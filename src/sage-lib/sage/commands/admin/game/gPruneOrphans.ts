@@ -67,7 +67,7 @@ export async function gPruneOrphans(sageCommand: SageCommand): Promise<boolean> 
 	}
 
 	if (unable.length) {
-		await sageCommand.reply(unable.join("<br/>"));
+		await sageCommand.dChannel?.send(unable.join("<br/>"));
 	}
 
 	return changed;

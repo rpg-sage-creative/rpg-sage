@@ -1,3 +1,4 @@
+import { error } from "@rsc-utils/console-utils";
 import type { GuildMember, NonThreadGuildBasedChannel } from "discord.js";
 import { getPermsFor } from "./getPermsFor";
 
@@ -46,8 +47,20 @@ export async function blockFromChannel(sage: GuildMember, channel: NonThreadGuil
 
 	// update perms
 	let fixError = false;
-	const updatedChannel = await channel.permissionOverwrites.create(memberToBlock, overwrites)
-		.catch(() => { fixError = true; return null; }); // NOSONAR
+	const errorHandler = (log: boolean) => {
+		if (log) {
+			const fnName = "blockFromChannel";
+			const fnSection = "permissionOverwrites";
+			const channelType = channel.type;
+			const parentChannelType = channel.parent?.type;
+			error({ fnName, fnSection, channelType, parentChannelType });
+		}
+		fixError = true;
+		return null;
+	};
+	const updatedChannel = "permissionOverwrites" in channel
+		? await channel.permissionOverwrites.create(memberToBlock, overwrites).catch(() => errorHandler(false))
+		: errorHandler(true);
 
 	// recheck perms
 	const blockedAfter = !getPermsFor(updatedChannel ?? channel, memberToBlock).canViewChannel;

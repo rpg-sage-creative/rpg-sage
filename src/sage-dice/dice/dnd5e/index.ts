@@ -114,7 +114,7 @@ function gradeResults(roll: DiceRoll): DieRollGrade {
 
 //#region diceGroupRollToString
 
-function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOutputType, joiner = "\n"): string {
+function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOutputType, joiner = "\n", diceSort?: "noSort" | "sort"): string {
 	const rollOutputs: string[] = [],
 		attackRoll = diceGroupRoll.attackRoll;
 	if (attackRoll) {
@@ -126,13 +126,13 @@ function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOut
 			const damageRoll = diceGroupRoll.damageRoll;
 			if (damageRoll) {
 				const dmgEmoji = attackGrade ? `[damage] ` : ``;
-				rollOutputs.push(`${dmgEmoji}${damageRoll.toString(outputType)}`);
+				rollOutputs.push(`${dmgEmoji}${damageRoll.toString(outputType, diceSort)}`);
 			}
 
-			diceGroupRoll.otherRolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType)));
+			diceGroupRoll.otherRolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType, diceSort)));
 		}
 	}else {
-		diceGroupRoll.rolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType)));
+		diceGroupRoll.rolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType, diceSort)));
 	}
 	return rollOutputs.join(joiner);
 }
@@ -478,13 +478,21 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 	}
 	//#endregion
 
-	public toString(outputType?: DiceOutputType, inline = false): string {
+	public toString(): string;
+	public toString(outputType: DiceOutputType): string;
+	public toString(outputType: DiceOutputType, inline: boolean): string;
+	public toString(outputType: DiceOutputType, noSort: "noSort" | "sort"): string;
+	public toString(...args: (DiceOutputType | boolean | "noSort" | "sort")[]): string {
+		const outputType = args.find(arg => typeof(arg) === "number") as DiceOutputType;
+		const inline = args.find(arg => typeof(arg) === "boolean");
+		const noSort = args.find(arg => arg === "noSort" || arg === "sort") as "noSort" | "sort";
+
 		let _outputType = this.dice.diceOutputType ?? outputType ?? DiceOutputType.M;
 		if (inline) {
 			_outputType = <DiceOutputType>Math.min(_outputType, DiceOutputType.M);
 		}
 		const joiner = _outputType < DiceOutputType.L ? "; " : "\n";
-		return diceGroupRollToString(this, _outputType, joiner);
+		return diceGroupRollToString(this, _outputType, joiner, noSort);
 	}
 
 	public static create(diceGroup: DiceGroup): DiceGroupRoll {

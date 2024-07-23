@@ -2,6 +2,8 @@ import { getHomeServerId } from "@rsc-sage/env";
 import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
 import { parseGameSystem, updateServer } from "@rsc-sage/types";
 import { applyChanges, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { DiceSortType, parseGameSystem, updateServer } from "@rsc-sage/types";
+import { warn } from "@rsc-utils/console-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
@@ -48,6 +50,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
+	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
 	private _gameSystem?: GameSystem | null;
 	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
 	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
@@ -150,10 +153,10 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	// #endregion
 
 	// #region Admin actions
-	public async addAdmin(userDid: Snowflake, roleType: AdminRoleType): Promise<boolean> {
+	public async addAdmin(userDid: Snowflake, roleType: AdminRoleType): Promise<boolean | AdminRoleType> {
 		const found = this.getAdmin(userDid);
 		if (found) {
-			return false;
+			return found.role;
 		}
 		const admin: IAdminUser = { did: userDid, role: roleType };
 		(this.core.admins || (this.core.admins = [])).push(admin);
@@ -164,10 +167,13 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		// }
 		return saved;
 	}
-	public async updateAdminRole(userDid: Snowflake, roleType: AdminRoleType): Promise<boolean> {
+	public async updateAdminRole(userDid: Snowflake, roleType: AdminRoleType): Promise<Optional<boolean>> {
 		const found = this.getAdmin(userDid);
 		if (!found) {
-			return false;
+			return null;
+		}
+		if (found.role === roleType) {
+			return undefined;
 		}
 		// const oldRoleType = found.role;
 		found.role = roleType;
@@ -179,10 +185,10 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		// }
 		return saved;
 	}
-	public async removeAdmin(userDid: Snowflake): Promise<boolean> {
+	public async removeAdmin(userDid: Snowflake): Promise<boolean | null> {
 		const found = this.getAdmin(userDid);
 		if (!found) {
-			return false;
+			return null;
 		}
 		this.core.admins = this.core.admins.filter(admin => admin !== found);
 		const saved = await this.save();

@@ -156,7 +156,7 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 
 function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	const slicedContent = sageMessage.slicedContent;
-	if (sageMessage.hasPrefix && slicedContent.match(/^\?[^!].+$/)) {
+	if (sageMessage.hasPrefix && /^\?[^!]\s*\w+/.test(slicedContent)) {
 		return {
 			command: "search",
 			args: new ArgsManager(slicedContent.slice(1))
@@ -196,7 +196,7 @@ async function repositoryFindRenderTable(sageMessage: SageMessage): Promise<bool
 }
 function findTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	const slicedContent = sageMessage.slicedContent;
-	if (sageMessage.hasPrefix && slicedContent.match(/^\?\!.+$/)) {
+	if (sageMessage.hasPrefix && /^\?!\s*\w+/.test(slicedContent)) {
 		return {
 			command: "find",
 			args: new ArgsManager(slicedContent.slice(2))

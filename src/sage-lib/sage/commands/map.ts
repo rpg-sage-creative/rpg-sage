@@ -112,7 +112,7 @@ function namesMatch(a: string, b: string | undefined): boolean {
 
 
 /** If the user is a player in a game, this will ensure their tokens (pc/companions) are on the map */
-function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameMap: GameMap, stack: ReplyStack): boolean {
+function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameMap: GameMap): boolean {
 	if (sageCommand.isGameMaster) {
 		return false;
 	}
@@ -131,7 +131,7 @@ function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameM
 				?? gameMap.tokens.find(token => namesMatch(token.name, charName) || namesMatch(token.name, charAlias))
 				?? gameMap.tokens.find(token => urlsMatch(token.url, tokenUrl) || urlsMatch(token.url, avatarUrl));
 			if (!found) {
-				stack.editReply(`Adding token for ${charName} ... ${ReplyStack.SpinnerEmoji}`);
+				sageCommand.replyStack.editReply(`Adding token for ${charName} ...`, true);
 				gameMap.tokens.push({
 					auras: [],
 					characterId: char.id,
@@ -146,7 +146,7 @@ function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameM
 				updated = true;
 			}else {
 				if (found.name !== charName || found.url !== charUrl) {
-					stack.editReply(`Updating token for ${charName} ... ${ReplyStack.SpinnerEmoji}`);
+					sageCommand.replyStack.editReply(`Updating token for ${charName} ...`, true);
 					found.name = charName;
 					found.url = charUrl;
 					updated = true;
@@ -163,10 +163,10 @@ function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage, gameM
 }
 
 async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
-	const stack = new ReplyStack(sageInteraction);
+	const stack = sageInteraction.replyStack;
 	const toggled = gameMap.cycleActiveTerrain();
 	const activeTerrain = gameMap.activeTerrain;
-	stack.reply(`Setting ${activeTerrain?.name} as active ... ${ReplyStack.SpinnerEmoji}`);
+	stack.reply(`Setting ${activeTerrain?.name} as active ...`, true);
 	const updated = toggled && await gameMap.save();
 	if (updated) {
 		return stack.editReply(`Your active terrain is: ${activeTerrain?.name ?? "Unknown"}`);
@@ -175,12 +175,12 @@ async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap
 }
 
 async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
-	const stack = new ReplyStack(sageInteraction);
+	const stack = sageInteraction.replyStack;
 	const activeToken = gameMap.activeToken;
-	let updated = ensurePlayerCharacter(sageInteraction, gameMap, stack);
+	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveAura();
 	const toggledAura = gameMap.activeAura;
-	stack.editReply(`Setting active aura for ${activeToken?.name} to ${toggledAura?.name ?? "none"} ... ${ReplyStack.SpinnerEmoji}`);
+	stack.editReply(`Setting active aura for ${activeToken?.name} to ${toggledAura?.name ?? "none"} ...`, true);
 	updated = toggled
 		&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	if (updated) {
@@ -190,11 +190,11 @@ async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: G
 }
 
 async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
-	const stack = new ReplyStack(sageInteraction);
-	const added = ensurePlayerCharacter(sageInteraction, gameMap, stack);
+	const stack = sageInteraction.replyStack;
+	const added = ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveToken();
 	const activeToken = gameMap.activeToken;
-	stack.editReply(`Setting ${activeToken?.name} as active ... ${ReplyStack.SpinnerEmoji}`);
+	stack.editReply(`Setting ${activeToken?.name} as active ...`, true);
 	let updated = false;
 	if (added) {
 		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
@@ -211,24 +211,24 @@ async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: 
 	if (!gameMap.isOwner) {
 		return sageInteraction.reply(`You can't edit somebody else's map!`, true);
 	}
-	const stack = new ReplyStack(sageInteraction);
+	const stack = sageInteraction.replyStack;
 	let updated = false;
 	let output = "";
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("up");
-			stack.editReply(`Increasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
+			stack.editReply(`Increasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"} ...`, true);
 			output = `Aura Opacity Increased: ${gameMap.activeAura?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("up");
-			stack.editReply(`Raising Terrain: ${gameMap.activeTerrain?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
+			stack.editReply(`Raising Terrain: ${gameMap.activeTerrain?.name ?? "Unknown"} ...`, true);
 			output = `Terrain Raised: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("up");
-			stack.editReply(`Raising Token: ${gameMap.activeToken?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
+			stack.editReply(`Raising Token: ${gameMap.activeToken?.name ?? "Unknown"} ...`, true);
 			output = `Token Raised: ${gameMap.activeToken?.name ?? "Unknown"}`;
 			break;
 	}
@@ -245,24 +245,24 @@ async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: 
 	if (!gameMap.isOwner) {
 		return sageInteraction.reply(`You can't edit somebody else's map!`, true);
 	}
-	const stack = new ReplyStack(sageInteraction);
+	const stack = sageInteraction.replyStack;
 	let updated = false;
 	let output = "";
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("down");
-			stack.editReply(`Decreasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
+			stack.editReply(`Decreasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"} ...`, true);
 			output = `Aura Opacity Decreased: ${gameMap.activeAura?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("down");
-			stack.editReply(`Lowering Terain: ${gameMap.activeTerrain?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
+			stack.editReply(`Lowering Terain: ${gameMap.activeTerrain?.name ?? "Unknown"} ...`, true);
 			output = `Terrain Lowered: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("down");
-			stack.editReply(`Lowering Token: ${gameMap.activeToken?.name ?? "Unknown"} ... ${ReplyStack.SpinnerEmoji}`);
+			stack.editReply(`Lowering Token: ${gameMap.activeToken?.name ?? "Unknown"} ...`, true);
 			output = `Token Lowered: ${gameMap.activeToken?.name ?? "Unknown"}`;
 			break;
 	}
@@ -282,11 +282,11 @@ async function actionHandlerMapConfig(sageInteraction: SageInteraction, _: GameM
 async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	const activeImage = gameMap.activeImage;
 	if (activeImage) {
-		const stack = new ReplyStack(sageInteraction);
+		const stack = sageInteraction.replyStack;
 		stack.defer();
 		const boolDelete = await discordPromptYesNo(sageInteraction, `Delete image: ${activeImage.name}?`, true);
 		if (boolDelete) {
-			stack.editReply(`Deleting image: ${activeImage.name} ... ${ReplyStack.SpinnerEmoji}`);
+			stack.editReply(`Deleting image: ${activeImage.name} ...`, true);
 			const deleted = gameMap.deleteImage(activeImage);
 			const updated = deleted
 				&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
@@ -302,13 +302,13 @@ async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap:
 }
 
 async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
-	const stack = new ReplyStack(sageInteraction);
+	const stack = sageInteraction.replyStack;
 	const gameMap = actionData.gameMap;
-	let updated = ensurePlayerCharacter(sageInteraction, gameMap, stack);
+	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
 	const activeImage = gameMap.activeImage;
 	const mapAction = actionData.mapAction;
 	if (activeImage) {
-		stack.editReply(`Moving ${activeImage.name} ${toDirection(mapAction)} ... ${ReplyStack.SpinnerEmoji}`);
+		stack.editReply(`Moving ${activeImage.name} ${toDirection(mapAction)} ...`, true);
 		const moved = gameMap.moveActiveToken(mapAction.slice(3).toLowerCase() as TMoveDirection);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 		updated = (moved || shuffled)
@@ -321,7 +321,7 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 	return sageInteraction.reply(`You have no image to move!`, true);
 }
 async function actionHandler(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
-	const gameMap = actionData.gameMap;
+	const { gameMap } = actionData;
 	switch(actionData.mapAction) {
 		case "MapConfig": return actionHandlerMapConfig(sageInteraction, gameMap);
 		case "MapTerrain": return actionHandlerMapTerrain(sageInteraction, gameMap);
@@ -661,8 +661,8 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 	const directions = inputToCompassDirections(sageMessage);
 	const gameMap = mapExists ? await GameMap.forUser(mapMessageId, mapUserId, true) : null;
 	if (gameMap) {
-		const stack = new ReplyStack(sageMessage);
-		ensurePlayerCharacter(sageMessage, gameMap, stack);
+		const stack = sageMessage.replyStack;
+		ensurePlayerCharacter(sageMessage, gameMap);
 		const activeImage = gameMap.activeImage;
 		if (!activeImage) {
 			return stack.editReply(`You have no image to move!`);
@@ -670,7 +670,7 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 		const moveEmoji = directions.map(dir => `[${dir}]`).join(" ");
 		const boolMove = await discordPromptYesNo(sageMessage, `Move ${activeImage.name} ${moveEmoji} ?`, true);
 		if (boolMove === true) {
-			stack.editReply(`Moving ${activeImage.name} ${moveEmoji} ... ${ReplyStack.SpinnerEmoji}`);
+			stack.editReply(`Moving ${activeImage.name} ${moveEmoji} ...`, true);
 			const moved = gameMap.moveActiveToken(...directions);
 			const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 			const updated = (moved || shuffled)

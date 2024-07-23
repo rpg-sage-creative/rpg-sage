@@ -1,4 +1,4 @@
-import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannelType } from "@rsc-sage/types";
+import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, SageChannelType } from "@rsc-sage/types";
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug, isDefined, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { DInteraction, DRepliableInteraction, DiscordKey, EmbedBuilder } from "@rsc-utils/discord-utils";
@@ -13,6 +13,7 @@ import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import type { ColorType, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType } from "./HasEmojiCore.js";
+import { ReplyStack } from "./ReplyStack.js";
 import type { SageCache } from "./SageCache.js";
 import type { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageInteraction } from "./SageInteraction.js";
@@ -104,6 +105,9 @@ export abstract class SageCommand<
 	}
 	public isSageMessage(): this is SageMessage { return "isEdit" in this; }
 	public isSageReaction(): this is SageReaction { return "messageReaction" in this; }
+
+	private _replyStack: ReplyStack | undefined;
+	public get replyStack(): ReplyStack { return this._replyStack ?? (this._replyStack = new ReplyStack(this)); }
 
 	/**
 	 * Enables us to call defer on the base class to cause Interactions to defer.
@@ -382,6 +386,10 @@ export abstract class SageCommand<
 		return this.cache.get("diceSecretMethodType", () => this.gameChannel?.diceSecretMethodType ?? this.game?.diceSecretMethodType ?? this.serverChannel?.diceSecretMethodType ?? this.server?.diceSecretMethodType ?? 0);
 	}
 
+	public get diceSortType(): DiceSortType {
+		return this.cache.get("diceSortType", () => this.gameChannel?.diceSortType ?? this.game?.diceSortType ?? this.serverChannel?.diceSortType ?? this.server?.diceSortType ?? 0);
+	}
+
 	//#endregion
 
 	//#region flags
@@ -413,7 +421,7 @@ export abstract class SageCommand<
 	//#endregion
 
 	/** @todo figure out where splitMessageOptions comes into this workflow */
-	protected resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, _ephemeral?: boolean): T {
+	public resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, _ephemeral?: boolean): T {
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
 				embeds: resolveToEmbeds(this.sageCache, renderableOrArgs),

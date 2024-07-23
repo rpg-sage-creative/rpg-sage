@@ -25,6 +25,10 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 		core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl)!;
 	}
 
+	if (/discord/i.test(core.name)) {
+		return sageMessage.reactFailure(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+	}
+
 	if (!core.name) {
 		return sageMessage.reactFailure("Cannot create a character without a name!");
 	}

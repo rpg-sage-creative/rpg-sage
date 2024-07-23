@@ -228,10 +228,11 @@ function strikeDroppedRolls(dropKeep: Optional<TDropKeepData>, sortedRolls: TRol
 	}
 }
 
-function dicePartRollToString(dicePartRoll: TDicePartRoll): string {
+function dicePartRollToString(dicePartRoll: TDicePartRoll, diceSort?: "noSort" | "sort"): string {
 	const rollsAndIndexes = mapAndSortRolls(dicePartRoll);
 	strikeDroppedRolls(dicePartRoll.dice.dropKeep, rollsAndIndexes.byRoll);
-	const outputRollsAndIndexes = dicePartRoll.dice.noSort ? rollsAndIndexes.byIndex : rollsAndIndexes.byRoll;
+	const sort = diceSort === "noSort" ? false : diceSort === "sort" ? true : !dicePartRoll.dice.noSort; // NOSONAR
+	const outputRollsAndIndexes = sort ? rollsAndIndexes.byRoll : rollsAndIndexes.byIndex;
 	const mappedOutuputRolls = outputRollsAndIndexes.map(rollAndIndex => rollAndIndex.output);
 	return `[${mappedOutuputRolls.join(", ")}]`;
 }
@@ -258,24 +259,24 @@ function mapDicePartRollToString(dicePartRoll: TDicePartRoll, includeSign: boole
 	return dicePartRollOutput.replace(/ +/g, " ").trim();
 }
 
-type TDicePartRollToString = (dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean) => string;
+type TDicePartRollToString = (dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean, diceSort?: "noSort" | "sort") => string;
 
-function mapDicePartRollToStringWithDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean): string {
+function mapDicePartRollToStringWithDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean, diceSort?: "noSort" | "sort"): string {
 	return mapDicePartRollToString(dicePartRoll, index > 0 || (dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+"), true, true, dpr => {
 		const rollemSpacer = rollem ? " " : "";
 		if (hideRolls && dpr.dice.hasDie) {
-			return ` ||${dicePartRollToString(dpr)}||${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} `;
+			return ` ||${dicePartRollToString(dpr, diceSort)}||${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} `;
 		}
-		return dpr.dice.hasDie ? ` ${dicePartRollToString(dpr)}${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} ` : ``;
+		return dpr.dice.hasDie ? ` ${dicePartRollToString(dpr, diceSort)}${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} ` : ``;
 	});
 }
 
-function mapDicePartRollToStringWithoutDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean): string {
+function mapDicePartRollToStringWithoutDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, _rollem: boolean, diceSort?: "noSort" | "sort"): string {
 	return mapDicePartRollToString(dicePartRoll, index > 0 || dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+", true, true, dpr => {
 		if (hideRolls && dpr.dice.hasDie) {
-			return ` ||${dicePartRollToString(dpr)}|| `;
+			return ` ||${dicePartRollToString(dpr, diceSort)}|| `;
 		}
-		return dpr.dice.hasDie ? ` ${dicePartRollToString(dpr)} ` : ``;
+		return dpr.dice.hasDie ? ` ${dicePartRollToString(dpr, diceSort)} ` : ``;
 	});
 }
 
@@ -603,10 +604,10 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		return this._rolls;
 	}
 	//#region toString
-	protected _toString(renderer: TDicePartRollToString, hideRolls: boolean, rollem = false): string {
+	protected _toString(renderer: TDicePartRollToString, hideRolls: boolean, rollem = false, diceSort?: "noSort" | "sort"): string {
 		const xxs = this.toStringXXS(hideRolls);
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
-		const description = this.rolls.map((roll, index) => renderer(roll, index, hideRolls, rollem)).join(" ");
+		const description = this.rolls.map((roll, index) => renderer(roll, index, hideRolls, rollem, diceSort)).join(" ");
 		if (rollem) {
 			const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "").trim();
 			const [_, emoji, total] = stripped.match(/^(?:(.*?)\s+)(\d+)$/) ?? ["","",stripped];
@@ -644,17 +645,19 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 	public toString(hideRolls: boolean): string;
 	public toString(outputType: DiceOutputType): string;
 	public toString(outputType: DiceOutputType, hideRolls: boolean): string;
-	public toString(hideRolls: boolean, outputType: DiceOutputType): string;
-	public toString(...args: (boolean | DiceOutputType)[]): string {
-		const hideRolls = <boolean>args.find(arg => arg === true || arg === false) ?? false;
+	public toString(outputType: DiceOutputType, diceSort?: "noSort" | "sort"): string;
+	public toString(outputType: DiceOutputType, hideRolls: boolean, diceSort?: "noSort" | "sort"): string;
+	public toString(...args: (boolean | DiceOutputType | "noSort" | "sort" | undefined)[]): string {
+		const hideRolls = args.includes(true);
 		const outputType = <DiceOutputType>args.find(arg => !!(DiceOutputType[<DiceOutputType>arg] ?? false)) ?? DiceOutputType.M;
+		const diceSort = args.find(arg => arg === "noSort" || arg === "sort") as "noSort" | "sort";
 		switch (outputType) {
-			case DiceOutputType.ROLLEM: return this._toString(mapDicePartRollToStringWithDice, hideRolls, true);
-			case DiceOutputType.XXL: return this._toString(mapDicePartRollToStringWithDice, hideRolls);
-			case DiceOutputType.XL: return this._toString(mapDicePartRollToStringWithDice, hideRolls);
-			case DiceOutputType.L: return this._toString(mapDicePartRollToStringWithoutDice, hideRolls);
-			case DiceOutputType.M: return this._toString(mapDicePartRollToStringWithDice, hideRolls);
-			case DiceOutputType.S: return this._toString(mapDicePartRollToStringWithoutDice, hideRolls);
+			case DiceOutputType.ROLLEM: return this._toString(mapDicePartRollToStringWithDice, hideRolls, true, diceSort);
+			case DiceOutputType.XXL: return this._toString(mapDicePartRollToStringWithDice, hideRolls, undefined, diceSort);
+			case DiceOutputType.XL: return this._toString(mapDicePartRollToStringWithDice, hideRolls, undefined, diceSort);
+			case DiceOutputType.L: return this._toString(mapDicePartRollToStringWithoutDice, hideRolls, undefined, diceSort);
+			case DiceOutputType.M: return this._toString(mapDicePartRollToStringWithDice, hideRolls, undefined, diceSort);
+			case DiceOutputType.S: return this._toString(mapDicePartRollToStringWithoutDice, hideRolls, undefined, diceSort);
 			case DiceOutputType.XS: return this.toStringXS(hideRolls);
 			case DiceOutputType.XXS: return this.toStringXXS(hideRolls);
 			default: {
@@ -822,12 +825,12 @@ export class DiceGroupRoll<T extends DiceGroupRollCore, U extends TDiceGroup, V 
 		return this._rolls;
 	}
 
-	public toString(outputType?: DiceOutputType): string {
+	public toString(outputType?: DiceOutputType, diceSort?: "sort" | "noSort"): string {
 		const _outputType = this.dice.diceOutputType ?? outputType ?? DiceOutputType.M;
 		const joiner = _outputType < DiceOutputType.L ? "; " : "\n";
 		const output: string[] = [];
 		for (const roll of this.rolls) {
-			output.push(roll.toString(_outputType));
+			output.push(roll.toString(_outputType, diceSort));
 			const grade = roll.grade;
 			if (grade && grade !== DieRollGrade.CriticalSuccess && grade !== DieRollGrade.Success) {
 				break;

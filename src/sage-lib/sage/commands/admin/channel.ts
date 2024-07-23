@@ -2,6 +2,11 @@ import { DialogPostType, DicePostType, GameSystemType, SageChannelType, parseGam
 import { mapAsync } from "@rsc-utils/array-utils";
 import { isDefined, stringify, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, isDMBased, isMessageTarget, toChannelMention } from "@rsc-utils/discord-utils";
+import { DicePostType, DiceSortType, GameSystemType, PostType, SageChannel, SageChannelType, parseGameSystem } from "@rsc-sage/types";
+import { mapAsync } from "@rsc-utils/async-array-utils";
+import { warn } from "@rsc-utils/console-utils";
+import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
+import { stringify } from "@rsc-utils/json-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { GuildChannel } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
@@ -51,6 +56,10 @@ async function channelDetailsAppendDice(renderableContent: RenderableContent, se
 	const diceSecretMethodType = DiceSecretMethodType[channel.diceSecretMethodType!];
 	const inheritedDiceSecretMethodType = DiceSecretMethodType[game?.diceSecretMethodType ?? server.diceSecretMethodType ?? DiceSecretMethodType.Ignore];
 	renderableContent.append(`[spacer]<b>Secret Checks</b> ${diceSecretMethodType ?? `<i>inherited (${inheritedDiceSecretMethodType})</i>`}`);
+
+	const diceSortType = DiceSortType[channel.diceSortType!];
+	const inheritedDiceSortType = DiceSortType[game?.diceSortType ?? server.diceSortType ?? DiceSortType.None];
+	renderableContent.append(`[spacer]<b>Sort Method</b> ${diceSortType ?? `<i>inherited (${inheritedDiceSortType})</i>`}`);
 
 	if (channel.sendDiceTo) {
 		renderableContent.append(`[spacer]<b>Send Dice To</b> ${toChannelMention(channel.sendDiceTo) ?? "<i>unknown</i>"}`);

@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.6.10",
-"branch":"v1.6.10-patch",
-"commit":"433f348ff7bd97ec334b2fa899348551bf3b2976",
-"commitSubject":"fix package ver",
-"commitTs":1717543253000,
-"commitDate":"2024-06-04-1620",
-"buildTs":1717543265000,
-"buildDate":"2024-06-04-1621",
+"version":"1.6.13",
+"branch":"main",
+"commit":"235cfe973c02d19baa4e5f5b2b484723d2313d5c",
+"commitSubject":"Merge pull request #93 from rpg-sage-creative/rewritten-replystack",
+"commitTs":1721162058000,
+"commitDate":"2024-07-16-1334",
+"buildTs":1721162471000,
+"buildDate":"2024-07-16-1341",
 "author":"Randal"
 }

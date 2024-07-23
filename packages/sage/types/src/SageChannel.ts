@@ -5,6 +5,7 @@ import type { DiceOutputType } from "./DiceOutputType.js";
 import type { DicePostType } from "./DicePostType.js";
 import type { DiceSecretMethodType } from "./DiceSecretMethodType.js";
 import type { GameSystemType } from "./GameSystem.js";
+import type { DiceSortType } from "./DiceSortType.js";
 
 export type DialogOptions = {
 	dialogPostType: DialogPostType;
@@ -17,6 +18,7 @@ export type DiceOptions = {
 	diceOutputType: DiceOutputType;
 	dicePostType: DicePostType;
 	diceSecretMethodType: DiceSecretMethodType;
+	diceSortType: DiceSortType;
 	sendDiceTo: Snowflake;
 };
 

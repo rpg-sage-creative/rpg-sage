@@ -1,12 +1,51 @@
-import type { BaseMessageOptions, InteractionReplyOptions, Message } from "discord.js";
+import { error, warn } from "@rsc-utils/console-utils";
+import type { DMessage } from "@rsc-utils/discord-utils";
+import { RenderableContentResolvable } from "@rsc-utils/render-utils";
+import { Optional } from "@rsc-utils/type-utils";
+import type { InteractionReplyOptions, Message, MessageEditOptions, MessageOptions } from "discord.js";
 import { deleteMessage, isDeletable } from "../../discord/deletedMessages.js";
-import type { SageCommand } from "./SageCommand.js";
+import type { SageCommand, TSendArgs } from "./SageCommand.js";
 import { addMessageDeleteButton, includeDeleteButton } from "./utils/deleteButton.js";
 
-type Options = {
-	updateLast: boolean;
-	updateReply: boolean;
-};
+/*
+startThinking
+- message: post thinking, save as thinkingMessage
+- interaction: defer, fetch, save as thinkingMessage
+
+reply
+- thinking: edit thinking
+- message: reply to message
+- interaction: reply to interaction
+
+editReply
+- edit if a reply exists
+- reply if one doesn't exist
+
+send
+- send message
+
+editLast?
+- edit the last message sent
+
+stopThinking
+*/
+
+function errorReturnPromiseResolve<T = any>(err: unknown): Promise<T> {
+	error(err);
+	return Promise.resolve() as Promise<T>;
+}
+
+async function deleteIfNotThenReturnNull(message: Optional<Message>, id?: string): Promise<Optional<Message>> {
+	if (message) {
+		if (message.id !== id) {
+			await deleteMessage(message);
+		}
+		return null;
+	}
+	return message;
+}
+
+type ResolveArgs = { appendSpinner?:boolean; fetchReply?:boolean; };
 
 /**
  * A temporary placeholder for new send/reply logic.
@@ -15,179 +54,280 @@ type Options = {
 export class ReplyStack {
 	public static readonly SpinnerEmoji = `<a:purple_spinner:1247285832822554738>`;
 
+	public constructor(public sageCommand: SageCommand, private deletableBy = sageCommand.authorDid) { }
+
+	//#region flags
+
+	public get deferred(): boolean {
+		return this.deferMessage !== undefined
+			|| (this.sageCommand.isSageInteraction("REPLIABLE") && this.sageCommand.interaction.deferred === true);
+	}
+
+	public get deletable(): boolean {
+		return this.deletableBy ? !this.ephemeral : false;
+	}
+
+	private _ephemeral: boolean | undefined;
+	public get ephemeral(): boolean {
+		return this._ephemeral
+			?? (this._ephemeral = this.sageCommand.isSageInteraction("REPLIABLE") && this.sageCommand.interaction.ephemeral === true);
+	 }
+
+	public get thinking(): boolean {
+		return !!this.thinkingMessage;
+	}
+
+	public get replied(): boolean {
+		return this.replyMessage !== undefined
+			|| (this.sageCommand.isSageInteraction("REPLIABLE") && this.sageCommand.interaction.replied === true);
+	}
+
+	public get sent(): boolean {
+		return this.lastMessage !== undefined;
+	}
+
+	//#endregion
+
+	//#region replyStack
+
 	private replyStack?: Promise<any>;
 	private pushToReplyStack<T = any>(fn: () => Promise<T>): Promise<T> {
 		if (!this.replyStack) {
 			this.replyStack = Promise.resolve();
 		}
-		const promise = this.replyStack.then(fn);
+		const promise = this.replyStack.then(fn, errorReturnPromiseResolve);
 		this.replyStack = promise;
 		return promise;
 	}
 
-	// public lastMessage: Message | undefined;
-	public replyMessage: Message | undefined;
-	// public messages: Message[];
-	private async processMessage(message: Message | undefined, options: Options): Promise<Message | undefined> {
-		if (message) {
-			/** @todo if we track multiple messages: this.messages.push(message) */
-			/** @todo if we track last message: if (options.updateLast) this.lastMessage = message */
-			if (options.updateReply) {
-				this.replyMessage = message;
-			}
-			if (this.deletableBy) {
-				const ephemeral = this.sageCommand.isSageInteraction("REPLIABLE") && this.sageCommand.interaction.ephemeral;
-				if (!ephemeral) {
-					await addMessageDeleteButton(message, this.deletableBy);
-				}
-			}
-			return message;
+	//#endregion
+
+	//#region thinking
+
+	/*
+	undefined = startThinking() not called yet
+	message = currently thinking
+	null = stopThinking() was called
+	*/
+	private thinkingMessage: Message | undefined | null;
+
+	private async _startThinking(): Promise<void> {
+		// if we have a message, don't make a new one
+		if (this.thinkingMessage) return; //NOSONAR
+
+		// create the send/reply args
+		const content = `RPG Sage is thinking ... ${ReplyStack.SpinnerEmoji}`;
+		const replyArgs = this.deletable
+			 ? includeDeleteButton({ content }, this.deletableBy)
+			 : { content };
+
+		// if we have a null thinkingMessage or we have already deferred then we must use dChannel.send
+		if (this.thinkingMessage === null || this.deferred || this.replied) {
+			const message = await this.sageCommand.dChannel?.send(replyArgs);
+			this.thinkingMessage = message ?? null;
+			return;
 		}
-		return undefined;
-	}
 
-	private createArgs<T extends BaseMessageOptions | InteractionReplyOptions>(args: T): T {
-		if (args.content) {
-			args.content = this.sageCommand.sageCache.format(args.content);
-		}
-		if (this.deletableBy) {
-			const ephemeral = this.sageCommand.isSageInteraction("REPLIABLE") && this.sageCommand.interaction.ephemeral;
-			if (!ephemeral) {
-				return includeDeleteButton(args, this.deletableBy);
-			}
-		}
-		return args;
-	}
+		// we haven't deferred yet, reply to the original command
+		if (this.sageCommand.isSageMessage()) {
+			this.thinkingMessage = await this.sageCommand.message.reply(replyArgs);
 
-	public constructor(public sageCommand: SageCommand, public deletableBy = sageCommand.authorDid) {
-		// this.messages = [];
-	}
-
-	private async _defer() {
-		const options = { updateLast: false, updateReply: true };
-
-		// do nothing, it's too late to defer
-		if (this.replyMessage) {
-
-		// there is no defer mechanism for SageMessage, so reply with "thinking ..."
-		}else if (this.sageCommand.isSageMessage()) {
-			const message = await this.sageCommand.message.reply(`RPG Sage is thinking ... ${ReplyStack.SpinnerEmoji}`);
-			return this.processMessage(message, options);
-
-		// try to safeul handle the defer for the interaction
 		}else if (this.sageCommand.isSageInteraction("REPLIABLE")) {
+			await this._defer();
+			this.thinkingMessage = this.deferMessage;
+			if (this.deletable) {
+				await addMessageDeleteButton(this.thinkingMessage as DMessage, this.deletableBy);
+			}
+		}else {
+			warn(`startThinking(): not isSageMessage() && !isSageInteraction("REPLIABLE")`);
+		}
+	}
+	public startThinking(): Promise<void> {
+		return this.pushToReplyStack(async () => this._startThinking());
+	}
+
+	private async _stopThinking(): Promise<void> {
+		this.thinkingMessage = await deleteIfNotThenReturnNull(this.thinkingMessage, this.lastMessage?.id);
+	}
+	public stopThinking(): Promise<void> {
+		return this.pushToReplyStack(async () => this._stopThinking());
+	}
+
+	//#endregion
+
+	//#region defer
+
+	private deferMessage: Message | undefined | null;
+
+	private async _defer(): Promise<void> {
+		if (!this.deferred && !this.replied && this.sageCommand.isSageInteraction("REPLIABLE")) {
 			const { interaction } = this.sageCommand;
-			if (!interaction.deferred && !interaction.replied) {
-				if ("deferUpdate" in interaction) {
-					return interaction.deferUpdate();
-					// const message = await interaction.deferUpdate({ fetchReply:true }) as Message;
-					// return this.processMessage(message, options);
-				}
-				return interaction.deferReply();
-				// const message = await interaction.deferReply({ fetchReply:true }) as Message;
-				// return this.processMessage(message, options);
+			if ("deferUpdate" in interaction) {
+				this.deferMessage = await interaction.deferUpdate({ fetchReply:true }) as Message;
+			}else {
+				this.deferMessage = await interaction.deferReply({ fetchReply:true }) as Message;
 			}
 		}
-
-		// we shouldn't get here, but return undefined just in case
-		return undefined;
 	}
-	public async defer() {
+	public defer(): Promise<void> {
 		return this.pushToReplyStack(async () => this._defer());
 	}
 
-	private async _noDefer(): Promise<void> {
-		// there is no defer mechanism for SageMessage
-
-		// defer and then delete the defer message
-		if (this.sageCommand.isSageInteraction("REPLIABLE")) {
-			const { interaction } = this.sageCommand;
-			if (!interaction.deferred && !interaction.replied) {
-				const message = await interaction.deferReply({ fetchReply:true }) as Message;
-				await this.processMessage(message, { updateLast: false, updateReply: true });
-				await interaction.deleteReply(message);
-			}
+	private async _deleteDefer(): Promise<void> {
+		if (this.deferMessage && this.sageCommand.isSageInteraction("REPLIABLE")) {
+			await this.sageCommand.interaction.deleteReply(this.deferMessage);
+			this.deferMessage = null;
 		}
 	}
-	public async noDefer(): Promise<void> {
-		return this.pushToReplyStack(async () => this._noDefer());
+	public deleteDefer(): Promise<void> {
+		return this.pushToReplyStack(async () => this._deleteDefer());
 	}
 
+	private async _deferAndDelete(): Promise<void> {
+		await this._defer();
+		await this._deleteDefer();
+	}
+	public deferAndDelete(): Promise<void> {
+		return this.pushToReplyStack(async () => this._deferAndDelete());
+	}
+
+	//#endregion
+
+
+	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options?: { appendSpinner?:boolean; }): MessageOptions;
+	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options: { fetchReply:true }): InteractionReplyOptions & { fetchReply:true };
+	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options?: ResolveArgs): MessageOptions | InteractionReplyOptions {
+		const args = typeof(renderable) === "string" ? { content:renderable } : renderable;
+		const messageOptions = this.sageCommand.resolveToOptions(args);
+		if (options?.appendSpinner) {
+			messageOptions.content = `${messageOptions.content ?? ""} ${ReplyStack.SpinnerEmoji}`.trim();
+		}
+		if (options?.fetchReply) {
+			(messageOptions as InteractionReplyOptions).fetchReply = true;
+		}
+		if (this.deletable) {
+			return includeDeleteButton(messageOptions, this.deletableBy);
+		}
+		return messageOptions;
+	}
+
+	//#region reply
+
+	private replyMessage: Message | undefined | null;
+
 	/** The reply logic without pushing to the stack. */
-	private async _reply(content: string, _options?: Partial<Options>): Promise<Message | undefined> {
-		const options = {
-			updateLast: _options?.updateLast ?? true,
-			updateReply: _options?.updateReply ?? true
-		};
-
+	private async _reply(_args: RenderableContentResolvable | TSendArgs, replyOpts?: ResolveArgs): Promise<Message | undefined> {
 		// we have already reply, treat this as a send instead
-		if (this.replyMessage) {
-			return this._send(content, options);
+		if (this.deferred || this.replied) {
+			return this._send(_args, replyOpts);
 
-		// this is a SageMessage, so reply the the posted message
+		// this is a SageMessage, so reply to the posted message
 		}else if (this.sageCommand.isSageMessage()) {
-			const replyArgs = this.createArgs({ content });
-			const message = await this.sageCommand.message.reply(replyArgs);
-			return this.processMessage(message, options);
+			const replyArgs = this.resolveArgs(_args);
+			this.replyMessage = await this.sageCommand.message.reply(replyArgs);
 
 		// this is a repliable SageInteraction, so check the interaction
 		}else if (this.sageCommand.isSageInteraction("REPLIABLE")) {
-			const { interaction } = this.sageCommand;
-
-			// in case we replied to the interaction without the ReplyStack, treat it as a send instead
-			if (interaction.replied || interaction.deferred) {
-				return this._send(content, options);
-
 			// it should be safe to use the interaction reply mechanism
-			}else {
-				const replyArgs = this.createArgs({ content, fetchReply:true });
-				const response = await interaction.reply(replyArgs);
-				const message = await response.fetch();
-				return this.processMessage(message, options);
-			}
+			const { interaction } = this.sageCommand;
+			const replyArgs = this.resolveArgs(_args, { fetchReply:true });
+			this.replyMessage = await interaction.reply(replyArgs) as Message;
+
+		}else {
+			warn(`ReplyStack._reply ELSE!?`);
 		}
 
 		// we shouldn't get here, but return undefined just in case
-		return undefined;
+		return this.replyMessage ?? undefined;
 	}
-	public async reply(content: string): Promise<Message | undefined> {
-		return this.pushToReplyStack(async () => this._reply(content));
+	public reply(contentOrArgs: RenderableContentResolvable | TSendArgs, appendSpinner?: boolean): Promise<Message | undefined> {
+		return this.pushToReplyStack(async () => this._reply(contentOrArgs, { appendSpinner }));
 	}
 
-	private async _editReply(content: string) {
+	private async _editReply(_args: RenderableContentResolvable | TSendArgs, opts?: ResolveArgs): Promise<void> {
 		// to avoid interaction conflicts, edit the message directly instead of through the interaction
 		if (isDeletable(this.replyMessage)) {
-			const editArgs = this.createArgs({ content, components:this.replyMessage.components });
+			const resolvedArgs = this.resolveArgs(_args, opts);
+			const components = this.replyMessage.components;
+			const editArgs = { ...resolvedArgs, components } as MessageEditOptions;
 			await this.replyMessage.edit(editArgs);
 
 		// we don't have a valid reply to edit, so treat as a reply instead
 		}else {
-			await this._reply(content);
+			await this._reply(_args);
 		}
 	}
-	public async editReply(content: string) {
-		return this.pushToReplyStack(async () => this._editReply(content));
+	public editReply(contentOrArgs: RenderableContentResolvable | TSendArgs, appendSpinner?: boolean): Promise<void> {
+		return this.pushToReplyStack(async () => this._editReply(contentOrArgs, { appendSpinner }));
 	}
 
-	private async _send(content: string, _options?: Partial<Options>): Promise<Message | undefined> {
-		const options = {
-			updateLast: _options?.updateLast ?? true,
-			updateReply: _options?.updateReply ?? false
-		};
-
-		// send directly to the discord channel, bypassing interactions
-		const sendArgs = this.createArgs({ content });
-		const message = await this.sageCommand.dChannel?.send(sendArgs);
-		return this.processMessage(message, options);
+	private async _deleteReply(): Promise<void> {
+		if (this.replyMessage) {
+			await deleteMessage(this.replyMessage);
+			this.replyMessage = null;
+		}
 	}
-	public async send(content: string): Promise<Message | undefined> {
-		return this.pushToReplyStack(async () => this._send(content));
-	}
-
-	private async _deleteReply() {
-		await deleteMessage(this.replyMessage);
-	}
-	public async deleteReply() {
+	public deleteReply(): Promise<void> {
 		return this.pushToReplyStack(async () => this._deleteReply());
 	}
+
+	//#endregion reply
+
+	//#region send
+
+	private lastMessage: Message | undefined | null;
+
+	private async _send(args: RenderableContentResolvable | TSendArgs, opts?: ResolveArgs): Promise<Message | undefined> {
+		// send directly to the discord channel, bypassing interactions
+		if (this.sageCommand.dChannel) {
+			const sendOptions = this.resolveArgs(args, opts);
+			this.lastMessage = await this.sageCommand.dChannel.send(sendOptions);
+		}else {
+			warn(`ReplyStack._send w/o a sageCommand.dChannel!`);
+		}
+
+		return this.lastMessage ?? undefined;
+	}
+	public send(contentOrArgs: RenderableContentResolvable | TSendArgs, appendSpinner?: boolean): Promise<Message | undefined> {
+		return this.pushToReplyStack(async () => this._send(contentOrArgs, { appendSpinner }));
+	}
+
+	private async _deleteLast() {
+		if (this.lastMessage) {
+			await deleteMessage(this.lastMessage);
+			this.lastMessage = null;
+		}
+	}
+	public deleteLast(): Promise<void> {
+		return this.pushToReplyStack(async () => this._deleteLast());
+	}
+
+	public async editLast(content: string): Promise<void> {
+		const msg = this.lastMessage;
+		if (msg) {
+			const { embeds, components } = msg;
+			await msg.edit({ content, embeds, components });
+		}
+	}
+
+	//#endregion
+
+	//#region whisper
+
+	private async _whisper(contentOrArgs: TSendArgs | RenderableContentResolvable): Promise<void> {
+		const updated = await this._reply(contentOrArgs);
+		if (updated) {
+			// whisper is intended to be the only response, so we clear out all the others
+			this.thinkingMessage = await deleteIfNotThenReturnNull(this.thinkingMessage, updated.id);
+			this.deferMessage = await deleteIfNotThenReturnNull(this.deferMessage, updated.id);
+			this.replyMessage = await deleteIfNotThenReturnNull(this.replyMessage, updated.id);
+			this.lastMessage = await deleteIfNotThenReturnNull(this.lastMessage, updated.id);
+		}
+	}
+
+	public whisper(contentOrArgs: TSendArgs | RenderableContentResolvable): Promise<void> {
+		return this.pushToReplyStack(async () => this._whisper(contentOrArgs));
+	}
+
+	//#endregion
 }

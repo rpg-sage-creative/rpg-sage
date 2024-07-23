@@ -3,6 +3,14 @@ import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { type Args, type EnumLike, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { type MessageChannel, parseIds } from "@rsc-utils/discord-utils";
 import type { Role, User } from "discord.js";
+import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
+import { Color } from "@rsc-utils/color-utils";
+import { parseIds } from "@rsc-utils/discord-utils";
+import { isEmpty } from "@rsc-utils/json-utils";
+import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import { type Args, type EnumLike, isDefined, type Optional } from "@rsc-utils/type-utils";
+import { isUuid, type UUID } from "@rsc-utils/uuid-utils";
+import type { GuildBasedChannel, Role, User } from "discord.js";
 import type { SageCommand } from "./SageCommand.js";
 
 /** An object containing names. */
@@ -311,6 +319,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 			diceOutputType: this.getEnum(DiceOutputType, "diceOutput"),
 			dicePostType: this.getEnum(DicePostType, "dicePost"),
 			diceSecretMethodType: this.getEnum(DiceSecretMethodType, "diceSecret"),
+			diceSortType: this.getEnum(DiceSortType, "diceSort"),
 			sendDiceTo: this.getChannelId("diceTo"),
 		};
 		if (isEmpty(diceOptions)) {

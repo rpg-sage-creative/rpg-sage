@@ -7,8 +7,12 @@ import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
+const DISABLE_TIL_FURTHER_NOTICE = true;
+
 /** Fixes Sage's perms for the game's channels. Returns true if a change was made. */
 export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise<boolean> {
+	if (DISABLE_TIL_FURTHER_NOTICE) return false; // NOSONAR
+
 	const game = _game ?? sageCommand.game;
 	if (!game) {
 		return false;
@@ -40,7 +44,7 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 	}
 
 	if (cannotView) {
-		await sageCommand.reply(`RPG Sage cannot see ${cannotView} channel(s).\nPlease have a server admin fix RPG Sage's permissions.`);
+		await sageCommand.replyStack.reply(`RPG Sage cannot see ${cannotView} channel(s).\nPlease have a server admin fix RPG Sage's permissions.`);
 		return false;
 	}
 
@@ -67,7 +71,7 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 	}
 
 	if (unable.length) {
-		await sageCommand.reply(unable.join("<br/>"));
+		await sageCommand.dChannel?.send(unable.join("<br/>"));
 	}
 
 	return changed;

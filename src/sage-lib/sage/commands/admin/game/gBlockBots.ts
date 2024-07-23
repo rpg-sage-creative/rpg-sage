@@ -8,8 +8,12 @@ import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
+const DISABLE_TIL_FURTHER_NOTICE = true;
+
 /** Prompts to block Tupper/Rollem if they have access to your channels. Returns true if a change was made. */
 export async function gBlockBots(sageCommand: SageCommand, _game?: Game): Promise<boolean> {
+	if (DISABLE_TIL_FURTHER_NOTICE) return false; // NOSONAR
+
 	const game = _game ?? sageCommand.game;
 	if (!game) {
 		return false;
@@ -72,7 +76,7 @@ export async function gBlockBots(sageCommand: SageCommand, _game?: Game): Promis
 		}
 
 		if (unable.length) {
-			await sageCommand.reply(unable.join("<br/>"));
+			await sageCommand.dChannel?.send(unable.join("<br/>"));
 		}
 	}
 

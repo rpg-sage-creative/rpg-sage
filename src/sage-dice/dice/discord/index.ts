@@ -367,11 +367,11 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 			return roll.toString(outputType);
 		}).join(joiner);
 	}
-	public toStrings(outputType?: DiceOutputType): TDiceOutput[] {
+	public toStrings(outputType?: DiceOutputType, diceSort?: "sort" | "noSort"): TDiceOutput[] {
 		return this.rolls.map(roll => {
 			const output = (roll.dice.diceOutputType ?? outputType) === DiceOutputType.XXL
-				? `${roll.dice.toString()}\n${roll.toString(outputType)}`
-				: roll.toString(outputType);
+				? `${roll.dice.toString()}\n${roll.toString(outputType, diceSort)}`
+				: roll.toString(outputType, diceSort);
 			return {
 				hasSecret: roll.hasSecret,
 				inlineOutput: roll.toString(outputType),

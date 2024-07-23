@@ -1,6 +1,8 @@
 import { DicePostType, GameSystemType } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/array-utils";
 import type { Optional } from "@rsc-utils/core-utils";
+import { DicePostType, DiceSortType, GameSystemType } from "@rsc-sage/types";
+import { mapAsync } from "@rsc-utils/async-array-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Role } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
@@ -78,6 +80,7 @@ function serverDetailsDefaultTypes(renderableContent: RenderableContent, server:
 	renderableContent.append(`<b>Default Dice Output Type</b> ${DiceOutputType[server.diceOutputType!] ?? "<i>unset (M)</i>"}`);
 	renderableContent.append(`<b>Default Dice Post Type</b> ${DicePostType[server.dicePostType!] ?? "<i>unset (Post)</i>"}`);
 	renderableContent.append(`<b>Default Dice Secret Method Type</b> ${DiceSecretMethodType[server.diceSecretMethodType!] ?? "<i>unset (Ignore)</i>"}`);
+	renderableContent.append(`<b>Default Dice Sort Type</b> ${DiceSortType[server.diceSortType!] ?? "<i>unset (None)</i>"}`);
 }
 type TRole = { role:IAdminRole, discordRole:Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {

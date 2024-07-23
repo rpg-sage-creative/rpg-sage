@@ -29,6 +29,11 @@ export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 	const character = await getCharacter(sageMessage, characterTypeMeta, userDid!, names, core.alias);
 	if (character) {
 		await character.update(core, false);
+
+		if (/discord/i.test(core.name)) {
+			return sageMessage.reactFailure(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+		}
+
 		return promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
 			const charSaved = await char.save();
 			if (charSaved && characterTypeMeta.isGm) {

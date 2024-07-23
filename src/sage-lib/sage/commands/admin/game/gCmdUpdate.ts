@@ -55,38 +55,44 @@ async function gameUpdate(sageCommand: SageCommand): Promise<boolean | undefined
 
 	const game = updateGame(sageCommand, { gameOptions, channelsToAdd, channelsToRemove, usersToAdd, usersToRemove });
 	await gSendDetails(sageCommand, game);
-	const update = await discordPromptYesNo(sageCommand, `Update Game?`);
+
+	sageCommand.replyStack.stopThinking();
+
+	const update = await discordPromptYesNo(sageCommand, `Update Game?`, true);
 
 	if (update) {
 		const gameSaved = game ? await game.save() : false;
 		const serverSaved = gameSaved ? await sageCommand.server.save() : false;
 		return gameSaved && serverSaved;
+	}else {
+		await sageCommand.replyStack.editLast("Game ***NOT*** Updated.");
 	}
 	return undefined;
 }
 
 export async function gCmdUpdate(sageCommand: SageCommand): Promise<void> {
+	sageCommand.replyStack.startThinking();
+
 	if (!sageCommand.game) {
-		await sageCommand.whisper("There is no Game to update!");
-		return;
+		return sageCommand.replyStack.whisper("There is no Game to update!");
 	}
 
 	if (!sageCommand.canAdminGame) {
-		await sageCommand.whisper("Sorry, you aren't allowed to update this Game.");
-		return;
+		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to update this Game.");
 	}
 
 	const updated = await gameUpdate(sageCommand);
 	if (updated === true) {
-		await sageCommand.whisper({ content:"Game Updated." });
+		await sageCommand.replyStack.editLast("Game Updated.");
 
 	}else if (updated === false) {
-		await sageCommand.whisper({ content:"Unknown Error; Game NOT Updated!" });
+		await sageCommand.replyStack.whisper({ content:"Unknown Error; Game NOT Updated!" });
 
 	}else if (updated === null) {
-		await sageCommand.whisper({ content:"Please try /sage-game-update" });
+		await sageCommand.replyStack.whisper({ content:"Please try /sage-game-update" });
 
 	}else if (updated === undefined) {
 		// do nothing
 	}
+
 }

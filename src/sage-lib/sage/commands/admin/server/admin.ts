@@ -1,14 +1,17 @@
 import { forEachAsync, mapAsync } from "@rsc-utils/array-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import type { User } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
+import { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { AdminRoleType, type IAdminUser } from "../../../model/Server.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { isDefined } from "@rsc-utils/core-utils";
 import { SageCommand } from "../../../model/SageCommand.js";
 
+import { Snowflake } from "@rsc-utils/snowflake-utils";
 
 type TAdminUser = IAdminUser & { discordUser: User };
 
@@ -51,25 +54,89 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 	return Promise.resolve();
 }
 
+type CanAdminResults = {
+	canAdminThis: boolean;
+	hasRoleType: boolean;
+	roleType?: AdminRoleType;
+	userId?: Snowflake;
+	userRoleType?: AdminRoleType;
+};
+
+async function canAdminRoleType(sageMessage: SageMessage, action: "add" | "update" | "remove"): Promise<CanAdminResults> {
+	const roleType = sageMessage.args.getEnum(AdminRoleType, "type") ?? undefined;
+	const hasRoleType = isDefined(roleType);
+
+	const userId = await sageMessage.args.removeAndReturnUserDid() ?? undefined;
+	const userRoleType = isDefined(userId) ? sageMessage.server.admins.find(admin => admin.did === userId)?.role : undefined;
+
+	let canAdminThis = false;
+
+	if (action === "add" && hasRoleType) {
+		switch(roleType) {
+			case AdminRoleType.SageAdmin: canAdminThis = sageMessage.isOwner; break;        // NOSONAR
+			case AdminRoleType.ServerAdmin: canAdminThis = sageMessage.canAdminSage; break; // NOSONAR
+			case AdminRoleType.GameAdmin: canAdminThis = sageMessage.canAdminServer; break; // NOSONAR
+		}
+	}
+	if (action === "update" && hasRoleType && isDefined(userRoleType)) {
+		if (roleType === AdminRoleType.SageAdmin || userRoleType === AdminRoleType.SageAdmin) {
+			canAdminThis = sageMessage.isOwner;
+		}else if (roleType === AdminRoleType.ServerAdmin || userRoleType === AdminRoleType.ServerAdmin) {
+			canAdminThis = sageMessage.canAdminSage;
+		}else if (roleType === AdminRoleType.GameAdmin || userRoleType === AdminRoleType.GameAdmin) {
+			canAdminThis = sageMessage.canAdminServer;
+		}
+	}
+	if (action === "remove" && isDefined(userRoleType)) {
+		switch(userRoleType) {
+			case AdminRoleType.SageAdmin: canAdminThis = sageMessage.isOwner; break;        // NOSONAR
+			case AdminRoleType.ServerAdmin: canAdminThis = sageMessage.canAdminSage; break; // NOSONAR
+			case AdminRoleType.GameAdmin: canAdminThis = sageMessage.canAdminServer; break; // NOSONAR
+		}
+	}
+
+	return {
+		hasRoleType,
+		roleType,
+
+		userId,
+		userRoleType,
+
+		canAdminThis,
+	};
+}
+
 async function adminAdd(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminSage) {
+	if (!sageMessage.canAdminServer) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
-	const userDid = await sageMessage.args.removeAndReturnUserDid();
-	const roleType = sageMessage.args.getEnum(AdminRoleType, "type") ?? null;
-	const hasRoleType = isDefined(roleType);
-	if (!userDid || !hasRoleType) {
+	const { canAdminThis, hasRoleType, roleType, userId } = await canAdminRoleType(sageMessage, "add");
+
+	if (!userId || !hasRoleType) {
 		const message = [
 			`Sorry, we cannot process your request:`,
-			userDid ? null : `- Missing/Invalid User.`,
+			userId ? null : `- Missing/Invalid User.`,
 			hasRoleType ? null : `- Invalid AdminRoleType: ${sageMessage.args.getString("type") ?? "*not found*"}.`,
 			`Example: \`sage! admin add @UserMention type="GameAdmin"\``
 		].filter(isDefined).join("\n");
 		return sageMessage.whisperWikiHelp({ message, page:`Sage-Admin-Tiers` });
 	}
 
-	const saved = await sageMessage.server.addAdmin(userDid, roleType);
+	if (!canAdminThis) {
+		return sageMessage.whisper(`Sorry, you aren't allowed to admin users of that tier.`);
+	}
+
+	const saved = await sageMessage.server.addAdmin(userId, roleType!);
+	if (typeof(saved) === "number") {
+		if (saved !== roleType) {
+			const updated = await sageMessage.server.updateAdminRole(userId, roleType!);
+			if (updated) {
+				return sageMessage.whisper(`That user was a ${AdminRoleType[saved]} and has been updated to ${AdminRoleType[roleType!]}!`);
+			}
+		}
+		return sageMessage.whisper(`That user is already a ${AdminRoleType[saved]}!`);
+	}
 	if (!saved) {
 		return sageMessage.whisper(`Sorry, we were unable to add your admin!`);
 	}
@@ -78,24 +145,33 @@ async function adminAdd(sageMessage: SageMessage): Promise<void> {
 }
 
 async function adminUpdate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminSage) {
+	if (!sageMessage.canAdminServer) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
-	const userDid = await sageMessage.args.removeAndReturnUserDid();
-	const roleType = sageMessage.args.getEnum(AdminRoleType, "type") ?? null;
-	const hasRoleType = isDefined(roleType);
-	if (!userDid || !hasRoleType) {
+	const { canAdminThis, hasRoleType, roleType, userId } = await canAdminRoleType(sageMessage, "update");
+
+	if (!userId || !hasRoleType) {
 		const message = [
 			`Sorry, we cannot process your request:`,
-			userDid ? null : `- Missing/Invalid User.`,
+			userId ? null : `- Missing/Invalid User.`,
 			hasRoleType ? null : `- Invalid AdminRoleType: ${sageMessage.args.getString("type") ?? "*not found*"}.`,
 			`Example: \`sage! admin update @UserMention type="GameAdmin"\``
 		].filter(isDefined).join("\n");
 		return sageMessage.whisperWikiHelp({ message, page:`Sage-Admin-Tiers` });
 	}
 
-	const saved = await sageMessage.server.updateAdminRole(userDid, roleType);
+	if (!canAdminThis) {
+		return sageMessage.whisper(`Sorry, you aren't allowed to admin users of that tier.`);
+	}
+
+	const saved = await sageMessage.server.updateAdminRole(userId, roleType!);
+	if (saved === null) {
+		return sageMessage.whisper(`Sorry, that user is not an admin!`);
+	}
+	if (saved === undefined) {
+		return sageMessage.whisper(`That user is already a ${AdminRoleType[roleType!]}!`);
+	}
 	if (!saved) {
 		return sageMessage.whisper(`Sorry, we were unable to update your admin!`);
 	}
@@ -104,17 +180,25 @@ async function adminUpdate(sageMessage: SageMessage): Promise<void> {
 }
 
 async function adminRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminSage) {
+	if (!sageMessage.canAdminServer) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
-	const userDid = await sageMessage.args.removeAndReturnUserDid();
-	if (!userDid) {
+	const { canAdminThis, userId } = await canAdminRoleType(sageMessage, "remove");
+
+	if (!userId) {
 		const message = `Sorry, we cannot process your request:\n- Missing/Invalid User.\nExample: \`sage! admin remove @UserMention\``;
 		return sageMessage.whisperWikiHelp({ message, page:`Sage-Admin-Tiers` });
 	}
 
-	const saved = await sageMessage.server.removeAdmin(userDid);
+	if (!canAdminThis) {
+		return sageMessage.whisper(`Sorry, you aren't allowed to admin users of that tier.`);
+	}
+
+	const saved = await sageMessage.server.removeAdmin(userId);
+	if (saved === null) {
+		return sageMessage.whisper(`Sorry, that user is not an admin!`);
+	}
 	if (!saved) {
 		return sageMessage.whisper(`Sorry, we were unable to remove your admin!`);
 	}

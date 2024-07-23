@@ -1,4 +1,4 @@
-import { DialogPostType, DicePostType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
+import { DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
 import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
 import { applyChanges, isDefined, warn, type Args, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
@@ -189,6 +189,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
+	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
 	public get serverDid(): Snowflake { return this.core.serverDid; }
 	public get serverId(): UUID { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }

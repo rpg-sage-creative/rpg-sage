@@ -26,8 +26,8 @@ function createGame(sageCommand: SageCommand, gameOptions: Partial<GameOptions>,
 
 function getGameOptions(sageCommand: SageCommand): GameOptions {
 	// get default gameOptions from server
-	const { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName } = sageCommand.server;
-	const gameOptions = { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, gameSystemType, gmCharacterName } as GameOptions;
+	const { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, gameSystemType, gmCharacterName } = sageCommand.server;
+	const gameOptions = { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, gameSystemType, gmCharacterName } as GameOptions;
 
 	// get gameOptions from args applied to server defaults
 	const gameOptionArgs = sageCommand.args.getGameOptions() ?? { };
@@ -57,7 +57,10 @@ async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined
 
 	const game = createGame(sageCommand, gameOptions, gameChannels.free, gameUsers);
 	await gSendDetails(sageCommand, game);
-	const create = await discordPromptYesNo(sageCommand, `Create Game?`);
+
+	sageCommand.replyStack.stopThinking();
+
+	const create = await discordPromptYesNo(sageCommand, `Create Game?`, true);
 
 	if (create) {
 		const gameSaved = game ? await game.save() : false;
@@ -71,27 +74,31 @@ async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined
 			return true;
 		}
 		return false;
+	}else {
+		await sageCommand.replyStack.editLast("Game ***NOT*** Created.");
 	}
 	return undefined;
 }
 
 export async function gCmdCreate(sageCommand: SageCommand): Promise<void> {
+	sageCommand.replyStack.startThinking();
+
 	if (!sageCommand.canAdminGames) {
-		await sageCommand.whisper("Sorry, you aren't allowed to create Games.");
-		return;
+		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to create Games.");
 	}
 
 	const updated = await gameCreate(sageCommand);
 	if (updated === true) {
-		await sageCommand.whisper({ content:"Game Created." });
+		await sageCommand.replyStack.editLast("Game Created.");
 
 	}else if (updated === false) {
-		await sageCommand.whisper({ content:"Unknown Error; Game NOT Created!" });
+		await sageCommand.replyStack.whisper({ content:"Unknown Error; Game NOT Created!" });
 
 	}else if (updated === null) {
-		await sageCommand.whisper({ content:"Please try /sage-game-create" });
+		await sageCommand.replyStack.whisper({ content:"Please try /sage-game-create" });
 
 	}else if (updated === undefined) {
 		// do nothing
 	}
+
 }

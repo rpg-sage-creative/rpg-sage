@@ -224,7 +224,8 @@ async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.whisperWikiHelp({ message:`Invalid Input.`, page:`Emoji Management` });
 	}
 
-	const set = sageMessage.server.emoji.set(emojiAndType);
+	const matches = sageMessage.bot.emoji.findEmoji(emojiAndType.type)?.matches ?? [];
+	const set = sageMessage.server.emoji.set({ ...emojiAndType, matches });
 	if (!set) {
 		return sageMessage.whisper(`Sorry, we were unable set your emoji!`);
 	}
@@ -250,7 +251,8 @@ async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.whisperWikiHelp({ message:`Invalid Input.`, page:`Emoji Management` });
 	}
 
-	const set = sageMessage.game!.emoji.set(emojiAndType);
+	const matches = sageMessage.bot.emoji.findEmoji(emojiAndType.type)?.matches ?? [];
+	const set = sageMessage.game!.emoji.set({ ...emojiAndType, matches });
 	if (!set) {
 		return sageMessage.whisper(`Sorry, we were unable set your emoji!`);
 	}
