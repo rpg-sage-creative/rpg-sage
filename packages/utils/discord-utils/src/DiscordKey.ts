@@ -109,7 +109,7 @@ export class DiscordKey implements MessageReference, ChannelReference {
 
 	public static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial | MessageReference): DiscordKey {
 		if ("messageId" in resolvable) {
-			return new DiscordKey(resolvable.guildId, resolvable.channelId, resolvable.messageId);
+			return new DiscordKey(resolvable.guildId, resolvable.channelId, undefined, resolvable.messageId);
 		}
 		if ("message" in resolvable) {
 			resolvable = resolvable.message as MessageOrPartial;
