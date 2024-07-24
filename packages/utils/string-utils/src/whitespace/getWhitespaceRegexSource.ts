@@ -1,4 +1,4 @@
-import { RegExpQuantifier } from "../regex/RegExpQuantifier.js";
+import { type RegExpQuantifier } from "../regex/RegExpQuantifier.js";
 import { HORIZONTAL_WHITESPACE_REGEX } from "../consts.js";
 
 type Options = {

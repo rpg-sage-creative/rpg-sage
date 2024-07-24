@@ -2,7 +2,6 @@ import { existsSync, readFileSync } from "fs";
 
 /**
  * @internal
- * @private
  * Tries to read the given filePath.
  * If it fails, it reads the orFileName from node_modules.
  */

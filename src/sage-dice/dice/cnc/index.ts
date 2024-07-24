@@ -1,8 +1,7 @@
 import { GameType } from "@rsc-sage/types";
-import { ExplodeDice, rollDice } from "@rsc-utils/dice-utils";
-import { randomSnowflake } from "@rsc-utils/snowflake-utils";
+import { type OrNull, randomSnowflake } from "@rsc-utils/core-utils";
+import { DiceExplode, rollDice } from "@rsc-utils/dice-utils";
 import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import type { OrNull } from "@rsc-utils/type-utils";
 import type {
 	TDiceLiteral,
 	TTestData
@@ -294,7 +293,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		const dicePartsRollsJson = dicePartsRolls.map(dicePartRoll => dicePartRoll.toJSON());
 		const explodedDice: number[] = [];
 		dicePartsRolls.forEach(dicePartRoll => {
-			explodedDice.push(...ExplodeDice.explode(12, dicePartRoll.rolls));
+			explodedDice.push(...DiceExplode.explode(12, dicePartRoll.rolls));
 		});
 		if (explodedDice.length) {
 			dicePartsRollsJson.push({

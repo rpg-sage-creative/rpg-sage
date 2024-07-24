@@ -1,35 +1,34 @@
 import { sortAsPrimitive, toUnique } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
-import type { TAbility, TAlignment, TProficiency, TSize } from "../../common";
-import { PERCEPTION, WISDOM, profToMod } from "../../common";
-import { findById, findByValue } from "../../data/Repository";
-import type { Action } from "../Action";
-import { Ancestry } from "../Ancestry";
-import { Background } from "../Background";
-import { Class } from "../Class";
-import type { Deity } from "../Deity";
-import type { Feature, FeatureCore } from "../Feature";
-import type { FeatureLevelCore } from "../Features";
-import { Features } from "../Features";
-import { Heritage } from "../Heritage";
-import { Language } from "../Language";
-import type { IHasMetadata } from "../Metadata";
-import type { Spell } from "../Spell";
-import type { IWealth } from "../Wealth";
-import { Wealth } from "../Wealth";
-import type { IHasAbilities } from "./Abilities";
-import { Abilities } from "./Abilities";
-import { ArmorClasses } from "./ArmorClasses";
-import { Check } from "./Check";
-import { Encumbrance } from "./Encumbrance";
-import type { IEquipment } from "./Equipment";
-import { Equipment } from "./Equipment";
-import type { IHasSavingThrows } from "./SavingThrows";
-import { SavingThrows } from "./SavingThrows";
-import { Skills } from "./Skills";
-import { Speeds } from "./Speeds";
+import { randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { TAbility, TAlignment, TProficiency, TSize } from "../../common.js";
+import { PERCEPTION, WISDOM, profToMod } from "../../common.js";
+import { findById, findByValue } from "../../data/Repository.js";
+import type { Action } from "../Action.js";
+import { Ancestry } from "../Ancestry.js";
+import { Background } from "../Background.js";
+import { Class } from "../Class.js";
+import type { Deity } from "../Deity.js";
+import type { Feature, FeatureCore } from "../Feature.js";
+import type { FeatureLevelCore } from "../Features.js";
+import { Features } from "../Features.js";
+import { Heritage } from "../Heritage.js";
+import { Language } from "../Language.js";
+import type { IHasMetadata } from "../Metadata.js";
+import type { Spell } from "../Spell.js";
+import type { IWealth } from "../Wealth.js";
+import { Wealth } from "../Wealth.js";
+import type { IHasAbilities } from "./Abilities.js";
+import { Abilities } from "./Abilities.js";
+import { ArmorClasses } from "./ArmorClasses.js";
+import { Check } from "./Check.js";
+import { Encumbrance } from "./Encumbrance.js";
+import type { IEquipment } from "./Equipment.js";
+import { Equipment } from "./Equipment.js";
+import type { IHasSavingThrows } from "./SavingThrows.js";
+import { SavingThrows } from "./SavingThrows.js";
+import { Skills } from "./Skills.js";
+import { Speeds } from "./Speeds.js";
 
 //#region Interfaces & Types
 
@@ -37,7 +36,7 @@ interface IPlayerCharacterBio {
 	age: number;
 	alignment: TAlignment;
 	characterName: string;
-	deityId?: UUID;
+	deityId?: Snowflake;
 	// languages: string[];
 	objectType: "Bio";
 	playerName: string;
@@ -115,7 +114,7 @@ export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerChara
 			core.bio = <any>{};
 		}
 		if (!core.id) {
-			core.id = randomUuid();
+			core.id = randomSnowflake();
 		}
 		if (!core.effects) {
 			core.effects = [];
@@ -206,7 +205,7 @@ export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerChara
 	public set deity(deity: Deity | undefined) {
 		if (this._deity !== deity) {
 			this._deity = deity;
-			this.bio.deityId = deity?.id;
+			this.bio.deityId = deity?.id as Snowflake;
 			this.update();
 		}
 	}

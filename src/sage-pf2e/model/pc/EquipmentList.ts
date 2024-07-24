@@ -1,12 +1,12 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
-import { Bulk } from "../Bulk";
-import { Coins } from "../Coins";
-import type { NamedCore } from "../base/interfaces";
-import type { Equipment } from "./Equipment";
-import type { EquipmentItem } from "./EquipmentItem";
+import { randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { Bulk } from "../Bulk.js";
+import { Coins } from "../Coins.js";
+import type { NamedCore } from "../base/interfaces.js";
+import type { Equipment } from "./Equipment.js";
+import type { EquipmentItem } from "./EquipmentItem.js";
 
-export interface EquipmentListCore extends IdCore<"EquipmentList">, NamedCore { }
+export interface EquipmentListCore extends IdCore<"EquipmentList", Snowflake>, NamedCore { }
 
 export class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList"> {
 
@@ -29,13 +29,13 @@ export class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList">
 	// Instance Methods
 
 	public addItem(...items: EquipmentItem[]): void {
-		this.eq.addItemTo(this.id, ...items);
+		this.eq.addItemTo(this.id as Snowflake, ...items);
 	}
 	public empty(): void {
-		this.eq.moveItemToList(this.eq.carried.id, ...this.items);
+		this.eq.moveItemToList(this.eq.carried.id as Snowflake, ...this.items);
 	}
 	public remove(): void {
-		this.eq.removeList(this.id);
+		this.eq.removeList(this.id as Snowflake);
 	}
 	public removeAll(): void {
 		this.eq.removeItem(...this.items);
@@ -46,7 +46,7 @@ export class EquipmentList extends HasIdCore<EquipmentListCore, "EquipmentList">
 
 	public static createCore(name: string): EquipmentListCore {
 		return {
-			id: randomUuid(),
+			id: randomSnowflake(),
 			name: name,
 			objectType: "EquipmentList"
 		};

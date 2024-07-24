@@ -12,7 +12,7 @@ import type {
 	SlashCommandSubcommandGroupBuilder,
 	SlashCommandUserOption
 } from "@discordjs/builders";
-import type { BotCodeName } from "@rsc-utils/env-utils";
+import type { CodeName } from "@rsc-utils/core-utils";
 
 export type SlashCommandGameType = "PF1E" | "PF2E" | "SF" | "Finder";
 
@@ -62,7 +62,7 @@ export type BuilderOrOption = Builder | BuilderOption;
 
 export type BotCore = {
 	/** bot codename: dev, beta, stable */
-	codeName: BotCodeName;
+	codeName: CodeName;
 
 	/** bot id / snowflake */
 	did: string;

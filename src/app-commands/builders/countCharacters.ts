@@ -1,5 +1,5 @@
 import { registerCommands } from "../commands/registerCommands.js";
-import { SlashCommand } from "../types.js";
+import { type SlashCommand } from "../types.js";
 
 export async function countCharacters(): Promise<number> {
 	let count = 0;

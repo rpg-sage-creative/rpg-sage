@@ -1,4 +1,4 @@
-import type { Snowflake } from "discord.js";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import type { SageMessage } from "../../../model/SageMessage";
 
 /** Checks for Game Player and uses their Id before checking the args. */

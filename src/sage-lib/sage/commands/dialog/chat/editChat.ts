@@ -1,7 +1,6 @@
-import { error, errorReturnNull } from "@rsc-utils/console-utils";
-import { DiscordKey, DMessage, splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
+import { error, errorReturnNull, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordKey, splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
-import { MessageAttachment } from "discord.js";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { TDialogMessage } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -10,6 +9,7 @@ import { DialogType } from "../../../repo/base/IdRepository.js";
 import type { DialogContent } from "../DialogContent.js";
 import { findLastMessage } from "../findLastMessage.js";
 import { updateEmbed } from "../updateEmbed.js";
+import { AttachmentBuilder } from "discord.js";
 
 function dialogMessageToDiscordKey(dialogMessage: TDialogMessage): DiscordKey {
 	return new DiscordKey(dialogMessage.serverDid, dialogMessage.channelDid, dialogMessage.threadDid, dialogMessage.messageDid);
@@ -19,12 +19,13 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 	const messageDid = dialogContent.name ?? sageMessage.message.reference?.messageId,
 		dialogMessage = await findLastMessage(sageMessage, messageDid).catch(errorReturnNull),
 		discordKey = dialogMessage ? dialogMessageToDiscordKey(dialogMessage) : null,
-		message = discordKey ? await sageMessage.discord.fetchMessage(discordKey) : null;
+		message = discordKey ? await sageMessage.sageCache.fetchMessage(discordKey) : null;
 	if (!message) {
 		return sageMessage.reactWarn();
 	}
 
-	const webhook = await sageMessage.discord.fetchWebhook(sageMessage.server.did, sageMessage.threadOrChannelDid, "dialog");
+	const webhookChannelReference = { guildId:sageMessage.server.did, channelId:sageMessage.threadOrChannelDid };
+	const webhook = await sageMessage.discord.fetchWebhook(webhookChannelReference);
 	if (webhook) {
 		const embed = message.embeds[0];
 		const originalContent = embed?.description ?? message.content;
@@ -49,10 +50,10 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 
 			const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
 			if (user) {
-				const content = `You edited: ${toMessageUrl(message as DMessage)}\nThe original content has been attached to this message.`;
-				const files = [new MessageAttachment(Buffer.from(originalContent, "utf-8"), `original-content.md`)];
+				const content = `You edited: ${toMessageUrl(message)}\nThe original content has been attached to this message.`;
+				const files = [new AttachmentBuilder(Buffer.from(originalContent, "utf-8"), { name:`original-content.md` })];
 				const sent = await user.send({ content, files });
-				await addMessageDeleteButton(sent as DMessage, user.id);
+				await addMessageDeleteButton(sent, user.id as Snowflake);
 			}
 
 		}

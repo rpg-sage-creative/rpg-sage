@@ -1,7 +1,8 @@
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
 import { dequote, getQuotedRegexSource } from "@rsc-utils/string-utils";
-import { SageMessage } from "../../../model/SageMessage";
 import XRegExp from "xregexp";
+import { SageMessage } from "../../../model/SageMessage.js";
 
 export async function replaceCharacterMention(sageMessage: SageMessage, content: string): Promise<string> {
 	const charMentionRegex = XRegExp(`@\\w+|@${getQuotedRegexSource()}`, "g");
@@ -27,7 +28,7 @@ export async function replaceCharacterMention(sageMessage: SageMessage, content:
 					if (!userMention && gmUserId) {
 						const npc = game.nonPlayerCharacters.findById(char.id);
 						if (npc) {
-							userMention = toUserMention(gmUserId) ?? "";
+							userMention = toUserMention(gmUserId as Snowflake) ?? "";
 						}
 					}
 				}

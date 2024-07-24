@@ -1,10 +1,9 @@
 import { GameType } from "@rsc-sage/types";
 import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
-import { warn } from "@rsc-utils/console-utils";
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
+import { randomSnowflake, warn } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
-import { TokenParsers, ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
-import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
+import { type TokenParsers, ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import {
 	CritMethodType,
@@ -12,12 +11,12 @@ import {
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
-	HasDieCore, IDiceBase,
-	IRollBase,
-	TDiceLiteral,
-	TDropKeepData,
-	TSign,
-	TTestData, UNICODE_LEFT_ARROW,
+	HasDieCore, type IDiceBase,
+	type IRollBase,
+	type TDiceLiteral,
+	type TDropKeepData,
+	type TSign,
+	type TTestData, UNICODE_LEFT_ARROW,
 	cleanDescription,
 	dropKeepToString,
 	gradeRoll, gradeToEmoji,
@@ -368,7 +367,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.None,
-			id: randomUuid(),
+			id: randomSnowflake(),
 
 			count: count ?? 0,
 			description: cleanDescription(description),
@@ -456,7 +455,7 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 		return {
 			objectType: "DicePartRoll",
 			gameType,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			dice: dicePart.toJSON(),
 			rolls
 		};
@@ -542,7 +541,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.None,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
 	}
@@ -676,7 +675,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			objectType: "DiceRoll",
 			gameType: GameType.None,
 			//Quick rolls can never be reloaded, so we don't need a UUID
-			id: uuid ? randomUuid() : null!,
+			id: uuid ? randomSnowflake() : null!,
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map<DicePartRollCore>(mapRollToJson)
 		};
@@ -746,7 +745,7 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.None,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			critMethodType: critMethodType,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
 			diceOutputType: diceOutputType,
@@ -848,7 +847,7 @@ export class DiceGroupRoll<T extends DiceGroupRollCore, U extends TDiceGroup, V 
 			objectType: "DiceGroupRoll",
 			gameType: GameType.None,
 			//Quick rolls can never be reloaded, so we don't need a UUID
-			id: uuid ? randomUuid() : null!,
+			id: uuid ? randomSnowflake() : null!,
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map<DiceRollCore>(mapRollToJson)
 		});

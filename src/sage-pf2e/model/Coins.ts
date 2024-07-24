@@ -1,6 +1,6 @@
 import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
 import { HasCore, type Core } from "@rsc-utils/class-utils";
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import { addCommas, round } from "@rsc-utils/number-utils";
 import { Bulk } from "./Bulk";
 

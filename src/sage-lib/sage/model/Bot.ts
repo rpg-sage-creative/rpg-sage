@@ -1,6 +1,7 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { warn } from "@rsc-utils/console-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import { warn } from "@rsc-utils/core-utils";
+import type { HexColorString } from "discord.js";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
@@ -70,12 +71,12 @@ export class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmo
 		return this._colors;
 	}
 
-	public toDiscordColor(colorType: ColorType): string | null {
+	public toHexColorString(colorType: ColorType): HexColorString | undefined {
 		if (!this.core.colors.length) {
 			warn(`Colors Missing: Bot (${this.codeName || this.id})`);
-			return null;
+			return undefined;
 		}
-		return this.colors.toDiscordColor(colorType);
+		return this.colors.toHexColorString(colorType);
 	}
 
 	// #endregion

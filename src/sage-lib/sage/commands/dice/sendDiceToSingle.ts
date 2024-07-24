@@ -1,8 +1,7 @@
-import { debug } from "@rsc-utils/console-utils";
-import { toMessageUrl, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { debug } from "@rsc-utils/core-utils";
+import { toMessageUrl, type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { ColorResolvable } from "discord.js";
 import { sendTo } from "../../../discord/sendTo.js";
 import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
@@ -10,14 +9,14 @@ import type { FormattedDiceOutput } from "./FormattedDiceOutput.js";
 import { createMentionLine } from "./createMentionLine.js";
 
 /** This function sends all dice rolls to the channel in one post. */
-export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutputs: FormattedDiceOutput[], targetChannel: DMessageChannel, gmTargetChannel: Optional<DMessageTarget>): Promise<void> {
+export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutputs: FormattedDiceOutput[], targetChannel: MessageChannel, gmTargetChannel: Optional<MessageTarget>): Promise<void> {
 	const isSageMessage = sageCommand.isSageMessage();
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0;
 	const allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length;
 	const publicMentionLine = await createMentionLine(sageCommand);
 	const secretMentionLine = await createMentionLine(sageCommand, true);
 	const secretReferenceLink = isSageMessage ? toMessageUrl(sageCommand.message) : ``;
-	const splitOptions = { embedColor:sageCommand.toDiscordColor(ColorType.Dice) as ColorResolvable ?? undefined };
+	const splitOptions = { embedColor:sageCommand.toHexColorString(ColorType.Dice) ?? undefined };
 
 	const gmPostContents: Optional<string>[] = [];
 	const gmEmbedContents: Optional<string>[] = [];
@@ -49,7 +48,7 @@ export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutput
 	const gmEmbedContent = gmEmbedContents.filter(isNotBlank).join("\n");
 	if (gmPostContent || gmEmbedContent) {
 		if (gmTargetChannel) {
-			sendTo({
+			await sendTo({
 				sageCache: sageCommand.sageCache,
 				target: gmTargetChannel,
 				content: gmPostContent,
@@ -64,7 +63,7 @@ export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutput
 	const mainEmbedContent = mainEmbedContents.filter(isNotBlank).join("\n");
 	if (mainPostContent || mainEmbedContent) {
 		if (targetChannel) {
-			sendTo({
+			await sendTo({
 				sageCache: sageCommand.sageCache,
 				target: targetChannel,
 				content: mainPostContent,

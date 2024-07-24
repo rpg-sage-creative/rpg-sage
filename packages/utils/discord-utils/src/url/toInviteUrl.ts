@@ -1,36 +1,26 @@
-import { error } from "@rsc-utils/console-utils";
-import type { Optional, OrNull } from "@rsc-utils/type-utils";
-import type { Channel, Guild } from "discord.js";
+import { error, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { Guild } from "discord.js";
 
-function isTextChannel(channel: Optional<Channel>): boolean {
-	if (channel) {
-		if ("isText" in channel && typeof(channel.isText) === "function" && channel.isText()) {
-			return true;
-		}
-		if ("isTextBased" in channel && typeof(channel.isTextBased) === "function" && channel.isTextBased()) {
-			return true;
-		}
-	}
-	return false;
-}
-
-export function toInviteUrl(guild: Optional<Guild>): OrNull<string> {
+export function toInviteUrl(guild: Optional<Guild>): OrUndefined<string> {
 	if (!guild) {
-		return null;
+		return undefined;
 	}
 	try {
 		const bestInvite = guild.invites.cache.find(invite => {
-			if (("stageInstance" in invite) && invite.stageInstance) {
-				return false;
-			}
-			if (invite.targetUser || invite.temporary) {
-				return false;
-			}
-			return isTextChannel(invite.channel);
+			if (!invite.channel?.isTextBased()) return false; //NOSONAR
+			if (invite.guildScheduledEvent) return false; //NOSONAR
+			if (invite.maxAge) return false; //NOSONAR
+			if (invite.maxUses) return false; //NOSONAR
+			if (invite.stageInstance) return false; //NOSONAR
+			if (invite.targetApplication) return false; //NOSONAR
+			if (invite.targetUser) return false; //NOSONAR
+			if (invite.targetType) return false; //NOSONAR
+			if (invite.temporary) return false; //NOSONAR
+			return true;
 		});
-		return bestInvite?.url ?? null;
+		return bestInvite?.url ?? undefined;
 	}catch(ex) {
 		error(ex);
 	}
-	return null;
+	return undefined;
 }

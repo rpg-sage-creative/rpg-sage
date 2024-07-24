@@ -1,5 +1,5 @@
-import type { Comparable } from "./Comparable.js";
-import type { SortResult } from "./SortResult.js";
+import { type Comparable } from "./Comparable.js";
+import { type SortResult } from "./SortResult.js";
 
 /** Used to sort Comparable objects. */
 export function sortComparable<T>(a: Comparable<T>, b: Comparable<T>): SortResult {

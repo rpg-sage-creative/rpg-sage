@@ -1,19 +1,14 @@
 import { Collection } from "@rsc-utils/array-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
-import { debug, errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
-import { getDataRoot } from "@rsc-utils/env-utils";
-import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/fs-utils";
-import { getJson } from "@rsc-utils/https-utils";
-import { stringify } from "@rsc-utils/json-utils";
+import { debug, errorReturnFalse, errorReturnNull, getDataRoot, randomSnowflake, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { fileExistsSync, getJson, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
-import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
-import { ABILITIES } from "../../index.js";
 import type { TMacro } from "../../../sage-lib/sage/model/types.js";
 import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common.js";
 import { getSavingThrows, toModifier } from "../../common.js";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository.js";
+import { ABILITIES } from "../../index.js";
 import type { Weapon } from "../Weapon.js";
 import { Abilities, type IHasAbilities } from "./Abilities.js";
 import type { IHasProficiencies } from "./PlayerCharacter.js";
@@ -699,7 +694,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super(core);
 		if (!core.id) {
-			core.id = randomUuid();
+			core.id = randomSnowflake();
 		}
 		Object.keys(flags).forEach(key => {
 			core[key as TPathbuilderCharacterCustomFlag] = flags[key as TPathbuilderCharacterCustomFlag];

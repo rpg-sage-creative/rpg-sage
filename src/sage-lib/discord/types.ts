@@ -1,5 +1,5 @@
 import type { Renderable, RenderableContent } from "@rsc-utils/render-utils";
-import type { Awaitable } from "@rsc-utils/type-utils";
+import type { Awaitable, Optional } from "@rsc-utils/core-utils";
 import type { SageInteraction } from "../sage/model/SageInteraction";
 import type { SageMessage } from "../sage/model/SageMessage";
 import type { SageReaction } from "../sage/model/SageReaction";
@@ -40,7 +40,7 @@ export type TInteractionHandler<T = any> = (sageInteraction: SageInteraction<any
 export type TCommandAndArgs = { command?: string; args?: ArgsManager; };
 export type TCommandAndArgsAndData<T> = TCommandAndArgs & { data: T; };
 
-export type TMessageTester<T = any> = (sageMessage: SageMessage) => Awaitable<TCommandAndArgs | TCommandAndArgsAndData<T> | null>;
+export type TMessageTester<T = any> = (sageMessage: SageMessage) => Awaitable<Optional<TCommandAndArgs | TCommandAndArgsAndData<T>>>;
 export type TMessageHandler<T = any> = (sageMessage: SageMessage, data?: T) => Awaitable<void>;
 
 //#endregion

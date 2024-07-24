@@ -1,5 +1,5 @@
 
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 import { nth } from "@rsc-utils/number-utils";
 import { findByValue } from "../data/Repository";
 import type { Domain } from "./Domain";

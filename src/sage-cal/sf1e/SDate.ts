@@ -1,7 +1,5 @@
-import { SageDate } from "../SageDate";
-import {
-	Days, DayType, Months, MonthType, TDayType, TMonthType
-} from "./cal";
+import { SageDate } from "../SageDate.js";
+import { Days, DayType, Months, MonthType, type TDayType, type TMonthType } from "./cal.js";
 
 export class SDate extends SageDate<SDate, DayType, TDayType, MonthType, TMonthType> {
 
@@ -11,5 +9,5 @@ export class SDate extends SageDate<SDate, DayType, TDayType, MonthType, TMonthT
 	public get monthType(): MonthType { return this._.getMonth(); }
 	public get month(): TMonthType { return Months[this._.getMonth()]; }
 
-	public static YearDelta = -1700;
+	public static readonly YearDelta = -1700;
 }

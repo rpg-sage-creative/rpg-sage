@@ -1,18 +1,17 @@
+import { GameType } from "@rsc-sage/types";
+import { randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
 import { correctEscapeForEmoji } from "..";
-import { GameType } from "@rsc-sage/types";
 import {
 	DiceOutputType,
 	DiceSecretMethodType, DropKeepType,
-	TDiceLiteral,
-	TTestData,
 	TestType,
 	cleanDescription,
 	createValueTestData,
-	parseTestTargetValue
+	parseTestTargetValue,
+	type TDiceLiteral,
+	type TTestData
 } from "../../common";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
@@ -339,7 +338,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 
 			count: count ?? 1,
 			description: cleanDescription(description),
@@ -422,7 +421,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			dice: dp.toJSON(),
 			rolls: dpRolls
 		});
@@ -453,7 +452,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
 	}
@@ -487,7 +486,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 		return new DiceRoll({
 			objectType: "DiceRoll",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
 		});
@@ -518,7 +517,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			critMethodType: undefined,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
 			diceOutputType: diceOutputType,
@@ -539,7 +538,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 			const d20DicePartCore: DicePartCore = {
 				objectType: "DicePart",
 				gameType: GameType.E20,
-				id: randomUuid(),
+				id: randomSnowflake(),
 				count: 1,
 				sides: 20,
 				description: "",
@@ -571,7 +570,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 					dice.push(Dice.create([new DicePart({
 						objectType: "DicePart",
 						gameType: GameType.E20,
-						id: randomUuid(),
+						id: randomSnowflake(),
 						count: +count || 1,
 						sides: +sides || 0,
 						description: "",
@@ -656,7 +655,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
 			gameType: GameType.E20,
-			id: randomUuid(),
+			id: randomSnowflake(),
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
 		});

@@ -1,7 +1,7 @@
 import { RenderableMap } from "../../../../sage-utils/utils/MapUtils";
 import type { IMapLayer, MapRenderResponse, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils";
 import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
-import { TParsedGameMapCore } from "./gameMapImporter";
+import { type TParsedGameMapCore } from "./gameMapImporter";
 
 class RenderableGameMapLayer implements IMapLayer {
 	public constructor(protected images: TGameMapImage[]) { }

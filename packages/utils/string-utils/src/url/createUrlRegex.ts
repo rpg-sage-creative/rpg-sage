@@ -1,4 +1,4 @@
-import { RegExpCreateOptions } from "../regex/RegExpCreateOptions.js";
+import { type RegExpCreateOptions } from "../regex/RegExpCreateOptions.js";
 import { wrap } from "../wrap/wrap.js";
 
 type Options = Omit<RegExpCreateOptions, "quantifier"> & {

@@ -1,12 +1,12 @@
-import type { SageMessage } from "../../model/SageMessage";
-import type { DialogContent } from "./DialogContent";
-import { parseDialogContent } from "./parseDialogContent";
+import type { SageMessage } from "../../model/SageMessage.js";
+import type { DialogContent } from "./DialogContent.js";
+import { parseDialogContent } from "./parseDialogContent.js";
 
 /**
  * Parses dialog content.
  * If an alias is found, it ensures the alias is valid and updates the dialog content to use it.
  */
-export function parseUsableDialogContent(sageMessage: SageMessage, content: string): DialogContent | null {
+export function parseUsableDialogContent(sageMessage: SageMessage, content: string): DialogContent | undefined {
 	// parse original content
 	const dialogContent = parseDialogContent(content);
 	// we can't parse it or don't have an alias, so return now
@@ -18,7 +18,7 @@ export function parseUsableDialogContent(sageMessage: SageMessage, content: stri
 	const aliasFound = sageMessage.findAlias(dialogContent.alias);
 	// we can't find it, so return now
 	if (!aliasFound) {
-		return null;
+		return undefined;
 	}
 
 	// .charAlias implies a dynamic alias on the character (using alias property) instead of a user advanced alias (alias macro)
@@ -33,7 +33,7 @@ export function parseUsableDialogContent(sageMessage: SageMessage, content: stri
 	const aliasContent = parseDialogContent(aliasFound.target);
 	// just in case it doesn't parse, return now
 	if (!aliasContent) {
-		return null;
+		return undefined;
 	}
 
 	// properly update the content by either replacing {text} or appending

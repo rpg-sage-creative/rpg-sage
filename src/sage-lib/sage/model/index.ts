@@ -1,5 +1,5 @@
 import type { DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannel } from "@rsc-sage/types";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { GameCharacter } from "./GameCharacter.js";
 
 export interface HasGame {

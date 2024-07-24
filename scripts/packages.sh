@@ -26,35 +26,24 @@ if [ "$1" = "all" ] || [ "$2" = "all" ]; then
 	repoNames=(
 		"args-utils"
 		"array-utils"
-		"async-array-utils"
 		"cache-utils"
 		"character-utils"
 		"class-utils"
 		"color-utils"
-		"console-utils"
+		"core-utils"
 		"date-utils"
-		# "dice-utils"
+		"dice-utils"
 		"discord-utils"
-		"enum-utils"
-		"env-utils"
-		"fs-utils"
-		"https-utils"
-		"json-utils"
+		"io-utils"
 		"language-utils"
 		# "maps-utils"
-		"math-utils"
 		"number-utils"
-		"pdf-utils"
 		"progress-utils"
-		"random-utils"
+		# "queue-utils"
 		"render-utils"
 		"search-utils"
-		"snowflake-utils"
 		"string-utils"
 		"temperature-utils"
-		"test-utils"
-		"type-utils"
-		"uuid-utils"
 	)
 elif [ ! -z "$1" ] && [ -d "$utilsDir/$1" ]; then
 	doOne=true
@@ -84,7 +73,7 @@ for repoName in "${repoNames[@]}"; do
 	rm -rf "$destDir"
 	mkdir "$destDir"
 	cp -r "$srcDir/src" "$destDir/src"
-	if [ "$repoName" = "console-utils" ]; then
+	if [ "$repoName" = "core-utils" ]; then
 		cp -r "$srcDir/scripts" "$destDir/scripts"
 	fi
 	if [ "$repoName" = "language-utils" ]; then

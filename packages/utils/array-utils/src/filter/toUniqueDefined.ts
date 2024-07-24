@@ -1,4 +1,4 @@
-import { isDefined, type Optional } from "@rsc-utils/type-utils";
+import { isDefined, type Optional } from "@rsc-utils/core-utils";
 
 /**
  * Filter that reduces an array to unique/defined values.

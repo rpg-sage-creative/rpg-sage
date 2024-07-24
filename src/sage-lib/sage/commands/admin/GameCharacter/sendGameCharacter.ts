@@ -1,4 +1,4 @@
-import { mapAsync } from "@rsc-utils/async-array-utils";
+import { mapAsync } from "@rsc-utils/array-utils";
 import { toChannelMention, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
 import { sendWebhook } from "../../../../discord/messages.js";

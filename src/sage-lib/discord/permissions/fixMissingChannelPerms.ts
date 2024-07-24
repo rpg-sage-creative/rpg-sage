@@ -1,11 +1,12 @@
-import type { GuildMember, TextChannel } from "discord.js";
+import type { GuildMember, PermissionFlagsBits, TextChannel } from "discord.js";
 import { getPermsFor } from "./getPermsFor.js";
 import { getRequiredChannelPerms } from "./getRequiredChannelPerms.js";
-import { ChannelPermissionString } from "./ChannelPermissionString.js";
 
 /*
 https://discord.com/developers/docs/topics/permissions
 */
+
+type PermFlagBitsKeys = keyof typeof PermissionFlagsBits;
 
 type FixPermResults = {
 	/** Could Sage manage the channel? */
@@ -15,7 +16,7 @@ type FixPermResults = {
 	canViewChannel: boolean;
 
 	/** perms missing before the edit */
-	missingBefore?: ChannelPermissionString[];
+	missingBefore?: PermFlagBitsKeys[];
 
 	/** was an edit attempted? */
 	fixAttempted?: boolean;
@@ -24,7 +25,7 @@ type FixPermResults = {
 	fixSuccess?: boolean;
 
 	/** perms missing after the edit */
-	missingAfter?: ChannelPermissionString[];
+	missingAfter?: PermFlagBitsKeys[];
 
 	/** regardless of changes, are the final perms correct? */
 	permsCorrect: boolean;

@@ -1,20 +1,16 @@
 import { Collection } from "@rsc-utils/array-utils";
-import type { DiscordKey } from "@rsc-utils/discord-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
-import { CharactersMatch } from "./CharactersMatch";
-import type { Game } from "./Game";
-import type { GameCharacterCore, TDialogMessage, TGameCharacterType } from "./GameCharacter";
-import { GameCharacter } from "./GameCharacter";
-import type { IHasSave } from "./NamedCollection";
-import { NamedCollection } from "./NamedCollection";
-import type { User } from "./User";
+import { randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { resolveSnowflake, type CanBeSnowflakeResolvable, type DiscordKey } from "@rsc-utils/discord-utils";
+import { CharactersMatch } from "./CharactersMatch.js";
+import type { Game } from "./Game.js";
+import { GameCharacter, type GameCharacterCore, type TDialogMessage, type TGameCharacterType } from "./GameCharacter.js";
+import { NamedCollection, type IHasSave } from "./NamedCollection.js";
+import type { User } from "./User.js";
 
 /*
 // function remapCharacters(this: CharacterManager, core: GameCharacterCore, index: number, array: (GameCharacterCore | GameCharacter)[]): void {
 // 	if (!core.id) {
-// 		core.id = randomUuid();
+// 		core.id = randomSnowflake();
 // 	}
 // 	array[index] = new GameCharacter(core, this);
 // }
@@ -53,7 +49,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	public async addCharacter(core: GameCharacterCore): Promise<GameCharacter | null> {
 		const found = this.findByUserAndName(core.userDid, core.name);
 		if (!found) {
-			const newCore = <GameCharacterCore>{ ...core, id: randomUuid() };
+			const newCore = <GameCharacterCore>{ ...core, id: randomSnowflake() };
 			const character = new GameCharacter(newCore, this),
 				added = await this.pushAndSave(character);
 			return added ? character : null;
@@ -77,7 +73,8 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	}
 
 	/** Returns the character with the given id, recursively. */
-	public findById(characterId: UUID): GameCharacter | undefined {
+	public findById(resolvable: CanBeSnowflakeResolvable): GameCharacter | undefined {
+		const characterId = resolveSnowflake(resolvable) ?? resolvable;
 		for (const character of this) {
 			if (character.id === characterId) {
 				return character;
@@ -229,7 +226,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		}else if (values) {
 			Array.from(values).forEach(core => {
 				if (!core.id) {
-					core.id = randomUuid();
+					core.id = randomSnowflake();
 				}
 				characterManager.push(new GameCharacter(core, characterManager));
 			});

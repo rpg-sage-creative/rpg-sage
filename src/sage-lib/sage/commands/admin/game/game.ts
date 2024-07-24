@@ -1,5 +1,6 @@
 import { type SageChannel } from "@rsc-sage/types";
 import { sortComparable } from "@rsc-utils/array-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { toChannelMention } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
@@ -13,7 +14,7 @@ async function getGames(sageCommand: SageCommand): Promise<Game[]> {
 	const guild = sageCommand.discord.guild;
 	if (guild) {
 		if (sageCommand.canAdminGames) {
-			return sageCommand.sageCache.games.getByServerDid(guild.id);
+			return sageCommand.sageCache.games.getByServerDid(guild.id as Snowflake);
 		}
 	} else if (sageCommand.isSuperUser) {
 		return sageCommand.sageCache.games.getAll();

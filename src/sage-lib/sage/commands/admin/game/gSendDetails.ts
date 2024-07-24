@@ -1,11 +1,10 @@
+import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType } from "@rsc-sage/types";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { getRollemId, getTupperBoxId } from "@rsc-utils/env-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import type { Optional } from "@rsc-utils/type-utils";
 import type { TextChannel } from "discord.js";
-import { getPermissionLabel } from "../../../../discord/permissions/getPermissionLabel.js";
 import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
 import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
@@ -16,7 +15,7 @@ import { createAdminRenderableContent } from "../../cmd.js";
 async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 	let game: Optional<Game> = sageCommand.game;
 	if (!game) {
-		const gameId = sageCommand.args.getString("id");
+		const gameId = sageCommand.args.getIdType("id");
 		if (gameId) {
 			game = await sageCommand.sageCache.games.getById(gameId);
 		}
@@ -44,7 +43,7 @@ function showGameRenderGameType(renderableContent: RenderableContent, game: Game
 async function checkForMissingPerms(sageCommand: SageCommand, guildChannel?: TextChannel | null): Promise<string[]> {
 	const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.did);
 	if (bot && guildChannel) {
-		return getPermsFor(guildChannel, bot, ...getRequiredChannelPerms()).missing.map(getPermissionLabel);
+		return getPermsFor(guildChannel, bot, ...getRequiredChannelPerms()).missing;
 	}
 	return [];
 }
@@ -78,7 +77,7 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 		if (metas.length) {
 			renderableContent.append(`[spacer]<b>${nameTagsToType(metas[0].nameTags)}</b>`);
 			for (const meta of metas) {
-				const guildChannel = await sageCommand.discord.fetchChannel<TextChannel>(meta.sageChannel.id);
+				const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(meta.sageChannel.id);
 				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
 				renderableContent.append(`[spacer][spacer]${guildChannelName}`);
 				const missingPerms = await checkForMissingPerms(sageCommand, guildChannel);
@@ -201,7 +200,7 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 	renderableContent.append(`<b>NonPlayer Characters</b> ${game.nonPlayerCharacters.length}`);
 
 	const playerGuildMembers = await game.pGuildMembers();
-	const players = playerGuildMembers.map(pGuildMember => ({ name:toHumanReadable(pGuildMember), character:game.playerCharacters.findByUser(pGuildMember.id)?.name }));
+	const players = playerGuildMembers.map(pGuildMember => ({ name:toHumanReadable(pGuildMember), character:game.playerCharacters.findByUser(pGuildMember.id as Snowflake)?.name }));
 	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
 	players.forEach(player => renderableContent.append(`[spacer]${player.name}${player.character ? ` (${player.character})` : ``}`));
 

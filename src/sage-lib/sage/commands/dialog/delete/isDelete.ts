@@ -1,8 +1,8 @@
-import { TCommand } from "../../../../discord";
-import { isAuthorBotOrWebhook } from "../../../../discord/handlers";
-import { SageReaction } from "../../../model/SageReaction";
-import { DialogMessageRepository } from "../../../repo/DialogMessageRepository";
-import { isValidDeleteAction } from "./isValidDeleteAction";
+import { type TCommand } from "../../../../discord/index.js";
+import { isAuthorBotOrWebhook } from "../../../../discord/handlers.js";
+import { SageReaction } from "../../../model/SageReaction.js";
+import { DialogMessageRepository } from "../../../repo/DialogMessageRepository.js";
+import { isValidDeleteAction } from "./isValidDeleteAction.js";
 
 export async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	if (!isValidDeleteAction(sageReaction)) {

@@ -1,4 +1,4 @@
-import { RegExpCreateOptions, wrap } from "@rsc-utils/string-utils";
+import { wrap, type RegExpCreateOptions } from "@rsc-utils/string-utils";
 
 // dm message
 // https://discord.com/channels/@me/654449179493400649/1199781308537262212
@@ -18,7 +18,7 @@ import { RegExpCreateOptions, wrap } from "@rsc-utils/string-utils";
 
 type UrlType = "channel" | "message";
 
-/** @internal @private */
+/** @internal */
 export function createDiscordUrlRegex(type: UrlType, options?: RegExpCreateOptions): RegExp {
 	const capture = options?.capture;
 	const flags = options?.globalFlag ? "gi" : "i";

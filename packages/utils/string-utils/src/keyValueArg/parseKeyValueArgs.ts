@@ -1,5 +1,5 @@
 import XRegExp from "xregexp";
-import { KeyValueArg } from "./KeyValueArg.js";
+import { type KeyValueArg } from "./KeyValueArg.js";
 import { getKeyValueArgSource } from "./getKeyValueArgSource.js";
 import { parseKeyValueArg } from "./parseKeyValueArg.js";
 

@@ -1,20 +1,16 @@
-import { errorReturnFalse, errorReturnNull } from "@rsc-utils/console-utils";
-import { DiscordKey, toUserMention, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
-import { getDataRoot } from "@rsc-utils/env-utils";
-import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
-import { PdfCacher } from "@rsc-utils/pdf-utils";
-import { NIL_SNOWFLAKE } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
-import { ButtonInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageButtonStyleResolvable, MessageEmbed, MessageSelectMenu, SelectMenuInteraction } from "discord.js";
+import type { Optional, Snowflake, UUID } from "@rsc-utils/core-utils";
+import { errorReturnFalse, errorReturnNull, getDataRoot } from "@rsc-utils/core-utils";
+import { DiscordKey, type MessageTarget, toUserMention } from "@rsc-utils/discord-utils";
+import type { PdfJson } from "@rsc-utils/io-utils";
+import { PdfCacher, PdfJsonManager, fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { ActionRowBuilder, AttachmentBuilder, type BaseMessageOptions, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20/index.js";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
-import { PdfJsonFields, TRawJson } from "../../../sage-e20/common/pdf.js";
-import { PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
+import { type PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
 import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse.js";
-import { PlayerCharacterCorePR, PlayerCharacterPR, TCharacterSectionType, TCharacterViewType, TSkillZord, TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";
+import { type PlayerCharacterCorePR, PlayerCharacterPR, type TCharacterSectionType, type TCharacterViewType, type TSkillZord, type TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";
 import { PdfJsonParserPR } from "../../../sage-e20/pr/parse.js";
-import { PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer.js";
+import { type PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer.js";
 import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -28,17 +24,20 @@ import { parseDiceMatches, sendDice } from "./dice.js";
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
 type TPlayerCharacterCore = PlayerCharacterCoreJoe | PlayerCharacterCorePR | PlayerCharacterCoreTransformer;
 
-function createSelectMenuRow(selectMenu: MessageSelectMenu): MessageActionRow {
+function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuilder<StringSelectMenuBuilder> {
 	if (selectMenu.options.length > 25) {
 		selectMenu.options.length = 25;
 	}
-	return new MessageActionRow().addComponents(selectMenu);
+	if (selectMenu.data.min_values) {
+		selectMenu.setMaxValues(selectMenu.options.length);
+	}
+	return new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(selectMenu);
 }
 
-async function attachCharacter(sageCache: SageCache, channel: DMessageChannel | DUser, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
-	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.description).join("");
+async function attachCharacter(sageCache: SageCache, channel: MessageTarget, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
+	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.getDescription()).join("");
 	const buffer = Buffer.from(raw, "utf-8");
-	const attachment = new MessageAttachment(buffer, `${attachmentName}.txt`);
+	const attachment = new AttachmentBuilder(buffer, { name:`${attachmentName}.txt` });
 	const message = await channel.send({
 		content: `Attaching Character: ${character.name}`,
 		files:[attachment]
@@ -49,18 +48,18 @@ async function attachCharacter(sageCache: SageCache, channel: DMessageChannel | 
 	return Promise.resolve();
 }
 
-function jsonToCharacter(rawJson: TRawJson): TPlayerCharacter | null {
-	const fields = PdfJsonFields.inputToFields(rawJson);
-	if (PdfJsonParserJoe.isJoePdf(rawJson, fields)) {
-		const core = PdfJsonParserJoe.parseCharacter(fields);
+function jsonToCharacter(rawJson: PdfJson): TPlayerCharacter | null {
+	const pdfJsonManager = PdfJsonManager.from(rawJson);
+	if (PdfJsonParserJoe.isJoePdf(pdfJsonManager)) {
+		const core = PdfJsonParserJoe.parseCharacter(pdfJsonManager);
 		return core ? new PlayerCharacterJoe(core) : null;
 	}
-	if (PdfJsonParserPR.isPowerRangerPdf(rawJson, fields)) {
-		const core = PdfJsonParserPR.parseCharacter(fields);
+	if (PdfJsonParserPR.isPowerRangerPdf(pdfJsonManager)) {
+		const core = PdfJsonParserPR.parseCharacter(pdfJsonManager);
 		return core ? new PlayerCharacterPR(core) : null;
 	}
-	if (PdfJsonParserTransformer.isTransformerPdf(rawJson, fields)) {
-		const core = PdfJsonParserTransformer.parseCharacter(fields);
+	if (PdfJsonParserTransformer.isTransformerPdf(pdfJsonManager)) {
+		const core = PdfJsonParserTransformer.parseCharacter(pdfJsonManager);
 		return core ? new PlayerCharacterTransformer(core) : null;
 	}
 	return null;
@@ -89,7 +88,13 @@ function getPath(characterId: string): string {
 	return `${getDataRoot("sage")}/e20/${characterId}.json`;
 }
 
-async function postCharacter(sageCache: SageCache, channel: DMessageChannel, character: TPlayerCharacter, pin: boolean): Promise<void> {
+function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): BaseMessageOptions {
+	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character) as any));
+	const components = createComponents(character);
+	return { embeds, components };
+}
+
+async function postCharacter(sageCache: SageCache, channel: MessageTarget, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const saved = await saveCharacter(character);
 	if (saved) {
 		const output = prepareOutput(sageCache, character);
@@ -118,8 +123,8 @@ function getActiveSections(character: TPlayerCharacter): TCharacterSectionType[]
 	return getCharacterSections(activeView) ?? activeSections ?? getCharacterSections("Combat") ?? [];
 }
 
-function createViewSelectRow(character: TPlayerCharacter): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createViewSelectRow(character: TPlayerCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`E20|${character.id}|View`);
 	selectMenu.setPlaceholder("Character Sheet Sections");
 	selectMenu.setMinValues(1);
@@ -151,8 +156,8 @@ function createViewSelectRow(character: TPlayerCharacter): MessageActionRow {
 	return createSelectMenuRow(selectMenu);
 }
 
-function createEdgeSnagShiftRow(character: TPlayerCharacter): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createEdgeSnagShiftRow(character: TPlayerCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`E20|${character.id}|EdgeSnagShift`);
 	selectMenu.setPlaceholder("Edge, Snag, Upshift, Downshift");
 	selectMenu.setMinValues(1);
@@ -195,8 +200,8 @@ function countTrainedAndSpecs(character: TPlayerCharacter): number {
 	}
 	return count;
 }
-function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`E20|${character.id}|Skill`);
 	selectMenu.setPlaceholder("Select a Skill to Roll");
 
@@ -252,8 +257,8 @@ function createSkillSelectRow(character: TPlayerCharacter, includeSpecs: boolean
 		return name === activeSkill || (!activeSkill && name === "Initiative");
 	}
 }
-function createSkillSpecializationSelectRow(character: TPlayerCharacter): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createSkillSpecializationSelectRow(character: TPlayerCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`E20|${character.id}|Spec`);
 	selectMenu.setPlaceholder("Select a Specialization to Roll");
 
@@ -281,8 +286,8 @@ function createSkillSpecializationSelectRow(character: TPlayerCharacter): Messag
 	return createSelectMenuRow(selectMenu);
 }
 
-function createButton(customId: string, label: string, style: MessageButtonStyleResolvable): MessageButton {
-	const button = new MessageButton();
+function createButton(customId: string, label: string, style: ButtonStyle): ButtonBuilder {
+	const button = new ButtonBuilder();
 	button.setCustomId(customId);
 	button.setLabel(label);
 	button.setStyle(style);
@@ -299,42 +304,36 @@ function getActiveEdgeSnagShiftValues<T extends TEdgeSnag | TShift | TEdgeSnagSh
 	return activeValue.split(",").filter(s => s) as T[];
 }
 
-function createRollButtonRow(character: TPlayerCharacter): MessageActionRow {
+function createRollButtonRow(character: TPlayerCharacter): ActionRowBuilder<ButtonBuilder> {
 	const activeEdgeSnagShift = getActiveEdgeSnagShiftValues(character);
-	const testColor = testEdgeSnag(activeEdgeSnagShift, { edge:"SUCCESS", snag:"DANGER", none:"PRIMARY" }) as MessageButtonStyleResolvable;
-	const untrainedColor = testEdgeSnag(activeEdgeSnagShift, { edge:"PRIMARY", snag:"DANGER", none:"DANGER" }) as MessageButtonStyleResolvable;
+	const testColor = testEdgeSnag(activeEdgeSnagShift, { edge:ButtonStyle.Success, snag:ButtonStyle.Danger, none:ButtonStyle.Primary });
+	const untrainedColor = testEdgeSnag(activeEdgeSnagShift, { edge:ButtonStyle.Primary, snag:ButtonStyle.Danger, none:ButtonStyle.Danger });
 	const rollButton = createButton(`E20|${character.id}|Roll`, `Roll Test`, testColor);
 	const rollSecretButton = createButton(`E20|${character.id}|Secret`, `Roll Secret Test`, testColor);
 	const rollInitButton = createButton(`E20|${character.id}|Init`, `Roll Initiative`, testColor);
 	const rollUntrainedButton = createButton(`E20|${character.id}|Untrained`, `Roll Untrained`, untrainedColor);
-	return new MessageActionRow().addComponents(rollButton, rollSecretButton, rollInitButton, rollUntrainedButton);
+	return new ActionRowBuilder<ButtonBuilder>().setComponents(rollButton, rollSecretButton, rollInitButton, rollUntrainedButton);
 }
 
-function createComponents(character: TPlayerCharacter): MessageActionRow[] {
+function createComponents(character: TPlayerCharacter): ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] {
 	const countSkillOptions = countTrainedAndSpecs(character);
 	const includeSpecs = countSkillOptions < 25;
-	return [
+	const selectRows: ActionRowBuilder<StringSelectMenuBuilder>[] = [
 		createViewSelectRow(character),
 		createEdgeSnagShiftRow(character),
 		createSkillSelectRow(character, includeSpecs),
 		!includeSpecs ? createSkillSpecializationSelectRow(character) : null!,
-	].filter(row => row?.components.every(component => (component as MessageSelectMenu).options.length))
-	.concat([
+	];
+	const rows: ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] = selectRows
+		.filter(row => row?.components.every(component => component.options.length));
+	return rows.concat([
 		createRollButtonRow(character)
 	]);
 }
 
-type TOutput = { embeds:MessageEmbed[], components:MessageActionRow[] };
-function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutput {
-	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character) as any));
-	const components = createComponents(character);
-	return { embeds, components };
-}
-
-
 export function getValidE20CharacterId(customId?: string | null): string | undefined {
-	const uuidActionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
-	if (!customId || !uuidActionRegex.test(customId)) {
+	const actionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
+	if (!customId || !actionRegex.test(customId)) {
 		return undefined;
 	}
 
@@ -350,7 +349,7 @@ function sheetTester(sageInteraction: SageInteraction): boolean {
 	return getValidE20CharacterId(customId) !== undefined;
 }
 
-async function viewHandler(sageInteraction: SageInteraction<SelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
+async function viewHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
 	if (values.includes("All")) {
@@ -369,7 +368,7 @@ async function viewHandler(sageInteraction: SageInteraction<SelectMenuInteractio
 	return updateSheet(sageInteraction, character);
 }
 
-async function skillHandler(sageInteraction: SageInteraction<SelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
+async function skillHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await saveCharacter(character);
@@ -436,8 +435,8 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
 		await sageInteraction.interaction.channel?.send({
-			content: `${toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`,
-			components: createMessageDeleteButtonComponents(sageInteraction.user.id)
+			content: `${toUserMention(sageInteraction.user.id as Snowflake)} *Secret Dice sent to the GM* 🎲`,
+			components: createMessageDeleteButtonComponents(sageInteraction.user.id as Snowflake)
 		});
 	}
 
@@ -479,20 +478,19 @@ export async function handleEssence20Import(sageCommand: SageCommand): Promise<v
 	const isMessageUrl = value.startsWith("https://discord.com/channels/");
 
 	let fileName: string | undefined;
-	let rawJson: Optional<TRawJson>;
+	let rawJson: Optional<PdfJson>;
 	if (isPdfUrl) {
 		fileName = value.split("/").pop();
 		await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
-		rawJson = await PdfCacher.read<TRawJson>(value);
+		rawJson = await PdfCacher.read<PdfJson>(value);
 	}else if (isMessageUrl) {
-		const [serverDid, channelDid, messageDid] = value.split("/").slice(-3);
-		const discordKey = new DiscordKey(serverDid.replace("@me", NIL_SNOWFLAKE), channelDid, NIL_SNOWFLAKE, messageDid);
-		const message = await sageCommand.discord.fetchMessage(discordKey);
+		const discordKey = DiscordKey.fromUrl(value);
+		const message = discordKey ? await sageCommand.sageCache.fetchMessage(discordKey) : undefined;
 		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 		if (attachment) {
 			fileName = attachment.name ?? undefined;
 			await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
-			rawJson = await PdfCacher.read<TRawJson>(attachment?.url);
+			rawJson = await PdfCacher.read<PdfJson>(attachment?.url);
 		}
 	}
 	if (!rawJson) {
@@ -506,7 +504,7 @@ export async function handleEssence20Import(sageCommand: SageCommand): Promise<v
 
 	await sageCommand.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
 
-	const channel = sageCommand.dChannel as DMessageChannel;
+	const channel = sageCommand.dChannel as MessageTarget;
 	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
 
 	const pin = sageCommand.args.getBoolean("pin") ?? false;

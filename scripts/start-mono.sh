@@ -3,10 +3,10 @@
 # ensure root folder
 [ -d "./scripts" ] || cd ..
 
-botCodeName="dev"
-echo "botCodeName=\"$botCodeName\""
+codeName="dev"
+echo "codeName=\"$codeName\""
 
-envMonoCodeFile="./config/env.mono.$botCodeName.json"
+envMonoCodeFile="./config/env.mono.$codeName.json"
 if [ ! -f "$envMonoCodeFile" ]; then
 	echo "File Not Found: $envMonoCodeFile"
 fi
@@ -66,7 +66,7 @@ if [ "$?" != "0" ]; then echo "Unable to Start 'mono'!"; exit 1; fi
 
 if [ "$1" = "pm2" ]; then
 
-	pm2 start mono.config.cjs --env "$botCodeName"
+	pm2 start mono.config.cjs --env "$codeName"
 
 else
 
@@ -74,12 +74,13 @@ else
 	node --experimental-modules \
 		--es-module-specifier-resolution=node \
 		mono.mjs \
-		"botCodeName=$botCodeName" \
+		"codeName=$codeName" \
 		"dataRoot=$jsonDataRoot" \
 		"homeServerId=$jsonHomeServerId" \
 		"rollemId=$jsonRollemId" \
 		"superAdminId=$jsonSuperAdminId" \
 		"superUserId=$jsonSuperUserId" \
-		"tupperBoxId=$jsonTupperBoxId"
+		"tupperBoxId=$jsonTupperBoxId" \
+		"mapPort=1"
 
 fi

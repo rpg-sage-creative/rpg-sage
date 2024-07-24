@@ -1,3 +1,4 @@
+import type { SlashCommandStringOption } from "discord.js";
 import type { BuilderCommand, BuilderOption, SlashCommandOption } from "../types.js";
 import { setMinMaxValues } from "./setMinMaxValues.js";
 import { setNameAndRequired } from "./setNameAndRequired.js";
@@ -13,7 +14,7 @@ export function addOptions<T extends BuilderCommand>(builder: T, options?: Slash
 			if ("setMinValue" in opt) setMinMaxValues(opt, option); //NOSONAR
 			if ("addChoices" in opt) {
 				option.choices?.forEach(choice => {
-					opt.addChoices(toChoice(choice));
+					(opt as SlashCommandStringOption).addChoices(toChoice<string>(choice));
 				});
 			}
 			return opt;

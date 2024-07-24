@@ -1,7 +1,7 @@
 import { EphemeralSet } from "@rsc-utils/cache-utils";
-import { debug, errorReturnNull, verbose } from "@rsc-utils/console-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { Message, PartialMessage, Snowflake } from "discord.js";
+import { debug, errorReturnNull, verbose } from "@rsc-utils/core-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { Message, PartialMessage } from "discord.js";
 import { GameMapBase } from "../sage/commands/map/GameMapBase";
 
 /* We only really need to store deleted state for seconds due to races with Tupper. */
@@ -25,7 +25,7 @@ export function isDeleted(messageId: Snowflake): boolean {
 
 /** Checks to see if the value given is a message that is marked deletable and also isn't in our deleted set. */
 export function isDeletable(message: Optional<Message>): message is Message {
-	return message ? message.deletable && !isDeleted(message.id) : false;
+	return message ? message.deletable && !isDeleted(message.id as Snowflake) : false;
 }
 
 export enum MessageDeleteResults { InvalidMessage = -2, NotDeletable = -1, NotDeleted = 0, Deleted = 1, AlreadyDeleted = 2 }
@@ -57,7 +57,7 @@ export async function deleteMessage(message: Optional<Message | PartialMessage>)
 async function _deleteMessage(message: Optional<Message | PartialMessage>): Promise<MessageDeleteResults> {
 	if (!message?.id) return MessageDeleteResults.InvalidMessage; //NOSONAR
 	if (!message.deletable) return MessageDeleteResults.NotDeletable; //NOSONAR
-	if (isDeleted(message.id)) return MessageDeleteResults.AlreadyDeleted; //NOSONAR
+	if (isDeleted(message.id as Snowflake)) return MessageDeleteResults.AlreadyDeleted; //NOSONAR
 	const results = await message.delete().catch(errorReturnNull);
 	if (results) return MessageDeleteResults.Deleted; // NOSONAR
 	// if (results?.deletable === false) return MessageDeleteResults.Deleted; //NOSONAR

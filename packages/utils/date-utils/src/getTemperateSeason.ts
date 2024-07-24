@@ -1,6 +1,6 @@
 import { isDate } from "util/types";
 import { Hemisphere } from "./Hemisphere.js";
-import { Season } from "./Season.js";
+import type { Season } from "./Season.js";
 import { TemperateSeason } from "./TemperateSeason.js";
 import { flipSeasonForHemisphere } from "./internal/flipSeasonForHemisphere.js";
 

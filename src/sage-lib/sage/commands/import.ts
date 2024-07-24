@@ -1,4 +1,3 @@
-import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
 import { registerCommand } from "../../discord/handlers/registerCommand.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
@@ -32,13 +31,12 @@ async function reimportHelp(sageCommand: SageMessage): Promise<void> {
 async function reimportHandler(sageCommand: SageMessage): Promise<void> {
 	// no reference means no reply, means no link back to the character to reimport
 	const reference = sageCommand.message.reference;
-	if (!reference) {
+	if (!reference?.messageId) {
 		return reimportHelp(sageCommand);
 	}
 
 	// no message, means no components to find the characterId
-	const discordKey = new DiscordKey(reference.guildId, reference.channelId, undefined, reference.messageId);
-	const charMessage = await sageCommand.discord.fetchMessage(discordKey);
+	const charMessage = await sageCommand.sageCache.fetchMessage(reference);
 	if (!charMessage) {
 		return reimportHelp(sageCommand);
 	}

@@ -1,4 +1,4 @@
-import { error, verbose } from "@rsc-utils/console-utils";
+import { error, verbose } from "@rsc-utils/core-utils";
 import { ProgressTracker } from "./ProgressTracker.js";
 
 /**

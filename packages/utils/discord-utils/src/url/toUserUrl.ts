@@ -1,9 +1,9 @@
-import type { Optional, OrNull } from "@rsc-utils/type-utils";
-import type { DUserResolvable } from "../types.js";
+import type { Optional, OrUndefined } from "@rsc-utils/core-utils";
+import { resolveUserId, type UserIdResolvable } from "../resolve/resolveUserId.js";
 
-export function toUserUrl(user: DUserResolvable): string;
-export function toUserUrl(user: Optional<DUserResolvable>): OrNull<string>;
-export function toUserUrl(user: Optional<DUserResolvable>): OrNull<string> {
-	const userId = typeof(user) === "string" ? user : user?.id;
-	return userId ? `https://discordapp.com/users/${userId}` : null;
+export function toUserUrl(user: UserIdResolvable): string;
+export function toUserUrl(user: Optional<UserIdResolvable>): OrUndefined<string>;
+export function toUserUrl(user: Optional<UserIdResolvable>): OrUndefined<string> {
+	const userId = resolveUserId(user);
+	return userId ? `https://discordapp.com/users/${userId}` : undefined;
 }

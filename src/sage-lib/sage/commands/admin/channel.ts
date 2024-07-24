@@ -1,11 +1,8 @@
-import { DicePostType, DiceSortType, GameSystemType, PostType, SageChannel, SageChannelType, parseGameSystem } from "@rsc-sage/types";
-import { mapAsync } from "@rsc-utils/async-array-utils";
-import { warn } from "@rsc-utils/console-utils";
-import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
-import { stringify } from "@rsc-utils/json-utils";
+import { DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, type SageChannel } from "@rsc-sage/types";
+import { mapAsync } from "@rsc-utils/array-utils";
+import { isDefined, stringify, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordKey, isDMBased, isMessageTarget, toChannelMention } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { GuildChannel } from "discord.js";
 import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
@@ -24,8 +21,8 @@ async function channelDetailsAppendDialog(renderableContent: RenderableContent, 
 	if (![SageChannelType.None, SageChannelType.Dice].includes(channel.type!)) {
 		renderableContent.append(`<b>Dialog Options</b>`);
 
-		const dialogType = PostType[channel.dialogPostType!];
-		const inheritedDialogType = PostType[game?.dialogPostType ?? server.dialogPostType ?? PostType.Embed];
+		const dialogType = DialogPostType[channel.dialogPostType!];
+		const inheritedDialogType = DialogPostType[game?.dialogPostType ?? server.dialogPostType ?? DialogPostType.Embed];
 		renderableContent.append(`[spacer]<b>Dialog Type</b> ${dialogType ?? `<i>inherited (${inheritedDialogType})</i>`}`);
 
 		if (channel.sendDialogTo) {
@@ -80,12 +77,12 @@ function channelDetailsAppendGame(renderableContent: RenderableContent, server: 
 	}
 }
 
-async function getChannelNameAndActiveGame(sageCache: SageCache, channelDid: Snowflake): Promise<[string, Game | undefined]> {
-	const channel = await sageCache.discord.fetchChannel(channelDid);
-	if (!channel || channel.type === "DM") {
+async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Snowflake): Promise<[string, Game | undefined]> {
+	const channel = await sageCache.fetchChannel(channelId);
+	if (!isMessageTarget(channel) || isDMBased(channel)) {
 		return ["DM", undefined];
 	}
-	const discordKey = DiscordKey.fromChannel(channel);
+	const discordKey = DiscordKey.from(channel);
 	return [channel.name, await sageCache.games.findActiveByDiscordKey(discordKey)];
 }
 
@@ -95,10 +92,10 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 	}
 
 	// Get channel from args if it isn't passed
-	const channelDid = channel?.id ?? await sageMessage.args.removeAndReturnChannelDid(true);
-	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.sageCache, channelDid);
+	const channelId = channel?.id ?? sageMessage.args.getChannelId("channel") ?? sageMessage.threadOrChannelDid;
+	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.sageCache, channelId);
 	const server = sageMessage.server;
-	channel = game?.getChannel(channelDid) ?? server?.getChannel(channelDid);
+	channel = game?.getChannel(channelId) ?? server?.getChannel(channelId);
 
 	if (!channel) {
 		const notProvisionedContent = createAdminRenderableContent(sageMessage.getHasColors());
@@ -107,7 +104,7 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 	}
 
 	const renderableContent = createAdminRenderableContent(server);
-	renderableContent.appendTitledSection(`<b>#${guildChannelName}</b>`, `<b>Channel Id</b> ${channelDid}`);
+	renderableContent.appendTitledSection(`<b>#${guildChannelName}</b>`, `<b>Channel Id</b> ${channelId}`);
 
 	channelDetailsAppendGame(renderableContent, server, game, channel);
 	await channelDetailsAppendDialog(renderableContent, server, game, channel);
@@ -121,7 +118,7 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 //#region list
 
 async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: SageChannel[]): Promise<GuildChannel[]> {
-	const guildChannels = await mapAsync(channels, async channel => sageMessage.discord.fetchChannel(channel.id));
+	const guildChannels = await mapAsync(channels, async channel => sageMessage.sageCache.fetchChannel(channel.id));
 	const existing = guildChannels.filter(isDefined) as GuildChannel[];
 
 	const filter = sageMessage.args.join(" ").trim();

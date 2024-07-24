@@ -1,20 +1,20 @@
 import { toUnique } from "@rsc-utils/array-utils";
 import { type Core } from "@rsc-utils/class-utils";
-import { debug } from "@rsc-utils/console-utils";
+import { debug } from "@rsc-utils/core-utils";
 import { nth } from "@rsc-utils/number-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
-import type { TMagicComponent, TMagicTradition } from '../common';
-import { ABILITIES, NEWLINE, toModifier } from '../common';
-import { RenderableContent } from '../data/RenderableContent';
-import { find, findByValue } from '../data/Repository';
-import type { ArcaneSchool } from './ArcaneSchool';
-import type { Domain } from './Domain';
-import { HeightenedSpell } from "./HeightenedSpell";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from './base/HasSource';
+import type { UUID } from "@rsc-utils/core-utils";
+import type { TMagicComponent, TMagicTradition } from "../common.js";
+import { ABILITIES, NEWLINE, toModifier } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { find, findByValue } from "../data/Repository.js";
+import type { ArcaneSchool } from "./ArcaneSchool.js";
+import type { Domain } from "./Domain.js";
+import { HeightenedSpell } from "./HeightenedSpell.js";
+import type { SourcedCore } from "./base/HasSource.js";
+import { HasSource } from "./base/HasSource.js";
 
 //#region types
 
@@ -218,7 +218,7 @@ export class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = Spel
 	public toHeightenedSpell(): HeightenedSpell;
 	public toHeightenedSpell(level: number): HeightenedSpell;
 	public toHeightenedSpell(level = this.level): HeightenedSpell {
-		return heightenSpell(this.id, this.core as SpellCore).find(h => h.level === level)!;
+		return heightenSpell(this.id as UUID, this.core as SpellCore).find(h => h.level === level)!;
 		/*// return this.heightened.find(h => h.level === level);*/
 	}
 
@@ -388,7 +388,7 @@ export class Spell<T extends string = "Spell", U extends SpellCoreBase<T> = Spel
 
 	//#region static
 
-	public static find(value: UUID): Spell | undefined {
+	public static find(value: string): Spell | undefined {
 		return findByValue("Spell", value);
 	}
 

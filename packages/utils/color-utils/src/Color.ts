@@ -1,5 +1,5 @@
 import type { Optional } from "./internal/Optional.js";
-import type { ColorData } from "./ColorData.js";
+import type { ColorData, HexColorString, RgbaColorString, RgbColorString } from "./ColorData.js";
 import { toColorData } from "./internal/toColorData.js";
 import { isHex } from "./isHex.js";
 import { isRgb } from "./isRgb.js";
@@ -8,10 +8,10 @@ import { hasNamedColor } from "./namedColors.js";
 export class Color {
 	// #region public properties
 	public get name(): string | undefined { return this.data.name; }
-	public get hex(): string { return this.data.hex; }
-	public get hexa(): string { return this.data.hexa; }
-	public get rgb(): string { return this.data.rgb; }
-	public get rgba(): string { return this.data.rgba; }
+	public get hex(): HexColorString { return this.data.hex; }
+	public get hexa(): HexColorString { return this.data.hexa; }
+	public get rgb(): RgbColorString { return this.data.rgb; }
+	public get rgba(): RgbaColorString { return this.data.rgba; }
 	public get red(): number { return this.data.red; }
 	public get green(): number { return this.data.green; }
 	public get blue(): number { return this.data.blue; }
@@ -20,7 +20,7 @@ export class Color {
 
 	public constructor(public data: ColorData) { }
 
-	/** Returns a color value compatible with Discord. */
+	/** @deprecated Returns a color value compatible with Discord. */
 	public toDiscordColor(): string { return "0x" + this.hex.slice(1); }
 
 	// #region color manipulation
@@ -59,9 +59,9 @@ export class Color {
 	public static from(color: ColorData, alpha: number): Color;
 	public static from(red: number, green: number, blue: number): Color;
 	public static from(red: number, green: number, blue: number, alpha: number): Color;
-	public static from(colorOrRed: string | number | ColorData, alphaOrGreen?: number, blue?: number, alpha?: number): Color | null {
+	public static from(colorOrRed: string | number | ColorData, alphaOrGreen?: number, blue?: number, alpha?: number): Color | undefined {
 		const color = toColorData(colorOrRed as number, alphaOrGreen as number, blue as number, alpha as number);
-		return color ? new Color(color) : null;
+		return color ? new Color(color) : undefined;
 	}
 
 	// #region "is" tests

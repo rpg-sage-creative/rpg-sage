@@ -5,7 +5,7 @@ import type { SageCommand } from "../../model/SageCommand.js";
  * This creates a Discord mention for the user rolling the dice.
  * @todo maybe consider a "posterId" that can be a message sender and interaction sender (to replace authorDid)
  */
-export async function createAuthorMention(sageCommand: SageCommand, isSecretMention = false): Promise<string | null> {
+export async function createAuthorMention(sageCommand: SageCommand, isSecretMention = false): Promise<string | undefined> {
 	// actorId refers to the user posting the message; interactions don't have messages
 	const actorId = sageCommand.sageUser.did;
 

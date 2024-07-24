@@ -1,5 +1,5 @@
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import type { MessageEmbed } from "discord.js";
+import type { EmbedBuilder } from "discord.js";
 import type { SageCache } from "../../sage/model/SageCache.js";
 import { resolveToContent } from "./resolveToContent.js";
 import { resolveToEmbeds } from "./resolveToEmbeds.js";
@@ -11,7 +11,7 @@ export class ContentResolver {
 		return resolveToContent(this.sageCache, renderableContentResolvable).join("\n\n").trim();
 	}
 
-	public resolveToEmbeds(renderableContentResolvable: RenderableContentResolvable): MessageEmbed[] {
+	public resolveToEmbeds(renderableContentResolvable: RenderableContentResolvable): EmbedBuilder[] {
 		return resolveToEmbeds(this.sageCache, renderableContentResolvable);
 	}
 }

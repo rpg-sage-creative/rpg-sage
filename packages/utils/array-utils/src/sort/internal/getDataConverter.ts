@@ -5,10 +5,7 @@ function newDate(value: any): Date {
 	return new Date(value);
 }
 
-/**
- * @internal
- * @private
- */
+/** @internal */
 export function getDataConverter(dataType: "string" | "number" | "date"): DataConverter<any> {
 	switch(dataType) {
 		case "date":

@@ -1,4 +1,4 @@
-import { error } from "@rsc-utils/console-utils";
+import { error } from "@rsc-utils/core-utils";
 import type { GameCharacter } from "../../../model/GameCharacter";
 import type { ColorType } from "../../../model/HasColorsCore";
 import type { SageMessage } from "../../../model/SageMessage";

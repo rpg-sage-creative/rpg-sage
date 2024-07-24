@@ -1,5 +1,5 @@
 import { isBlank } from "@rsc-utils/string-utils";
-import { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 

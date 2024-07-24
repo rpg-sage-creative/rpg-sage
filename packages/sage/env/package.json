@@ -1,1 +1,11 @@
-{"name":"@rsc-sage/env","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies": {"@rsc-utils/snowflake-utils": "^0.0.0"}}
+{
+	"name": "@rsc-sage/env",
+	"version": "0.0.0",
+	"private": true,
+	"main": "build/index.js",
+	"type": "module",
+	"dependencies": {
+		"@rsc-utils/core-utils": "^0.0.0",
+		"@rsc-utils/discord-utils": "^0.0.0"
+	}
+}

@@ -1,4 +1,4 @@
-import type { Collection } from "./Collection.js";
+import { type Collection } from "./Collection.js";
 
 /** Partitions the values into nested Collections based on the partitionfn */
 export function partition

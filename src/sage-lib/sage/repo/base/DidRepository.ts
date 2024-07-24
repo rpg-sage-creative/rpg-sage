@@ -1,18 +1,19 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
-import { errorReturnNull, verbose } from "@rsc-utils/console-utils";
-import { readJsonFile, symLinkSync } from "@rsc-utils/fs-utils";
-import { randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
+import { errorReturnNull, randomSnowflake, verbose, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { readJsonFile, symLinkSync } from "@rsc-utils/io-utils";
 import { existsSync } from "fs";
 import { HasIdCoreAndSageCache, IdRepository } from "./IdRepository";
 
 export interface DidCore<T extends string = string> extends IdCore<T> {
+	/** @deprecated */
 	did: Snowflake;
 }
 
+type IdType = Snowflake | UUID;
+
 export class HasDidCore<T extends DidCore<U>, U extends string = string> extends HasIdCoreAndSageCache<T, U> {
+	/** @deprecated */
 	public get did(): Snowflake { return this.core.did; }
 }
 
@@ -20,10 +21,10 @@ export abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> 
 
 	//#region Cache
 
-	private didToIdMap = new EphemeralMap<Snowflake, UUID>(15000);
+	private didToIdMap = new EphemeralMap<Snowflake, IdType>(15000);
 
 	/** Overrides the parent .cacheId() to also cache the did/id pair. */
-	protected cacheId(id: Snowflake, entity: U): void {
+	protected cacheId(id: IdType, entity: U): void {
 		super.cacheId(id, entity);
 		if (entity) {
 			this.cacheDid(entity.did, entity.id);
@@ -31,9 +32,9 @@ export abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> 
 	}
 
 	/** Caches the given did/id pair. */
-	protected cacheDid(did: Snowflake, id: UUID | undefined): void {
+	protected cacheDid(did: Snowflake, id: IdType | string | undefined): void {
 		if (did) {
-			this.didToIdMap.set(did, id!);
+			this.didToIdMap.set(did, id! as IdType);
 		}
 	}
 
@@ -86,7 +87,7 @@ export abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> 
 			if (core) {
 				this.cacheDid(did, core.id);
 				const entity = <U>await (<typeof IdRepository>this.constructor).fromCore(core, this.sageCache);
-				this.cacheId(core.id, entity);
+				this.cacheId(core.id as IdType, entity);
 				return entity;
 			}
 		}
@@ -95,7 +96,7 @@ export abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> 
 		const cores = await this.readUncachedCores(),
 			uncached = cores.find(core => core.did === did),
 			id = uncached?.id;
-		return this.getById(id);
+		return this.getById(id as IdType);
 	}
 
 	/** Writes the entity's core to uuid.json using (or creating if needed) the "Id". */

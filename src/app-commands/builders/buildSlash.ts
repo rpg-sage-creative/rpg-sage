@@ -3,10 +3,10 @@ import type { SlashCommand } from "../types.js";
 import { addOptions } from "./addOptions.js";
 import { addSubcommands } from "./addSubCommands.js";
 import { setName } from "./setName.js";
-import { getBotCodeName } from "@rsc-utils/env-utils";
+import { getCodeName } from "@rsc-utils/core-utils";
 
 function buildOne(raw: SlashCommand): SlashCommandBuilder {
-	const which = getBotCodeName();
+	const which = getCodeName();
 	raw.name = /stable/i.test(which) ? `sage-${raw.name}` : `sage-${which}-${raw.name}`;
 
 	const cmd = setName(new SlashCommandBuilder(), raw);

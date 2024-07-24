@@ -1,12 +1,9 @@
 import { type SageChannel } from "@rsc-sage/types";
-import { parseId } from "@rsc-utils/discord-utils";
-import { parseEnum } from "@rsc-utils/enum-utils";
-import { isUrl } from "@rsc-utils/https-utils";
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
+import { isDefined, isNonNilSnowflake, isNonNilUuid, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { parseId, type MessageChannel } from "@rsc-utils/discord-utils";
+import { isUrl } from "@rsc-utils/io-utils";
 import { isNotBlank, unwrap } from "@rsc-utils/string-utils";
-import { isDefined, type EnumLike, type Optional } from "@rsc-utils/type-utils";
-import { isNonNilUuid } from "@rsc-utils/uuid-utils";
-import type { Collection, GuildBasedChannel, MessageAttachment, Role, User } from "discord.js";
+import type { Attachment, Collection, Role, User } from "discord.js";
 import type { ArgsManager } from "../../discord/ArgsManager.js";
 import type { TColorAndType } from "./Colors.js";
 import type { GameCharacterCore } from "./GameCharacter.js";
@@ -42,7 +39,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	//#region Old
 
 	/** @deprecated */
-	private attachments?: Collection<Snowflake, MessageAttachment>;
+	private attachments?: Collection<string, Attachment>;
 
 	/** @deprecated */
 	public removeAndReturnAttachmentUrl(): string | undefined {
@@ -63,9 +60,9 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 		return <Promise<TArgIndexRet<Snowflake> | undefined>>this.argsManager.asyncFindArgIndexRet(async arg => {
 			const trimmed = arg?.trim();
-			const did = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "channel");
-			if (did) {
-				const channel = await this.sageCommand.discord.fetchChannel(did);
+			const channelId = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "channel");
+			if (channelId) {
+				const channel = await this.sageCommand.sageCache.fetchChannel(channelId);
 				return channel?.id;
 			}
 			return undefined;
@@ -96,7 +93,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			autoChannels: undefined,
 			avatarUrl: this.getUrl("avatar")!,
 			companions: undefined,
-			embedColor: this.getDiscordColor("color")!,
+			embedColor: this.getHexColorString("color")!,
 			id: undefined!,
 			tokenUrl: this.getUrl("token")!,
 			name: names.newName ?? names.name!,
@@ -207,7 +204,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			const did = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "role");
 			if (did) {
 				const role = await this.sageCommand.discord.fetchGuildRole(did);
-				return role?.id;
+				return role?.id as Snowflake;
 			}
 			return undefined;
 		});
@@ -257,7 +254,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 			if (isNonNilSnowflake(arg)) {
 				const member = await discord.fetchGuildMember(arg);
-				return member?.id;
+				return member?.id as Snowflake;
 			}
 
 			if (isNonNilUuid(arg)) {
@@ -338,7 +335,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public getChannel<T extends GuildBasedChannel>(name: string): Optional<T> {
+	public getChannel<T extends MessageChannel>(name: string): Optional<T> {
 		const keyValueArg = this.getKeyValueArg(name);
 		if (!keyValueArg.hasKey) return undefined;
 		if (keyValueArg.hasUnset) return null;
@@ -346,7 +343,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			const channelId = parseId(keyValueArg.value.trim(), "channel");
 			if (channelId) {
 				const channel = this.sageCommand.message.mentions.channels.get(channelId) ?? null;
-				return channel as T;
+				return channel as unknown as T;
 			}
 		}
 		return null;

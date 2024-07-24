@@ -1,10 +1,11 @@
 import { SageChannelType, type SageChannel } from "@rsc-sage/types";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
 type Results = { free:SageChannel[]; used:SageChannel[]; };
 
-function getChannelIds({ args }: SageCommand, name: string): string[] {
+function getChannelIds({ args }: SageCommand, name: string): Snowflake[] {
 	const channelName = `${name}-channel`;
 	if (args.hasChannel(channelName)) {
 		return args.getChannelIds(channelName);

@@ -2,7 +2,6 @@ import { readFile } from "./readFile.js";
 
 /**
  * @internal
- * @private
  * For reading word lists, such as noiseUS.
  */
 export function readWords(filePath: string | undefined, orFileName: string): string[] {

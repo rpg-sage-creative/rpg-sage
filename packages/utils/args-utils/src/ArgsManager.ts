@@ -1,9 +1,7 @@
 import { Collection, sortPrimitive } from "@rsc-utils/array-utils";
 import { Color } from "@rsc-utils/color-utils";
-import { warn } from "@rsc-utils/console-utils";
+import { isNonNilUuid, warn, type Optional, type OrNull, type OrUndefined, type UUID } from "@rsc-utils/core-utils";
 import { createUrlRegex, isKeyValueArg, parseKeyValueArg, type KeyValueArg } from "@rsc-utils/string-utils";
-import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { isNonNilUuid, type UUID } from "@rsc-utils/uuid-utils";
 
 type TArgIndexRet<T> = {
 	arg: string;
@@ -290,7 +288,7 @@ export class ArgsManager<T extends string> extends Collection<T> {
 
 	/** Removes and returns UUID. */
 	public removeAndReturnUuid(): OrUndefined<UUID> {
-		return this.findArgAndRemove(isNonNilUuid);
+		return this.findArgAndRemove(isNonNilUuid) as UUID;
 	}
 
 	//#endregion

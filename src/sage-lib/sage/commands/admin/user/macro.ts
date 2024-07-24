@@ -1,7 +1,7 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
-import { isUrl } from "@rsc-utils/https-utils";
+import { isUrl } from "@rsc-utils/io-utils";
 import { StringMatcher, unwrap, wrap } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { SageCommand } from "../../../model/SageCommand.js";
@@ -139,7 +139,7 @@ async function macroCreate(sageMessage: SageMessage, macro: TMacro): Promise<boo
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Create macro?`);
 	promptRenderable.append(macroPrompt);
 
-	const bool = await discordPromptYesNo(sageMessage, promptRenderable);
+	const bool = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (bool === true) {
 		return sageMessage.sageUser.macros.pushAndSave(macro);
 	}
@@ -153,7 +153,7 @@ async function macroUpdate(sageMessage: SageMessage, existing: TMacro, updated: 
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Update macro?`);
 	promptRenderable.append(`from:${existingPrompt}\nto:${updatedPrompt}`);
 
-	const bool = await discordPromptYesNo(sageMessage, promptRenderable);
+	const bool = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (bool === true) {
 		existing.category = updated.category ?? existing.category;
 		existing.dice = updated.dice;
@@ -241,7 +241,7 @@ async function macroMove(sageMessage: SageMessage): Promise<void> {
 		const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Update macro?`);
 		promptRenderable.append(`from:${existingPrompt}\nto:${updatedPrompt}`);
 
-		const bool = await discordPromptYesNo(sageMessage, promptRenderable);
+		const bool = await discordPromptYesNo(sageMessage, promptRenderable, true);
 		if (bool === true) {
 			existing.category = categoryPair.value ?? existing.category;
 			saved = await sageMessage.sageUser.save();
@@ -278,7 +278,7 @@ async function deleteCategory(sageMessage: SageMessage, category: string): Promi
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `Delete Category ${byCategory.length} Macros?`);
 	renderableContent.appendTitledSection(byCategory[0].category!, toList(byCategory));
 
-	const yes = await discordPromptYesNo(sageMessage, renderableContent);
+	const yes = await discordPromptYesNo(sageMessage, renderableContent, true);
 	if (yes === true) {
 		const saved = await sageMessage.sageUser.macros.removeAndSave(...byCategory);
 		return sageMessage.reactSuccessOrFailure(saved);
@@ -305,7 +305,7 @@ async function macroDeleteAll(sageMessage: SageMessage): Promise<void> {
 
 	const count = sageMessage.sageUser.macros.length;
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Delete All ${count} Macros?`);
-	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
+	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (yes === true) {
 		const saved = await sageMessage.sageUser.macros.emptyAndSave();
 		return sageMessage.reactSuccessOrFailure(saved);
@@ -321,7 +321,7 @@ async function deleteMacro(sageMessage: SageMessage, macro: Optional<TMacro>): P
 	const macroPrompt = macroToPrompt(macro, false, false);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Delete Macro?`);
 	promptRenderable.append(macroPrompt);
-	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
+	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (yes === true) {
 		const saved = await sageMessage.sageUser.macros.removeAndSave(macro);
 		return sageMessage.reactSuccessOrFailure(saved);

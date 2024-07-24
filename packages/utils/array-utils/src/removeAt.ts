@@ -1,4 +1,4 @@
-import type { Collection } from "./Collection.js";
+import { type Collection } from "./Collection.js";
 import { sortPrimitive } from "./sort/sortPrimitive.js";
 
 /** Remove the value at the given index using .splice(). */

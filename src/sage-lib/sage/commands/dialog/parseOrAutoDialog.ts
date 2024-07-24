@@ -1,4 +1,4 @@
-import { isDefined } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import type { SageMessage } from "../../model/SageMessage";
 import type { DialogContent } from "./DialogContent";
 import { parseDialogContents } from "./parseDialogContents";

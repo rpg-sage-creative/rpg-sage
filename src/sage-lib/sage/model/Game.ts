@@ -1,13 +1,9 @@
 import { DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
 import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
-import { warn } from "@rsc-utils/console-utils";
-import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
-import { applyChanges } from "@rsc-utils/json-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { Args, isDefined, type Optional, type OrNull } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
-import type { GuildChannel, GuildMember, Role } from "discord.js";
+import { applyChanges, isDefined, warn, type Args, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
+import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Message, Role } from "discord.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";
 import type { PartyCore } from "../commands/trackers/party/Party.js";
@@ -76,7 +72,7 @@ export type TMappedChannelNameTags = {
 export type TMappedGameChannel = {
 	id: Snowflake;
 	sChannel: SageChannel;
-	gChannel: GuildChannel | undefined;
+	gChannel: GuildTextBasedChannel | undefined;
 	nameTags: TMappedChannelNameTags;
 };
 
@@ -114,7 +110,7 @@ export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 }
 
 /** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
-function mapGuildChannelNameTags(channel: GuildChannel): TMappedChannelNameTags {
+function mapGuildChannelNameTags(channel: GuildTextBasedChannel): TMappedChannelNameTags {
 	return sageChannelTypeToNameTags(parseSageChannelType(channel.name));
 }
 
@@ -126,11 +122,11 @@ async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promi
 		sChannels.push({
 			id: sChannel.id,
 			sChannel: sChannel,
-			gChannel: undefined,
+			gChannel: undefined, // NOSONAR
 			nameTags: mapSageChannelNameTags(sChannel)
 		});
 
-		const gChannel = await sageCache.discord.fetchChannel(sChannel.id) as GuildChannel;
+		const gChannel = await sageCache.fetchChannel<GuildTextBasedChannel>(sChannel.id);
 		if (gChannel) {
 			gChannels.push({
 				id: sChannel.id,
@@ -247,7 +243,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public async gmGuildChannel(): Promise<OrNull<GuildChannel>> {
 		for (const sChannel of this.channels) {
 			if (sChannel.type === SageChannelType.GameMaster) {
-				const gChannel = await this.discord.fetchChannel(sChannel.id);
+				const gChannel = await this.sageCache.fetchChannel(sChannel.id);
 				if (gChannel) {
 					return gChannel as GuildChannel;
 				}
@@ -269,12 +265,12 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		}
 		return pGuildMembers.filter(isDefined);
 	}
-	public async guildChannels(): Promise<GuildChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.id)));
-		return all.filter(isDefined) as GuildChannel[];
+	public async guildChannels(): Promise<GuildTextBasedChannel[]> {
+		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
+		return all.filter(isDefined) as GuildTextBasedChannel[];
 	}
 	public async orphanChannels(): Promise<SageChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.discord.fetchChannel(channel.id)));
+		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
 		return this.channels.filter((_, index) => !all[index]);
 	}
 	public async orphanUsers(): Promise<IGameUser[]> {
@@ -588,8 +584,9 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		return this.roles.find(role => role.type === roleType);
 	}
 
-	public getUser(userDid: Optional<Snowflake>): IGameUser | undefined {
-		return this.users.find(user => user.did === userDid);
+	public getUser(userResolvable: Optional<CanBeUserIdResolvable>): IGameUser | undefined {
+		const userId = resolveUserId(userResolvable);
+		return this.users.find(user => user.did === userId);
 	}
 
 	// #endregion
@@ -602,28 +599,29 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		return this.getChannel(didOrKey as DiscordKey) !== undefined;
 	}
 
-	public hasGameMaster(userDid: Optional<Snowflake>): boolean {
-		return this.getUser(userDid)?.type === GameUserType.GameMaster;
+	public hasGameMaster(userResolvable: Optional<CanBeUserIdResolvable>): boolean {
+		return this.getUser(userResolvable)?.type === GameUserType.GameMaster;
 	}
 
-	public hasPlayer(userDid: Optional<Snowflake>): boolean {
-		return this.getUser(userDid)?.type === GameUserType.Player;
+	public hasPlayer(userResolvable: Optional<CanBeUserIdResolvable>): boolean {
+		return this.getUser(userResolvable)?.type === GameUserType.Player;
 	}
 
 	/** Returns true if the game has the given User. */
-	public async hasUser(userDid: Optional<Snowflake>): Promise<boolean>;
+	public async hasUser(userResolvable: Optional<CanBeUserIdResolvable>): Promise<boolean>;
 	/** Returns true if the game has the given User for the given RoleType. */
-	public async hasUser(userDid: Optional<Snowflake>, roleType: GameRoleType): Promise<boolean>;
-	public async hasUser(userDid: Optional<Snowflake>, roleType?: GameRoleType): Promise<boolean> {
-		if (!userDid) {
+	public async hasUser(userResolvable: Optional<CanBeUserIdResolvable>, roleType: GameRoleType): Promise<boolean>;
+	public async hasUser(userResolvable: Optional<CanBeUserIdResolvable>, roleType?: GameRoleType): Promise<boolean> {
+		const userId = resolveUserId(userResolvable);
+		if (!userId) {
 			return false;
 		}
 		if (roleType === undefined) {
-			if (this.getUser(userDid) !== undefined) {
+			if (this.getUser(userId) !== undefined) {
 				return true;
 			}
 			for (const role of this.roles) {
-				const bool = await hasRole(this.sageCache, userDid, role.did);
+				const bool = await hasRole(this.sageCache, userId, role.did);
 				if (bool) {
 					return true;
 				}
@@ -631,12 +629,12 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			return false;
 		}
 		const userType = GameUserType[GameRoleType[roleType] as keyof typeof GameUserType];
-		if (userType !== undefined && this.getUser(userDid)?.type === userType) {
+		if (userType !== undefined && this.getUser(userId)?.type === userType) {
 			return true;
 		}
 		const roleDid = this.getRole(roleType)?.did;
 		if (roleDid) {
-			return hasRole(this.sageCache, userDid, roleDid);
+			return hasRole(this.sageCache, userId, roleDid);
 		}
 		return false;
 
@@ -670,13 +668,13 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		return this._colors;
 	}
 
-	public toDiscordColor(colorType: ColorType): string | null {
+	public toHexColorString(colorType: ColorType): HexColorString | undefined {
 		if (!this.core.colors.length) {
 			warn(`Colors Missing: Game (${this.name || this.id})`);
-			return this.server.toDiscordColor(colorType);
+			return this.server.toHexColorString(colorType);
 		}
-		return this.colors.toDiscordColor(colorType)
-			?? this.server.toDiscordColor(colorType);
+		return this.colors.toHexColorString(colorType)
+			?? this.server.toHexColorString(colorType);
 	}
 
 	// #endregion
@@ -703,9 +701,9 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 
 	// #endregion
 
-	public static async from(message: DMessage, sageCache: SageCache): Promise<Game | null> {
+	public static async from(message: Message, sageCache: SageCache): Promise<Game | null> {
 		if (message.guild) {
-			const game = await sageCache.games.findByDiscordKey(DiscordKey.fromMessage(message));
+			const game = await sageCache.games.findByDiscordKey(DiscordKey.from(message));
 			if (game) {
 				return game;
 			}

@@ -1,8 +1,8 @@
-import { randomSnowflake } from "@rsc-utils/snowflake-utils";
-import { CharacterShell } from "../../../model/CharacterShell";
-import type { Game } from "../../../model/Game";
-import { Manager } from "../common/Manager";
-import { Encounter, type EncounterCore } from "./Encounter";
+import { randomSnowflake } from "@rsc-utils/core-utils";
+import { CharacterShell } from "../../../model/CharacterShell.js";
+import type { Game } from "../../../model/Game.js";
+import { Manager } from "../common/Manager.js";
+import { Encounter, type EncounterCore } from "./Encounter.js";
 
 export class EncounterManager extends Manager<EncounterCore, Encounter> {
 

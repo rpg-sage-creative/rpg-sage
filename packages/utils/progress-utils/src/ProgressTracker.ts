@@ -11,7 +11,7 @@ type ProgressTrackerEventHandler<EventName extends ProgressTrackerEventName> = (
 
 /**
  * A class for logging percent complete of a task.
- * Uses verbose from console-utils.
+ * Uses verbose from core-utils.
  */
 export class ProgressTracker {
 	public countComplete = 0;
@@ -92,7 +92,7 @@ export class ProgressTracker {
 	 */
 	public status(): void;
 
-	/** @private @internal */
+	/** @internal */
 	public status(options?: { force0?:boolean, force100?:boolean }): void;
 
 	public status({ force0 = false, force100 = false } = { }): void {

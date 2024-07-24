@@ -1,12 +1,12 @@
-import { debug } from "@rsc-utils/console-utils";
-import type { Awaitable } from "@rsc-utils/type-utils";
+import { debug } from "@rsc-utils/core-utils";
+import type { Awaitable } from "@rsc-utils/core-utils";
 import type { SageCommand } from "../../sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage/model/SageInteraction.js";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
 import type { SageReaction } from "../../sage/model/SageReaction.js";
 import { ArgsManager } from "../ArgsManager.js";
 import { registerInteractionListener, registerMessageListener } from "../handlers.js";
-import { TCommandAndArgs } from "../types.js";
+import { type TCommandAndArgs } from "../types.js";
 
 type SageCommandHandler = (sageCommand: SageCommand) => Awaitable<void>;
 type SageInteractionHandler = (sageInteraction: SageInteraction) => Awaitable<void>;

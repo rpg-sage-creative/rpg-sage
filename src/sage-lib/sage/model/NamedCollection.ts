@@ -1,5 +1,5 @@
 import { Collection, toUniqueDefined } from "@rsc-utils/array-utils";
-import { isDefined } from "@rsc-utils/type-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 
 export interface IHasSave {

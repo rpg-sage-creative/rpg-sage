@@ -1,17 +1,17 @@
-import { warn } from "@rsc-utils/console-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
-import { DEXTERITY, STRENGTH } from "../../common";
-import { AlchemicalItem } from "../AlchemicalItem";
-import { Bulk } from "../Bulk";
-import { Coins } from "../Coins";
-import { Weapon } from "../Weapon";
-import type { HasSource } from "../base/HasSource";
-import { Check } from "./Check";
-import type { EquipmentItemCore } from "./EquipmentItem";
-import { EquipmentItem } from "./EquipmentItem";
-import type { EquipmentListCore } from "./EquipmentList";
-import { EquipmentList } from "./EquipmentList";
-import type { PlayerCharacter } from "./PlayerCharacter";
+import { warn } from "@rsc-utils/core-utils";
+import type { Snowflake, UUID } from "@rsc-utils/core-utils";
+import { DEXTERITY, STRENGTH } from "../../common.js";
+import { AlchemicalItem } from "../AlchemicalItem.js";
+import { Bulk } from "../Bulk.js";
+import { Coins } from "../Coins.js";
+import { Weapon } from "../Weapon.js";
+import type { HasSource } from "../base/HasSource.js";
+import { Check } from "./Check.js";
+import type { EquipmentItemCore } from "./EquipmentItem.js";
+import { EquipmentItem } from "./EquipmentItem.js";
+import type { EquipmentListCore } from "./EquipmentList.js";
+import { EquipmentList } from "./EquipmentList.js";
+import type { PlayerCharacter } from "./PlayerCharacter.js";
 
 type TFilter<T> = (value: T, index: number, array: T[]) => unknown;
 type TIterator<T> = (value: T, index: number, array: T[]) => void;
@@ -68,7 +68,7 @@ export class Equipment {
 			}
 			if (!item.containerId && !item.listId) {
 				warn("No Container nor List: " + item.name);
-				item.listId = this.dropped.id;
+				item.listId = this.dropped.id as Snowflake;
 				pc.save();
 			}
 		});
@@ -135,7 +135,7 @@ export class Equipment {
 		const coreItems = this.core.items;
 		items.forEach(item => {
 			if (!item.listId && !item.containerId) {
-				item.listId = this.core.carriedList.id;
+				item.listId = this.core.carriedList.id as Snowflake;
 			}
 			const core = item.toJSON();
 			if (!coreItems.includes(core)) {
@@ -144,10 +144,10 @@ export class Equipment {
 		});
 		this.update();
 	}
-	public addItemTo(listId: UUID, ...items: EquipmentItem[]): void {
+	public addItemTo(listId: Snowflake | UUID, ...items: EquipmentItem[]): void {
 		items.forEach(item => {
 			delete item.containerId;
-			item.listId = listId;
+			item.listId = listId as Snowflake;
 		});
 		this.addItem(...items);
 	}
@@ -189,7 +189,7 @@ export class Equipment {
 				check.setAbility(DEXTERITY);
 			}
 			check.addProficiency(item.category + " Weapons");
-			if (eqItem.meta && eqItem.meta.potencyRuneValue) {
+			if (eqItem.meta?.potencyRuneValue) {
 				check.addItemModifier("Potency Rune", eqItem.meta.potencyRuneValue);
 			}
 		}
@@ -199,18 +199,18 @@ export class Equipment {
 		}
 		return check;
 	}
-	public getItem(itemId: UUID): EquipmentItem | undefined {
+	public getItem(itemId: Snowflake | UUID): EquipmentItem | undefined {
 		return this.items.find(item => item.id === itemId);
 	}
-	public moveItemToContainer(containerId: UUID, ...items: EquipmentItem[]): void {
+	public moveItemToContainer(containerId: Snowflake | UUID, ...items: EquipmentItem[]): void {
 		items.forEach(item => {
-			item.containerId = containerId;
+			item.containerId = containerId as Snowflake;
 			delete item.listId;
 		});
 		this.update();
 	}
-	public moveItemToList(listId: UUID, ...items: EquipmentItem[]): void {
-		items.forEach(item => item.listId = listId);
+	public moveItemToList(listId: Snowflake | UUID, ...items: EquipmentItem[]): void {
+		items.forEach(item => item.listId = listId as Snowflake);
 		this.update();
 	}
 	public removeItem(...items: EquipmentItem[]): void {
@@ -250,27 +250,27 @@ export class Equipment {
 		const core = EquipmentList.createCore(name);
 		this.core.otherLists.push(core);
 		this.update();
-		return this.getList(core.id)!;
+		return this.getList(core.id as Snowflake)!;
 	}
-	public canRemoveList(listId: UUID): boolean {
+	public canRemoveList(listId: Snowflake | UUID): boolean {
 		return this.core.otherLists.find(list => list.id === listId) !== undefined;
 	}
-	public getList(listId: UUID): EquipmentList | undefined {
+	public getList(listId: Snowflake | UUID): EquipmentList | undefined {
 		return this.lists.find(list => list.id === listId);
 	}
-	public renameList(listId: UUID, name: string): void {
+	public renameList(listId: Snowflake | UUID, name: string): void {
 		const list = this.getList(listId);
 		if (list) {
 			list.name = name;
 			this.update();
 		}
 	}
-	public removeList(listId: UUID): void {
+	public removeList(listId: Snowflake | UUID): void {
 		if (this.canRemoveList(listId)) {
 			const lists = this.core.otherLists,
 				list = this.getList(listId)!,
 				listCore = list.toJSON(),
-				carriedListId = this.carried.id;
+				carriedListId = this.carried.id as Snowflake;
 			list.items.forEach(item => item.listId = carriedListId);
 			lists.splice(lists.indexOf(listCore), 1);
 			this.update();

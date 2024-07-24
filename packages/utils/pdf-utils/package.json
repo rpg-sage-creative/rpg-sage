@@ -1,7 +1,0 @@
-{"name":"@rsc-utils/pdf-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
-  "@rsc-utils/env-utils": "^0.0.0",
-  "@rsc-utils/fs-utils": "^0.0.0",
-  "@rsc-utils/https-utils": "^0.0.0",
-  "@rsc-utils/snowflake-utils": "^0.0.0",
-  "pdf2json": "^2.0.2"
-}}

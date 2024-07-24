@@ -1,5 +1,5 @@
-import type { Filter } from "./filter/Filter.js";
-import type { Sorter } from "./sort/Sorter.js";
+import { type Filter } from "./filter/Filter.js";
+import { type Sorter } from "./sort/Sorter.js";
 
 /**
  * Creates a single Filter function that tests each array element against the given filters.

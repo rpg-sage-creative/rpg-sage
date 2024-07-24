@@ -1,7 +1,8 @@
-import type { TSkillDie } from "../../sage-dice/dice/essence20";
-import { filterValuesWithKeys, PdfJsonParserE20, SkillPairKey } from "../common/parse";
-import type { TField, TRawJson } from "../common/pdf";
-import type { PlayerCharacterCorePR, TAttackZord, TSkillZord, TStatPR, TStatZord, TZord } from "./PlayerCharacterPR";
+import type { PdfJsonManager } from "@rsc-utils/io-utils";
+import type { TSkillDie } from "../../sage-dice/dice/essence20/index.js";
+import { filterValuesWithKeys, PdfJsonParserE20, type SkillPairKey } from "../common/parse.js";
+import type { PlayerCharacterCorePR, TAttackZord, TSkillZord, TStatPR, TStatZord, TZord } from "./PlayerCharacterPR.js";
+import { debug } from "@rsc-utils/core-utils";
 
 const ZordSkills = {
 	Strength: [
@@ -104,8 +105,8 @@ export class PdfJsonParserPR extends PdfJsonParserE20 {
 	}
 
 	/** checks the json/fields to see if this is a Power Rangers character */
-	public static isPowerRangerPdf(_rawJson: TRawJson, fields: TField[]): boolean {
-		if (fields.find(field => field.name === "Zord_Name")) {
+	public static isPowerRangerPdf(pdfJsonManager: PdfJsonManager): boolean {
+		if (pdfJsonManager.hasField("Zord_Name")) {
 			return true;
 		}
 		// if (isRenegadePdf(rawJson, "")) {
@@ -117,7 +118,8 @@ export class PdfJsonParserPR extends PdfJsonParserE20 {
 		return false;
 	}
 
-	public static parseCharacter(fields: TField[]): PlayerCharacterCorePR {
-		return new PdfJsonParserPR(fields).parseCharacter();
+	public static parseCharacter(pdfJsonManager: PdfJsonManager): PlayerCharacterCorePR {
+		debug("parsing PR")
+		return new PdfJsonParserPR(pdfJsonManager).parseCharacter();
 	}
 }

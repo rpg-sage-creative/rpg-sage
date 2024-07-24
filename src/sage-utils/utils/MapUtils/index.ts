@@ -3,10 +3,10 @@ export * from "./RenderableMap.js";
 export * from "./types.js";
 
 export {
-	GameMapLayer as IMapLayer,
-	HasOffset as THasOffset,
-	GameMapData as TMap,
-	GameMapBackgroundImage as TMapBackgroundImage,
-	GameMapLayerData as TMapLayer,
-	GameMapLayerImage as TMapLayerImage
-} from "./types";
+	type GameMapLayer as IMapLayer,
+	type HasOffset as THasOffset,
+	type GameMapData as TMap,
+	type GameMapBackgroundImage as TMapBackgroundImage,
+	type GameMapLayerData as TMapLayer,
+	type GameMapLayerImage as TMapLayerImage
+} from "./types.js";

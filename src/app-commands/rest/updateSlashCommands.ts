@@ -1,5 +1,5 @@
 import { REST } from "@discordjs/rest";
-import { error, info } from "@rsc-utils/console-utils";
+import { error, info } from "@rsc-utils/core-utils";
 import { Routes } from "discord-api-types/v9";
 import { buildCommands } from "../builders/buildCommands.js";
 import type { BotCore } from "../types.js";

@@ -1,21 +1,23 @@
-import { error, warn } from "@rsc-utils/console-utils";
-import { splitMessageOptions, toHumanReadable, type DMessageChannel, type DUser, type SplitOptions } from "@rsc-utils/discord-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { Message, MessageActionRow, MessageAttachment, MessageEmbed, Webhook } from "discord.js";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import { error, warn } from "@rsc-utils/core-utils";
+import { splitMessageOptions, toHumanReadable, type EmbedResolvable, type MessageTarget, type SplitOptions } from "@rsc-utils/discord-utils";
+import { ActionRow, Attachment, AttachmentBuilder, Message, Webhook, type MessageActionRowComponent } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
 
+export type AttachmentResolvable = Attachment | AttachmentBuilder;
+
 type TSendToArgs = {
 	avatarURL?: string;
-	components?: MessageActionRow[];
+	components?: ActionRow<MessageActionRowComponent>[];
 	content?: string;
 	embedContent?: string;
-	embeds?: MessageEmbed[];
+	embeds?: EmbedResolvable[];
 	errMsg?: string;
-	files?: MessageAttachment[];
+	files?: AttachmentResolvable[];
 	replyingTo?: string;
 	sageCache: SageCache;
-	target: DMessageChannel | DUser | Webhook;
+	target: MessageTarget | Webhook;
 	threadId?: Snowflake;
 	username?: string;
 };
@@ -58,7 +60,7 @@ type TSendToArgs = {
 	for (const payload of payloads) {
 		const message = await target.send(payload).catch(catcher);
 		if (message) {
-			if (typeof(message.type) === "string") {
+			if (typeof(message.type) === "number") {
 				messages.push(message);
 			}else {
 				warn(`sendTo(): I should not hit this line of code.`);

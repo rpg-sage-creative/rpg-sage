@@ -1,7 +1,6 @@
 import { HasCore, type Core } from "@rsc-utils/class-utils";
-import { rollDie } from "@rsc-utils/dice-utils";
-import { randomItem } from "@rsc-utils/random-utils";
-import { randomUuid, type UUID } from "@rsc-utils/uuid-utils";
+import { randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { randomItem, rollDie } from "@rsc-utils/dice-utils";
 import type { TMagicTradition } from "../common";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
 import { filter, findByValue } from "../data/Repository";
@@ -62,7 +61,7 @@ export function randomCasterClass(): string {
 export interface SpellbookCore extends Core<"Spellbook"> {
 	casterClass: string;
 	casterLevel: number;
-	casterSpecialty?: UUID;
+	casterSpecialty?: Snowflake;
 	spells: SpellCollection;
 	sources: string[];
 }
@@ -76,17 +75,17 @@ export class Spellbook extends HasCore<SpellbookCore> {
 	public constructor(spells: SpellCollection);
 	public constructor(spells?: any) {
 		super(<any>{ spells: new SpellCollection(spells) });
-		this.id = `Spellbook${DASH}${randomUuid()}`;
+		this.id = `Spellbook${DASH}${randomSnowflake()}`;
 	}
 
 	/**************************************************************************************************************************/
 	// Properties
 
 	public get arcaneSchool(): ArcaneSchool | undefined { return this.casterClass === "Wizard" && this.core.casterSpecialty ? findByValue("ArcaneSchool", this.core.casterSpecialty) : undefined; }
-	public set arcaneSchool(arcaneSchool: ArcaneSchool | undefined) { this.core.casterSpecialty = arcaneSchool?.id; }
+	public set arcaneSchool(arcaneSchool: ArcaneSchool | undefined) { this.core.casterSpecialty = arcaneSchool?.id as Snowflake; }
 
-	public get bloodline(): UUID | undefined { return this.casterClass === "Sorcerer" ? this.core.casterSpecialty : undefined; }
-	public set bloodline(bloodline: UUID | undefined) { this.core.casterSpecialty = bloodline; }
+	public get bloodline(): Snowflake | undefined { return this.casterClass === "Sorcerer" ? this.core.casterSpecialty : undefined; }
+	public set bloodline(bloodline: Snowflake | undefined) { this.core.casterSpecialty = bloodline; }
 
 	public get casterClass(): string { return this.core.casterClass; }
 	public set casterClass(casterClass: string) { this.core.casterClass = casterClass; }
@@ -179,7 +178,7 @@ export class Spellbook extends HasCore<SpellbookCore> {
 		const spellbook = new Spellbook();
 		spellbook.core.casterClass = casterClass;
 		spellbook.core.casterLevel = casterLevel;
-		spellbook.core.casterSpecialty = casterSpecialty;
+		spellbook.core.casterSpecialty = casterSpecialty as Snowflake;
 		spellbook.core.sources = sources;
 		spellbook.spells = spells;
 		return spellbook;

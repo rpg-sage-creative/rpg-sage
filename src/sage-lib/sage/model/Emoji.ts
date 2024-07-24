@@ -1,5 +1,5 @@
 import { tokenize } from "@rsc-utils/string-utils";
-import { Optional } from "@rsc-utils/type-utils";
+import { type Optional } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import type { EmojiType, IEmoji } from "./HasEmojiCore.js";
 

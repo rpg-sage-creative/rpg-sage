@@ -1,5 +1,5 @@
-import { debug } from "@rsc-utils/console-utils";
-import { isDefined } from "@rsc-utils/type-utils";
+import { debug } from "@rsc-utils/core-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import { PostType } from "../PostType.js";
 import { updateDialogOptions, type OldDialogOptions } from "./updateDialogOptions.js";
 

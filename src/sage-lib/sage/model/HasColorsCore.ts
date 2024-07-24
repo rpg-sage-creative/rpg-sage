@@ -1,4 +1,5 @@
-import type { Colors } from "./Colors";
+import type { HexColorString } from "@rsc-utils/color-utils";
+import type { Colors } from "./Colors.js";
 
 export enum ColorType {
 	Command = 1,
@@ -37,5 +38,5 @@ export interface IHasColors {
 }
 export interface IHasColorsCore {
 	colors: Colors;
-	toDiscordColor(colorType: ColorType): string | null;
+	toHexColorString(colorType: ColorType): HexColorString | undefined;
 }

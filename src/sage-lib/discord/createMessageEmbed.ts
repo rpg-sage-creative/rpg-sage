@@ -1,16 +1,16 @@
-import { warn } from "@rsc-utils/console-utils";
-import { DiscordMaxValues } from "@rsc-utils/discord-utils";
-import { MessageEmbed, type ColorResolvable } from "discord.js";
+import { warn } from "@rsc-utils/core-utils";
+import { DiscordMaxValues, EmbedBuilder } from "@rsc-utils/discord-utils";
+import { type HexColorString } from "discord.js";
 
 type Options = {
 	title?: string | null;
 	description?: string | null;
-	color?: string | null;
+	color?: HexColorString | null;
 };
 
 /** Creates a new MessageEmbed, setting the title, description, and color if given. */
-export function createMessageEmbed({ title, description, color }: Options = { }): MessageEmbed {
-	const embed = new MessageEmbed();
+export function createMessageEmbed({ title, description, color }: Options = { }): EmbedBuilder {
+	const embed = new EmbedBuilder();
 
 	if (title) {
 		if (title.length > DiscordMaxValues.embed.titleLength) {
@@ -29,7 +29,11 @@ export function createMessageEmbed({ title, description, color }: Options = { })
 	}
 
 	if (color) {
-		embed.setColor(color as ColorResolvable);
+		if (color.startsWith("0x")) {
+			warn(`Non-HexColorString: ${color}`);
+			color = `#${color.slice(2)}`;
+		}
+		embed.setColor(color);
 	}
 
 	return embed;

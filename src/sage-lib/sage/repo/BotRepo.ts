@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import type { IBotCore, TBotCodeName } from "../model/Bot";
 import { Bot } from "../model/Bot";
 import type { SageCache } from "../model/SageCache";
@@ -15,7 +15,7 @@ export class BotRepo extends DidRepository<IBotCore, Bot> {
 		const botRepo = new BotRepo(null!),
 			botCores = await botRepo.readAllCores(),
 			botCore = botCores.find(core => core.codeName === codeName)!;
-		return botRepo.getById(botCore.id) as Promise<Bot>;
+		return botRepo.getById(botCore.id as Snowflake) as Promise<Bot>;
 	}
 
 	public static isTesterBot(userDid: Snowflake): boolean;

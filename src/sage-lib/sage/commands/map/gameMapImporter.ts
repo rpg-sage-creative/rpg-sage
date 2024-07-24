@@ -1,10 +1,9 @@
-import { debug } from "@rsc-utils/console-utils";
-import { isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
+import { debug, isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { StringMatcher, dequote } from "@rsc-utils/string-utils";
 import type { Guild } from "discord.js";
 import XRegExp from "xregexp";
-import { COL, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
-import { RenderableGameMap } from "./RenderableGameMap";
+import { COL, LayerType, ROW, type TGameMapAura, type TGameMapCore, type TGameMapImage } from "./GameMapBase.js";
+import { RenderableGameMap } from "./RenderableGameMap.js";
 
 export type TParsedGameMapCore = Omit<TGameMapCore, "messageId">;
 export type TValidatedGameMapCore = TParsedGameMapCore & {
@@ -13,7 +12,7 @@ export type TValidatedGameMapCore = TParsedGameMapCore & {
 };
 
 /** matches a line and cleans it up for use if found */
-function matchLine(lines: string[], regex: RegExp, slice?: boolean): string | undefined;
+function matchLine<T extends string>(lines: string[], regex: RegExp, slice?: boolean): T | undefined;
 function matchLine(lines: string[], regex: RegExp, slice?: boolean, split?: boolean): number[] | undefined;
 function matchLine(lines: string[], regex: RegExp, slice = false, split = false): string | number[] | undefined {
 	let line = lines.find(_line => regex.test(_line));
@@ -79,7 +78,7 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 	// if we have a discord snowflake ... make sure it is valid
 	if (isNonNilSnowflake(userValue) as boolean) {
 		const user = await guild.client.users.fetch(userValue);
-		return user?.id;
+		return user?.id as Snowflake;
 	}
 
 	// break the user string down (ignore ZERO_WIDTH_SPACE in case if is a copy/paste from game/char/user details)
@@ -91,7 +90,7 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 	const tagMatch = guild.members.cache.find(member => tagRegex.test(member.user.tag));
 	if (tagMatch) {
 		debug(`parseUser match: tag = "${tag}"`);
-		return tagMatch.id;
+		return tagMatch.id as Snowflake;
 	}
 
 	// look for username, displayName, and nickname matches and only return a singleton
@@ -112,7 +111,7 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 		return false;
 	}).values());
 	if (usernameMatches.length === 1) {
-		return usernameMatches[0].id;
+		return usernameMatches[0].id as Snowflake;
 	}
 
 	debug(`parseUser no match: ${userValue}`);
@@ -153,7 +152,7 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		terrain: [],
 		tokens: [],
 		url: url,
-		userId: userId!
+		userId: userId as Snowflake
 	};
 }
 
@@ -290,15 +289,15 @@ export async function validateMapCore(parsedCore: TParsedGameMapCore, guild: Gui
 	const testRenderResponse = await RenderableGameMap.testRender(parsedCore);
 
 	const invalidUserSet = new Set<string>();
-	parsedCore.userId = await validateUserId(parsedCore.userId) as string;
+	parsedCore.userId = await validateUserId(parsedCore.userId) as Snowflake;
 	for (const terrain of parsedCore.terrain) {
-		terrain.userId = await validateUserId(terrain.userId) as string;
+		terrain.userId = await validateUserId(terrain.userId);
 	}
 	for (const aura of parsedCore.auras) {
-		aura.userId = await validateUserId(aura.userId) as string;
+		aura.userId = await validateUserId(aura.userId);
 	}
 	for (const token of parsedCore.tokens) {
-		token.userId = await validateUserId(token.userId) as string;
+		token.userId = await validateUserId(token.userId);
 	}
 
 	const invalidImages = testRenderResponse.invalidImageUrls;
@@ -306,7 +305,7 @@ export async function validateMapCore(parsedCore: TParsedGameMapCore, guild: Gui
 
 	return { ...parsedCore, invalidImages, invalidUsers };
 
-	async function validateUserId(userValue?: string): Promise<string | undefined> {
+	async function validateUserId(userValue?: string): Promise<Snowflake | undefined> {
 		if (userValue) {
 			const validId = await parseUser(guild, userValue);
 			if (validId) return validId;

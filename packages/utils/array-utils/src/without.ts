@@ -1,4 +1,4 @@
-import type { Collection } from "./Collection.js";
+import { type Collection } from "./Collection.js";
 
 /** Returns a new array that doesn't contain the passed args */
 export function without<T>(array: Array<T>, ...args: T[]): Array<T>;

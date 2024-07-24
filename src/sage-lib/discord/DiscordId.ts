@@ -1,8 +1,8 @@
 // import { and, toUniqueDefined } from "@rsc-utils/array-utils";
 // import type { DMessage } from "@rsc-utils/discord-utils";
-// import { isNonNilSnowflake, orNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-// import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
-// import { isDefined } from "@rsc-utils/type-utils";
+// import { isNonNilSnowflake, orNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+// import type { Optional, OrUndefined } from "@rsc-utils/core-utils";
+// import { isDefined } from "@rsc-utils/core-utils";
 // import { Formatters } from "discord.js";
 // import { SnowflakeType } from "./enums";
 

@@ -1,5 +1,5 @@
-import { getSuperUserId } from "@rsc-utils/env-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import { getSuperUserId } from "@rsc-sage/env";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import type { SageCache } from "../model/SageCache.js";
 import { User, type UserCore } from "../model/User.js";
 import { DidRepository } from "./base/DidRepository.js";

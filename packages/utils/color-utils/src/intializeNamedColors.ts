@@ -1,9 +1,9 @@
 import { Color } from "./Color.js";
-import type { ColorData } from "./ColorData.js";
+import type { ColorData, HexColorString } from "./ColorData.js";
 import { hexToColor } from "./internal/hexToColor.js";
 import { getNamedColors } from "./namedColors.js";
 
-type SimpleColor = { name:string; hex:string };
+type SimpleColor = { name:string; hex:string; };
 
 /**
  * Loads the named colors used by this repo.
@@ -73,7 +73,7 @@ export function intializeNamedColors(): number {
 		{ name: "Wheat", hex: "#F5DEB3" }, { name: "White", hex: "#FFFFFF" }, { name: "WhiteSmoke", hex: "#F5F5F5" },
 		{ name: "Yellow", hex: "#FFFF00" }, { name: "YellowGreen", hex: "#9ACD32" }
 	].forEach((simpleColor: SimpleColor) => {
-		const colorCore = hexToColor(simpleColor.hex) as ColorData;
+		const colorCore = hexToColor(simpleColor.hex as HexColorString) as ColorData;
 		colorCore.name = simpleColor.name;
 		colorCore.lower = simpleColor.name.toLowerCase();
 

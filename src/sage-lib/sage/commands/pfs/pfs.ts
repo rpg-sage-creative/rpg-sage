@@ -1,4 +1,4 @@
-import { error, warn } from "@rsc-utils/console-utils";
+import { error, warn } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { Dice } from "../../../../sage-dice/dice/pf2e/index.js";

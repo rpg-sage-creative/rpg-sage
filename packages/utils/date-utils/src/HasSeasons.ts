@@ -1,5 +1,5 @@
-import { TemperateSeason } from "./TemperateSeason.js";
-import { TropicalSeason } from "./TropicalSeason.js";
+import type { TemperateSeason } from "./TemperateSeason.js";
+import type { TropicalSeason } from "./TropicalSeason.js";
 
 export interface HasSeasons {
 	temperateSeason: TemperateSeason;

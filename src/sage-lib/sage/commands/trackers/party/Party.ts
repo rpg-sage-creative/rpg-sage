@@ -1,13 +1,13 @@
-import { applyMixins } from "@rsc-utils/type-utils";
-import { CharacterShell } from "../../../model/CharacterShell";
-import type { Game } from "../../../model/Game";
-import { GameCharacter } from "../../../model/GameCharacter";
-import { CharacterSorter, HasCharacters, type HasCharactersCore } from "../common/HasCharacters";
-import { HasCore } from "../common/HasCore";
-import { HasPins, HasPinsCore } from "../common/HasPins";
-import { HasTemplates, HasTemplatesCore } from "../common/HasTemplates";
-import { appendWealth } from "../wealth/appendWealth";
-import { getCharWealth } from "../wealth/getCharWealth";
+import { applyMixins } from "@rsc-utils/core-utils";
+import { CharacterShell } from "../../../model/CharacterShell.js";
+import type { Game } from "../../../model/Game.js";
+import { GameCharacter } from "../../../model/GameCharacter.js";
+import { type CharacterSorter, HasCharacters, type HasCharactersCore } from "../common/HasCharacters.js";
+import { HasCore } from "../common/HasCore.js";
+import { HasPins, type HasPinsCore } from "../common/HasPins.js";
+import { HasTemplates, type HasTemplatesCore } from "../common/HasTemplates.js";
+import { appendWealth } from "../wealth/appendWealth.js";
+import { getCharWealth } from "../wealth/getCharWealth.js";
 
 export type PartyType = "pc" | "npc" | "mixed";
 

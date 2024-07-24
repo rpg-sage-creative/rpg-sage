@@ -1,12 +1,15 @@
+import type { Optional } from "@rsc-utils/core-utils";
 import { chunk, isNotBlank } from "@rsc-utils/string-utils";
-import { ColorResolvable, MessageEmbed, MessageEmbedOptions, MessageOptions, WebhookEditMessageOptions, WebhookMessageOptions } from "discord.js";
-import { DiscordMaxValues } from "../DiscordMaxValues.js";
-import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
+import { type APIEmbed, type ColorResolvable, type Embed, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
+import { EmbedBuilder } from "../embed/EmbedBuilder.js";
+import { type EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
+import { resolveEmbed } from "../embed/resolveEmbed.js";
+import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 
-type MsgOptions = (WebhookMessageOptions | WebhookEditMessageOptions | MessageOptions)
-				& { embedContent?:string; replyingTo?:string; };
+type MessageOptions = MessageCreateOptions | MessageEditOptions | WebhookMessageCreateOptions | WebhookMessageEditOptions;
+type SplitMessageOptions<T extends MessageOptions> = T & { embedContent?:string; replyingTo?:string; };
 
 export type SplitOptions = {
 	/** Use in place of blank content (null, undefined, empty string, whitespcae only), ie: ZERO_WIDTH_SPACE */
@@ -19,10 +22,10 @@ export type SplitOptions = {
 	embedColor?: ColorResolvable;
 };
 
-type MsgEmbed = MessageEmbed | MessageEmbedOptions;
+type MsgEmbed = Embed | APIEmbed;
 
 /** Ensures we have a string, prepending a NewLine or title markdown if needed. */
-function getValueToAppend(value?: string | null, newLine?: boolean, title?: boolean): string {
+function getValueToAppend(value?: Optional<string>, newLine?: boolean, title?: boolean): string {
 	const titleOut = isNotBlank(value) && title ? "### " : "";
 	const newLineOut = newLine ? "\n" : "";
 	const valueOut = value?.trim() ?? "";
@@ -30,18 +33,26 @@ function getValueToAppend(value?: string | null, newLine?: boolean, title?: bool
 }
 
 /** Converts embeds into content. */
-function embedsToContent(embeds?: MsgEmbed[] | null): string | undefined {
+function embedsToContent(embeds?: Optional<MsgEmbed[]>): string | undefined {
 	// map the embeds to content and join them
-	const content = embeds?.map(embed => {
+	const content = embeds?.map(_embed => {
+		const embed = resolveEmbed(_embed);
+
 		let text = "";
-		text += getValueToAppend(embed.title, !!text, true);
-		text += getValueToAppend(embed.description, !!text, false);
-		if (embed.fields?.length) {
-			embed.fields.forEach(field => {
-				text += getValueToAppend(field.name, !!text, true);
-				text += getValueToAppend(field.value, !!text, false);
-			});
-		}
+
+		text += getValueToAppend(embed.title, false, true);
+		let newLine = text.length > 0;
+
+		text += getValueToAppend(embed.description, newLine);
+		newLine ||= text.length > 0;
+
+		embed.fields?.forEach(field => {
+			text += getValueToAppend(field.name, newLine, true);
+			newLine ||= text.length > 0;
+
+			text += getValueToAppend(field.value, newLine);
+			newLine ||= text.length > 0;
+		});
 		return text;
 	}).join("\n\n");
 
@@ -52,19 +63,20 @@ function embedsToContent(embeds?: MsgEmbed[] | null): string | undefined {
 }
 
 /** Converts content into embeds. */
-function contentToEmbeds(content?: string | null, color?: ColorResolvable): MessageEmbed[] | undefined {
+function contentToEmbeds(content?: Optional<string>, colorResolvable?: ColorResolvable): EmbedBuilder[] | undefined {
 	const trimmedContent = content?.trim();
 	if (trimmedContent?.length) {
 		const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
 		if (chunks.length) {
-			return chunks.map(description => new MessageEmbed({ color, description }));
+			const color = colorResolvable ? resolveColor(colorResolvable) : undefined;
+			return chunks.map(description => new EmbedBuilder({ color, description }));
 		}
 	}
 	return undefined;
 }
 
 /** Merges embeds into content. */
-function mergeContent(content?: string | null, embeds?: MsgEmbed[] | null): string | undefined {
+function mergeContent(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>): string | undefined {
 	// get embed content
 	const embedContent = embedsToContent(embeds);
 
@@ -86,21 +98,21 @@ function mergeContent(content?: string | null, embeds?: MsgEmbed[] | null): stri
 }
 
 /** Merges content into embeds */
-function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null, color?: ColorResolvable): MessageEmbed[] | undefined {
-	// get content embeds
-	const contentEmbeds = contentToEmbeds(content, embeds?.[0].color as ColorResolvable ?? color);
-
-	// get has flags
-	const hasContentEmbeds = !!contentEmbeds?.length;
+function mergeEmbeds(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>, color?: ColorResolvable): EmbedBuilder[] | undefined {
 	const hasEmbeds = !!embeds?.length;
+
+	// get content embeds
+	const embedColor = hasEmbeds ? resolveEmbed(embeds[0]).color as ColorResolvable : undefined;
+	const contentEmbeds = contentToEmbeds(content, embedColor ?? color);
+	const hasContentEmbeds = !!contentEmbeds?.length;
 
 	// return defined embeds
 	if (hasContentEmbeds && hasEmbeds) {
-		return contentEmbeds.concat(embeds as MessageEmbed[]);
+		return contentEmbeds.concat(embeds as EmbedBuilder[]);
 	}else if (hasContentEmbeds) {
 		return contentEmbeds;
 	}else if (hasEmbeds) {
-		return embeds as MessageEmbed[];
+		return embeds as EmbedBuilder[];
 	}
 
 	// return undefined to avoid sending an invalid array
@@ -108,9 +120,9 @@ function mergeEmbeds(content?: string | null, embeds?: MsgEmbed[] | null, color?
 }
 
 /** Used to convert a single message options object into an array to ensure we don't break posting limits. */
-export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOptions?: SplitOptions): T[] {
+export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitMessageOptions<T>, splitOptions?: SplitOptions): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
-	const { attachments, components, content, embedContent, embeds, files, replyingTo, ...baseOptions } = msgOptions;
+	const { components, content, embedContent, embeds, files, replyingTo, ...baseOptions } = msgOptions;
 
 	// convert incoming embedContent to embeds
 	const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) as MsgEmbed[] ?? [];
@@ -119,7 +131,7 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 	const allIncomingEmbeds = convertedEmbeds.concat(embeds as MsgEmbed[] ?? []);
 
 	let contentToChunk: string | undefined;
-	let embedsToPost: MessageEmbed[] | undefined;
+	let embedsToPost: EmbedBuilder[] | undefined;
 
 	if (splitOptions?.embedsToContent) {
 		// merge the incoming content with the embeds
@@ -131,11 +143,11 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 
 	}else {
 		contentToChunk = content ?? undefined;
-		embedsToPost = allIncomingEmbeds as MessageEmbed[];
+		embedsToPost = allIncomingEmbeds as EmbedBuilder[];
 	}
 
 	if (replyingTo && contentToChunk) {
-		contentToChunk = replyingTo + "\n\n" + contentToChunk;
+		contentToChunk = `${replyingTo}\n\n${contentToChunk}`;
 	}
 
 	const payloads: T[] = [];
@@ -147,13 +159,13 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 	contentChunks.forEach(contentChunk => {
 		payloads.push({
 			content: contentChunk,
-			embeds: [] as EmbedResolvable[],
-			...baseOptions
+			embeds: [],
+			...baseOptions as T
 		} as T);
 	});
 
 	// cannot send an empty string for content
-	let blankContent = (contentToChunk ? null : replyingTo) ?? splitOptions?.blankContentValue?.trim();
+	let blankContent = (contentToChunk ? undefined : replyingTo) ?? splitOptions?.blankContentValue?.trim();
 	if (!blankContent?.length) {
 		blankContent = undefined; //NOSONAR
 	}
@@ -167,32 +179,32 @@ export function splitMessageOptions<T extends MsgOptions>(msgOptions: T, splitOp
 		const payload = payloads[payloads.length - 1];
 		if (payload) {
 			// get the length of the existing embeds
-			const embedsLength = getTotalEmbedLength(payload.embeds);
+			const embedsLength = getTotalEmbedLength([...payload.embeds ?? []]);
 
 			// if we have enough characters left, then add the add
 			if (embedsLength + embedLength < DiscordMaxValues.embed.totalLength) {
-				payload.embeds!.push(embed);
+				(payload.embeds as EmbedResolvable[]).push(embed);
 
 			// create a new embed
 			}else {
-				payloads.push({ content:blankContent, embeds:[embed], ...baseOptions } as T);
+				payloads.push({ content:blankContent, embeds:[embed], ...baseOptions as T });
 			}
 
 		// no payload, create a new one
 		}else {
-			payloads.push({ content:blankContent, embeds:[embed], ...baseOptions } as T);
+			payloads.push({ content:blankContent, embeds:[embed], ...baseOptions as T });
 		}
 	});
 
 	// only set components or files /if/ we have them
-	if (attachments?.length || components?.length || files?.length) {
+	if (components?.length || files?.length) {
 		// if we somehow don't have a payload, add one
 		if (!payloads.length) {
 			payloads.push({ } as T);
 		}
 
 		// only include attachments in the first payload
-		payloads[0].attachments = attachments;
+		// payloads[0].attachments = attachments;
 
 		// only include components in the first payload
 		payloads[0].components = components;

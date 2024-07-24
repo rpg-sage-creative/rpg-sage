@@ -1,11 +1,11 @@
 import { getIdMatcher } from "@rsc-utils/class-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { Matcher, OrNull, OrUndefined } from "@rsc-utils/type-utils";
+import type { Matcher, OrNull, OrUndefined } from "@rsc-utils/core-utils";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
 import { RenderableContent } from "../../data/RenderableContent";
 import { find, findByValue } from "../../data/Repository";
-import { Base, BaseCore } from "./Base";
+import { Base, type BaseCore } from "./Base";
 import type { Source } from "./Source";
 import type { IHasRarity, IHasTraits, RarityCore, TraitsCore } from "./interfaces";
 
@@ -42,7 +42,7 @@ function doPages(sourceInfo: TSourceInfoRaw): string[] {
 }
 function parseSourceInfo(sourceInfo: TSourceInfoRaw): TSourceInfo {
 	const pages = doPages(sourceInfo);
-	const source = findByValue("Source", sourceInfo.source)!;
+	const source = findByValue("Source", sourceInfo.source);
 	const version = sourceInfo.version ?? 0;
 	return { pages: pages, source: source, version: version };
 }

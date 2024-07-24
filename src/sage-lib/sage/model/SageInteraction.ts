@@ -1,11 +1,9 @@
 import type { Cache } from "@rsc-utils/cache-utils";
-import { debug, warn } from "@rsc-utils/console-utils";
-import { DiscordKey, DMessage, type DInteraction, type DMessageChannel, type DUser } from "@rsc-utils/discord-utils";
+import { debug, isDefined, warn, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordKey, type DInteraction, type MessageTarget } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import { isString } from "@rsc-utils/string-utils";
-import { isDefined } from "@rsc-utils/type-utils";
-import type { InteractionReplyOptions, InteractionUpdateOptions, Message, MessageAttachment, User } from "discord.js";
+import type { Attachment, InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
@@ -58,7 +56,7 @@ export class SageInteraction<T extends DInteraction = any>
 	public isCommand(sub: string, command: string): boolean;
 	public isCommand(gameType: SlashCommandGameType, command: string): boolean;
 	public isCommand(...args: string[]): boolean {
-		if (!this.interaction.isCommand() && !this.interaction.isContextMenu()) {
+		if (!this.interaction.isCommand() && !this.interaction.isContextMenuCommand()) {
 			return false;
 		}
 
@@ -85,14 +83,14 @@ export class SageInteraction<T extends DInteraction = any>
 	}
 
 	public get commandValues(): string[] {
-		if (this.interaction.isCommand()) {
+		if (this.interaction.isChatInputCommand()) {
 			return [
 				this.interaction.commandName,
 				this.interaction.options.getSubcommandGroup(false),
 				this.interaction.options.getSubcommand(false)
 			].filter(isDefined);
 		}
-		if (this.interaction.isContextMenu()) {
+		if (this.interaction.isContextMenuCommand()) {
 			return [
 				this.interaction.commandName
 			];
@@ -102,20 +100,20 @@ export class SageInteraction<T extends DInteraction = any>
 
 	//#endregion
 
-	public getAttachment(name: string): MessageAttachment | null;
-	public getAttachment(name: string, required: true): MessageAttachment;
-	public getAttachment(name: string, required = false): MessageAttachment | null {
-		return this.interaction.isCommand() ? this.interaction.options.getAttachment(name, required) : null;
+	public getAttachment(name: string): Attachment | null;
+	public getAttachment(name: string, required: true): Attachment;
+	public getAttachment(name: string, required = false): Attachment | null {
+		return this.interaction.isChatInputCommand() ? this.interaction.options.getAttachment(name, required) : null;
 	}
 
 	public hasAttachment(name: string): boolean {
 		return this.getAttachment(name) !== null;
 	}
 
-	public getAttachmentPdf(name: string): MessageAttachment | null;
-	public getAttachmentPdf(name: string, required: true): MessageAttachment;
-	public getAttachmentPdf(name: string, required = false): MessageAttachment | null {
-		const attachment = this.interaction.isCommand() ? this.interaction.options.getAttachment(name, required) : null;
+	public getAttachmentPdf(name: string): Attachment | null;
+	public getAttachmentPdf(name: string, required: true): Attachment;
+	public getAttachmentPdf(name: string, required = false): Attachment | null {
+		const attachment = this.interaction.isChatInputCommand() ? this.interaction.options.getAttachment(name, required) : null;
 		return attachment?.contentType === "application/pdf" ? attachment : null;
 	}
 
@@ -129,7 +127,7 @@ export class SageInteraction<T extends DInteraction = any>
 	}
 
 	/** Returns the user */
-	public get user(): DUser {
+	public get user(): User {
 		return this.core.interaction.user;
 	}
 
@@ -190,7 +188,7 @@ export class SageInteraction<T extends DInteraction = any>
 		if (this._noReply) {
 			const message = await this.interaction.channel?.send(args);
 			if (message) {
-				await addMessageDeleteButton(message as DMessage, this.sageUser.did);
+				await addMessageDeleteButton(message, this.sageUser.did);
 				this.updates.push(message);
 			}
 
@@ -213,9 +211,9 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Sends a full message to the channel or user the interaction originated in. */
 	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: DMessageChannel): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: DMessageChannel, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.interaction.channel as DMessageChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageTarget): Promise<Message[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageTarget, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.interaction.channel as MessageTarget, originalAuthor = this.interaction.user): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			return [];
@@ -227,8 +225,8 @@ export class SageInteraction<T extends DInteraction = any>
 		}
 		return [];
 	}
-	public async canSend(targetChannel = this.interaction.channel as DMessageChannel): Promise<boolean> {
-		return this.sageCache.canSendMessageTo(DiscordKey.fromChannel(targetChannel));
+	public async canSend(targetChannel = this.interaction.channel as MessageTarget): Promise<boolean> {
+		return this.sageCache.canSendMessageTo(DiscordKey.from(targetChannel));
 	}
 
 	public async whisper(args: TSendArgs): Promise<void>;
@@ -253,9 +251,9 @@ export class SageInteraction<T extends DInteraction = any>
 	public get channelDid(): Snowflake | undefined {
 		return this.cache.get("channelDid", () => {
 			if (this.interaction.channel?.isThread()) {
-				return this.interaction.channel.parentId ?? undefined;
+				return this.interaction.channel.parentId as Snowflake ?? undefined;
 			}
-			return this.interaction.channelId ?? undefined;
+			return this.interaction.channelId as Snowflake ?? undefined;
 		});
 	}
 
@@ -273,7 +271,7 @@ export class SageInteraction<T extends DInteraction = any>
 	public get threadDid(): Snowflake | undefined {
 		return this.cache.get("threadDid", () => {
 			if (this.interaction.channel?.isThread()) {
-				return this.interaction.channelId ?? undefined;
+				return this.interaction.channelId as Snowflake ?? undefined;
 			}
 			return undefined;
 		});
@@ -281,7 +279,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Returns either the message's threadDid or channelDid if there is no thread. */
 	public get threadOrChannelDid(): Snowflake {
-		return this.cache.get("channelDid", () => this.threadDid ?? this.channelDid ?? this.interaction.channelId!);
+		return this.cache.get("channelDid", () => this.threadDid ?? this.channelDid ?? this.interaction.channelId as Snowflake);
 	}
 
 	// #endregion
@@ -291,7 +289,7 @@ export class SageInteraction<T extends DInteraction = any>
 	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
 	public get playerCharacter(): GameCharacter | undefined {
 		return this.cache.get("playerCharacter", () => {
-			const channelDid = this.channel?.id!;
+			const channelDid = this.channel?.id as Snowflake;
 			const userDid = this.sageUser.did;
 			const autoChannelData = { channelDid, userDid };
 			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
@@ -311,8 +309,8 @@ export class SageInteraction<T extends DInteraction = any>
 			interaction,
 			type
 		});
-		sageInteraction.isGameMaster = await sageInteraction.game?.hasUser(interaction.user.id, GameRoleType.GameMaster) ?? false;
-		sageInteraction.isPlayer = await sageInteraction.game?.hasUser(interaction.user.id, GameRoleType.Player) ?? false;
+		sageInteraction.isGameMaster = await sageInteraction.game?.hasUser(interaction.user.id as Snowflake, GameRoleType.GameMaster) ?? false;
+		sageInteraction.isPlayer = await sageInteraction.game?.hasUser(interaction.user.id as Snowflake, GameRoleType.Player) ?? false;
 		return sageInteraction;
 	}
 

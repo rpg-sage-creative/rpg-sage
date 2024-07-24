@@ -1,8 +1,8 @@
-import { randomInt } from "@rsc-utils/random-utils";
+import { randomInt } from "@rsc-utils/dice-utils";
 import { unwrap } from "@rsc-utils/string-utils";
-import type { TDiceOutput } from "../../../../sage-dice/index.js";
-import type { SageCommand } from "../../model/SageCommand.js";
-import { SimpleRollableTable } from "./SimpleRollableTable.js";
+import { type TDiceOutput } from "../../../../sage-dice/index.js";
+import { type SageCommand } from "../../model/SageCommand.js";
+import { type SimpleRollableTable } from "./SimpleRollableTable.js";
 import { fetchTableFromUrl } from "./fetchTableFromUrl.js";
 
 type TableOutput = TDiceOutput & { children?:string[]; };

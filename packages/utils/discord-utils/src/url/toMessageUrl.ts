@@ -1,20 +1,23 @@
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { MessageReference } from "discord.js";
-import type { DiscordKey } from "../DiscordKey.js";
-import type { DMessage } from "../types.js";
+import type { MessageOrPartial } from "../types/types.js";
 
-function createUrl(guildId: Optional<Snowflake>, channelId: Snowflake, messageId: Snowflake): string {
+function createUrl(guildId: Optional<string>, channelId: string, messageId: string): string {
 	return `https://discord.com/channels/${guildId ?? "@me"}/${channelId}/${messageId}`;
 }
 
-export function toMessageUrl(ref: DiscordKey | DMessage | MessageReference): string | null {
+export function toMessageUrl(ref: MessageOrPartial | MessageReference): string | undefined {
 	if ("messageId" in ref) {
 		if (ref.messageId) {
 			return createUrl(ref.guildId, ref.channelId, ref.messageId);
 		}
-	}else if (ref.id) {
-		return createUrl(ref.guildId, ref.channelId, ref.id);
+	}else {
+		if (ref.url) {
+			return ref.url;
+		}
+		if (ref.id) {
+			return createUrl(ref.guildId, ref.channelId, ref.id);
+		}
 	}
-	return null;
+	return undefined;
 }

@@ -1,8 +1,8 @@
 import { sortComparable, sortPrimitive, toUniqueDefined, type Sorter } from "@rsc-utils/array-utils";
 import { HasCore, type Core } from "@rsc-utils/class-utils";
-import { randomItem } from "@rsc-utils/random-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
+import { randomItem } from "@rsc-utils/dice-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { UUID } from "@rsc-utils/core-utils";
 import type { TMagicTradition } from "../common";
 import type { ArcaneSchool } from "./ArcaneSchool";
 import { HeightenedSpell } from "./HeightenedSpell";
@@ -37,10 +37,10 @@ export class SpellCollection extends HasCore<SpellCollectionCore> {
 		} else if (Array.isArray(spells)) {
 			spells.forEach((spell: Spell | HeightenedSpell) => {
 				if (spell instanceof Spell) {
-					this.core.spells.push(spell.toHeightenedSpell(spell.level).id);
+					this.core.spells.push(spell.toHeightenedSpell(spell.level).id as UUID);
 				}
 				if (spell instanceof HeightenedSpell) {
-					this.core.spells.push(spell.id);
+					this.core.spells.push(spell.id as UUID);
 				}
 			});
 		}
@@ -68,8 +68,8 @@ export class SpellCollection extends HasCore<SpellCollectionCore> {
 		if (spell instanceof Spell) {
 			spellId = spell.toHeightenedSpell().id;
 		}
-		if (!this.core.spells.includes(spellId)) {
-			this.core.spells.push(spell.id);
+		if (!this.core.spells.includes(spellId as UUID)) {
+			this.core.spells.push(spell.id as UUID);
 		}
 	}
 

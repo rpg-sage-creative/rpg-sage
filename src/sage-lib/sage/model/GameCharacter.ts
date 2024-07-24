@@ -1,20 +1,19 @@
 import type { DialogPostType } from "@rsc-sage/types";
+import { Color, type HexColorString } from "@rsc-utils/color-utils";
+import { NIL_SNOWFLAKE, isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
-import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
+import { doStatMath } from "../commands/dice/stats/doStatMath.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
-import { doStatMath } from "../commands/dice/stats/doStatMath.js";
 
 export type TDialogMessage = {
 	channelDid: Snowflake;
-	characterId: UUID;
-	gameId: UUID;
+	characterId: Snowflake;
+	gameId: Snowflake;
 	messageDid: Snowflake;
 	serverDid: Snowflake;
 	threadDid: Snowflake;
@@ -36,10 +35,10 @@ export interface GameCharacterCore {
 	avatarUrl?: string;
 	/** The character's companion characters */
 	companions?: (GameCharacter | GameCharacterCore)[];
-	/** Discord compatible color: 0x001122 */
-	embedColor?: string;
+	/** Discord compatible color: #001122 */
+	embedColor?: HexColorString;
 	/** Unique ID of this character */
-	id: UUID;
+	id: Snowflake;
 	/** A list of the character's last messages by channel. */
 	lastMessages?: TDialogMessage[];
 	/** The character's name */
@@ -86,8 +85,9 @@ function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage
 
 //#region Core Updates
 
-interface IOldGameCharacterCore extends Omit<GameCharacterCore, "autoChannels"> {
+interface IOldGameCharacterCore extends Omit<GameCharacterCore, "autoChannels" | "embedColor"> {
 	autoChannels?: (Snowflake | AutoChannelData)[];
+	embedColor?: string;
 	iconUrl?: string;
 }
 
@@ -100,6 +100,11 @@ function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
 			}
 			return data;
 		});
+	}
+	//#endregion
+	//#region update embedColor
+	if (core.embedColor) {
+		core.embedColor = Color.from(core.embedColor)?.hex;
 	}
 	//#endregion
 	//#region move .iconUrl to .avatarUrl
@@ -149,12 +154,12 @@ export class GameCharacter implements IHasSave {
 	/** The character's companion characters. */
 	public get companions(): CharacterManager { return this.core.companions as CharacterManager; }
 
-	/** Discord compatible color: 0x001122 */
-	public get embedColor(): string | undefined { return this.core.embedColor; }
-	public set embedColor(embedColor: string | undefined) { this.core.embedColor = embedColor; }
+	/** Discord compatible color: #001122 */
+	public get embedColor(): HexColorString | undefined { return this.core.embedColor; }
+	public set embedColor(embedColor: HexColorString | undefined) { this.core.embedColor = embedColor; }
 
 	/** Unique ID of this character */
-	public get id(): UUID { return this.core.id; }
+	public get id(): Snowflake { return this.core.id; }
 
 	public isGM: boolean;// = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
 	public isNPC: boolean;// = this.type === "npc";
@@ -189,7 +194,7 @@ export class GameCharacter implements IHasSave {
 		return this._parent ?? undefined;
 	}
 	/** The ID of the parent of a companion. */
-	public get parentId(): UUID | undefined { return this.parent?.id; }
+	public get parentId(): Snowflake | undefined { return this.parent?.id; }
 
 	private _preparedAlias?: string;
 	private get preparedAlias(): string { return this._preparedAlias ?? (this._preparedAlias = GameCharacter.prepareName(this.alias ?? this.name)); }

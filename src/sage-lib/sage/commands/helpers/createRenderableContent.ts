@@ -3,6 +3,6 @@ import type { ColorType, IHasColorsCore } from "../../model/HasColorsCore";
 
 export function createRenderableContent(hasColors: IHasColorsCore, colorType: ColorType, title?: string): RenderableContent {
 	const renderableContent = new RenderableContent(title);
-	renderableContent.setColor(hasColors.toDiscordColor(colorType));
+	renderableContent.setColor(hasColors.toHexColorString(colorType));
 	return renderableContent;
 }

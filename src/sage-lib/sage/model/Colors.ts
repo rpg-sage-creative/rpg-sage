@@ -1,6 +1,7 @@
 import { Color } from "@rsc-utils/color-utils";
-import { warn } from "@rsc-utils/console-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { warn } from "@rsc-utils/core-utils";
+import type { HexColorString } from "discord.js";
 import { ColorType, type IColor } from "./HasColorsCore.js";
 
 export type TColorAndType = { type: ColorType; color: Color; };
@@ -32,7 +33,7 @@ export class Colors {
 			this.colors.push(found);
 		}
 
-		found.hex = colorAndType.color.toDiscordColor();
+		found.hex = colorAndType.color.hex;
 
 		return true;
 	}
@@ -60,7 +61,7 @@ export class Colors {
 		return this.colors.map(({ type, hex }) => ({ type, hex }));
 	}
 
-	public toDiscordColor(colorType: ColorType): string | null {
+	public toHexColorString(colorType: ColorType): HexColorString | undefined {
 		const color = this.get(colorType);
 		switch (colorType) {
 			case ColorType.Command:
@@ -69,31 +70,31 @@ export class Colors {
 			case ColorType.Dice:
 			case ColorType.Dialog:
 			case ColorType.PfsCommand:
-				return color?.toDiscordColor() ?? this.toDiscordColor(undefined!);
+				return color?.hex ?? this.toHexColorString(undefined!);
 
 			case ColorType.SearchFind:
-				return color?.toDiscordColor() ?? this.toDiscordColor(ColorType.Search);
+				return color?.hex ?? this.toHexColorString(ColorType.Search);
 
 			case ColorType.GameMaster:
 			case ColorType.PlayerCharacter:
 			case ColorType.NonPlayerCharacter:
-				return color?.toDiscordColor() ?? this.toDiscordColor(ColorType.Dialog);
+				return color?.hex ?? this.toHexColorString(ColorType.Dialog);
 
 			case ColorType.PlayerCharacterAlt:
 			case ColorType.PlayerCharacterCompanion:
 			case ColorType.PlayerCharacterFamiliar:
 			case ColorType.PlayerCharacterHireling:
-				return color?.toDiscordColor() ?? this.toDiscordColor(ColorType.PlayerCharacter);
+				return color?.hex ?? this.toHexColorString(ColorType.PlayerCharacter);
 
 			case ColorType.NonPlayerCharacterAlly:
 			case ColorType.NonPlayerCharacterEnemy:
 			case ColorType.NonPlayerCharacterBoss:
 			case ColorType.NonPlayerCharacterMinion:
-				return color?.toDiscordColor() ?? this.toDiscordColor(ColorType.NonPlayerCharacter);
+				return color?.hex ?? this.toHexColorString(ColorType.NonPlayerCharacter);
 
 			default:
 				warn(`Missing ColorType: ${colorType}`);
-				return null;
+				return undefined;
 		}
 	}
 

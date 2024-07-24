@@ -1,11 +1,9 @@
 import { toUnique } from "@rsc-utils/array-utils";
-import { errorReturnNull } from "@rsc-utils/console-utils";
-import { DiscordKey, toUserMention, type DMessageChannel, type DMessageTarget } from "@rsc-utils/discord-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnNull, isDefined, warn } from "@rsc-utils/core-utils";
+import { DiscordMaxValues, EmbedBuilder, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/type-utils";
-import { isDefined } from "@rsc-utils/type-utils";
-import type { UUID } from "@rsc-utils/uuid-utils";
-import { MessageActionRow, MessageAttachment, MessageButton, MessageSelectMenu, type ButtonInteraction, type Message, type MessageButtonStyleResolvable, type MessageEmbed, type SelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills, PathbuilderCharacter, toModifier } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
@@ -20,13 +18,20 @@ import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton
 import { parseDiceMatches, sendDice } from "./dice.js";
 
 type SageButtonInteraction = SageInteraction<ButtonInteraction>;
-type SageSelectInteraction = SageInteraction<SelectMenuInteraction>;
+type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
 
-function createSelectMenuRow(selectMenu: MessageSelectMenu): MessageActionRow {
-	if (selectMenu.options.length > 25) {
-		selectMenu.options.length = 25;
-	}
-	return new MessageActionRow().addComponents(selectMenu);
+function createActionRow<T extends ButtonBuilder | StringSelectMenuBuilder>(...components: T[]): ActionRowBuilder<T> {
+	components.forEach(comp => {
+		if ("options" in comp) {
+			if (comp.options.length > 25) {
+				comp.options.length = 25;
+			}
+			if (comp.data.min_values) {
+				comp.setMaxValues(comp.options.length);
+			}
+		}
+	});
+	return new ActionRowBuilder<T>().setComponents(...components);
 }
 
 type TLabeledMacro = TMacro & { id:string; prefix:string; };
@@ -34,6 +39,7 @@ function getAttackMacros(character: PathbuilderCharacter): TLabeledMacro[] {
 	return character.getAttackMacros()
 		.map((macro, index) => ({ id:`atk-${index}`, prefix:"Attack Roll", ...macro }));
 }
+
 function getUserMacros(character: PathbuilderCharacter, macroUser: Optional<User>): TLabeledMacro[] {
 	if (macroUser) {
 		const matcher = new StringMatcher(character.name);
@@ -43,6 +49,7 @@ function getUserMacros(character: PathbuilderCharacter, macroUser: Optional<User
 	}
 	return [];
 }
+
 function getMacros(character: PathbuilderCharacter, macroUser: Optional<User>): TLabeledMacro[] {
 	// create attack rolls
 	const attackMacros = getAttackMacros(character);
@@ -67,6 +74,7 @@ function getMacros(character: PathbuilderCharacter, macroUser: Optional<User>): 
 		return arrOne.length + arrTwo.length > 24;
 	}
 }
+
 function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	if (getUserMacros(character, macroUser).length > 0) {
 		character.setSheetValue("macroUserId", macroUser.id);
@@ -75,11 +83,11 @@ function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	}
 }
 
-async function attachCharacter(sageCache: SageCache, channel: DMessageTarget, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
-	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.description).join("");
+async function attachCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.getDescription()).join("");
 	const buffer = Buffer.from(raw, "utf-8");
-	const attachment = new MessageAttachment(buffer, `pathbuilder2e-${pathbuilderId}.txt`);
-	const message = await channel.send({
+	const attachment = new AttachmentBuilder(buffer, { name:`pathbuilder2e-${pathbuilderId}.txt` });
+	const message = await channel?.send({
 		content: `Attaching Pathbuilder2e Character: ${character.name} (${pathbuilderId})`,
 		files:[attachment]
 	}).catch(errorReturnNull);
@@ -99,12 +107,12 @@ async function notifyOfSlicedMacros(sageCache: SageCache, character: Pathbuilder
 	}
 }
 
-async function postCharacter(sageCache: SageCache, channel: DMessageChannel, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+async function postCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	setMacroUser(character, sageCache.user);
 	const saved = await character.save();
 	if (saved) {
 		const output = prepareOutput(sageCache, character, sageCache.user);
-		const message = await channel.send(output).catch(errorReturnNull);
+		const message = await channel?.send(output).catch(errorReturnNull);
 		if (message) {
 			character.messageId = message.id;
 			await character.save();
@@ -115,7 +123,7 @@ async function postCharacter(sageCache: SageCache, channel: DMessageChannel, cha
 		}
 	}else {
 		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
-		const message = await channel.send(output).catch(errorReturnNull);
+		const message = await channel?.send(output).catch(errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();
 		}
@@ -130,8 +138,9 @@ export async function updateSheet(sageCache: SageCache, character: PathbuilderCh
 		}
 	}else {
 		if (character.messageId) {
-			const discordKey = new DiscordKey(sageCache.server.did, undefined, undefined, character.messageId);
-			message = await sageCache.discord.fetchMessage(discordKey) ?? undefined;
+			const messageReference = { guildId:sageCache.server.did, channelId:undefined!, messageId:character.messageId };
+			warn(`Pretty sure this channelId:undefined is going to be a problem!`);
+			message = await sageCache.fetchMessage(messageReference) ?? undefined;
 		}
 	}
 	if (message) {
@@ -147,8 +156,9 @@ function getActiveSections(character: PathbuilderCharacter): TCharacterSectionTy
 	const activeSections = character.getSheetValue<TCharacterSectionType[]>("activeSections");
 	return getCharacterSections(activeView) ?? activeSections ?? getCharacterSections("Combat") ?? [];
 }
-function createViewSelectRow(character: PathbuilderCharacter): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+
+function createViewSelectRow(character: PathbuilderCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`PB2E|${character.id}|View`);
 	selectMenu.setPlaceholder("Character Sheet Sections");
 	selectMenu.setMinValues(1);
@@ -177,12 +187,11 @@ function createViewSelectRow(character: PathbuilderCharacter): MessageActionRow 
 		});
 	});
 
-	return createSelectMenuRow(selectMenu);
+	return createActionRow(selectMenu);
 }
 
-
-function createExplorationSelectRow(character: PathbuilderCharacter): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createExplorationSelectRow(character: PathbuilderCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`PB2E|${character.id}|Exploration`);
 	selectMenu.setPlaceholder("Select Exploration Mode");
 
@@ -196,11 +205,11 @@ function createExplorationSelectRow(character: PathbuilderCharacter): MessageAct
 		});
 	});
 
-	return createSelectMenuRow(selectMenu);
+	return createActionRow(selectMenu);
 }
 
-function createSkillSelectRow(character: PathbuilderCharacter): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+function createSkillSelectRow(character: PathbuilderCharacter): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`PB2E|${character.id}|Skill`);
 	selectMenu.setPlaceholder("Select a Skill to Roll");
 
@@ -218,30 +227,31 @@ function createSkillSelectRow(character: PathbuilderCharacter): MessageActionRow
 		});
 	});
 
-	return createSelectMenuRow(selectMenu);
+	return createActionRow(selectMenu);
 }
 
-const maxLength = 100;
 function createMacroLabel(macro: TLabeledMacro): string {
+	const { labelLength } = DiscordMaxValues.component.select;
 	let prefix = macro.prefix;
 	const name = macro.name;
-	if (`${prefix}: ${name}`.length > maxLength) {
-		if (macro.prefix === "Attack Roll") prefix = "Atk Roll";
+	if (`${prefix}: ${name}`.length > labelLength) {
+		if (macro.prefix === "Attack Roll") prefix = "Atk Roll"; //NOSONAR
 	}
-	if (`${prefix}: ${name}`.length > maxLength) {
-		if (macro.prefix === "Attack Roll") prefix = "Attack";
-		if (macro.prefix === "Macro Roll") prefix = "Macro";
+	if (`${prefix}: ${name}`.length > labelLength) {
+		if (macro.prefix === "Attack Roll") prefix = "Attack"; //NOSONAR
+		if (macro.prefix === "Macro Roll") prefix = "Macro"; //NOSONAR
 	}
-	if (`${prefix}: ${name}`.length > maxLength) {
-		if (macro.prefix === "Attack Roll") prefix = "Atk";
+	if (`${prefix}: ${name}`.length > labelLength) {
+		if (macro.prefix === "Attack Roll") prefix = "Atk"; //NOSONAR
 	}
-	if (`${prefix}: ${name}`.length > maxLength) {
-		return `${prefix}: ${name}`.slice(0, 99) + "\u2026";
+	if (`${prefix}: ${name}`.length > labelLength) {
+		return `${prefix}: ${name}`.slice(0, labelLength - 1) + "\u2026";
 	}
 	return `${prefix}: ${name}`;
 }
-function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledMacro[]): MessageActionRow {
-	const selectMenu = new MessageSelectMenu();
+
+function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledMacro[]): ActionRowBuilder<StringSelectMenuBuilder> {
+	const selectMenu = new StringSelectMenuBuilder();
 	selectMenu.setCustomId(`PB2E|${character.id}|Macro`);
 	selectMenu.setPlaceholder("Select a Macro to Roll");
 
@@ -259,11 +269,11 @@ function createMacroSelectRow(character: PathbuilderCharacter, macros: TLabeledM
 		default: false
 	});
 
-	return createSelectMenuRow(selectMenu);
+	return createActionRow(selectMenu);
 }
 
-function createButton(customId: string, label: string, style: MessageButtonStyleResolvable): MessageButton {
-	const button = new MessageButton();
+function createButton(customId: string, label: string, style: ButtonStyle): ButtonBuilder {
+	const button = new ButtonBuilder();
 	button.setCustomId(customId);
 	if (label.startsWith("<") && label.endsWith(">")) {
 		button.setEmoji(label);
@@ -274,18 +284,18 @@ function createButton(customId: string, label: string, style: MessageButtonStyle
 	return button;
 }
 
-function createRollButtonRow(character: PathbuilderCharacter, macros: TMacro[]): MessageActionRow {
-	const rollButton = createButton(`PB2E|${character.id}|Roll`, `Roll Check`, "PRIMARY");
-	const rollSecretButton = createButton(`PB2E|${character.id}|Secret`, `Roll Secret Check`, "PRIMARY");
-	const rollInitButton = createButton(`PB2E|${character.id}|Init`, `Roll Initiative`, "PRIMARY");
-	const macroButton = createButton(`PB2E|${character.id}|MacroRoll`, macros.length > 0 ? `Roll Macro` : `Load Macros`, "PRIMARY");
+function createRollButtonRow(character: PathbuilderCharacter, macros: TMacro[]): ActionRowBuilder<ButtonBuilder> {
+	const rollButton = createButton(`PB2E|${character.id}|Roll`, `Roll Check`, ButtonStyle.Primary);
+	const rollSecretButton = createButton(`PB2E|${character.id}|Secret`, `Roll Secret Check`, ButtonStyle.Primary);
+	const rollInitButton = createButton(`PB2E|${character.id}|Init`, `Roll Initiative`, ButtonStyle.Primary);
+	const macroButton = createButton(`PB2E|${character.id}|MacroRoll`, macros.length > 0 ? `Roll Macro` : `Load Macros`, ButtonStyle.Primary);
 	const linkButton = character.characterId
-		? createButton(`PB2E|${character.id}|Unlink`, "🔗", "DANGER")
-		: createButton(`PB2E|${character.id}|Link`, "🔗", "SECONDARY");
-	return new MessageActionRow().addComponents(rollButton, rollSecretButton, rollInitButton, macroButton, linkButton);
+		? createButton(`PB2E|${character.id}|Unlink`, "🔗", ButtonStyle.Danger)
+		: createButton(`PB2E|${character.id}|Link`, "🔗", ButtonStyle.Secondary);
+	return new ActionRowBuilder<ButtonBuilder>().setComponents(rollButton, rollSecretButton, rollInitButton, macroButton, linkButton);
 }
 
-function createComponents(character: PathbuilderCharacter, macroUser: Optional<User>): MessageActionRow[] {
+function createComponents(character: PathbuilderCharacter, macroUser: Optional<User>): ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] {
 	const macros = getMacros(character, macroUser);
 	return [
 		createViewSelectRow(character),
@@ -296,7 +306,7 @@ function createComponents(character: PathbuilderCharacter, macroUser: Optional<U
 	].filter(isDefined);
 }
 
-type TOutput = { embeds:MessageEmbed[], components:MessageActionRow[] };
+type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
 function prepareOutput(sageCache: SageCache, character: PathbuilderCharacter, macroUser: Optional<User>): TOutput {
 	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character)));
 	const components = createComponents(character, macroUser);
@@ -305,16 +315,16 @@ function prepareOutput(sageCache: SageCache, character: PathbuilderCharacter, ma
 
 //#region button command
 
-type TActionIdType = ["PB2E", UUID, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll" | "Link" | "Unlink"];
+type TActionIdType = ["PB2E", string, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll" | "Link" | "Unlink"];
 
 function matchesOldActionRegex(customId: string): boolean {
-	const _uuidActionRegex = /^(?:PB2E\|)*(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
-	return _uuidActionRegex.test(customId);
+	const actionRegex = /^(?:PB2E\|)*(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
+	return actionRegex.test(customId);
 }
 
 function matchesActionRegex(customId: string): boolean {
-	const uuidActionRegex = /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll|Link|Unlink)$/i;
-	return uuidActionRegex.test(customId);
+	const actionRegex = /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll|Link|Unlink)$/i;
+	return actionRegex.test(customId);
 }
 
 function parseCustomId(customId: string): TActionIdType {
@@ -370,21 +380,21 @@ async function viewHandler(sageInteraction: SageSelectInteraction, character: Pa
 	character.setSheetValue("activeView", undefined);
 	character.setSheetValue("activeSections", activeSections);
 	await character.save();
-	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
+	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
 }
 
 async function explorationHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeExploration = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeExploration", activeExploration);
 	await character.save();
-	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
+	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
 }
 
 async function skillHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await character.save();
-	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
+	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
 }
 
 async function macroHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
@@ -395,12 +405,12 @@ async function macroHandler(sageInteraction: SageSelectInteraction, character: P
 		character.setSheetValue("activeMacro", activeMacro);
 	}
 	await character.save();
-	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
+	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
 }
 
 
 async function rollHandler(sageInteraction: SageButtonInteraction, character: PathbuilderCharacter, secret = false, init = false): Promise<void> {
-	const skill = init ? character.getInitSkill() : character.getSheetValue<string>("activeSkill") ?? "Perception";
+	const skill = init ? character.getInitSkill() : character.getSheetValue("activeSkill") ?? "Perception";
 	const skillMod = character.getProficiencyAndMod(skill)[1];
 	const incredibleMod = character.hasFeat("Incredible Initiative") ? 2 : 0;
 	const scoutMod = character.getSheetValue("activeExploration") === "Scout" ? 1 : 0;
@@ -411,8 +421,8 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
 		await sageInteraction.interaction.channel?.send({
-			content: `${toUserMention(sageInteraction.user.id)} *Secret Dice sent to the GM* 🎲`,
-			components: createMessageDeleteButtonComponents(sageInteraction.user.id)
+			content: `${toUserMention(sageInteraction.user.id as Snowflake)} *Secret Dice sent to the GM* 🎲`,
+			components: createMessageDeleteButtonComponents(sageInteraction.user.id as Snowflake)
 		});
 	}
 }
@@ -430,7 +440,7 @@ async function macroRollHandler(sageInteraction: SageButtonInteraction, characte
 	}else {
 		setMacroUser(character, sageInteraction.sageUser);
 		await character.save();
-		await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
+		await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
 		if (macros.length) {
 			sageInteraction.send("Invalid Macro!");
 		}
@@ -457,7 +467,7 @@ async function linkHandler(sageInteraction: SageButtonInteraction, character: Pa
 		const charSaved = await character.save();
 		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
 		if (gameSaved) {
-			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
+			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
 			return sageInteraction.reply("Character Successfully Linked.", true);
 		}else {
 			return sageInteraction.reply("Sorry, unable to link character.", true);
@@ -487,7 +497,7 @@ async function unlinkHandler(sageInteraction: SageButtonInteraction, character: 
 		const charSaved = await character.save();
 		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
 		if (gameSaved) {
-			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
+			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
 			return sageInteraction.reply("Character Successfully Unlinked.", true);
 		}else {
 			return sageInteraction.reply("Sorry, unable to unlink character.", true);
@@ -506,7 +516,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 
 		// if we matched the old regex, force the sheet to update
 		if (!matchesActionRegex(customId)) {
-			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message as Message);
+			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
 		}
 
 		switch(command) {
@@ -538,7 +548,7 @@ export async function handlePathbuilder2eImport(sageCommand: SageCommand): Promi
 		return sageCommand.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
 	}
 
-	const channel = sageCommand.dChannel as DMessageChannel;
+	const channel = sageCommand.dChannel;
 	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
 
 	const pin = sageCommand.args.getBoolean("pin") ?? false;

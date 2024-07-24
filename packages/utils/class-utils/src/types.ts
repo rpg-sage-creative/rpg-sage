@@ -1,4 +1,4 @@
-import { type Matcher } from "@rsc-utils/type-utils";
+import { type Matcher } from "@rsc-utils/core-utils";
 
 /** A core with a name */
 export interface NameCore {

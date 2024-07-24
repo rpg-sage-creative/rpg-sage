@@ -1,6 +1,6 @@
 
-import { error } from "@rsc-utils/console-utils";
-import { filterFiles } from "@rsc-utils/fs-utils";
+import { error } from "@rsc-utils/core-utils";
+import { filterFiles } from "@rsc-utils/io-utils";
 import type { MessageCommand, SlashCommand, UserCommand } from "../types.js";
 
 type CommandType = SlashCommand | MessageCommand | UserCommand;

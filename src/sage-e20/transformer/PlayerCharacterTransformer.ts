@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { PlayerCharacterCoreE20, TWeaponE20 } from "../common/PlayerCharacterE20";
 import { PlayerCharacterE20 } from "../common/PlayerCharacterE20";
 

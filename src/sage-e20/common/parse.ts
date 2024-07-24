@@ -1,8 +1,8 @@
-import { isBlank } from "@rsc-utils/string-utils";
-import { randomUuid } from "@rsc-utils/uuid-utils";
-import type { TSkillDie } from "../../sage-dice/dice/essence20";
-import type { PlayerCharacterCoreE20, TArmorE20, TAttackE20, TSkillE20, TStatE20, TWeaponE20 } from "./PlayerCharacterE20";
-import { PdfJsonFields, TRawJson } from "./pdf";
+import { randomSnowflake } from "@rsc-utils/core-utils";
+import { PdfJsonManager } from "@rsc-utils/io-utils";
+import { isBlank, stringOrUndefined } from "@rsc-utils/string-utils";
+import type { TSkillDie } from "../../sage-dice/dice/essence20/index.js";
+import type { PlayerCharacterCoreE20, TArmorE20, TAttackE20, TSkillE20, TStatE20, TWeaponE20 } from "./PlayerCharacterE20.js";
 
 /** All the skills (name and abbreviation) for each ability. */
 const SkillPairs = {
@@ -46,7 +46,22 @@ export function filterValuesWithKeys<T>(values: T[]): T[] {
 	);
 }
 
-export class PdfJsonParserE20 extends PdfJsonFields {
+export class PdfJsonParserE20 extends PdfJsonManager {
+
+	private _findChecked(key: string): boolean {
+		const checked = this.isChecked(key);
+		this.fields.remove(key);
+		return checked;
+	}
+	public findChecked(...keys: string[]): boolean {
+		for (const key of keys) {
+			if (this.hasField(key)) return this._findChecked(key);
+			const lower = key.toLowerCase();
+			if (this.hasField(lower)) return this._findChecked(lower);
+		}
+		return false;
+	}
+	public findValue(key: string) { const value = this.getString(key); this.fields.remove(key); return stringOrUndefined(value); }
 
 	public parseArmor<T extends TArmorE20>(ext: (armor: T, index: number) => T = _armor => _armor): T[] {
 		const armor: T[] = [];
@@ -85,7 +100,7 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 			objectType: "PlayerCharacter",
 			diceEngine: "E20",
 			gameType: undefined!,
-			id: randomUuid(),
+			id: randomSnowflake(),
 
 			abilities: [
 				this.parseStat("Strength", "Toughness", "Str"),
@@ -121,7 +136,7 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 		let count = 0;
 		for (let i = 1; i <= 20; i++) {
 			let key = `${prefix}d${i}`;
-			if (!this.find(key)) {
+			if (!this.hasField(key)) {
 				/** @todo remove this if block when the PDF gets updated to correct these field ids */
 				key = key.replace("d15", "4d").replace("d16", "5d16").replace("d18", "18");
 			}
@@ -135,24 +150,22 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 
 	protected parseSkill(name: string, prefix: string): TSkillE20 {
 		const skill: TSkillE20 = { name };
-		const prefixLower = prefix.toLowerCase();
 		const dice = ["", "d2", "d4", "d6", "d8", "d10", "d12"];
 		for (let i = 1; i <= 6; i++) {
+			const indexChecked = this.findChecked(`${prefix}${i}`, `${prefix}_${i}`);
 			if (name === "Conditioning") {
-				const bonusChecked = this.findChecked(`${prefix}${i}`);
-				if (bonusChecked) {
+				if (indexChecked) {
 					skill.bonus = i;
 				}
 			}else {
-				const dieChecked = this.findChecked(`${prefixLower}${i}`);
-				if (dieChecked) {
+				if (indexChecked) {
 					skill.die = dice[i] as TSkillDie;
 				}
 			}
 
 			if (i <= 3 && !["Conditioning","Initiative"].includes(name)) {
 				const specName = this.findValue(`${prefix}_Sp_${i}`);
-				const specChecked = this.findChecked(`${prefixLower}_spec_${i}`);
+				const specChecked = this.findChecked(`${prefix}_Spec_${i}`);
 				if (specName) {
 					if (!skill.specializations) {
 						skill.specializations = [];
@@ -187,8 +200,8 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 		const weapons: T[] = [];
 		for (let i = 1; i <= count; i++) {
 			// check before we try and remove these fields
-			const hasTraits = this.find(`W_Traits_${i}`);
-			const hasHands = this.find(`W_Hands_${i}`);
+			const hasTraits = this.hasField(`W_Traits_${i}`);
+			const hasHands = this.hasField(`W_Hands_${i}`);
 
 			// create weapon
 			const weapon = ext({
@@ -202,10 +215,10 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 			} as T, i);
 
 			// check for these incorrectly named fields
-			if (!hasTraits && i === 2 && this.find("W_Traits_7")) {
+			if (!hasTraits && i === 2 && this.hasField("W_Traits_7")) {
 				weapon.traits = this.findValue("W_Traits_7");
 			}
-			if (!hasHands && i === 3 && this.find("W_Rng_7")) {
+			if (!hasHands && i === 3 && this.hasField("W_Rng_7")) {
 				weapon.hands = this.findValue("W_Rng_7");
 			}
 
@@ -215,30 +228,4 @@ export class PdfJsonParserE20 extends PdfJsonFields {
 		return filterValuesWithKeys(weapons);
 	}
 
-	/** used to check the pdfs pages/texts for specific pieces of text */
-	public static isRenegadePdf(rawJson: TRawJson, ...textsToFind: string[]): boolean {
-		// track which were found
-		const textsFound = textsToFind.map(_ => false);
-		// iterate pages
-		const pages = rawJson.Pages ?? [];
-		for (const page of pages) {
-			// iterate texts
-			const texts = page.Texts ?? [];
-			for (const text of texts) {
-				// grab string sections
-				const strings = text.R?.map(r => r.T) ?? [];
-				// mark found texts as found
-				textsToFind.forEach((t, i) => {
-					if (strings.includes(t)) {
-						textsFound[i] = true;
-					}
-				});
-				// return true as soon as each text is found
-				if (!textsFound.includes(false)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 }

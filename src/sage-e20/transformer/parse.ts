@@ -1,7 +1,7 @@
-import { PdfJsonParserE20 } from "../common/parse";
-import type { TField, TRawJson } from "../common/pdf";
-import type { TWeaponE20 } from "../common/PlayerCharacterE20";
-import type { PlayerCharacterCoreTransformer, TAltMode, TWeaponTransformer } from "./PlayerCharacterTransformer";
+import type { PdfJsonManager } from "@rsc-utils/io-utils";
+import { PdfJsonParserE20 } from "../common/parse.js";
+import type { TWeaponE20 } from "../common/PlayerCharacterE20.js";
+import type { PlayerCharacterCoreTransformer, TAltMode, TWeaponTransformer } from "./PlayerCharacterTransformer.js";
 
 export class PdfJsonParserTransformer extends PdfJsonParserE20 {
 
@@ -73,12 +73,12 @@ export class PdfJsonParserTransformer extends PdfJsonParserE20 {
 
 
 	/** checks the json/fields to see if this is a Power Rangers character */
-	public static isTransformerPdf(_rawJson: TRawJson, fields: TField[]): boolean {
-		return fields.find(field => field.name === "Crew2") !== undefined
-			&& fields.find(field => field.name === "MOV4") !== undefined;
+	public static isTransformerPdf(pdfJsonManager: PdfJsonManager): boolean {
+		return pdfJsonManager.hasField("Crew2")
+			&& pdfJsonManager.hasField("MOV4");
 	}
 
-	public static parseCharacter(fields: TField[]): PlayerCharacterCoreTransformer {
-		return new PdfJsonParserTransformer(fields).parseCharacter();
+	public static parseCharacter(pdfJsonManager: PdfJsonManager): PlayerCharacterCoreTransformer {
+		return new PdfJsonParserTransformer(pdfJsonManager).parseCharacter();
 	}
 }

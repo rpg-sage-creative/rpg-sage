@@ -1,4 +1,4 @@
-import type { Awaitable } from "@rsc-utils/type-utils";
+import type { Awaitable } from "@rsc-utils/core-utils";
 
 export type MimeType = "image/png" | "image/jpeg" | "image/webp";
 

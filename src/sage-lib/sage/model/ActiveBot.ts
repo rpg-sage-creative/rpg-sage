@@ -1,10 +1,9 @@
-import { isSageId } from "@rsc-sage/env";
-import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, info, verbose } from "@rsc-utils/console-utils";
-import { wrapUrl, type DMessage } from "@rsc-utils/discord-utils";
-import { getSuperUserId } from "@rsc-utils/env-utils";
+import { getSuperUserId, isSageId } from "@rsc-sage/env";
+import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
+import { wrapUrl } from "@rsc-utils/discord-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
-import { Client } from "discord.js";
+import { ActivityType, Client } from "discord.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
@@ -50,7 +49,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		this.client = new Client(createDiscordClientOptions());
 		captureProcessExit(() => {
 			info("Destroying Discord.Client");
-			this.client.destroy();
+			return this.client.destroy();
 		});
 
 		// To see options, look for: Discord.ClientEvents (right click nav .on below)
@@ -83,9 +82,9 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		this.client.on("messageUpdate", this.onClientMessageUpdate.bind(this));
 		// TODO: Do I need to track deletes for any reason?
 		// messageDelete: [message: Message | PartialMessage];
-		this.client.on("messageDelete", msg => setDeleted(msg.id));
+		this.client.on("messageDelete", msg => setDeleted(msg.id as Snowflake));
 		// messageDeleteBulk: [messages: Collection<Snowflake, Message | PartialMessage>];
-		this.client.on("messageDeleteBulk", msgs => msgs.forEach(msg => setDeleted(msg.id)));
+		this.client.on("messageDeleteBulk", msgs => msgs.forEach(msg => setDeleted(msg.id as Snowflake)));
 
 		this.client.on("messageReactionAdd", this.onClientMessageReactionAdd.bind(this));
 		this.client.on("messageReactionRemove", this.onClientMessageReactionRemove.bind(this));
@@ -124,7 +123,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 			status: "online"
 		});
 		this.client.user?.setActivity("rpgsage.io; /sage-help", {
-			type: "PLAYING"
+			type: ActivityType.Playing
 		});
 
 		SageCache.fromClient(this.client).then(sageCache => {
@@ -192,7 +191,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	}
 
 	onClientMessageCreate(message: Message): void {
-		handleMessage(message as DMessage, null, MessageType.Post).then(data => {
+		handleMessage(message, null, MessageType.Post).then(data => {
 			if (data.handled > 0) {
 				verbose(`Discord.Client.on("message", "${message.id}") => ${data.tested}.${data.handled}`);
 			}
@@ -200,7 +199,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	}
 
 	onClientMessageUpdate(originalMessage: Message | PartialMessage, updatedMessage: Message | PartialMessage): void {
-		handleMessage(updatedMessage as DMessage, originalMessage as DMessage, MessageType.Edit).then(data => {
+		handleMessage(updatedMessage, originalMessage, MessageType.Edit).then(data => {
 			if (data.handled > 0) {
 				verbose(`Discord.Client.on("messageUpdate", "${originalMessage.id}", "${updatedMessage.id}") => ${data.tested}.${data.handled}`);
 			}

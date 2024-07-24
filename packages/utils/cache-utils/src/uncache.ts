@@ -1,4 +1,4 @@
-import { isPrimitive } from "@rsc-utils/type-utils";
+import { isPrimitive } from "@rsc-utils/core-utils";
 
 type UncacheOptions = {
 	/** set all keys to null */
@@ -8,7 +8,7 @@ type UncacheOptions = {
 	undefine?: boolean;
 };
 
-/** @private attempt to call the named function on the given object. */
+/** attempt to call the named function on the given object. */
 function attempt(object: any, fnName: "clear" | "destroy"): void {
 	if (typeof(object?.[fnName]) === "function") {
 		object[fnName]();

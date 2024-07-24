@@ -1,14 +1,11 @@
+import { getHomeServerId } from "@rsc-sage/env";
 import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
 import { DiceSortType, parseGameSystem, updateServer } from "@rsc-sage/types";
-import { warn } from "@rsc-utils/console-utils";
+import { applyChanges, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
-import { getHomeServerId } from "@rsc-utils/env-utils";
-import { applyChanges } from "@rsc-utils/json-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import type { Args, Optional } from "@rsc-utils/type-utils";
-import type { Guild } from "discord.js";
+import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
-import { DidCore, HasDidCore } from "../repo/base/DidRepository.js";
+import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
 import type { Game } from "./Game.js";
@@ -88,7 +85,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	// 	const diceSecretMethodType = _diceSecretMethodType ?? this.defaultDiceSecretMethodType;
 	// 	const game = new Game({
 	// 		objectType: "Game",
-	// 		id: randomUuid(),
+	// 		id: randomSnowflake(),
 	// 		serverDid: this.did,
 	// 		serverId: this.id,
 	// 		createdTs: new Date().getTime(),
@@ -348,13 +345,13 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 		return this._colors;
 	}
 
-	public toDiscordColor(colorType: ColorType): string | null {
+	public toHexColorString(colorType: ColorType): HexColorString | undefined {
 		if (!this.core.colors.length) {
 			warn(`Colors Missing: Server (${this.discord?.guild?.name ?? this.id})`);
-			return this.sageCache.bot.toDiscordColor(colorType);
+			return this.sageCache.bot.toHexColorString(colorType);
 		}
-		return this.colors.toDiscordColor(colorType)
-			?? this.sageCache.bot.toDiscordColor(colorType);
+		return this.colors.toHexColorString(colorType)
+			?? this.sageCache.bot.toHexColorString(colorType);
 	}
 
 	// #endregion
@@ -386,7 +383,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 			admins: [],
 			channels: [],
 			colors: activeBot.colors.toArray(),
-			did: guild.id,
+			did: guild.id as Snowflake,
 			emoji: [],
 			// dialogPostType: DialogPostType.Embed,
 			// diceCritMethodType: DiceCritMethodType.Unknown,

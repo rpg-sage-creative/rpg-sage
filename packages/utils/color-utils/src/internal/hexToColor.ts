@@ -1,19 +1,19 @@
-import { ColorData } from "../ColorData.js";
+import { type ColorData, type HexColorString } from "../ColorData.js";
 import { getNamedColor } from "../namedColors.js";
 import { parseHexColor } from "../parseHexColor.js";
 import { hexToAlpha } from "./hexToAlpha.js";
 import { alphaToHex } from "./toHex.js";
 
 /** Converts a hex/hexa value (with optional new alpha) to a Color object */
-export function hexToColor(value: string, newAlpha?: number): ColorData | null {
+export function hexToColor(value: HexColorString, newAlpha?: number): ColorData | undefined {
 	let hexa = parseHexColor(value);
 	if (!hexa) {
-		return null;
+		return undefined;
 	}
 
-	const hex = hexa?.slice(0, 7);
+	const hex = hexa?.slice(0, 7) as HexColorString;
 	if (hex && newAlpha !== undefined) {
-		hexa = hex + alphaToHex(newAlpha);
+		hexa = hex + alphaToHex(newAlpha) as HexColorString; // NOSONAR
 	}
 
 	const color = getNamedColor(hexa);
@@ -30,13 +30,13 @@ export function hexToColor(value: string, newAlpha?: number): ColorData | null {
 	return {
 		// name: undefined,
 		// lower: undefined,
-		hexa: hexa,
-		hex: hex,
+		hexa,
+		hex,
 		rgba: `rgba(${red},${green},${blue},${alpha})`,
 		rgb: `rgb(${red},${green},${blue})`,
-		red: red,
-		green: green,
-		blue: blue,
-		alpha: alpha
+		red,
+		green,
+		blue,
+		alpha
 	};
 }

@@ -1,6 +1,5 @@
-import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
-import type { Game } from "../../../model/Game";
+import type { Game } from "../../../model/Game.js";
 
 export type PinData = { channelId:string; messageId:string; };
 
@@ -62,8 +61,8 @@ export abstract class HasPins<Core extends HasPinsCore, Type extends string> {
 	private async _unpin(type: Type, channelId: string): Promise<boolean> {
 		const messageId = this.getPin(type, channelId)?.messageId;
 		if (messageId) {
-			const discordKey = new DiscordKey(this.game.serverDid, channelId, undefined, messageId);
-			const message = await this.game.server.discord.fetchMessage(discordKey);
+			const messageReference = { guildId:this.game.serverDid, channelId, messageId };
+			const message = await this.game.sageCache.fetchMessage(messageReference);
 			if (message?.pinned) {
 				await message.unpin();
 			}
@@ -73,7 +72,7 @@ export abstract class HasPins<Core extends HasPinsCore, Type extends string> {
 			const array = pins[type];
 			if (array) {
 				pins[type] = array.filter(data => data.channelId !== channelId);
-				if (pins[type]!.length < array.length) {
+				if (pins[type].length < array.length) {
 					this.changed();
 					return true;
 				}
@@ -114,8 +113,8 @@ export abstract class HasPins<Core extends HasPinsCore, Type extends string> {
 		if (pins.length) {
 			const content = this.render(pinType);
 			for (const pin of pins) {
-				const discordKey = new DiscordKey(this.game.server.did, pin.channelId, undefined, pin.messageId);
-				const message = await this.game.server.discord.fetchMessage(discordKey);
+				const messageReference = { guildId:this.game.serverDid, ...pin };
+				const message = await this.game.sageCache.fetchMessage(messageReference);
 				if (message?.editable && message.content !== content) {
 					await message.edit(content);
 				}

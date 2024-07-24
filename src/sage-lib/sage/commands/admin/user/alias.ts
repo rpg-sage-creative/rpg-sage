@@ -139,7 +139,7 @@ async function aliasCreate(sageMessage: SageMessage, alias: TAlias): Promise<boo
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Create alias?`);
 	promptRenderable.append(aliasPrompt);
 
-	const bool = await discordPromptYesNo(sageMessage, promptRenderable);
+	const bool = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (bool === true) {
 		return sageMessage.sageUser.aliases.pushAndSave(alias);
 	}
@@ -153,7 +153,7 @@ async function aliasUpdate(sageMessage: SageMessage, existing: TAlias, updated: 
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Update alias?`);
 	promptRenderable.append(`from:\n${existingPrompt}to:\n${updatedPrompt}`);
 
-	const bool = await discordPromptYesNo(sageMessage, promptRenderable);
+	const bool = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (bool === true) {
 		existing.target = updated.target;
 		return sageMessage.sageUser.save();
@@ -208,7 +208,7 @@ async function deleteAlias(sageMessage: SageMessage, alias: TAlias): Promise<voi
 	const aliasPrompt = aliasToPrompt(alias, false);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Delete Alias?`);
 	promptRenderable.append(aliasPrompt);
-	const yes = await discordPromptYesNo(sageMessage, promptRenderable);
+	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (yes === true) {
 		const saved = await sageMessage.sageUser.aliases.removeAndSave(alias);
 		return sageMessage.reactSuccessOrFailure(saved);

@@ -1,4 +1,4 @@
-import { debug } from "@rsc-utils/console-utils";
+import { debug } from "@rsc-utils/core-utils";
 import { ButtonInteraction } from "discord.js";
 import { registerInteractionListener } from "../../../../discord/handlers";
 import { SageInteraction } from "../../../model/SageInteraction";

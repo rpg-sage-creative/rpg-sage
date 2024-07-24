@@ -1,4 +1,4 @@
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 
 //#region EventListener and EventHandler
 // type TEventListener<T> = (object: T) => void;

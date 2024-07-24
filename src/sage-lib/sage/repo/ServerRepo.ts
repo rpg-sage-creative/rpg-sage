@@ -1,5 +1,5 @@
-import { info } from "@rsc-utils/console-utils";
-import { getHomeServerId } from "@rsc-utils/env-utils";
+import { getHomeServerId } from "@rsc-sage/env";
+import { info, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import type { SageCache } from "../model/SageCache.js";
@@ -16,7 +16,7 @@ export class ServerRepo extends DidRepository<ServerCore, Server> {
 
 	/** This finds or creates the server object. It also updates the server name if changed. */
 	public async getOrCreateByGuild(guild: Guild): Promise<Server> {
-		let server = await this.getByDid(guild.id);
+		let server = await this.getByDid(guild.id as Snowflake);
 		if (!server) {
 			server = new Server(Server.createCore(guild), this.sageCache);
 		}
@@ -27,12 +27,12 @@ export class ServerRepo extends DidRepository<ServerCore, Server> {
 		return server;
 	}
 
-	public async initializeServer(guild: Guild | null): Promise<boolean> {
+	public async initializeServer(guild: Optional<Guild>): Promise<boolean> {
 		if (!guild) {
 			return false;
 		}
 
-		const existingServer = await this.getByDid(guild.id);
+		const existingServer = await this.getByDid(guild.id as Snowflake);
 		if (existingServer) {
 			guild = existingServer.discord.guild;
 			info(`${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} rejoined ${guild?.name} (${guild?.id}) as ${existingServer.id}`);
@@ -48,7 +48,7 @@ export class ServerRepo extends DidRepository<ServerCore, Server> {
 	}
 
 	public async retireServer(guild: Guild, kicked = false, banned = false): Promise<boolean> {
-		const server = await this.getByDid(guild.id);
+		const server = await this.getByDid(guild.id as Snowflake);
 		if (server) {
 			info(`NOT IMPLEMENTED: ${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} ${banned && "banned" || kicked && "kicked" || "left"} ${guild.name} (${guild.id})`);
 			//TODO: IMPLEMENT THIS

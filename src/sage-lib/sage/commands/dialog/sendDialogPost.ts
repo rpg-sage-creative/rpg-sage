@@ -1,9 +1,10 @@
-import { errorReturnEmptyArray, errorReturnNull, warnReturnNull } from "@rsc-utils/console-utils";
-import { DiscordKey, type DMessage } from "@rsc-utils/discord-utils";
-import { getBuffer } from "@rsc-utils/https-utils";
+import type { HexColorString } from "@rsc-utils/color-utils";
+import { errorReturnEmptyArray, errorReturnNull, warnReturnNull, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordKey } from "@rsc-utils/discord-utils";
+import { getBuffer } from "@rsc-utils/io-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
-import { MessageAttachment } from "discord.js";
+import { AttachmentBuilder, type Message } from "discord.js";
 import type { GameCharacter, TDialogMessage } from "../../model/GameCharacter.js";
 import type { ColorType } from "../../model/HasColorsCore.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
@@ -20,7 +21,7 @@ type DialogPostData = {
 	character: GameCharacter;
 	colorType?: ColorType;
 	content: string;
-	embedColor?: string;
+	embedColor?: HexColorString;
 	imageUrl?: string;
 	postType?: DialogType;
 	title?: string;
@@ -32,7 +33,7 @@ function formatName(char: GameCharacter, name?: string): string {
 		?? char.name;
 }
 
-export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, skipDelete }: ChatOptions): Promise<DMessage[]> {
+export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, skipDelete }: ChatOptions): Promise<Message[]> {
 	const character = postData?.character;
 	if (!character) {
 		return Promise.reject("Invalid TDialogPostData");
@@ -47,7 +48,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 		renderableContent.setTitle(title);
 	}
 
-	const color = postData.embedColor ?? character.embedColor ?? sageMessage.toDiscordColor(postData.colorType);
+	const color = postData.embedColor ?? character.embedColor ?? sageMessage.toHexColorString(postData.colorType);
 	renderableContent.setColor(color);
 
 	let content = postData.content;
@@ -90,20 +91,20 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const dialogTypeOverride = postData.postType;
 
 	//#region files
-	const files: MessageAttachment[] = [];
+	const files: AttachmentBuilder[] = [];
 	if (doAttachment && sageMessage.message.attachments.size) {
 		for (const att of sageMessage.message.attachments.values()) {
 			if (att.contentType?.match(/image/i) && att.url) {
 				const buffer = await getBuffer(att.url).catch(warnReturnNull);
 				if (buffer !== null) {
-					files.push(new MessageAttachment(buffer, att.name ?? undefined));
+					files.push(new AttachmentBuilder(buffer, { name:att.name }));
 				}
 			}
 		}
 	}
 	//#endregion
 
-	const messages: DMessage[] = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete })
+	const messages = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete })
 		.catch(errorReturnEmptyArray);
 	if (messages.length) {
 		const last = messages[messages.length - 1];
@@ -122,16 +123,16 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 		//#endregion
 
 		const dialogMessage: Partial<TDialogMessage> = {
-			channelDid: last.channel.isThread() ? last.channel.parent?.id : last.channel.id,
+			channelDid: last.channel.isThread() ? last.channel.parent?.id as Snowflake : last.channel.id as Snowflake,
 			characterId: character.id,
-			gameId: sageMessage.game?.id,
-			messageDid: last.id,
-			serverDid: last.guild?.id,
-			threadDid: last.channel.isThread() ? last.channel.id : undefined,
+			gameId: sageMessage.game?.id as Snowflake,
+			messageDid: last.id as Snowflake,
+			serverDid: last.guild?.id as Snowflake,
+			threadDid: last.channel.isThread() ? last.channel.id as Snowflake : undefined,
 			timestamp: last.createdTimestamp,
 			userDid: character.userDid ?? sageMessage.sageUser.did
 		};
-		await DialogMessageRepository.write(DiscordKey.fromMessage(last), dialogMessage as TDialogMessage);
+		await DialogMessageRepository.write(DiscordKey.from(last), dialogMessage as TDialogMessage);
 
 		character.setLastMessage(dialogMessage as TDialogMessage);
 		await character.save();

@@ -1,3 +1,0 @@
-{"name":"@rsc-utils/math-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
-  "xregexp": "^5.1.1"
-}}

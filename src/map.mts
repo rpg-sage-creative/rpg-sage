@@ -1,5 +1,5 @@
-import { getPort, initializeConsoleUtilsByEnvironment } from "@rsc-utils/env-utils";
-import { RenderableMap } from "./sage-utils/utils/MapUtils";
+import { getPort, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
+import { RenderableMap } from "./sage-utils/utils/MapUtils/index.js";
 
 initializeConsoleUtilsByEnvironment();
 RenderableMap.startServer(getPort("Map"));

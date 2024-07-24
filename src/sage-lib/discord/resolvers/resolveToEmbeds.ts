@@ -1,12 +1,11 @@
-import { DiscordMaxValues } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues, EmbedBuilder } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable, type RenderableContentSection } from "@rsc-utils/render-utils";
 import { chunk } from "@rsc-utils/string-utils";
-import type { MessageEmbed } from "discord.js";
 import type { SageCache } from "../../sage/model/SageCache.js";
 import { createMessageEmbed } from "../createMessageEmbed.js";
 
 /** Resolves a simple text section. */
-function resolveSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], section: RenderableContentSection): void {
+function resolveSection(renderableContent: RenderableContent, caches: SageCache, embeds: EmbedBuilder[], section: RenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 	const joinedContent = section.content.join(renderableContent.paragraphDelimiter),
 		formattedContent = caches.format(joinedContent),
@@ -16,7 +15,7 @@ function resolveSection(renderableContent: RenderableContent, caches: SageCache,
 
 	chunkedContent.forEach((chunk, index) => {
 		if (index === 0) {
-			embed.description = (embed.description ?? "") + renderableContent.paragraphDelimiter + chunk;
+			embed.appendDescription(chunk, renderableContent.paragraphDelimiter);
 		}else {
 			embed = createMessageEmbed({ description:chunk, color:renderableContent.color });
 			embeds.push(embed);
@@ -25,12 +24,13 @@ function resolveSection(renderableContent: RenderableContent, caches: SageCache,
 }
 
 /** Resolves a section that has columns. */
-function resolveColumnedSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], columnedSection: RenderableContentSection): void {
+function resolveColumnedSection(renderableContent: RenderableContent, caches: SageCache, embeds: EmbedBuilder[], columnedSection: RenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
+	const embedFieldCount = embed.toJSON().fields?.length ?? 0;
 	columnedSection.columns.forEach(column => {
 		const formattedTitle = caches.format(column.title),
 			formattedContent = caches.format(column.content);
-		if (embed.fields.length === DiscordMaxValues.embed.field.count
+		if (embedFieldCount === DiscordMaxValues.embed.field.count
 				|| embed.length + formattedTitle.length + formattedContent.length > DiscordMaxValues.embed.totalLength) {
 			embed = createMessageEmbed({ color:renderableContent.color });
 			embeds.push(embed);
@@ -40,7 +40,7 @@ function resolveColumnedSection(renderableContent: RenderableContent, caches: Sa
 }
 
 /** Resolves a section that has a title. */
-function resolveTitledSection(renderableContent: RenderableContent, caches: SageCache, embeds: MessageEmbed[], titledSection: RenderableContentSection): void {
+function resolveTitledSection(renderableContent: RenderableContent, caches: SageCache, embeds: EmbedBuilder[], titledSection: RenderableContentSection): void {
 	let embed = embeds[embeds.length - 1];
 
 	const formattedTitle = caches.format(titledSection.title ?? "");
@@ -52,7 +52,7 @@ function resolveTitledSection(renderableContent: RenderableContent, caches: Sage
 
 	chunkedContent.forEach((chunk, index) => {
 		if (index === 0) {
-			embed.description = (embed.description ?? "") + renderableContent.paragraphDelimiter + chunk;
+			embed.appendDescription(chunk, renderableContent.paragraphDelimiter);
 		}else {
 			embed = createMessageEmbed({ description:chunk, color:renderableContent.color });
 			embeds.push(embed);
@@ -61,7 +61,7 @@ function resolveTitledSection(renderableContent: RenderableContent, caches: Sage
 
 }
 
-function resolveSections(caches: SageCache, renderableContent: RenderableContent, embeds: MessageEmbed[]): void {
+function resolveSections(caches: SageCache, renderableContent: RenderableContent, embeds: EmbedBuilder[]): void {
 	for (const section of renderableContent.sections) {
 		if (section.title) {
 			resolveTitledSection(renderableContent, caches, embeds, section);
@@ -74,13 +74,13 @@ function resolveSections(caches: SageCache, renderableContent: RenderableContent
 }
 
 /** Converts the given renderableContent to MessageEmbed objects, using the given caches. */
-export function resolveToEmbeds(caches: SageCache, renderableContentResolvable: RenderableContentResolvable): MessageEmbed[] {
+export function resolveToEmbeds(caches: SageCache, renderableContentResolvable: RenderableContentResolvable): EmbedBuilder[] {
 	const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 	if (!renderableContent) {
 		return [];
 	}
 
-	const embed: MessageEmbed = createMessageEmbed({ color:renderableContent.color });
+	const embed = createMessageEmbed({ color:renderableContent.color });
 
 	const title = caches.format(renderableContent.title ?? "");
 	if (title) {

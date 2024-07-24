@@ -1,5 +1,5 @@
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { COL, GameMapBase, LayerType, ROW, TGameMapAura, TGameMapCore, TGameMapImage, UserLayerType } from "./GameMapBase";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import { COL, GameMapBase, LayerType, ROW, type TGameMapAura, type TGameMapCore, type TGameMapImage, UserLayerType } from "./GameMapBase";
 
 /** shuffles an image on a layer */
 export type TShuffleUpDown = "up" | "down";

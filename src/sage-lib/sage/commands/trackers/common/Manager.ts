@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import type { CharacterShell } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";

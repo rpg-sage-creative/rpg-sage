@@ -1,11 +1,8 @@
 import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
-import { Color } from "@rsc-utils/color-utils";
-import { parseIds } from "@rsc-utils/discord-utils";
-import { isEmpty } from "@rsc-utils/json-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
-import { type Args, type EnumLike, isDefined, type Optional } from "@rsc-utils/type-utils";
-import { isUuid, type UUID } from "@rsc-utils/uuid-utils";
-import type { GuildBasedChannel, Role, User } from "discord.js";
+import { Color, type HexColorString } from "@rsc-utils/color-utils";
+import { type Args, type EnumLike, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { type MessageChannel, parseIds } from "@rsc-utils/discord-utils";
+import type { Role, User } from "discord.js";
 import type { SageCommand } from "./SageCommand.js";
 
 /** An object containing names. */
@@ -73,7 +70,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public abstract getChannel(name: string): Optional<GuildBasedChannel>;
+	public abstract getChannel(name: string): Optional<MessageChannel>;
 
 	/** Returns true if getChannel(name) is not null and not undefined. */
 	public hasChannel(name: string): boolean {
@@ -87,7 +84,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 */
 	public getChannelId(name: string): Optional<Snowflake> {
 		const channel = this.getChannel(name);
-		return channel ? channel.id : channel;
+		return channel ? channel.id as Snowflake : channel;
 	}
 
 	/** Returns true if getChannelId(name) is not null and not undefined. */
@@ -97,7 +94,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	/** Returns an array of channelIds passed in for the given argument. */
 	public getChannelIds(name: string): Snowflake[] {
-		const channelIdSet = new Set<string>();
+		const channelIdSet = new Set<Snowflake>();
 
 		if (this.hasChannel(name)) {
 			channelIdSet.add(this.getChannelId(name)!);
@@ -163,7 +160,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 */
 	public getRoleId(name: string): Optional<Snowflake> {
 		const role = this.getRole(name);
-		return role ? role.id : role;
+		return role ? role.id as Snowflake : role;
 	}
 
 	/** Returns true if getRoleId(name) is not null and not undefined. */
@@ -213,7 +210,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 */
 	public getUserId(name: string): Optional<Snowflake> {
 		const user = this.getUser(name);
-		return user ? user.id : user;
+		return user ? user.id as Snowflake : user;
 	}
 
 	/** Returns true if getUserId(name) is not null and not undefined. */
@@ -223,11 +220,11 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	/** Returns an array of user snowflakes passed in for the given argument. Optionally finds roles and gets all the users from the roles. */
 	public async getUserIds(name: string, expandRoles?: boolean): Promise<Snowflake[]> {
-		const userIdSet = new Set<string>();
+		const userIdSet = new Set<Snowflake>();
 		const expandRoleId = async (roleId: string) => {
 			const guildRole = await this.sageCommand.discord.fetchGuildRole(roleId);
 			if (guildRole) {
-				guildRole.members.forEach(guildMember => userIdSet.add(guildMember.id));
+				guildRole.members.forEach(guildMember => userIdSet.add(guildMember.id as Snowflake));
 			}
 		};
 
@@ -323,10 +320,10 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		return diceOptions;
 	}
 
-	public getDiscordColor(key: string): string | null | undefined {
+	public getHexColorString(key: string): HexColorString | null | undefined {
 		const color = this.getColor(key);
 		if (color) {
-			return color.toDiscordColor() ?? null;
+			return color.hex ?? null;
 		}
 		return color;
 	}
@@ -343,6 +340,14 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 			return undefined;
 		}
 		return gameOptions;
+	}
+
+	public getIdType(key: string): Snowflake | UUID | null | undefined {
+		const id = this.getString(key);
+		if (id) {
+			return isSnowflake(id) || isUuid(id) ? id : null;
+		}
+		return id as null;
 	}
 
 	/** Gets all the different names that might be passed into the command. */
