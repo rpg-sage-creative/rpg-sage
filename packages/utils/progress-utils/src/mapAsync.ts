@@ -28,7 +28,12 @@ export async function mapAsync
 export async function mapAsync
 		(label: string, array: any[], callbackfn: (value: any, index: number, array: any[]) => Awaitable<any>, interval?: number)
 		: Promise<any[]> {
+
 	const pLogger = new PercentLogger(label, array.length, interval);
+
+	// trigger the 0% before processing the first item
+	pLogger.start();
+
 	const arrayConstructor = array.constructor as ArrayConstructor;
 	const mapped = new arrayConstructor() as any[];
 	for (let index = 0, len = array.length; index < len; index++) {

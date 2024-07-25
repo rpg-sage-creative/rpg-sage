@@ -15,7 +15,12 @@ export function map
 export function map
 		(label: string, array: any[], callbackfn: (value: any, index: number, array: any[]) => any, interval?: number)
 		: any[] {
+
 	const pLogger = new PercentLogger(label, array.length, interval);
+
+	// trigger the 0% before processing the first item
+	pLogger.start();
+
 	return array.map((val, i, arr) => {
 		const out = callbackfn(val, i, arr);
 		pLogger.increment();
