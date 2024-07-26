@@ -1,6 +1,5 @@
-import { getIdMatcher } from "@rsc-utils/class-utils";
+import type { OrNull, OrUndefined } from "@rsc-utils/core-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { Matcher, OrNull, OrUndefined } from "@rsc-utils/core-utils";
 import type { TRarity } from "../../common";
 import { COMMON, RARITIES } from "../../common";
 import { RenderableContent } from "../../data/RenderableContent";
@@ -93,10 +92,10 @@ export abstract class HasSource<T extends SourcedCore<U> = SourcedCore<any>, U e
 
 	public get previousId(): OrUndefined<string> { return this.core.previousId; }
 
-	private _previousIdMatcher?: Matcher;
-	protected get previousIdMatcher(): Matcher {
-		return this._previousIdMatcher ?? (this._previousIdMatcher = getIdMatcher(this.core.previousId!));
-	}
+	// private _previousIdMatcher?: Matcher;
+	// protected get previousIdMatcher(): Matcher {
+	// 	return this._previousIdMatcher ?? (this._previousIdMatcher = getIdMatcher(this.core.previousId!));
+	// }
 
 	/** Store null if we look but can't find one. */
 	private _nextId?: OrNull<string>;
@@ -104,7 +103,8 @@ export abstract class HasSource<T extends SourcedCore<U> = SourcedCore<any>, U e
 	public get nextId(): OrUndefined<string> {
 		if (this._nextId === undefined) {
 			this._nextId = find<HasSource>(this.objectType, other =>
-				other.isErrata && this.idMatcher.matches(other.previousIdMatcher)
+				// other.isErrata && this.idMatcher.matches(other.previousIdMatcher)
+				other.isErrata && this.id === other.previousId
 			)?.id ?? null;
 		}
 		return this._nextId ?? undefined;
