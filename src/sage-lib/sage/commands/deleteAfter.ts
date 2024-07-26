@@ -7,6 +7,7 @@ import { deleteMessages } from "../../discord/deletedMessages.js";
 
 export async function deleteAfter(sageInteraction: SageInteraction): Promise<void> {
 	if (sageInteraction.isSuperUser) {
+		sageInteraction.replyStack.deferAndDelete();
 		const interaction = sageInteraction.interaction as MessageContextMenuCommandInteraction;
 		const message = interaction.targetMessage;
 		const confirm = await discordPromptYesNo(sageInteraction, `Delete All Messages After: ${toMessageUrl(message)}`);
