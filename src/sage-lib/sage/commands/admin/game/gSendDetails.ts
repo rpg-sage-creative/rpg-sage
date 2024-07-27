@@ -8,7 +8,6 @@ import type { TextChannel } from "discord.js";
 import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
 import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
-import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
@@ -193,7 +192,7 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 
 	const gmGuildMembers = await game.gmGuildMembers();
 	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? toHumanReadable(gmGuildMember) : `<i>${game.gameMasters[index]}</i>`);
-	renderableContent.append(`<b>GM Character Name</b>`, `[spacer]${game.gmCharacterName ?? `<i>inherited (${game.server.gmCharacterName ?? GameCharacter.defaultGmCharacterName})</i>`}`);
+	renderableContent.append(`<b>GM Character Name</b>`, `[spacer]${game.gmCharacter.name}`);
 	renderableContent.append(`<b>Game Masters</b> ${gameMasters.length}`);
 	gameMasters.forEach(gm => renderableContent.append(`[spacer]${gm}`));
 

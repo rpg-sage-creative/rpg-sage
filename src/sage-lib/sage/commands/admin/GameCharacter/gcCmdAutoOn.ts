@@ -1,15 +1,14 @@
 import { DialogPostType } from "@rsc-sage/types";
 import { toChannelMention } from "@rsc-utils/discord-utils";
-import { GameCharacter } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
-import { DialogType } from "../../../repo/base/IdRepository";
-import { getCharacter } from "./getCharacter";
-import { getCharacterTypeMeta } from "./getCharacterTypeMeta";
-import { promptCharConfirm } from "./promptCharConfirm";
-import { removeAndReturnChannelDids } from "./removeAndReturnChannelDids";
-import { removeAuto } from "./removeAuto";
-import { sendNotFound } from "./sendNotFound";
-import { testCanAdminCharacter } from "./testCanAdminCharacter";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { DialogType } from "../../../repo/base/IdRepository.js";
+import { getCharacter } from "./getCharacter.js";
+import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
+import { promptCharConfirm } from "./promptCharConfirm.js";
+import { removeAndReturnChannelDids } from "./removeAndReturnChannelDids.js";
+import { removeAuto } from "./removeAuto.js";
+import { sendNotFound } from "./sendNotFound.js";
+import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -22,10 +21,9 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 	const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType") ?? undefined;
 
 	let name = sageMessage.args.removeAndReturnName();
-	if (characterTypeMeta.isGm) {
-		name = sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
-	}
-	let character = await getCharacter(sageMessage, characterTypeMeta, sageMessage.sageUser.did, { name });
+	let character = characterTypeMeta.isGm
+		? sageMessage.gmCharacter
+		: await getCharacter(sageMessage, characterTypeMeta, sageMessage.sageUser.did, { name });
 	if (!character && characterTypeMeta.isPc) {
 		character = sageMessage.playerCharacter;
 	}

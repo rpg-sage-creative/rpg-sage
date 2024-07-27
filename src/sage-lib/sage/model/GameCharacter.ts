@@ -1,6 +1,6 @@
-import type { DialogPostType } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { NIL_SNOWFLAKE, isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, applyChanges, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
@@ -122,7 +122,7 @@ export class GameCharacter implements IHasSave {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		updateCore(core);
 
-		this.isGM = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
+		this.isGM = this.type === "gm";
 		this.isNPC = this.type === "npc";
 		this.isMinion = this.type === "minion";
 		this.isGMorNPC = this.isGM || this.isNPC;
@@ -161,7 +161,7 @@ export class GameCharacter implements IHasSave {
 	/** Unique ID of this character */
 	public get id(): Snowflake { return this.core.id; }
 
-	public isGM: boolean;// = this.type === "npc" && this.name === (this.owner?.gmCharacterName ?? GameCharacter.defaultGmCharacterName);
+	public isGM: boolean;// = this.type === "gm"
 	public isNPC: boolean;// = this.type === "npc";
 	public isMinion: boolean;
 	public isGMorNPC: boolean;// = this.isGM || this.isNPC;
@@ -345,6 +345,12 @@ export class GameCharacter implements IHasSave {
 		if (/^name$/i.test(key)) {
 			return this.name;
 		}
+		if (/^alias$/i.test(key)) {
+			return this.alias ?? null;
+		}
+		if (/^nname$/i.test(key)) {
+			return this.notes.getStat("nickname")?.note.trim() ?? this.name;
+		}
 
 		const noteStat = this.notes.getStat(key)?.note.trim() ?? null;
 		if (noteStat !== null) {
@@ -439,47 +445,32 @@ export class GameCharacter implements IHasSave {
 		return changes || updatedNotes;
 	}
 
-	public update(values: Partial<GameCharacterCore>, save = true): Promise<boolean> {
-		let changed = false;
-		if (values.alias !== undefined) {
-			this.alias = values.alias;
-			delete this._preparedAlias;
-			changed = true;
-		}
-		if (values.avatarUrl !== undefined) {
-			this.avatarUrl = values.avatarUrl;
-			changed = true;
-		}
-		if (values.embedColor !== undefined) {
-			this.embedColor = values.embedColor;
-			changed = true;
-		}
-		if (values.tokenUrl !== undefined) {
-			this.tokenUrl = values.tokenUrl;
-			changed = true;
-		}
-		if (values.name !== undefined) {
-			const notAlias = this.preparedAlias !== GameCharacter.prepareName(values.name);
+	public async update({ alias, avatarUrl, embedColor, name, pathbuilder, pathbuilderId, tokenUrl, userDid }: Args<GameCharacterCore>, save = true): Promise<boolean> {
+		// we only use the values that are changable, leaving the needed arrays intact
+		let changed = applyChanges(this.core, { alias, avatarUrl, embedColor, pathbuilder, pathbuilderId, tokenUrl, userDid });
+
+		// name is tricky cause we can update via alias in name field; do it separate
+		if (name) {
+			// we don't wanna edit the name if we are simply using the alias to update
+			const notAlias = this.preparedAlias !== GameCharacter.prepareName(name);
+			// if the name and alias are the same then we can update the name
 			const aliasMatchesName = this.preparedName === this.preparedAlias;
 			if (notAlias || aliasMatchesName) {
-				this.name = values.name;
-				delete this._preparedName;
+				this.name = name;
 				changed = true;
 			}
 		}
-		if (values.userDid !== undefined && values.userDid !== this.userDid) {
-			this.userDid = values.userDid;
-			changed = true;
-		}
-		if (values.pathbuilder !== undefined) {
-			this.core.pathbuilder = values.pathbuilder;
+
+		if (changed) {
+			delete this._preparedAlias;
+			delete this._preparedName;
 			delete this._pathbuilder;
-			changed = true;
+			delete this._pathbuilder;
+			if (save) {
+				return this.save();
+			}
 		}
-		if (changed && save) {
-			return this.save();
-		}
-		return Promise.resolve(false);
+		return false;
 	}
 
 	//#region IHasSave
@@ -493,7 +484,7 @@ export class GameCharacter implements IHasSave {
 	}
 	//#endregion
 
-	public static defaultGmCharacterName = "Game Master";
+	public static readonly defaultGmCharacterName = DEFAULT_GM_CHARACTER_NAME;
 
 	public static prepareName(name: string): string {
 		return XRegExp.replace(name ?? "", XRegExp("[^\\pL\\pN]+"), "", "all").toLowerCase();

@@ -1,5 +1,3 @@
-import { GameCharacter } from "../../../model/GameCharacter.js";
-import type { Names } from "../../../model/SageCommandArgs.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { findCompanion } from "./findCompanion.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
@@ -17,10 +15,11 @@ export async function gcCmdDetails(sageMessage: SageMessage): Promise<void> {
 	const userDid = await getUserDid(sageMessage),
 		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
 		characterManager = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
-		names = characterTypeMeta.isGm ? <Names>{ name: sageMessage.game?.gmCharacterName ?? GameCharacter.defaultGmCharacterName } : sageMessage.args.removeAndReturnNames(true);
+		names = sageMessage.args.removeAndReturnNames(true);
 
 	const character =
-		characterTypeMeta.isCompanion ? findCompanion(characterManager, userDid, names)
+		characterTypeMeta.isGm ? sageMessage.gmCharacter
+		: characterTypeMeta.isCompanion ? findCompanion(characterManager, userDid, names)
 		: characterTypeMeta.isMinion ? characterManager.findCompanionByName(names.name)
 		: characterManager.findByUserAndName(userDid, names.name) ?? characterManager.filterByUser(userDid!)[0];
 
