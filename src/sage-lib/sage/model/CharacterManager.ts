@@ -5,6 +5,7 @@ import { CharactersMatch } from "./CharactersMatch.js";
 import type { Game } from "./Game.js";
 import { GameCharacter, type GameCharacterCore, type TDialogMessage, type TGameCharacterType } from "./GameCharacter.js";
 import { NamedCollection, type IHasSave } from "./NamedCollection.js";
+import type { Server } from "./Server.js";
 import type { User } from "./User.js";
 
 /*
@@ -16,7 +17,7 @@ import type { User } from "./User.js";
 // }
 */
 
-type TGameCharacterOwner = Game | GameCharacter | User;
+type TGameCharacterOwner = Game | GameCharacter | Server | User;
 
 export class CharacterManager extends NamedCollection<GameCharacter> implements IHasSave {
 	// 			public async addCharacter(userDid: Snowflake, name: string, iconUrl: string): Promise<boolean> {
@@ -32,8 +33,8 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	/** The type of character represented by this manager. */
 	public characterType?: TGameCharacterType;
 
-	/** Convenient way to get the GM Character Name from this manager's owner Game. */
-	public get gmCharacterName(): string | undefined { return (this.owner as Game).gmCharacterName; }
+	/** Convenient way to get the GM Character Name from this manager's owner Game/Server. */
+	// public get gmCharacterName(): string | undefined { return (this.owner as Game).gmCharacter.name; }
 
 	/** The owner of this collection that can be saved when changes are made. */
 	declare protected owner?: TGameCharacterOwner;
