@@ -532,9 +532,14 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		for (const channelDid of channelDids) {
 			if (channelDid) {
 				const autoChannelData = { channelDid, userDid };
-				return this.playerCharacters.getAutoCharacter(autoChannelData)
-					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData)
-					?? undefined;
+				const autoChar = this.playerCharacters.getAutoCharacter(autoChannelData)
+					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData);
+					if (autoChar) {
+						return autoChar;
+					}
+					if (this.gmCharacter.hasAutoChannel(autoChannelData)) {
+					return this.gmCharacter;
+				}
 			}
 		}
 		return undefined;
