@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.0",
+"version":"1.7.1",
 "branch":"main",
-"commit":"4db214de56e2a99235ee042eb49384d63a7092f0",
-"commitSubject":"updated package-lock",
-"commitTs":1721860455000,
-"commitDate":"2024-07-24-1534",
-"buildTs":1721864556000,
-"buildDate":"2024-07-24-1642",
+"commit":"d73e933f20799ba28d64492a75111fa2f85737a5",
+"commitSubject":"update macro list help",
+"commitTs":1722268384000,
+"commitDate":"2024-07-29-0853",
+"buildTs":1722268419000,
+"buildDate":"2024-07-29-0853",
 "author":"Randal"
 }
