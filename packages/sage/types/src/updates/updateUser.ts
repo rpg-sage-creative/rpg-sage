@@ -1,4 +1,4 @@
-import { debug } from "@rsc-utils/core-utils";
+// import { debug } from "@rsc-utils/core-utils";
 import { isDefined } from "@rsc-utils/core-utils";
 import { PostType } from "../PostType.js";
 import { updateDialogOptions, type OldDialogOptions } from "./updateDialogOptions.js";
@@ -25,7 +25,7 @@ type UserCore = OldDialogOptions & OldSageOptions & OldCharacterOptions & {
 
 export function updateUser<T>(user: T): T;
 export function updateUser<T extends UserCore>(user: T): T {
-	debug(`Updating User: ${user.id} ...`);
+	// debug(`Updating User: ${user.id} ...`);
 	updateDialogOptions(user);
 
 	if (isDefined(user.characters)) {
@@ -38,6 +38,6 @@ export function updateUser<T extends UserCore>(user: T): T {
 		delete user.defaultSagePostType;
 	}
 
-	debug(`Updating User: ${user.id} ... done.`);
+	// debug(`Updating User: ${user.id} ... done.`);
 	return user;
 }
