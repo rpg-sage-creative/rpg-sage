@@ -181,7 +181,7 @@ function getPromptMap() {
 
 export async function prompt(args: PromptArgs): Promise<PromptResults | null> {
 	if (!_handling) {
-		ActiveBot.active.client.on("interactionCreate", handlePrompt);
+		ActiveBot.client.on("interactionCreate", handlePrompt);
 		_handling = true;
 	}
 

@@ -12,7 +12,7 @@ import { Bot, type IBotCore, type TBotCodeName } from "./Bot.js";
 import { SageCache } from "./SageCache.js";
 
 interface IClientEventHandler {
-	onClientReady(): void;
+	onClientReady(client: Client): void;
 	onClientGuildCreate(guild: Guild): void;
 	onClientGuildDelete(guild: Guild): void;
 	onClientGuildBanAdd(ban: GuildBan): void;
@@ -41,19 +41,22 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		}
 	}
 
-	public client: Client;
+	// public client: Client;
 
 	private constructor(core: IBotCore) {
 		super(core, null!);
 
-		this.client = new Client(createDiscordClientOptions());
+		const client = new Client(createDiscordClientOptions());
+
+		ActiveBot.client = client;
+
 		captureProcessExit(() => {
 			info("Destroying Discord.Client");
-			return this.client.destroy();
+			return ActiveBot.client.destroy();
 		});
 
 		// To see options, look for: Discord.ClientEvents (right click nav .on below)
-		this.client.once("ready", this.onClientReady.bind(this));
+		client.once("ready", this.onClientReady.bind(this));
 
 		// TODO: if created in a game category i could add or prompt to add?
 		// channelCreate: [channel: GuildChannel];
@@ -63,31 +66,31 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		// channelPinsUpdate: [channel: TextBasedChannels, date: Date];
 		// channelUpdate: [oldChannel: DMChannel | GuildChannel, newChannel: DMChannel | GuildChannel];
 
-		this.client.on("guildCreate", this.onClientGuildCreate.bind(this));
-		this.client.on("guildDelete", this.onClientGuildDelete.bind(this));
+		client.on("guildCreate", this.onClientGuildCreate.bind(this));
+		client.on("guildDelete", this.onClientGuildDelete.bind(this));
 		// TODO: What is unavailable?
 		// guildUnavailable: [guild: Guild];
 		// Use this to update server name?
 		// guildUpdate: [oldGuild: Guild, newGuild: Guild];
 
-		this.client.on("guildBanAdd", this.onClientGuildBanAdd.bind(this));
-		this.client.on("guildBanRemove", this.onClientGuildBanRemove.bind(this));
+		client.on("guildBanAdd", this.onClientGuildBanAdd.bind(this));
+		client.on("guildBanRemove", this.onClientGuildBanRemove.bind(this));
 
-		this.client.on("guildMemberUpdate", this.onClientGuildMemberUpdate.bind(this));
-		this.client.on("guildMemberRemove", this.onClientGuildMemberRemove.bind(this));
+		client.on("guildMemberUpdate", this.onClientGuildMemberUpdate.bind(this));
+		client.on("guildMemberRemove", this.onClientGuildMemberRemove.bind(this));
 
-		this.client.on("interactionCreate", this.onInteractionCreate.bind(this));
+		client.on("interactionCreate", this.onInteractionCreate.bind(this));
 
-		this.client.on("messageCreate", this.onClientMessageCreate.bind(this));
-		this.client.on("messageUpdate", this.onClientMessageUpdate.bind(this));
+		client.on("messageCreate", this.onClientMessageCreate.bind(this));
+		client.on("messageUpdate", this.onClientMessageUpdate.bind(this));
 		// TODO: Do I need to track deletes for any reason?
 		// messageDelete: [message: Message | PartialMessage];
-		this.client.on("messageDelete", msg => setDeleted(msg.id as Snowflake));
+		client.on("messageDelete", msg => setDeleted(msg.id as Snowflake));
 		// messageDeleteBulk: [messages: Collection<Snowflake, Message | PartialMessage>];
-		this.client.on("messageDeleteBulk", msgs => msgs.forEach(msg => setDeleted(msg.id as Snowflake)));
+		client.on("messageDeleteBulk", msgs => msgs.forEach(msg => setDeleted(msg.id as Snowflake)));
 
-		this.client.on("messageReactionAdd", this.onClientMessageReactionAdd.bind(this));
-		this.client.on("messageReactionRemove", this.onClientMessageReactionRemove.bind(this));
+		client.on("messageReactionAdd", this.onClientMessageReactionAdd.bind(this));
+		client.on("messageReactionRemove", this.onClientMessageReactionRemove.bind(this));
 		// TODO: Do these call the above remove or do i need to handle all?
 		// messageReactionRemoveAll: [message: Message | PartialMessage, reactions: Collection<string | Snowflake, MessageReaction>];
 		// messageReactionRemoveEmoji: [reaction: MessageReaction | PartialMessageReaction];
@@ -106,7 +109,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		// TODO: I create webhook(s) as needed, so likely not needed.
 		// webhookUpdate: [channel: TextChannel | NewsChannel];
 
-		this.client.login(this.token);
+		client.login(this.token);
 	}
 
 	onInteractionCreate(interaction: Interaction): void {
@@ -118,15 +121,15 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		});
 	}
 
-	onClientReady(): void {
-		this.client.user?.setPresence({
+	onClientReady(client: Client): void {
+		client.user?.setPresence({
 			status: "online"
 		});
-		this.client.user?.setActivity("rpgsage.io; /sage-help", {
+		client.user?.setActivity("rpgsage.io; /sage-help", {
 			type: ActivityType.Playing
 		});
 
-		SageCache.fromClient(this.client).then(sageCache => {
+		SageCache.fromClient(client).then(sageCache => {
 			this.sageCache = sageCache;
 			ActiveBot.active = this;
 
@@ -221,6 +224,8 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 			}
 		});
 	}
+
+	public static client: Client;
 
 	public static async activate(codeName: TBotCodeName): Promise<void> {
 		const bot = await BotRepo.getByCodeName(codeName);
