@@ -5,7 +5,6 @@ import { registerEmoji } from "./emoji.js";
 import { registerGame } from "./game";
 import { registerGameCharacter } from "./gameCharacter.js";
 import { registerNote } from "./note.js";
-import { registerPatreon } from "./patreon.js";
 import { registerServer } from "./server";
 import { registerUser } from "./user";
 
@@ -17,7 +16,6 @@ export function registerAdmin(): void {
 	registerGame();
 	registerGameCharacter();
 	registerNote();
-	registerPatreon();
 	registerServer();
 	registerUser();
 }

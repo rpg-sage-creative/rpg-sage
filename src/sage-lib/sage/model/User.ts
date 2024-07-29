@@ -17,8 +17,8 @@ export type TMacro = {
 	name: string;
 	dice: string;
 };
-export enum PatronTierType { None = 0, Friend = 1, Informant = 2, Trusted = 3 }
-export const PatronTierSnowflakes: Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
+// export enum PatronTierType { None = 0, Friend = 1, Informant = 2, Trusted = 3 }
+// export const PatronTierSnowflakes: Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
 
 export enum DialogDiceBehaviorType { Default = 0, Inline = 1 };
 
@@ -30,7 +30,8 @@ export interface UserCore extends DidCore<"User"> {
 	macros?: TMacro[];
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	notes?: TNote[];
-	patronTier?: PatronTierType;
+	/** @deprecated */
+	patronTier?: number;
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
 }
 
@@ -48,6 +49,9 @@ function updateCore(core: IOldUserCore): UserCore {
 	}
 	delete core.characters;
 	//#endregion
+
+	delete core.patronTier;
+
 	return core;
 }
 
@@ -65,11 +69,6 @@ export class User extends HasDidCore<UserCore> {
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []), this);
 
-		this.isFriend = this.core.patronTier === PatronTierType.Friend;
-		this.isInformant = this.core.patronTier === PatronTierType.Informant;
-		this.isTrusted = this.core.patronTier === PatronTierType.Trusted;
-		this.isPatron = this.isFriend || this.isInformant || this.isTrusted;
-
 		this.isSuperAdmin = core.did === getSuperAdminId();
 		this.isSuperUser = core.did === getSuperUserId();
 	}
@@ -86,12 +85,6 @@ export class User extends HasDidCore<UserCore> {
 	public notes: NoteManager;
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
 
-	public get patronTier(): PatronTierType { return this.core.patronTier ?? 0; }
-	public set patronTier(patronTierType: PatronTierType) { this.core.patronTier = patronTierType; }
-	public isFriend: boolean;
-	public isInformant: boolean;
-	public isTrusted: boolean;
-	public isPatron: boolean;
 	public isSuperAdmin: boolean;
 	public isSuperUser: boolean;
 
