@@ -4,6 +4,7 @@ export * from "./emojiRegex/index.js";
 export * from "./humanReadable/index.js";
 export * from "./mention/index.js";
 export * from "./messageOptions/index.js";
+export * from "./modal/index.js";
 export * from "./parse/index.js";
 export * from "./permissions/index.js";
 export * from "./resolve/index.js";
