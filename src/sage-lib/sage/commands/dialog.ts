@@ -1,4 +1,5 @@
 import { debug } from "@rsc-utils/core-utils";
+import { isDMBased } from "@rsc-utils/discord-utils";
 import { registerMessageListener, registerReactionListener } from "../../discord/handlers.js";
 import { MessageType, ReactionType, type TCommandAndArgsAndData } from "../../discord/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
@@ -33,6 +34,10 @@ async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndDat
 }
 
 async function doDialog(sageMessage: SageMessage, dialogContents: DialogContent[]): Promise<void> {
+	if (isDMBased(sageMessage.dChannel)) {
+		return sageMessage.whisper(`Sorry, Dialog does not function in DMs.`);
+	}
+
 	// we attach the image the first dialog that has (attachment) as an argument, otherwise the first of all dialogs
 	const attachmentIndex = Math.max(dialogContents.findIndex(dialogContent => dialogContent.attachment === true), 0);
 	for (let index = 0; index < dialogContents.length; index++) {

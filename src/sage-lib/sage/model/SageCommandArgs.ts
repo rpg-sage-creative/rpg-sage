@@ -2,6 +2,8 @@ import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOption
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { type Args, type EnumLike, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { type MessageChannel, parseIds } from "@rsc-utils/discord-utils";
+import { isUrl } from "@rsc-utils/io-utils";
+import { unwrap } from "@rsc-utils/string-utils";
 import type { Role, User } from "discord.js";
 import type { SageCommand } from "./SageCommand.js";
 
@@ -189,6 +191,24 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 			return value.test(argValue);
 		}
 		return true;
+	}
+
+	/**
+	 * Gets the named option as an unwrapped url (meaning without <>).
+	 * Returns undefined if not found.
+	 * Returns null if empty, invalid or "unset".
+	 */
+	public getUrl(name: string): string | null | undefined {
+		const url = this.getString(name);
+		if (url) {
+			return isUrl(url) ? unwrap(url, "<>") : null;
+		}
+		return url;
+	}
+
+	/** Returns true if getUrl(name) is not null and not undefined. */
+	public hasUrl(name: string): boolean {
+		return isDefined(this.getUrl(name));
 	}
 
 	/**

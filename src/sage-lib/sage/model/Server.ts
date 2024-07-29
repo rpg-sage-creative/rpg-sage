@@ -1,14 +1,16 @@
 import { getHomeServerId } from "@rsc-sage/env";
 import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
 import { DiceSortType, parseGameSystem, updateServer } from "@rsc-sage/types";
-import { applyChanges, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, randomSnowflake, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
+import { CharacterManager } from "./CharacterManager.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
 import type { Game } from "./Game.js";
+import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
 import type { SageCache } from "./SageCache.js";
@@ -22,6 +24,7 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Pa
 	admins: IAdminUser[];
 	channels: SageChannel[];
 	commandPrefix?: string;
+	gmCharacter?: GameCharacter | GameCharacterCore;
 	name: string;
 	roles: IAdminRole[];
 }
@@ -37,6 +40,12 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Pa
 export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
 	public constructor(core: ServerCore, sageCache: SageCache) {
 		super(updateServer(core), sageCache);
+
+		if (!this.core.gmCharacter) {
+			this.core.gmCharacter = { id:randomSnowflake(), name:"" };
+		}
+		this.core.gmCharacter.name = this.core.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
+		this.core.gmCharacter = new GameCharacter(this.core.gmCharacter as GameCharacterCore, CharacterManager.from([this.core.gmCharacter as GameCharacterCore], this, "gm"));
 	}
 
 	// #region Public Properties
@@ -52,7 +61,10 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	private _gameSystem?: GameSystem | null;
 	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
 	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
-	public get gmCharacterName(): string { return this.core.gmCharacterName ?? "Game Master"; }
+	/** The default gm character name for the server. */
+	public get gmCharacterName(): string { return this.core.gmCharacterName ?? GameCharacter.defaultGmCharacterName; }
+	/** The generic Game Master for the Server. */
+	public get gmCharacter(): GameCharacter { return this.core.gmCharacter as GameCharacter; }
 	public get discord() { return this.sageCache.discord; }
 	public get name(): string { return this.core.name; }
 	public get roles(): IAdminRole[] { return this.core.roles ?? []; }
@@ -391,7 +403,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 			// dicePostType: DicePostType.SinglePost,
 			// diceSecretMethodType: DiceSecretMethodType.Ignore,
 			// gameSystemType: GameSystemType.None,
-			gmCharacterName: "Game Master",
+			gmCharacterName: GameCharacter.defaultGmCharacterName,
 			id: null!,
 			name: guild.name,
 			objectType: "Server",

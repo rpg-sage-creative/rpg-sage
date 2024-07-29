@@ -9,7 +9,12 @@ export function forEach
 export function forEach
 		(label: string, array: any[], callbackfn: (value: any, index: number, array: any[]) => void, interval?: number)
 		: void {
+
 	const pLogger = new PercentLogger(label, array.length, interval);
+
+	// trigger the 0% before processing the first item
+	pLogger.start();
+
 	array.forEach((val, i, arr) => {
 		callbackfn(val, i, arr);
 		pLogger.increment();

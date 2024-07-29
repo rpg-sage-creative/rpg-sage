@@ -1,8 +1,7 @@
 import { type SageChannel } from "@rsc-sage/types";
 import { isDefined, isNonNilSnowflake, isNonNilUuid, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { parseId, type MessageChannel } from "@rsc-utils/discord-utils";
-import { isUrl } from "@rsc-utils/io-utils";
-import { isNotBlank, unwrap } from "@rsc-utils/string-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import type { Attachment, Collection, Role, User } from "discord.js";
 import type { ArgsManager } from "../../discord/ArgsManager.js";
 import type { TColorAndType } from "./Colors.js";
@@ -267,14 +266,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	}
 
 	//#endregion
-
-	public getUrl(key: string): string | null | undefined {
-		const url = this.getString(key);
-		if (url) {
-			return isUrl(url) ? unwrap(url, "<>") : null;
-		}
-		return url;
-	}
 
 	//#region SageCommandArgs
 

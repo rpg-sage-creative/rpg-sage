@@ -1,7 +1,7 @@
-import { DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
 import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
-import { applyChanges, isDefined, warn, type Args, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { applyChanges, isDefined, randomSnowflake, warn, type Args, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Message, Role } from "discord.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
@@ -13,7 +13,7 @@ import { CharacterManager } from "./CharacterManager.js";
 import type { CharacterShell } from "./CharacterShell.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
-import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
+import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
 import type { SageCache } from "./SageCache.js";
@@ -55,6 +55,7 @@ export interface GameCore extends IdCore, IHasColors, IHasEmoji, Partial<GameOpt
 
 	users?: IGameUser[];
 
+	gmCharacter?: GameCharacter | GameCharacterCore;
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
 
@@ -172,6 +173,21 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 		this.core.encounters = EncounterManager.from(this.core.encounters as EncounterCore[] ?? (this.core.encounters = []), this);
 		this.core.parties = PartyManager.from(this.core.parties as PartyCore[] ?? (this.core.parties = []), this);
+
+		if (!this.core.gmCharacter) {
+			let gmCharacterCore: GameCharacterCore | undefined;
+			const gmCharacterName = this.core.gmCharacterName ?? this.server.gmCharacterName ?? DEFAULT_GM_CHARACTER_NAME;
+			const gmCharacter = this.nonPlayerCharacters.findByName(gmCharacterName);
+			if (gmCharacter) {
+				this.nonPlayerCharacters.removeAt(this.nonPlayerCharacters.indexOf(gmCharacter));
+				gmCharacterCore = gmCharacter.toJSON();
+			}
+			if (!gmCharacterCore) {
+				gmCharacterCore = { id:randomSnowflake(), name:gmCharacterName };
+			}
+			this.core.gmCharacter = gmCharacterCore;
+		}
+		this.core.gmCharacter = new GameCharacter(this.core.gmCharacter as GameCharacterCore, CharacterManager.from([this.core.gmCharacter as GameCharacterCore], this, "gm"));
 	}
 
 	public get createdDate(): Date { return new Date(this.core.createdTs ?? 283305600000); }
@@ -204,7 +220,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 
 	public get channels(): SageChannel[] { return this.core.channels ?? (this.core.channels = []); }
 	public get gameMasters(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
-	public get gmCharacterName(): string { return this.core.gmCharacterName ?? this.server.gmCharacterName; }
+	public get gmCharacter(): GameCharacter { return this.core.gmCharacter as GameCharacter; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
 	public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
@@ -516,9 +532,14 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		for (const channelDid of channelDids) {
 			if (channelDid) {
 				const autoChannelData = { channelDid, userDid };
-				return this.playerCharacters.getAutoCharacter(autoChannelData)
-					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData)
-					?? undefined;
+				const autoChar = this.playerCharacters.getAutoCharacter(autoChannelData)
+					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData);
+					if (autoChar) {
+						return autoChar;
+					}
+					if (this.gmCharacter.hasAutoChannel(autoChannelData)) {
+					return this.gmCharacter;
+				}
 			}
 		}
 		return undefined;

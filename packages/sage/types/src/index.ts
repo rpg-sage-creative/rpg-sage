@@ -1,4 +1,5 @@
 export * from "./updates/index.js";
+export * from "./const.js";
 export * from "./DialogPostType.js";
 export * from "./DiceCritMethodType.js";
 export * from "./DiceOutputType.js";

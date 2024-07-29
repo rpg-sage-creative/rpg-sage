@@ -325,6 +325,12 @@ export abstract class SageCommand<
 		});
 	}
 
+	public get gmCharacter(): GameCharacter {
+		return this.cache.get("gmCharacter", () =>
+			this.game?.gmCharacter ?? this.server.gmCharacter
+		);
+	}
+
 	//#endregion
 
 	//#region colors

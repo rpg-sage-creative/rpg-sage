@@ -19,6 +19,10 @@ export async function forEachAsync
 		(label: string, array: any[], callbackfn: (value: any, index: number, array: any[]) => Awaitable<void>, interval?: number)
 		: Promise<void> {
 	const pLogger = new PercentLogger(label, array.length, interval);
+
+	// trigger the 0% before processing the first item
+	pLogger.start();
+
 	for (let index = 0, len = array.length; index < len; index++) {
 		try {
 			const awaitable = callbackfn(array[index], index, array);
