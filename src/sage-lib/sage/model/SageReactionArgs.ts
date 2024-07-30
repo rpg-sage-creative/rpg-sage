@@ -1,6 +1,6 @@
 import type { EnumLike, Optional } from "@rsc-utils/core-utils";
 import type { MessageChannel } from "@rsc-utils/discord-utils";
-import type { Role, User } from "discord.js";
+import type { Attachment, Role, User } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageReaction } from "./SageReaction.js";
 
@@ -21,6 +21,15 @@ export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 	public hasUnset(name: string): boolean;
 	public hasUnset(): boolean {
 		return false;
+	}
+
+	/**
+	 * Gets the named option as an attachment.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid attachment or "unset".
+	 */
+	public getAttachment(): Optional<Attachment> {
+		return undefined;
 	}
 
 	/**

@@ -304,6 +304,15 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	}
 
 	/**
+	 * Gets the named option as an attachment.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid attachment or "unset".
+	 */
+	public getAttachment(): Optional<Attachment> {
+		return undefined;
+	}
+
+	/**
 	 * Gets the named option as a boolean.
 	 * Returns undefined if not found.
 	 * Returns null if not a valid boolean or "unset".

@@ -3,7 +3,7 @@ import { debug, isDefined, warn, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, type DInteraction, type MessageTarget } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { isString } from "@rsc-utils/string-utils";
-import type { Attachment, InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
+import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
@@ -99,27 +99,6 @@ export class SageInteraction<T extends DInteraction = any>
 	}
 
 	//#endregion
-
-	public getAttachment(name: string): Attachment | null;
-	public getAttachment(name: string, required: true): Attachment;
-	public getAttachment(name: string, required = false): Attachment | null {
-		return this.interaction.isChatInputCommand() ? this.interaction.options.getAttachment(name, required) : null;
-	}
-
-	public hasAttachment(name: string): boolean {
-		return this.getAttachment(name) !== null;
-	}
-
-	public getAttachmentPdf(name: string): Attachment | null;
-	public getAttachmentPdf(name: string, required: true): Attachment;
-	public getAttachmentPdf(name: string, required = false): Attachment | null {
-		const attachment = this.interaction.isChatInputCommand() ? this.interaction.options.getAttachment(name, required) : null;
-		return attachment?.contentType === "application/pdf" ? attachment : null;
-	}
-
-	public hasAttachmentPdf(name: string): boolean {
-		return this.getAttachmentPdf(name) !== null;
-	}
 
 	/** Returns the interaction */
 	public get interaction(): T {

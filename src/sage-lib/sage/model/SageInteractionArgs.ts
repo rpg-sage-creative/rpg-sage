@@ -1,6 +1,6 @@
 import type { EnumLike, Optional } from "@rsc-utils/core-utils";
 import type { MessageChannel } from "@rsc-utils/discord-utils";
-import { ApplicationCommandOptionType, CommandInteraction, GuildMember, Role, User } from "discord.js";
+import { ApplicationCommandOptionType, Attachment, CommandInteraction, GuildMember, Role, User } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageInteraction } from "./SageInteraction.js";
 
@@ -62,6 +62,22 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	/** Returns true if the argument matching the given key has the value "unset". */
 	public hasUnset(name: string): boolean {
 		return this.getOption(name).hasUnset;
+	}
+
+	/**
+	 * Gets the named option as an attachment.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid attachment or "unset".
+	 */
+	public getAttachment(name: string): Optional<Attachment> {
+		const { nameLower, hasKey, hasUnset } = this.getOption(name);
+		if (!hasKey) return undefined; //NOSONAR
+		if (hasUnset) return null; //NOSONAR
+		const attachment = this.interaction.options.get(nameLower)?.attachment;
+		if (attachment instanceof Attachment) {
+			return attachment;
+		}
+		return null;
 	}
 
 	/**

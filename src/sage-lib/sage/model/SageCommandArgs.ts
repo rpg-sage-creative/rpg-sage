@@ -4,7 +4,7 @@ import { type Args, type EnumLike, isDefined, isEmpty, isSnowflake, isUuid, type
 import { type MessageChannel, parseIds } from "@rsc-utils/discord-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { unwrap } from "@rsc-utils/string-utils";
-import type { Role, User } from "discord.js";
+import type { Attachment, Role, User } from "discord.js";
 import type { SageCommand } from "./SageCommand.js";
 
 /** An object containing names. */
@@ -54,6 +54,34 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	/** Returns true if the argument matching the given key has the value "unset". */
 	public abstract hasUnset(key: string): boolean;
+
+	/**
+	 * Gets the named option as an attachment.
+	 * Returns undefined if not found.
+	 * Returns null if not a valid attachment or "unset".
+	 */
+	public abstract getAttachment(name: string): Optional<Attachment>;
+
+	/** Returns true if getAttachment(name) is not null and not undefined. */
+	public hasAttachment(name: string): boolean {
+		return isDefined(this.getAttachment(name));
+	}
+
+	/**
+	 * Gets the named option as an attachment with contentType of "application/pdf".
+	 * Returns undefined if not found.
+	 * Returns null if not a valid attachment or "unset".
+	 */
+		public getAttachmentPdf(name: string): Optional<Attachment> {
+		const attachment = this.getAttachment(name);
+		if (!attachment) return attachment;
+		return attachment.contentType === "application/pdf" ? attachment : null;
+	}
+
+	/** Returns true if getAttachmentPdf(name) is not null and not undefined. */
+	public hasAttachmentPdf(name: string): boolean {
+		return isDefined(this.getAttachmentPdf(name));
+	}
 
 	/**
 	 * Gets the named option as a boolean.
