@@ -10,7 +10,7 @@ function isEncounterStartStopButton(sageInteraction: SageInteraction<ButtonInter
 }
 
 async function handleEncounterStartStopButton(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
-	await sageInteraction.defer(false);
+	sageInteraction.replyStack.defer();
 	const [_encounter, encounterId, _status, _action, action] = sageInteraction.interaction.customId.split("-")[1];
 	const encounter = sageInteraction.game?.encounters.get(encounterId);
 	debug({encounterId,encounter:!!encounter});
