@@ -109,17 +109,6 @@ export abstract class SageCommand<
 	private _replyStack: ReplyStack | undefined;
 	public get replyStack(): ReplyStack { return this._replyStack ?? (this._replyStack = new ReplyStack(this)); }
 
-	/**
-	 * Enables us to call defer on the base class to cause Interactions to defer.
-	 * @TODO should we add logic for SageMessage to post a "Sage is thinking" ?
-	 */
-	public async defer(_ephemeral: boolean): Promise<void> { }
-	/**
-	 * Deletes a deferred Interaction reply.
-	 * @TODO If we add logic to defer for SageMessage, make sure we have logic here to delete that defer message.
-	 */
-	public async noDefer(): Promise<void> { }
-
 	//#region abstract
 
 	public abstract args: U;

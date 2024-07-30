@@ -1,5 +1,5 @@
 import type { Cache } from "@rsc-utils/cache-utils";
-import { debug, isDefined, warn, type Snowflake } from "@rsc-utils/core-utils";
+import { debug, isDefined, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, type DInteraction, type MessageTarget } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { isString } from "@rsc-utils/string-utils";
@@ -15,7 +15,6 @@ import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
 import type { HasChannels, HasGame } from "./index.js";
-import { addMessageDeleteButton } from "./utils/deleteButton.js";
 
 interface SageInteractionCore extends SageCommandCore {
 	interaction: DInteraction;
@@ -115,37 +114,6 @@ export class SageInteraction<T extends DInteraction = any>
 	/** Flag toggled when followUp() is called. */
 	private updates: Message<boolean>[] = [];
 
-	/** Convenience for .interation.deferReply().then(() => .interaction.deleteReply()) */
-	public async noDefer(): Promise<void> {
-		if (!this.isSageInteraction("REPLIABLE")) return; // NOSONAR
-
-		if (!this.interaction.deferred && !this.interaction.replied) {
-			await this.defer(true);
-			await this.interaction.deleteReply();
-			this._noReply = true;
-		}
-	}
-
-	private _noReply = false;
-
-	/** Defers the interaction so that a reply can be sent later. */
-	public async defer(_ephemeral: boolean): Promise<void> {
-		if (!this.isSageInteraction("REPLIABLE")) return; // NOSONAR
-
-		if (!this.interaction.deferred) {
-			if ("deferUpdate" in this.interaction) {
-				await this.interaction.deferUpdate();
-			}else if ("deferReply" in this.interaction) {
-				await this.interaction.deferReply({
-					ephemeral: false
-					// ephemeral:this.sageCache.server ? (ephemeral ?? true) : false
-				});
-			}else {
-				warn(`IDE says we should never reach this code ...`);
-			}
-		}
-	}
-
 	/** Deletes the reply and any updates (ONLY IF NOT EPHEMERAL) */
 	public async deleteReply(): Promise<void> {
 		if (!this.isSageInteraction("REPLIABLE")) return; // NOSONAR
@@ -164,14 +132,7 @@ export class SageInteraction<T extends DInteraction = any>
 		if (!this.isSageInteraction("REPLIABLE")) return; // NOSONAR
 
 		const args = this.resolveToOptions(renderableOrArgs, ephemeral);
-		if (this._noReply) {
-			const message = await this.interaction.channel?.send(args);
-			if (message) {
-				await addMessageDeleteButton(message, this.sageUser.did);
-				this.updates.push(message);
-			}
-
-		}else if (this.interaction.deferred || this.interaction.replied) {
+		if (this.interaction.deferred || this.interaction.replied) {
 			/** @todo confirm that we need to do the followup step here */
 			// if (ephemeral || this.interaction.ephemeral) {
 				const message = await this.interaction.followUp(args as InteractionReplyOptions) as Message<boolean>;
