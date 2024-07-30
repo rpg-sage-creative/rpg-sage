@@ -51,10 +51,21 @@
 		"@napi-rs/canvas": "0.1.53",
 		"discord.js": "14.15.3",
 		"emoji-regex": "10.3.0",
+		"exifreader": "4.23.3",
 		"follow-redirects": "1.15.6",
 		"image-size": "1.1.1",
 		"pdf2json": "3.0.5",
 		"xregexp": "5.1.1"
+	},
+	"exifreader": {
+		"include": {
+			"file": true,
+			"gif": true,
+			"jpeg": true,
+			"png": true,
+			"png_file": true,
+			"webp": true
+		}
 	},
 	"scripts": {
 		"daemon": "bash scripts/daemon.sh",
