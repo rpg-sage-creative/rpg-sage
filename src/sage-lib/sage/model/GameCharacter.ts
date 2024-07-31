@@ -1,7 +1,10 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { NIL_SNOWFLAKE, applyChanges, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, applyChanges, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
+import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { isBlank } from "@rsc-utils/string-utils";
+import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
 import { doStatMath } from "../commands/dice/stats/doStatMath.js";
@@ -20,13 +23,18 @@ export type TDialogMessage = {
 	timestamp: number;
 	userDid: Snowflake;
 };
+
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
+
 type AutoChannelData = {
 	channelDid: Snowflake;
 	dialogPostType?: DialogPostType;
 	userDid?: Snowflake;
 };
-export interface GameCharacterCore {
+
+export type GameCharacterCore = {
+	/** nickname (aka) */
+	aka?: string;
 	/** short name used to ease dialog access */
 	alias?: string;
 	/** Channels to automatically treat input as dialog */
@@ -52,7 +60,8 @@ export interface GameCharacterCore {
 	tokenUrl?: string;
 	/** The character's user's Discord ID */
 	userDid?: Snowflake;
-}
+};
+
 // 		export type TPlayerCharacterImageType = "Default"
 // 												| "Token" | "TokenBloody" | "TokenDying"
 // 												| "Profile" | "ProfileBloody" | "ProfileDying"
@@ -70,6 +79,7 @@ export function toDiscordKey(channelDidOrDiscordKey: DiscordKey | Snowflake, thr
 	}
 	return new DiscordKey(null, channelDidOrDiscordKey, threadDid);
 }
+
 function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage): boolean {
 	const { channel, thread } = discordKey.channelAndThread;
 	const hasThread = isNonNilSnowflake(dialogMessage.threadDid);
@@ -82,6 +92,27 @@ function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage
 	}
 	return dialogMessage.channelDid === channel;
 }
+
+//#region temp files
+
+type TempIds = {
+	charId: string;
+	gameId?: string;
+	userId: string;
+};
+
+function createTempPath({ charId, gameId, userId }: TempIds): string {
+	const sageRoot = getDataRoot("sage");
+	const path = gameId
+		? `${sageRoot}/games/${gameId}/characters`
+		: `${sageRoot}/users/${userId}/characters`;
+	if (!fileExistsSync(path)) {
+		mkdirSync(path, { recursive:true });
+	}
+	return `${path}/${charId}.json.tmp`;
+}
+
+//#endregion
 
 //#region Core Updates
 
@@ -140,6 +171,10 @@ export class GameCharacter implements IHasSave {
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []), this.owner);
 	}
 
+	/** nickname (aka) */
+	public get aka(): string | undefined { return this.core.aka ?? this.notes.getStat("nickname")?.note.trim(); }
+	public set aka(aka: string | undefined) { this.core.aka = aka; this.notes.unsetStat("nickname"); }
+
 	/** short name used to ease dialog access */
 	public get alias(): string | undefined { return this.core.alias; }
 	public set alias(alias: string | undefined) { this.core.alias = alias; }
@@ -153,6 +188,14 @@ export class GameCharacter implements IHasSave {
 
 	/** The character's companion characters. */
 	public get companions(): CharacterManager { return this.core.companions as CharacterManager; }
+
+	/** Convenient way of getting the displayName.template stat */
+	public get displayNameTemplate(): string | undefined {
+		return this.getStat("displayName.template") ?? undefined;
+	}
+	public set displayNameTemplate(displayNameTemplate: string | undefined) {
+		this.notes.setStat("displayName.template", displayNameTemplate ?? "");
+	}
 
 	/** Discord compatible color: #001122 */
 	public get embedColor(): HexColorString | undefined { return this.core.embedColor; }
@@ -196,8 +239,26 @@ export class GameCharacter implements IHasSave {
 	/** The ID of the parent of a companion. */
 	public get parentId(): Snowflake | undefined { return this.parent?.id; }
 
+	private _pathbuilder: PathbuilderCharacter | null | undefined;
+	public get pathbuilder(): PathbuilderCharacter | null {
+		if (this._pathbuilder === undefined) {
+			if (this.core.pathbuilder) {
+				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder);
+			}
+			if (this.core.pathbuilderId) {
+				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId);
+			}
+		}
+		return this._pathbuilder ?? null;
+	}
+
+	/** @todo figure out what this id is and what it represents */
+	public get pathbuilderId(): string | undefined { return this.core.pathbuilderId; }
+	public set pathbuilderId(pathbuilderId: Optional<string>) { this.core.pathbuilderId = pathbuilderId ?? undefined; }
+
 	private _preparedAlias?: string;
 	private get preparedAlias(): string { return this._preparedAlias ?? (this._preparedAlias = GameCharacter.prepareName(this.alias ?? this.name)); }
+
 	private _preparedName?: string;
 	private get preparedName(): string { return this._preparedName ?? (this._preparedName = GameCharacter.prepareName(this.name)); }
 
@@ -301,17 +362,28 @@ export class GameCharacter implements IHasSave {
 
 	//#endregion
 
-	/** Compares name literal, alias literal, then preparedName. If recursive, it also checks companions. */
-	public matches(name: string, recursive = false): boolean {
-		if (this.name === name || this.alias === name) {
+	/** Compares id, name literal, alias literal, then preparedName and preparedAlias. If recursive, it also checks companions. */
+	public matches(value: string, recursive = false): boolean {
+		if (this.name === value || this.alias === value || this.id === value) {
 			return true;
 		}
-		const preparedName = GameCharacter.prepareName(name);
-		if (this.preparedName === preparedName || this.preparedAlias === preparedName) {
+		const preparedValue = GameCharacter.prepareName(value);
+		if (this.preparedName === preparedValue || this.preparedAlias === preparedValue) {
 			return true;
 		}
-		return recursive && this.companions.hasMatching(name, true);
+		return recursive && this.companions.hasMatching(value, true);
 	}
+
+	public toDisplayName(template?: string): string {
+		if (isBlank(template)) {
+			template = this.displayNameTemplate;
+		}
+		if (!isBlank(template)) {
+			return template.replace(/{[^}]+}/g, match => this.getStat(match.slice(1, -1)) ?? match);
+		}
+		return this.name;
+	}
+
 	public toJSON(): GameCharacterCore {
 		return this.core;
 	}
@@ -325,22 +397,6 @@ export class GameCharacter implements IHasSave {
 		return Promise.resolve(false);
 	}
 
-	public get pathbuilderId(): string | undefined { return this.core.pathbuilderId; }
-	public set pathbuilderId(pathbuilderId: Optional<string>) { this.core.pathbuilderId = pathbuilderId ?? undefined; }
-
-	private _pathbuilder: PathbuilderCharacter | null | undefined;
-	public get pathbuilder(): PathbuilderCharacter | null {
-		if (this._pathbuilder === undefined) {
-			if (this.core.pathbuilder) {
-				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder);
-			}
-			if (this.core.pathbuilderId) {
-				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId);
-			}
-		}
-		return this._pathbuilder ?? null;
-	}
-
 	public getStat(key: string): string | null {
 		if (/^name$/i.test(key)) {
 			return this.name;
@@ -348,8 +404,8 @@ export class GameCharacter implements IHasSave {
 		if (/^alias$/i.test(key)) {
 			return this.alias ?? null;
 		}
-		if (/^nname$/i.test(key)) {
-			return this.notes.getStat("nickname")?.note.trim() ?? this.name;
+		if (/^aka|n(ick)?name$/i.test(key)) {
+			return this.aka ?? this.notes.getStat("nickname")?.note.trim() ?? this.name;
 		}
 
 		const noteStat = this.notes.getStat(key)?.note.trim() ?? null;
@@ -388,6 +444,7 @@ export class GameCharacter implements IHasSave {
 
 		return null;
 	}
+
 	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
 		let changes = false;
 		const forNotes: TKeyValuePair[] = [];
@@ -489,4 +546,22 @@ export class GameCharacter implements IHasSave {
 	public static prepareName(name: string): string {
 		return XRegExp.replace(name ?? "", XRegExp("[^\\pL\\pN]+"), "", "all").toLowerCase();
 	}
+
+	public static async fromTemp(ids: TempIds): Promise<GameCharacter | undefined> {
+		const path = createTempPath(ids);
+		if (fileExistsSync(path)) {
+			const core = await readJsonFile<GameCharacterCore>(path);
+			if (core) {
+				return new GameCharacter(core);
+			}
+		}
+		return undefined;
+	}
+
+	public async saveTemp(ids: Omit<TempIds, "charId">): Promise<boolean> {
+		const path = createTempPath({ charId:this.id, ...ids });
+		return writeFile(path, this.core);
+
+	}
 }
+
