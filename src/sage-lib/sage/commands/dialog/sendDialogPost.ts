@@ -3,18 +3,17 @@ import { errorReturnEmptyArray, errorReturnNull, warnReturnNull, type Snowflake 
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
-import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { AttachmentBuilder, type Message } from "discord.js";
 import type { GameCharacter, TDialogMessage } from "../../model/GameCharacter.js";
 import type { ColorType } from "../../model/HasColorsCore.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
 import type { SageMessage } from "../../model/SageMessage.js";
+import { DialogDiceBehaviorType } from "../../model/User.js";
 import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
 import { parseDiceMatches, sendDice } from "../dice.js";
 import type { ChatOptions } from "./chat/ChatOptions.js";
 import { sendDialogRenderable } from "./sendDialogRenderable.js";
-import { DialogDiceBehaviorType } from "../../model/User.js";
 
 type DialogPostData = {
 	authorName?: string;
@@ -27,12 +26,6 @@ type DialogPostData = {
 	title?: string;
 };
 
-function formatName(char: GameCharacter, name?: string): string {
-	const template = stringOrUndefined(name) ?? char.getStat("displayName.template");
-	return template?.replace(/{[^}]+}/g, match => char.getStat(match.slice(1, -1)) ?? match)
-		?? char.name;
-}
-
 export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, skipDelete }: ChatOptions): Promise<Message[]> {
 	const character = postData?.character;
 	if (!character) {
@@ -42,7 +35,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const webhook = true; //sageMessage.dialogType === "Webhook";
 	const renderableContent = new RenderableContent();
 
-	const authorName = formatName(character, postData.authorName);
+	const authorName = character.toDisplayName(postData.authorName);
 	const title = postData.title || authorName;
 	if (!webhook || title !== authorName) {
 		renderableContent.setTitle(title);
