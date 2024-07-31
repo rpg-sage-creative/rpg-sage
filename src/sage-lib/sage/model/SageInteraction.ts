@@ -21,6 +21,30 @@ interface SageInteractionCore extends SageCommandCore {
 	type: InteractionType;
 }
 
+/** Parses a string of type `{indicator}|{userId}|{action}|...` */
+type IdParts = {
+	/** Generally the tool or feature of Sage */
+	indicator: string;
+	/** Generally the user doing the action. */
+	userId: Snowflake;
+	/** The action being performed. */
+	action: string;
+	/** any remaining values */
+	args?: string[];
+};
+
+type CustomIdParser<T extends IdParts> = (customId: string) => T | undefined;
+
+function defaultCustomIdParser<T extends IdParts>(customId: string): T | undefined {
+	const args = customId.split("|");
+	const indicator = args.shift();
+	const userId = args.shift() as Snowflake;
+	const action = args.shift();
+	return indicator && userId && action
+		? { args, indicator, userId, action} as T
+		: undefined;
+}
+
 export class SageInteraction<T extends DInteraction = any>
 	extends SageCommand<SageInteractionCore, SageInteractionArgs>
 	implements HasGame, HasChannels {
@@ -95,6 +119,31 @@ export class SageInteraction<T extends DInteraction = any>
 			];
 		}
 		return [];
+	}
+
+	//#endregion
+
+	//#region customId
+
+	/** The interaction's customId is exactly this string. */
+	public customIdMatches(value: string): boolean;
+	/** The interaction's customId .matches(regex) !== null */
+	public customIdMatches(regex: RegExp): boolean;
+	public customIdMatches(valueOrRegex: string | RegExp): boolean {
+		if ("customId" in this.interaction) {
+			const customId = this.interaction.customId;
+			return isString(valueOrRegex)
+				? customId === valueOrRegex
+				: valueOrRegex.test(customId);
+		}
+		return false;
+	}
+
+	public parseCustomId<T extends IdParts>(parser?: CustomIdParser<T>): T | undefined {
+		if ("customId" in this.interaction) {
+			return (parser ?? defaultCustomIdParser)(this.interaction.customId);
+		}
+		return undefined;
 	}
 
 	//#endregion
