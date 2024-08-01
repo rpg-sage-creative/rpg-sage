@@ -404,7 +404,7 @@ export class GameCharacter implements IHasSave {
 		if (/^alias$/i.test(key)) {
 			return this.alias ?? null;
 		}
-		if (/^aka|n(ick)?name$/i.test(key)) {
+		if (/^(aka|n(ick)?name)$/i.test(key)) {
 			return this.aka ?? this.notes.getStat("nickname")?.note.trim() ?? this.name;
 		}
 
