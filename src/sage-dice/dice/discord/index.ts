@@ -53,7 +53,8 @@ function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
 		case GameType.CnC: return <typeof baseDiceGroup>cncDiceGroup;
 		case GameType.DnD5e: return <typeof baseDiceGroup>dnd5eDiceGroup;
 		case GameType.E20: return <typeof baseDiceGroup>e20DiceGroup;
-		case GameType.PF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
+		case GameType.PF2e:
+		case GameType.SF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
 		case GameType.Quest: return <typeof baseDiceGroup>questDiceGroup;
 		case GameType.VtM5e: return <typeof baseDiceGroup>vtm5eDiceGroup;
 		default: return baseDiceGroup;
@@ -69,6 +70,7 @@ function parseDice(diceString: string, gameType?: GameType, diceOutputType?: Dic
 		case GameType.E20:
 			return e20DiceGroup.parse(diceString, diceOutputType);
 		case GameType.PF2e:
+		case GameType.SF2e:
 			return pf2eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
 		case GameType.Quest:
 			return questDiceGroup.parse(diceString, diceOutputType);
@@ -174,6 +176,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 					case GameType.E20:
 						return e20DiceGroup.fromCore(core);
 					case GameType.PF2e:
+					case GameType.SF2e:
 						return pf2eDiceGroup.fromCore(core);
 					case GameType.Quest:
 						return questDiceGroup.fromCore(core);
@@ -240,13 +243,17 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 			let count: number, map: number;
 			[match, count, map] = matchCountAndMap(match);
 
+			if (gameType !== GameType.PF2e && gameType !== GameType.SF2e) {
+				map = 0;
+			}
+
 			const diceGroup = parseDice(match, gameType, diceOutputType, defaultDiceSecretMethodType, critMethodType);
 			diceGroups.push(diceGroup);
 			if (count > 1) {
 				const diceGroupClass = getDiceGroupForGame(diceGroup.gameType);
 				const diceGroupCore = diceGroup.toJSON();
 				for (let i = 1; i < count; i++) {
-					diceGroups.push(cloneDiceGroup(diceGroupClass, diceGroupCore, gameType === GameType.PF2e ? map * i : 0));
+					diceGroups.push(cloneDiceGroup(diceGroupClass, diceGroupCore, map * i));
 				}
 			}
 
@@ -258,7 +265,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 
 /** Returns the GameType at the beginning of the match along with the rest of the match. */
 function matchGameType(match: string, defaultGameType: OrUndefined<GameType>): [string, OrUndefined<GameType>] {
-	const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf1|sf|5e|quest|vtm5|vtm5e)\b)?/i;
+	const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf2e|sf1|sf2|sf|5e|quest|vtm5|vtm5e)\b)?/i;
 	const gameMatch = match.match(GAME_CHECK);
 	if (gameMatch) {
 		const gameTypeString = gameMatch[0];
@@ -341,6 +348,7 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 					case GameType.E20:
 						return e20DiceGroupRoll.fromCore(core);
 					case GameType.PF2e:
+					case GameType.SF2e:
 						return pf2eDiceGroupRoll.fromCore(core);
 					case GameType.Quest:
 						return questDiceGroupRoll.fromCore(core);
