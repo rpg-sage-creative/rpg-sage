@@ -26,7 +26,8 @@ type TTypedMap<T> = { [key: string]: T; };
 
 const CritMethodTypeMap: TTypedMap<TTypedMap<DiceCritMethodType>> = {
 	"DND5E":{ "TIMESTWO":DiceCritMethodType.TimesTwo, "ROLLTWICE":DiceCritMethodType.RollTwice, "ADDMAX":DiceCritMethodType.AddMax },
-	"PF2E":{ "TIMESTWO":DiceCritMethodType.TimesTwo, "ROLLTWICE":DiceCritMethodType.RollTwice, "ADDMAX":DiceCritMethodType.AddMax }
+	"PF2E":{ "TIMESTWO":DiceCritMethodType.TimesTwo, "ROLLTWICE":DiceCritMethodType.RollTwice, "ADDMAX":DiceCritMethodType.AddMax },
+	"SF2E":{ "TIMESTWO":DiceCritMethodType.TimesTwo, "ROLLTWICE":DiceCritMethodType.RollTwice, "ADDMAX":DiceCritMethodType.AddMax }
 };
 
 export function parseCritMethodType(gameType: GameType | undefined, critMethod: string, defaultCritMethod?: DiceCritMethodType): DiceCritMethodType | undefined {
@@ -38,7 +39,7 @@ export function parseCritMethodType(gameType: GameType | undefined, critMethod: 
 }
 
 export function getCritMethodRegex(gameType: GameType | undefined): RegExp | null {
-	if ([GameType.DnD5e, GameType.PF2e].includes(gameType!)) {
+	if ([GameType.DnD5e, GameType.PF2e, GameType.SF2e].includes(gameType!)) {
 		return /^(timestwo|rolltwice|addmax)?/i;
 	}
 	return null;
