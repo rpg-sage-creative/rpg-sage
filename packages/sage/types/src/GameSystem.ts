@@ -52,6 +52,10 @@ const gameSystems: GameSystem[] = [
 	{ code:"VtM5e", description:"", dice:"VtM5e", name:"Vampire: the Masquerade 5e", type:GameSystemType.VtM5e },
 ];
 
+export function getGameSystems(): GameSystem[] {
+	return gameSystems;
+}
+
 /** Returns a game system if found, undefined otherwise. */
 export function parseGameSystem(value?: string | number | null): GameSystem | undefined {
 	if (value) {
