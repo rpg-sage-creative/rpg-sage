@@ -75,6 +75,13 @@ export class SageInteraction<T extends DInteraction = any>
 
 	//#region command / category / sub
 
+	/** Splits the command on | and calls isCommand with the correct number of args. */
+	public commandMatches(command: string): boolean {
+		const [one, two] = command.split("|");
+		if (two) this.isCommand(one, two);
+		return this.isCommand(one);
+	}
+
 	public isCommand(command: string): boolean;
 	public isCommand(sub: string, command: string): boolean;
 	public isCommand(gameType: SlashCommandGameType, command: string): boolean;
@@ -125,10 +132,6 @@ export class SageInteraction<T extends DInteraction = any>
 
 	//#region customId
 
-	/** The interaction's customId is exactly this string. */
-	public customIdMatches(value: string): boolean;
-	/** The interaction's customId .matches(regex) !== null */
-	public customIdMatches(regex: RegExp): boolean;
 	public customIdMatches(valueOrRegex: string | RegExp): boolean {
 		if ("customId" in this.interaction) {
 			const customId = this.interaction.customId;
