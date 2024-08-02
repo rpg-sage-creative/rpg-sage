@@ -7,6 +7,7 @@ type CharModalData = {
 	// indicator: string;
 	userId: Snowflake;
 	charId: CharId;
+	compId: CharId;
 	action: CharModalAction;
 	fields: [string, string, string, (number | "P")?, boolean?][];
 }

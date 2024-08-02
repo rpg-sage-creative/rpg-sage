@@ -4,7 +4,7 @@ export type CharId = Snowflake | UUID;
 
 export type CharModalIndicator = "CharModal";
 
-type SelectOptions = `Char`;
+type SelectOptions = `Char` | `Comp`;
 type ModalActions = `Show` | `Submit`;
 type ModalOptions = `Names` | `Images` | `Stats`;
 export type CharModalAction = `Select${SelectOptions}` | `${ModalActions}${ModalOptions}` | "Save" | "Confirm" | "Cancel";
@@ -18,6 +18,9 @@ export type CustomIdParts = {
 
 	/** Character Id */
 	charId: CharId;
+
+	/** Character Id */
+	compId: CharId;
 
 	/** Action */
 	action: CharModalAction;

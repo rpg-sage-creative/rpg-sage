@@ -8,6 +8,7 @@ import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
 import { showCharForm } from "./showCharForm.js";
 import type { CustomIdParts } from "./types.js";
+import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 
 export type CharStatsForm = {
 	conditions: string;
@@ -25,7 +26,8 @@ export function showCharStatsModal(sageInteraction: SageInteraction, char: GameC
 		.join("\n");
 	const modal = createCharModal({
 		userId: sageInteraction.authorDid,
-		charId: char.id,
+		charId: char.isCompanionOrMinion ? char.parentId ?? NIL_SNOWFLAKE : char.id,
+		compId: char.isCompanionOrMinion ? char.id : NIL_SNOWFLAKE,
 		action: "SubmitStats",
 		fields: [
 			["level", "Character Level", char.getStat("level") ?? ""],

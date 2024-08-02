@@ -1,3 +1,4 @@
+import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";
@@ -15,7 +16,8 @@ export type CharImagesForm = {
 export function showCharImagesModal(sageInteraction: SageInteraction, char: GameCharacter): Promise<void> {
 	const modal = createCharModal({
 		userId: sageInteraction.authorDid,
-		charId: char.id,
+		charId: char.isCompanionOrMinion ? char.parentId ?? NIL_SNOWFLAKE : char.id,
+		compId: char.isCompanionOrMinion ? char.id : NIL_SNOWFLAKE,
 		action: "SubmitImages",
 		fields: [
 			["tokenUrl", "Character Token Url (left of post)", char.tokenUrl ?? ""],

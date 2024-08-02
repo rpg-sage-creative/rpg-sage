@@ -17,6 +17,7 @@ type SageButtonInteraction = SageInteraction<ButtonInteraction>;
 type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
 
 const SelectChar = "SelectChar";
+const SelectComp = "SelectComp";
 const ShowNames = "ShowNames";
 const ShowImages = "ShowImages";
 const ShowStats = "ShowStats";
@@ -30,9 +31,9 @@ function createButton(customId: string, label: string, style: keyof typeof Butto
 		.setDisabled(disabled);
 }
 
-function buildCharForm(sageCommand: SageCommand, charId?: CharId): ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] {
+function buildCharForm(sageCommand: SageCommand, charId?: CharId, compId?: CharId): ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] {
 	const userId = sageCommand.authorDid;
-	const customId = (action: CharModalAction) => createCustomId(userId, charId ?? NIL_SNOWFLAKE, action);
+	const customId = (action: CharModalAction) => createCustomId(userId, charId ?? NIL_SNOWFLAKE, compId ?? NIL_SNOWFLAKE, action);
 
 	const characterSelect = new StringSelectMenuBuilder().setCustomId(customId(SelectChar)).setPlaceholder("Select a Character");
 	const characterManager = sageCommand.game?.playerCharacters ?? sageCommand.sageUser.playerCharacters;
@@ -40,6 +41,14 @@ function buildCharForm(sageCommand: SageCommand, charId?: CharId): ActionRowBuil
 		characterSelect.addOptions(new StringSelectMenuOptionBuilder().setLabel(char.name).setValue(char.id).setDefault(charId === char.id));
 	});
 	characterSelect.addOptions(new StringSelectMenuOptionBuilder().setLabel(`Create New Character`).setValue(NIL_SNOWFLAKE).setDefault(isNilSnowflake(charId)));
+
+	const char = characterManager.findByName(charId);
+	const companionSelect = new StringSelectMenuBuilder().setCustomId(customId(SelectComp)).setPlaceholder("Select a Companion");
+	const companionManager = char?.companions;
+	companionManager?.forEach(comp => {
+		companionSelect.addOptions(new StringSelectMenuOptionBuilder().setLabel(comp.name).setValue(comp.id).setDefault(compId === comp.id));
+	});
+	companionSelect.addOptions(new StringSelectMenuOptionBuilder().setLabel(`Create New Companion`).setValue(NIL_SNOWFLAKE).setDefault(isNilSnowflake(compId)));
 
 	const buttons = [
 		createButton(customId(ShowNames), "Names", "Primary", !charId),
@@ -51,6 +60,7 @@ function buildCharForm(sageCommand: SageCommand, charId?: CharId): ActionRowBuil
 
 	const components = [
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(characterSelect),
+		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(companionSelect),
 		new ActionRowBuilder<ButtonBuilder>().setComponents(...buttons)
 	];
 

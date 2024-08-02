@@ -7,6 +7,7 @@ import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
 import { showCharForm } from "./showCharForm.js";
 import type { CustomIdParts } from "./types.js";
+import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 
 export type CharNamesForm = {
 	name: string;
@@ -18,7 +19,8 @@ export type CharNamesForm = {
 export function showCharNamesModal(sageInteraction: SageInteraction, char: GameCharacter): Promise<void> {
 	const modal = createCharModal({
 		userId: sageInteraction.authorDid,
-		charId: char.id,
+		charId: char.isCompanionOrMinion ? char.parentId ?? NIL_SNOWFLAKE : char.id,
+		compId: char.isCompanionOrMinion ? char.id : NIL_SNOWFLAKE,
 		action: "SubmitNames",
 		fields: [
 			["name", "Character Name", char.name, DiscordMaxValues.usernameLength, true],
