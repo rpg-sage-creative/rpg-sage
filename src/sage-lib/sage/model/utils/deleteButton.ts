@@ -1,7 +1,7 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, toChannelMention, toUserMention } from "@rsc-utils/discord-utils";
 import { isNotBlank } from "@rsc-utils/string-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, type ActionRowData, type BaseMessageOptions, type ButtonComponentData, type InteractionReplyOptions, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
 import { deleteMessage } from "../../../discord/deletedMessages.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import type { SageInteraction } from "../SageInteraction.js";
@@ -19,9 +19,9 @@ function createCustomId(userId: Snowflake): string {
 }
 
 /** Checks to see if the given customId is for the given userId. */
-function isMatchingCustomId(customId: string, userId: Snowflake): boolean {
-	return getUserId(customId) === userId;
-}
+// function isMatchingCustomId(customId: string, userId: Snowflake): boolean {
+// 	return getUserId(customId) === userId;
+// }
 
 /** Extracts the userId from a valid delete button customId. */
 function getUserId(customId: string): Snowflake | undefined {
@@ -60,10 +60,14 @@ export function createMessageDeleteButtonComponents(userId: Snowflake, options?:
 
 /** Checks all components to see if a valid delete button customId exists. */
 function hasDeleteButton(message: Message | MessageEditOptions | MessageCreateOptions | InteractionReplyOptions, userId: Snowflake): boolean {
+	const customId = createCustomId(userId);
 	return message?.components?.some(row =>
-		(row as ActionRowData<ButtonComponentData>).components.some(btn =>
-			"customId" in btn && isMatchingCustomId(btn.customId ?? "", userId)
-		)
+		(row as ActionRowData<ActionRowComponent | ActionRowComponentData | MessageActionRowComponentBuilder>).components.some(componentOrBuilder => {
+			const component = "toJSON" in componentOrBuilder ? componentOrBuilder.toJSON() : componentOrBuilder;
+			if ("customId" in component) return component.customId === customId;
+			if ("custom_id" in component) return component.custom_id === customId;
+			return false;
+		})
 	) ?? false;
 }
 
