@@ -13,9 +13,11 @@ type SageInteractionHandler = (sageInteraction: SageInteraction) => Awaitable<vo
 type SageMessageHandler = (sageMessage: SageMessage) => Awaitable<void>;
 type SageReactionHandler = (sageReaction: SageReaction) => Awaitable<void>;
 
+type Command = string | RegExp;
+
 type Args = {
 	/** Commands */
-	commands: string[];
+	commands: Command[];
 
 	/** Listen to all? */
 	handler?: SageCommandHandler;
@@ -30,19 +32,27 @@ type Args = {
 	reaction?: SageCommandHandler | SageReactionHandler;
 };
 
-function createInteractionTester(commandParts: string[]) {
-	return (cmd: SageCommand) => cmd.isCommand(...commandParts);
+function createInteractionTester(command: Command) {
+	return (cmd: SageInteraction) => cmd.customIdMatches(command)
+		|| (typeof(command) === "string" && cmd.commandMatches(command));
 }
 
-function createMessageTester(command: string) {
+function commandToMatcher(command: Command): RegExp {
+	if (typeof(command) === "string") {
+		const commandParts = command.split("|");
+		const keyRegex = commandParts.join(" ").replace(/[-\s]+/g, "[\\-\\s]");
+		return new RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
+	}
+	return command;
+}
+
+function createMessageTester(command: Command) {
 	return async function (sageMessage: SageMessage): Promise<TCommandAndArgs | null> {
 		if (sageMessage.hasPrefix && /^!!?/.test(sageMessage.slicedContent)) {
-			const commandParts = command.split("|");
-			const keyRegex = commandParts.join(" ").replace(/[-\s]+/g, "[\\-\\s]");
-			const matcher = new RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
+			const matcher = commandToMatcher(command);
 			const match = matcher.exec(sageMessage.slicedContent.replace(/^!!?/, "").trim());
 			if (match) {
-				return { command, args: new ArgsManager(match[1]) };
+				return { command:String(command), args: new ArgsManager(match[1]) };
 			}
 		}
 		return null;
@@ -52,16 +62,15 @@ function createMessageTester(command: string) {
 
 export function registerListeners({ commands, interaction, message, reaction, handler }: Args): void {
 	for (const command of commands) {
-		const commandParts = command.split("|");
 
 		if (handler || interaction) {
-			const tester = createInteractionTester(commandParts);
+			const tester = createInteractionTester(command);
 			registerInteractionListener(tester, handler ?? interaction!);
 		}
 
 		if (handler || message) {
 			const tester = createMessageTester(command);
-			registerMessageListener(tester, handler ?? message!, { command });
+			registerMessageListener(tester, handler ?? message!, { command:String(command) });
 			// registerCommand(handler ?? message!, command);
 		}
 
