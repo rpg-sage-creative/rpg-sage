@@ -72,8 +72,10 @@ async function serverInit(sageMessage: SageMessage): Promise<void> {
 function serverDetailsDefaultTypes(renderableContent: RenderableContent, server: Server): void {
 	renderableContent.append(`<b>Default Dialog Type</b> ${DialogType[server.dialogPostType!] ?? "<i>unset (Embed)</i>"}`);
 	renderableContent.append(`<b>Default Game Type</b> ${GameSystemType[server.gameSystemType!] ?? "<i>unset (None)</i>"}`);
-	if (server.gameSystemType === GameSystemType.PF2e) {
+	if ([GameSystemType.DnD5e, GameSystemType.PF2e, GameSystemType.SF2e].includes(server.gameSystemType ?? GameSystemType.None)) {
 		renderableContent.append(`<b>Default Crit Method Type</b> ${CritMethodType[server.diceCritMethodType!] ?? "<i>unset (x2)</i>"}`);
+	}else {
+		renderableContent.append(`<b>Default Crit Method Type</b> <i>only for PF2e, SF2e, and DnD5e</i>`);
 	}
 	renderableContent.append(`<b>Default Dice Output Type</b> ${DiceOutputType[server.diceOutputType!] ?? "<i>unset (M)</i>"}`);
 	renderableContent.append(`<b>Default Dice Post Type</b> ${DicePostType[server.dicePostType!] ?? "<i>unset (Post)</i>"}`);

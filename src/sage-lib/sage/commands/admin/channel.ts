@@ -34,10 +34,13 @@ async function channelDetailsAppendDialog(renderableContent: RenderableContent, 
 async function channelDetailsAppendDice(renderableContent: RenderableContent, server: Server, game: Optional<Game>, channel: SageChannel): Promise<void> {
 	renderableContent.append(`<b>Dice Options</b>`);
 
-	if ((game ? game.gameSystemType : server.gameSystemType) === GameSystemType.PF2e) {
+	const gameSystemType = channel.gameSystemType ?? (game ? game.gameSystemType : server.gameSystemType) ?? GameSystemType.None;
+	if ([GameSystemType.DnD5e, GameSystemType.PF2e, GameSystemType.SF2e].includes(gameSystemType)) {
 		const critMethodType = CritMethodType[channel.diceCritMethodType!];
 		const inheritedCritMethodType = CritMethodType[game?.diceCritMethodType ?? server.diceCritMethodType ?? CritMethodType.TimesTwo];
-		renderableContent.append(`[spacer]<b>Crit Math</b> ${critMethodType ?? `<i>inherited (${inheritedCritMethodType})</i>`}`);
+		renderableContent.append(`[spacer]<b>Crit Method</b> ${critMethodType ?? `<i>inherited (${inheritedCritMethodType})</i>`}`);
+	} else {
+		renderableContent.append(`[spacer]<b>Crit Method</b> <i>only for PF2e, SF2e, and DnD5e</i>`);
 	}
 
 	const diceOutputType = DiceOutputType[channel.diceOutputType!];
