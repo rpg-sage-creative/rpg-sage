@@ -22,8 +22,13 @@
 		"pathfinder",
 		"pathfinder2e",
 		"pf2e",
+		"starfinder",
+		"starfinder2e",
+		"sf2e",
 		"essence20",
-		"e20"
+		"e20",
+		"dnd5e",
+		"vtm5e"
 	],
 	"private": true,
 	"author": "Randal T Meyer <randal.t.meyer@gmail.com> (https://rpgsage.io)",
