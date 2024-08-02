@@ -14,7 +14,7 @@ import type {
 } from "@discordjs/builders";
 import type { CodeName } from "@rsc-utils/core-utils";
 
-export type SlashCommandGameType = "PF1E" | "PF2E" | "SF" | "Finder";
+export type SlashCommandGameType = "PF1E" | "PF2E" | "SF1E" | "SF2E" | "Finder";
 
 export type SlashCommandChoice<T = string | number> = T | [string, T] | { name:string; description?:string; value?:T; };
 
