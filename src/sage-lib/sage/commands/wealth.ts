@@ -2,7 +2,6 @@ import { debug } from "@rsc-utils/core-utils";
 import { addCommas } from "@rsc-utils/number-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import { registerCharacterWealth } from "../../../gameSystems/p20/characterWealth.js";
 import { Coins, PROFICIENCIES, type TProficiency, Table } from "../../../sage-pf2e/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
@@ -81,5 +80,4 @@ export function registerWealth(): void {
 	registerCommandRegex(/^((?:\s*[\-\+]?\s*\d+(?:,\d{3})*\s*[csgp]p)+)$/i, spUtils);
 	registerCommandRegex(/^\s*income\s*earned\s*(\d{1,2})?\s*(trained|expert|master|legendary|t|e|m|l)?\s*$/i, incomeEarnedA);
 	registerCommandRegex(/^\s*income\s*earned\s*(trained|expert|master|legendary|t|e|m|l)\s*(\d{1,2})\s*$/i, incomeEarnedB);
-	registerCharacterWealth();
 }
