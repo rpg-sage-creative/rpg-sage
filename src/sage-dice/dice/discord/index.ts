@@ -253,7 +253,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 				const diceGroupClass = getDiceGroupForGame(diceGroup.gameType);
 				const diceGroupCore = diceGroup.toJSON();
 				for (let i = 1; i < count; i++) {
-					diceGroups.push(cloneDiceGroup(diceGroupClass, diceGroupCore, map * i));
+					diceGroups.push(cloneDiceGroup(diceGroupClass, diceGroupCore, map * Math.min(i, 2)));
 				}
 			}
 
