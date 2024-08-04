@@ -3,6 +3,7 @@ import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug, isDefined, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { DInteraction, DRepliableInteraction, DiscordKey, EmbedBuilder } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
+import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { ComponentType, InteractionType, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
@@ -56,6 +57,27 @@ export abstract class SageCommand<
 
 	public abstract commandValues: string[];
 	public abstract isCommand(...args: string[]): boolean;
+
+	public getModalForm<T>(): T | undefined {
+		if (this.isSageInteraction("MODAL")) {
+			const form = { } as { [key:string]: string | undefined; };
+			this.interaction.fields.fields.forEach(comp => {
+				form[comp.customId] = stringOrUndefined(comp.value);
+			});
+			return form as T;
+		}
+
+		const keys = this.args.keys();
+		if (keys.length) {
+			const form = { } as { [key:string]: Optional<string>; };
+			keys.forEach(key => {
+				form[key] = this.args.getString(key);
+			});
+			return form as T;
+		}
+
+		return undefined;
+	}
 
 	public isSageInteraction(type: "BUTTON"): this is SageInteraction<ButtonInteraction>;
 	public isSageInteraction(type: "SELECT"): this is SageInteraction<StringSelectMenuInteraction>;

@@ -1,5 +1,5 @@
 import { debug } from "@rsc-utils/core-utils";
-import { addCommas, nth } from "@rsc-utils/number-utils";
+import { addCommas } from "@rsc-utils/number-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { Coins, PROFICIENCIES, type TProficiency, Table } from "../../../sage-pf2e/index.js";
@@ -24,28 +24,6 @@ async function spUtils(sageMessage: SageMessage): Promise<void> {
 	const content = createCommandRenderableContent(`<b>Coin Counter</b>`);
 	content.append(`${data}\n\n${coins.toString()}\n(${addCommas(coins.spValue)} sp)`);
 	return <any>sageMessage.send(content);
-}
-// #endregion
-
-// #region Starting Wealth
-async function startingWealth(sageMessage: SageMessage): Promise<void> {
-	const levelString = sageMessage.args.shift()!;
-
-	const table = Table.findByNumber("10-10")!,
-		level = +levelString.replace(/st|nd|rd|th/, "");
-	let renderable: RenderableContent;
-	if (isNaN(level) || level < 1 || 20 < level) {
-		renderable = table.toRenderableContent();
-	} else {
-		renderable = createCommandRenderableContent();
-		const levelRow = table.rows[level];
-		renderable.setTitle(`<b>Starting Wealth</b> (${nth(level)} Level)`);
-		renderable.append(`<b>Permanent Items</b>`, `<blockquote>${levelRow[1].split(/,\s*/).join("\n")}</blockquote>`);
-		renderable.append(`<b>Currency</b> ${levelRow[2]}`);
-		renderable.append(`<h1>Optionally</h1>`);
-		renderable.append(`<b>Lump Sum</b> ${levelRow[3]}`);
-	}
-	sageMessage.send(renderable);
 }
 // #endregion
 
@@ -100,7 +78,6 @@ async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, 
 
 export function registerWealth(): void {
 	registerCommandRegex(/^((?:\s*[\-\+]?\s*\d+(?:,\d{3})*\s*[csgp]p)+)$/i, spUtils);
-	registerCommandRegex(/^\s*(?:starting|character)\s*wealth\s*(\d+(?:st|nd|rd|th)?)?\s*$/i, startingWealth);
 	registerCommandRegex(/^\s*income\s*earned\s*(\d{1,2})?\s*(trained|expert|master|legendary|t|e|m|l)?\s*$/i, incomeEarnedA);
 	registerCommandRegex(/^\s*income\s*earned\s*(trained|expert|master|legendary|t|e|m|l)\s*(\d{1,2})\s*$/i, incomeEarnedB);
 }

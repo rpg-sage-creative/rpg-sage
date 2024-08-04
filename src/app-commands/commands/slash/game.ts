@@ -5,7 +5,7 @@ import type { SlashCommand } from "../../types.js";
 function getCreateUpdateOptions(isUpdate: boolean) {
 	const options = [
 		{ name:"name", isRequired:!isUpdate },
-		{ name:"system", description:"Game System, ex: PF2e or DnD5e", choices:getEnumKeys(GameType) },
+		{ name:"system", description:"Game System, ex: PF2e, SF2e, or DnD5e", choices:getEnumKeys(GameType) },
 		{ name:"ic-channel", description:"In Character Channel", isChannel:true },
 		{ name:"ooc-channel", description:"Out of Character Channel", isChannel:true },
 		{ name:"gm-channel", description:"GM Only Channel", isChannel:true },

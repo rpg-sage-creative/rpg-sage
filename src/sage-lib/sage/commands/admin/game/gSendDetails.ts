@@ -118,12 +118,12 @@ function gameDetailsAppendDice(renderableContent: RenderableContent, game: Game)
 	const server = game.server;
 	renderableContent.append(`<b>Default Dice Options</b>`);
 
-	if (game.gameSystemType === GameSystemType.PF2e) {
+	if ([GameSystemType.DnD5e, GameSystemType.PF2e, GameSystemType.SF2e].includes(game.gameSystemType ?? GameSystemType.None)) {
 		const diceCritMethodType: keyof typeof DiceCritMethodType | undefined = <keyof typeof DiceCritMethodType>DiceCritMethodType[game.diceCritMethodType!];
 		const inheritedDiceCritMethodType = DiceCritMethodType[server.diceCritMethodType ?? DiceCritMethodType.TimesTwo];
-		renderableContent.append(`[spacer]<b>Crit Math</b> ${diceCritMethodType ?? `<i>inherited (${inheritedDiceCritMethodType})</i>`}`);
+		renderableContent.append(`[spacer]<b>Crit Method</b> ${diceCritMethodType ?? `<i>inherited (${inheritedDiceCritMethodType})</i>`}`);
 	} else {
-		renderableContent.append(`[spacer]<b>Crit Math</b> <i>currently only available for PF2e</i>`);
+		renderableContent.append(`[spacer]<b>Crit Method</b> <i>only for PF2e, SF2e, and DnD5e</i>`);
 	}
 
 	const diceOutputType: keyof typeof DiceOutputType | undefined = <keyof typeof DiceOutputType>DiceOutputType[game.diceOutputType!];
