@@ -1,5 +1,6 @@
 import { GameSystemType, parseEnum } from "@rsc-sage/types";
 import { type Snowflake } from "@rsc-utils/core-utils";
+import { nth } from "@rsc-utils/number-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { toMod } from "../../sage-dice/common.js";
@@ -129,11 +130,11 @@ function getContent(opts: Options): RenderableContent {
 
 	}else {
 		const dcRow = getByRankTable(opts.rank ?? 1);
-		renderable.append(`## DC by Spell Rank: ${dcRow.rank}`);
+		renderable.append(`## DC by Spell Rank: ${nth(dcRow.rank)}`);
 		renderable.append(`**Base**`, `> DC ${dcRow.dc}`);
 
 		const rarityRow = getAdjustmentTable().find(row => row.rarity === opts.rarity);
-		renderable.append(`**Rarity**`, rarityRow ? `> ${toMod(rarityRow.adjustment)} (${rarityRow.difficulty})` : `> +0 *(common)*`);
+		renderable.append(`**Rarity**`, rarityRow ? `> ${toMod(rarityRow.adjustment)} (${rarityRow.rarity})` : `> +0 *(common)*`);
 
 		renderable.append(`**Final**`, `> DC ${dcRow.dc + (rarityRow?.adjustment ?? 0)}`);
 	}
@@ -197,7 +198,7 @@ function buildForm(userId: Snowflake, selected: Options): ActionRowBuilder<Strin
 	getByRankTable().forEach(row => {
 		rankSelect.addOptions(
 			new StringSelectMenuOptionBuilder()
-				.setLabel(`Spell Rank ${row.rank}`)
+				.setLabel(`Spell Rank ${nth(row.rank)}`)
 				.setValue(String(row.rank))
 				.setDefault(row.rank === (selected.rank ?? 1))
 		);
