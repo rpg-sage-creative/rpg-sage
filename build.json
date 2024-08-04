@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.1",
+"version":"1.7.2",
 "branch":"main",
-"commit":"d73e933f20799ba28d64492a75111fa2f85737a5",
-"commitSubject":"update macro list help",
-"commitTs":1722268384000,
-"commitDate":"2024-07-29-0853",
-"buildTs":1722268419000,
-"buildDate":"2024-07-29-0853",
+"commit":"00c6c4acfbbd09e9177bf050f7941af1a81207a7",
+"commitSubject":"Merge pull request #96 from rpg-sage-creative/sf2e",
+"commitTs":1722806008000,
+"commitDate":"2024-08-04-1413",
+"buildTs":1722806656000,
+"buildDate":"2024-08-04-1424",
 "author":"Randal"
 }
