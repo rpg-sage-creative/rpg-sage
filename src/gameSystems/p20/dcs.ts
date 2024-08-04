@@ -2,19 +2,19 @@ import { GameSystemType, parseEnum } from "@rsc-sage/types";
 import { type Snowflake } from "@rsc-utils/core-utils";
 import { nth } from "@rsc-utils/number-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { toMod } from "../../sage-dice/common.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
-import { createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
+import { createMessageDeleteButton, createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { boundNumber, type BoundedOptions } from "../utils/boundNumber.js";
 
 type Table = "Simple" | "Level" | "Rank";
 type Proficiency = "Untrained" | "Trained" | "Expert" | "Master" | "Legendary";
-type Difficulty = "Incredibly Easy" | "Very Easy" | "Easy" | "Hard" | "Very Hard" | "Incredibly Hard";
-type Rarity = "-" | "Uncommon" | "Rare" | "Unique";
+type Difficulty = "Incredibly Easy" | "Very Easy" | "Easy" | "Normal" | "Hard" | "Very Hard" | "Incredibly Hard";
+type Rarity = "-" | "Common" | "Uncommon" | "Rare" | "Unique";
 type Options = {
 	difficulty?: Difficulty;
 	gameSystemType: GameSystemType;
@@ -102,11 +102,16 @@ function getAdjustmentTable(): AdjustmentItem[] {
 		{ difficulty:"Incredibly Easy", adjustment:-10, rarity:"-" },
 		{ difficulty:"Very Easy", adjustment:-5, rarity:"-" },
 		{ difficulty:"Easy", adjustment:-2, rarity:"-" },
+		{ difficulty:"Normal", adjustment:0, rarity:"Common" },
 		{ difficulty:"Hard", adjustment:2, rarity:"Uncommon" },
 		{ difficulty:"Very Hard", adjustment:5, rarity:"Rare" },
 		{ difficulty:"Incredibly Hard", adjustment:10, rarity:"Unique" }
 	];
 	return rows;
+}
+
+function adjustmentToString(row: AdjustmentItem, key: "difficulty" | "rarity"): string {
+	return `${row[key]} (${toMod(row.adjustment)})`;
 }
 
 /** Generates the renderable content for Character Wealth for the given system and level. */
@@ -120,22 +125,20 @@ function getContent(opts: Options): RenderableContent {
 
 	}else if (opts.table === "Level") {
 		const dcRow = getByLevelTable(opts.level ?? 0);
+		const diffRow = getAdjustmentTable().find(row => row.difficulty === (opts.difficulty ?? "Normal"))!;
+
 		renderable.append(`## DC by Level: ${dcRow.level}`);
 		renderable.append(`**Base**`, `> DC ${dcRow.dc}`);
-
-		const diffRow = getAdjustmentTable().find(row => row.difficulty === opts.difficulty);
-		renderable.append(`**Difficulty**`, diffRow ? `> ${toMod(diffRow.adjustment)} (${diffRow.difficulty})` : `> +0 *(none)*`);
-
+		renderable.append(`**Difficulty**`, `> ${adjustmentToString(diffRow, "difficulty")}`);
 		renderable.append(`**Final**`, `> DC ${dcRow.dc + (diffRow?.adjustment ?? 0)}`);
 
 	}else {
 		const dcRow = getByRankTable(opts.rank ?? 1);
+		const rarityRow = getAdjustmentTable().find(row => row.rarity === (opts.rarity ?? "Common"))!;
+
 		renderable.append(`## DC by Spell Rank: ${nth(dcRow.rank)}`);
 		renderable.append(`**Base**`, `> DC ${dcRow.dc}`);
-
-		const rarityRow = getAdjustmentTable().find(row => row.rarity === opts.rarity);
-		renderable.append(`**Rarity**`, rarityRow ? `> ${toMod(rarityRow.adjustment)} (${rarityRow.rarity})` : `> +0 *(common)*`);
-
+		renderable.append(`**Rarity**`, `> ${adjustmentToString(rarityRow, "rarity")}`);
 		renderable.append(`**Final**`, `> DC ${dcRow.dc + (rarityRow?.adjustment ?? 0)}`);
 	}
 	return renderable;
@@ -160,13 +163,15 @@ function buildForm(userId: Snowflake, selected: Options): ActionRowBuilder<Strin
 	}
 
 	if (selected.table === "Level") {
+		const levelTable = getByLevelTable();
+		const zero = levelTable[0];
 		const levelSelect = new StringSelectMenuBuilder()
 			.setCustomId(`p20-dcs-level`)
-			.setPlaceholder(`Level 0`);
-		getByLevelTable().slice(1).forEach(row => {
+			.setPlaceholder(`Level ${zero.level} (DC ${zero.dc})`);
+		levelTable.slice(1).forEach(row => {
 			levelSelect.addOptions(
 				new StringSelectMenuOptionBuilder()
-					.setLabel(`Level ${row.level}`)
+					.setLabel(`Level ${row.level} (DC ${row.dc})`)
 					.setValue(String(row.level))
 					.setDefault(row.level === selected.level)
 			);
@@ -178,17 +183,24 @@ function buildForm(userId: Snowflake, selected: Options): ActionRowBuilder<Strin
 		getAdjustmentTable().forEach(row => {
 			difficultySelect.addOptions(
 				new StringSelectMenuOptionBuilder()
-					.setLabel(`${row.difficulty}: ${toMod(row.adjustment)}`)
+					.setLabel(`${adjustmentToString(row, "difficulty")}`)
 					.setValue(String(row.difficulty))
 					.setDefault(row.difficulty === selected.difficulty)
 			);
 		});
 
+		const resetButton = new ButtonBuilder()
+			.setCustomId(`p20-dcs-reset`)
+			.setLabel(`Reset`)
+			.setStyle(ButtonStyle.Primary);
+
+		const deleteButton = createMessageDeleteButton(userId, { label:"Delete" });
+
 		return [
 			new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(tableSelect),
 			new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(levelSelect),
 			new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(difficultySelect),
-			createMessageDeleteButtonRow(userId, { label:"Remove DCs Control" })
+			new ActionRowBuilder<ButtonBuilder>().setComponents(resetButton, deleteButton)
 		];
 	}
 
@@ -198,7 +210,7 @@ function buildForm(userId: Snowflake, selected: Options): ActionRowBuilder<Strin
 	getByRankTable().forEach(row => {
 		rankSelect.addOptions(
 			new StringSelectMenuOptionBuilder()
-				.setLabel(`Spell Rank ${nth(row.rank)}`)
+				.setLabel(`Spell Rank ${nth(row.rank)} (DC ${row.dc})`)
 				.setValue(String(row.rank))
 				.setDefault(row.rank === (selected.rank ?? 1))
 		);
@@ -207,27 +219,29 @@ function buildForm(userId: Snowflake, selected: Options): ActionRowBuilder<Strin
 	const raritySelect = new StringSelectMenuBuilder()
 		.setCustomId(`p20-dcs-rarity`)
 		.setPlaceholder(`Optionally Select a Rarity ...`);
-	raritySelect.addOptions(
-		new StringSelectMenuOptionBuilder()
-			.setLabel(`Common: +0`)
-			.setValue("Common")
-	);
 	getAdjustmentTable().forEach(row => {
 		if (row.rarity !== "-") {
 			raritySelect.addOptions(
 				new StringSelectMenuOptionBuilder()
-					.setLabel(`${row.rarity}: ${toMod(row.adjustment)}`)
+					.setLabel(`${adjustmentToString(row, "rarity")}`)
 					.setValue(String(row.rarity))
 					.setDefault(row.rarity === selected.rarity)
 			);
 		}
 	});
 
+	const resetButton = new ButtonBuilder()
+		.setCustomId(`p20-dcs-reset`)
+		.setLabel(`Reset`)
+		.setStyle(ButtonStyle.Primary);
+
+	const deleteButton = createMessageDeleteButton(userId, { label:"Delete" });
+
 	return [
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(tableSelect),
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(rankSelect),
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(raritySelect),
-		createMessageDeleteButtonRow(userId, { label:"Remove DCs Control" })
+		new ActionRowBuilder<ButtonBuilder>().setComponents(resetButton, deleteButton)
 	];
 }
 
@@ -272,12 +286,13 @@ function getSelected(sageInteraction: SageInteraction<StringSelectMenuInteractio
 /** Updates the form when a system or level is changed. */
 async function changeDCs(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
 	sageInteraction.replyStack.defer();
+	const isReset = sageInteraction.customIdMatches(`p20-dcs-reset`);
 	const gameSystemType = parseEnum(GameSystemType, getSelected(sageInteraction, "p20-dcs-game") ?? "PF2e");
 	const table = getSelected<Table>(sageInteraction, "p20-dcs-table") ?? "Simple";
-	const level = getSelected(sageInteraction, "p20-dcs-level", { min:0, max:25, default:0 });
-	const rank = getSelected(sageInteraction, "p20-dcs-rank", { min:1, max:10, default:1 });
-	const difficulty = getSelected<Difficulty>(sageInteraction, "p20-dcs-difficulty");
-	const rarity = getSelected<Rarity>(sageInteraction, "p20-dcs-rarity");
+	const level = isReset ? 0 : getSelected(sageInteraction, "p20-dcs-level", { min:0, max:25, default:0 });
+	const rank = isReset ? 1 : getSelected(sageInteraction, "p20-dcs-rank", { min:1, max:10, default:1 });
+	const difficulty = isReset ? undefined : getSelected<Difficulty>(sageInteraction, "p20-dcs-difficulty");
+	const rarity = isReset ? undefined : getSelected<Rarity>(sageInteraction, "p20-dcs-rarity");
 	const options = { gameSystemType, table, level, rank, difficulty, rarity };
 	const content = getContent(options);
 	const components = buildForm(sageInteraction.authorDid, options);
@@ -286,5 +301,6 @@ async function changeDCs(sageInteraction: SageInteraction<StringSelectMenuIntera
 
 export function registerDCs(): void {
 	registerListeners({ commands:["PF2E|DCs", "SF2E|DCs", "Finder|DCs", "P20|DCs"], handler:showDCs });
-	registerListeners({ commands:["p20-dcs-game", "p20-dcs-table", "p20-dcs-level", "p20-dcs-rank", "p20-dcs-difficulty", "p20-dcs-rarity"], interaction:changeDCs });
+	registerListeners({ commands:["p20-dcs-game", "p20-dcs-table", "p20-dcs-level", "p20-dcs-rank", "p20-dcs-difficulty", "p20-dcs-rarity", `p20-dcs-reset`], interaction:changeDCs });
+
 }
