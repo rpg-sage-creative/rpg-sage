@@ -158,7 +158,7 @@ function buildForm(userId: Snowflake, selected: Options): ActionRowBuilder<Strin
 	if (selected.table === "Simple") {
 		return [
 			new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(tableSelect),
-			createMessageDeleteButtonRow(userId, { label:"Remove DCs Control" })
+			createMessageDeleteButtonRow(userId, { label:"Delete" })
 		];
 	}
 

@@ -182,7 +182,7 @@ function buildForm(userId: Snowflake, selected: { gameSystemType: GameSystemType
 	return [
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(gameSelect),
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(levelSelect),
-		createMessageDeleteButtonRow(userId, { label:"Remove Character Wealth Control" })
+		createMessageDeleteButtonRow(userId, { label:"Delete" })
 	];
 }
 
