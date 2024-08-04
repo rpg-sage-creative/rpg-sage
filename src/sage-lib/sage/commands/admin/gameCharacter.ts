@@ -1,7 +1,7 @@
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { gcCmdAutoOff } from "./GameCharacter/gcCmdAutoOff.js";
 import { gcCmdAutoOn } from "./GameCharacter/gcCmdAutoOn.js";
-import { gcCmdCreate, registerCharModal } from "./GameCharacter/gcCmdCreate.js";
+import { gcCmdCreate } from "./GameCharacter/gcCmdCreate.js";
 import { gcCmdDelete } from "./GameCharacter/gcCmdDelete.js";
 import { gcCmdDetails } from "./GameCharacter/gcCmdDetails.js";
 import { gcCmdList } from "./GameCharacter/gcCmdList.js";
@@ -21,7 +21,6 @@ export function registerGameCharacter(): void {
 	registerListeners({ commands:["pc|auto|on", "gm|auto|on", "npc|auto|on", "minion|auto|on", "companion|auto|on"], message:gcCmdAutoOn });
 	registerListeners({ commands:["pc|auto|off", "gm|auto|off", "npc|auto|off", "minion|auto|off", "companion|auto|off"], message:gcCmdAutoOff });
 	// registerListeners({ commands:["pc-link", "npc-link", "companion-link", "minion-link"], message:characterLink });
-	registerCharModal();
 }
 
 // async function characterLink(sageMessage: SageMessage): Promise<void> {
