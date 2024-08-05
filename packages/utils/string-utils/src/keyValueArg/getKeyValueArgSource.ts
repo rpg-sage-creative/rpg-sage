@@ -7,7 +7,7 @@ import { getWordCharacterRegexSource } from "../regex/getWordCharacterRegexSourc
  * @todo redo this logic to enforce a strict no space policy.
  */
 export function getKeyValueArgSource(key?: string): string {
-	key = key ?? getWordCharacterRegexSource({ allowDotNotation:true, quantifier:"+" });
+	key = key ?? getWordCharacterRegexSource({ allowDashes:true, allowPeriods:true, quantifier:"+" });
 	const quotedRegexSource = getQuotedRegexSource({ lengthQuantifier:"*" });
 	return `${key}=(?:${quotedRegexSource}|\\S+)`;
 }

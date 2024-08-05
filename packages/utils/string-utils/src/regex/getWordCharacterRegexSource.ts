@@ -1,8 +1,10 @@
 import type { RegExpQuantifier } from "./RegExpQuantifier.js";
 
 type Options = {
+	/** determines if dashes are allowed */
+	allowDashes?: boolean;
 	/** determines if periods are allowed */
-	allowDotNotation?: boolean;
+	allowPeriods?: boolean;
 	/** how many to capture */
 	quantifier?: RegExpQuantifier;
 };
@@ -19,7 +21,8 @@ export function getWordCharacterRegexSource(): string;
 export function getWordCharacterRegexSource(options: Options): string;
 
 export function getWordCharacterRegexSource(options?: Options): string {
-	const period = options?.allowDotNotation ? "\\." : "";
+	const dash = options?.allowDashes ? "\\-" : "";
+	const period = options?.allowPeriods ? "\\." : "";
 	const quantifier = options?.quantifier ?? "";
-	return `[\\w\\pL\\pN${period}]${quantifier}`;
+	return `[\\w\\pL\\pN${dash}${period}]${quantifier}`;
 }
