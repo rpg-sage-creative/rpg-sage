@@ -4,7 +4,7 @@ import type { SageCommand } from "../../../../model/SageCommand";
 
 type CharId = Snowflake | UUID | string;
 
-export async function getCharToEdit(sageCommand: SageCommand, charId: CharId): Promise<GameCharacter | undefined> {
+export async function getCharToEdit(sageCommand: SageCommand, charId: CharId, compId?: CharId): Promise<GameCharacter | undefined> {
 	const game = sageCommand.game;
 	const gameId = game?.id;
 	const userId = sageCommand.authorDid;
