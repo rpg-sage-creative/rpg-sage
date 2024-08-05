@@ -78,7 +78,7 @@ export class SageInteraction<T extends DInteraction = any>
 	/** Splits the command on | and calls isCommand with the correct number of args. */
 	public commandMatches(command: string): boolean {
 		const [one, two] = command.split("|");
-		if (two) this.isCommand(one, two);
+		if (two) return this.isCommand(one, two);
 		return this.isCommand(one);
 	}
 
@@ -104,7 +104,7 @@ export class SageInteraction<T extends DInteraction = any>
 			commandValues[0] = commandValues[0].replace(/^sage-(dev-|beta-)?/i, "");
 		}
 
-		if (subCommand) {
+		if (commandValues.length === 2 || subCommandLower) {
 			return commandValues[0] === subCommandLower
 				&& commandValues[1] === commandLower;
 		}
