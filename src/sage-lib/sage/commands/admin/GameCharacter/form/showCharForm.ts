@@ -8,10 +8,21 @@ import type { SageCommand } from "../../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";
 import { createCustomId, parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
-import { showCharImagesModal } from "./showCharImagesModal.js";
-import { showCharNamesModal } from "./showCharNamesModal.js";
-import { showCharStatsModal } from "./showCharStatsModal.js";
+import { registerCharImages, showCharImagesModal } from "./showCharImagesModal.js";
+import { registerCharNames, showCharNamesModal } from "./showCharNamesModal.js";
+import { registerCharStats, showCharStatsModal } from "./showCharStatsModal.js";
 import type { CharId, CharModalAction, CustomIdParts } from "./types.js";
+import { registerListeners } from "../../../../../discord/handlers/registerListeners.js";
+
+/*
+1. prompt modal dialog input
+2. handle modal dialog input
+2. save input to /games/game_id/users/user_id/characters/nil_snowflake.json
+3. prompt confirmation
+4. handle confirmation
+5. create character
+6. delete tmp character
+*/
 
 type SageButtonInteraction = SageInteraction<ButtonInteraction>;
 type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
@@ -185,5 +196,9 @@ async function handleCharFormAction(sageInteraction: SageInteraction, idParts: C
 }
 
 export function registerCharForm(): void {
+	registerListeners({ commands:["pc"], message:showCharForm });
 	registerInteractionListener(isCharFormAction, handleCharFormAction);
+	registerCharNames();
+	registerCharImages();
+	registerCharStats();
 }
