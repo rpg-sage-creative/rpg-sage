@@ -14,7 +14,7 @@ export async function getCharToEdit(sageCommand: SageCommand, charId: CharId, co
 		return char;
 	}
 
-	const charOrShell = (game ?? sageCommand.sageUser).findCharacterOrCompanion(charId);
+	const charOrShell = (game ?? sageCommand.sageUser).findCharacterOrCompanion(compId ?? charId);
 	if (charOrShell) {
 		return "game" in charOrShell ? charOrShell.game : charOrShell;
 	}
