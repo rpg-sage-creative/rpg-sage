@@ -1,5 +1,5 @@
-import { debug } from "@rsc-utils/core-utils";
 import type { Awaitable } from "@rsc-utils/core-utils";
+import { debug } from "@rsc-utils/core-utils";
 import type { SageCommand } from "../../sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage/model/SageInteraction.js";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
@@ -33,8 +33,10 @@ type Args = {
 };
 
 function createInteractionTester(command: Command) {
-	return (cmd: SageInteraction) => cmd.customIdMatches(command)
-		|| (typeof(command) === "string" && cmd.commandMatches(command));
+	if (typeof(command) === "string") {
+		return (cmd: SageInteraction) => cmd.customIdMatches(command) || cmd.commandMatches(command);
+	}
+	return (cmd: SageInteraction) => cmd.customIdMatches(command);
 }
 
 function commandToMatcher(command: Command): RegExp {
