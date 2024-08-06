@@ -3,16 +3,18 @@ import { EmbedBuilder } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type MessagePayloadOption } from "discord.js";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
-import { GameCharacter } from "../../../../model/GameCharacter.js";
+import { registerListeners } from "../../../../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";
 import { createCustomId, parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
+import { getImagesEmbed } from "./getImagesEmbed.js";
+import { getNamesEmbed } from "./getNamesEmbed.js";
+import { getStatsEmbed } from "./getStatsEmbed.js";
 import { registerCharImages, showCharImagesModal } from "./showCharImagesModal.js";
 import { registerCharNames, showCharNamesModal } from "./showCharNamesModal.js";
 import { registerCharStats, showCharStatsModal } from "./showCharStatsModal.js";
 import type { CharId, CharModalAction, CustomIdParts } from "./types.js";
-import { registerListeners } from "../../../../../discord/handlers/registerListeners.js";
 
 /*
 1. prompt modal dialog input
@@ -78,26 +80,6 @@ function buildCharForm(sageCommand: SageCommand, charId?: CharId, compId?: CharI
 	return components;
 }
 
-function buildFormEmbed(char: GameCharacter): EmbedBuilder {
-	const embed = new EmbedBuilder();
-	embed.setTitle(char.name);
-	if (char.avatarUrl) embed.setThumbnail(char.avatarUrl);
-	embed.appendDescription(`**Nickname (aka)** ${char.aka ?? "*none*"}`, "\n");
-	embed.appendDescription(`**Alias** ${char.alias ?? "*none*"}`, "\n");
-	const { displayNameTemplate } = char;
-	const displayName = char.toDisplayName();
-	if (displayNameTemplate) {
-		embed.appendDescription(`**Display Name**`, "\n");
-		embed.appendDescription(`- Template: ${"`" + displayNameTemplate + "`"}`, "\n");
-		embed.appendDescription(`- Output: ${displayName}`, "\n");
-	}else {
-		embed.appendDescription(`**Display Name**`, "\n");
-		embed.appendDescription(`- Template: *none*`, "\n");
-		embed.appendDescription(`- Output: ${displayName}`, "\n");
-	}
-	return embed;
-}
-
 export async function showCharForm(sageCommand: SageCommand, charId?: CharId): Promise<void> {
 	sageCommand.replyStack.defer();
 
@@ -115,8 +97,10 @@ export async function showCharForm(sageCommand: SageCommand, charId?: CharId): P
 	let embeds: EmbedBuilder[] = [];
 	let options: MessagePayloadOption | undefined;
 	if (char) {
-		if (char.tokenUrl) options = { avatarURL:char.tokenUrl };
-		embeds.push(buildFormEmbed(char));
+		// if (char.tokenUrl) options = { avatarURL:char.tokenUrl };
+		embeds.push(getNamesEmbed(char));
+		embeds.push(getImagesEmbed(char));
+		embeds.push(getStatsEmbed(char));
 	}
 	if (message?.components?.find(row => row.components.find(comp => parseCustomId(comp.customId)))) {
 		await message.edit({ components, content, embeds, options });
