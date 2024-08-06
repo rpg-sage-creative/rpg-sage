@@ -1,5 +1,5 @@
 import { isNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
-import { ModalBuilder } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues, ModalBuilder } from "@rsc-utils/discord-utils";
 import { createCustomId } from "./customId.js";
 import type { CharId, CharModalAction } from "./types.js";
 
@@ -22,8 +22,8 @@ export function createCharModal(modalData: CharModalData): ModalBuilder {
 			? modal.addParagraph({ required })
 			: modal.addShortText({ maxLength, required });
 		input.setCustomId(customId)
-			.setLabel(label)
-			.setValue(value ?? "");
+			.setLabel(label.slice(0, DiscordMaxValues.modal.field.labelLength))
+			.setValue(value.slice(0, DiscordMaxValues.modal.field.valueLength) ?? "");
 	});
 	return modal;
 }
