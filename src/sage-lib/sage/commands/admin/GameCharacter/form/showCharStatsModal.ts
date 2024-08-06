@@ -1,3 +1,4 @@
+import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 import { parseKeyValueArgs } from "@rsc-utils/string-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
@@ -8,7 +9,6 @@ import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
 import { showCharForm } from "./showCharForm.js";
 import type { CustomIdParts } from "./types.js";
-import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 
 export type CharStatsForm = {
 	conditions: string;
@@ -20,7 +20,7 @@ export type CharStatsForm = {
 
 export function showCharStatsModal(sageInteraction: SageInteraction, char: GameCharacter): Promise<void> {
 	const regex = /^(level|hp|maxhp|conditions)$/i;
-	const stats = char.notes.getStats()
+	const other = char.notes.getStats()
 		.filter(stat => !regex.test(stat.title))
 		.map(stat => `${stat.title}="${stat.note}"`)
 		.join("\n");
@@ -34,7 +34,7 @@ export function showCharStatsModal(sageInteraction: SageInteraction, char: GameC
 			["hp", "Current Hit Points", char.getStat("hp") ?? ""],
 			["maxHp", "Max Hit Points", char.getStat("maxHp") ?? ""],
 			["conditions", "Conditions, ex: prone, stunned 1, dying", char.getStat("conditions") ?? ""],
-			["other", `Other Stats (as key="value" pairs)`, stats, "P"],
+			["other", `Other Stats (as key="value" pairs)`, other, "P"],
 		]
 	});
 	return sageInteraction.interaction.showModal(modal);
