@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.3",
+"version":"1.7.4",
 "branch":"main",
-"commit":"d74e9d9d56ce06bd2388532e55a199efdb216b09",
-"commitSubject":"optimize createInteractionTester",
-"commitTs":1722890556000,
-"commitDate":"2024-08-05-1342",
-"buildTs":1722890693000,
-"buildDate":"2024-08-05-1344",
+"commit":"8739d502aac695edaa5e83300d8f2c798156f2e9",
+"commitSubject":"dice math fix",
+"commitTs":1722975458000,
+"commitDate":"2024-08-06-1317",
+"buildTs":1722975557000,
+"buildDate":"2024-08-06-1319",
 "author":"Randal"
 }

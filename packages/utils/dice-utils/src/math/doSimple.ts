@@ -8,7 +8,7 @@ function getSimpleRegex(): RegExp {
 
 /** Attempts to do the math and returns true if the result was not null. */
 export function isSimple(value: string): boolean {
-	return doSimple(value) !== null;
+	return doSimple(value) !== undefined;
 }
 
 /**
@@ -28,7 +28,18 @@ export function doSimple(value: string): string | undefined {
 				// change power symbol
 				[/\^/g, "**"]
 			]);
-			return String(eval(value));
+			const outValue = eval(value);
+			// if is possible to eval to undefined, so default to the input value
+			if (outValue === null || outValue === undefined || isNaN(outValue)) {
+				return undefined;
+			}
+			// if the evaluated number is a negative, it will start with -, allowing math/parsing to continue
+			// therefore, we should leave a + if a sign was present before the eval() call and the result is positive
+			const outStringValue = String(outValue).trim();
+			const signRegex = /^[+-]/;
+			return signRegex.test(value.trim()) && !signRegex.test(outStringValue)
+				? `+${outStringValue}`
+				: outStringValue;
 		}
 	} catch (ex) {
 		/* ignore */
