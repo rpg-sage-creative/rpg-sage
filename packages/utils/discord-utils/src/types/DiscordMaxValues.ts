@@ -46,6 +46,7 @@ export const DiscordMaxValues = {
 		}
 	},
 
+	/** modal popups */
 	modal: {
 		field: {
 			count: 5,
