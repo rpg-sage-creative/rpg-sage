@@ -30,10 +30,10 @@ export function showCharStatsModal(sageInteraction: SageInteraction, char: GameC
 		compId: char.isCompanionOrMinion ? char.id : NIL_SNOWFLAKE,
 		action: "SubmitStats",
 		fields: [
-			["level", "Character Level", char.getStat("level") ?? ""],
-			["hp", "Current Hit Points", char.getStat("hp") ?? ""],
+			["level", "Level", char.getStat("level") ?? ""],
+			["hp", "Hit Points", char.getStat("hp") ?? ""],
 			["maxHp", "Max Hit Points", char.getStat("maxHp") ?? ""],
-			["conditions", "Conditions, ex: prone, stunned 1, dying", char.getStat("conditions") ?? ""],
+			["conditions", "Conditions (ex: prone, stunned 1, dying)", char.getStat("conditions") ?? ""],
 			["other", `Other Stats (as key="value" pairs)`, other, "P"],
 		]
 	});

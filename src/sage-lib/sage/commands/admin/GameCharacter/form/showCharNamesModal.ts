@@ -23,9 +23,9 @@ export function showCharNamesModal(sageInteraction: SageInteraction, char: GameC
 		compId: char.isCompanionOrMinion ? char.id : NIL_SNOWFLAKE,
 		action: "SubmitNames",
 		fields: [
-			["name", "Character Name", char.name, DiscordMaxValues.usernameLength, true],
-			["aka", "Character Nickname (aka)", char.aka ?? "", DiscordMaxValues.usernameLength],
-			["alias", "Character Alias (used for RPG Sage commands)", char.alias ?? "", DiscordMaxValues.usernameLength],
+			["name", "Name", char.name, DiscordMaxValues.usernameLength, true],
+			["aka", "Nickname (aka)", char.aka ?? "", DiscordMaxValues.usernameLength],
+			["alias", "Alias (used for RPG Sage commands)", char.alias ?? "", DiscordMaxValues.usernameLength],
 			["displayNameTemplate", "Display Name Template", char.displayNameTemplate ?? "", DiscordMaxValues.usernameLength]
 		]
 	});

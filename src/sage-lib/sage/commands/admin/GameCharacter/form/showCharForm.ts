@@ -1,5 +1,5 @@
 import { debug, isNilSnowflake, NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
-import { EmbedBuilder } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues, EmbedBuilder, getTotalEmbedLength, pushIfValid } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type MessagePayloadOption } from "discord.js";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
@@ -8,9 +8,9 @@ import type { SageCommand } from "../../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";
 import { createCustomId, parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
-import { getImagesEmbed } from "./getImagesEmbed.js";
-import { getNamesEmbed } from "./getNamesEmbed.js";
-import { getStatsEmbed } from "./getStatsEmbed.js";
+import { getImagesContent } from "./getImagesContent.js";
+import { getNamesContent } from "./getNamesContent.js";
+import { getStatsContent } from "./getStatsContent.js";
 import { registerCharImages, showCharImagesModal } from "./showCharImagesModal.js";
 import { registerCharNames, showCharNamesModal } from "./showCharNamesModal.js";
 import { registerCharStats, showCharStatsModal } from "./showCharStatsModal.js";
@@ -97,10 +97,41 @@ export async function showCharForm(sageCommand: SageCommand, charId?: CharId): P
 	let embeds: EmbedBuilder[] = [];
 	let options: MessagePayloadOption | undefined;
 	if (char) {
-		// if (char.tokenUrl) options = { avatarURL:char.tokenUrl };
-		embeds.push(getNamesEmbed(char));
-		embeds.push(getImagesEmbed(char));
-		embeds.push(getStatsEmbed(char));
+		content = getNamesContent(char);
+
+		// images
+		const images = getImagesContent(char);
+		if (images.isEmpty) {
+			content += `\n${images.content}`;
+		}else {
+			pushIfValid(embeds, ...images.embeds);
+		}
+
+		// stats
+		const stats = getStatsContent(char, getTotalEmbedLength(embeds));
+		if (stats.isEmpty) {
+			content += `\n## Stats\n> *none*`;
+		}else {
+			let contentStats = false;
+			const { common, other } = stats;
+			if (!common.isEmpty) {
+				if (content.length + common.content.length + 1 < DiscordMaxValues.message.contentLength) {
+					content += `\n## Stats`;
+					contentStats = true;
+					content += `\n${common.content}`;
+				}else {
+					pushIfValid(embeds, ...common.embeds);
+				}
+			}
+			if (!other.isEmpty) {
+				if (content.length + other.content.length + 1 < DiscordMaxValues.message.contentLength) {
+					if (!contentStats) content += `\n## Stats`;
+					content += `\n${other.content}`;
+				}else {
+					pushIfValid(embeds, ...other.embeds);
+				}
+			}
+		}
 	}
 	if (message?.components?.find(row => row.components.find(comp => parseCustomId(comp.customId)))) {
 		await message.edit({ components, content, embeds, options });
