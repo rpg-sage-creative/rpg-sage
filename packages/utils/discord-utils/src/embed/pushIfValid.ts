@@ -4,15 +4,21 @@ import type { EmbedBuilder } from "./EmbedBuilder.js";
 import { getEmbedLength } from "./getEmbedLength.js";
 import { getTotalEmbedLength } from "./getTotalEmbedLength.js";
 
-/** Pushes an embed to an array only if the resulting array is within allowed embed length limits. */
-export function pushIfValid(embeds: EmbedBuilder[], embed: Optional<EmbedBuilder>): boolean {
-	if (embed) {
-		const currentLength = getTotalEmbedLength(embeds);
-		const length = getEmbedLength(embed);
-		if (currentLength + length < DiscordMaxValues.embed.totalLength) {
-			embeds.push(embed);
-			return true;
+/**
+ * Pushes an embed to an array only if the resulting array is within allowed embed length limits.
+ * @returns number of items pushed
+ */
+export function pushIfValid(array: EmbedBuilder[], ...embeds: Optional<EmbedBuilder>[]): number {
+	let pushed = 0;
+	for (const embed of embeds) {
+		if (embed && array.length < DiscordMaxValues.message.embedCount) {
+			const currentLength = getTotalEmbedLength(array);
+			const length = getEmbedLength(embed);
+			if (currentLength + length < DiscordMaxValues.embed.totalLength) {
+				array.push(embed);
+				pushed++;
+			}
 		}
 	}
-	return false;
+	return pushed;
 }
