@@ -583,10 +583,14 @@ async function handleReimportError(sageCommand: SageMessage, errorMessage: strin
 
 export async function handlePathbuilder2eReimport(sageCommand: SageMessage, message: Message, characterId: string): Promise<void> {
 	const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
-	const updatedName = sageCommand.args.getString("name") ?? undefined;
-	const refreshResult = await PathbuilderCharacter.refresh(characterId, pathbuilderId, updatedName);
+	const newName = sageCommand.args.getString("name") ?? undefined;
+	const pdfUrl = sageCommand.args.getUrl("pdf") ?? undefined;
+	const pdfAttachment = message.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
+	const refreshResult = await PathbuilderCharacter.refresh({ characterId, pathbuilderId, newName, pdfUrl, pdfAttachment });
 	switch (refreshResult) {
 		case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
+		case "INVALID_PDF_URL": return handleReimportError(sageCommand, "The given PDF url is invalid.");
+		case "INVALID_PDF_ATTACHMENT": return handleReimportError(sageCommand, "The attached PDF is invalid.");
 		case "MISSING_JSON_ID": return handleReimportError(sageCommand, "You are missing a 'Export JSON' id.");
 		case "INVALID_JSON_ID": return handleReimportError(sageCommand, "Unable to fetch the 'Export JSON' id.");
 		case "INVALID_CHARACTER_NAME": return handleReimportError(sageCommand, "The character names do not match!");

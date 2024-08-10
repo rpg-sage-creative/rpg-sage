@@ -1,9 +1,11 @@
 import { Collection } from "@rsc-utils/array-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
 import { debug, errorReturnFalse, errorReturnNull, getDataRoot, randomSnowflake, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
-import { fileExistsSync, getJson, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
+import { fileExistsSync, getJson, PdfCacher, readJsonFile, readJsonFileSync, writeFile, type PdfJson } from "@rsc-utils/io-utils";
 import { addCommas, nth } from "@rsc-utils/number-utils";
-import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
+import { capitalize, StringMatcher } from "@rsc-utils/string-utils";
+import type { Attachment } from "discord.js";
+import { jsonToCharacter } from "../../../gameSystems/p20/sf2e/jsonToCharacter.js";
 import { Skill } from "../../../gameSystems/p20/Skill.js";
 import { ProficiencyType, SizeType } from "../../../gameSystems/p20/types.js";
 import type { TMacro } from "../../../sage-lib/sage/model/types.js";
@@ -1109,20 +1111,43 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	public async save(): Promise<boolean> {
 		return PathbuilderCharacter.saveCharacter(this);
 	}
-	public static async refresh(characterId: string, id?: number, newName?: string): Promise<RefreshResult> {
+	public static async refresh(options: { characterId:string; pathbuilderId?:number; newName?:string; pdfUrl?:string; pdfAttachment?:Attachment }): Promise<RefreshResult> {
+		const { characterId, pathbuilderId, newName, pdfUrl, pdfAttachment } = options;
 		const oldChar = await this.loadCharacter(characterId);
 		if (!oldChar) {
 			return "INVALID_CHARACTER_ID";
 		}
 
-		const exportJsonId = id ?? oldChar.exportJsonId;
-		if (!exportJsonId) {
-			return "MISSING_JSON_ID";
+		let newChar: TPathbuilderCharacter | undefined;
+
+		if (pdfUrl) {
+			const json = await PdfCacher.read<PdfJson>(pdfUrl);
+			if (json) {
+				newChar = jsonToCharacter(json).toJSON();
+			}else {
+				return "INVALID_PDF_URL";
+			}
 		}
 
-		const newChar = await this.fetchCore(exportJsonId);
+		if (!newChar && pdfAttachment) {
+			const json = await PdfCacher.read<PdfJson>(pdfAttachment.url);
+			if (json) {
+				newChar = jsonToCharacter(json).toJSON();
+			}else {
+				return "INVALID_PDF_ATTACHMENT";
+			}
+		}
+
 		if (!newChar) {
-			return "INVALID_JSON_ID";
+			const exportJsonId = pathbuilderId ?? oldChar.exportJsonId;
+			if (!exportJsonId) {
+				return "MISSING_JSON_ID";
+			}
+
+			newChar = await this.fetchCore(exportJsonId);
+			if (!newChar) {
+				return "INVALID_JSON_ID";
+			}
 		}
 
 		if (oldChar.name !== newChar.name && newChar.name !== newName) {
@@ -1139,4 +1164,4 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 	//#endregion
 }
-type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | true | false;
+type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | "INVALID_PDF_URL" | "INVALID_PDF_ATTACHMENT" | true | false;
