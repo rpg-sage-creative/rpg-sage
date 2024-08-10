@@ -83,12 +83,12 @@ function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	}
 }
 
-async function attachCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+export async function attachCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, attachmentName: string, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.getDescription()).join("");
 	const buffer = Buffer.from(raw, "utf-8");
-	const attachment = new AttachmentBuilder(buffer, { name:`pathbuilder2e-${pathbuilderId}.txt` });
+	const attachment = new AttachmentBuilder(buffer, { name:`${attachmentName}.txt` });
 	const message = await channel?.send({
-		content: `Attaching Pathbuilder2e Character: ${character.name} (${pathbuilderId})`,
+		content: `Attaching Character: ${character.name}`,
 		files:[attachment]
 	}).catch(errorReturnNull);
 	if (pin && message?.pinnable) {
@@ -107,7 +107,7 @@ async function notifyOfSlicedMacros(sageCache: SageCache, character: Pathbuilder
 	}
 }
 
-async function postCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+export async function postCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	setMacroUser(character, sageCache.user);
 	const saved = await character.save();
 	if (saved) {
@@ -554,7 +554,7 @@ export async function handlePathbuilder2eImport(sageCommand: SageCommand): Promi
 	const pin = sageCommand.args.getBoolean("pin") ?? false;
 	const attach = sageCommand.args.getBoolean("attach") ?? false;
 	if (attach) {
-		await attachCharacter(sageCommand.sageCache, channel ?? user, pathbuilderId, pathbuilderChar, pin);
+		await attachCharacter(sageCommand.sageCache, channel ?? user, `pathbuilder2e-${pathbuilderId}`, pathbuilderChar, pin);
 	}else {
 		await postCharacter(sageCommand.sageCache, channel ?? user, pathbuilderChar, pin);
 	}
