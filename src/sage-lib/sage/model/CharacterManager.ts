@@ -93,15 +93,6 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		return name ? this.find(character => character.matches(name)) : undefined;
 	}
 
-	/** Returns the first character that matches the given name. */
-	public findByNameOrIndex(nameOrIndex: Optional<string>): GameCharacter | undefined {
-		const index = +(nameOrIndex ?? 0);
-		if (isNaN(index)) {
-			return this.findByName(nameOrIndex);
-		}
-		return this[index];
-	}
-
 	/**
 	 * Finds character by user and name, if both given.
 	 * If only id is given, the first character for that user is returned.
@@ -188,7 +179,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		return CharactersMatch.match(this, input);
 	}
 
-	public getAutoCharacter(autoChannelData: {channelDid:Snowflake;userDid:Snowflake;}): GameCharacter | null {
+	public getAutoCharacter(autoChannelData: {channelDid:Snowflake;userDid:Snowflake;}): GameCharacter | undefined {
 		for (const char of this) {
 			if (char.hasAutoChannel(autoChannelData)) {
 				return char;
@@ -199,7 +190,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 				}
 			}
 		}
-		return null;
+		return undefined;
 	}
 
 	//#region IHasSave

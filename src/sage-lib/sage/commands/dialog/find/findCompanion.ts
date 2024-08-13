@@ -1,23 +1,38 @@
-import { isBlank } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
-import type { SageMessage } from "../../../model/SageMessage.js";
+import type { SageCommand } from "../../../model/SageCommand.js";
 
-export function findCompanion(sageMessage: SageMessage, companionNameOrIndex: Optional<string>): GameCharacter | undefined {
-	const grabFirst = isBlank(companionNameOrIndex);
-	if (sageMessage.gameChannel) {
-		const companions = sageMessage.playerCharacter?.companions;
-		if (companions) {
-			return grabFirst ? companions.first() : companions.findByNameOrIndex(companionNameOrIndex);
-		}
-	} else if (sageMessage.allowDialog) {
-		// Currently only allow a single PC per server outside of games
-		const playerCharacters = sageMessage.sageUser.playerCharacters;
-		for (const playerCharacter of playerCharacters) {
-			const companions = playerCharacter.companions;
-			const companion = grabFirst ? companions.first() : companions.findByNameOrIndex(companionNameOrIndex);
-			if (companion) return companion;
-		}
+export function findCompanion(sageCommand: SageCommand, name: Optional<string>): GameCharacter | undefined {
+	if (!sageCommand.allowDialog) return undefined;
+
+	const { authorDid, game, isPlayer, sageUser } = sageCommand;
+	if (game && !isPlayer) return undefined;
+
+	const gamePcs = game?.playerCharacters;
+	const userPcs = sageUser.playerCharacters;
+
+	let char: GameCharacter | undefined;
+
+	// try by given name/index first
+	if (isNotBlank(name)) {
+		char = gamePcs?.findCompanion(authorDid, name)
+			?? userPcs.findCompanion(name);
 	}
-	return undefined;
+
+	// try grabbing auto character
+	if (!char) {
+		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:authorDid };
+		char = gamePcs?.getAutoCharacter(autoChannel)
+			?? userPcs.getAutoCharacter(autoChannel);
+	}
+
+	// else grab their first
+	if (!char) {
+		char = gamePcs
+			? gamePcs.findByUser(authorDid)?.companions.first()
+			: userPcs.first()?.companions.first()
+	}
+
+	return char;
 }
