@@ -30,13 +30,8 @@ export type GetStatPrefix = "" | "dc" | "mod" | "prof" | "proficiency";
 export const STRENGTH = "Strength", DEXTERITY = "Dexterity", CONSTITUTION = "Constitution", INTELLIGENCE = "Intelligence", WISDOM = "Wisdom", CHARISMA = "Charisma";
 export const ABILITIES: TAbility[] = [STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA];
 export type TAbility = "Strength" | "Dexterity" | "Constitution" | "Intelligence" | "Wisdom" | "Charisma";
+export type TAbil = "Str" | "Dex" | "Con" | "Int" | "Wis" | "Cha";
 //#endregion Abilities
-
-//#region Alignments
-export const LG = "LG", NG = "NG", CG = "CG", LN = "LN", N = "N", CN = "CN", LE = "LE", NE = "NE", CE = "CE";
-export const ALIGNMENTS: TAlignment[] = [LG, NG, CG, LN, N, CN, LE, NE, CE];
-export type TAlignment = "LG" | "NG" | "CG" | "LN" | "N" | "CN" | "LE" | "NE" | "CE";
-//#endregion Alignments
 
 //#region Magic Traditions
 export const ARCANE = "Arcane", DIVINE = "Divine", OCCULT = "Occult", PRIMAL = "Primal";

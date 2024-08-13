@@ -83,12 +83,12 @@ function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	}
 }
 
-async function attachCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, pathbuilderId: number, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+export async function attachCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, attachmentName: string, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.getDescription()).join("");
 	const buffer = Buffer.from(raw, "utf-8");
-	const attachment = new AttachmentBuilder(buffer, { name:`pathbuilder2e-${pathbuilderId}.txt` });
+	const attachment = new AttachmentBuilder(buffer, { name:`${attachmentName}.txt` });
 	const message = await channel?.send({
-		content: `Attaching Pathbuilder2e Character: ${character.name} (${pathbuilderId})`,
+		content: `Attaching Character: ${character.name}`,
 		files:[attachment]
 	}).catch(errorReturnNull);
 	if (pin && message?.pinnable) {
@@ -107,19 +107,63 @@ async function notifyOfSlicedMacros(sageCache: SageCache, character: Pathbuilder
 	}
 }
 
-async function postCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: PathbuilderCharacter, message: Message): Promise<boolean> {
+	const { tokenUrl, avatarUrl } = sageCommand.isSageMessage() ? sageCommand.args.getCharacterOptions({}) ?? { } : { } as { tokenUrl?:string; avatarUrl?:string; };
+
+	// get or create character
+	const owner = sageCommand.game ?? sageCommand.sageUser;
+	const existing = owner.findCharacterOrCompanion(pbChar.name);
+	const oChar = existing
+		? ("game" in existing ? existing.game : existing)
+		: await owner.playerCharacters.addCharacter({
+			avatarUrl,
+			id: pbChar.id as Snowflake,
+			name: pbChar.name,
+			pathbuilderId: pbChar.id,
+			tokenUrl,
+			userDid: pbChar.userDid as Snowflake
+		});
+
+	// if something went wrong, fail out
+	if (!oChar) return false;
+
+	// link gamecharacter to pbcharacter
+	pbChar.characterId = oChar.id;
+	pbChar.messageId = message.id;
+	pbChar.userDid = oChar.userDid;
+	const pbCharSaved = await pbChar.save();
+
+	if (pbCharSaved) {
+		await updateSheet(sageCommand.sageCache, pbChar, message);
+	}
+
+	// newly created character should already be linked
+	if (oChar.pathbuilderId === pbChar.id) {
+		return pbCharSaved;
+	}
+
+	// link pbcharacter to gamecharacter
+	oChar.pathbuilderId = pbChar.id;
+	// optionally update images
+	if (avatarUrl) oChar.avatarUrl = avatarUrl;
+	if (tokenUrl) oChar.tokenUrl = tokenUrl;
+	const oCharSaved = pbCharSaved ? await owner.save() : false;
+
+	return oCharSaved;
+}
+
+export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+	const { sageCache } = sageCommand;
 	setMacroUser(character, sageCache.user);
 	const saved = await character.save();
 	if (saved) {
 		const output = prepareOutput(sageCache, character, sageCache.user);
 		const message = await channel?.send(output).catch(errorReturnNull);
 		if (message) {
-			character.messageId = message.id;
-			await character.save();
+			await addOrUpdateCharacter(sageCommand, character, message);
 			if (pin && message.pinnable) {
 				await message.pin();
 			}
-			await notifyOfSlicedMacros(sageCache, character);
 		}
 	}else {
 		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
@@ -554,9 +598,9 @@ export async function handlePathbuilder2eImport(sageCommand: SageCommand): Promi
 	const pin = sageCommand.args.getBoolean("pin") ?? false;
 	const attach = sageCommand.args.getBoolean("attach") ?? false;
 	if (attach) {
-		await attachCharacter(sageCommand.sageCache, channel ?? user, pathbuilderId, pathbuilderChar, pin);
+		await attachCharacter(sageCommand.sageCache, channel ?? user, `pathbuilder2e-${pathbuilderId}`, pathbuilderChar, pin);
 	}else {
-		await postCharacter(sageCommand.sageCache, channel ?? user, pathbuilderChar, pin);
+		await postCharacter(sageCommand, channel ?? user, pathbuilderChar, pin);
 	}
 
 	if (sageCommand.isSageInteraction()) {
@@ -583,10 +627,14 @@ async function handleReimportError(sageCommand: SageMessage, errorMessage: strin
 
 export async function handlePathbuilder2eReimport(sageCommand: SageMessage, message: Message, characterId: string): Promise<void> {
 	const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
-	const updatedName = sageCommand.args.getString("name") ?? undefined;
-	const refreshResult = await PathbuilderCharacter.refresh(characterId, pathbuilderId, updatedName);
+	const newName = sageCommand.args.getString("name") ?? undefined;
+	const pdfUrl = sageCommand.args.getUrl("pdf") ?? undefined;
+	const pdfAttachment = message.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
+	const refreshResult = await PathbuilderCharacter.refresh({ characterId, pathbuilderId, newName, pdfUrl, pdfAttachment });
 	switch (refreshResult) {
 		case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
+		case "INVALID_PDF_URL": return handleReimportError(sageCommand, "The given PDF url is invalid.");
+		case "INVALID_PDF_ATTACHMENT": return handleReimportError(sageCommand, "The attached PDF is invalid.");
 		case "MISSING_JSON_ID": return handleReimportError(sageCommand, "You are missing a 'Export JSON' id.");
 		case "INVALID_JSON_ID": return handleReimportError(sageCommand, "Unable to fetch the 'Export JSON' id.");
 		case "INVALID_CHARACTER_NAME": return handleReimportError(sageCommand, "The character names do not match!");

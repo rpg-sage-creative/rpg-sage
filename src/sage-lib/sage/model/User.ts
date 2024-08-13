@@ -100,8 +100,7 @@ export class User extends HasDidCore<UserCore> {
 			if (channelDid) {
 				const autoChannelData = { channelDid, userDid:this.did };
 				return this.playerCharacters.getAutoCharacter(autoChannelData)
-					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData)
-					?? undefined;
+					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData);
 			}
 		}
 		return undefined;

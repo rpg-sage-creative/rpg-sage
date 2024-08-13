@@ -331,8 +331,7 @@ export abstract class SageCommand<
 			const autoChannelData = { channelDid, userDid };
 			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
 				?? this.game?.playerCharacters.findByUser(userDid)
-				?? this.sageUser.playerCharacters.getAutoCharacter(autoChannelData)
-				?? undefined;
+				?? this.sageUser.playerCharacters.getAutoCharacter(autoChannelData);
 		});
 	}
 

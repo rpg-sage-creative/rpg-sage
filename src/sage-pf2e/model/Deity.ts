@@ -1,11 +1,10 @@
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { TAlignment } from '../common';
-import { RenderableContent } from '../data/RenderableContent';
-import type { TDevoteeBenefitsCore } from "./DevoteeBenefits";
-import { DevoteeBenefits } from "./DevoteeBenefits";
-import type { Domain } from "./Domain";
-import type { FaithCoreBase } from "./Faith";
-import { Faith } from "./Faith";
+import { RenderableContent } from '../data/RenderableContent.js';
+import type { TDevoteeBenefitsCore } from "./DevoteeBenefits.js";
+import { DevoteeBenefits } from "./DevoteeBenefits.js";
+import type { Domain } from "./Domain.js";
+import type { FaithCoreBase } from "./Faith.js";
+import { Faith } from "./Faith.js";
 
 export type TDeitySpell = {
 	level: number;
@@ -13,7 +12,6 @@ export type TDeitySpell = {
 };
 
 export interface DeityCore extends FaithCoreBase<"Deity"> {
-	alignment: TAlignment;
 	devoteeBenefits: TDevoteeBenefitsCore;
 }
 
@@ -30,7 +28,6 @@ export class Deity extends Faith<"Deity", DeityCore> {
 	/**************************************************************************************************************************/
 	// Properties
 
-	public get alignment(): TAlignment { return this.core.alignment; }
 	public devoteeBenefits: DevoteeBenefits;
 
 	public hasDomain(domain: Domain): boolean { return this.devoteeBenefits.domains.includes(domain) || this.devoteeBenefits.alternateDomains.includes(domain); }
@@ -43,11 +40,10 @@ export class Deity extends Faith<"Deity", DeityCore> {
 		if (this.source.isCore) {
 			content.setThumbnailUrl(`http://rpgsage.io/images/religious/${this.name.replace(/\s/g, "")}.png`);
 		}
-		content.setTitle(`<b>${this.name}</b> (${this.alignment})`);
+		content.setTitle(`<b>${this.name}</b>`);
 		this.appendDetailsTo(content);
 		content.append(`<blockquote><b>Edicts</b> ${this.edicts.join(this.edicts.find(e => e.includes(",")) ? "; " : ", ")}</blockquote>`);
 		content.append(`<blockquote><b>Anathema</b> ${this.anathema.join(this.anathema.find(a => a.includes(",")) ? "; " : ", ")}</blockquote>`);
-		content.append(`<blockquote><b>Follower Alignments</b> ${this.followerAlignments.length === 9 ? "all" : this.followerAlignments.join(", ")}</blockquote>`);
 		content.append(`<h1>Devotee Benefits</h1>`);
 		content.append(`<b>Divine Font</b> ${this.devoteeBenefits.divineFont.map(spell => italicize(spell.nameLower)).join(" or ")}`);
 		content.append(`<b>Divine Skill</b> ${this.devoteeBenefits.divineSkill.length > 1 ? doDivineSkills(this.devoteeBenefits.divineSkill) : this.devoteeBenefits.divineSkill[0].name}`);

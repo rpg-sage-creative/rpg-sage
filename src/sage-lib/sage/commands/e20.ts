@@ -1,6 +1,6 @@
 import type { Optional, Snowflake, UUID } from "@rsc-utils/core-utils";
 import { errorReturnFalse, errorReturnNull, getDataRoot } from "@rsc-utils/core-utils";
-import { DiscordKey, type MessageTarget, toUserMention } from "@rsc-utils/discord-utils";
+import { DiscordKey, type MessageOrPartial, type MessageTarget, toUserMention } from "@rsc-utils/discord-utils";
 import type { PdfJson } from "@rsc-utils/io-utils";
 import { PdfCacher, PdfJsonManager, fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { ActionRowBuilder, AttachmentBuilder, type BaseMessageOptions, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
@@ -470,39 +470,53 @@ export function registerE20(): void {
 	registerInteractionListener(sheetTester, sheetHandler);
 }
 
+type AttachmentData = { json?:PdfJson; fileName?:string; };
+async function getJsonFromAttachment(message: Optional<MessageOrPartial>): Promise<AttachmentData> {
+	const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
+	if (attachment) {
+		const fileName = attachment.name;
+		const json = await PdfCacher.read<PdfJson>(attachment.url);
+		return { json, fileName };
+	}
+	return { };
+}
+
 export async function handleEssence20Import(sageCommand: SageCommand): Promise<void> {
-	await sageCommand.reply(`Attempting to import character ...`, false);
+	await sageCommand.replyStack.startThinking();
 
-	const value = sageCommand.args.getString("pdf") ?? "";
-	const isPdfUrl = /^http.*?\.pdf$/.test(value);
-	const isMessageUrl = value.startsWith("https://discord.com/channels/");
-
+	let json: PdfJson | undefined;
 	let fileName: string | undefined;
-	let rawJson: Optional<PdfJson>;
-	if (isPdfUrl) {
-		fileName = value.split("/").pop();
-		await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
-		rawJson = await PdfCacher.read<PdfJson>(value);
-	}else if (isMessageUrl) {
-		const discordKey = DiscordKey.fromUrl(value);
-		const message = discordKey ? await sageCommand.sageCache.fetchMessage(discordKey) : undefined;
-		const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
-		if (attachment) {
-			fileName = attachment.name ?? undefined;
-			await sageCommand.reply(`Attempting to read character from ${fileName} ...`, false);
-			rawJson = await PdfCacher.read<PdfJson>(attachment?.url);
+
+	if (sageCommand.isSageMessage()) {
+		({ json, fileName } = await getJsonFromAttachment(sageCommand.message));
+	}
+
+	if (!json) {
+		const value = sageCommand.args.getString("pdf") ?? "";
+		const isPdfUrl = /^http.*?\.pdf$/.test(value);
+		const isMessageUrl = value.startsWith("https://discord.com/channels/");
+
+		if (isPdfUrl) {
+			json = await PdfCacher.read<PdfJson>(value);
+			fileName = value.split("/").pop();
+
+		}else if (isMessageUrl) {
+			const discordKey = DiscordKey.fromUrl(value);
+			const message = discordKey ? await sageCommand.sageCache.fetchMessage(discordKey) : undefined;
+			({ json, fileName } = await getJsonFromAttachment(message));
 		}
 	}
-	if (!rawJson) {
-		return sageCommand.reply(`Failed to find pdf!`, false);
+
+	if (!json) {
+		return sageCommand.replyStack.whisper(`Failed to find pdf!`);
 	}
 
-	const character = jsonToCharacter(rawJson);
+	const character = jsonToCharacter(json);
 	if (!character) {
-		return sageCommand.reply(`Failed to import character from: ${fileName}!`, false);
+		return sageCommand.replyStack.whisper(`Failed to import character from: ${fileName}!`);
 	}
 
-	await sageCommand.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
+	const importing = await sageCommand.replyStack.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
 
 	const channel = sageCommand.dChannel as MessageTarget;
 	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
@@ -515,9 +529,13 @@ export async function handleEssence20Import(sageCommand: SageCommand): Promise<v
 		await postCharacter(sageCommand.sageCache, channel ?? user, character, pin);
 	}
 
+	await importing?.delete();
+
 	if (sageCommand.isSageInteraction()) {
-		await sageCommand.deleteReply();
+		await sageCommand.replyStack.deleteReply();
 	}
+
+	await sageCommand.replyStack.stopThinking();
 }
 
 //#region reimport

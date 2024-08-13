@@ -14,12 +14,10 @@ import { type TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
 import type { Game } from "../model/Game.js";
 import { GameRoleType } from "../model/Game.js";
-import type { GameCharacter } from "./GameCharacter.js";
 import { EmojiType } from "./HasEmojiCore.js";
 import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageMessageArgs } from "./SageMessageArgs.js";
-import type { TAlias } from "./User.js";
 import type { HasChannels, HasGame } from "./index.js";
 import { addMessageDeleteButton } from "./utils/deleteButton.js";
 
@@ -340,51 +338,4 @@ export class SageMessage
 	}
 
 	// #endregion
-
-	public findAlias(aliasName?: string): (TAlias & {charAlias?:boolean}) | null {
-		if (!aliasName) {
-			return null;
-		}
-
-		const found = this.sageUser.aliases.findByName(aliasName, true);
-		if (found) {
-			return found;
-		}
-
-		let char = this.playerCharacter?.matches(aliasName) ? this.playerCharacter : undefined;
-		if (!char) {
-			const nonPlayerCharacters = this.game
-				? (this.isGameMaster ? this.game.nonPlayerCharacters : undefined) //NOSONAR
-				: this.sageUser.nonPlayerCharacters;
-			if (!char) {
-				debug("not pc");
-				char = nonPlayerCharacters?.findByName(aliasName);
-			}
-			if (!char) {
-				debug("not npc");
-				char = nonPlayerCharacters?.findCompanionByName(aliasName);
-			}
-
-			const playerCharacters = this.game?.playerCharacters ?? this.sageUser.playerCharacters;
-			if (!char) {
-				debug("not minion");
-				char = playerCharacters?.findByUser(this.isPlayer ? this.authorDid : undefined, aliasName);
-			}
-			if (!char) {
-				debug("not pc");
-				char = playerCharacters?.findCompanionByName(aliasName);
-			}
-		}
-
-		if (char) {
-			return alias(char);
-		}
-		debug("not companion");
-
-		return null;
-
-		function alias(char: GameCharacter) {
-			return { name:aliasName!, target:`${char.type}::${char.name}::`, charAlias:true };
-		}
-	}
 }

@@ -1,7 +1,7 @@
 import { sortAsPrimitive, toUnique } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { TAbility, TAlignment, TProficiency, TSize } from "../../common.js";
+import type { TAbility, TProficiency, TSize } from "../../common.js";
 import { PERCEPTION, WISDOM, profToMod } from "../../common.js";
 import { findById, findByValue } from "../../data/Repository.js";
 import type { Action } from "../Action.js";
@@ -34,7 +34,6 @@ import { Speeds } from "./Speeds.js";
 
 interface IPlayerCharacterBio {
 	age: number;
-	alignment: TAlignment;
 	characterName: string;
 	deityId?: Snowflake;
 	// languages: string[];

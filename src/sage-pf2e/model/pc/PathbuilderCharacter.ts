@@ -1,9 +1,13 @@
 import { Collection } from "@rsc-utils/array-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
 import { debug, errorReturnFalse, errorReturnNull, getDataRoot, randomSnowflake, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
-import { fileExistsSync, getJson, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
-import { nth } from "@rsc-utils/number-utils";
-import { StringMatcher, capitalize } from "@rsc-utils/string-utils";
+import { fileExistsSync, getJson, PdfCacher, readJsonFile, readJsonFileSync, writeFile, type PdfJson } from "@rsc-utils/io-utils";
+import { addCommas, nth } from "@rsc-utils/number-utils";
+import { capitalize, StringMatcher } from "@rsc-utils/string-utils";
+import type { Attachment } from "discord.js";
+import { jsonToCharacter } from "../../../gameSystems/p20/sf2e/jsonToCharacter.js";
+import { Skill } from "../../../gameSystems/p20/Skill.js";
+import { ProficiencyType, SizeType } from "../../../gameSystems/p20/types.js";
 import type { TMacro } from "../../../sage-lib/sage/model/types.js";
 import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common.js";
 import { getSavingThrows, toModifier } from "../../common.js";
@@ -14,27 +18,7 @@ import { Abilities, type IHasAbilities } from "./Abilities.js";
 import type { IHasProficiencies } from "./PlayerCharacter.js";
 import { SavingThrows, type IHasSavingThrows } from "./SavingThrows.js";
 
-const skillNames = "Acrobatics,Arcana,Athletics,Crafting,Deception,Diplomacy,Intimidation,Medicine,Nature,Occultism,Performance,Religion,Society,Stealth,Survival,Thievery".split(",");
-const skillStatKeys: TPathbuilderCharacterAbilityKey[] = ["dex", "int", "str", "int", "cha", "cha", "cha", "wis", "wis", "int", "cha", "wis", "int", "dex", "wis", "dex"];
-
 //#region types
-
-enum PathbuilderCharacterProficiencyType {
-	PenalizedUntrained = -2,
-	Untrained = 0,
-	Trained = 2,
-	Expert = 4,
-	Master = 6,
-	Legendary = 8
-}
-
-enum PathbuilderCharacterSizeType {
-	Tiny = 0,
-	Small = 1,
-	Medium = 2,
-	Large = 3,
-	Huge = 4
-}
 
 export type TPathbuilderCharacterAbilityKey = keyof TPathbuilderCharacterAbilities;
 
@@ -95,47 +79,52 @@ type TPathbuilderCharacterFormula = {
 };
 
 type TPathbuilderCharacterMoney = {
-	pp: number;
-	gp: number;
-	sp: number;
-	cp: number;
+	pp?: number;
+	gp?: number;
+	sp?: number;
+	cp?: number;
+	credits?: number;
+	upb?: number;
 };
 
 type TPathbuilderCharacterProficienciesKey = keyof TPathbuilderCharacterProficiencies;
 type TPathbuilderCharacterProficiencies = {
-	classDC: PathbuilderCharacterProficiencyType;
-	perception: PathbuilderCharacterProficiencyType;
-	fortitude: PathbuilderCharacterProficiencyType;
-	reflex: PathbuilderCharacterProficiencyType;
-	will: PathbuilderCharacterProficiencyType;
-	heavy: PathbuilderCharacterProficiencyType;
-	medium: PathbuilderCharacterProficiencyType;
-	light: PathbuilderCharacterProficiencyType;
-	unarmored: PathbuilderCharacterProficiencyType;
-	advanced: PathbuilderCharacterProficiencyType;
-	martial: PathbuilderCharacterProficiencyType;
-	simple: PathbuilderCharacterProficiencyType;
-	unarmed: PathbuilderCharacterProficiencyType;
-	castingArcane: PathbuilderCharacterProficiencyType;
-	castingDivine: PathbuilderCharacterProficiencyType;
-	castingOccult: PathbuilderCharacterProficiencyType;
-	castingPrimal: PathbuilderCharacterProficiencyType;
-	acrobatics: PathbuilderCharacterProficiencyType;
-	arcana: PathbuilderCharacterProficiencyType;
-	athletics: PathbuilderCharacterProficiencyType;
-	crafting: PathbuilderCharacterProficiencyType;
-	deception: PathbuilderCharacterProficiencyType;
-	diplomacy: PathbuilderCharacterProficiencyType;
-	intimidation: PathbuilderCharacterProficiencyType;
-	medicine: PathbuilderCharacterProficiencyType;
-	nature: PathbuilderCharacterProficiencyType;
-	occultism: PathbuilderCharacterProficiencyType;
-	performance: PathbuilderCharacterProficiencyType;
-	religion: PathbuilderCharacterProficiencyType;
-	society: PathbuilderCharacterProficiencyType;
-	stealth: PathbuilderCharacterProficiencyType;
-	survival: PathbuilderCharacterProficiencyType;
-	thievery: PathbuilderCharacterProficiencyType;
+	classDC: ProficiencyType;
+	perception: ProficiencyType;
+	fortitude: ProficiencyType;
+	reflex: ProficiencyType;
+	will: ProficiencyType;
+	heavy: ProficiencyType;
+	medium: ProficiencyType;
+	light: ProficiencyType;
+	unarmored: ProficiencyType;
+	advanced: ProficiencyType;
+	martial: ProficiencyType;
+	simple: ProficiencyType;
+	unarmed: ProficiencyType;
+	castingArcane: ProficiencyType;
+	castingDivine: ProficiencyType;
+	castingOccult: ProficiencyType;
+	castingPrimal: ProficiencyType;
+	acrobatics: ProficiencyType;
+	arcana: ProficiencyType;
+	athletics: ProficiencyType;
+	crafting: ProficiencyType;
+	deception: ProficiencyType;
+	diplomacy: ProficiencyType;
+	intimidation: ProficiencyType;
+	medicine: ProficiencyType;
+	nature: ProficiencyType;
+	occultism: ProficiencyType;
+	performance: ProficiencyType;
+	religion: ProficiencyType;
+	society: ProficiencyType;
+	stealth: ProficiencyType;
+	survival: ProficiencyType;
+	thievery: ProficiencyType;
+	// Starfinder Hack
+	piloting: ProficiencyType;
+	computers: ProficiencyType;
 };
 
 type TPathbuilderCharacterSpecificProficiencies = {
@@ -159,7 +148,7 @@ type TPathbuilderCharacterSpellCaster = {
 	ability: TPathbuilderCharacterAbilityKey;
 
 	/** 0, 2, 4, 6, 8 */
-	proficiency: PathbuilderCharacterProficiencyType;
+	proficiency: ProficiencyType;
 
 	/** 0 */
 	focusPoints: number;
@@ -176,7 +165,7 @@ type TPathbuilderCharacterSpellCasterSpells = {
 
 type TPathbuilderCharacterTraditionKey = "arcane" | "divine" | "focus" | "occult" | "primal";
 
-type TPathbuilderCharacterWeapon = {
+export type TPathbuilderCharacterWeapon = {
 	name: string;
 	qty: number;
 	/* proficiency: "martial" */
@@ -191,6 +180,8 @@ type TPathbuilderCharacterWeapon = {
 	mat: null;
 	display: string;
 	runes: string[];
+	/** [1d20 +mod atk; XdY dmg] */
+	dice?: string;
 };
 
 type TPathbuilderCharacterFamiliar = {
@@ -227,7 +218,7 @@ export type TPathbuilderCharacterCustomFlags = {
 	_untrainedPenalty?: boolean;
 };
 type TPathbuilderCharacterCustomFlag = keyof TPathbuilderCharacterCustomFlags;
-export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter"> & TPathbuilderCharacterCustomFlags & {
+export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter" | "P20Character"> & TPathbuilderCharacterCustomFlags & {
 	/** Clean this up! */
 	class: string;
 	dualClass?: string;
@@ -238,7 +229,7 @@ export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter"> & 
 	gender: string;
 	age: string;
 	deity: string;
-	size: PathbuilderCharacterSizeType;
+	size: SizeType;
 	keyability: TPathbuilderCharacterAbilityKey;
 	languages: string[];
 	attributes: TPathbuilderCharacterAttributes;
@@ -256,7 +247,7 @@ export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter"> & 
 	formula: TPathbuilderCharacterFormula[];
 	pets: TPathbuilderCharacterPet[];
 	acTotal: TPathbuilderCharacterArmorClassTotal;
-	exportJsonId: number;
+	exportJsonId?: number;
 };
 
 type TPathbuilderCharacterResponse = {
@@ -310,26 +301,32 @@ function loreToHtml(char: PathbuilderCharacter): string {
 function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 	const coins = <string[]>[];
 	if (money.pp) {
-		coins.push(`${money.pp} pp`);
+		coins.push(`${addCommas(money.pp)} pp`);
 	}
 	if (money.gp) {
-		coins.push(`${money.gp} gp`);
+		coins.push(`${addCommas(money.gp)} gp`);
 	}
 	if (money.sp) {
-		coins.push(`${money.sp} sp`);
+		coins.push(`${addCommas(money.sp)} sp`);
 	}
 	if (money.cp) {
-		coins.push(`${money.cp} cp`);
+		coins.push(`${addCommas(money.cp)} cp`);
+	}
+	if (money.credits) {
+		coins.push(`${addCommas(money.credits)} credits`);
+	}
+	if (money.upb) {
+		coins.push(`${addCommas(money.upb)} upb`);
 	}
 	return coins.join(", ");
 }
 function skillsToHtml(char: PathbuilderCharacter): string {
-	return skillNames.map(skill => {
-		const profMod = char.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey);
+	return Skill.all().map(skill => {
+		const profMod = char.getProficiencyMod(skill.name as TPathbuilderCharacterProficienciesKey);
 		if (profMod <= 0) {
 			return "";
 		}
-		return `${skill} ${toModifier(char.getSkillMod(skill))}`;
+		return `${skill.name} ${toModifier(char.getSkillMod(skill.name))}`;
 	}).filter(s => s).join(", ");
 }
 function calculateSpeed(char: PathbuilderCharacter): number {
@@ -551,6 +548,9 @@ function getWeaponSpecMod(char: PathbuilderCharacter, weapon: TPathbuilderCharac
 }
 
 function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): string {
+	if (weapon.dice) {
+		return `<b>${weapon.name}</b> ${weapon.dice}`;
+	}
 	const wpnItem = findWeapon(weapon);
 	if (wpnItem) {
 		const profMod = char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name);
@@ -575,6 +575,7 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 }
 
 function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): TMacro {
+	if (weapon.dice) return { name:weapon.name, dice:weapon.dice };
 	const wpnItem = findWeapon(weapon);
 	if (wpnItem) {
 		const profMod = char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name);
@@ -635,14 +636,14 @@ function perceptionGetStat(char: PathbuilderCharacter, prefix: GetStatPrefix): n
 	}
 }
 function skillGetStat(char: PathbuilderCharacter, statLower: string, prefix: GetStatPrefix): number | string | null {
-	const skill = skillNames.find(name => statLower === name.toLowerCase());
+	const skill = Skill.findByName(statLower);
 	if (skill) {
 		switch(prefix) {
-			case "dc": return char.getSkillMod(skill) + 10;
-			case "mod": return char.getSkillMod(skill);
-			case "prof": return char.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey);
-			case "proficiency": return char.getProficiency(skill as TPathbuilderCharacterProficienciesKey);
-			default: return char.getSkillMod(skill);
+			case "dc": return char.getSkillMod(skill.name) + 10;
+			case "mod": return char.getSkillMod(skill.name);
+			case "prof": return char.getProficiencyMod(skill.name as TPathbuilderCharacterProficienciesKey);
+			case "proficiency": return char.getProficiency(skill.name as TPathbuilderCharacterProficienciesKey);
+			default: return char.getSkillMod(skill.name);
 		}
 	}
 	return null;
@@ -654,7 +655,7 @@ function loreGetStat(char: PathbuilderCharacter, statLower: string, prefix: GetS
 			case "dc": return char.getLoreMod(lore[0]) + 10;
 			case "mod": return char.getLoreMod(lore[0]);
 			case "prof": return lore[1];
-			case "proficiency": return PathbuilderCharacterProficiencyType[lore[1]];
+			case "proficiency": return ProficiencyType[lore[1]];
 			default: return char.getLoreMod(lore[0]);
 		}
 	}
@@ -769,10 +770,10 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		const profMod = this.getProficiencyMod(key, specificKey);
 		return profMod === -2
 			? "Untrained"
-			: <TProficiency>PathbuilderCharacterProficiencyType[profMod];
+			: <TProficiency>ProficiencyType[profMod];
 	}
 
-	public getProficiencyMod(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): PathbuilderCharacterProficiencyType {
+	public getProficiencyMod(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): ProficiencyType {
 		const keys = Object.keys(this.core.proficiencies) as TPathbuilderCharacterProficienciesKey[];
 		const lower = key.toLowerCase();
 		const found = keys.find(k => k.toLowerCase() === lower);
@@ -781,20 +782,20 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		const profMod = Math.max(keyMod, specificMod);
 		return profMod === 0 && this.core._untrainedPenalty === true ? -2 : profMod;
 	}
-	private getSpecificProficiencyMod(key: string): PathbuilderCharacterProficiencyType {
+	private getSpecificProficiencyMod(key: string): ProficiencyType {
 		if (this.core?.specificProficiencies?.legendary?.includes(key)) {
-			return PathbuilderCharacterProficiencyType.Legendary;
+			return ProficiencyType.Legendary;
 		}
 		if (this.core?.specificProficiencies?.master?.includes(key)) {
-			return PathbuilderCharacterProficiencyType.Master;
+			return ProficiencyType.Master;
 		}
 		if (this.core?.specificProficiencies?.expert?.includes(key)) {
-			return PathbuilderCharacterProficiencyType.Expert;
+			return ProficiencyType.Expert;
 		}
 		if (this.core?.specificProficiencies?.trained?.includes(key)) {
-			return PathbuilderCharacterProficiencyType.Trained;
+			return ProficiencyType.Trained;
 		}
-		return PathbuilderCharacterProficiencyType.Untrained;
+		return ProficiencyType.Untrained;
 	}
 
 	//#endregion
@@ -812,10 +813,10 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	}
 
 	public getSkillMod(skillName: string): number {
-		const skillIndex = skillNames.indexOf(skillName);
+		const skill = Skill.findByName(skillName);
 		const profMod = this.getProficiencyMod(skillName as TPathbuilderCharacterProficienciesKey);
 		const levelMod = this.getLevelMod(profMod);
-		const statMod = Abilities.scoreToMod(this.abilities[skillStatKeys[skillIndex]]);
+		const statMod = Abilities.scoreToMod(this.abilities[skill?.abilKey!]);
 		return levelMod + profMod + statMod;
 	}
 
@@ -823,12 +824,12 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		if (key === "Perception") {
 			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), this.perceptionMod];
 		}
-		if (skillNames.includes(key)) {
+		if (Skill.findByName(key)) {
 			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), this.getSkillMod(key)];
 		}
 		if (this.hasLore(key)) {
 			const lore = this.getLore(key)!;
-			return [PathbuilderCharacterProficiencyType[lore[1]] as TProficiency, this.getLoreMod(key)];
+			return [ProficiencyType[lore[1]] as TProficiency, this.getLoreMod(key)];
 		}
 		if (getSavingThrows().includes(key as TSavingThrow)) {
 			const ability = SavingThrows.getAbilityForSavingThrow(key as TSavingThrow);
@@ -876,7 +877,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		push(`<b><u>${this.toHtmlName()}</u></b>`);
 
 		if (includes(["All", "Traits"])) {
-			push(`${bracketTraits(PathbuilderCharacterSizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
+			push(`${bracketTraits(SizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
 		}
 
 		if (includes(["All", "Perception"])) {
@@ -1110,20 +1111,43 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	public async save(): Promise<boolean> {
 		return PathbuilderCharacter.saveCharacter(this);
 	}
-	public static async refresh(characterId: string, id?: number, newName?: string): Promise<RefreshResult> {
+	public static async refresh(options: { characterId:string; pathbuilderId?:number; newName?:string; pdfUrl?:string; pdfAttachment?:Attachment }): Promise<RefreshResult> {
+		const { characterId, pathbuilderId, newName, pdfUrl, pdfAttachment } = options;
 		const oldChar = await this.loadCharacter(characterId);
 		if (!oldChar) {
 			return "INVALID_CHARACTER_ID";
 		}
 
-		const exportJsonId = id ?? oldChar.exportJsonId;
-		if (!exportJsonId) {
-			return "MISSING_JSON_ID";
+		let newChar: TPathbuilderCharacter | undefined;
+
+		if (pdfUrl) {
+			const json = await PdfCacher.read<PdfJson>(pdfUrl);
+			if (json) {
+				newChar = jsonToCharacter(json).toJSON();
+			}else {
+				return "INVALID_PDF_URL";
+			}
 		}
 
-		const newChar = await this.fetchCore(exportJsonId);
+		if (!newChar && pdfAttachment) {
+			const json = await PdfCacher.read<PdfJson>(pdfAttachment.url);
+			if (json) {
+				newChar = jsonToCharacter(json).toJSON();
+			}else {
+				return "INVALID_PDF_ATTACHMENT";
+			}
+		}
+
 		if (!newChar) {
-			return "INVALID_JSON_ID";
+			const exportJsonId = pathbuilderId ?? oldChar.exportJsonId;
+			if (!exportJsonId) {
+				return "MISSING_JSON_ID";
+			}
+
+			newChar = await this.fetchCore(exportJsonId);
+			if (!newChar) {
+				return "INVALID_JSON_ID";
+			}
 		}
 
 		if (oldChar.name !== newChar.name && newChar.name !== newName) {
@@ -1140,4 +1164,4 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 	//#endregion
 }
-type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | true | false;
+type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | "INVALID_PDF_URL" | "INVALID_PDF_ATTACHMENT" | true | false;
