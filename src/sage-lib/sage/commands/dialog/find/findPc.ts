@@ -11,8 +11,8 @@ type Options = {
 export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: Options): GameCharacter | undefined {
 	// if (!sageCommand.allowDialog) return undefined;
 
-	const { authorDid, game, isPlayer, sageUser } = sageCommand;
-	if (game && !isPlayer) return undefined;
+	const { authorDid, game, isGameMaster, isPlayer, sageUser } = sageCommand;
+	if (game && !isPlayer && !isGameMaster) return undefined;
 
 	const gamePcs = game?.playerCharacters;
 	const userPcs = sageUser.playerCharacters;
@@ -21,7 +21,7 @@ export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: O
 
 	// try by given name/index first
 	if (isNotBlank(name)) {
-		char = gamePcs?.filterByUser(authorDid).findByName(name)
+		char = (isGameMaster ? gamePcs : gamePcs?.filterByUser(authorDid))?.findByName(name)
 			?? userPcs.findByName(name);
 	}
 
