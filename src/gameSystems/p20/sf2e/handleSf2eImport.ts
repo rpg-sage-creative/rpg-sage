@@ -62,7 +62,7 @@ export async function handleSf2eImport(sageCommand: SageCommand): Promise<void> 
 		await attachCharacter(sageCommand.sageCache, channel ?? user, fileName!, character, pin);
 
 	}else {
-		await postCharacter(sageCommand.sageCache, channel ?? user, character, pin);
+		await postCharacter(sageCommand, channel ?? user, character, pin);
 	}
 
 	await importing?.delete();

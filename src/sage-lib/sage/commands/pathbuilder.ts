@@ -107,19 +107,63 @@ async function notifyOfSlicedMacros(sageCache: SageCache, character: Pathbuilder
 	}
 }
 
-export async function postCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: PathbuilderCharacter, message: Message): Promise<boolean> {
+	const { tokenUrl, avatarUrl } = sageCommand.isSageMessage() ? sageCommand.args.getCharacterOptions({}) ?? { } : { } as { tokenUrl?:string; avatarUrl?:string; };
+
+	// get or create character
+	const owner = sageCommand.game ?? sageCommand.sageUser;
+	const existing = owner.findCharacterOrCompanion(pbChar.name);
+	const oChar = existing
+		? ("game" in existing ? existing.game : existing)
+		: await owner.playerCharacters.addCharacter({
+			avatarUrl,
+			id: pbChar.id as Snowflake,
+			name: pbChar.name,
+			pathbuilderId: pbChar.id,
+			tokenUrl,
+			userDid: pbChar.userDid as Snowflake
+		});
+
+	// if something went wrong, fail out
+	if (!oChar) return false;
+
+	// link gamecharacter to pbcharacter
+	pbChar.characterId = oChar.id;
+	pbChar.messageId = message.id;
+	pbChar.userDid = oChar.userDid;
+	const pbCharSaved = await pbChar.save();
+
+	if (pbCharSaved) {
+		await updateSheet(sageCommand.sageCache, pbChar, message);
+	}
+
+	// newly created character should already be linked
+	if (oChar.pathbuilderId === pbChar.id) {
+		return pbCharSaved;
+	}
+
+	// link pbcharacter to gamecharacter
+	oChar.pathbuilderId = pbChar.id;
+	// optionally update images
+	if (avatarUrl) oChar.avatarUrl = avatarUrl;
+	if (tokenUrl) oChar.tokenUrl = tokenUrl;
+	const oCharSaved = pbCharSaved ? await owner.save() : false;
+
+	return oCharSaved;
+}
+
+export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+	const { sageCache } = sageCommand;
 	setMacroUser(character, sageCache.user);
 	const saved = await character.save();
 	if (saved) {
 		const output = prepareOutput(sageCache, character, sageCache.user);
 		const message = await channel?.send(output).catch(errorReturnNull);
 		if (message) {
-			character.messageId = message.id;
-			await character.save();
+			await addOrUpdateCharacter(sageCommand, character, message);
 			if (pin && message.pinnable) {
 				await message.pin();
 			}
-			await notifyOfSlicedMacros(sageCache, character);
 		}
 	}else {
 		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
@@ -556,7 +600,7 @@ export async function handlePathbuilder2eImport(sageCommand: SageCommand): Promi
 	if (attach) {
 		await attachCharacter(sageCommand.sageCache, channel ?? user, `pathbuilder2e-${pathbuilderId}`, pathbuilderChar, pin);
 	}else {
-		await postCharacter(sageCommand.sageCache, channel ?? user, pathbuilderChar, pin);
+		await postCharacter(sageCommand, channel ?? user, pathbuilderChar, pin);
 	}
 
 	if (sageCommand.isSageInteraction()) {
