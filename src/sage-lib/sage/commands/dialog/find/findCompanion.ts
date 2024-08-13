@@ -11,8 +11,8 @@ type Options = {
 export function findCompanion(sageCommand: SageCommand, name: Optional<string>, opts: Options): GameCharacter | undefined {
 	// if (!sageCommand.allowDialog) return undefined;
 
-	const { authorDid, game, isPlayer, sageUser } = sageCommand;
-	if (game && !isPlayer) return undefined;
+	const { authorDid, game, isGameMaster, isPlayer, sageUser } = sageCommand;
+	if (game && !isPlayer && !isGameMaster) return undefined;
 
 	const gamePcs = game?.playerCharacters;
 	const userPcs = sageUser.playerCharacters;
@@ -21,8 +21,8 @@ export function findCompanion(sageCommand: SageCommand, name: Optional<string>, 
 
 	// try by given name/index first
 	if (isNotBlank(name)) {
-		char = gamePcs?.findCompanion(authorDid, name)
-			?? userPcs.findCompanion(name);
+		char = (isGameMaster ? gamePcs : gamePcs?.filterByUser(authorDid))?.findByName(name)
+			?? userPcs.findByName(name);
 	}
 
 	// try grabbing auto character
