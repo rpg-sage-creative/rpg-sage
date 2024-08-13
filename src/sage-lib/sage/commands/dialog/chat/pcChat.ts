@@ -1,9 +1,9 @@
-import { ColorType } from "../../../model/HasColorsCore";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { DialogContent } from "../DialogContent";
-import { findPc } from "../find/findPc";
-import type { ChatOptions } from "./ChatOptions";
-import { doChat } from "./doChat";
+import { ColorType } from "../../../model/HasColorsCore.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { DialogContent } from "../DialogContent.js";
+import { findPc } from "../find/findPc.js";
+import type { ChatOptions } from "./ChatOptions.js";
+import { doChat } from "./doChat.js";
 
 export async function pcChat(sageMessage: SageMessage, dialogContent: DialogContent, options: ChatOptions): Promise<void> {
 	const findOpts = { auto:true, first:true };

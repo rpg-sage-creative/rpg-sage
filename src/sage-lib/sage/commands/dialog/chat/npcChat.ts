@@ -1,9 +1,9 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import type { DialogContent } from "../DialogContent";
-import { findNpc } from "../find/findNpc";
-import { getColorType } from "../getColorType";
-import type { ChatOptions } from "./ChatOptions";
-import { doChat } from "./doChat";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { DialogContent } from "../DialogContent.js";
+import { findNpc } from "../find/findNpc.js";
+import { getColorType } from "../getColorType.js";
+import type { ChatOptions } from "./ChatOptions.js";
+import { doChat } from "./doChat.js";
 
 export async function npcChat(sageMessage: SageMessage, dialogContent: DialogContent, options: ChatOptions): Promise<void> {
 	const characterName = dialogContent.name?.trim();
