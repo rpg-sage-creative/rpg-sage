@@ -1,11 +1,11 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import type { DialogContent } from "../DialogContent";
-import { findCompanion } from "../find/findCompanion";
-import { getColorType } from "../getColorType";
-import type { ChatOptions } from "./ChatOptions";
-import { doChat } from "./doChat";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { DialogContent } from "../DialogContent.js";
+import { findCompanion } from "../find/findCompanion.js";
+import { getColorType } from "../getColorType.js";
+import type { ChatOptions } from "./ChatOptions.js";
+import { doChat } from "./doChat.js";
 
-export async function companionChat(sageMessage: SageMessage, dialogContent: DialogContent, options: ChatOptions): Promise<any> {
+export async function companionChat(sageMessage: SageMessage, dialogContent: DialogContent, options: ChatOptions): Promise<void> {
 	const findOpts = { auto:true, first:true };
 	let character = findCompanion(sageMessage, dialogContent.name, findOpts);
 
