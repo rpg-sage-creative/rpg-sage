@@ -1,12 +1,12 @@
 {
-"name":"rpg-sage",
-"version":"1.7.5",
-"branch":"main",
-"commit":"8ea2148f986e011f30870542c2019eb6003197db",
-"commitSubject":"hack to redo 1.7.5 tag",
-"commitTs":1723581934000,
-"commitDate":"2024-08-13-1345",
-"buildTs":1723581993000,
-"buildDate":"2024-08-13-1346",
-"author":"Randal"
-}
+	"name":"rpg-sage",
+	"version":"1.7.4",
+	"branch":"main",
+	"commit":"8739d502aac695edaa5e83300d8f2c798156f2e9",
+	"commitSubject":"dice math fix",
+	"commitTs":1722975458000,
+	"commitDate":"2024-08-06-1317",
+	"buildTs":1722975557000,
+	"buildDate":"2024-08-06-1319",
+	"author":"Randal"
+	}
