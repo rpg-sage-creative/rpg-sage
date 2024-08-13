@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.4",
+"version":"1.7.5",
 "branch":"main",
-"commit":"8739d502aac695edaa5e83300d8f2c798156f2e9",
-"commitSubject":"dice math fix",
-"commitTs":1722975458000,
-"commitDate":"2024-08-06-1317",
-"buildTs":1722975557000,
-"buildDate":"2024-08-06-1319",
+"commit":"ee68a8edb132cf8dabe645baa16a6f0b838f4600",
+"commitSubject":"updated lock",
+"commitTs":1723581208000,
+"commitDate":"2024-08-13-1333",
+"buildTs":1723581247000,
+"buildDate":"2024-08-13-1334",
 "author":"Randal"
 }
