@@ -134,8 +134,12 @@ async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: S
 
 async function _channelList(sageMessage: SageMessage, whichType: BotServerGameType): Promise<void> {
 	const which = whichType === BotServerGameType.Game ? sageMessage.game! : sageMessage.server;
+	if (!which) {
+		await sageMessage.send(`<b>No Channel List in DMs</b>`);
+		return;
+	}
 	const guildChannels = await fetchAndFilterGuildChannels(sageMessage, which.channels);
-	const renderableContent = createAdminRenderableContent(which, `<b>${BotServerGameType[whichType]} Channel List</b>`);
+	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>${BotServerGameType[whichType]} Channel List</b>`);
 	if (guildChannels.length) {
 		for (const guildChannel of guildChannels) {
 			renderableContent.appendTitledSection(`<b>#${guildChannel.name}</b>`, `<b>Channel Id</b> ${guildChannel.id}`);
@@ -143,7 +147,7 @@ async function _channelList(sageMessage: SageMessage, whichType: BotServerGameTy
 	} else {
 		renderableContent.append(`<blockquote>No Channels Found!</blockquote>`);
 	}
-	return <any>sageMessage.send(renderableContent);
+	await sageMessage.send(renderableContent);
 }
 
 async function channelListServer(sageMessage: SageMessage): Promise<void> {

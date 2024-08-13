@@ -212,12 +212,12 @@ export abstract class SageCommand<
 
 	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
 	public get canAdminSage(): boolean {
-		return this.cache.get("canAdminSage", () => this.isSuperUser || this.isOwner || this.isSageAdmin);
+		return this.cache.get("canAdminSage", () => !!this.server && (this.isSuperUser || this.isOwner || this.isSageAdmin));
 	}
 
 	/** Quick flag for Server admins (canAdminSage || isServerAdmin) */
 	public get canAdminServer(): boolean {
-		return this.cache.get("canAdminServer", () => this.canAdminSage || this.isServerAdmin);
+		return this.cache.get("canAdminServer", () => this.canAdminSage || (!!this.server && this.isServerAdmin));
 	}
 
 	/** Quick flag for Game admins (canAdminServer || isGameAdmin) */

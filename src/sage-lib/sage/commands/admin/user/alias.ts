@@ -92,18 +92,18 @@ async function aliasList(sageMessage: SageMessage): Promise<void> {
 
 	const aliases = sageMessage.sageUser.aliases;
 	if (aliases.length) {
-		const renderableContent = createAdminRenderableContent(sageMessage.game ?? sageMessage.server, `<b>Alias List</b>`);
+		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>Alias List</b>`);
 		aliases.forEach((alias, index) => {
 			const newLine = index ? "\n" : "";
 			const target = alias.target.replace(/\n/g, "\n> ");
 			renderableContent.appendSection(`${newLine}\`${alias.name}::\` is an alias for:\n> \`\`\`${target}\`\`\``);
 		});
-		return <any>sageMessage.sendPost(renderableContent);
+		await sageMessage.sendPost(renderableContent);
 
 	} else {
-		const renderableContent = createAdminRenderableContent(sageMessage.game ?? sageMessage.server, `<b>Alias List</b>`);
+		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>Alias List</b>`);
 		renderableContent.append("<b>No Aliases Found!</b>");
-		return <any>sageMessage.sendPost(renderableContent);
+		await sageMessage.sendPost(renderableContent);
 
 	}
 }
