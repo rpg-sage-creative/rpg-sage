@@ -50,6 +50,9 @@ export async function handleSf2eImport(sageCommand: SageCommand): Promise<void> 
 	if (!character) {
 		return sageCommand.replyStack.whisper(`Failed to import character from: ${fileName}!`);
 	}
+	if (/discord/i.test(character.name)) {
+		return sageCommand.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+	}
 
 	const importing = await sageCommand.replyStack.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
 

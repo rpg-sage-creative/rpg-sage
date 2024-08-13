@@ -591,6 +591,9 @@ export async function handlePathbuilder2eImport(sageCommand: SageCommand): Promi
 	if (!pathbuilderChar) {
 		return sageCommand.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
 	}
+	if (/discord/i.test(pathbuilderChar.name)) {
+		return sageCommand.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+	}
 
 	const channel = sageCommand.dChannel;
 	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
