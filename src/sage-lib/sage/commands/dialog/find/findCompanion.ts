@@ -3,8 +3,13 @@ import { isNotBlank } from "@rsc-utils/string-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
-export function findCompanion(sageCommand: SageCommand, name: Optional<string>): GameCharacter | undefined {
-	if (!sageCommand.allowDialog) return undefined;
+type Options = {
+	auto: boolean;
+	first: boolean;
+};
+
+export function findCompanion(sageCommand: SageCommand, name: Optional<string>, opts: Options): GameCharacter | undefined {
+	// if (!sageCommand.allowDialog) return undefined;
 
 	const { authorDid, game, isPlayer, sageUser } = sageCommand;
 	if (game && !isPlayer) return undefined;
@@ -21,14 +26,14 @@ export function findCompanion(sageCommand: SageCommand, name: Optional<string>):
 	}
 
 	// try grabbing auto character
-	if (!char) {
+	if (!char && opts.auto) {
 		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:authorDid };
 		char = gamePcs?.getAutoCharacter(autoChannel)
 			?? userPcs.getAutoCharacter(autoChannel);
 	}
 
 	// else grab their first
-	if (!char) {
+	if (!char && opts.first) {
 		char = gamePcs
 			? gamePcs.findByUser(authorDid)?.companions.first()
 			: userPcs.first()?.companions.first()

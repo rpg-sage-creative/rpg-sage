@@ -1,9 +1,15 @@
 import { isNotBlank } from "@rsc-utils/string-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
+import type { Optional } from "@rsc-utils/core-utils";
 
-export function findNpc(sageCommand: SageCommand, name: string): GameCharacter | undefined {
-	if (!sageCommand.allowDialog) return undefined;
+type Options = {
+	auto: boolean;
+	first: boolean;
+};
+
+export function findNpc(sageCommand: SageCommand, name: Optional<string>, opts: Options): GameCharacter | undefined {
+	// if (!sageCommand.allowDialog) return undefined;
 
 	const { game, isGameMaster } = sageCommand;
 	if (game && !isGameMaster) return undefined;
@@ -22,10 +28,17 @@ export function findNpc(sageCommand: SageCommand, name: string): GameCharacter |
 	}
 
 	// try grabbing auto character
-	if (!char) {
+	if (!char && opts.auto) {
 		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:sageCommand.authorDid };
 		char = gameNpcs?.getAutoCharacter(autoChannel)
 			?? userNpcs.getAutoCharacter(autoChannel);
+	}
+
+	// else grab their first
+	if (!char && opts.first) {
+		char = gameNpcs
+			? gameNpcs.first()
+			: userNpcs.first();
 	}
 
 	return char;

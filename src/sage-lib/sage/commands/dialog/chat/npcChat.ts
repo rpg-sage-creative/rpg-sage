@@ -8,7 +8,7 @@ import { doChat } from "./doChat";
 export async function npcChat(sageMessage: SageMessage, dialogContent: DialogContent, options: ChatOptions): Promise<void> {
 	const characterName = dialogContent.name?.trim();
 	if (characterName) {
-		const character = characterName ? findNpc(sageMessage, characterName) : null;
+		const character = characterName ? findNpc(sageMessage, characterName, { auto:true, first:false }) : null;
 		if (character) {
 			await doChat(sageMessage, { character, colorType:getColorType(dialogContent.type), dialogContent }, options);
 		}else {
