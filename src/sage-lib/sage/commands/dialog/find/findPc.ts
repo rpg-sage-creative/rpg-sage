@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import { isNotBlank } from "@rsc-utils/string-utils";
+import { isBlank } from "@rsc-utils/string-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
@@ -17,27 +17,30 @@ export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: O
 	const gamePcs = game?.playerCharacters;
 	const userPcs = sageUser.playerCharacters;
 
-	let char: GameCharacter | undefined;
+	const isNameBlank = isBlank(name);
 
 	// try by given name/index first
-	if (isNotBlank(name)) {
-		char = (isGameMaster ? gamePcs : gamePcs?.filterByUser(authorDid))?.findByName(name)
+	if (!isNameBlank) {
+		const namedChar = (isGameMaster ? gamePcs : gamePcs?.filterByUser(authorDid))?.findByName(name)
 			?? userPcs.findByName(name);
+		if (namedChar) return namedChar;
 	}
 
 	// try grabbing auto character
-	if (!char && opts.auto) {
+	if (opts.auto) {
 		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:authorDid };
-		char = gamePcs?.getAutoCharacter(autoChannel)
+		const autoChar = gamePcs?.getAutoCharacter(autoChannel)
 			?? userPcs.getAutoCharacter(autoChannel);
+		if (autoChar) return autoChar;
 	}
 
 	// else grab their first
-	if (!char && opts.first) {
-		char = gamePcs
+	if (isNameBlank && opts.first) {
+		const firstChar = gamePcs
 			? gamePcs.findByUser(authorDid)
 			: userPcs.first();
+		if (firstChar) return firstChar;
 	}
 
-	return char;
+	return undefined;
 }
