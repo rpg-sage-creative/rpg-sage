@@ -4,6 +4,7 @@ import { DiscordKey } from "@rsc-utils/discord-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import { AttachmentBuilder, type Message } from "discord.js";
+import type { TDiceOutput } from "../../../../sage-dice/common.js";
 import type { GameCharacter, TDialogMessage } from "../../model/GameCharacter.js";
 import type { ColorType } from "../../model/HasColorsCore.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
@@ -11,7 +12,7 @@ import type { SageMessage } from "../../model/SageMessage.js";
 import { DialogDiceBehaviorType } from "../../model/User.js";
 import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
-import { parseDiceMatches, sendDice } from "../dice.js";
+import { parseDiceMatches, sendDice, type TDiceMatch } from "../dice.js";
 import type { ChatOptions } from "./chat/ChatOptions.js";
 import { sendDialogRenderable } from "./sendDialogRenderable.js";
 
@@ -49,8 +50,21 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	//#region dice lists
 	const diceMatches = await parseDiceMatches(sageMessage, content);
 	const reverseInline = sageMessage.sageUser.dialogDiceBehaviorType === DialogDiceBehaviorType.Inline;
-	const inlineDiceMatches = diceMatches.filter(dice => reverseInline ? !dice.inline : dice.inline);
-	const otherDiceMatches = diceMatches.filter(dice => reverseInline ? dice.inline : !dice.inline);
+	const inlineDiceMatches: TDiceMatch[] = [];
+	const diceOutputs: TDiceOutput[] = [];
+	diceMatches.forEach(dice => {
+		const inline = reverseInline ? !dice.inline : dice.inline;
+		if (inline) {
+			inlineDiceMatches.push(dice);
+			dice.output.forEach(out => {
+				if (out.hasSecret) {
+					diceOutputs.push(out);
+				}
+			});
+		}else {
+			diceOutputs.push(...dice.output);
+		}
+	});
 	//#endregion
 
 	//#region inline dice
@@ -103,7 +117,6 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 		const last = messages[messages.length - 1];
 
 		//#region dice
-		const diceOutputs = otherDiceMatches.map(match => match.output).flat();
 		if (diceOutputs.length) {
 			const diceResults = await sendDice(sageMessage, diceOutputs);
 			if (diceResults.allSecret && diceResults.hasGmChannel) {

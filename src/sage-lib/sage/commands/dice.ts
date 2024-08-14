@@ -39,7 +39,7 @@ type TDiscordDiceParseOptions = {
 	diceSecretMethodType?: DiceSecretMethodType;
 };
 
-type TDiceMatch = {
+export type TDiceMatch = {
 	match: string;
 	index: number;
 	inline: boolean;
