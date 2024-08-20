@@ -17,3 +17,6 @@ node_modules/
 !scripts/**/*.sh
 !docker/**/*.sh
 !**/core-utils/**/*.sh
+
+# docker
+shared-local-instance.db
