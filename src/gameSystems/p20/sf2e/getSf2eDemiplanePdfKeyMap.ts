@@ -61,6 +61,27 @@ export function getSf2eDemiplanePdfKeyMap(): DemiplanePdfKeyMap {
 		["shield_broken_threshold", { sageKey: "shieldBreakThreshold" }],
 		["shield_hp", { sageKey: "shieldHp" }],
 
+		// Armor Proficiencies:
+		["ac_unarmored_trained", { sageKey: "unarmoredTrained", checked: true }],
+		["ac_unarmored_expert", { sageKey: "unarmoredExpert", checked: true }],
+		["ac_unarmored_master", { sageKey: "unarmoredMaster", checked: true }],
+		["ac_unarmored_legendary", { sageKey: "unarmoredLegendary", checked: true }],
+
+		["ac_light_trained", { sageKey: "lightArmorTrained", checked: true }],
+		["ac_light_expert", { sageKey: "lightArmorExpert", checked: true }],
+		["ac_light_master", { sageKey: "lightArmorMaster", checked: true }],
+		["ac_light_legendary", { sageKey: "lightArmorLegendary", checked: true }],
+
+		["ac_medium_trained", { sageKey: "mediumArmorTrained", checked: true }],
+		["ac_medium_expert", { sageKey: "mediumArmorExpert", checked: true }],
+		["ac_medium_master", { sageKey: "mediumArmorMaster", checked: true }],
+		["ac_medium_legendary", { sageKey: "mediumArmorLegendary", checked: true }],
+
+		["ac_heavy_trained", { sageKey: "heavyArmorTrained", checked: true }],
+		["ac_heavy_expert", { sageKey: "heavyArmorExpert", checked: true }],
+		["ac_heavy_master", { sageKey: "heavyArmorMaster", checked: true }],
+		["ac_heavy_legendary", { sageKey: "heavyArmorLegendary", checked: true }],
+
 		// Skills, Perception, and DCs
 		["class_dc", { sageKey: "classDc" }],
 		["class_dc_key_bonus", { sageKey: "classDcAbilityMod" }],
@@ -222,56 +243,28 @@ export function getSf2eDemiplanePdfKeyMap(): DemiplanePdfKeyMap {
 		["ranged_weapon_damage_3", { sageKey: "ranged3Damage" }],
 		["ranged_weapon_traits_notes_3", { sageKey: "ranged3Traits" }],
 
-		//  TODO: These do not appear to have fields in the PDF as of now
-		//  [181, { sageKey: "ranged2Range" }],
-		//  [182, { sageKey: "ranged1Range" }],
-		//  [183, { sageKey: "ranged3Range" }],
-		//	[189, { sageKey: "ranged2Magazine" }],
-		//	[190, { sageKey: "ranged2Expended" }],
-		//	[191, { sageKey: "ranged1Magazine" }],
-		//	[192, { sageKey: "ranged1Expended" }],
-		//	[193, { sageKey: "ranged3Magazine" }],
-		//	[194, { sageKey: "ranged3Expended" }],
-		//	[196, { sageKey: "weaponProfNotes" }],
-		//	[197, { sageKey: "criticalSpecializations" }],
+		// Weapon Proficiencies:
+		["weapon_prof_unarmed_trained", { sageKey: "unarmedTrained", checked: true }],
+		["weapon_prof_unarmed_expert", { sageKey: "unarmedExpert", checked: true }],
+		["weapon_prof_unarmed_master", { sageKey: "unarmedMaster", checked: true }],
+		["weapon_prof_unarmed_legendary", { sageKey: "unarmedLegendary", checked: true }],
 
-		// Armor Proficiencies:
-		// [207, { sageKey: "unarmoredTrained", checked: true }],
-		// [208, { sageKey: "unarmoredExpert", checked: true }],
-		// [209, { sageKey: "unarmoredMaster", checked: true }],
-		// [210, { sageKey: "unarmoredLegendary", checked: true }],
-		// [211, { sageKey: "lightArmorTrained", checked: true }],
-		// [212, { sageKey: "lightArmorExpert", checked: true }],
-		// [213, { sageKey: "lightArmorMaster", checked: true }],
-		// [214, { sageKey: "lightArmorLegendary", checked: true }],
-		// [215, { sageKey: "mediumArmorTrained", checked: true }],
-		// [216, { sageKey: "mediumArmorExpert", checked: true }],
-		// [217, { sageKey: "mediumArmorMaster", checked: true }],
-		// [218, { sageKey: "mediumArmorLegendary", checked: true }],
-		// [219, { sageKey: "heavyArmorTrained", checked: true }],
-		// [220, { sageKey: "heavyArmorExpert", checked: true }],
-		// [221, { sageKey: "heavyArmorMaster", checked: true }],
-		// [222, { sageKey: "heavyArmorLegendary", checked: true }],
-		// [228, { sageKey: "unarmedTrained", checked: true }],
-		// [229, { sageKey: "unarmedExpert", checked: true }],
-		// [230, { sageKey: "unarmedMaster", checked: true }],
-		// [231, { sageKey: "unarmedLegendary", checked: true }],
-		// [232, { sageKey: "simpleTrained", checked: true }],
-		// [233, { sageKey: "simpleExpert", checked: true }],
-		// [234, { sageKey: "simpleMaster", checked: true }],
-		// [235, { sageKey: "simpleLegendary", checked: true }],
-		// [236, { sageKey: "martialTrained", checked: true }],
-		// [237, { sageKey: "martialExpert", checked: true }],
-		// [238, { sageKey: "martialLegendary", checked: true }],
-		// [239, { sageKey: "martialMaster", checked: true }],
-		// [240, { sageKey: "advancedTrained", checked: true }],
-		// [244, { sageKey: "advancedExpert", checked: true }],
-		// [245, { sageKey: "advancedMaster", checked: true }],
-		// [246, { sageKey: "advancedLegendary", checked: true }],
-		// [247, { sageKey: "otherTrained", checked: true }],
-		// [248, { sageKey: "otherExpert", checked: true }],
-		// [249, { sageKey: "otherMaster", checked: true }],
-		// [250, { sageKey: "otherLegendary", checked: true }],
+		["weapon_prof_simple_trained", { sageKey: "simpleTrained", checked: true }],
+		["weapon_prof_simple_expert", { sageKey: "simpleExpert", checked: true }],
+		["weapon_prof_simple_master", { sageKey: "simpleMaster", checked: true }],
+		["weapon_prof_simple_legendary", { sageKey: "simpleLegendary", checked: true }],
+
+		["weapon_prof_martial_trained", { sageKey: "martialTrained", checked: true }],
+		["weapon_prof_martial_expert", { sageKey: "martialExpert", checked: true }],
+		["weapon_prof_martial_master", { sageKey: "martialMaster", checked: true }],
+		["weapon_prof_martial_legendary", { sageKey: "martialLegendary", checked: true }],
+
+		["weapon_prof_advanced_trained", { sageKey: "advancedTrained", checked: true }],
+		["weapon_prof_advanced_expert", { sageKey: "advancedExpert", checked: true }],
+		["weapon_prof_advanced_master", { sageKey: "advancedMaster", checked: true }],
+		["weapon_prof_advanced_legendary", { sageKey: "advancedLegendary", checked: true }],
+
+		// TODO: These mappings need to be configured
 		// [251, { sageKey: "fortitudeTrained", checked: true }],
 		// [252, { sageKey: "reflexTrained", checked: true }],
 		// [253, { sageKey: "willTrained", checked: true }],
@@ -613,9 +606,22 @@ export function getSf2eDemiplanePdfKeyMap(): DemiplanePdfKeyMap {
 		// [707, { sageKey: "spellAtkExpert", checked: true }],
 		// [708, { sageKey: "spellAtkMaster", checked: true }],
 		// [709, { sageKey: "spellAtkLegendary", checked: true }],
+
+		//  TODO: These do not appear to have fields in the PDF as of now
+		//  [181, { sageKey: "ranged2Range" }],
+		//  [182, { sageKey: "ranged1Range" }],
+		//  [183, { sageKey: "ranged3Range" }],
+		//  [189, { sageKey: "ranged2Magazine" }],
+		//  [190, { sageKey: "ranged2Expended" }],
+		//  [191, { sageKey: "ranged1Magazine" }],
+		//  [192, { sageKey: "ranged1Expended" }],
+		//  [193, { sageKey: "ranged3Magazine" }],
+		//  [194, { sageKey: "ranged3Expended" }],
+		//  [196, { sageKey: "weaponProfNotes" }],
+		//  [197, { sageKey: "criticalSpecializations" }],
+		//  [247, { sageKey: "otherTrained", checked: true }],
+		//  [248, { sageKey: "otherExpert", checked: true }],
+		//  [249, { sageKey: "otherMaster", checked: true }],
+		//  [250, { sageKey: "otherLegendary", checked: true }],
 	])
 }
-//
-
-// 	];
-// }
