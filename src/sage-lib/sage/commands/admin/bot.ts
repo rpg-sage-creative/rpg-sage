@@ -1,21 +1,10 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { errorReturnEmptyArray, getBuildInfo, isDefined, type Snowflake } from "@rsc-utils/core-utils";
+import { getBuildInfo, isDefined, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Bot } from "../../model/Bot.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../cmd.js";
-
-async function botList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-	const bots: Bot[] = await sageMessage.caches.bots.getAll().catch(errorReturnEmptyArray);
-	for (const bot of bots) {
-		await sendBot(sageMessage, bot);
-	}
-	return Promise.resolve();
-}
 
 async function botDetails(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
@@ -113,7 +102,6 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerBot(): void {
-	registerListeners({ commands:["bot|list"], message:botList });
 	registerListeners({ commands:["bot|details"], message:botDetails });
 	registerListeners({ commands:["code|version"], message:botCodeVersion });
 	registerListeners({ commands:["bot|set|search|status"], message:setBotSearchStatus });

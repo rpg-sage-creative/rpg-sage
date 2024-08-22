@@ -96,13 +96,6 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	//#region Entities
 
-	/** Gets all of the entities by using getIds() and getByIds(), which checks cache first. */
-	public async getAll(): Promise<U[]> {
-		const ids = await this.getIds(),
-			entities = await this.getByIds(...ids);
-		return entities.filter(isDefined);
-	}
-
 	/** Gets the entity by id, checking cache first. */
 	public async getById(id: Optional<IdType>): Promise<OrNull<U>> {
 		if (!id) {

@@ -3,7 +3,7 @@ import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
 import { applyChanges, isDefined, randomSnowflake, warn, type Args, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
-import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Message, Role } from "discord.js";
+import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";
 import type { PartyCore } from "../commands/trackers/party/Party.js";
@@ -722,13 +722,4 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 
 	// #endregion
 
-	public static async from(message: Message, sageCache: SageCache): Promise<Game | null> {
-		if (message.guild) {
-			const game = await sageCache.games.findByDiscordKey(DiscordKey.from(message));
-			if (game) {
-				return game;
-			}
-		}
-		return null;
-	}
 }

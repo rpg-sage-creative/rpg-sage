@@ -1,6 +1,5 @@
+import { isDefined, type UUID } from "@rsc-utils/core-utils";
 import type { DiscordKey } from "@rsc-utils/discord-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import type { UUID } from "@rsc-utils/core-utils";
 import { Game, type GameCore } from "../model/Game.js";
 import type { SageCache } from "../model/SageCache.js";
 import { IdRepository } from "./base/IdRepository.js";
@@ -12,26 +11,26 @@ export class GameRepo extends IdRepository<GameCore, Game> {
 	/** Cache of active channel keys */
 	private channelKeyToIdMap = new Map<string, UUID>();
 
+	/** Gets all of the entities by using getIds() and getByIds(), which checks cache first. */
+	public async getAll(): Promise<Game[]> {
+		const ids = await this.getIds(),
+			entities = await this.getByIds(...ids);
+		return entities.filter(isDefined);
+	}
+
 	/** Gets the active/current Game for the GameChannelKey */
 	public async findActiveByDiscordKey(discordKey: DiscordKey): Promise<Game | undefined> {
+		// const { guildId, channelId } = discordKey;
+		// const test = (core: GameCore) => !core.archivedTs
+		// 	&& core.serverDid === guildId
+		// 	&& core.channels?.some(channel => channel.id === channelId || channel.did === channelId);
+		// return this.cached.find(game => test(game.toJSON()));
 		const games = await this.getAll();
 		return games.find(game =>
 			!game.isArchived
 			&& game.serverDid === discordKey.server
 			&& game.hasChannel(discordKey)
 		);
-	}
-	public async findByDiscordKey(discordKey: DiscordKey): Promise<Game | undefined> {
-		const games = await this.getAll();
-		return games.find(game =>
-			game.serverDid === discordKey.server
-			&& game.hasChannel(discordKey)
-		);
-	}
-
-	public async getByServerDid(serverDid: Snowflake): Promise<Game[]> {
-		const allGames = await this.getAll();
-		return allGames.filter(game => game.serverDid === serverDid);
 	}
 
 	public write(game: Game): Promise<boolean> {
