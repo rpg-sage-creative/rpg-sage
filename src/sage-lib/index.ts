@@ -1,17 +1,12 @@
 import { setSageId } from "@rsc-sage/env";
-import { error, getCodeName } from "@rsc-utils/core-utils";
+import { error } from "@rsc-utils/core-utils";
 import { registerAndLoad } from "../sage-pf2e";
 import { registerPrompts } from "./discord/index.js";
 import { registerCommandHandlers } from "./sage/commands/index.js";
 import { ActiveBot } from "./sage/model/ActiveBot.js";
-import { BotRepo } from "./sage/repo/BotRepo.js";
 
 export async function activate(): Promise<void> {
-	const botCodeName = getCodeName();
-	const bot = await BotRepo.getByCodeName(botCodeName).catch(err => {
-		error(`BotRepo.getByCodeName("${botCodeName}") failed!`, err);
-		return null;
-	});
+	const bot = await ActiveBot.prepBot().catch(error);
 	if (!bot) {
 		process.exit(1);
 	}
@@ -25,7 +20,7 @@ export async function activate(): Promise<void> {
 
 	await registerAndLoad();
 
-	await ActiveBot.activate(botCodeName);
+	ActiveBot.from(bot);
 }
 
 /*
