@@ -33,8 +33,8 @@ export async function gcCmdStats(sageMessage: SageMessage): Promise<void> {
 				}else {
 					await game.encounters.updatePins();
 					await game.parties.updatePins();
-					if (char.pathbuilder?.messageId) {
-						await updateSheet(sageMessage.caches, char.pathbuilder);
+					if (char.pathbuilder?.hasSheetRef) {
+						await updateSheet(sageMessage, char.pathbuilder);
 					}
 				}
 			}
