@@ -62,13 +62,6 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	//#region Cores
 
-	/** Reads all cores by iterating all uuid.json files. */
-	protected async readAllCores(): Promise<T[]> {
-		const ids = await this.getIds(),
-			cores = await this.readCoresByIds(...ids);
-		return cores.filter(isDefined);
-	}
-
 	/** Reads all uncached cores by iterating all uuid.json files and checking cache. */
 	protected async readUncachedCores(): Promise<T[]> {
 		const ids = await this.getIds(),
