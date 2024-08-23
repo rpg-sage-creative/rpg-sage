@@ -637,7 +637,7 @@ export async function handlePathbuilder2eReimport(sageCommand: SageMessage, mess
 	const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
 	const newName = sageCommand.args.getString("name") ?? undefined;
 	const pdfUrl = sageCommand.args.getUrl("pdf") ?? undefined;
-	const pdfAttachment = message.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
+	const pdfAttachment = sageCommand.message.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 	const refreshResult = await PathbuilderCharacter.refresh({ characterId, pathbuilderId, newName, pdfUrl, pdfAttachment });
 	switch (refreshResult) {
 		case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
