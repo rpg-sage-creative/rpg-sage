@@ -85,8 +85,7 @@ async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Snow
 	if (!isMessageTarget(channel) || isDMBased(channel)) {
 		return ["DM", undefined];
 	}
-	const discordKey = DiscordKey.from(channel);
-	return [channel.name, await sageCache.games.findActiveByDiscordKey(discordKey)];
+	return [channel.name, await sageCache.games.findActive(channel)];
 }
 
 export async function channelDetails(sageMessage: SageMessage, channel?: SageChannel): Promise<void> {

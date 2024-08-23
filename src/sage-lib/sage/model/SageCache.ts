@@ -259,7 +259,7 @@ export class SageCache {
 		core.home = await core.servers.getHome();
 		if (message.guild) {
 			core.server = await core.servers.getOrCreateByGuild(message.guild);
-			core.game = await core.games.findActiveByDiscordKey(core.discordKey);
+			core.game = await core.games.findActive(message);
 		}
 		core.user = await core.users.getOrCreateByDid(orNilSnowflake(userDid));
 		return sageCache;
@@ -275,7 +275,7 @@ export class SageCache {
 		core.home = await core.servers.getHome();
 		if (interaction.guild) {
 			core.server = await core.servers.getOrCreateByGuild(interaction.guild);
-			core.game = await core.games.findActiveByDiscordKey(core.discordKey);
+			core.game = await core.games.findActive(interaction);
 		}
 		core.user = await core.users.getOrCreateByDid(interaction.user.id as Snowflake);
 		return sageCache;

@@ -1,6 +1,6 @@
 import { SageChannelType, type SageChannel } from "@rsc-sage/types";
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, toChannelMention } from "@rsc-utils/discord-utils";
+import { toChannelMention } from "@rsc-utils/discord-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
 type Results = { free:SageChannel[]; used:SageChannel[]; };
@@ -38,8 +38,7 @@ export async function getGameChannels(sageCommand: SageCommand, includeThisChann
 	const free: SageChannel[] = [];
 	const used: SageChannel[] = [];
 	for (const channel of channels) {
-		const discordKey = new DiscordKey(sageCommand.server.did, channel.id);
-		const otherGame = await sageCommand.sageCache.games.findActiveByDiscordKey(discordKey);
+		const otherGame = await sageCommand.server.findActiveGame(channel.id);
 		if (otherGame) {
 			used.push(channel);
 		}else {
