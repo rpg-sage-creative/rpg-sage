@@ -86,6 +86,13 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	);
 	//#endregion
 
+	//#region sheet link
+	const sheetUrl = character.getStat("sheetUrl");
+	if (sheetUrl) {
+		content += ` [✎](${sheetUrl})`;
+	}
+	//#endregion
+
 	renderableContent.append(content);
 
 	const thumbnailUrl = postData.imageUrl ?? character.avatarUrl;

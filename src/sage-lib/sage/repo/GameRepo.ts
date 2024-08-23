@@ -1,6 +1,6 @@
-import type { DiscordKey } from "@rsc-utils/discord-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import type { UUID } from "@rsc-utils/core-utils";
+import { type UUID } from "@rsc-utils/core-utils";
+import { findJsonFile } from "@rsc-utils/io-utils";
+import type { MessageReference } from "discord.js";
 import { Game, type GameCore } from "../model/Game.js";
 import type { SageCache } from "../model/SageCache.js";
 import { IdRepository } from "./base/IdRepository.js";
@@ -13,25 +13,22 @@ export class GameRepo extends IdRepository<GameCore, Game> {
 	private channelKeyToIdMap = new Map<string, UUID>();
 
 	/** Gets the active/current Game for the GameChannelKey */
-	public async findActiveByDiscordKey(discordKey: DiscordKey): Promise<Game | undefined> {
-		const games = await this.getAll();
-		return games.find(game =>
-			!game.isArchived
-			&& game.serverDid === discordKey.server
-			&& game.hasChannel(discordKey)
-		);
-	}
-	public async findByDiscordKey(discordKey: DiscordKey): Promise<Game | undefined> {
-		const games = await this.getAll();
-		return games.find(game =>
-			game.serverDid === discordKey.server
-			&& game.hasChannel(discordKey)
-		);
-	}
+	public async findActiveByDiscordKey(messageRef: MessageReference): Promise<Game | undefined> {
+		const { guildId, channelId } = messageRef;
+		const contentFilter = (core: GameCore) => !core.archivedTs
+			&& core.serverDid === guildId
+			&& core.channels?.some(channel => channel.id === channelId || channel.did === channelId);
 
-	public async getByServerDid(serverDid: Snowflake): Promise<Game[]> {
-		const allGames = await this.getAll();
-		return allGames.filter(game => game.serverDid === serverDid);
+		const cachedGame = this.cached.find(game => contentFilter(game.toJSON()));
+		if (cachedGame) return cachedGame;
+
+		const uncachedCore = await findJsonFile(`${IdRepository.DataPath}/${this.objectTypePlural}`, { contentFilter });
+		if (uncachedCore) {
+			const game = await GameRepo.fromCore(uncachedCore, this.sageCache);
+			this.cacheId(game.id as UUID, game);
+			return game;
+		}
+		return undefined;
 	}
 
 	public write(game: Game): Promise<boolean> {

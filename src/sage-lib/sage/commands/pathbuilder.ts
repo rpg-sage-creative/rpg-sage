@@ -1,6 +1,6 @@
 import { toUnique } from "@rsc-utils/array-utils";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { errorReturnNull, isDefined, warn } from "@rsc-utils/core-utils";
+import { errorReturnNull, isDefined } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
@@ -129,12 +129,12 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: Pathbuilde
 
 	// link gamecharacter to pbcharacter
 	pbChar.characterId = oChar.id;
-	pbChar.messageId = message.id;
+	pbChar.setSheetRef(message);
 	pbChar.userDid = oChar.userDid;
 	const pbCharSaved = await pbChar.save();
 
 	if (pbCharSaved) {
-		await updateSheet(sageCommand.sageCache, pbChar, message);
+		await updateSheet(sageCommand, pbChar, message);
 	}
 
 	// newly created character should already be linked
@@ -174,17 +174,22 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 	}
 }
 
-export async function updateSheet(sageCache: SageCache, character: PathbuilderCharacter, message?: Message) {
+export async function updateSheet({ sageCache }: SageCommand, character: PathbuilderCharacter, message?: Message) {
 	if (message) {
-		if (!character.messageId) {
-			character.messageId = message.id;
+		// we have a message, update the sheet reference just in case
+		if (character.setSheetRef(message)) {
+			// if it was updated, save the character
 			await character.save();
 		}
+
 	}else {
-		if (character.messageId) {
-			const messageReference = { guildId:sageCache.server.did, channelId:undefined!, messageId:character.messageId };
-			warn(`Pretty sure this channelId:undefined is going to be a problem!`);
-			message = await sageCache.fetchMessage(messageReference) ?? undefined;
+		// we don't have a message, go find it
+		if (character.hasSheetRef) {
+			const messageReference = character.sheetRef;
+			// handle old data before we stored the full MessageReference
+			if (messageReference?.channelId) {
+				message = await sageCache.fetchMessage(messageReference);
+			}
 		}
 	}
 	if (message) {
@@ -424,21 +429,21 @@ async function viewHandler(sageInteraction: SageSelectInteraction, character: Pa
 	character.setSheetValue("activeView", undefined);
 	character.setSheetValue("activeSections", activeSections);
 	await character.save();
-	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
+	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
 async function explorationHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeExploration = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeExploration", activeExploration);
 	await character.save();
-	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
+	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
 async function skillHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await character.save();
-	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
+	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
 async function macroHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
@@ -449,7 +454,7 @@ async function macroHandler(sageInteraction: SageSelectInteraction, character: P
 		character.setSheetValue("activeMacro", activeMacro);
 	}
 	await character.save();
-	return updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
+	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
 
@@ -484,7 +489,7 @@ async function macroRollHandler(sageInteraction: SageButtonInteraction, characte
 	}else {
 		setMacroUser(character, sageInteraction.sageUser);
 		await character.save();
-		await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
+		await updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 		if (macros.length) {
 			sageInteraction.send("Invalid Macro!");
 		}
@@ -505,13 +510,13 @@ async function linkHandler(sageInteraction: SageButtonInteraction, character: Pa
 
 	if (char) {
 		character.characterId = char.id;
-		character.messageId = sageInteraction.interaction.message.id;
+		character.setSheetRef(sageInteraction.interaction.message);
 		character.userDid = char.userDid;
 		char.pathbuilderId = character.id;
 		const charSaved = await character.save();
 		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
 		if (gameSaved) {
-			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
+			await updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 			return sageInteraction.reply("Character Successfully Linked.", true);
 		}else {
 			return sageInteraction.reply("Sorry, unable to link character.", true);
@@ -535,13 +540,13 @@ async function unlinkHandler(sageInteraction: SageButtonInteraction, character: 
 
 	if (char) {
 		character.characterId = null;
-		character.messageId = sageInteraction.interaction.message.id;
+		character.setSheetRef(sageInteraction.interaction.message);
 		character.userDid = null;
 		char.pathbuilderId = null;
 		const charSaved = await character.save();
 		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
 		if (gameSaved) {
-			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
+			await updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 			return sageInteraction.reply("Character Successfully Unlinked.", true);
 		}else {
 			return sageInteraction.reply("Sorry, unable to unlink character.", true);
@@ -560,7 +565,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 
 		// if we matched the old regex, force the sheet to update
 		if (!matchesActionRegex(customId)) {
-			await updateSheet(sageInteraction.sageCache, character, sageInteraction.interaction.message);
+			await updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 		}
 
 		switch(command) {
@@ -632,7 +637,7 @@ export async function handlePathbuilder2eReimport(sageCommand: SageMessage, mess
 	const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
 	const newName = sageCommand.args.getString("name") ?? undefined;
 	const pdfUrl = sageCommand.args.getUrl("pdf") ?? undefined;
-	const pdfAttachment = message.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
+	const pdfAttachment = sageCommand.message.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
 	const refreshResult = await PathbuilderCharacter.refresh({ characterId, pathbuilderId, newName, pdfUrl, pdfAttachment });
 	switch (refreshResult) {
 		case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
@@ -644,7 +649,7 @@ export async function handlePathbuilder2eReimport(sageCommand: SageMessage, mess
 		case false: return sageCommand.whisper("Sorry, we don't know what happened!");
 		default: {
 			const char = await PathbuilderCharacter.loadCharacter(characterId);
-			await updateSheet(sageCommand.sageCache, char!, message);
+			await updateSheet(sageCommand, char!, message);
 			await sageCommand.message.delete();
 			return;
 		}

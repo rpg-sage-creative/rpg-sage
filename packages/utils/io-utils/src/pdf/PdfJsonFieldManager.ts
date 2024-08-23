@@ -4,7 +4,7 @@ import type { CheckField, Field, TextField } from "./internal/types.js";
 import type { PdfJson } from "./types.js";
 
 type TransmutedField = Field & { id?:string | number; };
-export type Transmuter = (fields: Field) => TransmutedField;
+type Transmuter = (fields: Field) => TransmutedField;
 
 export class PdfJsonFieldManager {
 	public fields: TransmutedField[];

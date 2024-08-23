@@ -1,32 +1,16 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { errorReturnEmptyArray, getBuildInfo, isDefined, type Snowflake } from "@rsc-utils/core-utils";
+import { getBuildInfo, isDefined } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Bot } from "../../model/Bot.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../cmd.js";
 
-async function botList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-	const bots: Bot[] = await sageMessage.caches.bots.getAll().catch(errorReturnEmptyArray);
-	for (const bot of bots) {
-		await sendBot(sageMessage, bot);
-	}
-	return Promise.resolve();
-}
-
 async function botDetails(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.isSuperUser) {
 		return sageMessage.reactBlock();
 	}
-
-	const firstMention = sageMessage.message.mentions.users.first();
-	const botDid = firstMention?.id as Snowflake ?? await sageMessage.args.removeAndReturnUserDid();
-	const bot = botDid && (await sageMessage.caches.bots.getByDid(botDid)) || sageMessage.bot;
-
-	return sendBot(sageMessage, bot);
+	return sendBot(sageMessage);
 }
 
 function searchStatusToReadable(status: string | boolean): string {
@@ -37,43 +21,42 @@ function searchStatusToReadable(status: string | boolean): string {
 	}
 	return status;
 }
+
 function keyAndStatusToOutput(gameSystem: GameSystemType, status: boolean | string): string {
 	const emoji = status === true ? ":green_circle:" : status === false ? ":no_entry_sign:" : ":yellow_circle:";
 	return `[spacer] ${emoji} <b>${GameSystemType[gameSystem]}</b> ${searchStatusToReadable(status)}`;
 }
+
 function getBotSearchStatus(bot: Bot): string[] {
 	return Object.keys(GameSystemType)
 		.filter(key => +key)
 		.map(key => keyAndStatusToOutput(+key, bot.getSearchStatus(+key)));
 }
 
-async function sendBot(sageMessage: SageMessage, bot: Bot): Promise<void> {
-	const renderableContent = createAdminRenderableContent(sageMessage.bot);
-	if (bot) {
-		renderableContent.setTitle(`<b>${bot.codeName}</b>`);
-		renderableContent.append(bot.id);
-		const botUser = await sageMessage.discord.fetchUser(bot.did);
-		if (botUser) {
-			renderableContent.setThumbnailUrl(botUser.displayAvatarURL());
-			renderableContent.append(`<b>Username</b> ${toHumanReadable(botUser)}`);
-			renderableContent.append(`<b>User Id</b> ${botUser.id}`);
-			//TODO: resolved to a guildmember to get presence and last message
-			// renderableContent.append(`<b>Status</b> ${botUser.presence.status}`);
-			// const lastMessage = botUser.lastMessage;
-			// if (lastMessage) {
-			// 	renderableContent.append(`<b>Last Message Guild</b> ${lastMessage.guild && lastMessage.guild.name || "non-guild message"}`);
-			// 	renderableContent.append(`<b>Last Message Date</b> ${lastMessage.createdAt.toUTCString()}`);
-			// }
-		} else {
-			renderableContent.append(`<b>Username</b> ${"<i>UNKNOWN</i>"}`);
-			renderableContent.append(`<b>User Id</b> ${bot.did || "<i>NOT SET</i>"}`);
-			renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
-		}
-		renderableContent.appendTitledSection("Search Engine Status by Game", ...getBotSearchStatus(bot));
+async function sendBot(sageMessage: SageMessage): Promise<void> {
+	const { bot } = sageMessage;
+	const renderableContent = createAdminRenderableContent(bot);
+	renderableContent.setTitle(`<b>${bot.codeName}</b>`);
+	renderableContent.append(bot.id);
+	const botUser = await sageMessage.discord.fetchUser(bot.did);
+	if (botUser) {
+		renderableContent.setThumbnailUrl(botUser.displayAvatarURL());
+		renderableContent.append(`<b>Username</b> ${toHumanReadable(botUser)}`);
+		renderableContent.append(`<b>User Id</b> ${botUser.id}`);
+		//TODO: resolved to a guildmember to get presence and last message
+		// renderableContent.append(`<b>Status</b> ${botUser.presence.status}`);
+		// const lastMessage = botUser.lastMessage;
+		// if (lastMessage) {
+		// 	renderableContent.append(`<b>Last Message Guild</b> ${lastMessage.guild && lastMessage.guild.name || "non-guild message"}`);
+		// 	renderableContent.append(`<b>Last Message Date</b> ${lastMessage.createdAt.toUTCString()}`);
+		// }
 	} else {
-		renderableContent.append(`<blockquote>Bot Not Found!</blockquote>`);
+		renderableContent.append(`<b>Username</b> ${"<i>UNKNOWN</i>"}`);
+		renderableContent.append(`<b>User Id</b> ${bot.did || "<i>NOT SET</i>"}`);
+		renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
 	}
-	return <any>sageMessage.send(renderableContent);
+	renderableContent.appendTitledSection("Search Engine Status by Game", ...getBotSearchStatus(bot));
+	await sageMessage.send(renderableContent);
 }
 
 async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
@@ -92,7 +75,7 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 	const saved = await sageMessage.bot.setSearchStatus(gameSystem, status);
 	await sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
-		return sendBot(sageMessage, sageMessage.bot);
+		return sendBot(sageMessage);
 	}
 }
 
@@ -113,7 +96,6 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerBot(): void {
-	registerListeners({ commands:["bot|list"], message:botList });
 	registerListeners({ commands:["bot|details"], message:botDetails });
 	registerListeners({ commands:["code|version"], message:botCodeVersion });
 	registerListeners({ commands:["bot|set|search|status"], message:setBotSearchStatus });

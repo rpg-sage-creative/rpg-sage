@@ -6,5 +6,5 @@ export * from "./getFileSize.js";
 export * from "./getJson.js";
 export * from "./getProtocol.js";
 export * from "./getText.js";
-export * from "./helpers.js";
+export * from "./isUrl.js";
 export * from "./types.js";

@@ -1,14 +1,14 @@
 import { getSuperUserId, isSageId } from "@rsc-sage/env";
-import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
+import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, getCodeName, getDataRoot, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { wrapUrl } from "@rsc-utils/discord-utils";
+import { findJsonFile } from "@rsc-utils/io-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { ActivityType, Client } from "discord.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
-import { BotRepo } from "../repo/BotRepo.js";
-import { Bot, type IBotCore, type TBotCodeName } from "./Bot.js";
+import { Bot, type IBotCore } from "./Bot.js";
 import { SageCache } from "./SageCache.js";
 
 interface IClientEventHandler {
@@ -227,17 +227,17 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 	public static client: Client;
 
-	public static async activate(codeName: TBotCodeName): Promise<void> {
-		const bot = await BotRepo.getByCodeName(codeName);
-		if (bot) {
-			ActiveBot.from(bot);
-		}else {
-			error(`Failure to load: ${codeName}`);
-		}
-	}
-
 	public static from(bot: Bot): ActiveBot {
 		return new ActiveBot(bot.toJSON());
+	}
+
+	public static async prepBot(): Promise<Bot> {
+		const codeName = getCodeName();
+		const contentFilter = (core: IBotCore) => core.codeName === codeName;
+		const botsPath = `${getDataRoot("sage")}/bots`;
+		const botCore = await findJsonFile(botsPath, { contentFilter });
+		if (!botCore) throw new Error(`Cannot find bot: ${codeName}`);
+		return new Bot(botCore!, null!);
 	}
 
 }

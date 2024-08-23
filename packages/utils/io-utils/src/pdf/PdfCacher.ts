@@ -40,17 +40,51 @@ export class PdfCacher {
 		return new Promise((resolve, reject) => {
 			const pdfParser = new PDFParser();
 
-			pdfParser.on("pdfParser_dataError", async (errData: any) => {
+			//#region timeout logic
+
+			// this timer is to avoid hanging a process
+			let timer: NodeJS.Timeout;
+			// how many seconds to wait
+			const TIMER_MS = 2000;
+			// reset counter keeps us from running too long
+			let resetCount = 0;
+			// (arbitrary number)
+			const MAX_RESETS = 5;
+			// clears the timer during cleanup
+			const clearTimer = () => timer ? clearTimeout(timer) : void 0;
+			// resets the counter during various events
+			const resetTimer = () => {
+				if (resetCount < MAX_RESETS) {
+					clearTimer();
+					// instead of having more resolve/reject logic, simply use the pdfParser's emit to pass along an error
+					timer = setTimeout(() => pdfParser.emit("pdfParser_dataError", { parserError:"TIMEOUT" }), TIMER_MS);
+				}
+			};
+
+			//#endregion
+
+			pdfParser.once("pdfParser_dataError", async (errData: any) => {
+				clearTimer();
 				this.removeCache();
-				reject(errData.parserError);
+				reject(errData?.parserError);
 			});
 
-			pdfParser.on("pdfParser_dataReady", async (json: any) => {
+			pdfParser.once("pdfParser_dataReady", async (json: any) => {
+				clearTimer();
 				this.removeCache();
 				resolve(json);
 			});
 
-			pdfParser.loadPDF(this.cachedPdfPath);
+			pdfParser.once("data", resetTimer);
+
+			pdfParser.once("readable", _meta => {
+				/** @todo logic here for testing headers? */
+				resetTimer();
+			});
+
+			pdfParser.loadPDF(this.cachedPdfPath).then(resetTimer);
+
+			resetTimer();
 		});
 
 	}

@@ -11,52 +11,6 @@ import { AdminRoleType, type IAdminRole } from "../../../model/Server.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
-async function serverCount(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-	const servers = await sageMessage.caches.servers.getAll();
-	const active = servers.filter(server => server.isActive);
-	const guilds = await sageMessage.caches.discord.client.guilds.fetch();
-
-	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>Server Count</b>`);
-	renderableContent.append(`<b>Total</b> ${servers.length}`);
-	renderableContent.append(`<b>Active</b> ${active.length}`);
-	renderableContent.append(`<b>Inactive</b> ${servers.length - active.length}`);
-	renderableContent.append(`<b>Connected</b> ${guilds.size}`);
-	await sageMessage.send(renderableContent);
-	// return renderCount(sageMessage, "Servers", servers.length, active.length);
-}
-
-async function serverList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-	let servers = await sageMessage.caches.servers.getAll();
-	if (servers) {
-		const filter = sageMessage.args.join(" ");
-		if (filter && servers.length) {
-			const lower = filter.toLowerCase();
-			servers = servers.filter(server => server.discord?.guild?.name.toLowerCase().includes(lower));
-		}
-
-		const renderableContent = createAdminRenderableContent(sageMessage.bot);
-		renderableContent.setTitle(`<b>server-list</b>`);
-		if (servers.length) {
-			for (const server of servers) {
-				const title = `<b>${server.discord?.guild?.name} (${server.discord?.guild?.nameAcronym})</b>`;
-				const serverId = `<b>UUID</b> ${server.id}`;
-				const serverDid = `<b>Server Id</b> ${server.did}`;
-				renderableContent.appendTitledSection(title, serverDid, serverId);
-			}
-		} else {
-			renderableContent.append(`<blockquote>No Servers Found!</blockquote>`);
-		}
-		return <any>sageMessage.send(renderableContent);
-	}
-	return Promise.resolve();
-}
-
 async function serverInit(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.server) {
 		return Promise.resolve();
@@ -102,7 +56,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 		};
 	});
 
-	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>server-details</b>`);
+	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>Server Details</b>`);
 	if (server) {
 		renderableContent.append(server.id);
 		const guild = server.discord?.guild;
@@ -126,12 +80,9 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 }
 
 async function serverUpdate(sageMessage: SageMessage): Promise<void> {
-	let server: Optional<Server> = sageMessage.server;
+	const { server } = sageMessage;
 	if (server && !sageMessage.canAdminServer) {
 		return sageMessage.reactBlock();
-	}
-	if (!server && sageMessage.isSuperUser) {
-		server = await sageMessage.args.removeAndReturnServer();
 	}
 	if (!server) {
 		return sageMessage.reactFailure();
@@ -147,8 +98,6 @@ async function serverUpdate(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerServer(): void {
-	registerListeners({ commands:["server|count"], message:serverCount });
-	registerListeners({ commands:["server|list"], message:serverList });
 	registerListeners({ commands:["server|init"], message:serverInit });
 	registerListeners({ commands:["server|details"], message:serverDetails });
 	registerListeners({ commands:["server|update"], message:serverUpdate });

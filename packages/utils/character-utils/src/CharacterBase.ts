@@ -1,4 +1,5 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
+import type { Message, MessageReference } from "discord.js";
 
 /** Represents an object that can be null or undefined. */
 type Optional<T> = T | null | undefined;
@@ -11,6 +12,8 @@ export interface CharacterBaseCore<T extends string = string> extends IdCore<T> 
 	/** link to the game/user character */
 	characterId?: string;
 	/** message where the char sheet is posted */
+	sheetRef?: MessageReference;
+	/** @deprecated */
 	messageId?: string;
 	/** link to the character's user */
 	userDid?: string;
@@ -25,8 +28,42 @@ export abstract class CharacterBase<T extends CharacterBaseCore<U> = CharacterBa
 	public set characterId(characterId: Optional<string>) { this.core.characterId = characterId ?? undefined; }
 
 	/** The messageId value from the Message where the character sheet is posted. */
-	public get messageId(): string { return this.core.messageId ?? ""; }
-	public set messageId(messageId: Optional<string>) { this.core.messageId = messageId ?? undefined; }
+	public get sheetRef(): MessageReference | undefined {
+		if (this.core.sheetRef) return this.core.sheetRef;
+		// this allows us to function from old/inadequate data
+		if (this.core.messageId) return { messageId:this.core.messageId } as MessageReference;
+		return undefined;
+	}
+	public setSheetRef(msgOrRef: Optional<Message | MessageReference>): boolean {
+		let changed = false;
+		if (msgOrRef) {
+			// check guild/channel now, but do message later for different keys
+			if (this.core.sheetRef?.guildId !== (msgOrRef.guildId ?? undefined)) changed = true;
+			if (this.core.sheetRef?.channelId !== msgOrRef.channelId) changed = true;
+
+			if ("messageId" in msgOrRef) {
+				if (this.core.sheetRef?.messageId !== msgOrRef.messageId) changed = true;
+				this.core.sheetRef = {
+					guildId: msgOrRef.guildId,
+					channelId: msgOrRef.channelId,
+					messageId: msgOrRef.messageId
+				};
+			}else {
+				if (this.core.sheetRef?.messageId !== msgOrRef.id) changed = true;
+				this.core.sheetRef = {
+					guildId: msgOrRef.guildId ?? undefined,
+					channelId: msgOrRef.channelId,
+					messageId: msgOrRef.id
+				};
+			}
+		}else {
+			if (this.core.sheetRef) changed = true;
+			this.core.sheetRef = undefined;
+		}
+		if (this.core.messageId) delete this.core.messageId;
+		return changed;
+	}
+	public get hasSheetRef(): boolean { return this.core.sheetRef !== undefined || this.core.messageId !== undefined; }
 
 	/** The id value from the characterId's User. */
 	public get userDid(): string { return this.core.userDid ?? ""; }

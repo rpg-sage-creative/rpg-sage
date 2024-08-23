@@ -1,9 +1,9 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { NIL_SNOWFLAKE, applyChanges, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey } from "@rsc-utils/discord-utils";
-import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { isBlank } from "@rsc-utils/string-utils";
+import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
+import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { isBlank, isWrapped, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
@@ -406,6 +406,22 @@ export class GameCharacter implements IHasSave {
 		}
 		if (/^(aka|n(ick)?name)$/i.test(key)) {
 			return this.aka ?? this.name;
+		}
+		if (/^sheeturl$/i.test(key)) {
+			let sheetUrl = this.notes.getStat(key)?.note.trim();
+			if (sheetUrl === "on") {
+				const { sheetRef } = this.pathbuilder ?? { };
+				if (sheetRef?.channelId) {
+					sheetUrl = toMessageUrl(sheetRef);
+				}
+			}
+			if (isUrl(sheetUrl)) {
+				if (!isWrapped(sheetUrl, "<>")) {
+					sheetUrl = wrap(sheetUrl, "<>");
+				}
+				return sheetUrl;
+			}
+			return null;
 		}
 
 		const noteStat = this.notes.getStat(key)?.note.trim() ?? null;

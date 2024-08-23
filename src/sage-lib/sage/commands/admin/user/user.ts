@@ -5,14 +5,6 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { DialogDiceBehaviorType, type User as SUser } from "../../../model/User.js";
 import { createAdminRenderableContent } from "../../cmd.js";
-import { renderCount } from "../../helpers/renderCount.js";
-
-async function userCount(sageCommand: SageCommand): Promise<void> {
-	if (sageCommand.isSuperUser) {
-		const users = await sageCommand.sageCache.users.getAll();
-		return renderCount(sageCommand, "Users", users.length);
-	}
-}
 
 /**
  * @todo include other organized play ids:
@@ -135,7 +127,6 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 }
 
 export function registerUser(): void {
-	registerListeners({ commands:["user|count"], message:userCount });
 	registerListeners({ commands:["user|set", "user|update"], message:userUpdate });
 	registerListeners({ commands:["user|details", "User Details"], interaction:userDetails, message:userDetails });
 }
