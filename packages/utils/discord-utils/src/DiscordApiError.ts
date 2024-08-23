@@ -6,7 +6,28 @@ import { toHumanReadable, type Readable } from "./humanReadable/toHumanReadable.
 
 export function isDiscordApiError(reason: unknown): reason is TDiscordApiError;
 export function isDiscordApiError(reason: any): reason is TDiscordApiError {
-	return reason?.name === "DiscordAPIError";
+	return reason?.name === "DiscordAPIError"
+		|| isErrorCode(reason?.code)
+		|| isWarnCode(reason?.code)
+		;
+}
+
+function isErrorCode(code?: string | number): boolean {
+	return code === 50035 // "Invalid Form Body"
+		;
+}
+
+function isWarnCode(code?: string | number): boolean {
+	return code === 10003 // "Unknown Channel"
+		|| code === 10004 // "Unknown Guild"
+		|| code === 10007 // "Unknown Member"
+		|| code === 10008 // "Unknown Message"
+		|| code === 10011 // "Unknown Role"
+		|| code === 10013 // "Unknown User"
+		|| code === 10014 // "Unknown Emoji"
+		|| code === 10015 // "Unknown Webhook"
+		|| code === 10062 // "Unknown Interaction"
+		;
 }
 
 export class DiscordApiError {
@@ -17,26 +38,20 @@ export class DiscordApiError {
 
 	public get isFetchWebhooks() { return this.asString.includes(".fetchWebhooks"); }
 
-	public get isInvalidFormBody() { return this.error.code === 50035; }
-
 	public get isMissingPermissions() { return this.asString.includes("Missing Permissions"); }
-
-	public get isUnknownGuild() { return this.error?.message === "Unknown Guild"; }
-	public get isUnknownMember() { return this.error?.message === "Unknown Member"; }
-	public get isUnknownUser() { return this.error?.message === "Unknown User"; }
 
 	/** Tries to process various DiscordApiErrors and returns true if logged in some way. */
 	public process(): boolean {
-		if (this.isInvalidFormBody) {
+		if (isErrorCode(this.error.code)) {
 			error(this.error);
 			return true;
 		}
 		if (this.isFetchWebhooks && this.isMissingPermissions) {
-			warn(`DiscordAPIError: Missing Permissions (TextChannel.fetchWebhooks)`);
+			warn(`DiscordAPIError[${this.error.code}]: Missing Permissions (TextChannel.fetchWebhooks)`);
 			return true;
 		}
-		if (this.isUnknownGuild || this.isUnknownMember || this.isUnknownUser) {
-			warn(`${this.error.message}: ${this.error.url}`);
+		if (isWarnCode(this.error.code)) {
+			warn(`[${this.error.code}]${this.error.message}: ${this.error.url}`);
 			return true;
 		}
 		return false;

@@ -60,7 +60,7 @@ export class DiscordCache {
 		if (!guild) return undefined;
 
 		const cache = this.#cached.has(channelId);
-		const channel = await guild.channels.fetch(channelId, { cache, force:!cache });
+		const channel = await guild.channels.fetch(channelId, { cache, force:!cache }).catch(DiscordApiError.process);
 
 		this.#cached.set(channelId, true);
 
@@ -74,7 +74,7 @@ export class DiscordCache {
 
 		const cache = this.#cached.has(channelId);
 
-		const channel = await user.dmChannel.fetch(!cache);
+		const channel = await user.dmChannel.fetch(!cache).catch(DiscordApiError.process);
 
 		this.#cached.set(channelId, true);
 
@@ -168,7 +168,9 @@ export class DiscordCache {
 		const channel = discordKey.isDm
 			? await this.fetchDmChannel({ userId, channelId:discordKey.channelId })
 			: await this.fetchChannel(discordKey);
-		const message = isMessageTarget(channel) ? await channel.messages.fetch({ message:messageId, cache, force:!cache }) : undefined;
+		const message = isMessageTarget(channel)
+			? await channel.messages.fetch({ message:messageId, cache, force:!cache }).catch(DiscordApiError.process)
+			: undefined;
 
 		this.#cached.set(messageId, true);
 
