@@ -31,7 +31,7 @@ export async function gPruneOrphans(sageCommand: SageCommand): Promise<boolean> 
 		`Remove them from the game?`
 	].filter(s => s).join("\n");
 
-	const remove = await discordPromptYesNo(sageCommand, message);
+	const remove = await discordPromptYesNo(sageCommand, message, true);
 	if (!remove) {
 		return false;
 	}
