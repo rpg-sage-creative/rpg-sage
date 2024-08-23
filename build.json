@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.5",
+"version":"1.7.6",
 "branch":"main",
-"commit":"ba38621ab2e17cab15d0934e8d79eb6880126391",
-"commitSubject":"hack to fix tag",
-"commitTs":1723582318000,
-"commitDate":"2024-08-13-1351",
-"buildTs":1723582435000,
-"buildDate":"2024-08-13-1353",
+"commit":"d8e69f0da8e8554607f200ee9fb7ed6a2022d60f",
+"commitSubject":"fix bot activation",
+"commitTs":1724390357000,
+"commitDate":"2024-08-22-2219",
+"buildTs":1724390923000,
+"buildDate":"2024-08-22-2228",
 "author":"Randal"
 }
