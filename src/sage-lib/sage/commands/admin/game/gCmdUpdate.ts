@@ -19,8 +19,17 @@ type UpdateGameOptions = {
 function updateGame(sageCommand: SageCommand, options: UpdateGameOptions): Game {
 	const json = cloneJson<GameCore>(sageCommand.game);
 	applyChanges(json, options.gameOptions);
-	json.channels = (json.channels ?? []).concat(options.channelsToAdd).filter(channel => !options.channelsToRemove.includes(channel.id as Snowflake));
-	json.users = (json.users ?? []).concat(options.usersToAdd).filter(user => !options.usersToRemove.includes(user.did));
+
+	json.channels = (json.channels ?? []).filter(channel =>
+		!options.channelsToRemove.includes(channel.id as Snowflake) // remove channels to remove
+		&& !options.channelsToAdd.some(ch => ch.id === channel.id) // remove channels being readded
+	).concat(options.channelsToAdd);
+
+	json.users = (json.users ?? []).filter(user =>
+		!options.usersToRemove.includes(user.did) // remove users to remove
+		&& !options.usersToAdd.some(u => user.did === u.did) // remove users being readded
+	).concat(options.usersToAdd);
+
 	return new Game(json, sageCommand.server, sageCommand.sageCache);
 }
 
