@@ -1,8 +1,8 @@
-import type { Optional } from "./internal/Optional.js";
 import type { ColorData, HexColorString, RgbaColorString, RgbColorString } from "./ColorData.js";
+import type { Optional } from "./internal/Optional.js";
 import { toColorData } from "./internal/toColorData.js";
-import { isHex } from "./isHex.js";
-import { isRgb } from "./isRgb.js";
+import { isHexColorString } from "./isHexColorString.js";
+import { isRgbColorString } from "./isRgbColorString.js";
 import { hasNamedColor } from "./namedColors.js";
 
 export class Color {
@@ -68,7 +68,7 @@ export class Color {
 
 	/** Tests all color types in this module */
 	public static isValid(color: Optional<string>): boolean {
-		return isHex(color) || isRgb(color);
+		return isHexColorString(color) || isRgbColorString(color);
 	}
 
 	/** Tests to see if the named color exists */

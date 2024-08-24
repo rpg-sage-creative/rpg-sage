@@ -10,7 +10,9 @@ function stringify(value: any): string {
 	if (isNullOrUndefined(value)) {
 		return String(value);
 	}
-	return jsonStringify(value);
+	return typeof(value) === "function"
+		? `function ${value.name || "/lambda/"}`
+		: jsonStringify(value);
 }
 
 /** Returns the correct prefix for logging based on the current AssertMode. */
@@ -53,6 +55,21 @@ function compareValues(expected: unknown, actual: unknown): boolean {
 	return false;
 }
 
+/** Processes the assert logic shared between assert and assertAsync. */
+function _assert(expectedValue: unknown, fnName: string, actualValue: unknown, args: unknown[]): void {
+	const compareResults = compareValues(expectedValue, actualValue);
+	incrementAssertData(compareResults);
+	const assertLabel = getAssertPrefix(compareResults);
+	if (assertLabel) {
+		const argsString = args.map(arg => stringify(arg)).join(",");
+		const actualString = stringify(actualValue);
+		const expectedString = stringify(expectedValue);
+		const output = `${fnName}(${argsString}) => ${actualString} !== ${expectedString}`;
+		console.log(assertLabel, output);
+	}
+
+}
+
 /**
  * A convenience method for using console.assert.
  * The callback method is called with all the given args and compared to the expected value.
@@ -71,17 +88,8 @@ export function assert(..._args: any[]): void {
 		const args = _args.slice(2);
 		const expectedValue = _args[0];
 		const actualValue = callbackfn(...args);
-		const compareResults = compareValues(expectedValue, actualValue);
-		incrementAssertData(compareResults);
-		const assertLabel = getAssertPrefix(compareResults);
-		if (assertLabel) {
-			const fnName = callbackfn.name || "/lambda/";
-			const argsString = args.map(arg => stringify(arg)).join(",");
-			const actualString = stringify(actualValue);
-			const expectedString = stringify(expectedValue);
-			const output = `${fnName}(${argsString}) => ${actualString} !== ${expectedString}`;
-			console.log(assertLabel, output);
-		}
+		_assert(expectedValue, callbackfn.name || "/lambda/", actualValue, args);
+
 	}else {
 		const assertBool = _args[0];
 		const args = _args.slice(1);
@@ -91,4 +99,14 @@ export function assert(..._args: any[]): void {
 			console.log(assertLabel, ...args);
 		}
 	}
+}
+
+/**
+ * A convenience method for using console.assert.
+ * The callback method is called with all the given args and compared to the expected value.
+ * The output for a failure is created to show the function name, args, and result as well as the expected value.
+ */
+export async function assertAsync<T>(expectedValue: T, callbackfn: Function, ...args: any[]): Promise<void> {
+	const actualValue = await callbackfn(...args);
+	_assert(expectedValue, callbackfn.name || "/lambda/", actualValue, args);
 }

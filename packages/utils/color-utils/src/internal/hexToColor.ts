@@ -11,8 +11,10 @@ export function hexToColor(value: HexColorString, newAlpha?: number): ColorData 
 		return undefined;
 	}
 
-	const hex = hexa?.slice(0, 7) as HexColorString;
-	if (hex && newAlpha !== undefined) {
+	hexa = hexa.padEnd(9, "f") as HexColorString;
+
+	const hex = hexa.slice(0, 7) as HexColorString;
+	if (newAlpha !== undefined) {
 		hexa = hex + alphaToHex(newAlpha) as HexColorString; // NOSONAR
 	}
 

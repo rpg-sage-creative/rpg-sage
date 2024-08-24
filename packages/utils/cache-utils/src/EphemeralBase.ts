@@ -34,7 +34,9 @@ export abstract class EphemeralBase<K, V = K> {
 
 	/** Removes the given value */
 	public delete(key: K): boolean {
-		return this.map.delete(key);
+		const deleted = this.map.delete(key);
+		if (!this.map.size) this.clearTimer();
+		return deleted;
 	}
 
 	/** iterate the entries as [key, value] */
@@ -139,5 +141,10 @@ export abstract class EphemeralBase<K, V = K> {
 
 		// in case items were added while cleaning
 		this.queue();
+	}
+
+	/** @internal Added so that JSON.stringify would treat this more like a Map/Set and not throw a TypeError trying to serialize ._timer */
+	protected toJSON() {
+		return { map:this.map, msToLive:this._msToLive };
 	}
 }

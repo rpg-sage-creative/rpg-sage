@@ -16,8 +16,19 @@ function getProtocolRegex(): RegExp {
 	return /(?:s?ftp|https?):\/\//i;
 }
 
+function getAuthRegex(): RegExp {
+	return /(?:\S+(?::\S*)?@)?/i;
+}
+
 function getDomainRegex(): RegExp {
-	return /(?:[a-z\d](?:[a-z\d-]*[a-z\d])?\.)+[a-z]{2,}/i;
+	const alpha = `[a-z\\u00a1-\\uffff]`;
+	const alphaNumeric = `[a-z\\u00a1-\\uffff0-9]`;
+
+	const host = `(?:(?:${alphaNumeric}[-_]*)*${alphaNumeric}+)`;
+	const domain = `(?:\\.(?:${alphaNumeric}-*)*${alphaNumeric}+)*`;
+	const tld = `(?:${alpha}{2,})`;
+
+	return new RegExp(host + domain + tld, "i");
 }
 
 function getIp4Regex(): RegExp {
@@ -35,7 +46,7 @@ function getHostnameRegex(): RegExp {
 }
 
 function getPortRegex(): RegExp {
-	return /(?::\d{1,5})?/;
+	return /(?::\d{2,5})?/;
 }
 
 function getPathRegex(): RegExp {
@@ -58,6 +69,7 @@ export function createUrlRegex(options?: Options): RegExp {
 
 	const sources = [
 		getProtocolRegex().source,
+		getAuthRegex().source,
 		getHostnameRegex().source,
 		getPortRegex().source,
 		getPathRegex().source,

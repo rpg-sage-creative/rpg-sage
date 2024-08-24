@@ -19,25 +19,20 @@ export function parseRgbColor(value: Optional<string>, includeAlpha: false): RGB
 
 export function parseRgbColor(value: Optional<string>, includeAlpha?: boolean): RGBA | undefined {
 	const match = matchRgb(value);
-	if (!match) {
-		return undefined;
-	}
+	if (!match) return undefined; // NOSONAR
+
+	const { red, green, blue, alpha } = match;
+
 	if (includeAlpha === false) {
-		return {
-			red: +match[1],
-			green: +match[2],
-			blue: +match[3]
-		};
+		return { red, green, blue };
 	}
+
 	// Because this is a decimal representation of 0%-100%, values are rounded to precision 2: 0.00
-	let alpha = match[4] !== undefined ? round(+match[4], 2) : undefined;
-	if (alpha === undefined && includeAlpha) {
-		alpha = 1;
+	const roundedAlpha = alpha !== undefined ? round(alpha, 2) : undefined;
+
+	if (includeAlpha === true) {
+		return { red, green, blue, alpha:roundedAlpha ?? 1 };
 	}
-	return {
-		red: +match[1],
-		green: +match[2],
-		blue: +match[3],
-		alpha
-	};
+
+	return { red, green, blue, alpha:roundedAlpha };
 }

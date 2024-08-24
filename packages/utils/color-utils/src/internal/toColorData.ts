@@ -1,6 +1,6 @@
 import type { ColorData } from "../ColorData.js";
-import { isHex } from "../isHex.js";
-import { isRgb } from "../isRgb.js";
+import { isHexColorString } from "../isHexColorString.js";
+import { isRgbColorString } from "../isRgbColorString.js";
 import { getNamedColor } from "../namedColors.js";
 import { hexToColor } from "./hexToColor.js";
 import { rgbToHex } from "./rgbToHex.js";
@@ -27,10 +27,10 @@ export function toColorData(colorOrRed: string | number | ColorData, alphaOrGree
 		return hexToColor(namedColor.hexa, alphaOrGreen);
 	}
 
-	if (isHex(colorOrRed)) {
+	if (isHexColorString(colorOrRed)) {
 		return hexToColor(colorOrRed, alphaOrGreen);
 	}
-	if (isRgb(colorOrRed)) {
+	if (isRgbColorString(colorOrRed)) {
 		return hexToColor(rgbToHex(colorOrRed), alphaOrGreen);
 	}
 
