@@ -1157,7 +1157,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		newChar.id = oldChar.id;
 		newChar.characterId = oldChar.characterId;
 		newChar.sheetRef = oldChar.sheetRef;
-		newChar.userDid = oldChar.userDid;
+		newChar.userId = oldChar.userId;
 
 		return this.saveCharacter(newChar);
 	}

@@ -1,7 +1,7 @@
 import { toUnique } from "@rsc-utils/array-utils";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { errorReturnNull, isDefined } from "@rsc-utils/core-utils";
-import { DiscordMaxValues, EmbedBuilder, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills, PathbuilderCharacter, toModifier } from "../../../sage-pf2e/index.js";
@@ -121,7 +121,7 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: Pathbuilde
 			name: pbChar.name,
 			pathbuilderId: pbChar.id,
 			tokenUrl,
-			userDid: pbChar.userDid as Snowflake
+			userDid: pbChar.userId as Snowflake
 		});
 
 	// if something went wrong, fail out
@@ -129,8 +129,8 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: Pathbuilde
 
 	// link gamecharacter to pbcharacter
 	pbChar.characterId = oChar.id;
-	pbChar.setSheetRef(message);
-	pbChar.userDid = oChar.userDid;
+	pbChar.setSheetRef(parseReference(message));
+	pbChar.userId = oChar.userDid;
 	const pbCharSaved = await pbChar.save();
 
 	if (pbCharSaved) {
@@ -177,7 +177,7 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 export async function updateSheet({ sageCache }: SageCommand, character: PathbuilderCharacter, message?: Message) {
 	if (message) {
 		// we have a message, update the sheet reference just in case
-		if (character.setSheetRef(message)) {
+		if (character.setSheetRef(parseReference(message))) {
 			// if it was updated, save the character
 			await character.save();
 		}
@@ -510,8 +510,8 @@ async function linkHandler(sageInteraction: SageButtonInteraction, character: Pa
 
 	if (char) {
 		character.characterId = char.id;
-		character.setSheetRef(sageInteraction.interaction.message);
-		character.userDid = char.userDid;
+		character.setSheetRef(parseReference(sageInteraction.interaction.message));
+		character.userId = char.userDid;
 		char.pathbuilderId = character.id;
 		const charSaved = await character.save();
 		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
@@ -528,7 +528,7 @@ async function linkHandler(sageInteraction: SageButtonInteraction, character: Pa
 
 async function unlinkHandler(sageInteraction: SageButtonInteraction, character: PathbuilderCharacter): Promise<void> {
 	const { game, isGameMaster, sageUser } = sageInteraction;
-	const isUser = character.userDid === sageInteraction.sageUser.did;
+	const isUser = character.userId === sageInteraction.sageUser.did;
 
 	if (game && !isUser && !isGameMaster) {
 		return sageInteraction.reply("You aren't part of this game.", true);
@@ -540,8 +540,8 @@ async function unlinkHandler(sageInteraction: SageButtonInteraction, character: 
 
 	if (char) {
 		character.characterId = null;
-		character.setSheetRef(sageInteraction.interaction.message);
-		character.userDid = null;
+		character.setSheetRef(parseReference(sageInteraction.interaction.message));
+		character.userId = null;
 		char.pathbuilderId = null;
 		const charSaved = await character.save();
 		const gameSaved = charSaved ? await (game ?? sageUser).save() : false;
