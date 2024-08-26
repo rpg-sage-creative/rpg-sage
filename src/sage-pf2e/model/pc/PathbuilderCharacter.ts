@@ -160,7 +160,8 @@ type TPathbuilderCharacterSpellCaster = {
 
 type TPathbuilderCharacterSpellCasterSpells = {
 	spellLevel: number;
-	list: string[]; // "Heal"
+	/** spell name, for instance: "Heal" */
+	list: string[];
 };
 
 type TPathbuilderCharacterTraditionKey = "arcane" | "divine" | "focus" | "occult" | "primal";
