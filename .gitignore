@@ -2,6 +2,7 @@
 build/
 logs/
 node_modules/
+leader-board/
 
 **/.DS_Store
 **/tsconfig.tsbuildinfo
