@@ -1,9 +1,9 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { NIL_SNOWFLAKE, applyChanges, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, applyChanges, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
-import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { isBlank, isWrapped, wrap } from "@rsc-utils/string-utils";
+import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { isBlank, isWrapped, unwrap, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
@@ -12,6 +12,7 @@ import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
+import type { TMacro } from "./types.js";
 
 export type TDialogMessage = {
 	channelDid: Snowflake;
@@ -70,6 +71,40 @@ export type GameCharacterCore = {
 /** Determine if the snowflakes are different. */
 function diff(a?: Snowflake, b?: Snowflake) {
 	return (a ?? NIL_SNOWFLAKE) !== (b ?? NIL_SNOWFLAKE);
+}
+
+function parseFetchedStats(raw: string, alias?: string) {
+	const stats = new Map<string, string>();
+	const macros: TMacro[] = [];
+	const lines = raw.split(/[\n\r]+/).map(line => line.split(/\t/).map(val => val.trim()));
+	lines.forEach(line => {
+		const results = parseFetchedStatsLine(line, alias);
+		if (results) {
+			if ("dice" in results) macros.push(results);
+			if ("value" in results) stats.set(results.key, results.value);
+		}
+	});
+	return { stats, macros };
+}
+function parseFetchedStatsLine(values: string[], alias?: string) {
+	const setAlias = (value?: string) => value && alias ? value.replace(/\{::/g, `{${alias}::`) : value;
+	const shift = () => setAlias(values.shift()?.trim());
+	const key = shift()?.toLowerCase();
+	if (!key) return undefined;
+	const value = shift();
+	if (!value) return undefined;
+	if (key === "macro") {
+		const three = shift(), four = shift();
+		if (four && isWrapped(four, "[]")) {
+			return { name:value, category:three, dice:four } as TMacro;
+		}
+		if (three && isWrapped(three, "[]")) {
+			return { name:value, dice:three } as TMacro;
+		}
+
+	}
+	return { key, value };
+
 }
 
 /** Temp convenience function to get a DiscordKey from varying input */
@@ -397,6 +432,26 @@ export class GameCharacter implements IHasSave {
 		return Promise.resolve(false);
 	}
 
+	private fetchedStats: Map<string, string> | undefined;
+	// private fetchedMacros: TMacro[] | undefined;
+	public async fetchStats(): Promise<void> {
+		if (!this.fetchedStats) {
+			const url = this.notes.getStat("stats.tsv.url")?.note;
+			if (isUrl(url)) {
+				const raw = await getText(unwrap(url, "<>")).catch(errorReturnNull);
+				if (raw) {
+					const { stats } = parseFetchedStats(raw, this.alias);
+					// const { stats, macros } = parseFetchedStats(raw);
+					this.fetchedStats = stats;
+					// this.fetchedMacros = macros;
+				}else {
+					this.fetchedStats = new Map();
+					// this.fetchedMacros = [];
+				}
+			}
+		}
+	}
+
 	public getStat(key: string): string | null {
 		if (/^name$/i.test(key)) {
 			return this.name;
@@ -407,7 +462,7 @@ export class GameCharacter implements IHasSave {
 		if (/^(aka|n(ick)?name)$/i.test(key)) {
 			return this.aka ?? this.name;
 		}
-		if (/^sheeturl$/i.test(key)) {
+		if (/^sheet\.?url$/i.test(key)) {
 			let sheetUrl = this.notes.getStat(key)?.note.trim();
 			if (sheetUrl === "on") {
 				const { sheetRef } = this.pathbuilder ?? { };
@@ -424,8 +479,13 @@ export class GameCharacter implements IHasSave {
 			return null;
 		}
 
-		const noteStat = this.notes.getStat(key)?.note.trim() ?? null;
-		if (noteStat !== null) {
+		const fetchedStat = this.fetchedStats?.get(key);
+		if (fetchedStat !== undefined) {
+			return fetchedStat;
+		}
+
+		const noteStat = this.notes.getStat(key)?.note.trim() ?? undefined;
+		if (noteStat !== undefined) {
 			return noteStat;
 		}
 

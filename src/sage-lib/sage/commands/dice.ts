@@ -11,6 +11,8 @@ import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
+import type { CharacterManager } from "../model/CharacterManager.js";
+import { GameCharacter } from "../model/GameCharacter.js";
 import type { NamedCollection } from "../model/NamedCollection.js";
 import { SageCommand } from "../model/SageCommand.js";
 import { SageInteraction } from "../model/SageInteraction.js";
@@ -54,7 +56,20 @@ function getBasicBracketRegex(): RegExp {
 	return /\[+[^\]]+\]+/ig;
 }
 
-function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): DiscordDice | null {
+async function fetchAllStats(npcs: CharacterManager, pcs: CharacterManager, pc: Optional<GameCharacter>): Promise<void> {
+	for (const npc of npcs) await fetchStats(npc);
+	for (const pc of pcs) await fetchStats(pc);
+	await fetchStats(pc);
+}
+async function fetchStats(char: Optional<GameCharacter>): Promise<void> {
+	if (!char) return;
+	await char.fetchStats();
+	for (const companion of char.companions) {
+		await fetchStats(companion);
+	}
+}
+
+async function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): Promise<DiscordDice | null> {
 	if (!diceString) {
 		return null;
 	}
@@ -65,6 +80,7 @@ function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrid
 		const pcs = game?.playerCharacters ?? sageMessage.sageUser.playerCharacters;
 		const pc = isPlayer && game ? sageMessage.playerCharacter : null;
 		const encounters = game?.encounters;
+		await fetchAllStats(npcs, pcs, pc);
 		diceString = processStatBlocks(diceString, { npcs, pcs, pc, encounters });
 	}
 
@@ -87,7 +103,8 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
 			error(`Macro Recursion`, { macroString, macroStack });
-			return parseDiscordDice(sageCommand, `[1d1 Recursion!]`)?.roll().toStrings() ?? [];
+			const parsedDice = await parseDiscordDice(sageCommand, `[1d1 Recursion!]`);
+			return parsedDice?.roll().toStrings() ?? [];
 		}
 
 		const diceToParse = output.match(getBasicBracketRegex()) ?? [];
@@ -126,7 +143,7 @@ async function parseMatch(sageMessage: TInteraction, match: string, overrides?: 
 		return tableResults;
 	}
 
-	const dice = parseDiscordDice(sageMessage, `[${noBraces}]`, overrides);
+	const dice = await parseDiscordDice(sageMessage, `[${noBraces}]`, overrides);
 	if (dice) {
 		// debug("dice", match);
 		const diceSort = sageMessage.diceSortType === 2 ? "noSort" : sageMessage.diceSortType === 1 ? "sort" : undefined; // NOSONAR
