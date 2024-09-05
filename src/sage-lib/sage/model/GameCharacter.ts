@@ -433,23 +433,26 @@ export class GameCharacter implements IHasSave {
 	}
 
 	private fetchedStats: Map<string, string> | undefined;
-	// private fetchedMacros: TMacro[] | undefined;
+	private fetchedMacros: TMacro[] | undefined;
 	public async fetchStats(): Promise<void> {
 		if (!this.fetchedStats) {
 			const url = this.notes.getStat("stats.tsv.url")?.note;
 			if (isUrl(url)) {
 				const raw = await getText(unwrap(url, "<>")).catch(errorReturnNull);
 				if (raw) {
-					const { stats } = parseFetchedStats(raw, this.alias);
-					// const { stats, macros } = parseFetchedStats(raw);
+					const { stats, macros } = parseFetchedStats(raw);
 					this.fetchedStats = stats;
-					// this.fetchedMacros = macros;
-				}else {
-					this.fetchedStats = new Map();
-					// this.fetchedMacros = [];
+					this.fetchedMacros = macros;
+					return;
 				}
 			}
+			this.fetchedStats = new Map();
+			this.fetchedMacros = [];
 		}
+	}
+	public async fetchMacros(): Promise<TMacro[]> {
+		await this.fetchStats();
+		return this.fetchedMacros ?? [];
 	}
 
 	public getStat(key: string): string | null {
@@ -479,14 +482,14 @@ export class GameCharacter implements IHasSave {
 			return null;
 		}
 
-		const fetchedStat = this.fetchedStats?.get(key);
-		if (fetchedStat !== undefined) {
-			return fetchedStat;
-		}
-
 		const noteStat = this.notes.getStat(key)?.note.trim() ?? undefined;
 		if (noteStat !== undefined) {
 			return noteStat;
+		}
+
+		const fetchedStat = this.fetchedStats?.get(key);
+		if (fetchedStat !== undefined) {
+			return fetchedStat;
 		}
 
 		const pb = this.pathbuilder;
