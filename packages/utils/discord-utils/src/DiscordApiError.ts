@@ -36,6 +36,9 @@ export class DiscordApiError {
 		this.asString = formatArg(error);
 	}
 
+	public get isAvatarUrl() { return this.asString.includes("avatar_url[URL_TYPE_INVALID_URL]"); }
+	public get isEmbedThumbnailUrl() { return this.asString.includes("thumbnail.url[URL_TYPE_INVALID_URL]"); }
+
 	public get isFetchWebhooks() { return this.asString.includes(".fetchWebhooks"); }
 
 	public get isMissingPermissions() { return this.asString.includes("Missing Permissions"); }
@@ -43,7 +46,11 @@ export class DiscordApiError {
 	/** Tries to process various DiscordApiErrors and returns true if logged in some way. */
 	public process(): boolean {
 		if (isErrorCode(this.error.code)) {
-			error(this.error);
+			if (this.isAvatarUrl || this.isEmbedThumbnailUrl) {
+				warn(`An image url (avatar or thumbnail) has been flagged as invalid.`)
+			}else {
+				error(this.error);
+			}
 			return true;
 		}
 		if (this.isFetchWebhooks && this.isMissingPermissions) {
