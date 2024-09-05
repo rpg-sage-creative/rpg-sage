@@ -1,29 +1,25 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { CharacterManager } from "../../../model/CharacterManager";
-import type { GameCharacter } from "../../../model/GameCharacter";
-import type { SageMessage } from "../../../model/SageMessage";
-import { createAdminRenderableContent } from "../../cmd";
-import { sendGameCharacter } from "./sendGameCharacter";
-import { sendNotFound } from "./sendNotFound";
+import type { CharacterManager } from "../../../model/CharacterManager.js";
+import type { GameCharacter } from "../../../model/GameCharacter.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { createAdminRenderableContent } from "../../cmd.js";
+import { toReadableOwner } from "./toReadableOwner.js";
 
-export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterManager: Optional<CharacterManager>, command: string, entityNamePlural: string): Promise<void> {
-	const nameFilter = sageMessage.args.removeAndReturnName(true),
-		hasNameFilter = nameFilter?.length,
-		characters: GameCharacter[] = hasNameFilter ? characterManager?.filterByName(nameFilter) ?? [] : characterManager?.slice() ?? [];
+export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterManager: Optional<CharacterManager>, entityNamePlural?: string): Promise<void> {
+	const { charName, name } = sageMessage.args.getNames();
+	const nameFilter = charName ?? name ?? "";
+	const hasNameFilter = nameFilter.length > 0;
+	const characters: GameCharacter[] = hasNameFilter
+		? characterManager?.filterByName(nameFilter) ?? []
+		: characterManager?.slice() ?? [];
+
+	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors());
+	renderableContent.append(`## ${entityNamePlural} (${characters.length})`)
+	if (hasNameFilter) {
+		renderableContent.append(`<b>Filtered by:</b> ${nameFilter}`);
+	}
+
 	if (characters.length) {
-		// Always show the Game Master first
-		const gmIndex = characters.findIndex(character => character.isGM);
-		if (gmIndex > 0) {
-			const gm = characters.splice(gmIndex, 1).pop()!;
-			characters.unshift(gm);
-		}
-
-		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>${command}</b>`);
-		if (hasNameFilter) {
-			renderableContent.append(`<b>Filtered by:</b> ${nameFilter}`);
-		}
-		renderableContent.append(`<blockquote>${characters.length} ${entityNamePlural} Found!</blockquote>`);
-		await sageMessage.send(renderableContent);
 
 		let nameIndex = 0;
 		for (const character of characters) {
@@ -32,10 +28,46 @@ export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, cha
 				nameIndex++;
 				await character.save();
 			}
-			await sendGameCharacter(sageMessage, character);
+
+			renderableContent.append(`### ${character.name}`);
+
+			const hasOwner = !!character.userDid || character.isPC;
+			const hasParent = character.isCompanionOrMinion;
+			const hasCompanions = character.companions.length > 0;
+
+			const charInfo: string[] = [];
+			if (hasOwner || hasCompanions || hasParent) {
+				if (hasOwner) {
+					const ownerOrPlayer = character.isGMorNPC ? "Owner" : "Player";
+					const owner = await toReadableOwner(sageMessage, character.userDid);
+					const ownerTag = owner ?? "<i>none</i>";
+					charInfo.push(`<b>${ownerOrPlayer}</b> ${ownerTag}`);
+				}
+
+				if (hasCompanions) {
+					const companionType = character.isPC ? `Companions` : `Minions`;
+					if (character.companions.length) {
+						const companionNames = character.companions.map(companion => `\n- ${companion.name}`).join("");
+						charInfo.push(`<b>${companionType}</b>${companionNames}`);
+					}else {
+						charInfo.push(`<b>${companionType}</b> <i>none</i>`);
+					}
+				}
+
+				if (hasParent) {
+					const parentTag = character.parent?.name ?? "<i>none</i>";
+					charInfo.push(`<b>Character</b> ${parentTag}`);
+				}
+			}
+
+			const charNameKeyValue = `name="${character.name}"`;
+			const parentNameKeyValue = hasParent ? `charName="${character.parent?.name}" ` : ``;
+			charInfo.push(`\`sage! ${characterManager?.characterType} details ${parentNameKeyValue}${charNameKeyValue}\``);
+
+			renderableContent.appendBlock(...charInfo);
 		}
-	} else {
-		await sendNotFound(sageMessage, command, entityNamePlural, nameFilter);
+
 	}
-	return Promise.resolve();
+
+	await sageMessage.send(renderableContent);
 }
