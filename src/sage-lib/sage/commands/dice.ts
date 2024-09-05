@@ -63,29 +63,40 @@ async function prepStatsAndMacros(sageCommand: TInteraction) {
 		const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
 		const pc = isPlayer && game ? sageCommand.playerCharacter : null;
 		const encounters = game?.encounters;
-		await fetchAllStatsAndMacros(npcs, pcs, pc, sageUser);
-		return { npcs, pcs, pc, encounters };
+		const macros = await fetchAllStatsAndMacros(npcs, pcs, pc, sageUser);
+		return { npcs, pcs, pc, encounters, macros };
 	}
 	return undefined;
 }
-async function fetchAllStatsAndMacros(npcs: CharacterManager, pcs: CharacterManager, pc: Optional<GameCharacter>, sageUser: User): Promise<void> {
-	for (const npc of npcs) await fetchStatsAndMacros(npc, sageUser);
-	for (const pc of pcs) await fetchStatsAndMacros(pc, sageUser);
+async function fetchAllStatsAndMacros(npcs: CharacterManager, pcs: CharacterManager, pc: Optional<GameCharacter>, sageUser: User): Promise<TMacro[]> {
+	const out: TMacro[] = [];
+	for (const npc of npcs) {
+		out.push(...await fetchStatsAndMacros(npc, sageUser));
+	}
+	for (const pc of pcs) {
+		out.push(...await fetchStatsAndMacros(pc, sageUser));
+	}
 	await fetchStatsAndMacros(pc, sageUser);
+	return out;
 }
-async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User): Promise<void> {
-	if (!char) return;
+async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User): Promise<TMacro[]> {
+	const out: TMacro[] = [];
+	if (!char) return out;
+
 	const macros = await char.fetchMacros();
 	if (char.userDid === sageUser.did) {
 		for (const macro of macros) {
-			if (!sageUser.macros.some(m => macro.name.toLowerCase() === m.name.toLowerCase() && m.category === char.name)) {
-				sageUser.macros.push(macro);
+			if (!out.some(m => macro.name.toLowerCase() === m.name.toLowerCase() && m.category === char.name)) {
+				out.push({ name:macro.name, category:char.name, dice:macro.dice });
 			}
 		}
 	}
+
 	for (const companion of char.companions) {
-		await fetchStatsAndMacros(companion, sageUser);
+		out.push(...await fetchStatsAndMacros(companion, sageUser));
 	}
+
+	return out;
 }
 
 async function parseDiscordDice(sageCommand: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): Promise<DiscordDice | null> {
@@ -112,8 +123,9 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 		return null;
 	}
 
-	await prepStatsAndMacros(sageCommand);
-	const macroAndOutput = macroToDice(sageCommand.sageUser.macros, unwrap(macroString, "[]"));
+	const statsAndMacros = await prepStatsAndMacros(sageCommand);
+	const tsvMacros = statsAndMacros?.macros ?? [];
+	const macroAndOutput = macroToDice(sageCommand.sageUser.macros.concat(tsvMacros), unwrap(macroString, "[]"));
 	if (macroAndOutput) {
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
