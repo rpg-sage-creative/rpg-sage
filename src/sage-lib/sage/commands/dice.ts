@@ -17,7 +17,7 @@ import type { NamedCollection } from "../model/NamedCollection.js";
 import { SageCommand } from "../model/SageCommand.js";
 import { SageInteraction } from "../model/SageInteraction.js";
 import { SageMessage } from "../model/SageMessage.js";
-import type { TMacro } from "../model/User.js";
+import type { TMacro, User } from "../model/User.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
 import { isMath } from "./dice/isMath.js";
@@ -56,40 +56,54 @@ function getBasicBracketRegex(): RegExp {
 	return /\[+[^\]]+\]+/ig;
 }
 
-async function fetchAllStats(npcs: CharacterManager, pcs: CharacterManager, pc: Optional<GameCharacter>): Promise<void> {
-	for (const npc of npcs) await fetchStats(npc);
-	for (const pc of pcs) await fetchStats(pc);
-	await fetchStats(pc);
+async function prepStatsAndMacros(sageCommand: TInteraction) {
+	const { game, isGameMaster, isPlayer, sageUser } = sageCommand;
+	if (!game || isGameMaster || isPlayer) {
+		const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
+		const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
+		const pc = isPlayer && game ? sageCommand.playerCharacter : null;
+		const encounters = game?.encounters;
+		await fetchAllStatsAndMacros(npcs, pcs, pc, sageUser);
+		return { npcs, pcs, pc, encounters };
+	}
+	return undefined;
 }
-async function fetchStats(char: Optional<GameCharacter>): Promise<void> {
+async function fetchAllStatsAndMacros(npcs: CharacterManager, pcs: CharacterManager, pc: Optional<GameCharacter>, sageUser: User): Promise<void> {
+	for (const npc of npcs) await fetchStatsAndMacros(npc, sageUser);
+	for (const pc of pcs) await fetchStatsAndMacros(pc, sageUser);
+	await fetchStatsAndMacros(pc, sageUser);
+}
+async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User): Promise<void> {
 	if (!char) return;
-	await char.fetchStats();
+	const macros = await char.fetchMacros();
+	if (char.userDid === sageUser.did) {
+		for (const macro of macros) {
+			if (!sageUser.macros.some(m => macro.name.toLowerCase() === m.name.toLowerCase() && m.category === char.name)) {
+				sageUser.macros.push(macro);
+			}
+		}
+	}
 	for (const companion of char.companions) {
-		await fetchStats(companion);
+		await fetchStatsAndMacros(companion, sageUser);
 	}
 }
 
-async function parseDiscordDice(sageMessage: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): Promise<DiscordDice | null> {
+async function parseDiscordDice(sageCommand: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): Promise<DiscordDice | null> {
 	if (!diceString) {
 		return null;
 	}
 
-	const { game, isGameMaster, isPlayer } = sageMessage;
-	if (!game || isGameMaster || isPlayer) {
-		const npcs = game?.nonPlayerCharacters ?? sageMessage.sageUser.nonPlayerCharacters;
-		const pcs = game?.playerCharacters ?? sageMessage.sageUser.playerCharacters;
-		const pc = isPlayer && game ? sageMessage.playerCharacter : null;
-		const encounters = game?.encounters;
-		await fetchAllStats(npcs, pcs, pc);
-		diceString = processStatBlocks(diceString, { npcs, pcs, pc, encounters });
+	const allCharacters = await prepStatsAndMacros(sageCommand);
+	if (allCharacters) {
+		diceString = processStatBlocks(diceString, allCharacters);
 	}
 
 	return DiscordDice.parse({
 		diceString: diceString,
-		defaultGameType: overrides?.gameSystemType ?? sageMessage.gameSystemType,
-		defaultDiceOutputType: overrides?.diceOutputType ?? sageMessage.diceOutputType,
-		defaultCritMethodType: overrides?.diceCritMethodType ?? sageMessage.diceCritMethodType,
-		defaultDiceSecretMethodType: overrides?.diceSecretMethodType ?? sageMessage.diceSecretMethodType
+		defaultGameType: overrides?.gameSystemType ?? sageCommand.gameSystemType,
+		defaultDiceOutputType: overrides?.diceOutputType ?? sageCommand.diceOutputType,
+		defaultCritMethodType: overrides?.diceCritMethodType ?? sageCommand.diceCritMethodType,
+		defaultDiceSecretMethodType: overrides?.diceSecretMethodType ?? sageCommand.diceSecretMethodType
 	});
 }
 
@@ -98,6 +112,7 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 		return null;
 	}
 
+	await prepStatsAndMacros(sageCommand);
 	const macroAndOutput = macroToDice(sageCommand.sageUser.macros, unwrap(macroString, "[]"));
 	if (macroAndOutput) {
 		const { macro, output } = macroAndOutput;
