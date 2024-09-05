@@ -13,8 +13,8 @@ export class Skill {
 	/** this.ability.slice(0, 3).toLowerCase() */
 	public get abilKey(): Lowercase<Abil> { return this.ability.slice(0, 3).toLowerCase() as Lowercase<Abil>; }
 
-	public static all(): Skill[] {
-		return [
+	public static all(options?: { includePerception?:boolean; }): Skill[] {
+		const skills = [
 			new Skill("Acrobatics", "Dexterity"),
 			new Skill("Arcana", "Intelligence"),
 			new Skill("Athletics", "Strength"),
@@ -34,6 +34,10 @@ export class Skill {
 			new Skill("Survival", "Wisdom"),
 			new Skill("Thievery", "Dexterity")
 		];
+		if (options?.includePerception) {
+			skills.unshift(new Skill("Perception", "Wisdom"));
+		}
+		return skills;
 	}
 
 	public static findByName(name: string): Skill | undefined {

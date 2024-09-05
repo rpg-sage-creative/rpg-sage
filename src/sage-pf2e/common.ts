@@ -1,28 +1,5 @@
 import { warn } from "@rsc-utils/core-utils";
-
-//#region EventListener and EventHandler
-// type TEventListener<T> = (object: T) => void;
-// interface IEventHandler<T> { eventName:string; listeners:TEventListener<T>[]; }
-
-// let handlers: IEventHandler<any>[] = [];
-// export namespace EventHandler {
-// 	export function addListener<T>(eventName: string, listener: TEventListener<T>): void {
-// 		let eventNames = (eventName || "").trim().split(/\s+/);
-// 		eventNames.forEach(eventName => {
-// 			let handler = handlers.find(h => h.eventName === eventName);
-// 			if (!handler) {
-// 				handlers.push(handler = { eventName:eventName, listeners:[] });
-// 			}
-// 			if (!handler.listeners.includes(listener)) {
-// 				handler.listeners.push(listener);
-// 			}
-// 		});
-// 	}
-// 	export function fireEvent<T>(eventName: string, object: T): void {
-// 		handlers.filter(h => h.eventName === eventName).forEach(h => h.listeners.forEach(l => l(object)));
-// 	}
-// }
-//#endregion EventListener and EventHandler
+import { Skill } from "../gameSystems/p20/Skill.js";
 
 export type GetStatPrefix = "" | "dc" | "mod" | "prof" | "proficiency";
 
@@ -65,7 +42,7 @@ export function getExplorationModes(): string[] {
 }
 
 export function getSkills(): string[] {
-	return ["Perception", "Acrobatics", "Arcana", "Athletics", "Crafting", "Deception", "Diplomacy", "Intimidation", "Medicine", "Nature", "Occultism", "Performance", "Religion", "Society", "Stealth", "Survival", "Thievery"];
+	return Skill.all({ includePerception:true }).map(skill => skill.name);
 }
 
 //#region Constants
