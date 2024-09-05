@@ -14,11 +14,14 @@ function urlToName(url: Optional<string>): string | undefined {
 export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
+			return sageMessage.replyStack.whisper(`Sorry, NPCs only exist inside a Game.`);
+		}
+		return sageMessage.replyStack.whisper(`Sorry, you cannot create characters here.`);
 	}
 
 	const userDid = await getUserDid(sageMessage),
-		names = sageMessage.args.removeAndReturnNames(),
+		names = sageMessage.args.getNames(),
 		core = sageMessage.args.getCharacterOptions(names, userDid!);
 
 	if (!core.name) {
@@ -26,11 +29,11 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	}
 
 	if (/discord/i.test(core.name)) {
-		return sageMessage.reactFailure(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+		return sageMessage.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
 	}
 
 	if (!core.name) {
-		return sageMessage.reactFailure("Cannot create a character without a name!");
+		return sageMessage.replyStack.whisper("Cannot create a character without a name!");
 	}
 
 	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
@@ -47,6 +50,10 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	}
 	if (!characterManager) {
 		return sageMessage.reactFailure(`Unable to find character "${names.charName}".`);
+	}
+	const existing = characterManager.findByName(core.name);
+	if (existing) {
+		return sageMessage.replyStack.whisper(`"${core.name}" already exists, please use update command!`);
 	}
 
 	const newChar = new GameCharacter(core, characterManager);

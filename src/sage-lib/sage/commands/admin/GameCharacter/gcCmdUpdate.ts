@@ -9,10 +9,13 @@ import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
+			return sageMessage.replyStack.whisper(`Sorry, NPCs only exist inside a Game.`);
+		}
+		return sageMessage.replyStack.whisper(`Sorry, you cannot update characters here.`);
 	}
 
-	const names = sageMessage.args.removeAndReturnNames();
+	const names = sageMessage.args.getNames();
 	if (characterTypeMeta.isGm) {
 		if (names.newName) {
 			names.oldName = sageMessage.gmCharacter.name;
@@ -32,7 +35,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 		await character.update(core, false);
 
 		if (/discord/i.test(core.name)) {
-			return sageMessage.reactFailure(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+			return sageMessage.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
 		}
 
 		return promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
@@ -43,5 +46,5 @@ export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 			return charSaved;
 		});
 	}
-	return sageMessage.reactFailure();
+	return sageMessage.replyStack.whisper(`Sorry, "${names.name ?? names.oldName}" not found, please use create command!`);
 }
