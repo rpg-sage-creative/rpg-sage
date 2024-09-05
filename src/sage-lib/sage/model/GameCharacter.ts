@@ -440,7 +440,7 @@ export class GameCharacter implements IHasSave {
 			if (isUrl(url)) {
 				const raw = await getText(unwrap(url, "<>")).catch(errorReturnNull);
 				if (raw) {
-					const { stats, macros } = parseFetchedStats(raw);
+					const { stats, macros } = parseFetchedStats(raw, this.alias);
 					this.fetchedStats = stats;
 					this.fetchedMacros = macros;
 					return;
