@@ -34,6 +34,16 @@ export class RenderableContent implements Renderable {
 		section.content.push(...content);
 	}
 
+	/** Prepends <blockquote> to the first content given, appends </blockquote> to the last content given, then passes to .append(...) */
+	public appendBlock(...content: string[]): void {
+		if (content.length) {
+			content[0] = `<blockquote>${content[0]}`;
+			const lastIndex = content.length - 1;
+			content[lastIndex] = `${content[lastIndex]}</blockquote>`;
+			this.append(...content);
+		}
+	}
+
 	/** Creates, appends, and returns a columned section. */
 	public appendColumnedSection(...columns: RenderableContentSectionColumn[]): RenderableContentSection {
 		return this._appendSection(createSection(this._sections.length, null, [], columns));
