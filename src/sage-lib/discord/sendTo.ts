@@ -1,6 +1,6 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { error, warn } from "@rsc-utils/core-utils";
-import { splitMessageOptions, toHumanReadable, type EmbedResolvable, type MessageTarget, type SplitOptions } from "@rsc-utils/discord-utils";
+import { warn } from "@rsc-utils/core-utils";
+import { DiscordApiError, splitMessageOptions, type EmbedResolvable, type MessageTarget, type SplitOptions } from "@rsc-utils/discord-utils";
 import { ActionRow, Attachment, AttachmentBuilder, Message, Webhook, type MessageActionRowComponent } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
@@ -44,17 +44,7 @@ type TSendToArgs = {
 	const payloads = splitMessageOptions({ avatarURL, components, content, embedContent, embeds, files, replyingTo, threadId, username }, { ...splitOptions, contentToEmbeds, embedsToContent });
 
 	// create a rejection catcher
-	const catcher = (err: unknown) => {
-		let msg = `Trying to send message to ${toHumanReadable(target)}`;
-		if (threadId) {
-			msg += ` (${threadId})`;
-		}
-		if (errMsg) {
-			msg += `: ${errMsg})`;
-		}
-		error(msg, err);
-		return null;
-	};
+	const catcher = (err: unknown) => DiscordApiError.process(err, { errMsg:errMsg && threadId ? `(${threadId}) ${errMsg}` : errMsg ?? threadId, target });
 
 	const messages: Message[] = [];
 	for (const payload of payloads) {
