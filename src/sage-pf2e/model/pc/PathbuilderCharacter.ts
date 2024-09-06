@@ -771,7 +771,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		const profMod = this.getProficiencyMod(key, specificKey);
 		return profMod === -2
 			? "Untrained"
-			: <TProficiency>ProficiencyType[profMod];
+			: <TProficiency>ProficiencyType[profMod] ?? debug({key,specificKey,profMod}) ?? ProficiencyType.Untrained;
 	}
 
 	public getProficiencyMod(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): ProficiencyType {
