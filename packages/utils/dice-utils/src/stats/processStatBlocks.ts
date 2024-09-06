@@ -1,3 +1,4 @@
+import { processMath } from "../math/processMath.js";
 import { doStatMath } from "./doStatMath.js";
 import { hasStatBlock, replaceStatBlocks } from "./StatBlock.js";
 import type { StatsCharacter, StatsCharacterManager, StatsEncounterManager } from "./types.js";
@@ -15,7 +16,9 @@ export function processStatBlocks(diceString: string, args: ProcessStatsArgs): s
 export function processStatBlocks(diceString: string, args: ProcessStatsArgs, stack: string[]): string;
 
 export function processStatBlocks(diceString: string, args: ProcessStatsArgs, stack: string[] = []): string {
-	if (!hasStatBlock(diceString)) return diceString; // NOSONAR
+	if (!hasStatBlock(diceString)) {
+		return processMath(diceString);
+	}
 
 	let replaced = diceString;
 	do {
