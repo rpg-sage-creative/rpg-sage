@@ -1,6 +1,6 @@
+import { doSimple } from "@rsc-utils/dice-utils";
 import type { TDiceOutput } from "../../../../sage-dice/index.js";
 import type { SageCommand } from "../../model/SageCommand.js";
-import { doSimple } from "./math/doSimple.js";
 
 /** Returns the output data for the given math equation. */
 export function rollMath(_: SageCommand, input: string): TDiceOutput[] {

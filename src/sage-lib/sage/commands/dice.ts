@@ -1,7 +1,7 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
 import type { Optional } from "@rsc-utils/core-utils";
 import { error } from "@rsc-utils/core-utils";
-import { rollDie } from "@rsc-utils/dice-utils";
+import { processStatBlocks, rollDie } from "@rsc-utils/dice-utils";
 import { type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
 import { addCommas } from "@rsc-utils/number-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
@@ -28,7 +28,6 @@ import { rollRandomItem } from "./dice/rollRandomItem.js";
 import { rollTable } from "./dice/rollTable.js";
 import { sendDiceToMultiple } from "./dice/sendDiceToMultiple.js";
 import { sendDiceToSingle } from "./dice/sendDiceToSingle.js";
-import { processStatBlocks } from "./dice/stats/processStatBlocks.js";
 
 type TInteraction = SageMessage | SageInteraction;
 
@@ -61,7 +60,7 @@ async function prepStatsAndMacros(sageCommand: TInteraction) {
 	if (!game || isGameMaster || isPlayer) {
 		const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
 		const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
-		const pc = isPlayer && game ? sageCommand.playerCharacter : null;
+		const pc = isPlayer && game ? sageCommand.playerCharacter : undefined;
 		const encounters = game?.encounters;
 		const macros = await fetchAllStatsAndMacros(npcs, pcs, pc, sageUser);
 		return { npcs, pcs, pc, encounters, macros };
