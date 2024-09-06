@@ -12,9 +12,10 @@ type Options = { globalFlag?: boolean; };
  * round(number)
  */
 export function getMathFunctionRegex(options?: Options): RegExp {
+	const flags = options?.globalFlag ? "xgi" : "xi";
 	const numberRegex = getNumberRegex({ capture:true }).source;
 	const simpleRegex = getSimpleRegex().source;
-	const MIN_MAX_REGEX = XRegExp(`
+	return XRegExp(`
 		(?:
 			${numberRegex}\\s*
 			|
@@ -29,10 +30,8 @@ export function getMathFunctionRegex(options?: Options): RegExp {
 			)*                       # close non-capture group, allow any number of them
 		)                            # close capture group
 		\\s*\\)                      # close parentheses, optional spaces
-		`, "xi");
-	return options?.globalFlag
-		? new RegExp(MIN_MAX_REGEX, "gi")
-		: MIN_MAX_REGEX;
+		(?!\\d*d\\d+)                # ignore the entire thing if followed by dY or XdY
+	`, flags);
 }
 
 /** Convenience for getMathFunctionRegex().test(value) */

@@ -38,7 +38,7 @@ export function doSimple(value: string): Optional<string> {
 	try {
 		if (getSimpleRegex({ anchored:true }).test(value.trim())) {
 			// by spacing the -- or ++ characters, the eval can properly process them
-			value = value.replace(/(-|\+)+/g, s => s.split("").join(" "))
+			value = value.replace(/-+|\++/g, s => s.split("").join(" "))
 
 			// replace the caret (math exponent) with ** (code exponent)
 			value = value.replace(/\^/g, "**");
