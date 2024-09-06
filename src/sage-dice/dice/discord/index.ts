@@ -94,7 +94,8 @@ function cloneDicePart<T extends baseDicePartCore, U extends baseTDicePart>(clss
 		objectType: core.objectType,
 		sides: core.sides,
 		sign: core.sign,
-		test: core.test
+		test: core.test,
+		target: core.target
 	});
 }
 

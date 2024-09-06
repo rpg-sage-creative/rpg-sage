@@ -1,5 +1,5 @@
 import { GameType } from "@rsc-sage/types";
-import { isDefined, randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 
 import {
@@ -16,18 +16,18 @@ import {
 	type TDiceLiteral,
 	type TSign,
 	type TTestData
-} from "../../common";
+} from "../../common.js";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
 	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers, reduceTokenToDicePartCore as baseReduceTokenToDicePartCore,
 	type TReduceSignToDropKeep
-} from "../base";
+} from "../base/index.js";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
-} from "../base/types";
+} from "../base/types.js";
 
 
 //#region Tokenizer
@@ -56,7 +56,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 //#endregion
 
 //#region Targets/Tests
-export enum TargetType { None = 0, AC = 1, DC = 2, VS = 3 }
+export enum TargetType { None = 0, AC = 1, DC = 2 }
 export type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; };
 function parseTargetType(targetType: string): TargetType {
 	const targetTypeLower = targetType.toLowerCase();
@@ -64,8 +64,6 @@ function parseTargetType(targetType: string): TargetType {
 		return TargetType.AC;
 	}else if (targetTypeLower.endsWith("dc")) {
 		return TargetType.DC;
-	}else if (targetTypeLower.endsWith("vs")) {
-		return TargetType.VS;
 	}else {
 		return TargetType.None;
 	}
@@ -115,24 +113,34 @@ function gradeResults(roll: DiceRoll): DieRollGrade {
 //#region diceGroupRollToString
 
 function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOutputType, joiner = "\n", diceSort?: "noSort" | "sort"): string {
-	const rollOutputs: string[] = [],
-		attackRoll = diceGroupRoll.attackRoll;
-	if (attackRoll) {
-		rollOutputs.push(attackRoll.toString(outputType));
+	const rollOutputs: string[] = [];
+	const { attack, damage } = diceGroupRoll.attackDamageRoll ?? { };
+	let breakOut = false;
+	let skipDamage = false;
+	const { rolls } = diceGroupRoll;
+	for (const roll of rolls) {
+		let dmgEmoji = "";
 
-		const attackGrade = attackRoll?.grade ?? DieRollGrade.Unknown;
-		const showRolls = !attackGrade || isGradeSuccess(attackGrade);
-		if (showRolls) {
-			const damageRoll = diceGroupRoll.damageRoll;
-			if (damageRoll) {
-				const dmgEmoji = attackGrade ? `[damage] ` : ``;
-				rollOutputs.push(`${dmgEmoji}${damageRoll.toString(outputType, diceSort)}`);
+		// if attack dice, we might stop showing subsequent rolls, including damage
+		if (attack && roll.is(attack)) {
+			skipDamage = !isGradeSuccess(roll.grade ?? DieRollGrade.Unknown);
+
+		// if the first test fails, stop showing subsequent rolls
+		}else if (roll.dice.hasTest) {
+			breakOut = !isGradeSuccess(roll.grade ?? DieRollGrade.Unknown);
+
+		}else {
+			if (damage && roll.is(damage)) {
+				if (skipDamage) continue;
+				dmgEmoji = attack?.grade ? `[damage] ` : ``;
 			}
-
-			diceGroupRoll.otherRolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType, diceSort)));
 		}
-	}else {
-		diceGroupRoll.rolls.forEach(diceRoll => rollOutputs.push(diceRoll.toString(outputType, diceSort)));
+
+		rollOutputs.push(dmgEmoji + roll.toString(outputType, diceSort));
+
+		if (breakOut) {
+			break;
+		}
 	}
 	return rollOutputs.join(joiner);
 }
@@ -152,6 +160,9 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	}
 	public get hasDisadvantage(): boolean {
 		return this.dropKeep?.alias === DISADVANTAGE;
+	}
+	public get hasAcTarget(): boolean {
+		return this.core.target?.type === TargetType.AC;
 	}
 	//#endregion
 
@@ -205,6 +216,9 @@ DicePart.Roll = <typeof baseDicePartRoll>DicePartRoll;
 //#region Dice
 type DiceCore = baseDiceCore;
 export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
+	public get hasAcTarget(): boolean {
+		return this.diceParts.some(dicePart => dicePart.hasAcTarget);
+	}
 
 	//#region static
 	public static create(diceParts: DicePart[]): Dice {
@@ -277,54 +291,30 @@ interface DiceGroupCore extends baseDiceGroupCore {
 export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll> {
 	public get critMethodType(): CritMethodType { return this.core.critMethodType ?? CritMethodType.Unknown; }
 
-	//#region Attack
-	public get hasAttackDice(): boolean {
-		return this.attackDice !== null;
+	//#region attack / damage
+	public get hasAttackAndDamage(): boolean {
+		return this.attackDamageDice !== undefined;
 	}
-	public get attackDice(): OrNull<Dice> {
-		const testDice: Dice[] = [];
-		const attackDice = this.dice.find(_dice => _dice.isD20 && (!_dice.test || !testDice.includes(_dice)));
-		if (attackDice) {
-			testDice.push(attackDice);
-			const damageDice = this.dice.find(_dice => !_dice.isD20 && !_dice.test && !testDice.includes(_dice));
-			if (damageDice) {
-				return attackDice;
+	public get attackDamageDice(): { attack:Dice; damage:Dice; } | undefined {
+		let attack: Dice | undefined;
+		for (const dice of this.dice) {
+			// find damage after attack
+			if (attack) {
+				if (!dice.isD20 && !dice.hasTest) {
+					return { attack, damage:dice };
+				}
+
+			// let's find attack
+			}else if (dice.isD20 && dice.hasAcTarget) {
+				attack = dice;
+
 			}
 		}
-		return null;
+		return undefined;
 	}
-	//#endregion
-
-	//#region Damage
-	public get hasDamageDice(): boolean {
-		return this.damageDice !== null;
-	}
-	public get damageDice(): OrNull<Dice> {
-		const attackDice = this.attackDice;
-		if (attackDice) {
-			const testDice: Dice[] = [attackDice];
-			return this.dice.find(_dice => !_dice.isD20 && !_dice.test && !testDice.includes(_dice)) ?? null;
-		}
-		return null;
-	}
-	//#endregion
-
-	//#region Others
-	public get hasOtherDice(): boolean {
-		return this.otherDice.length > 0;
-	}
-	public get otherDice(): Dice[] {
-		const nonOtherDice = [this.attackDice, this.damageDice]
-			.filter(isDefined);
-		return this.dice.filter(_dice => !nonOtherDice.includes(_dice));
-	}
-	//#endregion
 
 	public toString(outputType?: DiceOutputType): string {
-		const sortedDice = [this.attackDice, this.damageDice]
-			.concat(this.otherDice)
-			.filter(isDefined);
-		return `[${sortedDice.map(_dice => _dice.toString(outputType)).join("; ")}]`;
+		return `[${this.dice.map(_dice => _dice.toString(outputType)).join("; ")}]`;
 	}
 
 	//#region static
@@ -415,12 +405,12 @@ function manipulateDamage(diceGroupRoll: DiceGroupRoll): void {
 
 function critByTimesTwo(diceGroupRoll: DiceGroupRoll): void {
 	const critDicePart = DicePart.create({ modifier: 2, sign: "*", description: "<i>(crit)</i>" });
-	diceGroupRoll.dice.damageDice!.diceParts.push(critDicePart);
-	diceGroupRoll.damageRoll!.toJSON().rolls.push(critDicePart.roll().toJSON());
+	diceGroupRoll.dice.attackDamageDice?.damage.diceParts.push(critDicePart);
+	diceGroupRoll.attackDamageRoll?.damage.toJSON().rolls.push(critDicePart.roll().toJSON());
 }
 function critByRollingTwice(diceGroupRoll: DiceGroupRoll): void {
-	const damageDice = diceGroupRoll.dice.damageDice!;
-	const damageRoll = diceGroupRoll.damageRoll!;
+	const damageDice = diceGroupRoll.dice.attackDamageDice?.damage!;
+	const damageRoll = diceGroupRoll.attackDamageRoll?.damage!;
 	damageDice.diceParts.forEach((dicePart, index) => {
 		if (dicePart.hasDie) {
 			damageRoll.toJSON().rolls[index].rolls.push(...dicePart.roll().rolls);
@@ -435,9 +425,9 @@ function critByRollingTwice(diceGroupRoll: DiceGroupRoll): void {
 	damageRoll.toJSON().rolls.push(critDicePart.roll().toJSON());
 }
 function critByAddingMax(diceGroupRoll: DiceGroupRoll): void {
-	const critDicePart = DicePart.create({ modifier: diceGroupRoll.damageRoll!.dice.max, sign: "+", description: "<i>(crit; add max)</i>" });
-	diceGroupRoll.dice.damageDice!.diceParts.push(critDicePart);
-	diceGroupRoll.damageRoll!.toJSON().rolls.push(critDicePart.roll().toJSON());
+	const critDicePart = DicePart.create({ modifier: diceGroupRoll.attackDamageRoll?.damage!.dice.max, sign: "+", description: "<i>(crit; add max)</i>" });
+	diceGroupRoll.dice.attackDamageDice!.damage.diceParts.push(critDicePart);
+	diceGroupRoll.attackDamageRoll!.damage.toJSON().rolls.push(critDicePart.roll().toJSON());
 }
 
 function manipulateCriticalDamage(diceGroupRoll: DiceGroupRoll): void {
@@ -455,26 +445,24 @@ function manipulateCriticalDamage(diceGroupRoll: DiceGroupRoll): void {
 
 type DiceGroupRollCore = baseDiceGroupRollCore;
 export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGroup, DiceRoll> {
-	public get attackRoll(): OrNull<DiceRoll> {
-		const attackDice = this.dice.attackDice;
-		return attackDice ? DiceRoll.fromCore(this.core.rolls.find(rollCore => attackDice.is(rollCore.dice))!) : null;
-	}
-	public get damageRoll(): OrNull<DiceRoll> {
-		const damageDice = this.dice.damageDice;
-		return damageDice ? DiceRoll.fromCore(this.core.rolls.find(rollCore => damageDice.is(rollCore.dice))!) : null;
-	}
-	public get otherRolls(): DiceRoll[] {
-		const nonOtherRolls = [this.attackRoll, this.damageRoll]
-			.filter(isDefined);
-		return this.core.rolls.filter(rollCore => !nonOtherRolls.find(roll => roll.is(rollCore))).map(DiceRoll.fromCore);
+	public get attackDamageRoll(): { attack:DiceRoll; damage:DiceRoll; } | undefined {
+		const { attackDamageDice } = this.dice;
+		if (attackDamageDice) {
+			const { attack, damage } = attackDamageDice;
+			return {
+				attack: DiceRoll.fromCore(this.core.rolls.find(rollCore => attack.is(rollCore.dice))!),
+				damage: DiceRoll.fromCore(this.core.rolls.find(rollCore => damage.is(rollCore.dice))!),
+			};
+		}
+		return undefined;
 	}
 
 	//#region convenience / flags
 	public get hasAttackAndDamage(): boolean {
-		return this.dice.hasAttackDice && this.dice.hasDamageDice;
+		return this.dice.hasAttackAndDamage;
 	}
 	public get hasAttackCriticalSuccess(): boolean {
-		return this.attackRoll?.grade === DieRollGrade.CriticalSuccess;
+		return this.attackDamageRoll?.attack?.grade === DieRollGrade.CriticalSuccess;
 	}
 	//#endregion
 

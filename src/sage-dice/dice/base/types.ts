@@ -1,7 +1,9 @@
-import type { DicePart, DicePartRoll, DiceRoll, Dice, DiceGroupRoll, DiceGroup } from ".";
-import type { DieCore, TDropKeepData, TSign, TTestData, CritMethodType, DiceOutputType, DiceSecretMethodType } from "../..";
+import type { DicePart, DicePartRoll, DiceRoll, Dice, DiceGroupRoll, DiceGroup } from "./index.js";
+import type { DieCore, TDropKeepData, TSign, TTestData, CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../index.js";
 
 //#region DicePart
+
+type TargetData = { type:number; value:number; hidden:boolean; raw?:string; };
 
 interface DicePartCoreBase {
 
@@ -31,6 +33,8 @@ interface DicePartCoreBase {
 
 	/** target test information */
 	test?: TTestData;
+
+	target?: TargetData;
 }
 
 export type TDicePartCoreArgs = Partial<DicePartCoreBase>;
