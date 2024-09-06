@@ -1,34 +1,70 @@
-import { doFloorCeilRound, hasFloorCeilRound } from "./doFloorCeilRound.js";
-import { doMinMax, hasMinMax } from "./doMinMax.js";
-import { doParentheses, hasParentheses } from "./doParentheses.js";
-import { doSimple, isSimple } from "./doSimple.js";
-import { unwrapNumbers, hasWrappedNumbers } from "./unwrapNumbers.js";
+import XRegExp from "xregexp";
+import { doSimple, getSimpleRegex } from "./doSimple.js";
+import { getNumberRegex } from "./getNumberRegex.js";
 
-/** Checks to see if the value it matches any of the "doMath" functions. */
-export function hasMathFunctions(value: string): boolean {
-	return hasMinMax(value)
-		|| hasFloorCeilRound(value)
-		|| hasParentheses(value)
-		|| hasWrappedNumbers(value)
-		|| isSimple(value)
-		;
+type Options = { globalFlag?: boolean; };
+
+/** Returns a regular expression that finds:
+ * min(...number[])
+ * max(...number[])
+ * floor(number)
+ * ceil(number)
+ * round(number)
+ */
+export function getMathFunctionRegex(options?: Options): RegExp {
+	const numberRegex = getNumberRegex({ capture:true }).source;
+	const simpleRegex = getSimpleRegex().source;
+	const MIN_MAX_REGEX = XRegExp(`
+		(?:
+			${numberRegex}\\s*
+			|
+			(min|max|floor|ceil|round)
+		)?
+		\\(\\s*                      # open parentheses, optional spaces
+		(                            # open capture group
+			${simpleRegex}           # first simple match
+			(?:                      # open non-capture group
+				\\s*,\\s*            # comma, optional spaces
+				${simpleRegex}       # additional simple match
+			)*                       # close non-capture group, allow any number of them
+		)                            # close capture group
+		\\s*\\)                      # close parentheses, optional spaces
+		`, "xi");
+	return options?.globalFlag
+		? new RegExp(MIN_MAX_REGEX, "gi")
+		: MIN_MAX_REGEX;
 }
 
-/** Processes the value against the "doMath" functions until none are found. */
+/** Convenience for getMathFunctionRegex().test(value) */
+export function hasMathFunctions(value: string): boolean {
+	return getMathFunctionRegex().test(value);
+}
+
+/** Checks the value for min/max/floor/ceil/round and replaces it with the result. */
 export function doMathFunctions(value: string): string {
-	let done = false;
-	do {
-		if (hasMinMax(value)) {
-			value = doMinMax(value);
-		}else if (hasFloorCeilRound(value)) {
-			value = doFloorCeilRound(value);
-		}else if (hasParentheses(value)) {
-			value = doParentheses(value);
-		}else if (hasWrappedNumbers(value)) {
-			value = unwrapNumbers(value);
-		}else {
-			done = true;
-		}
-	}while (!done);
-	return doSimple(value) ?? value;
+	const regex = getMathFunctionRegex({ globalFlag:true });
+	while (regex.test(value)) {
+		value = value.replace(regex, (_, _multiplier: string | undefined, _functionName: string | undefined, _args: string) => {
+			// split on space,space and convert to numbers
+			const args = _args.split(/\s*,\s*/).map(s => +doSimple(s)!);
+
+			// handle a math function
+			if (_functionName !== undefined) {
+				// lower case and cast type
+				const functionName = _functionName?.toLowerCase() as "min";
+				// do the math
+				const result = Math[functionName](...args);
+				// return a string
+				return String(result);
+			}
+
+			if (_multiplier !== undefined) {
+				// return the new math so that it can be reprocessed
+				return `${_multiplier}*${args[0]}`;
+			}
+
+			return `${args[0]}`;
+		});
+	}
+	return value;
 }
