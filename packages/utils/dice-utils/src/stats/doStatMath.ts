@@ -1,6 +1,5 @@
 import { tokenize } from "../internal/tokenize.js";
 import { processMath } from "../math/processMath.js";
-import { doSimple } from "../math/doSimple.js";
 import { getDiceRegex } from "../token/getDiceRegex.js";
 
 /**
@@ -11,27 +10,8 @@ import { getDiceRegex } from "../token/getDiceRegex.js";
  * (Primarily for hiding values, such as AC.)
  */
 export function doStatMath(value: string): string {
-	// check for piped "hidden" values
-	const hasPipes = (/\|{2}[^|]+\|{2}/).test(value);
-
-	// remove pipes
-	const unpiped = value.replace(/\|{2}/g, "");
-
 	// process other math functions on non-dice parts of the value
-	const tokens = tokenize(unpiped, { dice:getDiceRegex() });
-	const processedTokens = tokens.map(({ token, key }) => key === "dice" ? token : processMath(token));
-	const processed = processedTokens.join("");
-
-	// handle simple math if applicable
-	const simpleValue = doSimple(processed);
-	if (simpleValue !== undefined && simpleValue !== null) {
-		return hasPipes ? `||${simpleValue}||` : simpleValue;
-	}
-
-	// if we actually did some math, return the change
-	if (processed !== unpiped) {
-		return hasPipes ? `||${processed}||` : processed;
-	}
-
-	return value;
+	const tokens = tokenize(value, { dice:getDiceRegex() });
+	const processed = tokens.map(({ token, key }) => key === "dice" ? token : processMath(token, { allowSpoilers:true }));
+	return processed.join("");
 }

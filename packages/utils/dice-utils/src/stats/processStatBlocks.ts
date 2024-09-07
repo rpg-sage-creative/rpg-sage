@@ -17,7 +17,7 @@ export function processStatBlocks(diceString: string, args: ProcessStatsArgs, st
 
 export function processStatBlocks(diceString: string, args: ProcessStatsArgs, stack: string[] = []): string {
 	if (!hasStatBlock(diceString)) {
-		return processMath(diceString);
+		return processMath(diceString, { allowSpoilers:true });
 	}
 
 	let replaced = diceString;

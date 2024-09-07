@@ -3,6 +3,9 @@ import { tokenize } from "@rsc-utils/string-utils";
 
 /** Looks for text escaped with ` characters that contain emoji (:die: or <:die:12345>) and unescapes those emoji so they render correctly. */
 export function correctEscapeForEmoji(value: string): string {
+	// replace any escaped spoilers with ?? to avoid revealing the value
+	// value = value.replace(/\|\|.*?\|\|/g, "??");
+
 	// We only need to be concerned with `escaped text` substrings
 	return value.replace(/`[^`]+`/gu, escapedValue => {
 		// Get the emojiRegex
