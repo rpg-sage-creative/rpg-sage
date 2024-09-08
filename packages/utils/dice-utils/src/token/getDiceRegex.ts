@@ -29,13 +29,11 @@ export function getDiceRegex(options?: Options): RegExp {
 		(?:
 			\\s*             # optional space    <-- SHOULD WE ALLOW THIS?
 			(\\d+)           # capture die count
-			\\s*             # optional space    <-- SHOULD WE ALLOW THIS?
 			|                # or
-			\b               # allows for "d20" (no count) while excluding "add20"
+			\\b              # allows for "d20" (no count) while excluding "add20"
 		)
 
 		d                    # die size indicator
-		\\s*                 # optional space    <-- SHOULD WE ALLOW THIS?
 		(\\d+)               # capture die size
 	`, "xi");
 
