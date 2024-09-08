@@ -115,7 +115,7 @@ export function sortSearchResults(searchResults: SearchResults): void {
 	const stringMatcher = StringMatcher.from(searchText);
 	const nameMatches = searchResults.scores.filter(score => score.searchable.matches(stringMatcher));
 
-	const wordRegex = new RegExp(`\b${escapedSearchText}\b`, "i");
+	const wordRegex = new RegExp(`\\b${escapedSearchText}\\b`, "i");
 	const wordMatches = searchResults.scores.filter(score => !nameMatches.includes(score) && score.searchable.name.match(wordRegex));
 
 	const partialRegex = new RegExp(escapedSearchText, "i");
