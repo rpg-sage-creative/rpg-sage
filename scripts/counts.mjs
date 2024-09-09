@@ -81,7 +81,8 @@ async function loadServers() {
 	if (ready) {
 		for (const guildId of missingGuildIds) {
 			if (!serverIds[guildId]) {
-				const guild = client.guilds.resolve(guildId)
+				const guild = client.guilds.cache.get(guildId)
+					?? client.guilds.resolve(guildId)
 					?? await client.guilds.fetch(guildId).catch(() => undefined);
 				serverIds[guildId] = guild?.name ?? `Unknown Guild`;
 			}
@@ -197,6 +198,8 @@ function sortedBy(data, totalOrWeek) {
 }
 
 async function processMessages() {
+	console.log("INFO: Processing Messages ...");
+
 	const path = `${PATH}/messages`;
 	const files = await listFiles(path, "json");
 	let noUser = 0;
