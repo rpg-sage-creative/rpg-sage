@@ -1,4 +1,5 @@
-import { listFiles, readJsonFile, readJsonFiles, writeFileSync } from "@rsc-utils/io-utils";
+import { listFiles, readJsonFile, readJsonFiles, writeFileSync, readFileSync, fileExistsSync } from "@rsc-utils/io-utils";
+import { Client, IntentsBitField } from "discord.js";
 
 const PATH = `/Users/randaltmeyer/tmp/data/sage`;
 
@@ -11,10 +12,86 @@ function msToDaysOld(ms) {
 }
 
 let games = [];
-async function loadGames() { games = await readJsonFiles(PATH + "/games"); }
+async function loadGames() {
+	console.log("INFO: Reading Game files ...");
+	games = await readJsonFiles(PATH + "/games");
+}
 
 let users = [];
-async function loadUsers() { users = await readJsonFiles(PATH + "/users"); }
+async function loadUsers() {
+	console.log("INFO: Reading User files ...");
+	users = await readJsonFiles(PATH + "/users");
+}
+
+let servers = [];
+let serverIds = {};
+async function loadServers() {
+	console.log("INFO: Reading Server Ids file ...");
+	serverIds = await readJsonFile("./leader-board/servers.json");
+
+	const tokenIndex = process.argv.includes("-t") ? process.argv.indexOf("-t") + 1 : -1;
+	const token = process.argv[tokenIndex];
+	if (!token) {
+		console.log("WARN: no token given");
+		return;
+	}
+
+	console.log("INFO: Reading Server files ...");
+	servers = await readJsonFiles(PATH + "/servers");
+
+	const missingGuildIds = servers
+		.filter(server => !serverIds[server.did ?? server.id])
+		.map(server => server.did ?? server.id);
+
+	if (!missingGuildIds.length) return;
+
+	console.log("INFO: Fetching Server info ...");
+
+	const client = new Client({ intents:[
+			IntentsBitField.Flags.Guilds,
+			IntentsBitField.Flags.GuildMembers,
+			IntentsBitField.Flags.GuildModeration,
+			// IntentsBitField.Flags.GuildBans <-- deprecated
+			IntentsBitField.Flags.GuildEmojisAndStickers,
+			// IntentsBitField.Flags.GuildIntegrations
+			IntentsBitField.Flags.GuildWebhooks,
+			IntentsBitField.Flags.GuildInvites,
+			// IntentsBitField.Flags.GuildVoiceStates,
+			IntentsBitField.Flags.GuildPresences,
+			IntentsBitField.Flags.GuildMessages,
+			IntentsBitField.Flags.GuildMessageReactions,
+			// IntentsBitField.Flags.GuildMessageTyping,
+			IntentsBitField.Flags.DirectMessages,
+			IntentsBitField.Flags.DirectMessageReactions,
+			// IntentsBitField.Flags.DirectMessageTyping,
+			IntentsBitField.Flags.MessageContent,
+			IntentsBitField.Flags.GuildScheduledEvents,
+			// IntentsBitField.Flags.AutoModerationConfiguration,
+			// IntentsBitField.Flags.AutoModerationExecution,
+			IntentsBitField.Flags.GuildMessagePolls,
+			IntentsBitField.Flags.DirectMessagePolls,
+		]
+	});
+	const ready = await new Promise(async resolve => {
+		client.once("ready", () => resolve(true));
+		client.on("error", console.error);
+		await client.login(token);
+		setTimeout(() => resolve(false), 5000);
+	});
+	if (ready) {
+		for (const guildId of missingGuildIds) {
+			if (!serverIds[guildId]) {
+				const guild = client.guilds.resolve(guildId)
+					?? await client.guilds.fetch(guildId).catch(() => undefined);
+				serverIds[guildId] = guild?.name ?? `Unknown Guild`;
+			}
+		}
+		writeFileSync(`./leader-board/servers.json`, serverIds, true, true);
+	}else {
+		console.log("WARN: Unable to connect and check servers.");
+	}
+	await client?.destroy();
+}
 
 function findCharType({ gameId, characterId, userDid }) {
 	const game = gameId ? games.find(game => game.id === gameId) : undefined;
@@ -33,19 +110,12 @@ function findUserType({ gameId, userDid }) {
 	return user?.type === 2 ? "gamemaster" : "player";
 }
 
-function createSets(keys) { const sets = { messages:0 }; keys.forEach(key => sets[key] = new Set()); return sets; }
+function createSets(keys) { const sets = { messages:0, lastMessage:"" }; keys.forEach(key => sets[key] = new Set()); return sets; }
 function createData(...keys) { return { total:createSets(keys), week:createSets(keys) }; }
 
 let sageData = undefined;
 function getSageData() { return sageData ?? (sageData = createData("servers", "games", "users", "characters", "channels", "gamemasters", "players", "pcs", "npcs" /*, "gms"*/)); }
 
-const serverIds = {
-	"601578527263031302": "Cayden's Keg",
-	"857970340385783828": "Knights of Last Call",
-	"706661999907569694": "Find the Path",
-	"337024788323106817": "Roll for Combat",
-	"480488957889609733": "RPG Sage"
-};
 const serverData = { };
 function getServerData(serverId) { return serverData[serverId] ?? (serverData[serverId] = createData("games", "users", "characters", "channels", "gamemasters", "players", "pcs", "npcs" /*, "gms"*/)); }
 
@@ -60,7 +130,11 @@ function countData(data) { return Object.keys(data).reduce((out, key) => { out[k
 function recordMessageDataItem(data, key, value, age) {
 	if (key === "messages") {
 		data.total.messages++;
-		if (age < 7) data.week.messages++;
+		if (!data.total.lastMessage || value > data.total.lastMessage) data.total.lastMessage = value;
+		if (age < 7) {
+			data.week.messages++;
+			if (!data.week.lastMessage || value > data.week.lastMessage) data.week.lastMessage = value;
+		}
 	}else if (data.total[key]) {
 		data.total[key].add(value);
 		if (age < 7) data.week[key].add(value);
@@ -76,7 +150,7 @@ function recordMessageData(data, age, { userDid, characterId, messageDid, server
 	record("servers", serverDid);
 	record("games", gameId);
 	switch(findCharType({ gameId, characterId, userDid })) {
-		// case "gm": record("gms", characterId); break;
+		case "gm": record("gms", characterId); break;
 		case "pc": record("pcs", characterId); break;
 		case "npc": record("npcs", characterId); break;
 		default: console.log({ what:"findCharType", gameId, characterId, userDid }); break;
@@ -104,9 +178,16 @@ function sortedBy(data, totalOrWeek) {
 	const keys = Object.keys(data);
 	const values = keys.map(key => ({ ...data[key], name:serverIds[key]??userIds[key]??key }));
 	values.sort((a, b) => {
-		const _a = a[totalOrWeek].messages;
-		const _b = b[totalOrWeek].messages;
-		return _a < _b ? 1 : _a > _b ? -1 : 0;
+		const aCount = a[totalOrWeek].messages;
+		const bCount = b[totalOrWeek].messages;
+		if (aCount !== bCount) return aCount < bCount ? 1 : -1;
+		if (a.name !== b.name) {
+			if (a.name === "Unknown Guild") return 1;
+			if (b.name === "Unknown Guild") return -1;
+		}
+		const aLast = a[totalOrWeek].lastMessage;
+		const bLast = b[totalOrWeek].lastMessage;
+		return aLast > bLast ? 1 : -1;
 	});
 	return values.map((value, index) => ({
 		name: value.name,
@@ -136,6 +217,7 @@ async function processMessages() {
 }
 
 async function main() {
+	await loadServers();
 	await loadGames();
 	await loadUsers();
 	await processMessages();
