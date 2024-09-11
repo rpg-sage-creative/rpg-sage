@@ -1,5 +1,5 @@
 import { GameType } from "@rsc-sage/types";
-import { randomSnowflake, type OrNull } from "@rsc-utils/core-utils";
+import { getCodeName, randomSnowflake, type OrNull } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
 import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import type {
@@ -176,20 +176,58 @@ function gradeRoll(rolls: number[], hunger: number, vs?: number): RollGradeResul
 
 type HungerAndGrade = { hunger:boolean; grade:DieGradeType; };
 
+/** @todo rework the bot config file to includde bot emoji ... or perhaps have a separate config file *just* for emoji. */
+function getEmoji() {
+	switch(getCodeName()) {
+		case "stable":
+			return {
+				HB: "<:vtm5_hunger_bestial:1283542785919811719>",
+				HF: "<:vtm5_hunger_failure:1283542802369613895>",
+				HS: "<:vtm5_hunger_success:1283542840768598056>",
+				HM: "<:vtm5_hunger_messy:1283542823768948849>",
+				F: "<:vtm5_failure:1283542767833714740>",
+				S: "<:vtm5_success:1283542855922614343>",
+				C: "<:vtm5_critical:1283542746040111136>"
+			};
+		case "beta":
+			return {
+				HB: "<:vtm5_hunger_bestial:1283543179731402853>",
+				HF: "<:vtm5_hunger_failure:1283543193291456597>",
+				HS: "<:vtm5_hunger_success:1283543223750361220>",
+				HM: "<:vtm5_hunger_messy:1283543208613253180>",
+				F: "<:vtm5_failure:1283543162995998732>",
+				S: "<:vtm5_success:1283543239734857811>",
+				C: "<:vtm5_critical:1283543135523180615>"
+			};
+		case "dev":
+		default:
+			return {
+				HB: "<:vtm5_hunger_bestial:1283543338238349363>",
+				HF: "<:vtm5_hunger_failure:1283543347725733991>",
+				HS: "<:vtm5_hunger_success:1283543378306400356>",
+				HM: "<:vtm5_hunger_messy:1283543361797755045>",
+				F: "<:vtm5_failure:1283543328763150379>",
+				S: "<:vtm5_success:1283543387001196618>",
+				C: "<:vtm5_critical:1283543316184567840>"
+			};
+	}
+}
+
 function toEmoji(result: HungerAndGrade): string {
+	const emoji = getEmoji();
 	if (result.hunger) {
 		switch(result.grade) {
-			case "B": return "<:vtm5_hunger_bestial:1161374530309202061>";
-			case "F": return "<:vtm5_hunger_failure:1161374532490252408>";
-			case "S": return "<:vtm5_hunger_success:1161374536730677248> ";
-			case "M": return "<:vtm5_hunger_messy:1161374533798854787>";
+			case "B": return emoji.HB;
+			case "F": return emoji.HF;
+			case "S": return emoji.HS;
+			case "M": return emoji.HM;
 			default: return `*${result.grade}*`;
 		}
 	}
 	switch(result.grade) {
-		case "F": return "<:vtm5_failure:1161374528610512897>";
-		case "S": return "<:vtm5_success:1161374538358083594>";
-		case "C": return "<:vtm5_critical:1161374526005854290>";
+		case "F": return emoji.F;
+		case "S": return emoji.S;
+		case "C": return emoji.C;
 		default: return result.grade as string;
 	}
 }
