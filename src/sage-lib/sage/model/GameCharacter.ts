@@ -538,6 +538,15 @@ export class GameCharacter implements IHasSave {
 			}
 		}
 
+		// provide a temp shortcut for dc values for PF2e
+		if (/^dc\./i.test(key)) {
+			const statKey = key.slice(3);
+			const statValue = this.getStat(statKey);
+			if (statValue !== null) {
+				return doStatMath(statValue + "+10");
+			}
+		}
+
 		return null;
 	}
 
