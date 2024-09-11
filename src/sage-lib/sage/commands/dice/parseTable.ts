@@ -58,6 +58,13 @@ export function parseTable(value?: string | null): SimpleRollableTable | undefin
 	const table: SimpleRollableTable = { min:undefined!, max:undefined!, count:0, items:[] };
 
 	const lines = normalizeDashes(unwrap(value?.trim() ?? "", "[]")).split(/\n/);
+
+	// by definition, a table is multiple lines
+	// also, grabbing a one line table of math means simple math no longer works
+	if (lines.length === 1) {
+		return undefined;
+	}
+
 	for (const line of lines) {
 		const tableItem = lineToTableItem(line);
 		if (!tableItem) {
