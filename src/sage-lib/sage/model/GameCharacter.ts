@@ -211,8 +211,19 @@ export class GameCharacter implements IHasSave {
 	public set aka(aka: string | undefined) { this.core.aka = aka; this.notes.unsetStat("nickname"); }
 
 	/** short name used to ease dialog access */
-	public get alias(): string | undefined { return this.core.alias; }
-	public set alias(alias: string | undefined) { this.core.alias = alias; }
+	public get alias(): string | undefined {
+		return this.core.alias;
+	}
+	public set alias(alias: string | undefined) {
+		this.core.alias = alias;
+		delete this._aliasForMatching;
+	}
+	/** stores the clean alias used for matching */
+	private _aliasForMatching?: string;
+	/** returns the clean alias used for matching */
+	public get aliasForMatching(): string {
+		return this._aliasForMatching ?? (this._aliasForMatching = GameCharacter.prepareForMatching(this.alias ?? this.name));
+	}
 
 	/** Channels to automatically treat input as dialog */
 	public get autoChannels(): AutoChannelData[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
@@ -255,8 +266,20 @@ export class GameCharacter implements IHasSave {
 	}
 
 	/** The character's name */
-	public get name(): string { return this.core.name; }
-	public set name(name: string) { this.core.name = name; }
+	public get name(): string {
+		return this.core.name;
+	}
+	public set name(name: string) {
+		this.core.name = name;
+		delete this._nameForMatching;
+		delete this._aliasForMatching;
+	}
+	/** stores the clean name used for matching */
+	private _nameForMatching?: string;
+	/** returns the clean name used for matching */
+	public get nameForMatching(): string {
+		return this._nameForMatching ?? (this._nameForMatching = GameCharacter.prepareForMatching(this.name));
+	}
 
 	/** The character's notes */
 	public notes: NoteManager;
@@ -290,12 +313,6 @@ export class GameCharacter implements IHasSave {
 	/** @todo figure out what this id is and what it represents */
 	public get pathbuilderId(): string | undefined { return this.core.pathbuilderId; }
 	public set pathbuilderId(pathbuilderId: Optional<string>) { this.core.pathbuilderId = pathbuilderId ?? undefined; }
-
-	private _preparedAlias?: string;
-	private get preparedAlias(): string { return this._preparedAlias ?? (this._preparedAlias = GameCharacter.prepareName(this.alias ?? this.name)); }
-
-	private _preparedName?: string;
-	private get preparedName(): string { return this._preparedName ?? (this._preparedName = GameCharacter.prepareName(this.name)); }
 
 	/** The image used to represent the character to the left of the post. */
 	public get tokenUrl(): string | undefined { return this.core.tokenUrl; }
@@ -402,8 +419,8 @@ export class GameCharacter implements IHasSave {
 		if (this.name === value || this.alias === value || this.id === value) {
 			return true;
 		}
-		const preparedValue = GameCharacter.prepareName(value);
-		if (this.preparedName === preparedValue || this.preparedAlias === preparedValue) {
+		const preparedValue = GameCharacter.prepareForMatching(value);
+		if (this.nameForMatching === preparedValue || this.aliasForMatching === preparedValue) {
 			return true;
 		}
 		return recursive && this.companions.hasMatching(value, true);
@@ -588,9 +605,9 @@ export class GameCharacter implements IHasSave {
 		// name is tricky cause we can update via alias in name field; do it separate
 		if (name) {
 			// we don't wanna edit the name if we are simply using the alias to update
-			const notAlias = this.preparedAlias !== GameCharacter.prepareName(name);
+			const notAlias = this.aliasForMatching !== GameCharacter.prepareForMatching(name);
 			// if the name and alias are the same then we can update the name
-			const aliasMatchesName = this.preparedName === this.preparedAlias;
+			const aliasMatchesName = this.nameForMatching === this.aliasForMatching;
 			if (notAlias || aliasMatchesName) {
 				this.name = name;
 				changed = true;
@@ -598,9 +615,8 @@ export class GameCharacter implements IHasSave {
 		}
 
 		if (changed) {
-			delete this._preparedAlias;
-			delete this._preparedName;
-			delete this._pathbuilder;
+			delete this._aliasForMatching;
+			delete this._nameForMatching;
 			delete this._pathbuilder;
 			if (save) {
 				return this.save();
@@ -622,7 +638,7 @@ export class GameCharacter implements IHasSave {
 
 	public static readonly defaultGmCharacterName = DEFAULT_GM_CHARACTER_NAME;
 
-	public static prepareName(name: string): string {
+	public static prepareForMatching(name: string): string {
 		return XRegExp.replace(name ?? "", XRegExp("[^\\pL\\pN]+"), "", "all").toLowerCase();
 	}
 

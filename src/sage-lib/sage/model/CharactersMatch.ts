@@ -24,7 +24,7 @@ export class CharactersMatch {
 					character: char
 				};
 			}
-			const preparedName = GameCharacter.prepareName(char.name);
+			const preparedName = GameCharacter.prepareForMatching(char.name);
 			const preparedMatch = input.match(new RegExp(`"\\s*${preparedName}\\s*"|${preparedName}`, "i"));
 			if (preparedMatch) {
 				return <TCharacterMatch>{

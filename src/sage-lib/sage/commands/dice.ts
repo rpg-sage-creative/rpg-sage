@@ -1,15 +1,13 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
 import type { Optional } from "@rsc-utils/core-utils";
 import { error } from "@rsc-utils/core-utils";
-import { processStatBlocks, rollDie } from "@rsc-utils/dice-utils";
+import { processStatBlocks } from "@rsc-utils/dice-utils";
 import { type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
-import { addCommas } from "@rsc-utils/number-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { ButtonInteraction } from "discord.js";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
-import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import type { CharacterManager } from "../model/CharacterManager.js";
 import { GameCharacter } from "../model/GameCharacter.js";
@@ -18,6 +16,7 @@ import { SageCommand } from "../model/SageCommand.js";
 import { SageInteraction } from "../model/SageInteraction.js";
 import { SageMessage } from "../model/SageMessage.js";
 import type { TMacro, User } from "../model/User.js";
+import { registerDiceTest } from "./dice/diceTest.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
 import { isMath } from "./dice/isMath.js";
@@ -52,7 +51,8 @@ export type TDiceMatch = {
 //#region parse and map
 
 function getBasicBracketRegex(): RegExp {
-	return /\[+[^\]]+\]+/ig;
+	// first regex takes priority, so it will find 2 or 1, but not 1 on left and 2 on right
+	return /\[{2}[^\]]+\]{2}|\[[^\]]+\]/ig;
 }
 
 async function prepStatsAndMacros(sageCommand: TInteraction) {
@@ -186,12 +186,26 @@ async function parseMatch(sageMessage: TInteraction, match: string, overrides?: 
 	return [];
 }
 
+function redactContent(content: string): string {
+	// use the existing logic for code blocks
+	let redacted = redactCodeBlocks(content);
+
+	// let's do key/value pairs if we have a command
+	if (/^!+(\s*[\w-]+)+/i.test(redacted)) {
+		const tokens = tokenize(redacted, { keyValue:createKeyValueArgRegex() });
+		const redactedTokens = tokens.map(({ key, token }) => key === "keyValue" ? "".padEnd(token.length, "*") : token);
+		redacted = redactedTokens.join("");
+	}
+
+	return redacted;
+}
+
 export async function parseDiceMatches(sageMessage: TInteraction, content: string): Promise<TDiceMatch[]> {
 	const diceMatches: TDiceMatch[] = [];
-	const withoutCodeBlocks = redactCodeBlocks(content);
-	const regex = new RegExp(getBasicBracketRegex());
+	const redacted = redactContent(content);
+	const regex = getBasicBracketRegex();
 	let execArray: RegExpExecArray | null;
-	while (execArray = regex.exec(withoutCodeBlocks)) {
+	while (execArray = regex.exec(redacted)) {
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = isWrapped(match, "[[]]");
@@ -210,12 +224,6 @@ export async function parseDiceMatches(sageMessage: TInteraction, content: strin
 
 async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDiceOutput[]> | undefined> {
 	if (!sageMessage.allowDice) {
-		return undefined;
-	}
-	if (sageMessage.slicedContent.match(/^!*\s*((add|set)[ -]?macro|macro[ -]?(add|set))/i)) {
-		return undefined;
-	}
-	if (sageMessage.slicedContent.match(/^!*\s*((add|set)[ -]?alias|alias[ -]?(add|set))/i)) {
 		return undefined;
 	}
 	if (sageMessage.game && !(sageMessage.isGameMaster || sageMessage.isPlayer)) {
@@ -457,196 +465,11 @@ function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacro
 
 //#region dice test
 
-async function diceTest(sageMessage: SageMessage): Promise<void> {
-	//#region validate command
 
-	if (!sageMessage.allowDice) {
-		await sageMessage.message.reply("*Dice not allowed in this channel!*");
-		return;
-	}
-	if (sageMessage.game && !(sageMessage.isGameMaster || sageMessage.isPlayer)) {
-		await sageMessage.message.reply("*Only members of this game allowed!*");
-		return;
-	}
-
-	const dieValue = sageMessage.args.getString("die") ?? sageMessage.args.getString("sides") ?? sageMessage.args.getString("type");
-	if (!dieValue) {
-		await sageMessage.message.reply("*Die type not given!*");
-		return;
-	}
-
-	const dieSize = +dieValue.replace(/\D/g, "");
-	if (![2,3,4,6,8,10,12,20].includes(dieSize)) {
-		await sageMessage.message.reply("*Die type not valid! (2, 3, 4, 6, 8, 10, 12, 20)*");
-		return;
-	}
-
-	//#endregion
-
-	const iterations = 10000;
-
-	//#region roll dice
-
-	const rolls: number[] = [];
-	let counter = iterations;
-	do {
-		rolls.push(rollDie(dieSize));
-	} while(--counter);
-
-	//#endregion
-
-	const results = mapDiceTestResults({ dieSize, iterations, rolls });
-
-	//#region count streaks
-
-	const singleValueStreaksRaw = [] as { result:number; streaks:number[]; }[];
-	const highLowStreaksRaw = [] as { high:boolean; low:boolean; streak:number[]; }[];
-	const lowCutoff = dieSize / 2;
-
-	results.rolls.forEach((roll, index, rolls) => {
-		//#region single value
-		const singleValueStreaks = singleValueStreaksRaw[roll] ?? (singleValueStreaksRaw[roll] = { result:roll, streaks:[] });
-		if (rolls[index - 1] === roll) {
-			singleValueStreaks.streaks[singleValueStreaks.streaks.length - 1] += 1;
-		}else {
-			singleValueStreaks.streaks.push(1);
-		}
-		//#endregion
-		//#region high low
-		const high = roll > lowCutoff;
-		const last = highLowStreaksRaw[highLowStreaksRaw.length - 1];
-		const streak = last?.high === high ? last : { high, low:!high, streak:[] };
-		if (last !== streak) {
-			highLowStreaksRaw.push(streak);
-		}
-		streak.streak.push(roll);
-		//#endregion
-	});
-
-	//#region single value
-	const singleValueStreaks = singleValueStreaksRaw.reduce((out, roll) => {
-			roll?.streaks.forEach(length => {
-				if (length > 1) {
-					addStreakLength(out[roll.result] ?? (out[roll.result] = { }), length);
-				}
-			});
-			return out;
-		}, { } as { [roll: number]: TStreakLengths });
-	//#endregion
-
-	//#region high low
-	const highLowStreaks = highLowStreaksRaw.reduce((out, streak) => {
-		if (streak.streak.length > 1) {
-			addStreakLength(out[streak.high ? "high" : "low"], streak.streak.length);
-		}
-		return out;
-	}, { high:{} as TStreakLengths, low:{} as TStreakLengths });
-	//#endregion
-
-	//#endregion
-
-	//#region map counts
-
-	const expectedAvg = Math.round(iterations / dieSize);
-	const expectedAvgLen = addCommas(expectedAvg).length;
-	const mappedCounts = results.counts.map((dieCount, dieRoll) => {
-		const die = addCommas(dieRoll).padStart(2, " ");
-		const count = addCommas(dieCount).padStart(expectedAvgLen, " ");
-		const delta = dieCount - expectedAvg;
-		const cDelta = addCommas(delta);
-		const sDelta = delta < 0 ? cDelta : `+${cDelta}`;
-		return { die, count, delta, cDelta, sDelta };
-	}).slice(1);
-	const highLowCounts = results.counts.reduce((out, dieCount, dieRoll) => {
-		if (dieRoll) {
-			out[dieRoll > lowCutoff ? "high" : "low"] += dieCount;
-		}
-		return out;
-	}, { high:0, low:0 });
-
-	//#endregion
-
-	const maxDelta = mappedCounts.reduce((max, count) => Math.max(Math.abs(count.delta), max), 0);
-
-	//#region create output
-
-	let output = `**Test Results: d${dieSize} x${addCommas(iterations)}**\n\`\`\``;
-	mappedCounts.forEach(count => {
-		const sDeltaBar = createDeltaBar(maxDelta, count.delta);
-		output += `\n${count.die}: ${count.count} ${sDeltaBar} (${count.sDelta})`;
-	});
-	(["high", "low"] as ("high" | "low")[]).forEach(hl => {
-		output += `\n\n${hl}: ${addCommas(highLowCounts[hl])}`;
-	});
-	output += "```\n**Streaks**\n*Roll: Length (xCount)*```";
-	for (let i = 1; i <= dieSize; i++) {
-		output += `\n${i}: `;
-		output += Object.keys(singleValueStreaks[i]).filter(key => key !== "max").map(key => `${key} (x${singleValueStreaks[i][key as any]})`).join(", ");
-	}
-	(["high", "low"] as ("high" | "low")[]).forEach(hl => {
-		output += `\n\n${hl}: `;
-		output += Object.keys(highLowStreaks[hl]).filter(key => key !== "max").map(key => `${key} (x${highLowStreaks[hl][key as any]})`).join(", ");
-	});
-	output += "```";
-
-	//#endregion
-
-	await sageMessage.send(output);
-}
-
-type TStreakLengths = { [length: number]:number; max?:number; };
-function addStreakLength(lengths: TStreakLengths, length: number): void {
-	const max = lengths.max;
-	lengths[length] = (lengths[length] ?? 0) + 1;
-	if (!max || length > max) {
-		lengths.max = length;
-	}
-}
-
-function createDeltaBar(biggestDelta: number, delta: number): string {
-	if (delta !== 0) {
-		const deltaPercent = (delta < 0 ? -1 : 1) * Math.round(100 * Math.abs(delta) / biggestDelta);
-		if (deltaPercent < -80) return `-----0     `;
-		if (deltaPercent < -60) return ` ----0     `;
-		if (deltaPercent < -40) return `  ---0     `;
-		if (deltaPercent < -20) return `   --0     `;
-		if (deltaPercent < 0)   return `    -0     `;
-		if (deltaPercent > 80)  return `     0+++++`;
-		if (deltaPercent > 60)  return `     0++++ `;
-		if (deltaPercent > 40)  return `     0+++  `;
-		if (deltaPercent > 20)  return `     0++   `;
-		if (deltaPercent > 0)   return `     0+    `;
-	}
-	return `     0     `;
-}
-
-type TDiceTestResults = {
-	counts: number[];
-	dieSize: number;
-	iterations: number;
-	minCount: number;
-	maxCount: number;
-	rolls: number[];
-};
-
-function mapDiceTestResults({ dieSize, iterations, rolls }: { dieSize: number; iterations: number; rolls: number[]; }): TDiceTestResults {
-	const counts = rolls.reduce((out, value) => {
-		out[value] = (out[value] ?? 0) + 1;
-		return out;
-	}, [] as number[]);
-	const [minCount, maxCount] = counts.reduce((minMax, count) => {
-		minMax[0] = Math.min(minMax[0] ?? 0, count);
-		minMax[1] = Math.max(minMax[1] ?? 0, count);
-		return minMax;
-	}, [] as number[]);
-	return {
-		counts, dieSize, iterations, minCount, maxCount, rolls
-	};
-}
 
 //#endregion
 
 export function registerDice(): void {
-	registerListeners({ commands:["dice|test"], message:diceTest });
+	registerDiceTest();
 	registerMessageListener(hasUnifiedDiceCommand, sendDice as any, { priorityIndex:1 });
 }

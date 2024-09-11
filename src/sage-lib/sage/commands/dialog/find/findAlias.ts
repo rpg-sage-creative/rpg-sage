@@ -25,7 +25,7 @@ export function findAlias(sageCommand: SageCommand, aliasName: Optional<string>)
 	if (char) {
 		return {
 			name: aliasName,
-			target: `${char.type}::${char.name}::`,
+			target: `${char.type}::${char.nameForMatching}::`,
 			charAlias: true
 		};
 	}
