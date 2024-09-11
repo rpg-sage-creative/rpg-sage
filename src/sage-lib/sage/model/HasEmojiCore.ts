@@ -1,4 +1,4 @@
-import type { Emoji } from "./Emoji";
+import type { Emoji } from "./Emoji.js";
 
 export enum EmojiType {
 
@@ -49,6 +49,7 @@ export enum EmojiType {
 	DialogLook = 52,
 	DialogSpeech = 53,
 	DialogThought = 54,
+	DialogOutOfCharacter = 55,
 
 	// Condition = 6
 	ConditionDead = 61,

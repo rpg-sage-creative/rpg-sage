@@ -1,7 +1,8 @@
 import { isDefined } from "@rsc-utils/core-utils";
-import type { SageMessage } from "../../model/SageMessage";
-import type { DialogContent } from "./DialogContent";
-import { parseDialogContents } from "./parseDialogContents";
+import { EmojiType } from "../../model/HasEmojiCore.js";
+import type { SageMessage } from "../../model/SageMessage.js";
+import type { DialogContent } from "./DialogContent.js";
+import { parseDialogContents } from "./parseDialogContents.js";
 
 export function parseOrAutoDialogContent(sageMessage: SageMessage): DialogContent[] {
 	const content = sageMessage.slicedContent;
@@ -11,6 +12,11 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): DialogConten
 	}
 
 	if (!sageMessage.hasCommandOrQueryOrSlicedContent) {
+		const oocEmoji = sageMessage.getEmoji(EmojiType.DialogOutOfCharacter);
+		if (oocEmoji && content.includes(oocEmoji)) {
+			return [];
+		}
+
 		const userDid = sageMessage.sageUser.did;
 		const channelDids = [sageMessage.threadDid, sageMessage.channelDid].filter(isDefined);
 		for (const channelDid of channelDids) {
