@@ -37,9 +37,9 @@ function getSimpleTable(): SimpleItem[] {
 }
 
 type ByLevelItem = { level:number; dc:number; };
-function getByLevelTable(): ByLevelItem[];
-function getByLevelTable(level: number): ByLevelItem;
-function getByLevelTable(level?: number): ByLevelItem | ByLevelItem[] {
+export function getByLevelTable(): ByLevelItem[];
+export function getByLevelTable(level: number): ByLevelItem;
+export function getByLevelTable(level?: number): ByLevelItem | ByLevelItem[] {
 	const rows = [
 		{ level:0, dc:14 },
 		{ level:1, dc:15 },
