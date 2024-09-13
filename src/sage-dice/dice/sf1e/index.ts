@@ -31,7 +31,7 @@ import type {
 function getParsers(): TokenParsers {
 	return {
 		...baseGetParsers(),
-		target: /(eac|kac|dc)\s*(\d+|\|\|\d+\|\|)/i
+		target: /(ac|eac|kac|dc)\s*(\d+|\|\|\d+\|\|)/i
 	};
 }
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
@@ -44,7 +44,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 //#endregion
 
 //#region Targets/Tests
-export enum TargetType { None = 0, EAC = 1, KAC = 2, DC = 3 }
+export enum TargetType { None = 0, AC = 1, DC = 2, EAC = 3, KAC = 4 }
 export type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; };
 function parseTargetType(targetType: string): TargetType {
 	const targetTypeLower = targetType.toLowerCase();
@@ -52,6 +52,8 @@ function parseTargetType(targetType: string): TargetType {
 		return TargetType.EAC;
 	}else if (targetTypeLower.endsWith("kac")) {
 		return TargetType.KAC;
+	}else if (targetTypeLower.endsWith("ac")) {
+		return TargetType.AC;
 	}else if (targetTypeLower.endsWith("dc")) {
 		return TargetType.DC;
 	}else {
@@ -90,7 +92,7 @@ function gradeResults(roll: DiceRoll): DieRollGrade {
 
 	const alias = roll.dice.test?.alias;
 
-	if (alias?.match(/eac|kac/i)) {
+	if (alias?.match(/ac/i)) {
 		const d20 = roll.rolls.find(dpr => dpr.dice.sides === 20);
 		if (d20?.isMin) DieRollGrade.CriticalFailure;
 		if (d20?.isMax) {
@@ -161,7 +163,8 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
 	public get hasAcTarget(): boolean {
 		return this.core.target?.type === TargetType.EAC
-			|| this.core.target?.type === TargetType.KAC;
+			|| this.core.target?.type === TargetType.KAC
+			|| this.core.target?.type === TargetType.AC;
 	}
 	public get hasSave(): boolean {
 		return this.description.match(/\b(fort(itude)?|ref(flex)?|will(power)?|save)\b/i) !== null;
