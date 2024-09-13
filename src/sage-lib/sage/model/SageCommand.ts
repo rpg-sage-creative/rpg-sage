@@ -1,7 +1,7 @@
-import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, SageChannelType } from "@rsc-sage/types";
+import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType } from "@rsc-sage/types";
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug, isDefined, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { DInteraction, DRepliableInteraction, DiscordKey, EmbedBuilder } from "@rsc-utils/discord-utils";
+import type { DInteraction, DiscordKey, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { ComponentType, InteractionType, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
@@ -387,7 +387,17 @@ export abstract class SageCommand<
 	}
 
 	public get diceCritMethodType(): DiceCritMethodType {
-		return this.cache.get("diceCritMethodType", () => this.gameChannel?.diceCritMethodType ?? this.game?.diceCritMethodType ?? this.serverChannel?.diceCritMethodType ?? this.server?.diceCritMethodType ?? 0);
+		return this.cache.get("diceCritMethodType", () => {
+			const diceCritMethodType = this.gameChannel?.diceCritMethodType
+				?? this.game?.diceCritMethodType
+				?? this.serverChannel?.diceCritMethodType
+				?? this.server?.diceCritMethodType;
+			if (diceCritMethodType !== undefined) {
+				return diceCritMethodType;
+			}
+			return parseGameSystem(this.gameSystemType)?.diceCritMethodType
+				?? 0;
+		});
 	}
 
 	public get dicePostType(): DicePostType {

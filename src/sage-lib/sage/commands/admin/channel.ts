@@ -1,10 +1,10 @@
-import { DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, type SageChannel } from "@rsc-sage/types";
+import { DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, getCritMethodText, parseGameSystem, type SageChannel } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/array-utils";
 import { isDefined, stringify, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, isDMBased, isMessageTarget, toChannelMention } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { GuildChannel } from "discord.js";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
+import { DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Game } from "../../model/Game.js";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game.js";
@@ -35,13 +35,8 @@ async function channelDetailsAppendDice(renderableContent: RenderableContent, se
 	renderableContent.append(`<b>Dice Options</b>`);
 
 	const gameSystemType = channel.gameSystemType ?? (game ? game.gameSystemType : server.gameSystemType) ?? GameSystemType.None;
-	if ([GameSystemType.DnD5e, GameSystemType.PF2e, GameSystemType.SF2e].includes(gameSystemType)) {
-		const critMethodType = CritMethodType[channel.diceCritMethodType!];
-		const inheritedCritMethodType = CritMethodType[game?.diceCritMethodType ?? server.diceCritMethodType ?? CritMethodType.TimesTwo];
-		renderableContent.append(`[spacer]<b>Crit Method</b> ${critMethodType ?? `<i>inherited (${inheritedCritMethodType})</i>`}`);
-	} else {
-		renderableContent.append(`[spacer]<b>Crit Method</b> <i>only for PF2e, SF2e, and DnD5e</i>`);
-	}
+	const critMethodText = getCritMethodText(gameSystemType, channel.diceCritMethodType, game?.diceCritMethodType ?? server.diceCritMethodType);
+	renderableContent.append(`[spacer]<b>Crit Method</b> ${critMethodText}`);
 
 	const diceOutputType = DiceOutputType[channel.diceOutputType!];
 	const inheritedDiceOutputType = DiceOutputType[game?.diceOutputType ?? server.diceOutputType ?? DiceOutputType.M];

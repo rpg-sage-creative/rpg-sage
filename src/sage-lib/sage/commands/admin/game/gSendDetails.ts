@@ -1,5 +1,5 @@
 import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
-import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType } from "@rsc-sage/types";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
@@ -118,13 +118,8 @@ function gameDetailsAppendDice(renderableContent: RenderableContent, game: Game)
 	const server = game.server;
 	renderableContent.append(`<b>Default Dice Options</b>`);
 
-	if ([GameSystemType.DnD5e, GameSystemType.PF2e, GameSystemType.SF2e].includes(game.gameSystemType ?? GameSystemType.None)) {
-		const diceCritMethodType: keyof typeof DiceCritMethodType | undefined = <keyof typeof DiceCritMethodType>DiceCritMethodType[game.diceCritMethodType!];
-		const inheritedDiceCritMethodType = DiceCritMethodType[server.diceCritMethodType ?? DiceCritMethodType.TimesTwo];
-		renderableContent.append(`[spacer]<b>Crit Method</b> ${diceCritMethodType ?? `<i>inherited (${inheritedDiceCritMethodType})</i>`}`);
-	} else {
-		renderableContent.append(`[spacer]<b>Crit Method</b> <i>only for PF2e, SF2e, and DnD5e</i>`);
-	}
+	const critMethodText = getCritMethodText(game.gameSystemType, game.diceCritMethodType, server.diceCritMethodType);
+	renderableContent.append(`[spacer]<b>Crit Method</b> ${critMethodText}`);
 
 	const diceOutputType: keyof typeof DiceOutputType | undefined = <keyof typeof DiceOutputType>DiceOutputType[game.diceOutputType!];
 	const inheritedDiceOutputType = DiceOutputType[server.diceOutputType ?? DiceOutputType.M];
