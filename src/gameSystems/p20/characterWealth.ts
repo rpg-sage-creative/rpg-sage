@@ -1,23 +1,16 @@
-import { GameSystemType, getGameSystems, parseEnum, type GameSystem } from "@rsc-sage/types";
+import { GameSystemType, parseEnum } from "@rsc-sage/types";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { addCommas, nth } from "@rsc-utils/number-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
-import type { Snowflake } from "@rsc-utils/core-utils";
-
-function getPaizoGameSystems(): GameSystem[] {
-	const all = getGameSystems();
-	return [GameSystemType.PF2e, GameSystemType.SF2e, GameSystemType.PF1e, GameSystemType.SF1e]
-		.map(type => all.find(system => system.type === type)!);
-}
-
-function isStarfinder(gameSystemType: GameSystemType): gameSystemType is (GameSystemType.SF1e | GameSystemType.SF2e) {
-	return gameSystemType === GameSystemType.SF1e || gameSystemType === GameSystemType.SF2e;
-}
+import { getPaizoGameSystems, isStarfinder } from "./lib/PaizoGameSystem.js";
+import { getSelectedOrDefault } from "./lib/getSelectedOrDefault.js";
+import { boundNumber } from "../utils/boundNumber.js";
 
 type RawWealthItem = { level:number; items:string; currency:number; lump:number; };
 
@@ -189,38 +182,19 @@ function buildForm(userId: Snowflake, selected: { gameSystemType: GameSystemType
 /** Sends the initial reply to the user. */
 async function showWealth(sageCommand: SageCommand): Promise<void> {
 	const levelArg = sageCommand.args.getNumber("level") ?? 1;
-	const level = Math.min(20, Math.max(1, levelArg));
+	const level = boundNumber(levelArg, { min:1, max:20, default:1 });
 	const gameSystemType = sageCommand.gameSystemType ?? sageCommand.args.getEnum(GameSystemType, "game") ?? GameSystemType.PF2e;
 	const content = getWealthByLevel({ gameSystemType, level });
 	const components = buildForm(sageCommand.authorDid, { gameSystemType, level });
 	await sageCommand.replyStack.reply({ content, components });
 }
 
-/** Gets the selected value (updated or default) for the given customId. */
-function getSelected(sageInteraction: SageInteraction<StringSelectMenuInteraction>, customId: string): string | undefined {
-	if (sageInteraction.customIdMatches(customId)) {
-		return sageInteraction.interaction.values[0];
-	}
-	for (const row of sageInteraction.interaction.message.components) {
-		for (const component of row.components) {
-			if (component.customId === customId) {
-				for (const option of (component as StringSelectMenuComponent).options) {
-					if (option.default) {
-						return option.value;
-					}
-				}
-			}
-		}
-	}
-	return undefined;
-}
-
 /** Updates the form when a system or level is changed. */
 async function changeWealth(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
 	sageInteraction.replyStack.defer();
-	const levelArg = +(getSelected(sageInteraction, "p20-wealth-level") ?? 1);
+	const levelArg = +(getSelectedOrDefault(sageInteraction, "p20-wealth-level") ?? 1);
 	const level = Math.min(20, Math.max(1, levelArg));
-	const gameSystemType = parseEnum(GameSystemType, getSelected(sageInteraction, "p20-wealth-game") ?? "PF2e");
+	const gameSystemType = parseEnum(GameSystemType, getSelectedOrDefault(sageInteraction, "p20-wealth-game") ?? "PF2e");
 	const content = getWealthByLevel({ gameSystemType, level });
 	const components = buildForm(sageInteraction.authorDid, { gameSystemType, level });
 	const options = sageInteraction.resolveToOptions({ content, components });
