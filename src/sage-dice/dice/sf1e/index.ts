@@ -84,16 +84,30 @@ function targetDataToTestData(targetData: TTargetData | TTestData): OrUndefined<
 //#region Grades
 
 function gradeResults(roll: DiceRoll): DieRollGrade {
-	const test = roll.dice.test;
-	if (test?.alias?.match(/ac|dc/i)) {
-		if (roll.isMax) {
-			return DieRollGrade.CriticalSuccess;
-		}else if (roll.isMin) {
-			return DieRollGrade.CriticalFailure;
+	const successOrFailure = gradeRoll(roll);
+
+	const alias = roll.dice.test?.alias;
+
+	if (alias?.match(/ac/i)) {
+		const d20 = roll.rolls.find(dpr => dpr.dice.sides === 20);
+		if (d20?.isMin) DieRollGrade.CriticalFailure;
+		if (d20?.isMax) {
+			if (successOrFailure === DieRollGrade.Success) return DieRollGrade.CriticalSuccess;
+			return DieRollGrade.Success;
 		}
-		return roll.total >= test.value ? DieRollGrade.Success : DieRollGrade.Failure;
 	}
-	return gradeRoll(roll);
+
+	if (alias?.match(/dc/i)) {
+		if (roll.hasSave) {
+			if (roll.isMax) {
+				return DieRollGrade.CriticalSuccess;
+			}else if (roll.isMin) {
+				return DieRollGrade.CriticalFailure;
+			}
+		}
+	}
+
+	return successOrFailure;
 }
 
 //#endregion
@@ -145,6 +159,9 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
 	public get hasAcTarget(): boolean {
 		return this.core.target?.type === TargetType.AC;
+	}
+	public get hasSave(): boolean {
+		return this.description.match(/\b(fort(itude)?|ref(flex)?|will(power)?|save)\b/i) !== null;
 	}
 	//#endregion
 
@@ -201,6 +218,9 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	public get hasAcTarget(): boolean {
 		return this.diceParts.some(dicePart => dicePart.hasAcTarget);
 	}
+	public get hasSave(): boolean {
+		return this.diceParts.find(dicePart => dicePart.hasSave) !== undefined;
+	}
 
 	//#region static
 	public static create(diceParts: DicePart[]): Dice {
@@ -238,6 +258,9 @@ type DiceRollCore = baseDiceRollCore;
 export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 	//#region calculated
 	public get grade(): DieRollGrade { return gradeResults(this); }
+	public get hasSave(): boolean {
+		return this.dice.hasSave;
+	}
 	//#endregion
 
 	//#region static
