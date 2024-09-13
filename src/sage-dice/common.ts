@@ -1,4 +1,4 @@
-import { DiceCritMethodType, DiceOutputType, GameType } from "@rsc-sage/types";
+import { DiceOutputType, GameType } from "@rsc-sage/types";
 import { sortPrimitive } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { warn } from "@rsc-utils/core-utils";
@@ -7,47 +7,6 @@ import type { TDiceRoll } from "./dice/base/types.js";
 
 /** @deprecated @todo Update imports for these enums. */
 export { DiceCritMethodType as CritMethodType, DiceOutputType, DiceSecretMethodType } from "@rsc-sage/types";
-
-//#region rpg.common.ts
-
-//#region DiceOutputType
-
-export type TDiceOutputType = keyof typeof DiceOutputType;
-
-export function parseDiceOutputType(outputType: string, defaultOutputType?: DiceOutputType): DiceOutputType | undefined {
-	return DiceOutputType[<TDiceOutputType>String(outputType).toUpperCase()] ?? defaultOutputType;
-}
-
-//#endregion
-
-//#region CritMethodType
-
-type TTypedMap<T> = { [key: string]: T; };
-
-const CritMethodTypeMap: TTypedMap<TTypedMap<DiceCritMethodType>> = {
-	"DND5E":{ "TIMESTWO":DiceCritMethodType.TimesTwo, "ROLLTWICE":DiceCritMethodType.RollTwice, "ADDMAX":DiceCritMethodType.AddMax },
-	"PF2E":{ "TIMESTWO":DiceCritMethodType.TimesTwo, "ROLLTWICE":DiceCritMethodType.RollTwice, "ADDMAX":DiceCritMethodType.AddMax },
-	"SF2E":{ "TIMESTWO":DiceCritMethodType.TimesTwo, "ROLLTWICE":DiceCritMethodType.RollTwice, "ADDMAX":DiceCritMethodType.AddMax }
-};
-
-export function parseCritMethodType(gameType: GameType | undefined, critMethod: string, defaultCritMethod?: DiceCritMethodType): DiceCritMethodType | undefined {
-	const map = CritMethodTypeMap[String(GameType[gameType!]).toUpperCase()];
-	if (map) {
-		return map[String(critMethod).toUpperCase()] ?? defaultCritMethod;
-	}
-	return defaultCritMethod;
-}
-
-export function getCritMethodRegex(gameType: GameType | undefined): RegExp | null {
-	if ([GameType.DnD5e, GameType.PF2e, GameType.SF2e].includes(gameType!)) {
-		return /^(timestwo|rolltwice|addmax)?/i;
-	}
-	return null;
-}
-
-//#endregion
-
-//#endregion
 
 //#region rpg.dice.common.ts
 

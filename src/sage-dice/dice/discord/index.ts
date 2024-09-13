@@ -1,14 +1,11 @@
 import { GameType, parseGameSystem } from "@rsc-sage/types";
 import { HasCore, type IdCore } from "@rsc-utils/class-utils";
-import { type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { randomSnowflake } from "@rsc-utils/core-utils";
+import { type OrNull, type OrUndefined, parseEnum, randomSnowflake } from "@rsc-utils/core-utils";
 import {
 	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
-	type TDiceOutput,
-	getCritMethodRegex,
-	parseCritMethodType, parseDiceOutputType
+	type TDiceOutput
 } from "../../common.js";
 import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
 import {
@@ -44,6 +41,10 @@ import {
 	DiceGroupRoll as questDiceGroupRoll
 } from "../quest/index.js";
 import {
+	DiceGroup as sf1eDiceGroup,
+	DiceGroupRoll as sf1eDiceGroupRoll
+} from "../sf1e/index.js";
+import {
 	DiceGroup as vtm5eDiceGroup,
 	DiceGroupRoll as vtm5eDiceGroupRoll
 } from "../vtm5e/index.js";
@@ -53,7 +54,8 @@ function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
 		case GameType.CnC: return <typeof baseDiceGroup>cncDiceGroup;
 		case GameType.DnD5e: return <typeof baseDiceGroup>dnd5eDiceGroup;
 		case GameType.E20: return <typeof baseDiceGroup>e20DiceGroup;
-		case GameType.PF2e:
+		case GameType.PF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
+		case GameType.SF1e: return <typeof baseDiceGroup>sf1eDiceGroup;
 		case GameType.SF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
 		case GameType.Quest: return <typeof baseDiceGroup>questDiceGroup;
 		case GameType.VtM5e: return <typeof baseDiceGroup>vtm5eDiceGroup;
@@ -70,6 +72,9 @@ function parseDice(diceString: string, gameType?: GameType, diceOutputType?: Dic
 		case GameType.E20:
 			return e20DiceGroup.parse(diceString, diceOutputType);
 		case GameType.PF2e:
+			return pf2eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
+		case GameType.SF1e:
+			return sf1eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
 		case GameType.SF2e:
 			return pf2eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
 		case GameType.Quest:
@@ -177,6 +182,9 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 					case GameType.E20:
 						return e20DiceGroup.fromCore(core);
 					case GameType.PF2e:
+						return pf2eDiceGroup.fromCore(core);
+					case GameType.SF1e:
+						return sf1eDiceGroup.fromCore(core);
 					case GameType.SF2e:
 						return pf2eDiceGroup.fromCore(core);
 					case GameType.Quest:
@@ -284,9 +292,10 @@ function matchDiceOutputType(match: string, defaultDiceOutputType: OrUndefined<D
 	const diceOutputMatch = match.match(DICE_OUTPUT_CHECK);
 	if (diceOutputMatch) {
 		const diceOutputTypeString = diceOutputMatch[0];
+		const diceOutputType = parseEnum(DiceOutputType, diceOutputTypeString, defaultDiceOutputType);
 		return [
 			match.slice(diceOutputTypeString.length).trim(),
-			parseDiceOutputType(diceOutputTypeString, defaultDiceOutputType)!
+			diceOutputType
 		];
 	}
 	return [match, defaultDiceOutputType];
@@ -294,14 +303,16 @@ function matchDiceOutputType(match: string, defaultDiceOutputType: OrUndefined<D
 
 /** Returns the CritMethodType at the beginning of the match along with the rest of the match. */
 function matchCritMethodType(match: string, gameType: OrUndefined<GameType>, defaultCritMethodType: OrUndefined<CritMethodType>): [string, OrUndefined<CritMethodType>] {
-	const critMethodRegex = getCritMethodRegex(gameType);
-	if (critMethodRegex) {
-		const critMethodMatch = match.match(critMethodRegex);
+	const gameSystem = parseGameSystem(gameType);
+	if (gameSystem?.diceCritMethodType) {
+		const CRIT_METHOD_CHECK = /^(timestwo|rolltwice|addmax)?/i;
+		const critMethodMatch = match.match(CRIT_METHOD_CHECK);
 		if (critMethodMatch) {
 			const critMethodTypeString = critMethodMatch[0];
+			const critMethodType = parseEnum(GameType, critMethodTypeString, defaultCritMethodType);
 			return [
 				match.slice(critMethodTypeString.length).trim(),
-				parseCritMethodType(gameType, critMethodTypeString, defaultCritMethodType)!
+				critMethodType
 			];
 		}
 	}
@@ -349,6 +360,9 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 					case GameType.E20:
 						return e20DiceGroupRoll.fromCore(core);
 					case GameType.PF2e:
+						return pf2eDiceGroupRoll.fromCore(core);
+					case GameType.SF1e:
+						return sf1eDiceGroupRoll.fromCore(core);
 					case GameType.SF2e:
 						return pf2eDiceGroupRoll.fromCore(core);
 					case GameType.Quest:
