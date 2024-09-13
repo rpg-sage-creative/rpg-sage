@@ -1,3 +1,5 @@
+import { DiceCritMethodType } from "./DiceCritMethodType.js";
+
 export enum GameSystemType {
 	None = 0,
 	/** Pathfinder 1e */
@@ -29,29 +31,33 @@ export type DiceSystemCode = GameSystemCode;
 export type GameSystem = {
 	/** Short code for the game system */
 	code: GameSystemCode;
-	/** Description of the game. */
+	/** Description of the game */
 	description: string;
 	/** Which dice system does the game use */
 	dice: DiceSystemCode;
-	/** Name of the game. */
+	/** Name of the game */
 	name: string;
 	/** Numeric enum value for the game system */
 	type: GameSystemType;
+	/** Default DiceCritMethodType for systems that allow it. */
+	diceCritMethodType?: DiceCritMethodType;
 };
 
+/** Stores all the available Game Systems. */
 const gameSystems: GameSystem[] = [
 	{ code:"None", description:"No Game System.", dice:"None", name:"None", type:GameSystemType.None },
 	{ code:"CnC", description:"", dice:"CnC", name:"Coyote & Crow", type:GameSystemType.CnC },
-	{ code:"DnD5e", description:"", dice:"DnD5e", name:"Dungeons & Dragons 5e", type:GameSystemType.DnD5e },
+	{ code:"DnD5e", description:"", dice:"DnD5e", name:"Dungeons & Dragons 5e", type:GameSystemType.DnD5e, diceCritMethodType:DiceCritMethodType.TimesTwo },
 	{ code:"E20", description:"", dice:"E20", name:"Essence 20", type:GameSystemType.E20 },
 	{ code:"PF1e", description:"", dice:"PF1e", name:"Pathfinder 1e", type:GameSystemType.PF1e },
-	{ code:"PF2e", description:"", dice:"PF2e", name:"Pathfinder 2e", type:GameSystemType.PF2e },
+	{ code:"PF2e", description:"", dice:"PF2e", name:"Pathfinder 2e", type:GameSystemType.PF2e, diceCritMethodType:DiceCritMethodType.TimesTwo },
 	{ code:"Quest", description:"", dice:"Quest", name:"Quest RPG", type:GameSystemType.Quest },
-	{ code:"SF1e", description:"", dice:"SF1e", name:"Starfinder 1e", type:GameSystemType.SF1e },
-	{ code:"SF2e", description:"", dice:"SF2e", name:"Starfinder 2e", type:GameSystemType.SF2e },
+	{ code:"SF1e", description:"", dice:"SF1e", name:"Starfinder 1e", type:GameSystemType.SF1e, diceCritMethodType:DiceCritMethodType.RollTwice },
+	{ code:"SF2e", description:"", dice:"SF2e", name:"Starfinder 2e", type:GameSystemType.SF2e, diceCritMethodType:DiceCritMethodType.TimesTwo },
 	{ code:"VtM5e", description:"", dice:"VtM5e", name:"Vampire: the Masquerade 5e", type:GameSystemType.VtM5e },
 ];
 
+/** Returns an array of the available Game Systems. */
 export function getGameSystems(): GameSystem[] {
 	return gameSystems;
 }
@@ -70,4 +76,19 @@ export function parseGameSystem(value?: string | number | null): GameSystem | un
 		}
 	}
 	return undefined;
+}
+
+/** Reusable method for displaying the DiceCritMethodType used by a channel/game/server. */
+export function getCritMethodText(gameSystemType?: GameSystemType, method?: DiceCritMethodType, inherited?: DiceCritMethodType): string {
+	const gameSystem = parseGameSystem(gameSystemType);
+	if (gameSystem?.diceCritMethodType) {
+		if (method !== undefined) return DiceCritMethodType[method];
+		if (inherited !== undefined) return `<i>inherited (${DiceCritMethodType[inherited]})</i>`;
+		return `<i>unset (${DiceCritMethodType[gameSystem.diceCritMethodType]})</i>`;
+	}
+	const critSystems = gameSystems
+		.filter(system => system.diceCritMethodType)
+		.map(system => system.dice)
+		.join(", ");
+	return `<i>only ${critSystems}</i>`;
 }
