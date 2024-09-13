@@ -34,7 +34,7 @@ import type {
 function getParsers(): TokenParsers {
 	return {
 		...baseGetParsers(),
-		target: /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+|\|\|\d+\|\|)/i
+		target: /(ac|dc)\s*(\d+|\|\|\d+\|\|)/i
 	};
 }
 const ADVANTAGE = "Advantage";
@@ -97,7 +97,7 @@ function targetDataToTestData(targetData: TTargetData | TTestData): OrUndefined<
 
 function gradeResults(roll: DiceRoll): DieRollGrade {
 	const test = roll.dice.test;
-	if (test?.alias?.match(/ac|dc|vs/i)) {
+	if (test?.alias?.match(/ac|dc/i)) {
 		if (roll.isMax) {
 			return DieRollGrade.CriticalSuccess;
 		}else if (roll.isMin) {
