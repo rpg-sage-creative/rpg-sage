@@ -1,10 +1,10 @@
 import { debug, randomSnowflake, type Optional } from "@rsc-utils/core-utils";
-import { PdfJsonFieldManager, type PdfJson } from "@rsc-utils/io-utils";
-import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
-import { ProficiencyType, SizeType } from "../lib/types.js";
-import { getSf2ePlaytestPdfKeyMap, type PdfKeyMapItem } from "./getSf2ePlaytestPdfKeyMap.js";
-import type { TPathbuilderCharacterWeapon } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
-import { toMod } from "../../../sage-dice/index.js";
+import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
+import { toMod } from "../../../../../sage-dice/index.js";
+import { type TPathbuilderCharacter } from "../../../../../sage-pf2e/index.js";
+import type { TPathbuilderCharacterWeapon } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import { ProficiencyType, SizeType } from "../../../lib/types.js";
+import type { PdfKeyMap } from "./types.js";
 
 function parseSize(value: Optional<string>): SizeType {
 	if (value) {
@@ -27,28 +27,48 @@ function parseAbilityScore(sValue: Optional<string>): number {
 }
 
 /** [ [name, null, type, level] ] */
-function parseFeats(mgr: PdfJsonFieldManager, keyMap: PdfKeyMapItem[]): [string, null, string, number][] {
+function parseFeats(mgr: PdfJsonFieldManager, keyMap: PdfKeyMap): [string, null, string, number][] {
 	const feats: [string, null, string, number][] = [];
-	const keyRegex = /^(?<type>ancestry|background|class|general|skill)Feat(?<level>\d+)?$/;
-	for (const item of keyMap) {
-		const match = keyRegex.exec(item?.sageKey ?? "");
-		if (match) {
-			const name = mgr.getValue(item.pdfId);
+
+	const playtestRegex = /^(?<type>ancestry|background|class|general|skill)Feat(?<level>\d+)?$/;
+	const demiplaneRegex = /^feat_\d+$/;
+
+	for (const [pdfId, item] of keyMap) {
+		if (!item?.sageKey) continue;
+
+		// playtest pdf
+		const playtestMatch = playtestRegex.exec(item.sageKey);
+		if (playtestMatch) {
+			const name = mgr.getValue(pdfId);
 			if (name) {
-				feats.push([name, null, match.groups?.type!, +(match.groups?.level ?? 1)]);
+				feats.push([name, null, playtestMatch.groups?.type!, +(playtestMatch.groups?.level ?? 1)]);
+			}
+		}
+
+		// demiplane pdf
+		const demiplaneMatch = demiplaneRegex.exec(item.sageKey);
+		if (demiplaneMatch) {
+			const name = mgr.getValue(pdfId);
+			if (name) {
+				feats.push([name, null, "", 0]);
 			}
 		}
 	}
+
 	return feats;
 }
 
-function _parseEquipment(mgr: PdfJsonFieldManager, key: string, count: number): [string, number][] {
+function _parseEquipment(mgr: PdfJsonFieldManager, key: string, start: number, count: number): [string, number][] {
 	const equipment: [string, number][] = [];
-	for (let i = 1; i <= count; i++) {
+	let i = start;
+	for (let counter = 1; counter <= count; i++, counter++) {
 		const item = mgr.getValue(`${key}${i}`);
+		// playtest pdf
 		// const bulk = mgr.getValue(`${key}${i}Bulk`);
 		// const invested = mgr.getValue(`${key}${i}Invested`);
 		// const mag = mgr.getValue(`${key}${i}Magazine`);
+		// demiplane pdf
+		// const bulk = mgr.getValue(`${key}${i}_bulk`);
 		if (item) equipment.push([item, 1]);
 	}
 	return equipment;
@@ -56,10 +76,16 @@ function _parseEquipment(mgr: PdfJsonFieldManager, key: string, count: number): 
 
 function parseEquipment(mgr: PdfJsonFieldManager): [string, number][] {
 	const equipment: [string, number][] = [];
-	equipment.push(..._parseEquipment(mgr, "heldItem", 13));
-	equipment.push(..._parseEquipment(mgr, "consumableItem", 14));
-	equipment.push(..._parseEquipment(mgr, "wornItem", 9));
-	equipment.push(..._parseEquipment(mgr, "weapon", 9));
+
+	// playtest pdf
+	equipment.push(..._parseEquipment(mgr, "heldItem", 1, 13));
+	equipment.push(..._parseEquipment(mgr, "consumableItem", 1, 14));
+	equipment.push(..._parseEquipment(mgr, "wornItem", 1, 9));
+	equipment.push(..._parseEquipment(mgr, "weapon", 1, 9));
+
+	// demiplane pdf
+	equipment.push(..._parseEquipment(mgr, "item_", 0, 29));
+
 	return equipment;
 }
 
@@ -91,11 +117,7 @@ function parseWeapons(mgr: PdfJsonFieldManager): TPathbuilderCharacterWeapon[] {
 	return weapons;
 }
 
-function parseCharacterCore(rawJson: PdfJson): TPathbuilderCharacter {
-	const pdfKeyMap = getSf2ePlaytestPdfKeyMap();
-	const mgr = new PdfJsonFieldManager(rawJson, f => ({ id:pdfKeyMap[+f.name.replace(/\D/g, "")]?.sageKey, ...f }));
-	// const getPdfId = (sageKey: string) => pdfKeyMap.find(pair => pair.sageKey === sageKey)?.pdfId;
-
+export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMap): TPathbuilderCharacter | undefined {
 	const getAbility = (key: string) => parseAbilityScore(mgr.getValue(key));
 	const getArray = (key: string, delim = ",") => mgr.getArray(key, delim)?.map(s => s.trim()).filter(s => s) ?? [];
 	const getProfMod = (skill: string): number => {
@@ -206,8 +228,4 @@ function parseCharacterCore(rawJson: PdfJson): TPathbuilderCharacter {
 			acTotal: mgr.getNumber("ac", 0),// ??
 		},
 	};
-}
-
-export function jsonToCharacter(rawJson: PdfJson): PathbuilderCharacter {
-	return new PathbuilderCharacter(parseCharacterCore(rawJson));
 }

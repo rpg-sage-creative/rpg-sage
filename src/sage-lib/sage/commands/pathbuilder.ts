@@ -641,6 +641,7 @@ export async function handlePathbuilder2eReimport(sageCommand: SageMessage, mess
 	const refreshResult = await PathbuilderCharacter.refresh({ characterId, pathbuilderId, newName, pdfUrl, pdfAttachment });
 	switch (refreshResult) {
 		case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
+		case "UNSUPPORTED_PDF": return handleReimportError(sageCommand, "The given PDF isn't supported.");
 		case "INVALID_PDF_URL": return handleReimportError(sageCommand, "The given PDF url is invalid.");
 		case "INVALID_PDF_ATTACHMENT": return handleReimportError(sageCommand, "The attached PDF is invalid.");
 		case "MISSING_JSON_ID": return handleReimportError(sageCommand, "You are missing a 'Export JSON' id.");

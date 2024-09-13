@@ -1,8 +1,6 @@
-export type PdfKeyMapItem = { sageKey: string; checked?: boolean; };
-export type DemiplanePdfKey = string;
-export type DemiplanePdfKeyMap = Map<DemiplanePdfKey, PdfKeyMapItem>
+import type { PdfKeyMap } from "../types.js";
 
-export function getSf2eDemiplanePdfKeyMap(): DemiplanePdfKeyMap {
+export function getDemiplanePdfKeyMap(): PdfKeyMap {
 	return new Map([
 		// PDF Page 1
 
@@ -107,7 +105,6 @@ export function getSf2eDemiplanePdfKeyMap(): DemiplanePdfKeyMap {
 		["acrobatics_item_bonus", { sageKey: "acrobaticsItemMod" }],
 		["acrobatics_armor_mod", { sageKey: "acrobaticsArmorMod" }],
 		["acrobatics_dex_bonus", { sageKey: "acrobaticsDexMod" }],
-
 		["acrobatics_prof_trained", { sageKey: "acrobaticsTrained", checked: true }],
 		["acrobatics_prof_expert", { sageKey: "acrobaticsExpert", checked: true }],
 		["acrobatics_prof_master", { sageKey: "acrobaticsMaster", checked: true }],
@@ -631,5 +628,5 @@ export function getSf2eDemiplanePdfKeyMap(): DemiplanePdfKeyMap {
 		//  [248, { sageKey: "otherExpert", checked: true }],
 		//  [249, { sageKey: "otherMaster", checked: true }],
 		//  [250, { sageKey: "otherLegendary", checked: true }],
-	])
+	]);
 }

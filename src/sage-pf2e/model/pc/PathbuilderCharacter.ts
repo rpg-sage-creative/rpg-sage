@@ -7,7 +7,7 @@ import { capitalize, StringMatcher } from "@rsc-utils/string-utils";
 import type { Attachment } from "discord.js";
 import { Skill } from "../../../gameSystems/p20/lib/Skill.js";
 import { ProficiencyType, SizeType } from "../../../gameSystems/p20/lib/types.js";
-import { jsonToCharacter } from "../../../gameSystems/p20/sf2e/jsonToCharacter.js";
+import { jsonToCharacter } from "../../../gameSystems/p20/sf2e/import/pdf/jsonToCharacter.js";
 import type { TMacro } from "../../../sage-lib/sage/model/types.js";
 import type { GetStatPrefix, TProficiency } from "../../common.js";
 import { toModifier } from "../../common.js";
@@ -1152,7 +1152,8 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		if (pdfUrl) {
 			const json = await PdfCacher.read<PdfJson>(pdfUrl);
 			if (json) {
-				newChar = jsonToCharacter(json).toJSON();
+				newChar = jsonToCharacter(json)?.toJSON();
+				if (!newChar) return "UNSUPPORTED_PDF";
 			}else {
 				return "INVALID_PDF_URL";
 			}
@@ -1161,7 +1162,8 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		if (!newChar && pdfAttachment) {
 			const json = await PdfCacher.read<PdfJson>(pdfAttachment.url);
 			if (json) {
-				newChar = jsonToCharacter(json).toJSON();
+				newChar = jsonToCharacter(json)?.toJSON();
+				if (!newChar) return "UNSUPPORTED_PDF";
 			}else {
 				return "INVALID_PDF_ATTACHMENT";
 			}
@@ -1193,4 +1195,4 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 	//#endregion
 }
-type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | "INVALID_PDF_URL" | "INVALID_PDF_ATTACHMENT" | true | false;
+type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | "INVALID_PDF_URL" | "INVALID_PDF_ATTACHMENT" | "UNSUPPORTED_PDF" | true | false;

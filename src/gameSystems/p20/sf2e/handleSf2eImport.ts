@@ -3,7 +3,7 @@ import { DiscordKey, type MessageOrPartial, type MessageTarget } from "@rsc-util
 import { PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
 import { attachCharacter, postCharacter } from "../../../sage-lib/sage/commands/pathbuilder.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
-import { jsonToCharacter } from "./jsonToCharacter.js";
+import { jsonToCharacter } from "./import/pdf/jsonToCharacter.js";
 
 type AttachmentData = { json?:PdfJson; fileName?:string; };
 async function getJsonFromAttachment(message: Optional<MessageOrPartial>): Promise<AttachmentData> {
