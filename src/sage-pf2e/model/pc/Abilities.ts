@@ -1,10 +1,21 @@
-import type { GetStatPrefix, TAbility } from "../../common";
-import { ABILITIES, STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA } from "../../common";
-import type { PlayerCharacter } from "./PlayerCharacter";
-import { PathbuilderCharacter } from "./PathbuilderCharacter";
-import type { TPathbuilderCharacterAbilityKey } from "./PathbuilderCharacter";
+import type { TAbility } from "../../common.js";
+import { ABILITIES, CHARISMA, CONSTITUTION, DEXTERITY, INTELLIGENCE, STRENGTH, WISDOM } from "../../common.js";
+import { Check } from "./Check.js";
+import type { TPathbuilderCharacterAbilityKey } from "./PathbuilderCharacter.js";
+import { PathbuilderCharacter } from "./PathbuilderCharacter.js";
+import type { PlayerCharacter } from "./PlayerCharacter.js";
 
 export interface IHasAbilities { abilities: Abilities; }
+
+/** Ensures we have a valid TAbility value. */
+function parseAbility(value?: string | null): TAbility | undefined {
+	if (!value) return undefined;
+	const lower = value.toLowerCase();
+	return ABILITIES.find(abil => {
+		const abilLower = abil.toLowerCase();
+		return lower === abilLower || lower === abilLower.slice(0, 3);
+	});
+}
 
 export abstract class Abilities {
 
@@ -50,21 +61,17 @@ export abstract class Abilities {
 		return this.getAbilityScoreModifier(this.getKeyAbility(klass)!);
 	}
 
-	public getStat(statLower: string, prefix: GetStatPrefix): number | null {
-		const ability = ABILITIES.find(abil => {
-			const lower = abil.toLowerCase();
-			return statLower === lower || statLower === lower.slice(0, 3);
-		});
-		if (ability) {
-			switch(prefix) {
-				case "dc": return this.getAbilityScoreModifier(ability) + 10;
-				case "mod": return this.getAbilityScoreModifier(ability);
-				case "prof": return null;
-				case "proficiency": return null;
-				default: return this.getAbilityScore(ability);
-			}
-		}
-		return null;
+	public getCheck(ability: TAbility): Check;
+	public getCheck(ability: string): Check | undefined;
+	public getCheck(_ability: string): Check | undefined {
+		const ability = parseAbility(_ability);
+		if (!ability) return undefined;
+
+		const modifier = this.getAbilityScoreModifier(ability);
+
+		const check = new Check(null!, ability);
+		check.abilityModifier = { ability, modifier };
+		return check;
 	}
 	//#endregion
 
@@ -80,6 +87,10 @@ export abstract class Abilities {
 			return new PbcAbilities(pc);
 		}
 		return new PcAbilities(pc);
+	}
+
+	public static isValidKey(key?: string | null): boolean {
+		return key ? /^(str(ength)?|dex(terity)?|con(stitution)?|int(elligence)?|wis(dom)?|cha(risma)?)$/i.test(key) : false;
 	}
 
 	//#endregion

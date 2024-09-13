@@ -5,14 +5,14 @@ import { fileExistsSync, getJson, PdfCacher, readJsonFile, readJsonFileSync, wri
 import { addCommas, nth } from "@rsc-utils/number-utils";
 import { capitalize, StringMatcher } from "@rsc-utils/string-utils";
 import type { Attachment } from "discord.js";
+import { Skill } from "../../../gameSystems/p20/lib/Skill.js";
+import { ProficiencyType, SizeType } from "../../../gameSystems/p20/lib/types.js";
 import { jsonToCharacter } from "../../../gameSystems/p20/sf2e/jsonToCharacter.js";
-import { Skill } from "../../../gameSystems/p20/Skill.js";
-import { ProficiencyType, SizeType } from "../../../gameSystems/p20/types.js";
 import type { TMacro } from "../../../sage-lib/sage/model/types.js";
-import type { GetStatPrefix, TProficiency, TSavingThrow } from "../../common.js";
-import { getSavingThrows, toModifier } from "../../common.js";
+import type { GetStatPrefix, TProficiency } from "../../common.js";
+import { toModifier } from "../../common.js";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository.js";
-import { ABILITIES } from "../../index.js";
+import { ABILITIES, Check } from "../../index.js";
 import type { Weapon } from "../Weapon.js";
 import { Abilities, type IHasAbilities } from "./Abilities.js";
 import type { IHasProficiencies } from "./PlayerCharacter.js";
@@ -323,11 +323,11 @@ function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 }
 function skillsToHtml(char: PathbuilderCharacter): string {
 	return Skill.all().map(skill => {
-		const profMod = char.getProficiencyMod(skill.name as TPathbuilderCharacterProficienciesKey);
-		if (profMod <= 0) {
-			return "";
-		}
-		return `${skill.name} ${toModifier(char.getSkillMod(skill.name))}`;
+		const check = Check.forSkill(char, skill);
+		if (!check) return "";
+		const prof = check.proficiencyModifier?.proficiency ?? "Untrained"
+		if (prof === "Untrained") return "";
+		return `${skill.name} ${toModifier(check.modifier)}`;
 	}).filter(s => s).join(", ");
 }
 function calculateSpeed(char: PathbuilderCharacter): number {
@@ -627,48 +627,71 @@ export function getCharacterSections(view: Optional<TCharacterViewType>): TChara
 export type TCharacterViewType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
 export const CharacterViewTypes: TCharacterViewType[] = ["All", "Combat", "Equipment", "Feats", "Formulas", "Pets", "Spells"];
 
-function perceptionGetStat(char: PathbuilderCharacter, prefix: GetStatPrefix): number | string | null {
-	switch(prefix) {
-		case "dc": return char.perceptionMod + 10;
-		case "mod": return char.perceptionMod;
-		case "prof": return char.getProficiencyMod("perception");
-		case "proficiency": return char.getProficiency("perception");
-		default: return char.perceptionMod;
-	}
-}
-function skillGetStat(char: PathbuilderCharacter, statLower: string, prefix: GetStatPrefix): number | string | null {
-	const skill = Skill.findByName(statLower);
-	if (skill) {
-		switch(prefix) {
-			case "dc": return char.getSkillMod(skill.name) + 10;
-			case "mod": return char.getSkillMod(skill.name);
-			case "prof": return char.getProficiencyMod(skill.name as TPathbuilderCharacterProficienciesKey);
-			case "proficiency": return char.getProficiency(skill.name as TPathbuilderCharacterProficienciesKey);
-			default: return char.getSkillMod(skill.name);
-		}
-	}
-	return null;
-}
-function loreGetStat(char: PathbuilderCharacter, statLower: string, prefix: GetStatPrefix): number | string | null {
-	const lore = char.lores.find(([name]) => statLower === name.toLowerCase());
-	if (lore) {
-		switch(prefix) {
-			case "dc": return char.getLoreMod(lore[0]) + 10;
-			case "mod": return char.getLoreMod(lore[0]);
-			case "prof": return lore[1];
-			case "proficiency": return ProficiencyType[lore[1]];
-			default: return char.getLoreMod(lore[0]);
-		}
-	}
-	return null;
-}
-
 export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 	public get exportJsonId(): number | undefined { return this.core.exportJsonId; }
+
+	public createCheck(key: string): Check | undefined {
+		if (/^perc(eption)?$/i.test(key)) {
+			return Check.forSkill(this, { name:"Perception", ability:"Wisdom" });
+		}
+
+		const skill = Skill.findByName(key);
+		if (skill) {
+			return Check.forSkill(this, skill);
+		}
+
+		if (SavingThrows.isValidKey(key)) {
+			return this.savingThrows.getCheck(key);
+		}
+
+		const lore = this.getLore(key);
+		const loreRegex = /^lore(?!master)[\W]*|[\W]*lore$/ig;
+		if (lore || loreRegex.test(key)) {
+			const check = lore ? Check.forSkill(this, { name:lore[0], ability:"Intelligence" }) : undefined;
+
+			const isBardic = /bardic/i.test(key);
+			const isLoremaster = /loremaster/i.test(key);
+
+			const bLore = this.getLore("Bardic");
+			const bCheck = bLore ? Check.forSkill(this, { name:bLore[0], ability:"Intelligence" }) : undefined;
+			if (bCheck && !isBardic) {
+				bCheck.subject = `Bardic Lore (${capitalize(key.replace(loreRegex, ""))})`;
+			}
+
+			const lLore = this.getLore("Loremaster");
+			const lCheck = lLore ? Check.forSkill(this, { name:lLore[0], ability:"Intelligence" }) : undefined;
+			if (lCheck && !isLoremaster) {
+				lCheck.subject = `Loremaster Lore (${capitalize(key.replace(loreRegex, ""))})`;
+			}
+
+			if (bCheck && lCheck) {
+				bCheck.addCircumstanceModifier("Loremaster", 1);
+			}
+
+			const loreMod = check?.modifier ?? 0;
+			const loremasterMod = lCheck?.modifier ?? 0;
+			const bardicMod = bCheck?.modifier ?? 0;
+
+			const bestMod = Math.max(loreMod, loremasterMod, bardicMod);
+			const best = [check, isLoremaster ? undefined : bCheck, isBardic ? undefined : lCheck].find(check => check?.modifier === bestMod);
+			return best ?? check;
+		}
+
+		if (Abilities.isValidKey(key)) {
+			return this.abilities.getCheck(key);
+		}
+
+		return undefined;
+	}
 
 	public getStat(stat: string): number | string | null {
 		const lower = stat.toLowerCase();
 		const [prefix, statLower] = lower.includes(".") ? lower.split(".") as [GetStatPrefix, string] : ["", lower] as [GetStatPrefix, string];
+
+		// special case for showing full ability score
+		if (!prefix && Abilities.isValidKey(statLower) && stat.length > 3) {
+			return this.abilities[statLower.slice(0, 3) as "str"];
+		}
 
 		switch(statLower) {
 			case "activeexploration": return this.getSheetValue("activeExploration") ?? null;
@@ -676,11 +699,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 			case "level": return this.level;
 			case "maxhp": return this.maxHp;
 			case "ac": return prefix === "prof" ? this.core.acTotal.acProfBonus : this.core.acTotal.acTotal;
-			case "perception": case "perc": return perceptionGetStat(this, prefix);
-			default: return skillGetStat(this, statLower, prefix)
-				?? loreGetStat(this, statLower, prefix)
-				?? this.savingThrows.getStat(statLower, prefix)
-				?? this.abilities.getStat(statLower, prefix);
+			default: return this.createCheck(statLower)?.toStatString(prefix) ?? null;
 		}
 	}
 
@@ -738,9 +757,12 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	public feats: Collection<TPathbuilderCharacterFeat>;
 	public savingThrows: SavingThrows;
 
+	//#region level
+
 	public get level(): number {
 		return this.core.level;
 	}
+
 	public async setLevel(level: number, save: boolean): Promise<boolean> {
 		if (level > 0 && level < 21) {
 			this.core.level = level;
@@ -752,36 +774,55 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		return false;
 	}
 
-	private get untrainedProficiencyMod(): number {
-		return this.core._untrainedPenalty === true ? -1 : 0;
+	/** If using the untrained penalty option of proficiency without level, you have a -2 when untrained instead of a 0. */
+	public get untrainedProficiencyMod(): number {
+		return this.core._untrainedPenalty === true ? -2 : 0;
 	}
+
+	/** If using the proficiency without level option, you don't use your level modifier on checks. */
+	public get trainedLevelMod(): number {
+		return this.core._proficiencyWithoutLevel === true ? 0 : this.level;
+	}
+
+	/**
+	 * Returns the level mod, taking into account if the character is trained and applicable optional rules.
+	 */
 	public getLevelMod(profMod: number): number;
 	public getLevelMod(trained: boolean): number;
 	public getLevelMod(arg: boolean | number): number {
 		const trained = typeof(arg) === "boolean" ? arg : arg > 0;
-		if (trained) {
-			return this.core._proficiencyWithoutLevel === true ? 0 : this.level;
-		}
-		return this.untrainedProficiencyMod;
+		return trained ? this.trainedLevelMod : 0;
 	}
+
+	//#endregion
 
 	//#region IHasProficiencies
 
 	public getProficiency(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): TProficiency {
 		const profMod = this.getProficiencyMod(key, specificKey);
-		return profMod === -2
+		return profMod === this.untrainedProficiencyMod
 			? "Untrained"
-			: <TProficiency>ProficiencyType[profMod] ?? debug({key,specificKey,profMod}) ?? ProficiencyType.Untrained;
+			: ProficiencyType[profMod] as TProficiency ?? debug({key,specificKey,profMod}) ?? ProficiencyType.Untrained;
 	}
 
 	public getProficiencyMod(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): ProficiencyType {
 		const keys = Object.keys(this.core.proficiencies) as TPathbuilderCharacterProficienciesKey[];
 		const lower = key.toLowerCase();
 		const found = keys.find(k => k.toLowerCase() === lower);
-		const keyMod = found ? this.core.proficiencies[found] ?? 0 : 0;
-		const specificMod = specificKey ? this.getSpecificProficiencyMod(specificKey) : 0;
-		const profMod = Math.max(keyMod, specificMod);
-		return profMod === 0 && this.core._untrainedPenalty === true ? -2 : profMod;
+		if (found) {
+			const keyMod = this.core.proficiencies[found] ?? 0;
+			const specificMod = specificKey ? this.getSpecificProficiencyMod(specificKey) : 0;
+			const profMod = Math.max(keyMod, specificMod);
+			return profMod ? profMod : this.untrainedProficiencyMod;
+		}
+		const lore = this.getLore(key);
+		if (lore) {
+			const keyMod = lore[1];
+			const specificMod = specificKey ? this.getSpecificProficiencyMod(specificKey) : 0;
+			const profMod = Math.max(keyMod, specificMod);
+			return profMod ? profMod : this.untrainedProficiencyMod;
+		}
+		return this.untrainedProficiencyMod;
 	}
 	private getSpecificProficiencyMod(key: string): ProficiencyType {
 		if (this.core?.specificProficiencies?.legendary?.includes(key)) {
@@ -804,41 +845,28 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	public get lores(): TPathbuilderCharacterLore[] {
 		return this.core.lores ?? [];
 	}
-	public hasLore(loreName: string): boolean { return this.getLore(loreName) !== undefined; }
-	private getLore(loreName: string): TPathbuilderCharacterLore | undefined { return this.lores.find(lore => lore[0] === loreName); }
-	public getLoreMod(loreName: string): number {
-		const lore = this.getLore(loreName);
-		const profMod = lore?.[1] ?? 0;
-		const levelMod = this.getLevelMod(profMod);
-		return levelMod + profMod + this.abilities.intMod;
-	}
 
-	public getSkillMod(skillName: string): number {
-		const skill = Skill.findByName(skillName);
-		const profMod = this.getProficiencyMod(skillName as TPathbuilderCharacterProficienciesKey);
-		const levelMod = this.getLevelMod(profMod);
-		const statMod = Abilities.scoreToMod(this.abilities[skill?.abilKey!]);
-		return levelMod + profMod + statMod;
-	}
+	public getLore(loreName: string): TPathbuilderCharacterLore | undefined {
+		if (!loreName) return undefined;
 
-	public getProficiencyAndMod(key: string): [TProficiency, number] {
-		if (key === "Perception") {
-			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), this.perceptionMod];
+		const loreRegex = /^lore(?!master)[\W]*|[\W]*lore$/ig;
+		const clean = (name: string) => name?.replace(loreRegex, "").toLowerCase();
+
+		loreName = clean(loreName);
+
+		const lore = this.lores.find(lore => clean(lore[0]) === loreName)?.slice() as TPathbuilderCharacterLore | undefined;
+		if (!lore) return undefined;
+
+		lore[0] = `${capitalize(loreName)} Lore`;
+
+		const isLegendary = (skill: string) => this.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey) === ProficiencyType.Legendary;
+		if (/bardic/i.test(loreName)) {
+			lore[1] = isLegendary("Occultism") ? ProficiencyType.Expert : ProficiencyType.Trained;
+		}else if (/loremaster/i.test(loreName)) {
+			lore[1] = ["Arcana", "Occultism", "Religion", "Society"].some(isLegendary) ? ProficiencyType.Expert : ProficiencyType.Trained;
 		}
-		if (Skill.findByName(key)) {
-			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), this.getSkillMod(key)];
-		}
-		if (this.hasLore(key)) {
-			const lore = this.getLore(key)!;
-			return [ProficiencyType[lore[1]] as TProficiency, this.getLoreMod(key)];
-		}
-		if (getSavingThrows().includes(key as TSavingThrow)) {
-			const ability = SavingThrows.getAbilityForSavingThrow(key as TSavingThrow);
-			const check = this.savingThrows.getSavingThrow(key as TSavingThrow, ability ?? "Constitution");
-			return [this.getProficiency(key as TPathbuilderCharacterProficienciesKey), check.modifier];
-		}
-		// Check other stuff?
-		return ["Untrained", this.untrainedProficiencyMod];
+
+		return lore;
 	}
 
 	public get perceptionMod(): number {

@@ -1,37 +1,34 @@
-import type { TAbility, TBonusType, TProficiency } from "../../common";
-import { CIRCUMSTANCE, ITEM, STATUS, toModifier, UNTYPED } from "../../common";
-import type { IHasAbilities } from "./Abilities";
-import type { IHasProficiencies } from "./PlayerCharacter";
-
-/**************************************************************************************************************************/
-// Helpers
-
-/*
-// function plus(value: number): string { return value < 0 ? "" : "+"; }
-*/
+import type { TAbility, TBonusType, TProficiency } from "../../common.js";
+import { CIRCUMSTANCE, ITEM, STATUS, toModifier, UNTYPED } from "../../common.js";
+import type { IHasAbilities } from "./Abilities.js";
+import type { IHasProficiencies } from "./PlayerCharacter.js";
 
 /**************************************************************************************************************************/
 // Interfaces
 
-interface IAbilityModifier {
+type AbilityModifier = {
 	ability: TAbility;
 	modifierCap?: number;
 	modifierCapSource?: string;
 	modifier: number;
-}
-interface IBonus {
+};
+
+type Bonus = {
 	bonus: number;
 	penalty: number;
 	source: string;
 	type: TBonusType;
-}
-interface IProficiencyModifier {
+};
+
+type ProficiencyModifier = {
 	modifier: number;
 	proficiency: TProficiency;
 	subject: string;
-}
+};
 
-export type TCheckPlayerCharacter = IHasAbilities & IHasProficiencies;
+export type TCheckPlayerCharacter = IHasAbilities & IHasProficiencies & {
+	getLevelMod(arg: boolean | number): number;
+};
 
 export class Check {
 	/**************************************************************************************************************************/
@@ -42,27 +39,29 @@ export class Check {
 	/**************************************************************************************************************************/
 	// Properties
 
-	public abilityModifier?: IAbilityModifier;
-	public circumstanceBonus: IBonus = { bonus: 0, penalty: 0, source: "None", type: CIRCUMSTANCE };
-	public circumstancePenalty: IBonus = { bonus: 0, penalty: 0, source: "None", type: CIRCUMSTANCE };
+	public abilityModifier?: AbilityModifier;
+
+	public circumstanceBonus: Bonus = { bonus: 0, penalty: 0, source: "None", type: CIRCUMSTANCE };
+	public circumstancePenalty: Bonus = { bonus: 0, penalty: 0, source: "None", type: CIRCUMSTANCE };
+
 	public get dc(): number { return this.baseValue + this.modifier; }
-	public itemBonus: IBonus = { bonus: 0, penalty: 0, source: "None", type: ITEM };
-	public itemPenalty: IBonus = { bonus: 0, penalty: 0, source: "None", type: ITEM };
+
+	public itemBonus: Bonus = { bonus: 0, penalty: 0, source: "None", type: ITEM };
+	public itemPenalty: Bonus = { bonus: 0, penalty: 0, source: "None", type: ITEM };
+
 	public level = 0;
+
 	public minimum?: number;
-	public statusBonus: IBonus = { bonus: 0, penalty: 0, source: "None", type: STATUS };
-	public statusPenalty: IBonus = { bonus: 0, penalty: 0, source: "None", type: STATUS };
-	public get untypedBonuses(): IBonus[] { return this.modifiers.filter(modifier => modifier.type === UNTYPED && modifier.bonus > 0); }
-	public get untypedPenalties(): IBonus[] { return this.modifiers.filter(modifier => modifier.type === UNTYPED && modifier.penalty < 0); }
+
 	public get modifier(): number {
-		let abilityModifier = this.abilityModifier && this.abilityModifier.modifier || 0;
-		const abilityModifierCap = this.abilityModifier && this.abilityModifier.modifierCap;
-		if (abilityModifierCap !== undefined && abilityModifierCap < abilityModifier) {
+		let abilityModifier = this.abilityModifier?.modifier ?? 0;
+		const abilityModifierCap = this.abilityModifier?.modifierCap ?? abilityModifier;
+		if (abilityModifierCap < abilityModifier) {
 			abilityModifier = abilityModifierCap;
 		}
 		const modifier = this.level
-			+ abilityModifier
 			+ (this.proficiencyModifier?.modifier ?? 0)
+			+ abilityModifier
 			+ this.circumstanceBonus.bonus
 			+ this.circumstancePenalty.penalty
 			+ this.itemBonus.bonus
@@ -77,20 +76,28 @@ export class Check {
 		}
 		return modifier;
 	}
-	public modifiers: IBonus[] = [];
-	public proficiencies: IProficiencyModifier[] = [];
-	public proficiencyModifier?: IProficiencyModifier;
+
+	public modifiers: Bonus[] = [];
+
+	public proficiencies: ProficiencyModifier[] = [];
+	public proficiencyModifier?: ProficiencyModifier;
+
+	public statusBonus: Bonus = { bonus: 0, penalty: 0, source: "None", type: STATUS };
+	public statusPenalty: Bonus = { bonus: 0, penalty: 0, source: "None", type: STATUS };
+
+	public get untypedBonuses(): Bonus[] { return this.modifiers.filter(modifier => modifier.type === UNTYPED && modifier.bonus > 0); }
+	public get untypedPenalties(): Bonus[] { return this.modifiers.filter(modifier => modifier.type === UNTYPED && modifier.penalty < 0); }
 
 	/**************************************************************************************************************************/
 	// Instance Methods
 
-	private getBonus(type: TBonusType, current: IBonus): IBonus {
+	private getBonus(type: TBonusType, current: Bonus): Bonus {
 		return this.modifiers
 			.filter(mod => mod.type === type && mod.bonus > 0)
 			.reduce((bestBonus, bonus) => !bestBonus || bonus.bonus > bestBonus.bonus ? bonus : bestBonus, current);
 	}
 
-	private getPenalty(type: TBonusType, current: IBonus): IBonus {
+	private getPenalty(type: TBonusType, current: Bonus): Bonus {
 		return this.modifiers
 			.filter(mod => mod.type === type && mod.penalty < 0)
 			.reduce((worstPenalty, penalty) => !worstPenalty || penalty.penalty < worstPenalty.penalty ? penalty : worstPenalty, current);
@@ -112,8 +119,11 @@ export class Check {
 		this.itemPenalty = this.getPenalty(ITEM, this.itemPenalty);
 	}
 
-	public addProficiency(subject: string): void {
-		this.proficiencies.push({ modifier: this.pc.getProficiencyMod(subject), proficiency: this.pc.getProficiency(subject), subject: subject });
+	public addProficiency(subject: string, modifier?: number, proficiency?: TProficiency): void {
+		if (!modifier) modifier = this.pc.getProficiencyMod(subject);
+		if (!proficiency) proficiency = this.pc.getProficiency(subject);
+		this.level = this.pc.getLevelMod(modifier);
+		this.proficiencies.push({ modifier, proficiency, subject });
 		this.proficiencyModifier = this.proficiencies.reduce((worst, prof) => !worst || prof.modifier < worst.modifier ? prof : worst, this.proficiencyModifier);
 	}
 
@@ -127,9 +137,6 @@ export class Check {
 		this.addModifier(source, modifier);
 	}
 
-	// public setAbility(ability?: TAbility): void;
-	// public setAbility(ability: TAbility, abilityModifierCap?: number): void;
-	// public setAbility(ability: TAbility, abilityModifierCap: number, abilityModifierCapSource?: string): void;
 	public setAbility(ability?: TAbility, abilityModifierCap?: number, abilityModifierCapSource?: string): void {
 		if (ability) {
 			this.abilityModifier = {
@@ -141,12 +148,62 @@ export class Check {
 		}
 	}
 
-	public toDCString(): string {
-		return `${this.baseValue}<br/>${this.toString()}`;
+	public toExtendedString(): string {
+		const mods: string[] = [this.subject];
+
+		const abilityModifier = this.abilityModifier?.modifier ?? 0;
+		const abilityModifierCap = this.abilityModifier?.modifierCap ?? abilityModifier;
+		if (abilityModifierCap < abilityModifier) {
+			mods.push(`${toModifier(abilityModifierCap)} ${this.abilityModifier?.ability.slice(0, 3)} (cap)`);
+		}else {
+			mods.push(`${toModifier(abilityModifier)} ${this.abilityModifier?.ability.slice(0, 3)}`);
+		}
+
+		mods.push(`${toModifier(this.level)} Lvl`);
+
+		mods.push(`${toModifier(this.proficiencyModifier?.modifier ?? 0)} ${this.proficiencyModifier?.proficiency ?? "Untrained"}`);
+
+		["circumstance", "item", "status"].forEach(type => {
+			const typeKey = `${type}Bonus` as "itemBonus";
+			if (this[typeKey].bonus) {
+				mods.push(`${toModifier(this[typeKey].bonus)} ${this[typeKey].source}`);
+			}
+			if (this[typeKey].penalty) {
+				mods.push(`${toModifier(this[typeKey].penalty)} ${this[typeKey].penalty}`);
+			}
+		});
+
+		this.untypedBonuses.forEach(bonus => mods.push(`${toModifier(bonus.bonus)} ${bonus.source}`));
+		this.untypedPenalties.forEach(bonus => mods.push(`${toModifier(bonus.penalty)} ${bonus.source}`));
+
+		return mods.join(" ");
 	}
 
-	public toModifierString(): string {
-		return this.toString();
+	/** Returns the total modifier with the +/- included. */
+	public toModifier(): string {
+		return toModifier(this.modifier);
+	}
+
+	public toProficiencyAndModifier(): [TProficiency, number] {
+		return [this.proficiencyModifier?.proficiency ?? "Untrained", this.modifier];
+	}
+
+	/** Used to output a value for use with stats in dice rolls. */
+	public toStatString(prefix: string): number | string {
+		if (prefix) {
+			switch(prefix) {
+				case "dc": return this.dc;
+				case "ext": return this.toExtendedString();
+				case "label": return `${this.subject} (${this.proficiencyModifier?.proficiency[0] ?? "U"})`;
+				case "labeled": return `${this.toModifier()} ${this.subject} (${this.proficiencyModifier?.proficiency[0] ?? "U"})`;
+				case "mod": return this.modifier;
+				case "p": return `(${this.proficiencyModifier?.proficiency[0] ?? "U"})`;
+				case "prof": return this.proficiencyModifier?.modifier ?? 0;
+				case "proficiency": return this.proficiencyModifier?.proficiency ?? "Untrained";
+				default: return `${prefix}.${this.subject}`;
+			}
+		}
+		return this.modifier;
 	}
 
 	private toStringLevel(values: string[]): void {
@@ -222,4 +279,14 @@ export class Check {
 		}
 		return values.join("<br/>");
 	}
+
+	public static forSkill(char: TCheckPlayerCharacter, skill?: { name:string; ability:TAbility; }): Check | undefined {
+		if (!skill) return undefined;
+
+		const check = new Check(char, skill.name);
+		check.addProficiency(skill.name);
+		check.setAbility(skill.ability);
+		return check;
+	}
+
 }

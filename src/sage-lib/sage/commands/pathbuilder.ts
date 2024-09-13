@@ -4,7 +4,7 @@ import { errorReturnNull, isDefined } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
-import { getExplorationModes, getSavingThrows, getSkills, PathbuilderCharacter, toModifier } from "../../../sage-pf2e/index.js";
+import { getExplorationModes, getSavingThrows, getSkills, PathbuilderCharacter } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -268,9 +268,9 @@ function createSkillSelectRow(character: PathbuilderCharacter): ActionRowBuilder
 	const savesSkillsAndLores = saves.concat(getSkills(), lores).filter(isNotBlank).filter(toUnique);
 	savesSkillsAndLores.forEach(skill => {
 		const labelPrefix = saves.includes(skill) ? "Save" : "Skill";
-		const skillAndMod = character.getProficiencyAndMod(skill);
+		const skillCheck = character.createCheck(skill);
 		selectMenu.addOptions({
-			label: `${labelPrefix} Roll: ${skill}${lores.includes(skill) ? " Lore" : ""} ${toModifier(skillAndMod[1])} (${skillAndMod[0]})`,
+			label: `${labelPrefix} Roll: ${skill}${lores.includes(skill) ? " Lore" : ""} ${skillCheck?.toModifier()} (${skillCheck?.proficiencyModifier?.proficiency})`,
 			value: skill,
 			default: skill === activeSkill || (!activeSkill && skill === "Perception")
 		});
@@ -460,7 +460,7 @@ async function macroHandler(sageInteraction: SageSelectInteraction, character: P
 
 async function rollHandler(sageInteraction: SageButtonInteraction, character: PathbuilderCharacter, secret = false, init = false): Promise<void> {
 	const skill = init ? character.getInitSkill() : character.getSheetValue("activeSkill") ?? "Perception";
-	const skillMod = character.getProficiencyAndMod(skill)[1];
+	const skillMod = character.createCheck(skill)?.modifier ?? character.untrainedProficiencyMod;
 	const incredibleMod = character.hasFeat("Incredible Initiative") ? 2 : 0;
 	const scoutMod = character.getSheetValue("activeExploration") === "Scout" ? 1 : 0;
 	const initMod = init ? Math.max(incredibleMod, scoutMod) : 0;

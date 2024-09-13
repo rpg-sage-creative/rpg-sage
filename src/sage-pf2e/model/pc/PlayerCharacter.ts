@@ -349,6 +349,32 @@ export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerChara
 
 	//#endregion
 
+	//#region level modifier for checks
+
+	/** @todo If using the untrained penalty option of proficiency without level, you have a -2 when untrained instead of a 0. */
+	public get untrainedProficiencyMod(): number {
+		// return this.core._untrainedPenalty === true ? -2 : 0;
+		return 0;
+	}
+
+	/** @todo If using the proficiency without level option, you don't use your level modifier on checks. */
+	public get trainedLevelMod(): number {
+		// return this.core._proficiencyWithoutLevel === true ? 0 : this.level;
+		return this.level;
+	}
+
+	/**
+	 * Returns the level mod, taking into account if the character is trained and applicable optional rules.
+	 */
+	public getLevelMod(profMod: number): number;
+	public getLevelMod(trained: boolean): number;
+	public getLevelMod(arg: boolean | number): number {
+		const trained = typeof(arg) === "boolean" ? arg : arg > 0;
+		return trained ? this.trainedLevelMod : 0;
+	}
+
+	//#endregion
+
 	//#region Instance Methods
 
 	public filterConditions(filter: (value: FeatureCore, index: number, obj: FeatureCore[]) => unknown): FeatureCore[] {
