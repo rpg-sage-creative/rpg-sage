@@ -28,15 +28,15 @@ export function is2e(gameSystemType: GameSystemType): boolean {
 }
 
 export function getPaizoGameSystems(): PaizoGameSystem[] {
-	const all = getGameSystems();
-	return [GameSystemType.PF2e, GameSystemType.SF2e, GameSystemType.PF1e, GameSystemType.SF1e].map(type => {
-		const gameSystem  = all.find(system => system.type === type)!;
+	return getGameSystems()
+		.filter(gameSystem => isPathfinder(gameSystem.type) || isStarfinder(gameSystem.type))
+		.map(gameSystem => {
 		return {
 			...gameSystem,
-			isPf: isPathfinder(type),
-			isSf: isStarfinder(type),
-			is1e: is1e(type),
-			is2e: is2e(type)
+			isPf: isPathfinder(gameSystem.type),
+			isSf: isStarfinder(gameSystem.type),
+			is1e: is1e(gameSystem.type),
+			is2e: is2e(gameSystem.type)
 		};
 	});
 }
