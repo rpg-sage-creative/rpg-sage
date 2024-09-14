@@ -59,6 +59,10 @@ function removeDesc(description: string, desc: string): string {
 		.join("");
 }
 
+function replaceSpoiler(value: string): string {
+	return value.replace(/\|{2}[^|]+\|{2}/g, "??");
+}
+
 //#endregion
 
 //#region Tokenizer
@@ -614,13 +618,13 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			const escapedTotal = `\` ${total} \``;
 
 			const output = desc
-				? `${emoji} '${detick(dequote(desc))}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
-				: `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description}`;
+				? `${emoji} '${replaceSpoiler(detick(dequote(desc)))}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(removeDesc(description, desc))}`
+				: `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(description)}`;
 			return correctEscapeForEmoji(cleanWhitespace(output));
 		}else {
 			const output = desc
-				? `${xxs} ${ZERO_WIDTH_SPACE}  \`${detick(dequote(desc))}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
-				: `${xxs} ${ZERO_WIDTH_SPACE} ${UNICODE_LEFT_ARROW} ${description}`;
+				? `${xxs} ${ZERO_WIDTH_SPACE}  \`${replaceSpoiler(detick(dequote(desc)))}\` ${UNICODE_LEFT_ARROW} ${replaceSpoiler(removeDesc(description, desc))}`
+				: `${xxs} ${ZERO_WIDTH_SPACE} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(description)}`;
 			return correctEscapeForEmoji(cleanWhitespace(output));
 		}
 	}
@@ -628,7 +632,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const xxs = this.toStringXXS(hideRolls);
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
 		const output = desc
-			? `${xxs} ${ZERO_WIDTH_SPACE} \`${detick(dequote(desc)) ?? ""}\``
+			? `${xxs} ${ZERO_WIDTH_SPACE} \`${replaceSpoiler(detick(dequote(desc))) ?? ""}\``
 			: xxs;
 		return correctEscapeForEmoji(cleanWhitespace(output));
 	}
