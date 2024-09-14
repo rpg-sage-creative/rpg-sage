@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.6",
+"version":"1.7.7",
 "branch":"main",
-"commit":"d8e69f0da8e8554607f200ee9fb7ed6a2022d60f",
-"commitSubject":"fix bot activation",
-"commitTs":1724390357000,
-"commitDate":"2024-08-22-2219",
-"buildTs":1724390923000,
-"buildDate":"2024-08-22-2228",
+"commit":"079b447afb5df216bf061ab4718c5bb953a2defb",
+"commitSubject":"properly hide spoilered values in dice",
+"commitTs":1726283103000,
+"commitDate":"2024-09-13-2005",
+"buildTs":1726284718000,
+"buildDate":"2024-09-13-2031",
 "author":"Randal"
 }
