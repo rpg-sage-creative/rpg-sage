@@ -6,13 +6,13 @@ import { StringMatcher } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, type Attachment } from "discord.js";
 import { deleteMessage } from "../../discord/deletedMessages.js";
 import { registerInteractionListener, registerMessageListener } from "../../discord/handlers.js";
+import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import { discordPromptYesNo } from "../../discord/prompts.js";
 import { ReplyStack } from "../model/ReplyStack.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { includeDeleteButton } from "../model/utils/deleteButton.js";
-import { registerCommandRegex } from "./cmd.js";
 import { GameMap, type TCompassDirection, type TMoveDirection } from "./map/GameMap.js";
 import { LayerType, type TGameMapCore } from "./map/GameMapBase.js";
 import { gameMapImporter, validateMapCore, type TParsedGameMapCore } from "./map/gameMapImporter.js";
@@ -412,7 +412,7 @@ export function registerMap(): void {
 	// registerInteractionListener(mapTerrainTester, mapTerrainHandler);
 	// registerInteractionListener(mapTokenTester, mapTokenHandler);
 	registerMessageListener(mapImportTester, mapImportHandler);
-	registerCommandRegex(/^map(-|\s+)move(\s*\[(\b(\s|nw|n|ne|w|e|sw|s|se))+\])+\s*$/i, mapMoveHandler);
+	registerListeners({ commands:["map|move"], message:mapMoveHandler });
 }
 
 //#region interaction listener testers
@@ -642,7 +642,7 @@ async function renderMap(messageOrChannel: Optional<Message | MessageTarget>, ga
 
 function inputToCompassDirections(sageMessage: SageMessage): TCompassDirection[] {
 	const directions: TCompassDirection[] = [];
-	const matches = sageMessage.slicedContent.match(/\[(\b(\s|nw|n|ne|w|e|sw|s|se))+\]/ig);
+	const matches = sageMessage.slicedContent.match(/\[\s*(\b(\s|nw|n|ne|w|e|sw|s|se)\b)+\s*\]/ig);
 	matches?.forEach(match => {
 		directions.push(...match.slice(1, -1).toLowerCase().split(/\s/).filter(s => s) as TCompassDirection[]);
 	});
@@ -662,11 +662,32 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 	const gameMap = mapExists ? await GameMap.forUser(mapMessageId, mapUserId, true) : null;
 	if (gameMap) {
 		const stack = sageMessage.replyStack;
+
 		ensurePlayerCharacter(sageMessage, gameMap);
-		const activeImage = gameMap.activeImage;
+
+		let activeImage = gameMap.activeImage;
+
+		const targetTokenArg = sageMessage.args.getString("token");
+		const targetTerrainArg = sageMessage.args.getString("terrain");
+		if (targetTokenArg) {
+			const token = gameMap.userTokens.find(t => t.name === targetTokenArg);
+			if (!token) return stack.editReply("Unable to find token: " + targetTokenArg);
+			gameMap.activeLayer = LayerType.Token;
+			gameMap.activeImage = token;
+			activeImage = token;
+
+		}else if (targetTerrainArg) {
+			const terrain = gameMap.userTerrain.find(t => t.name === targetTerrainArg);
+			if (!terrain) return stack.editReply("Unable to find terrain: " + targetTerrainArg);
+			gameMap.activeLayer = LayerType.Terrain;
+			gameMap.activeImage = terrain;
+			activeImage = terrain;
+		}
+
 		if (!activeImage) {
 			return stack.editReply(`You have no image to move!`);
 		}
+
 		const moveEmoji = directions.map(dir => `[${dir}]`).join(" ");
 		const boolMove = await discordPromptYesNo(sageMessage, `Move ${activeImage.name} ${moveEmoji} ?`, true);
 		if (boolMove === true) {
