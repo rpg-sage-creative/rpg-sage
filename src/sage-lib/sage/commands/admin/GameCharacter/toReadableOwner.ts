@@ -1,12 +1,12 @@
-import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { Optional } from "@rsc-utils/core-utils";
-import type { SageMessage } from "../../../model/SageMessage";
+import { toHumanReadable } from "@rsc-utils/discord-utils";
+import type { SageCommand } from "../../../model/SageCommand.js";
 
-export async function toReadableOwner(sageMessage: SageMessage, userId: Optional<string>): Promise<string | null> {
+export async function toReadableOwner(sageCommand: SageCommand, userId: Optional<string>): Promise<string | null> {
 	if (userId) {
-		const guildMember = await sageMessage.discord.fetchGuildMember(userId);
+		const guildMember = await sageCommand.discord.fetchGuildMember(userId);
 		if (guildMember) return toHumanReadable(guildMember);
-		const user = await sageMessage.discord.fetchUser(userId);
+		const user = await sageCommand.discord.fetchUser(userId);
 		if (user) return toHumanReadable(user);
 	}
 	return null;
