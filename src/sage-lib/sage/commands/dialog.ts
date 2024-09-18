@@ -17,7 +17,7 @@ import { isPin } from "./dialog/pin/isPin.js";
 
 /** Returns the dialog content if found or null otherwise. */
 async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<DialogContent[]> | null> {
-	if (!sageMessage.allowDialog) {
+	if (sageMessage.message.hasThread || !sageMessage.allowDialog) {
 		return null;
 	}
 
