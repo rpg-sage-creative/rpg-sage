@@ -1,4 +1,4 @@
-import { type Matcher } from "@rsc-utils/core-utils";
+import { type Matcher, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { HasCore, type Core } from "./HasCore.js";
 import { getIdMatcher } from "./getIdMatcher.js";
 
@@ -8,6 +8,11 @@ import { getIdMatcher } from "./getIdMatcher.js";
 type HasId<IdType extends string = string> = {
 	/** The unique identifier for this object. */
 	id: IdType;
+
+	/** @deprecated transitional holder until all objects are converted to id as Snowflake */
+	did?: Snowflake;
+	/** @deprecated transitional holder until all objects are converted to id as Snowflake */
+	uuid?: UUID;
 };
 
 /** The second most basic Core used. */
@@ -31,24 +36,71 @@ export abstract class HasIdCore<
 	/** The unique identifier for this object. */
 	public get id(): IdType { return this.core.id as IdType; }
 
-	/** Used to cache the UuidMatcher used for .equals(). */
+	/** Used to cache the SnowflakeMatcher or UuidMatcher used for .equals(). */
 	private _idMatcher?: Matcher;
 
-	/** Used to cache the UuidMatcher used for .equals(). */
+	/** Used to cache the SnowflakeMatcher or UuidMatcher used for .equals(). */
 	protected get idMatcher(): Matcher {
 		return this._idMatcher ?? (this._idMatcher = getIdMatcher(this.core.id));
 	}
 
+	/** @deprecated Used to cache the UuidMatcher used for .equals(). */
+	private _didMatcher?: Matcher;
+
+	/** @deprecated Used to cache the UuidMatcher used for .equals(). */
+	protected get didMatcher(): Matcher {
+		return this._didMatcher ?? (this._didMatcher = getIdMatcher(this.core.did));
+	}
+
+	/** @deprecated Used to cache the UuidMatcher used for .equals(). */
+	private _uuidMatcher?: Matcher;
+
+	/** @deprecated Used to cache the UuidMatcher used for .equals(). */
+	protected get uuidMatcher(): Matcher {
+		return this._uuidMatcher ?? (this._uuidMatcher = getIdMatcher(this.core.uuid));
+	}
+
 	/** Returns true if the given object represents this object, it's core, or it's id. */
-	public equals(other: string | IdType | Matcher | HasIdCore<any>): boolean {
+	public equals(other: string | IdType | Matcher | HasIdCore<any> | null | undefined): boolean {
 		if (!other) {
 			return false;
 		}
+
 		if (other instanceof HasIdCore) {
-			return this.is(other as HasIdCore<any, any>)
-				|| this.idMatcher.matches(other.idMatcher);
+			//#region @deprecated return logic
+
+			if (this.is(other as HasIdCore<any, any>)) return true;
+			if (this.idMatcher.matchesAny(other.idMatcher, other.didMatcher, other.uuidMatcher)) return true;
+			if (this.didMatcher.matchesAny(other.idMatcher, other.didMatcher)) return true;
+			if (this.uuidMatcher.matchesAny(other.idMatcher, other.uuidMatcher)) return true;
+
+			return false;
+
+			//#endregion
+
+			//#region wanted return logic
+
+			// return this.is(other as HasIdCore<any, any>)
+			// 	|| this.idMatcher.matches(other.idMatcher);
+
+			//#endregion
 		}
-		return this.idMatcher.matches(other);
+
+		//#region @deprecated return logic
+
+		if (typeof(other) === "string") {
+			return getIdMatcher(other).matchesAny(this.idMatcher, this.didMatcher, this.uuidMatcher);
+		}
+		
+		return other.matchesAny(this.idMatcher, this.didMatcher, this.uuidMatcher);
+
+		//#endregion
+
+		//#region wanted return logic
+
+		// return this.idMatcher.matches(other);
+
+		//#endregion
 	}
 
 }

@@ -40,6 +40,14 @@ export abstract class HasCore<
 		return false;
 	}
 
+	// /** Returns true if the this object's objectType matches the given value (if given a string) or its objectType (if given a HasCore). */
+	// public isType(value: TypedCore | HasCore<TypedCore, ObjectType> | string): boolean {
+	// 	if (typeof(value) === "string") {
+	// 		return this.objectType === value;
+	// 	}
+	// 	return this.objectType === value.objectType;
+	// }
+
 	/** Returns this object's core. */
 	public toJSON(): TypedCore {
 		return this.core;
