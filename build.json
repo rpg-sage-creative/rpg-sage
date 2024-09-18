@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.7",
+"version":"1.7.8",
 "branch":"main",
-"commit":"079b447afb5df216bf061ab4718c5bb953a2defb",
-"commitSubject":"properly hide spoilered values in dice",
-"commitTs":1726283103000,
-"commitDate":"2024-09-13-2005",
-"buildTs":1726284718000,
-"buildDate":"2024-09-13-2031",
+"commit":"3b0519604857431a5e6bf870368dc73d1e13a849",
+"commitSubject":"fix sage prefix detection",
+"commitTs":1726702625000,
+"commitDate":"2024-09-18-1637",
+"buildTs":1726702960000,
+"buildDate":"2024-09-18-1642",
 "author":"Randal"
 }
