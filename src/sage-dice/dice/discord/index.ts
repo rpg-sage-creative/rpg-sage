@@ -321,15 +321,28 @@ function matchCritMethodType(match: string, gameType: OrUndefined<GameType>, def
 
 /** Returns the Count and MAP at the beginning of the match along with the rest of the match. */
 function matchCountAndMap(match: string): [string, number, number] {
-	const COUNT_CHECK = /^(\d+)(map-\d+)?#/i;
+	const COUNT_CHECK = /^(\d+)(map-\d+|map|agile)?#/i;
 	const countMatch = match.match(COUNT_CHECK);
 	if (countMatch) {
-		const countString = countMatch[0];
-		return [
-			match.slice(countString.length).trim(),
-			+countMatch[1],
-			countMatch[2] && (+countMatch[2].slice(3)) || 0
-		];
+		const [matchString, countString, mapString] = countMatch;
+
+		const matchWithoutCount = match.slice(matchString.length).trim();
+
+		const count = +countString;
+
+		let map = 0;
+		if (mapString) {
+			if (/agile/i.test(mapString)) {
+				map = -4;
+			}else if (/map-\d+/i.test(mapString)) {
+				map = +countMatch[2].slice(3);
+			}else {
+				map = -5;
+			}
+		}
+
+
+		return [matchWithoutCount, count, map];
 	}
 	return [match, 1, 0];
 }
