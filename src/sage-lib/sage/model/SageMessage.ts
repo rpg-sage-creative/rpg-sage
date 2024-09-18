@@ -49,11 +49,12 @@ export class SageMessage
 	public static async fromMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): Promise<SageMessage> {
 		const sageCache = await SageCache.fromMessage(message);
 		const prefixOrDefault = sageCache.getPrefixOrDefault();
-		const regexOr = prefixOrDefault ? `sage|${XRegExp.escape(prefixOrDefault)}`.replace(/sage\|sage/i, "sage") : `sage`;
+		const regexOr = prefixOrDefault ? prefixOrDefault : `sage`;
 		const prefixRegex = XRegExp(`^\\s*(${regexOr})?[!?][!]?`, "i");
-		const prefixMatch = prefixRegex.exec(message.content ?? "") ?? [];
-		const hasPrefix = prefixMatch.length > 0;
-		const prefix = hasPrefix ? prefixMatch[1] ?? "" : prefixOrDefault;
+		const prefixMatch = prefixRegex.exec(message.content ?? "");
+		const prefixFound = prefixMatch?.[1] ?? "";
+		const hasPrefix = [prefixOrDefault.toLowerCase(), "sage"].includes(prefixFound.toLowerCase());
+		const prefix = hasPrefix ? prefixFound : prefixOrDefault;
 		const safeContent = safeMentions(message.content ?? "").trim();
 		const slicedContent = hasPrefix ? safeContent.slice(prefix.length).trim() : safeContent;
 		const sageMessage = new SageMessage({
