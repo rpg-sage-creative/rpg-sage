@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.8",
+"version":"1.7.9",
 "branch":"main",
-"commit":"3b0519604857431a5e6bf870368dc73d1e13a849",
-"commitSubject":"fix sage prefix detection",
-"commitTs":1726702625000,
-"commitDate":"2024-09-18-1637",
-"buildTs":1726702960000,
-"buildDate":"2024-09-18-1642",
+"commit":"4bb0b559de4cc890fc8f97cbedc275370f336536",
+"commitSubject":"fix editChat to require replies and not search for last message",
+"commitTs":1726788536000,
+"commitDate":"2024-09-19-1628",
+"buildTs":1726788592000,
+"buildDate":"2024-09-19-1629",
 "author":"Randal"
 }
