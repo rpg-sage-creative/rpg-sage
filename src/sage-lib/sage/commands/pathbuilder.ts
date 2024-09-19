@@ -263,9 +263,38 @@ function createSkillSelectRow(character: PathbuilderCharacter): ActionRowBuilder
 	selectMenu.setPlaceholder("Select a Skill to Roll");
 
 	const activeSkill = character.getSheetValue("activeSkill");
-	const lores = character.lores.map(lore => lore[0]);
-	const saves = getSavingThrows<string>();
-	const savesSkillsAndLores = saves.concat(getSkills(), lores).filter(isNotBlank).filter(toUnique);
+	let saves = getSavingThrows<string>();
+	let skills = getSkills();
+	let lores = character.lores.map(lore => lore[0]).filter(isNotBlank).filter(toUnique);
+	let savesSkillsAndLores = saves.concat(skills, lores).filter(toUnique);
+	while (savesSkillsAndLores.length >= DiscordMaxValues.command.option.count) {
+		let minProf = Math.min(
+			character.lores.reduce((min, lore) => Math.min(min, lore[1]), 10),
+			skills.reduce((min, skill) => Math.min(min, character.getProficiencyMod(skill as any)), 10)
+		);
+		const loreToRemove = lores.find(lore => character.lores.find(pair => pair[0] === lore && pair[1] <= minProf));
+		if (loreToRemove) {
+			lores = lores.filter(lore => lore !== loreToRemove);
+			savesSkillsAndLores = saves.concat(skills, lores).filter(toUnique);
+			continue;
+		}
+		const skillToRemove = skills.find(skill => character.getProficiencyMod(skill as any) <= minProf);
+		if (skillToRemove) {
+			skills = skills.filter(skill => skill !== skillToRemove);
+			savesSkillsAndLores = saves.concat(skills, lores).filter(toUnique);
+			continue;
+		}
+		if (lores.length) {
+			lores.pop();
+			savesSkillsAndLores = saves.concat(skills, lores).filter(toUnique);
+			continue;
+		}
+		if (skills.length) {
+			skills.pop();
+			savesSkillsAndLores = saves.concat(skills, lores).filter(toUnique);
+			continue;
+		}
+	}
 	savesSkillsAndLores.forEach(skill => {
 		const labelPrefix = saves.includes(skill) ? "Save" : "Skill";
 		const skillCheck = character.createCheck(skill);
