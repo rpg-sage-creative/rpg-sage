@@ -27,7 +27,7 @@ export type TDialogMessage = {
 
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
 
-type AutoChannelData = {
+export type AutoChannelData = {
 	channelDid: Snowflake;
 	dialogPostType?: DialogPostType;
 	userDid?: Snowflake;
@@ -185,6 +185,12 @@ function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
 //#endregion
 
 export class GameCharacter implements IHasSave {
+	public equals(other: string | GameCharacter | undefined): boolean {
+		if (!other) return false;
+		if (other instanceof GameCharacter) return other.id === this.core.id;
+		return this.core.id === other;
+	}
+
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		updateCore(core);
 
