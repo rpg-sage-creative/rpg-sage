@@ -9,7 +9,7 @@ export type TColorAndType = { type: ColorType; color: Color; };
 export class Colors {
 	public constructor(private colors: IColor[]) { }
 
-	private findColor(type: Optional<ColorType>): IColor | undefined {
+	public findColor(type: Optional<ColorType>): IColor | undefined {
 		return this.colors.find(color => color.type === type);
 	}
 
