@@ -553,6 +553,26 @@ export class GameCharacter implements IHasSave {
 			}
 		}
 
+		// provide a temp shortcut for calculating stat modifiers for d20 games
+		const abilities = ["strength","dexterity","constitution","intelligence","wisdom","charisma"];
+		const keyLower = key.toLowerCase();
+		for (const ability of abilities) {
+			if (ability.slice(0, 3) === keyLower || `mod.${ability}` === keyLower) {
+				const abilityValue = this.getStat(ability);
+				if (abilityValue !== null) {
+					return doStatMath(`floor((${abilityValue}-10)/2)`);
+				}
+			}
+		}
+
+		if (/^(strength|dexterity|constitution|intelligence|wisdom|charisma)$/i.test(key)) {
+			const statKey = key.slice(4);
+			const statValue = this.getStat(statKey);
+			if (statValue !== null) {
+				return doStatMath(`floor((${statValue}-10)/2)`);
+			}
+		}
+
 		return null;
 	}
 
