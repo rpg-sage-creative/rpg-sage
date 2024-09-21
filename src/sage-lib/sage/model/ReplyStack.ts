@@ -327,5 +327,18 @@ export class ReplyStack {
 		return this.pushToReplyStack(async () => this._whisper(contentOrArgs));
 	}
 
+	public whisperWikiHelp(...pages: { isHelp?:boolean; message?:string; page:string; label?:string; }[]): Promise<void> {
+		const notValidText = `The command you attempted isn't valid.`;
+		const urlRoot = `https://github.com/rpg-sage-creative/rpg-sage/wiki/`;
+		const content = pages.filter(p => p).map(({ isHelp, message, page, label }) => {
+			const notValidMessage = isHelp === false ? notValidText : ``;
+			const helpUrl = urlRoot + page.replace(/ /g, "-");
+			const helpLabel = label ?? page.replace(/-/g, " ");
+			const seeHelp = `- Please see Help for [${helpLabel}](<${helpUrl}>).`;
+			return `${notValidMessage ?? ""}\n${message ?? ""}\n${seeHelp}`.replace(/\n+/g, "\n").trim();
+		}).join("\n");
+		return this.whisper(content);
+	}
+
 	//#endregion
 }

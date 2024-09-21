@@ -1,6 +1,7 @@
 import { partition } from "@rsc-utils/array-utils";
-import { errorReturnNull } from "@rsc-utils/core-utils";
-import { isDefined } from "@rsc-utils/core-utils";
+import { Color } from "@rsc-utils/color-utils";
+import { errorReturnNull, getEnumValues, isDefined, parseEnum } from "@rsc-utils/core-utils";
+import { EmbedBuilder } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { Colors, TColorAndType } from "../../model/Colors.js";
@@ -10,15 +11,72 @@ import type { SageCommand } from "../../model/SageCommand.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { Server } from "../../model/Server.js";
 import { BotServerGameType } from "../helpers/BotServerGameType.js";
-import { embedColor } from "../helpers/embedColor.js";
+
+//#region args
+
+function getColorTypes(sageMessage: SageMessage): ColorType[] {
+
+	// get emoji by key, where key is keyof EmojiType
+	const types = sageMessage.args.toArray()
+		.map(arg => parseEnum<ColorType>(ColorType, arg))
+		.filter(isDefined);
+
+	if (!types.length) {
+		const type = sageMessage.args.getEnum(ColorType, "type");
+		if (isDefined(type)) types.push(type);
+	}
+
+	return types;
+}
+
+function getColorAndTypes(sageCommand: SageCommand): TColorAndType[] {
+	const results: TColorAndType[] = [];
+
+	// get color by key/value pair, where key is keyof ColorType
+	const types = getEnumValues<ColorType>(ColorType);
+	types.forEach(type => {
+		const color = sageCommand.args.getColor(ColorType[type]);
+		if (color) {
+			results.push({ color, type });
+		}
+	});
+
+	// If none found, fall back to the old way of type="keyof ColorType" and color="color"
+	if (!results.length) {
+		const color = sageCommand.args.getColor("color");
+		const type = sageCommand.args.getEnum(ColorType, "type");
+		if (color && isDefined(type)) {
+			results.push({ color, type });
+		}
+
+		if (sageCommand.isSageMessage()) {
+			const colorAndType = sageCommand.args.removeAndReturnColorAndType();
+			if (colorAndType) {
+				if (color) {
+					results.push({ color, type:colorAndType.type });
+				}
+				if (isDefined(type)) {
+					results.push({ color:colorAndType.color, type });
+				}
+			}
+		}
+	}
+
+	return results;
+}
+
+//#endregion
 
 //#region list
 
-function getColors(sageMessage: SageMessage, which: BotServerGameType): Colors {
-	if (which === BotServerGameType.Game && sageMessage.game) {
-		return sageMessage.game.colors;
+function getColors(sageCommand: SageCommand, which: BotServerGameType): Colors {
+	if (which === BotServerGameType.Game && sageCommand.game) {
+		return sageCommand.game.colors;
 	}
-	return which !== BotServerGameType.Bot ? sageMessage.server.colors : sageMessage.bot.colors;
+	if (which !== BotServerGameType.Bot && sageCommand.server) {
+		return sageCommand.server.colors;
+	}
+	return sageCommand.bot.colors;
 }
 
 function getColorName(which: BotServerGameType): string {
@@ -37,7 +95,39 @@ function getWhichEntity(sageMessage: SageMessage, which: BotServerGameType): Ser
 	return which === BotServerGameType.Server ? sageMessage.server : sageMessage.game;
 }
 
-async function _colorList(sageMessage: SageMessage, which: BotServerGameType, canSync: boolean): Promise<void> {
+type RenderPair = { which:BotServerGameType; type:ColorType; };
+
+function renderColors(sageCommand: SageCommand, ...pairs: RenderPair[]): EmbedBuilder[] {
+	const embeds: EmbedBuilder[] = [];
+
+	for (const { which, type } of pairs) {
+		const botColor = sageCommand.bot.colors.findColor(type);
+		if (!botColor || !which) {
+			embeds.push(new EmbedBuilder({ description:`Invalid EmojiType: ${type}` }));
+			continue;
+		}
+
+		let color = getColors(sageCommand, which).findColor(type)?.hex;
+		let inherited = false;
+		if (!color && which === BotServerGameType.Game) {
+			inherited = true;
+			color = getColors(sageCommand, BotServerGameType.Server).findColor(type)?.hex;
+		}
+		if (!color) {
+			inherited = true;
+			color = botColor.hex;
+		}
+
+		const inheritedText = inherited ? `*(unset, inherited)*` : ``;
+		const description = `${color} ${ColorType[type]} ${inheritedText}`.trim();
+		const hexColor = Color.from(color).hex;
+		embeds.push(new EmbedBuilder({ description }).setColor(hexColor));
+	}
+
+	return embeds;
+}
+
+async function _colorList(sageMessage: SageMessage, which: BotServerGameType, canSync: boolean, ...types: ColorType[]): Promise<void> {
 	const colors = getColors(sageMessage, which);
 	let render = colors.size > 0;
 	if (!render) {
@@ -50,37 +140,20 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType, ca
 			}
 		}
 		if (!render) {
-			return sageMessage.whisper(`Sorry, there was an error getting Colors.`);
+			await sageMessage.replyStack.whisper(`Sorry, there was an error getting Colors.`);
+			return;
 		}
 	}
 
-	let colorIndex = 0;
 	const botColors = sageMessage.bot.colors.toArray();
-	const colorCount = botColors.length;
-	const embeds = botColors.map(botColor => {
-		let color = colors.get(botColor.type);
-		let inherited = false;
-		if (!color && which === BotServerGameType.Game) {
-			inherited = true;
-			color = getColors(sageMessage, BotServerGameType.Server).get(botColor.type);
-		}
-		if (!color) {
-			inherited = true;
-			color = sageMessage.bot.colors.get(botColor.type)!;
-		}
-		const inheritedText = inherited ? `(unset, inherited)` : ``;
-		const countText = `(${++colorIndex} of ${colorCount})`;
-		return embedColor(color, ColorType[botColor.type], inheritedText, countText);
-	});
-
-	const contents = [`RPG Sage ${BotServerGameType[which]} Colors *(${colorCount})*`];
-	const embedGroups = partition(embeds, (_, index) => Math.floor(index / 10));
-	for (const embedGroup of embedGroups) {
+	const filteredColors = types.length ? botColors.filter(({ type }) => types.includes(type)) : botColors;
+	const contents = [`### RPG Sage ${BotServerGameType[which]} Colors *(${filteredColors.length})*`];
+	const allEmbeds = renderColors(sageMessage, ...filteredColors.map(({ type }) => ({ which, type })));
+	const embedGroups = partition(allEmbeds, (_, index) => Math.floor(index / 10));
+	for (const embeds of embedGroups) {
 		const content = contents.shift();
-		await sageMessage.message.channel.send({ content, embeds:embedGroup });
+		await sageMessage.replyStack.send({ content, embeds });
 	}
-
-	return Promise.resolve();
 }
 
 async function colorListBot(sageMessage: SageMessage): Promise<void> {
@@ -95,7 +168,7 @@ async function colorListGame(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.game) {
 		await _colorList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame);
 	}else {
-		await sageMessage.whisper("Game not found.");
+		await sageMessage.replyStack.whisper("Game not found.");
 	}
 }
 
@@ -113,55 +186,49 @@ async function colorList(sageMessage: SageMessage): Promise<void> {
 
 //#region get
 
-type WhichColors = { bot?:Colors; server?:Colors; game?:Colors; };
-
-async function _colorGet(sageMessage: SageMessage, colors: WhichColors): Promise<void> {
-	const type = sageMessage.args.getEnum(ColorType, "type")!;
-	if (!isDefined(type)) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
-	}
-
-	let inherited = false;
-	const colorArray = [colors.game, colors.server, colors.bot].filter(isDefined);
-	let color = colorArray.shift()!.get(type);
-	while (!color && colorArray.length) {
-		inherited = true;
-		color = colorArray.shift()!.get(type);
-	}
-	if (!color) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
-	}
-
-	const inheritedText = inherited ? ` (unset, inherited)` : ``;
-	await sageMessage.message.channel.send({ embeds:[embedColor(color, ColorType[type], inheritedText)] });
-	return Promise.resolve();
-}
-
 async function colorGetBot(sageMessage: SageMessage): Promise<void> {
 	if ([0, 5].includes(sageMessage.channel?.type!)) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to view Bot colors in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to view Bot colors in this channel.`);
 	}
-	return _colorGet(sageMessage, { bot:sageMessage.bot.colors });
+
+	const types = getColorTypes(sageMessage);
+	if (!types.length) {
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
+	}
+
+	await _colorList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser, ...types);
 }
 
 async function colorGetServer(sageMessage: SageMessage): Promise<void> {
 	if ([0, 5].includes(sageMessage.channel?.type!)) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to view Server colors in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to view Server colors in this channel.`);
 	}
-	return _colorGet(sageMessage, { server:sageMessage.server?.colors, bot:sageMessage.bot.colors });
+
+	const types = getColorTypes(sageMessage);
+	if (!types.length) {
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
+	}
+
+	await _colorList(sageMessage, BotServerGameType.Server, sageMessage.canAdminServer && sageMessage.testServerAdmin(), ...types);
 }
 
 async function colorGetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
-		return sageMessage.whisper("Game not found.");
+		return sageMessage.replyStack.whisper("Game not found.");
 	}
 	if (!sageMessage.canAdminGame && !sageMessage.isPlayer) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to access this Game.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to access this Game.`);
 	}
 	if ([0, 5].includes(sageMessage.channel?.type!)) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to view Game colors in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to view Game colors in this channel.`);
 	}
-	return _colorGet(sageMessage, { game:sageMessage.game?.colors, server:sageMessage.server?.colors, bot:sageMessage.bot.colors });
+
+	const types = getColorTypes(sageMessage);
+	if (!types.length) {
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
+	}
+
+	await _colorList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame, ...types);
 }
 
 async function colorGet(sageMessage: SageMessage): Promise<void> {
@@ -178,79 +245,62 @@ async function colorGet(sageMessage: SageMessage): Promise<void> {
 
 //#region set
 
-function getColorAndType(sageCommand: SageCommand): TColorAndType | undefined {
-	const color = sageCommand.args.getColor("color");
-	const type = sageCommand.args.getEnum(ColorType, "type");
-	if (color && isDefined(type)) {
-		return { color, type };
-	}
-
-	if (sageCommand.isSageMessage()) {
-		const colorAndType = sageCommand.args.removeAndReturnColorAndType();
-		if (colorAndType) {
-			if (color) {
-				return { color, type:colorAndType.type };
-			}
-			if (isDefined(type)) {
-				return { color:colorAndType.color, type };
-			}
-			return colorAndType;
-		}
-	}
-
-	return undefined;
-}
-
 async function colorSetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server colors.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server colors in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors in this channel.`);
 	}
 
-	const colorAndType = getColorAndType(sageMessage);
-	if (!colorAndType) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid Input.`, page:`Color Management` });
+	const colorAndTypes = getColorAndTypes(sageMessage);
+	if (!colorAndTypes.length) {
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid Input.`, page:`Color Management` });
 	}
 
-	const set = sageMessage.server.colors.set(colorAndType);
-	if (!set) {
-		return sageMessage.whisper(`Sorry, we were unable set your color!`);
+	let changes = 0;
+	for (const colorAndType of colorAndTypes) {
+		const set = sageMessage.server.colors.set(colorAndType);
+		if (set) changes++;
 	}
 
-	const saved = await sageMessage.server.save();
-	if (!saved) {
-		return sageMessage.whisper(`Sorry, we were unable set your color!`);
-	}
+	const saved = changes ? await sageMessage.server.save() : false;
+	const updated = saved ? changes : 0;
+	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 
-	return sageMessage.reply({ embeds:[embedColor(colorAndType.color, ColorType[colorAndType.type])] });
+	const pairs = colorAndTypes.map(({ type }) => ({ which:BotServerGameType.Server, type }));
+	const content = `### RPG Sage Server Colors Updated (${updated}/${pairs.length})${saveError}`;
+	const embeds = renderColors(sageMessage, ...pairs);
+	await sageMessage.replyStack.reply({ content, embeds });
 }
 
 async function colorSetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
-		return sageMessage.whisper("Game not found.");
+		return sageMessage.replyStack.whisper("Game not found.");
 	}
 	if (!sageMessage.canAdminGame) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Game colors.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game colors.`);
 	}
 
-	const colorAndType = getColorAndType(sageMessage);
-	if (!colorAndType) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid Input.`, page:`Color Management` });
+	const colorAndTypes = getColorAndTypes(sageMessage);
+	if (!colorAndTypes.length) {
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid Input.`, page:`Color Management` });
 	}
 
-	const set = sageMessage.game.colors.set(colorAndType);
-	if (!set) {
-		return sageMessage.whisper(`Sorry, we were unable set your color!`);
+	let changes = 0;
+	for (const colorAndType of colorAndTypes) {
+		const set = sageMessage.game.colors.set(colorAndType);
+		if (set) changes++;
 	}
 
-	const saved = await sageMessage.game.save();
-	if (!saved) {
-		return sageMessage.whisper(`Sorry, we were unable set your color!`);
-	}
+	const saved = changes ? await sageMessage.game.save() : false;
+	const updated = saved ? changes : 0;
+	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 
-	return sageMessage.reply({ embeds:[embedColor(colorAndType.color, ColorType[colorAndType.type])] });
+	const pairs = colorAndTypes.map(({ type }) => ({ which:BotServerGameType.Game, type }));
+	const content = `### RPG Sage Game Colors Updated (${updated}/${pairs.length})${saveError}`;
+	const embeds = renderColors(sageMessage, ...pairs);
+	await sageMessage.replyStack.reply({ content, embeds });
 }
 
 async function colorSet(sageMessage: SageMessage): Promise<void> {
@@ -263,46 +313,46 @@ async function colorSet(sageMessage: SageMessage): Promise<void> {
 
 async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server colors.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server colors in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors in this channel.`);
 	}
 
-	const server = sageMessage.server;
+	const { server } = sageMessage;
 
 	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync colors with Sage?");
 	if (booleanResponse) {
 		server.colors.sync(sageMessage.bot.colors);
 		const saved = await server.save();
 		if (!saved) {
-			return sageMessage.whisper(`Sorry, we were unable sync your colors!`);
+			return sageMessage.replyStack.whisper(`Sorry, we were unable to sync your colors!`);
 		} else {
 			return colorListServer(sageMessage);
 		}
 	}
-	return Promise.resolve();
 }
 
 async function colorSyncGame(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.game) {
+		return sageMessage.replyStack.whisper("Game not found.");
+	}
 	if (!sageMessage.canAdminGame) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Game colors.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game colors.`);
 	}
 
-	const game = sageMessage.game!;
+	const { game } = sageMessage;
 
 	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync colors with Server?");
 	if (booleanResponse) {
 		game.colors.sync(game.server.colors);
 		const saved = await game.save();
 		if (!saved) {
-			return sageMessage.whisper(`Sorry, we were unable sync your colors!`);
+			return sageMessage.replyStack.whisper(`Sorry, we were unable to sync your colors!`);
 		} else {
 			return colorListGame(sageMessage);
 		}
 	}
-
-	return Promise.resolve();
 }
 
 async function colorSync(sageMessage: SageMessage): Promise<void> {
@@ -315,55 +365,58 @@ async function colorSync(sageMessage: SageMessage): Promise<void> {
 
 async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server colors.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server colors in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors in this channel.`);
 	}
 
-	const type = sageMessage.args.getEnum(ColorType, "type");
-	if (!isDefined(type)) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
+	const types = getColorTypes(sageMessage);
+	if (!types.length) {
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid Input: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
 	}
 
-	const unset = sageMessage.server.colors.unset(type);
-	if (!unset) {
-		return sageMessage.whisper(`Nothing to unset!`);
+	let changes = 0;
+	for (const type of types) {
+		const unset = sageMessage.server.colors.unset(type);
+		if (unset) changes++;
 	}
 
-	const saved = await sageMessage.server.save();
-	if (!saved) {
-		return sageMessage.whisper(`Sorry, we were unable unset your color!`);
-	}
+	const saved = changes ? await sageMessage.server.save() : false;
+	const updated = saved ? changes : 0;
+	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 
-	/** @todo return the unset/default color */
-	return sageMessage.reactSuccess();
+	const content = `### RPG Sage Server Colors Unset (${updated}/${types.length})${saveError}`;
+	const embeds = renderColors(sageMessage, ...types.map(type => ({ which:BotServerGameType.Server, type })));
+	await sageMessage.replyStack.reply({ content, embeds });
 }
 
 async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.game) {
+		return sageMessage.replyStack.whisper("Game not found.");
+	}
 	if (!sageMessage.canAdminGame) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Game colors.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game colors.`);
 	}
 
-	const game = sageMessage.game!;
-
-	const type = sageMessage.args.getEnum(ColorType, "type");
-	if (!isDefined(type)) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
+	const types = getColorTypes(sageMessage);
+	if (!types.length) {
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid Input: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
 	}
 
-	const unset = game.colors.unset(type);
-	if (!unset) {
-		return sageMessage.whisper(`Nothing to unset!`);
+	let changes = 0;
+	for (const type of types) {
+		const unset = sageMessage.game.colors.unset(type);
+		if (unset) changes++;
 	}
 
-	const saved = await game.save();
-	if (!saved) {
-		return sageMessage.whisper(`Sorry, we were unable unset your color!`);
-	}
+	const saved = changes ? await sageMessage.game.save() : false;
+	const updated = saved ? changes : 0;
+	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 
-	/** @todo return the unset/default color */
-	return sageMessage.reactSuccess();
+	const content = `### RPG Sage Game Colors Unset (${updated}/${types.length})${saveError}`;
+	const embeds = renderColors(sageMessage, ...types.map(type => ({ which:BotServerGameType.Game, type })));
+	await sageMessage.replyStack.reply({ content, embeds });
 }
 
 async function colorUnset(sageMessage: SageMessage): Promise<void> {
