@@ -1,7 +1,7 @@
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { gcCmdAutoOff } from "./GameCharacter/gcCmdAutoOff.js";
 import { gcCmdAutoOn } from "./GameCharacter/gcCmdAutoOn.js";
-import { registerGcCmdAutoDialog } from "./GameCharacter/gcCmdAutoDialog.js";
+// import { registerGcCmdAutoDialog } from "./GameCharacter/gcCmdAutoDialog.js";
 import { gcCmdCreate } from "./GameCharacter/gcCmdCreate.js";
 import { gcCmdDelete } from "./GameCharacter/gcCmdDelete.js";
 import { gcCmdDetails } from "./GameCharacter/gcCmdDetails.js";
@@ -20,7 +20,7 @@ export function registerGameCharacter(): void {
 	registerListeners({ commands:["pc|stats", "npc|stats", "companion|stats", "minion|stats"], message:gcCmdStats });
 	registerListeners({ commands:["pc|delete", "npc|delete", "companion|delete", "minion|delete"], message:gcCmdDelete });
 	registerListeners({ commands:["pc|auto|on", "gm|auto|on", "npc|auto|on", "minion|auto|on", "companion|auto|on"], message:gcCmdAutoOn });
-	registerGcCmdAutoDialog();
+	// registerGcCmdAutoDialog();
 	registerListeners({ commands:["pc|auto|off", "gm|auto|off", "npc|auto|off", "minion|auto|off", "companion|auto|off"], message:gcCmdAutoOff });
 	// registerListeners({ commands:["pc-link", "npc-link", "companion-link", "minion-link"], message:characterLink });
 }
