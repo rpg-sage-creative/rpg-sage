@@ -1,5 +1,6 @@
 import { DialogPostType, type SageChannel } from "@rsc-sage/types";
 import { debug, type Snowflake } from "@rsc-utils/core-utils";
+import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type GuildTextBasedChannel, type SelectMenuComponentOptionData } from "discord.js";
 import { getSelectedOrDefault } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
@@ -8,11 +9,10 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import { SageInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
+import { canAdminCharacter } from "./canAdminCharacterType.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterTypeMeta, type TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
-import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 import { toReadableOwner } from "./toReadableOwner.js";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
 
 //#region customId
 
@@ -208,6 +208,18 @@ function getCharsById(sageCommand: SageCommand, id?: Snowflake): Chars | undefin
 	return { id, name, byId, byName, all };
 }
 
+// async function createCharacterList(sageCommand: SageCommand, characterTypeMeta: TCharacterTypeMeta): Promise<ActionRowBuilder<StringSelectMenuBuilder>> {
+// 	const characters: GameCharacter[] = [];
+// 	if (characterTypeMeta.isGm) {
+// 		characters.push(sageCommand.gmCharacter);
+// 	}else if (characterTypeMeta.isNpc || characterTypeMeta.isMinion) {
+// 		sageCommand.game?.nonPlayerCharacters.forEach(char => {
+// 			characters.push(char);
+// 			characters.push(...char.companions);
+// 		});
+// 	}
+// }
+
 async function createChannelList(sageCommand: SageCommand, chars: Chars, selectedValue?: ChannelData): Promise<ActionRowBuilder<StringSelectMenuBuilder>> {
 	const userId = sageCommand.sageUser.did;
 	const serverId = sageCommand.server.did;
@@ -364,21 +376,8 @@ async function handleAction(sageInteraction: SageInteraction<ButtonInteraction|S
 
 export async function showForm(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		if (!sageMessage.allowCommand) {
-			return sageMessage.replyStack.whisper(`Sorry, you cannot manage characters here.`);
-		}
-		if (sageMessage.game) {
-			if (!sageMessage.canAdminGame && !sageMessage.isPlayer) {
-				return sageMessage.replyStack.whisper(`Sorry, you are not part of this Game.`);
-			}
-			if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.canAdminGame) {
-				return sageMessage.replyStack.whisper(`Sorry, only GMs and Admins can manage NPCs.`);
-			}
-		}else if (characterTypeMeta.isGmOrNpcOrMinion) {
-			return sageMessage.replyStack.whisper(`Sorry, NPCs only exist inside a Game.`);
-		}
-		return sageMessage.replyStack.whisper(`I'm sorry Dave, I'm afraid I can't do that.`);
+	if (!canAdminCharacter(sageMessage, { characterTypeMeta })) {
+		return;
 	}
 
 	const character = await getAutoCharacter(sageMessage, characterTypeMeta);
@@ -388,7 +387,11 @@ export async function showForm(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const content = `Configuring Auto Dialog for:\n> **User** ${toHumanReadable(sageMessage.message.author)}\n> **Character** ${character.name}`;
+	const content = [
+		`Configuring Auto Dialog for:`,
+		`> **User** ${toHumanReadable(sageMessage.message.author)}`,
+		`> **Character** ${character.name}`
+	].join("\n");
 	const components = await createComponents(sageMessage, getCharsById(sageMessage, character.id));
 
 	await sageMessage.replyStack.send({ content, components });
