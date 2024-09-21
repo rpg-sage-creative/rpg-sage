@@ -1,4 +1,5 @@
 import { errorReturnNull, getEnumValues, isDefined, parseEnum } from "@rsc-utils/core-utils";
+import { splitMessageOptions } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import { Emoji, type TEmojiAndType } from "../../model/Emoji.js";
@@ -150,7 +151,10 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType, ca
 	const content = `### RPG Sage ${BotServerGameType[which]} Emoji *(${filteredEmoji.length})*`;
 	const text = renderEmoji(sageMessage, ...filteredEmoji.map(({ type }) =>  ({ which, type })));
 
-	await sageMessage.replyStack.send(`${content}\n${text}`);
+	const payloads = splitMessageOptions({ content:`${content}\n${text}` });
+	for (const payload of payloads) {
+		await sageMessage.replyStack.send(payload);
+	}
 }
 
 async function emojiListBot(sageMessage: SageMessage): Promise<void> {
