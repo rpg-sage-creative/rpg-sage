@@ -11,7 +11,7 @@ import { BotServerGameType } from "../helpers/BotServerGameType.js";
 
 //#region args
 
-function emojiGetTypes(sageMessage: SageMessage): EmojiType[] {
+function getEmojiTypes(sageMessage: SageMessage): EmojiType[] {
 
 	// get emoji by key, where key is keyof EmojiType
 	const types = sageMessage.args.toArray()
@@ -96,12 +96,13 @@ function getWhichEntity(sageMessage: SageMessage, which: BotServerGameType): Ser
 }
 
 type RenderPair = { which:BotServerGameType; type:EmojiType; };
+
 function renderEmoji(sageCommand: SageCommand, ...pairs: RenderPair[]): string {
 	const output: string[] = [];
 
 	for (const { which, type } of pairs) {
-		const emoji = sageCommand.bot.emoji.findEmoji(type);
-		if (!emoji || !which) {
+		const botEmoji = sageCommand.bot.emoji.findEmoji(type);
+		if (!botEmoji || !which) {
 			output.push(`Invalid EmojiType: ${type}`);
 			continue;
 		}
@@ -114,12 +115,13 @@ function renderEmoji(sageCommand: SageCommand, ...pairs: RenderPair[]): string {
 		}
 		if (!replacement) {
 			inherited = true;
-			replacement = emoji.replacement;
+			replacement = botEmoji.replacement;
 		}
 
-		const matchesText = emoji.matches ? emoji.matches.map(s => `\`[${s}]\``).join(", ") : ``;
+		const matchesText = botEmoji.matches ? botEmoji.matches.map(s => `\`[${s}]\``).join(", ") : ``;
 		const inheritedText = inherited ? `*(unset, inherited)*` : ``;
-		output.push(`${replacement} ${EmojiType[type]} ${matchesText} ${inheritedText}`.trim());
+		const description = `${replacement} ${EmojiType[type]} ${matchesText} ${inheritedText}`.trim();
+		output.push(description);
 	}
 
 	return output.join("\n");
@@ -138,17 +140,17 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType, ca
 			}
 		}
 		if (!render) {
-			await sageMessage.whisper(`Sorry, there was an error getting Emoji.`);
+			await sageMessage.replyStack.whisper(`Sorry, there was an error getting Emoji.`);
 			return;
 		}
 	}
 
 	const botEmoji = sageMessage.bot.emoji.toArray();
-	const filtered = types.length ? botEmoji.filter(_emoji => types.includes(_emoji.type)) : botEmoji;
-	const content = `### RPG Sage ${BotServerGameType[which]} Emoji *(${filtered.length})*`;
-	const text = renderEmoji(sageMessage, ...filtered.map(_emoji =>  ({ which, type:_emoji.type })));
+	const filteredEmoji = types.length ? botEmoji.filter(({ type }) => types.includes(type)) : botEmoji;
+	const content = `### RPG Sage ${BotServerGameType[which]} Emoji *(${filteredEmoji.length})*`;
+	const text = renderEmoji(sageMessage, ...filteredEmoji.map(({ type }) =>  ({ which, type })));
 
-	await sageMessage.send(`${content}\n${text}`);
+	await sageMessage.replyStack.send(`${content}\n${text}`);
 }
 
 async function emojiListBot(sageMessage: SageMessage): Promise<void> {
@@ -163,13 +165,13 @@ async function emojiListGame(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.game) {
 		await _emojiList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame);
 	}else {
-		await sageMessage.whisper("Game not found.");
+		await sageMessage.replyStack.whisper("Game not found.");
 	}
 }
 
 async function emojiList(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.game) {
-		return emojiListServer(sageMessage);
+		return emojiListGame(sageMessage);
 	}
 	if (sageMessage.server) {
 		return emojiListServer(sageMessage);
@@ -183,12 +185,12 @@ async function emojiList(sageMessage: SageMessage): Promise<void> {
 
 async function emojiGetBot(sageMessage: SageMessage): Promise<void> {
 	if ([0, 5].includes(sageMessage.channel?.type!)) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to view Bot emoji in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to view Bot emoji in this channel.`);
 	}
 
-	const types = emojiGetTypes(sageMessage);
+	const types = getEmojiTypes(sageMessage);
 	if (!types.length) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
 	}
 
 	await _emojiList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser, ...types);
@@ -196,12 +198,12 @@ async function emojiGetBot(sageMessage: SageMessage): Promise<void> {
 
 async function emojiGetServer(sageMessage: SageMessage): Promise<void> {
 	if ([0, 5].includes(sageMessage.channel?.type!)) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to view Server emoji in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to view Server emoji in this channel.`);
 	}
 
-	const types = emojiGetTypes(sageMessage);
+	const types = getEmojiTypes(sageMessage);
 	if (!types.length) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
 	}
 
 	await _emojiList(sageMessage, BotServerGameType.Server, sageMessage.canAdminServer && sageMessage.testServerAdmin(), ...types);
@@ -209,18 +211,18 @@ async function emojiGetServer(sageMessage: SageMessage): Promise<void> {
 
 async function emojiGetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
-		return sageMessage.whisper("Game not found.");
+		return sageMessage.replyStack.whisper("Game not found.");
 	}
 	if (!sageMessage.canAdminGame && !sageMessage.isPlayer) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to access this Game.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to access this Game.`);
 	}
 	if ([0, 5].includes(sageMessage.channel?.type!)) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to view Game emoji in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to view Game emoji in this channel.`);
 	}
 
-	const types = emojiGetTypes(sageMessage);
+	const types = getEmojiTypes(sageMessage);
 	if (!types.length) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
 	}
 
 	await _emojiList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame, ...types);
@@ -242,74 +244,64 @@ async function emojiGet(sageMessage: SageMessage): Promise<void> {
 
 async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server emoji.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server emoji in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji in this channel.`);
 	}
 
 	const emojiAndTypes = getEmojiAndTypes(sageMessage);
 	if (!emojiAndTypes.length) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid Input.`, page:`Emoji Management` });
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid Input.`, page:`Emoji Management` });
 	}
 
-	let changes = false;
+	let changes = 0;
 	for (const emojiAndType of emojiAndTypes) {
 		const matches = sageMessage.bot.emoji.findEmoji(emojiAndType.type)?.matches ?? [];
 		const set = sageMessage.server.emoji.set({ ...emojiAndType, matches });
-		changes ||= set;
-	}
-	if (!changes) {
-		return sageMessage.whisper(`Sorry, we were unable set your emoji!`);
+		if (set) changes++;
 	}
 
-	const saved = await sageMessage.server.save();
-	if (!saved) {
-		return sageMessage.whisper(`Sorry, we were unable set your emoji!`);
-	}
+	const saved = changes ? await sageMessage.server.save() : false;
+	const updated = saved ? changes : 0;
+	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 
-	const which = BotServerGameType.Server;
-	const types = emojiAndTypes.map(({ type }) => ({ which, type }));
-	const label = `RPG Sage Server Emoji Updated (${types.length})`;
-	const rendered = renderEmoji(sageMessage, ...types);
-	const content = `${label}\n${rendered}`;
-	return sageMessage.reply({ content });
+	const pairs = emojiAndTypes.map(({ type }) => ({ which:BotServerGameType.Server, type }));
+	const label = `### RPG Sage Server Emoji Updated (${updated}/${pairs.length})`;
+	const rendered = renderEmoji(sageMessage, ...pairs);
+	const content = `${label}${saveError}\n${rendered}`;
+	await sageMessage.replyStack.reply({ content });
 }
 
 async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
-		return sageMessage.whisper("Game not found.");
+		return sageMessage.replyStack.whisper("Game not found.");
 	}
 	if (!sageMessage.canAdminGame) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Game emoji.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game emoji.`);
 	}
 
 	const emojiAndTypes = getEmojiAndTypes(sageMessage);
 	if (!emojiAndTypes.length) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid Input.`, page:`Emoji Management` });
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid Input.`, page:`Emoji Management` });
 	}
 
-	let changes = false;
+	let changes = 0;
 	for (const emojiAndType of emojiAndTypes) {
 		const matches = sageMessage.bot.emoji.findEmoji(emojiAndType.type)?.matches ?? [];
 		const set = sageMessage.game.emoji.set({ ...emojiAndType, matches });
-		changes ||= set;
-	}
-	if (!changes) {
-		return sageMessage.whisper(`Sorry, we were unable set your emoji!`);
+		if (set) changes++;
 	}
 
-	const saved = await sageMessage.game.save();
-	if (!saved) {
-		return sageMessage.whisper(`Sorry, we were unable set your emoji!`);
-	}
+	const saved = changes ? await sageMessage.game.save() : false;
+	const updated = saved ? changes : 0;
+	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 
-	const which = BotServerGameType.Game;
-	const types = emojiAndTypes.map(({ type }) => ({ which, type }));
-	const label = `RPG Sage Game Emoji Updated (${types.length})`;
-	const rendered = renderEmoji(sageMessage, ...types);
-	const content = `${label}\n${rendered}`;
-	return sageMessage.reply({ content });
+	const pairs = emojiAndTypes.map(({ type }) => ({ which:BotServerGameType.Game, type }));
+	const label = `### RPG Sage Game Emoji Updated (${updated}/${pairs.length})`;
+	const rendered = renderEmoji(sageMessage, ...pairs);
+	const content = `${label}${saveError}\n${rendered}`;
+	await sageMessage.replyStack.reply({ content });
 }
 
 async function emojiSet(sageMessage: SageMessage): Promise<void> {
@@ -322,49 +314,46 @@ async function emojiSet(sageMessage: SageMessage): Promise<void> {
 
 async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server emoji.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server emoji in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji in this channel.`);
 	}
 
-	const server = sageMessage.server;
+	const { server } = sageMessage;
 
 	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync emoji with Sage?");
 	if (booleanResponse) {
 		server.emoji.sync(sageMessage.bot.emoji);
 		const saved = await server.save();
 		if (!saved) {
-			return sageMessage.whisper(`Sorry, we were unable sync your emoji!`);
+			return sageMessage.replyStack.whisper(`Sorry, we were unable to sync your emoji!`);
 		} else {
 			return emojiListServer(sageMessage);
 		}
 	}
-	return Promise.resolve();
 }
 
 async function emojiSyncGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
-		return sageMessage.whisper("Game not found.");
+		return sageMessage.replyStack.whisper("Game not found.");
 	}
 	if (!sageMessage.canAdminGame) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Game emoji.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game emoji.`);
 	}
 
-	const game = sageMessage.game!;
+	const { game } = sageMessage;
 
 	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync emoji with Server?");
 	if (booleanResponse) {
 		game.emoji.sync(game.server.emoji);
 		const saved = await game.save();
 		if (!saved) {
-			return sageMessage.whisper(`Sorry, we were unable sync your emoji!`);
+			return sageMessage.replyStack.whisper(`Sorry, we were unable to sync your emoji!`);
 		} else {
 			return emojiListGame(sageMessage);
 		}
 	}
-
-	return Promise.resolve();
 }
 
 async function emojiSync(sageMessage: SageMessage): Promise<void> {
@@ -377,70 +366,60 @@ async function emojiSync(sageMessage: SageMessage): Promise<void> {
 
 async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server emoji.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Server emoji in this channel.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji in this channel.`);
 	}
 
-	const types = emojiGetTypes(sageMessage);
+	const types = getEmojiTypes(sageMessage);
 	if (!types.length) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
 	}
 
-	let changes = false;
+	let changes = 0;
 	for (const type of types) {
 		const unset = sageMessage.server.emoji.unset(type);
-		changes ||= unset;
-	}
-	if (!changes) {
-		return sageMessage.whisper(`Sorry, we were unable unset your emoji!`);
+		if (unset) changes++;
 	}
 
-	const saved = await sageMessage.server.save();
-	if (!saved) {
-		return sageMessage.whisper(`Sorry, we were unable unset your emoji!`);
-	}
+	const saved = changes ? await sageMessage.server.save() : false;
+	const updated = saved ? changes : 0;
+	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 
-	const which = BotServerGameType.Server;
-	const label = `RPG Sage Server Emoji Unset (${types.length})`;
-	const rendered = renderEmoji(sageMessage, ...types.map(type => ({ which, type })));
-	const content = `${label}\n${rendered}`;
-	return sageMessage.reply({ content });
+	const label = `### RPG Sage Server Emoji Unset (${updated}/${types.length})`;
+	const rendered = renderEmoji(sageMessage, ...types.map(type => ({ which:BotServerGameType.Server, type })));
+	const content = `${label}${saveError}\n${rendered}`;
+	await sageMessage.replyStack.reply({ content });
 }
 
 async function emojiUnsetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
-		return sageMessage.whisper("Game not found.");
+		return sageMessage.replyStack.whisper("Game not found.");
 	}
 	if (!sageMessage.canAdminGame) {
-		return sageMessage.whisper(`Sorry, you aren't allowed to change Game emoji.`);
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game emoji.`);
 	}
 
-	const types = emojiGetTypes(sageMessage);
+	const types = getEmojiTypes(sageMessage);
 	if (!types.length) {
-		return sageMessage.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
+		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
 	}
 
-	let changes = false;
+	let changes = 0;
 	for (const type of types) {
 		const unset = sageMessage.game.emoji.unset(type);
-		changes ||= unset;
-	}
-	if (!changes) {
-		return sageMessage.whisper(`Sorry, we were unable unset your emoji!`);
+		if (unset) changes++;
 	}
 
-	const saved = await sageMessage.game.save();
-	if (!saved) {
-		return sageMessage.whisper(`Sorry, we were unable unset your emoji!`);
-	}
+	const saved = changes ? await sageMessage.game.save() : false;
+	const updated = saved ? changes : 0;
+	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 
-	const which = BotServerGameType.Game;
-	const label = `RPG Sage Game Emoji Unset (${types.length})`;
-	const rendered = renderEmoji(sageMessage, ...types.map(type => ({ which, type })));
-	const content = `${label}\n${rendered}`;
-	return sageMessage.reply({ content });
+	const label = `### RPG Sage Game Emoji Unset (${updated}/${types.length})`;
+	const rendered = renderEmoji(sageMessage, ...types.map(type => ({ which:BotServerGameType.Game, type })));
+	const content = `${label}${saveError}\n${rendered}`;
+	await sageMessage.replyStack.reply({ content });
 }
 
 async function emojiUnset(sageMessage: SageMessage): Promise<void> {
