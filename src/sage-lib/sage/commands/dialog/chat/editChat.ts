@@ -1,10 +1,10 @@
-import { error, errorReturnNull, type Snowflake } from "@rsc-utils/core-utils";
+import { error, errorReturnNull } from "@rsc-utils/core-utils";
 import { DiscordKey, splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { AttachmentBuilder } from "discord.js";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { addMessageDeleteButton } from "../../../model/utils/deleteButton.js";
+import { includeDeleteButton } from "../../../model/utils/deleteButton.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { DialogMessageRepository } from "../../../repo/DialogMessageRepository.js";
 import type { DialogContent } from "../DialogContent.js";
@@ -50,12 +50,17 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 	if (isValid) {
 		await webhook.editMessage(message.id, payloads[0]).then(() => deleteMessage(sageMessage.message), error);
 
-		const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
-		if (user) {
-			const content = `You edited: ${toMessageUrl(message)}\nThe original content has been attached to this message.`;
-			const files = [new AttachmentBuilder(Buffer.from(originalContent, "utf-8"), { name:`original-content.md` })];
-			const sent = await user.send({ content, files });
-			await addMessageDeleteButton(sent, user.id as Snowflake);
+		if (sageMessage.sageUser.dmOnEdit) {
+			const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
+			if (user) {
+				const content = [
+					`You edited: ${toMessageUrl(message)}`,
+					`The original content has been attached to this message.`,
+					"To stop receiving these messages, reply to this message with:```sage! user update dmOnEdit=false```"
+				].join("\n");
+				const files = [new AttachmentBuilder(Buffer.from(originalContent, "utf-8"), { name:`original-content.md` })];
+				await user.send(includeDeleteButton({ content, files }, sageMessage.authorDid));
+			}
 		}
 	}
 

@@ -3,7 +3,7 @@ import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { DialogDiceBehaviorType, type User as SUser } from "../../../model/User.js";
+import { DialogDiceBehaviorType } from "../../../model/User.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
 /**
@@ -25,7 +25,7 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("User Update", "You cannot manage your settings here.");
 	}
 
-	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogDiceBehavior", "dialogPostType", "sagePostType", "orgPlayId"]);
+	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogDiceBehavior", "dialogPostType", "dmOnDelete", "dmOnEdit", "sagePostType", "orgPlayId"]);
 	if (!hasValidKeys || hasInvalidKeys) {
 		const details = [
 			"The command for updating your User settings is:",
@@ -52,11 +52,13 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		}
 	}
 
-	if (validKeys.includes("dialogDiceBehavior") || validKeys.includes("dialogPostType") || validKeys.includes("sagePostType")) {
+	if (validKeys.includes("dialogDiceBehavior") || validKeys.includes("dialogPostType") || validKeys.includes("sagePostType") || validKeys.includes("dmOnDelete") || validKeys.includes("dmOnEdit")) {
 		const dialogDiceBehaviorType = sageMessage.args.getEnum(DialogDiceBehaviorType, "dialogDiceBehavior");
 		const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType");
 		const sagePostType = sageMessage.args.getEnum(DialogPostType, "sagePostType");
-		ptUpdated = await sageMessage.sageUser.update({ dialogDiceBehaviorType, dialogPostType, sagePostType });
+		const dmOnDelete = sageMessage.args.getBoolean("dmOnDelete");
+		const dmOnEdit = sageMessage.args.getBoolean("dmOnEdit");
+		ptUpdated = await sageMessage.sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType });
 	}
 
 	if (opUpdated || ptUpdated) {
@@ -67,61 +69,51 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 }
 
 async function userDetails(sageMessage: SageCommand): Promise<void> {
-	let user: SUser | null = sageMessage.sageUser;
-	if (sageMessage.isSuperUser) {
-		const userDid = sageMessage.args.getUserId("user");
-		if (userDid) {
-			user = await sageMessage.sageCache.users.getByDid(userDid);
-		}
-		if (!user) {
-			const userId = sageMessage.args.getUuid("user");
-			user = await sageMessage.sageCache.users.getById(userId);
-		}
-		if (!user) {
-			user = sageMessage.sageUser;
-		}
-	}
+	const { sageUser } = sageMessage;
 
 	const renderableContent = createAdminRenderableContent(sageMessage.bot, `<b>User Details</b>`);
-	if (user) {
-		const discordUser = await sageMessage.discord.fetchUser(user.did);
-		if (discordUser) {
-			renderableContent.setTitle(`<b>${toHumanReadable(discordUser)}</b>`);
-			renderableContent.append(`<b>Discord Id</b> ${discordUser.id}`);
-			renderableContent.setThumbnailUrl(discordUser.displayAvatarURL());
-			//TODO: sort out presence
-			// renderableContent.append(`<b>Status</b> ${discordUser.presence.status}`);
-			// const lastMessage = discordUser.lastMessage;
-			// if (lastMessage) {
-			// 	renderableContent.append(`<b>Last Message Guild</b> ${lastMessage.guild && lastMessage.guild.name || "non-guild message"}`);
-			// 	renderableContent.append(`<b>Last Message Date</b> ${lastMessage.createdAt.toUTCString()}`);
-			// }
-		} else {
-			// renderableContent.setTitle(`<b>Unknown User</b>`);
-			// renderableContent.append(`<b>Username</b> ${"<i>UNKNOWN</i>"}`);
-			renderableContent.append(`<b>Discord Id</b> ${user.did || "<i>NOT SET</i>"}`);
-			renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
-		}
 
-		renderableContent.append();
-		renderableContent.append(`<b>RPG Sage Id</b> ${user.id}`);
-
-		const dialogDiceBehaviorType = DialogDiceBehaviorType[user.dialogDiceBehaviorType!] ?? `<i>unset (Normal)</i>`;
-		renderableContent.append(`<b>Preferred Dialog Dice Behavior</b> ${dialogDiceBehaviorType}`);
-
-		const dialogPostType = DialogPostType[user.dialogPostType!] ?? `<i>unset (Embed)</i>`;
-		renderableContent.append(`<b>Preferred Dialog Type</b> ${dialogPostType}`);
-
-		const sagePostType = DialogPostType[user.sagePostType!] ?? `<i>unset (Embed)</i>`;
-		renderableContent.append(`<b>Preferred Sage Post Type</b> ${sagePostType}`);
-
-		const orgPlayId = sageMessage.sageUser.notes.getUncategorizedNote("orgPlayId")?.note ?? `<i>unset</i>`;
-		renderableContent.append(`<b>Paizo Organized Play #</b> ${orgPlayId}`);
-
-		// TODO: List any games, gameRoles, servers, serverRoles!
+	const discordUser = await sageMessage.discord.fetchUser(sageUser.did);
+	if (discordUser) {
+		renderableContent.setTitle(`<b>${toHumanReadable(discordUser)}</b>`);
+		renderableContent.append(`<b>Discord Id</b> ${discordUser.id}`);
+		renderableContent.setThumbnailUrl(discordUser.displayAvatarURL());
+		//TODO: sort out presence
+		// renderableContent.append(`<b>Status</b> ${discordUser.presence.status}`);
+		// const lastMessage = discordUser.lastMessage;
+		// if (lastMessage) {
+		// 	renderableContent.append(`<b>Last Message Guild</b> ${lastMessage.guild && lastMessage.guild.name || "non-guild message"}`);
+		// 	renderableContent.append(`<b>Last Message Date</b> ${lastMessage.createdAt.toUTCString()}`);
+		// }
 	} else {
-		renderableContent.append(`<blockquote>User Not Found!</blockquote>`);
+		// renderableContent.setTitle(`<b>Unknown User</b>`);
+		// renderableContent.append(`<b>Username</b> ${"<i>UNKNOWN</i>"}`);
+		renderableContent.append(`<b>Discord Id</b> ${sageUser.did || "<i>NOT SET</i>"}`);
+		renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
 	}
+
+	renderableContent.append();
+	renderableContent.append(`<b>RPG Sage Id</b> ${sageUser.id}`);
+
+	const dialogDiceBehaviorType = DialogDiceBehaviorType[sageUser.dialogDiceBehaviorType!] ?? `<i>unset (Normal)</i>`;
+	renderableContent.append(`<b>Preferred Dialog Dice Behavior</b> ${dialogDiceBehaviorType}`);
+
+	const dialogPostType = DialogPostType[sageUser.dialogPostType!] ?? `<i>unset (Embed)</i>`;
+	renderableContent.append(`<b>Preferred Dialog Type</b> ${dialogPostType}`);
+
+	const sagePostType = DialogPostType[sageUser.sagePostType!] ?? `<i>unset (Embed)</i>`;
+	renderableContent.append(`<b>Preferred Sage Post Type</b> ${sagePostType}`);
+
+	const orgPlayId = sageUser.notes.getUncategorizedNote("orgPlayId")?.note ?? `<i>unset</i>`;
+	renderableContent.append(`<b>Paizo Organized Play #</b> ${orgPlayId}`);
+
+	const dmOnDelete = sageUser.dmOnDelete === true ? `Yes` : `No`;
+	renderableContent.append(`<b>Receive DMs on Dialog Delete</b> ${dmOnDelete}`);
+
+	const dmOnEdit = sageUser.dmOnEdit === true ? `Yes` : `No`;
+	renderableContent.append(`<b>Receive DMs on Dialog Edit</b> ${dmOnEdit}`);
+
+	// TODO: List any games, gameRoles, servers, serverRoles!
 
 	await sageMessage.reply(renderableContent, true);
 }

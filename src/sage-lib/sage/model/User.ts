@@ -1,5 +1,5 @@
 import { getSuperAdminId, getSuperUserId } from "@rsc-sage/env";
-import { applyChanges, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
 import type { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
@@ -33,6 +33,10 @@ export interface UserCore extends DidCore<"User"> {
 	/** @deprecated */
 	patronTier?: number;
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
+	/** undefined is false (the default logic doesn't send on delete) */
+	dmOnDelete?: boolean;
+	/** undefined is true (the default logic does send on delete) */
+	dmOnEdit?: boolean;
 }
 
 //#region Core Updates
@@ -57,6 +61,14 @@ function updateCore(core: IOldUserCore): UserCore {
 
 //#endregion
 
+type UpdateArgs = Args<{
+	dialogDiceBehaviorType: DialogDiceBehaviorType;
+	dialogPostType: DialogType;
+	dmOnDelete: boolean;
+	dmOnEdit: boolean;
+	sagePostType: DialogType;
+}>;
+
 export class User extends HasDidCore<UserCore> {
 	public constructor(core: UserCore, sageCache: SageCache) {
 		super(updateCore(core), sageCache);
@@ -79,6 +91,10 @@ export class User extends HasDidCore<UserCore> {
 	public get dialogPostType(): DialogType | undefined { return this.core.defaultDialogType; }
 	/** @deprecated */
 	public get defaultSagePostType(): DialogType | undefined { return this.sagePostType; }
+	/** undefined is false (the default logic doesn't send on delete) */
+	public get dmOnDelete(): boolean { return this.core.dmOnDelete ?? false; }
+	/** undefined is true (the default logic does send on delete) */
+	public get dmOnEdit(): boolean { return this.core.dmOnEdit ?? true; }
 	public get sagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
 	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
@@ -106,8 +122,14 @@ export class User extends HasDidCore<UserCore> {
 		return undefined;
 	}
 
-	public async update({ dialogDiceBehaviorType, dialogPostType, sagePostType }: { dialogDiceBehaviorType?: Optional<DialogDiceBehaviorType>; dialogPostType?: Optional<DialogType>, sagePostType?: Optional<DialogType> }): Promise<boolean> {
-		const changed = applyChanges(this.core, { dialogDiceBehaviorType, defaultDialogType:dialogPostType, defaultSagePostType:sagePostType });
+	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType }: UpdateArgs): Promise<boolean> {
+		const changed = applyChanges(this.core, {
+			dialogDiceBehaviorType,
+			defaultDialogType:dialogPostType,
+			defaultSagePostType:sagePostType,
+			dmOnDelete,
+			dmOnEdit
+		});
 		return changed ? this.save() : false;
 	}
 
