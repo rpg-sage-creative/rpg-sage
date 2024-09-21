@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.9",
+"version":"1.7.10",
 "branch":"main",
-"commit":"4bb0b559de4cc890fc8f97cbedc275370f336536",
-"commitSubject":"fix editChat to require replies and not search for last message",
-"commitTs":1726788536000,
-"commitDate":"2024-09-19-1628",
-"buildTs":1726788592000,
-"buildDate":"2024-09-19-1629",
+"commit":"e176950b788c3d10cdf687892b49b0aabba59737",
+"commitSubject":"Merge pull request #100 from rpg-sage-creative/multi-emoji",
+"commitTs":1726878022000,
+"commitDate":"2024-09-20-1720",
+"buildTs":1726878092000,
+"buildDate":"2024-09-20-1721",
 "author":"Randal"
 }
