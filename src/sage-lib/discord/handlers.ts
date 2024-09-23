@@ -193,10 +193,10 @@ export function getRegisteredIntents() {
 
 export function getRegisteredPartials() {
 	return [
-		Partials.GuildMember,
-		Partials.Message,
-		Partials.Reaction,
-		Partials.User
+		// Partials.GuildMember, // guild member updates
+		Partials.Message,        // message update, reaction add/remove
+		Partials.Reaction,       // reaction add/remove
+		// Partials.User            // reaction add/remove
 	];
 }
 
