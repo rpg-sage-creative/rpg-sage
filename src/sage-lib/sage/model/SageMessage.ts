@@ -23,7 +23,6 @@ import { addMessageDeleteButton } from "./utils/deleteButton.js";
 
 interface SageMessageCore extends SageCommandCore {
 	message: MessageOrPartial;
-	originalMessage?: MessageOrPartial;
 	prefix: string;
 	hasPrefix: boolean;
 	slicedContent: string;
@@ -46,7 +45,8 @@ export class SageMessage
 		return this.commandAndArgs?.command?.toLowerCase().split("|") ?? [];
 	}
 
-	public static async fromMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): Promise<SageMessage> {
+	public static async fromMessage(message: MessageOrPartial): Promise<SageMessage> {
+		if (message.partial) await message.fetch();
 		const sageCache = await SageCache.fromMessage(message);
 		const prefixOrDefault = sageCache.getPrefixOrDefault();
 		const regexOr = prefixOrDefault ? prefixOrDefault : `sage`;
@@ -59,7 +59,6 @@ export class SageMessage
 		const slicedContent = hasPrefix ? safeContent.slice(prefix.length).trim() : safeContent;
 		const sageMessage = new SageMessage({
 			message,
-			originalMessage: originalMessage ?? undefined,
 			prefix,
 			hasPrefix,
 			slicedContent,
@@ -85,7 +84,6 @@ export class SageMessage
 	//#region core
 
 	public get message(): MessageOrPartial { return this.core.message; }
-	public get isEdit(): boolean { return !!this.core.originalMessage; }
 	public get prefix(): string { return this.core.prefix; }
 	public get hasPrefix(): boolean { return this.core.hasPrefix; }
 	public get slicedContent(): string { return this.core.slicedContent; }

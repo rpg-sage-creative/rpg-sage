@@ -301,7 +301,7 @@ export async function handleMessage(message: MessageOrPartial, originalMessage: 
 		const isWebhook = !!message.webhookId;
 		const canIgnore = isMessageWeCanIgnore(message, originalMessage) || isEditWeCanIgnore(message, originalMessage);
 		if (!isBot && !isWebhook && !canIgnore) {
-			const sageMessage = await SageMessage.fromMessage(message, originalMessage);
+			const sageMessage = await SageMessage.fromMessage(message);
 			await handleMessages(sageMessage, messageType, output);
 			sageMessage.clear();
 		}
