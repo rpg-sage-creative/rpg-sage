@@ -2,7 +2,7 @@ import { hasSageId } from "@rsc-sage/env";
 import type { Optional } from "@rsc-utils/core-utils";
 import { error, isNullOrUndefined, verbose, warn } from "@rsc-utils/core-utils";
 import { toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
-import { GatewayIntentBits, IntentsBitField, PermissionFlagsBits, type Interaction } from "discord.js";
+import { GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
 import { SageReaction } from "../sage/model/SageReaction.js";
@@ -160,7 +160,7 @@ export function registerReactionListener<T>(tester: TReactionTester<T>, handler:
 	registerListener({ which:"ReactionListener", tester, handler, type, command, ...options });
 }
 
-export function registeredIntents() {
+export function getRegisteredIntents() {
 	// const registered: IntentsString[] = [];
 	// messageListeners.forEach(listener => registered.push(...listener.intents ?? []));
 	// reactionListeners.forEach(listener => registered.push(...listener.intents ?? []));
@@ -188,6 +188,15 @@ export function registeredIntents() {
 		// IntentsBitField.Flags.AutoModerationExecution,
 		IntentsBitField.Flags.GuildMessagePolls,
 		IntentsBitField.Flags.DirectMessagePolls,
+	];
+}
+
+export function getRegisteredPartials() {
+	return [
+		Partials.GuildMember,
+		Partials.Message,
+		Partials.Reaction,
+		Partials.User
 	];
 }
 
