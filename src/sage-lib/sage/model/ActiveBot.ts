@@ -3,7 +3,7 @@ import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, g
 import { wrapUrl } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
 import { chunk } from "@rsc-utils/string-utils";
-import type { ClientOptions, Guild, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
+import type { ClientOptions, Guild, Interaction, Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { ActivityType, Client } from "discord.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { getRegisteredIntents, getRegisteredPartials, handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
@@ -17,7 +17,7 @@ interface IClientEventHandler {
 	// onClientGuildDelete(guild: Guild): void;
 	// onClientGuildBanAdd(ban: GuildBan): void;
 	// onClientGuildBanRemove(ban: GuildBan): void;
-	onClientGuildMemberUpdate(member: GuildMember | PartialGuildMember, originalMember: GuildMember): void;
+	// onClientGuildMemberUpdate(member: GuildMember | PartialGuildMember, originalMember: GuildMember): void;
 	// onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void;
 	onClientMessageCreate(message: Message): void;
 	onClientMessageUpdate(originalMessage: Message | PartialMessage, message: Message | PartialMessage): void;
@@ -79,7 +79,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		// client.on("guildBanAdd", this.onClientGuildBanAdd.bind(this));
 		// client.on("guildBanRemove", this.onClientGuildBanRemove.bind(this));
 
-		client.on("guildMemberUpdate", this.onClientGuildMemberUpdate.bind(this));
+		// client.on("guildMemberUpdate", this.onClientGuildMemberUpdate.bind(this));
 		// client.on("guildMemberRemove", this.onClientGuildMemberRemove.bind(this));
 
 		client.on("interactionCreate", this.onInteractionCreate.bind(this));
@@ -180,13 +180,13 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	// 	}
 	// }
 
-	onClientGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): void {
-		handleGuildMemberUpdate(originalMember, updatedMember).then(updated => {
-			if (updated) {
-				verbose(`Discord.Client.on("guildMemberUpdate", "${originalMember.id}::${originalMember.displayName}", "${updatedMember.id}::${updatedMember.displayName}")`);
-			}
-		});
-	}
+	// onClientGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): void {
+	// 	handleGuildMemberUpdate(originalMember, updatedMember).then(updated => {
+	// 		if (updated) {
+	// 			verbose(`Discord.Client.on("guildMemberUpdate", "${originalMember.id}::${originalMember.displayName}", "${updatedMember.id}::${updatedMember.displayName}")`);
+	// 		}
+	// 	});
+	// }
 
 	// onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void {
 	// 	if (isSageId(member.id)) {
@@ -245,7 +245,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 }
 
-async function handleGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): Promise<boolean>;
-async function handleGuildMemberUpdate(_: GuildMember | PartialGuildMember, __: GuildMember): Promise<boolean> {
-	return true;
-}
+// async function handleGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): Promise<boolean>;
+// async function handleGuildMemberUpdate(_: GuildMember | PartialGuildMember, __: GuildMember): Promise<boolean> {
+// 	return true;
+// }
