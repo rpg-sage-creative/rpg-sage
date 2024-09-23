@@ -1,5 +1,4 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { debug } from "@rsc-utils/core-utils";
 import { toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder, User } from "discord.js";
 import { deleteMessage } from "../../../discord/deletedMessages.js";
@@ -31,14 +30,13 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	const dialogMessage = await DialogMessageRepository.read(sageReaction.discordKey, () => null);
 	if (dialogMessage?.userDid === userDid) {
 		// This covers PCs inside a game *AND* outside a game
-		return { command: "dialog-delete" };
+		return { command: "CommandDelete|Add" };
 	}
 
 	const { game } = sageReaction;
 	if (game) {
 		/** @todo allow admins */
 		// make sure the reactor is in the game
-		debug({userPartial:sageReaction.user.partial});
 		const user = await sageReaction.user.fetch();
 		const actorIsGameUser = await game.hasUser(user.id);
 		if (!actorIsGameUser) {
@@ -58,7 +56,7 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 			return null;
 		}
 
-		return { command: "dialog-delete" };
+		return { command: "CommandDelete|Add" };
 	}
 
 	return null;
