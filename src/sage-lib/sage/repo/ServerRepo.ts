@@ -47,14 +47,14 @@ export class ServerRepo extends DidRepository<ServerCore, Server> {
 		return saved;
 	}
 
-	public async retireServer(guild: Guild, kicked = false, banned = false): Promise<boolean> {
-		const server = await this.getByDid(guild.id as Snowflake);
-		if (server) {
-			info(`NOT IMPLEMENTED: ${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} ${banned && "banned" || kicked && "kicked" || "left"} ${guild.name} (${guild.id})`);
-			//TODO: IMPLEMENT THIS
-		}
-		return false;
-	}
+	// public async retireServer(guild: Guild, kicked = false, banned = false): Promise<boolean> {
+	// 	const server = await this.getByDid(guild.id as Snowflake);
+	// 	if (server) {
+	// 		info(`NOT IMPLEMENTED: ${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} ${banned && "banned" || kicked && "kicked" || "left"} ${guild.name} (${guild.id})`);
+	// 		//TODO: IMPLEMENT THIS
+	// 	}
+	// 	return false;
+	// }
 
 	public static fromCore<T = ServerCore, U = Server>(core: T, sageCache: SageCache): Promise<U>;
 	public static fromCore(core: ServerCore, sageCache: SageCache): Promise<Server> {

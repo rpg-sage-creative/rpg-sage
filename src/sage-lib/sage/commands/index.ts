@@ -5,6 +5,8 @@ import { registerCal } from "./cal.js";
 import { registerDefault } from "./default.js";
 import { registerDeleteAfter } from "./deleteAfter.js";
 import { registerDialog } from "./dialog.js";
+import { registerDeleteReaction } from "./dialog/processDelete.js";
+import { registerPinReaction } from "./dialog/processPin.js";
 import { registerDice } from "./dice.js";
 import { registerE20 } from "./e20.js";
 import { registerHelpCommands } from "./help.js";
@@ -22,6 +24,7 @@ export function registerCommandHandlers(): void {
 	registerAdmin();
 	registerCal();
 	registerDefault();
+	registerDeleteReaction();
 	registerDialog();
 	registerDice();
 	registerEncounter();
@@ -32,6 +35,7 @@ export function registerCommandHandlers(): void {
 	registerMap();
 	registerParty();
 	registerPathbuilder();
+	registerPinReaction();
 	registerPfsCommands();
 	registerSpells();
 	registerWealth();

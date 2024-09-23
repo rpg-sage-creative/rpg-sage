@@ -3,7 +3,7 @@ import { uncache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnFalse, orNilSnowflake, silly, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordKey, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
-import type { Channel, Client, GuildMember, Interaction, Message, MessageReference } from "discord.js";
+import type { Channel, Client, Interaction, Message, MessageReference } from "discord.js";
 import { DiscordCache } from "../../discord/DiscordCache.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
@@ -240,17 +240,17 @@ export class SageCache {
 		core.home = await core.servers.getHome();
 		return sageCache;
 	}
-	public static async fromGuildMember(guildMember: GuildMember): Promise<SageCache> {
-		const [core, sageCache] = createCoreAndCache();
-		core.discord = DiscordCache.from(guildMember);
-		core.bot = ActiveBot.active;
-		core.home = await core.servers.getHome();
-		if (guildMember.guild) {
-			core.server = await core.servers.getOrCreateByGuild(guildMember.guild);
-		}
-		core.user = await core.users.getOrCreateByDid(guildMember.id as Snowflake);
-		return sageCache;
-	}
+	// public static async fromGuildMember(guildMember: GuildMember): Promise<SageCache> {
+	// 	const [core, sageCache] = createCoreAndCache();
+	// 	core.discord = DiscordCache.from(guildMember);
+	// 	core.bot = ActiveBot.active;
+	// 	core.home = await core.servers.getHome();
+	// 	if (guildMember.guild) {
+	// 		core.server = await core.servers.getOrCreateByGuild(guildMember.guild);
+	// 	}
+	// 	core.user = await core.users.getOrCreateByDid(guildMember.id as Snowflake);
+	// 	return sageCache;
+	// }
 	public static async fromMessage(message: MessageOrPartial, userDid = message.author?.id): Promise<SageCache> {
 		const [core, sageCache] = createCoreAndCache();
 		core.discord = DiscordCache.from(message);

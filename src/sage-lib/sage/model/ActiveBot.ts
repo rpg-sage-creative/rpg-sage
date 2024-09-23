@@ -1,12 +1,12 @@
-import { getSuperUserId, isSageId } from "@rsc-sage/env";
+import { getSuperUserId } from "@rsc-sage/env";
 import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, getCodeName, getDataRoot, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { wrapUrl } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
 import { chunk } from "@rsc-utils/string-utils";
-import type { ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
+import type { ClientOptions, Guild, Interaction, Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { ActivityType, Client } from "discord.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
-import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers.js";
+import { getRegisteredIntents, getRegisteredPartials, handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
 import { Bot, type IBotCore } from "./Bot.js";
 import { SageCache } from "./SageCache.js";
@@ -14,11 +14,11 @@ import { SageCache } from "./SageCache.js";
 interface IClientEventHandler {
 	onClientReady(client: Client): void;
 	onClientGuildCreate(guild: Guild): void;
-	onClientGuildDelete(guild: Guild): void;
-	onClientGuildBanAdd(ban: GuildBan): void;
-	onClientGuildBanRemove(ban: GuildBan): void;
-	onClientGuildMemberUpdate(member: GuildMember | PartialGuildMember, originalMember: GuildMember): void;
-	onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void;
+	// onClientGuildDelete(guild: Guild): void;
+	// onClientGuildBanAdd(ban: GuildBan): void;
+	// onClientGuildBanRemove(ban: GuildBan): void;
+	// onClientGuildMemberUpdate(member: GuildMember | PartialGuildMember, originalMember: GuildMember): void;
+	// onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void;
 	onClientMessageCreate(message: Message): void;
 	onClientMessageUpdate(originalMessage: Message | PartialMessage, message: Message | PartialMessage): void;
 	onClientMessageReactionAdd(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void;
@@ -26,7 +26,10 @@ interface IClientEventHandler {
 }
 
 function createDiscordClientOptions(): ClientOptions {
-	return { intents:registeredIntents() };
+	return {
+		intents: getRegisteredIntents(),
+		partials: getRegisteredPartials()
+	};
 }
 
 export class ActiveBot extends Bot implements IClientEventHandler {
@@ -67,17 +70,17 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		// channelUpdate: [oldChannel: DMChannel | GuildChannel, newChannel: DMChannel | GuildChannel];
 
 		client.on("guildCreate", this.onClientGuildCreate.bind(this));
-		client.on("guildDelete", this.onClientGuildDelete.bind(this));
+		// client.on("guildDelete", this.onClientGuildDelete.bind(this));
 		// TODO: What is unavailable?
 		// guildUnavailable: [guild: Guild];
 		// Use this to update server name?
 		// guildUpdate: [oldGuild: Guild, newGuild: Guild];
 
-		client.on("guildBanAdd", this.onClientGuildBanAdd.bind(this));
-		client.on("guildBanRemove", this.onClientGuildBanRemove.bind(this));
+		// client.on("guildBanAdd", this.onClientGuildBanAdd.bind(this));
+		// client.on("guildBanRemove", this.onClientGuildBanRemove.bind(this));
 
-		client.on("guildMemberUpdate", this.onClientGuildMemberUpdate.bind(this));
-		client.on("guildMemberRemove", this.onClientGuildMemberRemove.bind(this));
+		// client.on("guildMemberUpdate", this.onClientGuildMemberUpdate.bind(this));
+		// client.on("guildMemberRemove", this.onClientGuildMemberRemove.bind(this));
 
 		client.on("interactionCreate", this.onInteractionCreate.bind(this));
 
@@ -152,46 +155,46 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		});
 	}
 
-	onClientGuildDelete(guild: Guild): void {
-		this.sageCache.servers.retireServer(guild).then(retired => {
-			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildDelete", "${guild.id}::${guild.name}") => ${retired}`);
-		});
-	}
+	// onClientGuildDelete(guild: Guild): void {
+	// 	this.sageCache.servers.retireServer(guild).then(retired => {
+	// 		verbose(`NOT IMPLEMENTED: Discord.Client.on("guildDelete", "${guild.id}::${guild.name}") => ${retired}`);
+	// 	});
+	// }
 
-	onClientGuildBanAdd(ban: GuildBan): void {
-		const user = ban.user;
-		if (isSageId(user.id)) {
-			const guild = ban.guild;
-			this.sageCache.servers.retireServer(guild, false, true).then(retired => {
-				verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanAdd", "${guild.id}::${guild.name}", "${user.id}::${user.username}") => ${retired}`);
-			});
-		}
-	}
+	// onClientGuildBanAdd(ban: GuildBan): void {
+	// 	const user = ban.user;
+	// 	if (isSageId(user.id)) {
+	// 		const guild = ban.guild;
+	// 		this.sageCache.servers.retireServer(guild, false, true).then(retired => {
+	// 			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanAdd", "${guild.id}::${guild.name}", "${user.id}::${user.username}") => ${retired}`);
+	// 		});
+	// 	}
+	// }
 
-	onClientGuildBanRemove(ban: GuildBan): void {
-		const user = ban.user;
-		if (isSageId(user.id)) {
-			const guild = ban.guild;
-			//TODO: IMPLEMENT UNARCHIVE/UNRETIRE?
-			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanRemove", "${guild.id}::${guild.name}", "${user.id}::${user.username}")`);
-		}
-	}
+	// onClientGuildBanRemove(ban: GuildBan): void {
+	// 	const user = ban.user;
+	// 	if (isSageId(user.id)) {
+	// 		const guild = ban.guild;
+	// 		//TODO: IMPLEMENT UNARCHIVE/UNRETIRE?
+	// 		verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanRemove", "${guild.id}::${guild.name}", "${user.id}::${user.username}")`);
+	// 	}
+	// }
 
-	onClientGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): void {
-		handleGuildMemberUpdate(originalMember, updatedMember).then(updated => {
-			if (updated) {
-				verbose(`Discord.Client.on("guildMemberUpdate", "${originalMember.id}::${originalMember.displayName}", "${updatedMember.id}::${updatedMember.displayName}")`);
-			}
-		});
-	}
+	// onClientGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): void {
+	// 	handleGuildMemberUpdate(originalMember, updatedMember).then(updated => {
+	// 		if (updated) {
+	// 			verbose(`Discord.Client.on("guildMemberUpdate", "${originalMember.id}::${originalMember.displayName}", "${updatedMember.id}::${updatedMember.displayName}")`);
+	// 		}
+	// 	});
+	// }
 
-	onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void {
-		if (isSageId(member.id)) {
-			this.sageCache.servers.retireServer(member.guild, true).then(retired => {
-				verbose(`NOT IMPLEMENTED: Discord.Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
-			});
-		}
-	}
+	// onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void {
+	// 	if (isSageId(member.id)) {
+	// 		this.sageCache.servers.retireServer(member.guild, true).then(retired => {
+	// 			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
+	// 		});
+	// 	}
+	// }
 
 	onClientMessageCreate(message: Message): void {
 		handleMessage(message, null, MessageType.Post).then(data => {
@@ -242,7 +245,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 }
 
-async function handleGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): Promise<boolean>;
-async function handleGuildMemberUpdate(_: GuildMember | PartialGuildMember, __: GuildMember): Promise<boolean> {
-	return true;
-}
+// async function handleGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): Promise<boolean>;
+// async function handleGuildMemberUpdate(_: GuildMember | PartialGuildMember, __: GuildMember): Promise<boolean> {
+// 	return true;
+// }

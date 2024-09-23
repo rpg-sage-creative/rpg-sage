@@ -1,7 +1,7 @@
 import { debug } from "@rsc-utils/core-utils";
 import { isDMBased } from "@rsc-utils/discord-utils";
-import { registerMessageListener, registerReactionListener } from "../../discord/handlers.js";
-import { MessageType, ReactionType, type TCommandAndArgsAndData } from "../../discord/index.js";
+import { registerMessageListener } from "../../discord/handlers.js";
+import { MessageType, type TCommandAndArgsAndData } from "../../discord/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import type { DialogContent } from "./dialog/DialogContent.js";
 import { companionChat } from "./dialog/chat/companionChat.js";
@@ -9,15 +9,11 @@ import { editChat } from "./dialog/chat/editChat.js";
 import { gmChat } from "./dialog/chat/gmChat.js";
 import { npcChat } from "./dialog/chat/npcChat.js";
 import { pcChat } from "./dialog/chat/pcChat.js";
-import { doDelete } from "./dialog/delete/doDelete.js";
-import { isDelete } from "./dialog/delete/isDelete.js";
 import { parseOrAutoDialogContent } from "./dialog/parseOrAutoDialog.js";
-import { doPin } from "./dialog/pin/doPin.js";
-import { isPin } from "./dialog/pin/isPin.js";
 
 /** Returns the dialog content if found or null otherwise. */
 async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<DialogContent[]> | null> {
-	if (sageMessage.message.hasThread || !sageMessage.allowDialog) {
+	if (!sageMessage.allowDialog) {
 		return null;
 	}
 
@@ -68,6 +64,4 @@ async function doDialog(sageMessage: SageMessage, dialogContents: DialogContent[
 
 export function registerDialog(): void {
 	registerMessageListener(isDialog, doDialog, { type:MessageType.Both, priorityIndex:0 });
-	registerReactionListener(isDelete, doDelete, { type:ReactionType.Add });
-	registerReactionListener(isPin, doPin);
 }

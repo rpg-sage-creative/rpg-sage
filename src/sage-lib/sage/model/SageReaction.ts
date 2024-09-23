@@ -1,12 +1,13 @@
+import { isSageId } from "@rsc-sage/env";
 import { Cache } from "@rsc-utils/cache-utils";
-import { debug } from "@rsc-utils/core-utils";
-import { type Snowflake } from "@rsc-utils/core-utils";
+import { debug, type Snowflake } from "@rsc-utils/core-utils";
+import type { MessageOrPartial, ReactionOrPartial, UserOrPartial } from "@rsc-utils/discord-utils";
+import type { Message, MessageReaction } from "discord.js";
 import { ReactionType } from "../../discord/index.js";
 import { GameRoleType } from "./Game.js";
 import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore } from "./SageCommand.js";
 import { SageReactionArgs } from "./SageReactionArgs.js";
-import type { MessageOrPartial, ReactionOrPartial, UserOrPartial } from "@rsc-utils/discord-utils";
 
 interface SageReactionCore extends SageCommandCore {
 	messageReaction: ReactionOrPartial;
@@ -42,7 +43,41 @@ export class SageReaction
 		return this.core.reactionType === ReactionType.Remove;
 	}
 
-	/** Returns the message */
+	public get emoji() {
+		return this.core.messageReaction.emoji;
+	}
+
+	public async fetchMessage(): Promise<Message> {
+		const messageReaction = await this.fetchMessageReaction();
+		const { message } = messageReaction;
+		if (message.partial) {
+			await message.fetch();
+		}
+		return message as Message;
+	}
+
+	public async fetchMessageReaction(): Promise<MessageReaction> {
+		if (this.core.messageReaction.partial) {
+			await this.core.messageReaction.fetch();
+		}
+		return this.core.messageReaction as MessageReaction;
+	}
+
+	public async isAuthorSageOrWebhook(): Promise<boolean> {
+		const message = await this.fetchMessage();
+
+		const messageAuthorId = message.author.id;
+		if (isSageId(messageAuthorId)) {
+			return true;
+		}
+
+		if (!message.guild) return false;
+
+		const webhook = await this.sageCache.discord.fetchWebhook(message);
+		return webhook?.id === messageAuthorId;
+	}
+
+	/** @deprecated use fetchMessageReaction() */
 	public get messageReaction(): ReactionOrPartial {
 		return this.core.messageReaction;
 	}
@@ -51,18 +86,17 @@ export class SageReaction
 		return this.core.user;
 	}
 
+	/** @deprecated use fetchMessage() */
 	public get message(): MessageOrPartial {
 		return this.core.messageReaction.message;
 	}
 
 	/** Returns the channelDid this message (or its thread) is in. */
 	public get channelDid(): Snowflake | undefined {
-		return this.cache.get("channelDid", () => {
-			if (this.message.channel.isThread()) {
-				return this.message.channel.parent?.id as Snowflake;
-			}
-			return this.message.channel.id as Snowflake;
-		});
+		if (this.message.channel.isThread()) {
+			return this.message.channel.parentId as Snowflake | undefined;
+		}
+		return this.message.channelId as Snowflake | undefined;
 	}
 
 	public clear(): void {
@@ -71,13 +105,9 @@ export class SageReaction
 		this.sageCache.clear();
 	}
 
-	public clone(): this {
-		return new SageReaction(this.core, this.cache) as this;
-	}
+	public async reply(): Promise<void> { }
 
-	public reply(): Promise<void> { return Promise.resolve(); }
-
-	public whisper(): Promise<void> { return Promise.resolve(); }
+	public async whisper(): Promise<void> { }
 
 	public static async fromMessageReaction(messageReaction: ReactionOrPartial, user: UserOrPartial, reactionType: ReactionType): Promise<SageReaction> {
 		const sageCache = await SageCache.fromMessageReaction(messageReaction, user);
