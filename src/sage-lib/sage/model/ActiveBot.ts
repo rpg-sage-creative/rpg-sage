@@ -14,11 +14,11 @@ import { SageCache } from "./SageCache.js";
 interface IClientEventHandler {
 	onClientReady(client: Client): void;
 	onClientGuildCreate(guild: Guild): void;
-	onClientGuildDelete(guild: Guild): void;
-	onClientGuildBanAdd(ban: GuildBan): void;
+	// onClientGuildDelete(guild: Guild): void;
+	// onClientGuildBanAdd(ban: GuildBan): void;
 	onClientGuildBanRemove(ban: GuildBan): void;
 	onClientGuildMemberUpdate(member: GuildMember | PartialGuildMember, originalMember: GuildMember): void;
-	onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void;
+	// onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void;
 	onClientMessageCreate(message: Message): void;
 	onClientMessageUpdate(originalMessage: Message | PartialMessage, message: Message | PartialMessage): void;
 	onClientMessageReactionAdd(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void;
@@ -70,17 +70,17 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		// channelUpdate: [oldChannel: DMChannel | GuildChannel, newChannel: DMChannel | GuildChannel];
 
 		client.on("guildCreate", this.onClientGuildCreate.bind(this));
-		client.on("guildDelete", this.onClientGuildDelete.bind(this));
+		// client.on("guildDelete", this.onClientGuildDelete.bind(this));
 		// TODO: What is unavailable?
 		// guildUnavailable: [guild: Guild];
 		// Use this to update server name?
 		// guildUpdate: [oldGuild: Guild, newGuild: Guild];
 
-		client.on("guildBanAdd", this.onClientGuildBanAdd.bind(this));
+		// client.on("guildBanAdd", this.onClientGuildBanAdd.bind(this));
 		client.on("guildBanRemove", this.onClientGuildBanRemove.bind(this));
 
 		client.on("guildMemberUpdate", this.onClientGuildMemberUpdate.bind(this));
-		client.on("guildMemberRemove", this.onClientGuildMemberRemove.bind(this));
+		// client.on("guildMemberRemove", this.onClientGuildMemberRemove.bind(this));
 
 		client.on("interactionCreate", this.onInteractionCreate.bind(this));
 
@@ -155,21 +155,21 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		});
 	}
 
-	onClientGuildDelete(guild: Guild): void {
-		this.sageCache.servers.retireServer(guild).then(retired => {
-			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildDelete", "${guild.id}::${guild.name}") => ${retired}`);
-		});
-	}
+	// onClientGuildDelete(guild: Guild): void {
+	// 	this.sageCache.servers.retireServer(guild).then(retired => {
+	// 		verbose(`NOT IMPLEMENTED: Discord.Client.on("guildDelete", "${guild.id}::${guild.name}") => ${retired}`);
+	// 	});
+	// }
 
-	onClientGuildBanAdd(ban: GuildBan): void {
-		const user = ban.user;
-		if (isSageId(user.id)) {
-			const guild = ban.guild;
-			this.sageCache.servers.retireServer(guild, false, true).then(retired => {
-				verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanAdd", "${guild.id}::${guild.name}", "${user.id}::${user.username}") => ${retired}`);
-			});
-		}
-	}
+	// onClientGuildBanAdd(ban: GuildBan): void {
+	// 	const user = ban.user;
+	// 	if (isSageId(user.id)) {
+	// 		const guild = ban.guild;
+	// 		this.sageCache.servers.retireServer(guild, false, true).then(retired => {
+	// 			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildBanAdd", "${guild.id}::${guild.name}", "${user.id}::${user.username}") => ${retired}`);
+	// 		});
+	// 	}
+	// }
 
 	onClientGuildBanRemove(ban: GuildBan): void {
 		const user = ban.user;
@@ -188,13 +188,13 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		});
 	}
 
-	onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void {
-		if (isSageId(member.id)) {
-			this.sageCache.servers.retireServer(member.guild, true).then(retired => {
-				verbose(`NOT IMPLEMENTED: Discord.Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
-			});
-		}
-	}
+	// onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void {
+	// 	if (isSageId(member.id)) {
+	// 		this.sageCache.servers.retireServer(member.guild, true).then(retired => {
+	// 			verbose(`NOT IMPLEMENTED: Discord.Client.on("guildMemberRemove", "${member.id}::${member.displayName}") => ${retired}`);
+	// 		});
+	// 	}
+	// }
 
 	onClientMessageCreate(message: Message): void {
 		handleMessage(message, null, MessageType.Post).then(data => {
