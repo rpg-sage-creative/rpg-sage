@@ -125,7 +125,7 @@ export abstract class SageCommand<
 		}
 		return false;
 	}
-	public isSageMessage(): this is SageMessage { return "isEdit" in this; }
+	public isSageMessage(): this is SageMessage { return "hasPrefix" in this; }
 	public isSageReaction(): this is SageReaction { return "messageReaction" in this; }
 
 	private _replyStack: ReplyStack | undefined;
