@@ -4,7 +4,7 @@ import { wrapUrl } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { ClientOptions, Guild, GuildBan, GuildMember, Interaction, Message, MessageReaction, PartialGuildMember, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
-import { ActivityType, Client } from "discord.js";
+import { ActivityType, Client, Partials } from "discord.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { handleInteraction, handleMessage, handleReaction, registeredIntents } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
@@ -26,7 +26,10 @@ interface IClientEventHandler {
 }
 
 function createDiscordClientOptions(): ClientOptions {
-	return { intents:registeredIntents() };
+	return {
+		intents:registeredIntents(),
+		partials:[Partials.GuildMember, Partials.Message, Partials.Reaction, Partials.User]
+	};
 }
 
 export class ActiveBot extends Bot implements IClientEventHandler {

@@ -1,5 +1,5 @@
-import { hasSageId, isSageId, isTestBotId } from "@rsc-sage/env";
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { hasSageId } from "@rsc-sage/env";
+import type { Optional } from "@rsc-utils/core-utils";
 import { error, isNullOrUndefined, verbose, warn } from "@rsc-utils/core-utils";
 import { toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { GatewayIntentBits, IntentsBitField, PermissionFlagsBits, type Interaction } from "discord.js";
@@ -28,21 +28,6 @@ function isActionableType(listener: TMessageListener, type: MessageType): boolea
 function isActionableType(listener: TReactionListener, type: ReactionType): boolean;
 function isActionableType(listener: TMessageListener | TReactionListener, type: MessageType | ReactionType): boolean {
 	return !listener.type || listener.type === type;
-}
-
-export async function isAuthorBotOrWebhook(sageMessage: SageMessage): Promise<boolean>;
-export async function isAuthorBotOrWebhook(sageReaction: SageReaction): Promise<boolean>;
-export async function isAuthorBotOrWebhook(messageOrReaction: SageMessage | SageReaction): Promise<boolean> {
-	const message = ((<SageReaction>messageOrReaction).messageReaction ?? (<SageMessage>messageOrReaction)).message;
-	const messageAuthorDid = message.author?.id;
-	if (isSageId(messageAuthorDid)) {
-		return true;
-	}
-
-	if (!message.guild) return false;
-
-	const webhook = await messageOrReaction.sageCache.discord.fetchWebhook(message);
-	return webhook?.id === messageAuthorDid;
 }
 
 //#endregion
@@ -297,7 +282,7 @@ function isEditWeCanIgnore(message: MessageOrPartial, originalMessage: Optional<
 export async function handleMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>, messageType: MessageType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isBot = message.author?.bot && !isTestBotId(message.author.id as Snowflake);
+		const isBot = message.author?.bot;
 		const isWebhook = !!message.webhookId;
 		const canIgnore = isEditWeCanIgnore(message, originalMessage);
 		if (!isBot && !isWebhook && !canIgnore) {
@@ -325,7 +310,8 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 			}
 		}
 	}
-	if (!output.handled && sageMessage.hasPrefix && sageMessage.prefix && /^!!?/.test(sageMessage.slicedContent)) {
+	// track incorrect command attempts that aren't edits
+	if (!output.handled && messageType !== MessageType.Edit && sageMessage.hasPrefix && sageMessage.prefix && /^!!?/.test(sageMessage.slicedContent)) {
 		error(`I got ${messageListeners.length} message handlers, but "${sageMessage.slicedContent}" ain't one!`);
 	}
 }
@@ -337,32 +323,34 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 /** Returns the number of handlers executed. */
 export async function handleReaction(messageReaction: ReactionOrPartial, user: UserOrPartial, reactionType: ReactionType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
+	if (user.bot) return output;
+
 	try {
-		const isBot = user.bot && !isTestBotId(user.id as Snowflake);
-		if (!isBot) {
-			const sageReaction = await SageReaction.fromMessageReaction(messageReaction, user, reactionType);
-			await handleReactions(sageReaction, reactionType, output);
-			sageReaction.clear();
-		}
-	} catch (ex) {
-		error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
-	}
-	return output;
-}
-async function handleReactions(sageReaction: SageReaction, reactionType: ReactionType, output: THandlerOutput): Promise<void> {
-	for (const listener of reactionListeners) {
-		if (isActionableType(listener, reactionType)) {
-			const clonedReaction = sageReaction.clone();
-			const commandAndData = <TCommandAndData<any>>await listener.tester(clonedReaction);
+		let sageReaction: SageReaction | undefined;
+
+		for (const listener of reactionListeners) {
+			if (!isActionableType(listener, reactionType)) continue;
+
+			if (!sageReaction) sageReaction = await SageReaction.fromMessageReaction(messageReaction, user, reactionType);
+
+			const commandAndData = await listener.tester(sageReaction) as TCommandAndData<any>;
 			output.tested++;
+
 			if (isActionableObject(commandAndData)) {
-				clonedReaction.command = commandAndData.command;
-				await listener.handler(clonedReaction, commandAndData.data);
+				sageReaction.command = commandAndData.command;
+				await listener.handler(sageReaction, commandAndData.data);
 				output.handled++;
 				break;
 			}
 		}
+
+		sageReaction?.clear();
+
+	} catch (ex) {
+		error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
 	}
+
+	return output;
 }
 
 // #endregion Reaction Handling
