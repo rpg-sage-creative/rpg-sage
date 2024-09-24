@@ -46,21 +46,6 @@ function getEmojiAndTypes(sageCommand: SageCommand): TEmojiAndType[] {
 		if (replacement && isDefined(type)) {
 			results.push({ replacement, type });
 		}
-
-		if (sageCommand.isSageMessage()) {
-			if (type) {
-				const nonKeyEmoji = sageCommand.args.nonKeyValuePairs().join(" ").trim();
-				if (nonKeyEmoji) {
-					results.push({ replacement:nonKeyEmoji, type });
-				}
-			}
-			if (replacement) {
-				const nonKeyType = sageCommand.args.findEnum(EmojiType);
-				if (isDefined(nonKeyType)) {
-					results.push({ replacement, type:nonKeyType });
-				}
-			}
-		}
 	}
 
 	return results;
@@ -103,7 +88,7 @@ function renderEmoji(sageCommand: SageCommand, ...pairs: RenderPair[]): string {
 
 	for (const { which, type } of pairs) {
 		const botEmoji = sageCommand.bot.emoji.findEmoji(type);
-		if (!botEmoji || !which) {
+		if (!botEmoji) {
 			output.push(`Invalid EmojiType: ${type}`);
 			continue;
 		}
@@ -119,9 +104,9 @@ function renderEmoji(sageCommand: SageCommand, ...pairs: RenderPair[]): string {
 			replacement = botEmoji.replacement;
 		}
 
-		const matchesText = botEmoji.matches ? botEmoji.matches.map(s => `\`[${s}]\``).join(", ") : ``;
 		const inheritedText = inherited ? `*(unset, inherited)*` : ``;
-		const description = `${replacement} ${EmojiType[type]} ${matchesText} ${inheritedText}`.trim();
+		const matchesText = botEmoji.matches ? " " + botEmoji.matches.map(s => `\`[${s}]\``).join(", ") : ``;
+		const description = `${replacement} ${EmojiType[type]}${matchesText} ${inheritedText}`.trim();
 		output.push(description);
 	}
 
