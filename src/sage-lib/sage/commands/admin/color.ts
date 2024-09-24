@@ -48,18 +48,6 @@ function getColorAndTypes(sageCommand: SageCommand): TColorAndType[] {
 		if (color && isDefined(type)) {
 			results.push({ color, type });
 		}
-
-		if (sageCommand.isSageMessage()) {
-			const colorAndType = sageCommand.args.removeAndReturnColorAndType();
-			if (colorAndType) {
-				if (color) {
-					results.push({ color, type:colorAndType.type });
-				}
-				if (isDefined(type)) {
-					results.push({ color:colorAndType.color, type });
-				}
-			}
-		}
 	}
 
 	return results;
@@ -102,8 +90,8 @@ function renderColors(sageCommand: SageCommand, ...pairs: RenderPair[]): EmbedBu
 
 	for (const { which, type } of pairs) {
 		const botColor = sageCommand.bot.colors.findColor(type);
-		if (!botColor || !which) {
-			embeds.push(new EmbedBuilder({ description:`Invalid EmojiType: ${type}` }));
+		if (!botColor) {
+			embeds.push(new EmbedBuilder({ description:`Invalid ColorType: ${type}` }));
 			continue;
 		}
 
@@ -119,8 +107,8 @@ function renderColors(sageCommand: SageCommand, ...pairs: RenderPair[]): EmbedBu
 		}
 
 		const inheritedText = inherited ? `*(unset, inherited)*` : ``;
-		const description = `${color} ${ColorType[type]} ${inheritedText}`.trim();
 		const hexColor = Color.from(color).hex;
+		const description = `${hexColor.toUpperCase()} ${ColorType[type]} ${inheritedText}`.trim();
 		embeds.push(new EmbedBuilder({ description }).setColor(hexColor));
 	}
 
