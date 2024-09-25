@@ -74,7 +74,7 @@ export class CharacterShell {
 			const keyRegex = new RegExp(`^${XRegExp.escape(key)}$`, "i");
 			const statKey = Object.keys(partyStats).find(pKey => keyRegex.test(pKey)) ?? key;
 			if (partyStats[statKey] !== value) {
-				if (!value.trim()) {
+				if (!value?.trim()) {
 					delete partyStats[statKey];
 				}else {
 					partyStats[statKey] = value;

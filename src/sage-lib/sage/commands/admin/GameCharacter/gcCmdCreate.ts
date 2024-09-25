@@ -1,15 +1,11 @@
-import type { Optional } from "@rsc-utils/core-utils";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
+import { getCharacterArgs } from "./getCharacterArgs.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
-import { getUserDid } from "./getUserDid.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
-function urlToName(url: Optional<string>): string | undefined {
-	return url?.split("/").pop()?.split(".").shift();
-}
 
 export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -20,27 +16,25 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisper(`Sorry, you cannot create characters here.`);
 	}
 
-	const userDid = await getUserDid(sageMessage),
-		names = sageMessage.args.getNames(),
-		core = sageMessage.args.getCharacterOptions(names, userDid!);
+	const { core, mods, names, stats, userId } = getCharacterArgs(sageMessage, characterTypeMeta.isGm);
 
-	if (!core.name) {
-		core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl)!;
+	if (!core && !mods?.length && !stats?.length) {
+		return sageMessage.replyStack.whisper("Nothing to do.");
+	}
+
+	if (!core?.name) {
+		return sageMessage.replyStack.whisper("Cannot create a character without a name!");
 	}
 
 	if (/discord/i.test(core.name)) {
 		return sageMessage.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
 	}
 
-	if (!core.name) {
-		return sageMessage.replyStack.whisper("Cannot create a character without a name!");
-	}
-
 	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
 
 	let characterManager: CharacterManager | undefined = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
-		const character = characterManager?.findByUserAndName(userDid, names.charName) ?? characterManager.findByUser(userDid!);
+		const character = characterManager?.findByUser(userId, names.charName) ?? characterManager.findByUser(userId);
 		core.userDid = character?.userDid;
 		characterManager = character?.companions;
 	}
@@ -57,20 +51,26 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const newChar = new GameCharacter(core, characterManager);
-	return promptCharConfirm(sageMessage, newChar, `Create ${characterTypeMeta.singularDescriptor} ${newChar.name}?`, async char => {
-		if (sageMessage.game && userDid) {
+	if (stats?.length) {
+		await newChar.updateStats(stats, false);
+	}
+	if (mods?.length) {
+		await newChar.modStats(mods, false);
+	}
+return promptCharConfirm(sageMessage, newChar, `Create ${characterTypeMeta.singularDescriptor} ${newChar.name}?`, async char => {
+		if (sageMessage.game && userId) {
 			// why? debug("Checking owner's status as player/gm ...");
 			if (characterTypeMeta.isNpc) {
-				if (!sageMessage.game.hasGameMaster(userDid)) {
-					const gameMasterAdded = await sageMessage.game.addGameMasters([userDid]);
+				if (!sageMessage.game.hasGameMaster(userId)) {
+					const gameMasterAdded = await sageMessage.game.addGameMasters([userId]);
 					if (!gameMasterAdded) {
 						await sageMessage.reactFailure();
 						return false;
 					}
 				}
 			} else {
-				if (!sageMessage.game.hasPlayer(userDid)) {
-					const playerAdded = await sageMessage.game.addPlayers([userDid]);
+				if (!sageMessage.game.hasPlayer(userId)) {
+					const playerAdded = await sageMessage.game.addPlayers([userId]);
 					if (!playerAdded) {
 						await sageMessage.reactFailure();
 						return false;

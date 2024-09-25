@@ -1,9 +1,9 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
-import type { SageMessage } from "../../../model/SageMessage";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { SageCommand } from "../../../model/SageCommand.js";
 
 /** Checks for Game Player and uses their Id before checking the args. */
-export async function getUserDid(sageMessage: SageMessage): Promise<Snowflake | null> {
-	return !sageMessage.game || sageMessage.isPlayer
-		? sageMessage.authorDid
-		: sageMessage.args.removeAndReturnUserDid("user");
+export function getUserDid(sageCommand: SageCommand): Optional<Snowflake> {
+	return !sageCommand.game || sageCommand.isPlayer
+		? sageCommand.authorDid
+		: sageCommand.args.getUserId("user");
 }

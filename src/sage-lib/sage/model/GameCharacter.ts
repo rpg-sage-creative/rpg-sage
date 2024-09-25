@@ -1,6 +1,6 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { NIL_SNOWFLAKE, applyChanges, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, applyChanges, debug, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -8,6 +8,7 @@ import { isBlank, isWrapped, unwrap, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
 import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
+import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
@@ -576,12 +577,29 @@ export class GameCharacter implements IHasSave {
 		return null;
 	}
 
+	public async modStats(pairs: StatModPair[], save: boolean): Promise<boolean> {
+		let changes = false;
+		for (const pair of pairs) {
+			const oldValue = this.getStat(pair.key) ?? 0;
+			const math = `${oldValue}${pair.modifier}${pair.value}`;
+			const newValue = doStatMath(math);
+			debug({ modPair:pair, oldValue, math, newValue, statPair:{ key:pair.key, value:newValue } });
+			const updated = await this.updateStats([{ key:pair.key, value:newValue }], false);
+			changes ||= updated;
+		}
+		if (save && changes) {
+			return this.save();
+		}
+		return false;
+	}
+
 	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
 		let changes = false;
 		const forNotes: TKeyValuePair[] = [];
 		const pb = this.pathbuilder;
 		for (const pair of pairs) {
-			const { key, value } = pair;
+			const key = pair.key;
+			const value = pair.value ?? "";
 			if (/^name$/i.test(key) && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
 				this.name = value;
 				if (pb) {

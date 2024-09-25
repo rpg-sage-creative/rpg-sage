@@ -1,5 +1,5 @@
 import { toUniqueDefined } from "@rsc-utils/array-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import type { TKeyValuePair } from "./SageMessageArgs";
 
 interface IHasSave { save(): Promise<boolean>; }
@@ -91,7 +91,7 @@ export class NoteManager {
 	}
 	//#endregion
 
-	private _setCategorizedNote(category: string, title: string, value: string): boolean {
+	private _setCategorizedNote(category: string, title: string, value: Optional<string>): boolean {
 		const cleanValue = (value ?? "").trim();
 		if (!cleanValue) {
 			return this._unsetCategorizedNote(category, title);

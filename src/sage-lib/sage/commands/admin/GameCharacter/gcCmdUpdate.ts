@@ -1,8 +1,7 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { getCharacter } from "./getCharacter.js";
+import { getCharacterArgs } from "./getCharacterArgs.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
-import { getUserDid } from "./getUserDid.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
@@ -15,27 +14,27 @@ export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisper(`Sorry, you cannot update characters here.`);
 	}
 
-	const names = sageMessage.args.getNames();
-	if (characterTypeMeta.isGm) {
-		if (names.newName) {
-			names.oldName = sageMessage.gmCharacter.name;
-		}
-		if (names.count === 0) {
-			names.name = sageMessage.gmCharacter.name;
-		}
+	const { core, mods, names, stats, userId } = getCharacterArgs(sageMessage, characterTypeMeta.isGm);
+
+	if (!core && !mods?.length && !stats?.length) {
+		return sageMessage.replyStack.whisper("Nothing to do.");
 	}
 
-	const userDid = await getUserDid(sageMessage);
-	const newUserDid = await sageMessage.args.removeAndReturnUserDid("newuser") ?? await sageMessage.args.removeAndReturnUserDid("user");
-	const core = sageMessage.args.getCharacterOptions(names, (newUserDid ?? userDid) as Snowflake);
 	const character = characterTypeMeta.isGm
 		? sageMessage.gmCharacter
-		: await getCharacter(sageMessage, characterTypeMeta, userDid!, names, core.alias);
+		: await getCharacter(sageMessage, characterTypeMeta, userId, names, core?.alias);
 	if (character) {
-		await character.update(core, false);
-
-		if (/discord/i.test(core.name)) {
-			return sageMessage.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+		if (core) {
+			await character.update(core, false);
+			if (/discord/i.test(core.name)) {
+				return sageMessage.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+			}
+		}
+		if (stats?.length) {
+			await character.updateStats(stats, false);
+		}
+		if (mods?.length) {
+			await character.modStats(mods, false);
 		}
 
 		return promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
