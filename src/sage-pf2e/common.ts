@@ -1,13 +1,14 @@
 import { warn } from "@rsc-utils/core-utils";
 import { Skill } from "../gameSystems/p20/lib/Skill.js";
+import { type AbilityName } from "../gameSystems/d20/lib/Ability.js";
 
 export type GetStatPrefix = "" | "dc" | "label" | "labeled" | "mod" | "p" | "prof" | "proficiency";
 
 //#region Abilities
 export const STRENGTH = "Strength", DEXTERITY = "Dexterity", CONSTITUTION = "Constitution", INTELLIGENCE = "Intelligence", WISDOM = "Wisdom", CHARISMA = "Charisma";
-export const ABILITIES: TAbility[] = [STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA];
-export type TAbility = "Strength" | "Dexterity" | "Constitution" | "Intelligence" | "Wisdom" | "Charisma";
-export type TAbil = "Str" | "Dex" | "Con" | "Int" | "Wis" | "Cha";
+export const ABILITIES: AbilityName[] = [STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA];
+export { type AbilityName as TAbility } from "../gameSystems/d20/lib/Ability.js";
+export { type AbilityAbbr as TAbil } from "../gameSystems/d20/lib/Ability.js";
 //#endregion Abilities
 
 //#region Magic Traditions
@@ -261,9 +262,8 @@ export function minProf(a: TProficiency, b: TProficiency): TProficiency {
 	}
 	return aMod < bMod ? a : b;
 }
-export function toModifier(value: number): string {
-	return (value < 0 ? "" : "+") + String(value);
-}
+export { toModifier } from "../gameSystems/utils/toModifier.js";
+
 export function rarityToSuper(rarity: TRarity): string {
 	if (rarity === "Rare") {
 		return "ᴿ";

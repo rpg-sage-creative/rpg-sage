@@ -1,6 +1,7 @@
 import { mapAsync } from "@rsc-utils/array-utils";
 import { toChannelMention, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
+import { canProcessStats, isStatsKey, statsToHtml } from "../../../../../gameSystems/sheets.js";
 import { sendWebhook } from "../../../../discord/messages.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -53,9 +54,21 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`<b>Auto Dialog</b> <i>none</i>`);
 	}
 
-	const stats = character.notes.getStats().map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
-	if (stats.length) {
-		renderableContent.appendTitledSection(`<b>Stats</b>`, ...stats);
+	const gameSystem = character.gameSystem;
+	if (canProcessStats(gameSystem)) {
+		const stats = character.notes.getStats()
+			.filter(note => !isStatsKey(note.title, gameSystem))
+			.map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
+		if (stats.length) {
+			renderableContent.appendTitledSection(`<b>Stats</b>`, ...statsToHtml(character, gameSystem));
+			renderableContent.appendTitledSection(`<b>Other Stats</b>`, ...stats);
+		}
+	}else {
+		const stats = character.notes.getStats()
+			.map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
+		if (stats.length) {
+			renderableContent.appendTitledSection(`<b>Stats</b>`, ...stats);
+		}
 	}
 
 	const notes = character.notes.getUncategorizedNotes().map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);

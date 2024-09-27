@@ -1,4 +1,4 @@
-import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { NIL_SNOWFLAKE, applyChanges, debug, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
@@ -7,7 +7,8 @@ import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-ut
 import { isBlank, isWrapped, unwrap, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
-import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
+import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
+import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
@@ -477,6 +478,10 @@ export class GameCharacter implements IHasSave {
 	public async fetchMacros(): Promise<TMacro[]> {
 		await this.fetchStats();
 		return this.fetchedMacros ?? [];
+	}
+
+	public get gameSystem() {
+		return parseGameSystem(this.notes.getStat("gameSystem")?.note);
 	}
 
 	public getStat(key: string): string | null {

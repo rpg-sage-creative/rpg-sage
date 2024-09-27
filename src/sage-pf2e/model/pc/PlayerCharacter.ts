@@ -1,6 +1,7 @@
 import { sortAsPrimitive, toUnique } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { AbilitiesP20, type IHasAbilitiesP20 } from "../../../gameSystems/p20/lib/Abilities.js";
 import type { TAbility, TProficiency, TSize } from "../../common.js";
 import { PERCEPTION, WISDOM, profToMod } from "../../common.js";
 import { findById, findByValue } from "../../data/Repository.js";
@@ -18,8 +19,7 @@ import type { IHasMetadata } from "../Metadata.js";
 import type { Spell } from "../Spell.js";
 import type { IWealth } from "../Wealth.js";
 import { Wealth } from "../Wealth.js";
-import type { IHasAbilities } from "./Abilities.js";
-import { Abilities } from "./Abilities.js";
+import { PcAbilities } from "./Abilities.js";
 import { ArmorClasses } from "./ArmorClasses.js";
 import { Check } from "./Check.js";
 import { Encumbrance } from "./Encumbrance.js";
@@ -99,7 +99,7 @@ export interface IHasProficiencies {
 	getProficiencyMod(subject: string): number;
 }
 
-export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerCharacter"> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerCharacter"> implements IHasAbilitiesP20, IHasProficiencies, IHasSavingThrows {
 	private _background?: Background;
 	private _class?: Class;
 	private _deity?: Deity;
@@ -131,7 +131,7 @@ export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerChara
 			core.wealth = <any>{ coins: { sp: 150 } };
 		}
 
-		this.abilities = Abilities.for(this);
+		this.abilities = new PcAbilities(this);
 		this.armorClasses = new ArmorClasses(this);
 		this.encumbrance = new Encumbrance(this);
 		this.equipment = new Equipment(this, this.core.equipment);
@@ -153,7 +153,7 @@ export class PlayerCharacter extends HasIdCore<PlayerCharacterCore, "PlayerChara
 
 	//#region Properties
 
-	public abilities: Abilities;
+	public abilities: AbilitiesP20;
 	public get actions(): Action[] {
 		return (this.features.getMetadata().map(meta => meta.metadata.actions).flat(Infinity) as string[])
 			.filter(toUnique)
