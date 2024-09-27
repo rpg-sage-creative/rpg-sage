@@ -1,9 +1,7 @@
 import type { TAbility, TSavingThrow } from "../../common.js";
 import { CONSTITUTION, DEXTERITY, FORTITUDE, getSavingThrows, REFLEX, toModifier, WILL, WISDOM } from "../../common.js";
-import type { Armor } from "../Armor.js";
 import { Check } from "./Check.js";
 import { PathbuilderCharacter } from "./PathbuilderCharacter.js";
-import type { PlayerCharacter } from "./PlayerCharacter.js";
 
 export interface IHasSavingThrows { savingThrows: SavingThrows; }
 
@@ -57,11 +55,8 @@ export abstract class SavingThrows {
 		}
 	}
 
-	public static for(pc: PlayerCharacter | PathbuilderCharacter): SavingThrows {
-		if (pc instanceof PathbuilderCharacter) {
-			return new PbcSavingThrows(pc);
-		}
-		return new PcSavingThrows(pc);
+	public static for(pc: PathbuilderCharacter): SavingThrows {
+		return new PbcSavingThrows(pc);
 	}
 
 	public static isValidKey(key?: string | null): boolean {
@@ -71,37 +66,6 @@ export abstract class SavingThrows {
 	//#endregion
 }
 
-class PcSavingThrows extends SavingThrows {
-
-	public constructor(private pc: PlayerCharacter) { super(); }
-
-	public getCheck(savingThrow: TSavingThrow, ability?: TAbility): Check;
-	public getCheck(savingThrow: string, ability?: TAbility): Check | undefined;
-	public getCheck(_savingThrow: string, _ability?: TAbility): Check | undefined {
-		const saveAndAbility = parseSavingThrowAndAbility(_savingThrow);
-		if (!saveAndAbility) return undefined;
-
-		const { savingThrow } = saveAndAbility;
-		const ability = _ability ?? saveAndAbility.ability;
-
-		const check = new Check(this.pc, savingThrow);
-
-		check.addProficiency(savingThrow);
-
-		const eqArmor = this.pc.equipment.armor;
-		if (eqArmor?.hasTrait("Clumsy") && savingThrow === REFLEX) {
-			check.setAbility(ability, (eqArmor.item as Armor).dexModCap, "Clumsy");
-		}else {
-			check.setAbility(ability);
-		}
-
-		if (eqArmor?.meta.potencyRuneValue !== undefined) {
-			check.addItemModifier(eqArmor.name, eqArmor.meta.potencyRuneValue || 0);
-		}
-		return check;
-	}
-
-}
 
 class PbcSavingThrows extends SavingThrows {
 

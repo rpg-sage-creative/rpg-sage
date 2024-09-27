@@ -1,11 +1,11 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import { Abilities } from "../../d20/lib/Abilities.js";
+import { Abilities as AbilitiesD20 } from "../../d20/lib/Abilities.js";
 import { Ability, type AbilityAbbr, type AbilityAbbrKey, type AbilityKey, type AbilityName } from "../../d20/lib/Ability.js";
 import { Check } from "./Check.js";
 
-export interface IHasAbilitiesP20 { abilities: AbilitiesP20; }
+export interface IHasAbilities { abilities: Abilities; }
 
-export abstract class AbilitiesP20 extends Abilities {
+export abstract class Abilities extends AbilitiesD20 {
 
 	//#region Properties
 

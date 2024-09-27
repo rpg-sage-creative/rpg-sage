@@ -6,19 +6,20 @@ import { addCommas, nth } from "@rsc-utils/number-utils";
 import { capitalize, StringMatcher } from "@rsc-utils/string-utils";
 import type { Attachment } from "discord.js";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
-import type { IHasAbilitiesP20 } from "../../../gameSystems/p20/lib/Abilities.js";
+import type { IHasAbilities } from "../../../gameSystems/p20/lib/Abilities.js";
 import { Check } from "../../../gameSystems/p20/lib/Check.js";
+import type { IHasProficiencies } from "../../../gameSystems/p20/lib/Proficiencies.js";
+import { Proficiency } from "../../../gameSystems/p20/lib/Proficiency.js";
 import { Skill } from "../../../gameSystems/p20/lib/Skill.js";
 import { ProficiencyType, SizeType } from "../../../gameSystems/p20/lib/types.js";
 import { jsonToCharacter } from "../../../gameSystems/p20/sf2e/import/pdf/jsonToCharacter.js";
 import { toModifier } from "../../../gameSystems/utils/toModifier.js";
 import type { TMacro } from "../../../sage-lib/sage/model/types.js";
-import type { GetStatPrefix, TProficiency } from "../../common.js";
+import type { GetStatPrefix } from "../../common.js";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository.js";
 import { ABILITIES } from "../../index.js";
 import type { Weapon } from "../Weapon.js";
-import { PbcAbilities } from "./Abilities.js";
-import type { IHasProficiencies } from "./PlayerCharacter.js";
+import { PbcAbilities } from "./PbcAbilities.js";
 import { SavingThrows, type IHasSavingThrows } from "./SavingThrows.js";
 
 //#region types
@@ -394,9 +395,9 @@ function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilder
 function spellCasterLevelToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilderCharacterSpellCaster, spells: TPathbuilderCharacterSpellCasterSpells, cantripLevel: number): string {
 	if (spellCaster.name === "Caster Arcane Sense") {
 		const arcana = char.getProficiency("arcana");
-		switch (arcana) {
-			case "Legendary": return `Cantrip (4th)`;
-			case "Master": return `Cantrip (3rd)`;
+		switch (arcana.abbr) {
+			case "L": return `Cantrip (4th)`;
+			case "M": return `Cantrip (3rd)`;
 			default: return `Cantrip (1st)`;
 		}
 	}
@@ -542,11 +543,7 @@ function findWeapon(weapon: TPathbuilderCharacterWeapon): OrUndefined<Weapon> {
 function getWeaponSpecMod(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): number {
 	if (char.hasSpecial("Weapon Specialization")) {
 		const prof = char.getProficiency(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name);
-		switch(prof) {
-			case "Expert": return 2;
-			case "Master": return 3;
-			case "Legendary": return 4;
-		}
+		return prof?.modifier ?? 0;
 	}
 	return 0;
 }
@@ -630,7 +627,7 @@ export function getCharacterSections(view: Optional<TCharacterViewType>): TChara
 export type TCharacterViewType = "All" | "Combat" | "Equipment" | "Feats" | "Formulas" | "Pets" | "Spells";
 export const CharacterViewTypes: TCharacterViewType[] = ["All", "Combat", "Equipment", "Feats", "Formulas", "Pets", "Spells"];
 
-export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> implements IHasAbilitiesP20, IHasProficiencies, IHasSavingThrows {
+export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
 	public get exportJsonId(): number | undefined { return this.core.exportJsonId; }
 
 	public createCheck(key: string): Check | undefined {
@@ -801,11 +798,11 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 	//#region IHasProficiencies
 
-	public getProficiency(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): TProficiency {
+	public getProficiency(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): Proficiency {
 		const profMod = this.getProficiencyMod(key, specificKey);
 		return profMod === this.untrainedProficiencyMod
-			? "Untrained"
-			: ProficiencyType[profMod] as TProficiency ?? debug({key,specificKey,profMod}) ?? ProficiencyType.Untrained;
+			? Proficiency.findByName("U")
+			: Proficiency.findByName("U") ?? debug({key,specificKey,profMod}) ?? Proficiency.findByName("U");
 	}
 
 	public getProficiencyMod(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): ProficiencyType {

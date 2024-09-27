@@ -1,15 +1,17 @@
-import type { Skill } from "./Skill.js";
-import { toModifier } from "../../utils/toModifier.js";
-import type { TAbility, TBonusType, TProficiency } from "../../../sage-pf2e/common.js";
+import type { TBonusType } from "../../../sage-pf2e/common.js";
 import { CIRCUMSTANCE, ITEM, STATUS, UNTYPED } from "../../../sage-pf2e/common.js";
-import type { IHasProficiencies } from "../../../sage-pf2e/model/pc/PlayerCharacter.js";
-import type { IHasAbilitiesP20 } from "./Abilities.js";
+import type { AbilityName } from "../../d20/lib/Ability.js";
+import { toModifier } from "../../utils/toModifier.js";
+import type { IHasAbilities } from "./Abilities.js";
+import type { IHasProficiencies } from "./Proficiencies.js";
+import type { ProficiencyName } from "./Proficiency.js";
+import type { Skill } from "./Skill.js";
 
 /**************************************************************************************************************************/
 // Interfaces
 
 type AbilityModifier = {
-	ability: TAbility;
+	ability: AbilityName;
 	modifierCap?: number;
 	modifierCapSource?: string;
 	modifier: number;
@@ -24,11 +26,11 @@ type Bonus = {
 
 type ProficiencyModifier = {
 	modifier: number;
-	proficiency: TProficiency;
+	proficiency: ProficiencyName;
 	subject: string;
 };
 
-export type TCheckPlayerCharacter = IHasAbilitiesP20 & IHasProficiencies & {
+export type TCheckPlayerCharacter = IHasAbilities & IHasProficiencies & {
 	getLevelMod(arg: boolean | number): number;
 };
 
@@ -121,9 +123,9 @@ export class Check {
 		this.itemPenalty = this.getPenalty(ITEM, this.itemPenalty);
 	}
 
-	public addProficiency(subject: string, modifier?: number, proficiency?: TProficiency): void {
+	public addProficiency(subject: string, modifier?: number, proficiency?: ProficiencyName): void {
 		if (!modifier) modifier = this.pc.getProficiencyMod(subject);
-		if (!proficiency) proficiency = this.pc.getProficiency(subject);
+		if (!proficiency) proficiency = this.pc.getProficiency(subject).name;
 		this.level = this.pc.getLevelMod(modifier);
 		this.proficiencies.push({ modifier, proficiency, subject });
 		this.proficiencyModifier = this.proficiencies.reduce((worst, prof) => !worst || prof.modifier < worst.modifier ? prof : worst, this.proficiencyModifier);
@@ -139,7 +141,7 @@ export class Check {
 		this.addModifier(source, modifier);
 	}
 
-	public setAbility(ability?: TAbility, abilityModifierCap?: number, abilityModifierCapSource?: string): void {
+	public setAbility(ability?: AbilityName, abilityModifierCap?: number, abilityModifierCapSource?: string): void {
 		if (ability) {
 			this.abilityModifier = {
 				ability: ability,
@@ -186,7 +188,7 @@ export class Check {
 		return toModifier(this.modifier);
 	}
 
-	public toProficiencyAndModifier(): [TProficiency, number] {
+	public toProficiencyAndModifier(): [ProficiencyName, number] {
 		return [this.proficiencyModifier?.proficiency ?? "Untrained", this.modifier];
 	}
 
