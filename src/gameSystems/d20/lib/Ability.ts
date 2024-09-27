@@ -22,6 +22,8 @@ export class Ability {
 	/** this.name.toLowerCase(); used as the key in objects/maps */
 	public readonly key: AbilityKey;
 
+	public toString() { return this.name; }
+
 	private static _all: Ability[];
 	public static all(): Ability[] {
 		return this._all ?? (this._all = this.names().map(name => new Ability(name)));

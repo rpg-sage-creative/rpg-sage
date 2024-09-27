@@ -25,6 +25,8 @@ export class Proficiency {
 
 	public readonly modifier: number;
 
+	public toString() { return this.name; }
+
 	private static _all: Proficiency[];
 	public static all(): Proficiency[] {
 		return Proficiency._all ?? (Proficiency._all = Proficiency.names().map(name => new Proficiency(name)));

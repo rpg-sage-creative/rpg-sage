@@ -802,7 +802,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		const profMod = this.getProficiencyMod(key, specificKey);
 		return profMod === this.untrainedProficiencyMod
 			? Proficiency.findByName("U")
-			: Proficiency.findByName("U") ?? debug({key,specificKey,profMod}) ?? Proficiency.findByName("U");
+			: Proficiency.findByModifier(profMod) ?? debug({key,specificKey,profMod}) ?? Proficiency.findByName("U");
 	}
 
 	public getProficiencyMod(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): ProficiencyType {
