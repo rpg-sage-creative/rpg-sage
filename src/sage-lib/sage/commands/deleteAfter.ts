@@ -15,7 +15,11 @@ export async function deleteAfter(sageInteraction: SageInteraction): Promise<voi
 			const channel = message.channel;
 			const messagesToDelete = await channel.messages.fetch({ after:message.id });
 			await sageInteraction.replyStack.startThinking();
-			await deleteMessages([...messagesToDelete.values()]);
+			if ("bulkDelete" in channel) {
+				await channel.bulkDelete(messagesToDelete);
+			}else {
+				await deleteMessages([...messagesToDelete.values()]);
+			}
 			await sageInteraction.replyStack.stopThinking();
 		}
 	}
