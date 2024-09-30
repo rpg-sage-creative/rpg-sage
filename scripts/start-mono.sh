@@ -61,8 +61,10 @@ jsonSuperUserId="$RETVAL"
 readJsonProperty "tupperBoxId"
 jsonTupperBoxId="$RETVAL"
 
-npm run test
-if [ "$?" != "0" ]; then echo "Unable to Start 'mono'!"; exit 1; fi
+if [ ! "$1" = "-noBuild" ]; then
+	npm run test
+	if [ "$?" != "0" ]; then echo "Unable to Start 'mono'!"; exit 1; fi
+fi
 
 if [ "$1" = "pm2" ]; then
 
