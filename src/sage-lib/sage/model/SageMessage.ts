@@ -49,7 +49,7 @@ export class SageMessage
 		if (message.partial) await message.fetch();
 		const sageCache = await SageCache.fromMessage(message);
 		const prefixOrDefault = sageCache.getPrefixOrDefault();
-		const regexOr = prefixOrDefault ? prefixOrDefault : `sage`;
+		const regexOr = prefixOrDefault ? XRegExp.escape(prefixOrDefault) : `sage`;
 		const prefixRegex = XRegExp(`^\\s*(${regexOr})?[!?][!]?`, "i");
 		const prefixMatch = prefixRegex.exec(message.content ?? "");
 		const prefixFound = prefixMatch?.[1] ?? "";
