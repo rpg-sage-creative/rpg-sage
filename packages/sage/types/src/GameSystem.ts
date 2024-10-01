@@ -41,6 +41,8 @@ export type GameSystem = {
 	type: GameSystemType;
 	/** Default DiceCritMethodType for systems that allow it. */
 	diceCritMethodType?: DiceCritMethodType;
+	/** Helper flag for P20 (Paizo d20; PF2e/SF2e) games */
+	isP20?: boolean;
 };
 
 /** Stores all the available Game Systems. */
@@ -50,10 +52,10 @@ const gameSystems: GameSystem[] = [
 	{ code:"DnD5e", description:"", dice:"DnD5e", name:"Dungeons & Dragons 5e", type:GameSystemType.DnD5e, diceCritMethodType:DiceCritMethodType.TimesTwo },
 	{ code:"E20", description:"", dice:"E20", name:"Essence 20", type:GameSystemType.E20 },
 	{ code:"PF1e", description:"", dice:"PF1e", name:"Pathfinder 1e", type:GameSystemType.PF1e },
-	{ code:"PF2e", description:"", dice:"PF2e", name:"Pathfinder 2e", type:GameSystemType.PF2e, diceCritMethodType:DiceCritMethodType.TimesTwo },
+	{ code:"PF2e", description:"", dice:"PF2e", name:"Pathfinder 2e", type:GameSystemType.PF2e, diceCritMethodType:DiceCritMethodType.TimesTwo, isP20:true },
 	{ code:"Quest", description:"", dice:"Quest", name:"Quest RPG", type:GameSystemType.Quest },
 	{ code:"SF1e", description:"", dice:"SF1e", name:"Starfinder 1e", type:GameSystemType.SF1e, diceCritMethodType:DiceCritMethodType.RollTwice },
-	{ code:"SF2e", description:"", dice:"SF2e", name:"Starfinder 2e", type:GameSystemType.SF2e, diceCritMethodType:DiceCritMethodType.TimesTwo },
+	{ code:"SF2e", description:"", dice:"SF2e", name:"Starfinder 2e", type:GameSystemType.SF2e, diceCritMethodType:DiceCritMethodType.TimesTwo, isP20:true },
 	{ code:"VtM5e", description:"", dice:"VtM5e", name:"Vampire: the Masquerade 5e", type:GameSystemType.VtM5e },
 ];
 

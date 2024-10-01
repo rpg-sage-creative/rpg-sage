@@ -19,6 +19,8 @@ export type Names = {
 	newName?: string;
 	/** Count of names present in the object. */
 	count?: number;
+	/** true if oldName and newName are present */
+	isRename?: boolean;
 };
 
 export abstract class SageCommandArgs<T extends SageCommand> {
@@ -405,7 +407,8 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		const name = this.getString("name") ?? undefined;
 		const newName = this.getString("newName") ?? undefined;
 		const count = (charName ? 1 : 0) + (oldName ? 1 : 0) + (name ? 1 : 0) + (newName ? 1 : 0);
-		return { charName, oldName, name, newName, count };
+		const isRename = !!oldName && !!newName;
+		return { charName, oldName, name, newName, count, isRename };
 	}
 
 	public getServerOptions(): Args<ServerOptions> | undefined {

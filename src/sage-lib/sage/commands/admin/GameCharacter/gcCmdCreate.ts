@@ -16,11 +16,7 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisper(`Sorry, you cannot create characters here.`);
 	}
 
-	const { core, mods, names, stats, userId } = getCharacterArgs(sageMessage, characterTypeMeta.isGm);
-
-	if (!core && !mods?.length && !stats?.length) {
-		return sageMessage.replyStack.whisper("Nothing to do.");
-	}
+	const { core, mods, names, stats, userId } = getCharacterArgs(sageMessage, characterTypeMeta.isGm, false);
 
 	if (!core?.name) {
 		return sageMessage.replyStack.whisper("Cannot create a character without a name!");

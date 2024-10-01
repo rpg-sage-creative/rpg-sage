@@ -55,17 +55,15 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	}
 
 	const gameSystem = character.gameSystem;
+	const sortedStats = character.notes.getStats().sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
 	if (canProcessStats(gameSystem)) {
-		const stats = character.notes.getStats()
-			.filter(note => !isStatsKey(note.title, gameSystem))
-			.map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
-		if (stats.length) {
-			renderableContent.appendTitledSection(`<b>Stats</b>`, ...statsToHtml(character, gameSystem));
+		renderableContent.appendTitledSection(`<b>Stats</b> ${gameSystem?.code}`, ...statsToHtml(character, gameSystem));
+		const otherStats = sortedStats.filter(note => !isStatsKey(note.title, gameSystem)).map(note => `<b>${note.title}</b> ${note.note}`);
+		if (otherStats.length) {
 			renderableContent.appendTitledSection(`<b>Other Stats</b>`, ...stats);
 		}
 	}else {
-		const stats = character.notes.getStats()
-			.map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
+		const stats = sortedStats.map(note => `<b>${note.title}</b> ${note.note}`);
 		if (stats.length) {
 			renderableContent.appendTitledSection(`<b>Stats</b>`, ...stats);
 		}

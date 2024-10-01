@@ -1,12 +1,13 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { NIL_SNOWFLAKE, applyChanges, debug, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, applyChanges, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { isBlank, isWrapped, unwrap, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
+import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
@@ -484,6 +485,27 @@ export class GameCharacter implements IHasSave {
 		return parseGameSystem(this.notes.getStat("gameSystem")?.note);
 	}
 
+	public getConditions(): string[] {
+		const manual = this.getStat("conditions");
+		if (manual) return [manual];
+
+		const gameSystem = this.gameSystem;
+		if (!gameSystem?.isP20) return [];
+
+		const conditions: string[] = [];
+
+		Condition.getToggledConditions().forEach(key => {
+			if (this.getStat(key) !== null) conditions.push(key);
+		});
+
+		Condition.getValuedConditions().forEach(key => {
+			const value = this.getStat(key);
+			if (value !== null) conditions.push(`${key} ${value}`);
+		});
+
+		return conditions;
+	}
+
 	public getStat(key: string): string | null {
 		if (/^name$/i.test(key)) {
 			return this.name;
@@ -582,14 +604,13 @@ export class GameCharacter implements IHasSave {
 		return null;
 	}
 
-	public async modStats(pairs: StatModPair[], save: boolean): Promise<boolean> {
+	public async modStats(pairs: StatModPair[], save: boolean, boundsChecker?: (pair: TKeyValuePair) => string | undefined): Promise<boolean> {
 		let changes = false;
 		for (const pair of pairs) {
 			const oldValue = this.getStat(pair.key) ?? 0;
 			const math = `${oldValue}${pair.modifier}${pair.value}`;
 			const newValue = doStatMath(math);
-			debug({ modPair:pair, oldValue, math, newValue, statPair:{ key:pair.key, value:newValue } });
-			const updated = await this.updateStats([{ key:pair.key, value:newValue }], false);
+			const updated = await this.updateStats([{ key:pair.key, value:newValue }], false, boundsChecker);
 			changes ||= updated;
 		}
 		if (save && changes) {
@@ -598,7 +619,7 @@ export class GameCharacter implements IHasSave {
 		return false;
 	}
 
-	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
+	public async updateStats(pairs: TKeyValuePair[], save: boolean, boundsChecker?: (pair: TKeyValuePair) => string | undefined): Promise<boolean> {
 		let changes = false;
 		const forNotes: TKeyValuePair[] = [];
 		const pb = this.pathbuilder;
@@ -610,7 +631,7 @@ export class GameCharacter implements IHasSave {
 				if (pb) {
 					pb.name = value;
 				}
-				changes ||= true;
+				changes = true;
 				continue;
 			}
 
@@ -634,7 +655,7 @@ export class GameCharacter implements IHasSave {
 					if (updatedLevel) {
 						this.notes.unsetStats("level");
 					}
-					changes ||= updatedLevel;
+					changes = updatedLevel;
 					continue;
 				}
 				if (isExplorationMode) {
@@ -651,6 +672,10 @@ export class GameCharacter implements IHasSave {
 				// proficiencies?
 			}
 			forNotes.push({ key:correctedKey??key, value:correctedValue??value });
+		}
+		// this allows us to pass in a function per gameSystem (or other criteria) that lets us check the bounds of a value, ex: PF2/SF2 Dying (min 0, max 5)
+		if (boundsChecker) {
+			forNotes.forEach(pair => pair.value = boundsChecker(pair) ?? pair.value);
 		}
 		const updatedNotes = await this.notes.updateStats(forNotes, save);
 		return changes || updatedNotes;

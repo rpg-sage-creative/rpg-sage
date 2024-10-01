@@ -3,6 +3,7 @@ import { Ability } from "../../d20/lib/Ability.js";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { toModifier } from "../../utils/toModifier.js";
+import { Condition } from "../lib/Condition.js";
 
 function abilitiesToHtml(char: GameCharacter): string | undefined {
 	let hasStats = false;
@@ -67,11 +68,20 @@ function hpToHtml(char: GameCharacter): string | undefined {
 		: undefined;
 }
 
+function conditionsToHtml(char: GameCharacter): string | undefined {
+	const conditions = char.getConditions();
+	if (conditions.length) {
+		return conditions.join(", ");
+	}
+	return undefined;
+}
+
 export function statsToHtml(char: GameCharacter): string[] {
 	const out: (string | undefined)[] = [];
 	out.push(abilitiesToHtml(char));
 	out.push(acSavesToHtml(char));
 	out.push(hpToHtml(char));
+	out.push(conditionsToHtml(char));
 	return out.filter(s => s !== undefined) as string[];
 }
 
@@ -79,5 +89,8 @@ export function isStatsKey(key: string): boolean {
 	const lower = key.toLowerCase();
 	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower)
 		|| ["mod.fortitude", "fortitude", "fort", "mod.reflex", "reflex", "ref", "mod.will", "will"].includes(lower)
-		|| ["ac", "hp", "maxhp"].includes(lower);
+		|| ["ac", "hp", "maxhp"].includes(lower)
+		|| Condition.getToggledConditions().includes(lower)
+		|| Condition.getValuedConditions().includes(lower)
+		;
 }

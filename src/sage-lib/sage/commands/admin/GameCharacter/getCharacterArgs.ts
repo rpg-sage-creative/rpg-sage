@@ -1,4 +1,4 @@
-import { debug, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { dequote, getQuotedRegexSource, getWordCharacterRegexSource } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
@@ -19,32 +19,90 @@ type Results = {
 
 function createStatModKeyValuePairRegex(): RegExp {
 	const keySource = getWordCharacterRegexSource({ allowDashes:true, allowPeriods:true, quantifier:"+" });
-	const modSource = `[+-]`;
+	const modSource = `\\+=|\\-=`;
+	const incrementerSource = `\\+{2}|\\-{2}`;
 	const quotedSource = getQuotedRegexSource({ lengthQuantifier:"*" });
-	return XRegExp(`(${keySource})(${modSource})=(${quotedSource}|\\S+)`, "");
+	return XRegExp(`(${keySource})(?:(${incrementerSource})|(${modSource})(${quotedSource}|\\S+))`, "");
 }
 
 function parseStatModKeyValuePair(arg: string): StatModPair | undefined {
 	const regex = createStatModKeyValuePairRegex();
 	const match = regex.exec(arg);
 	if (match) {
-		return {
-			key: match[1],
-			modifier: match[2] as "+",
-			value: dequote(match[3])
-		};
+		const [_, key, incrementer, modifier, value] = match;
+		if (incrementer) {
+			return { key, modifier: incrementer[0] as "+", value: "1" };
+		}
+		return { key, modifier: modifier[0] as "+", value: dequote(value) };
 	}
 	return undefined;
 }
 
-function urlToName(url: Optional<string>): string | undefined {
-	return url?.split("/").pop()?.split(".").shift();
+function getCore({ args }: SageMessage, names: Names, isUpdate: boolean): GameCharacterCore | undefined {
+	const useAliasAsName = isUpdate && !names.isRename && !names.name;
+
+	let hasKeys = false;
+	const core: Args<GameCharacterCore> = { };
+
+	const alias = args.getString("alias");
+	if (!useAliasAsName && alias !== undefined) {
+		core.alias = alias;
+		hasKeys = true;
+	}
+
+	const avatarUrl = args.getUrl("avatar");
+	if (avatarUrl !== undefined) {
+		core.avatarUrl = avatarUrl;
+		hasKeys = true;
+	}
+
+	const embedColor = args.getHexColorString("color");
+	if (embedColor !== undefined) {
+		core.embedColor = embedColor;
+		hasKeys = true;
+	}
+
+	const tokenUrl = args.getUrl("token");
+	if (tokenUrl !== undefined) {
+		core.tokenUrl = tokenUrl;
+		hasKeys = true;
+	}
+
+	const newUserId = args.getUserId("newUser"); // used during update
+	const userId = args.getUserId("user");       // used during create
+	if (newUserId !== undefined || userId !== undefined) {
+		// we must use ?: and not ?? to allow unsetting a userId via newUser="unset"/null
+		core.userDid = newUserId !== undefined ? newUserId : userId;
+		hasKeys = true;
+	}
+
+	// do name last to allow for using token/avatar
+	if (isUpdate) {
+		// when updating, check to see if we are renaming
+		if (names.isRename) {
+			core.name = names.newName;
+			hasKeys = true;
+		}
+
+	}else {
+		// when creating, use the "name" arg before trying to parse a name from a token or avatar
+		core.name = names.name;
+		if (!core.name) {
+			const urlToName = (url: Optional<string>) => url?.split("/").pop()?.split(".").shift();
+			core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl);
+		}
+		if (core.name) {
+			hasKeys = true;
+		}
+	}
+
+	return hasKeys ? core as GameCharacterCore : undefined;
 }
 
-export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean): Results {
+export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpdate: boolean): Results {
 	const { args } = sageMessage;
 
-	const validCharArgs = [
+	const validCoreKeys = [
 		// basics
 		"alias", "avatar", "color", "token",
 		// user
@@ -53,46 +111,20 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean): Resul
 		"charname", "char", "oldname", "name", "newname"
 	];
 
-	const hasValidCharArgs = validCharArgs.some(key => args.hasString(key));
-
-	const mods = args.toArray().map(parseStatModKeyValuePair).filter(pair => pair) as StatModPair[];
-
+	/** @todo move the names logic into the getCore() function */
 	const names = args.getNames();
-	if (isGm) {
-		if (names.newName) {
-			names.oldName = sageMessage.gmCharacter.name;
-		}
-		if (names.count === 0) {
-			names.name = sageMessage.gmCharacter.name;
-		}
+	if (isGm && names.newName) {
+		names.oldName = sageMessage.gmCharacter.name;
 	}
+	const core = getCore(sageMessage, names, isUpdate);
 
-	const stats = args.keyValuePairs().filter(pair => !validCharArgs.includes(pair.key.toLowerCase()) && !/[+-]$/.test(pair.key));
-	debug({mods,stats});
+	// only do mods on an update
+	const mods = isUpdate ? args.toArray().map(parseStatModKeyValuePair).filter(pair => pair) as StatModPair[] : [];
 
+	const stats = args.keyValuePairs().filter(pair => !validCoreKeys.includes(pair.key.toLowerCase()) && !/[+-]$/.test(pair.key));
+
+	/** @todo determine how this userId is being used to decide if we need to return it at all */
 	const userId = args.getUserId("newUser") ?? args.getUserId("user") ?? getUserDid(sageMessage) ?? undefined;
-
-	// if we don't have valid core keys, let's just return out now
-	if (!hasValidCharArgs) {
-		return { core:undefined, mods, names, stats, userId };
-	}
-
-	// get the options directly
-	const core: GameCharacterCore = {
-		alias: args.getString("alias")!,
-		autoChannels: undefined,
-		avatarUrl: args.getUrl("avatar")!,
-		companions: undefined,
-		embedColor: args.getHexColorString("color")!,
-		id: undefined!,
-		tokenUrl: args.getUrl("token")!,
-		name: names.newName ?? names.name!,
-		userDid: userId ?? undefined
-	};
-
-	if (!core.name) {
-		core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl)!;
-	}
 
 	return { core, mods, names, stats, userId };
 }
