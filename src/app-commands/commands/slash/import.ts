@@ -15,6 +15,15 @@ export function registerCommand(): SlashCommand {
 				]
 			},
 			{
+				name:"Starfinder-2e",
+				description: "Import a Starfinder 2e character from PDF",
+				options: [
+					{ name:"pdf", description:"URL to pdf or Message with PDF attached", isRequired:true },
+					{ name:"attach", description:"Attach as a Markdown formatted .txt", isBoolean:true },
+					{ name:"pin", description:"Pin character", isBoolean:true },
+				]
+			},
+			{
 				name:"Essence20-pdf",
 				description: "Import an Essence20 character from PDF",
 				options: [

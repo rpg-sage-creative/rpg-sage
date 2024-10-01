@@ -1,4 +1,4 @@
-import type { MessageCommand } from "../../types.js";
+import type { MessageCommand } from "../../../types.js";
 
 export function registerCommand(): MessageCommand {
 	return {
