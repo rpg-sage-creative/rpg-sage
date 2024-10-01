@@ -60,7 +60,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.appendTitledSection(`<b>Stats</b> ${gameSystem?.code}`, ...statsToHtml(character, gameSystem));
 		const otherStats = sortedStats.filter(note => !isStatsKey(note.title, gameSystem)).map(note => `<b>${note.title}</b> ${note.note}`);
 		if (otherStats.length) {
-			renderableContent.appendTitledSection(`<b>Other Stats</b>`, ...stats);
+			renderableContent.appendTitledSection(`<b>Other Stats</b>`, ...otherStats);
 		}
 	}else {
 		const stats = sortedStats.map(note => `<b>${note.title}</b> ${note.note}`);
