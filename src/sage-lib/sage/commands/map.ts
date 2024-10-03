@@ -9,7 +9,6 @@ import { registerInteractionListener, registerMessageListener } from "../../disc
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import { discordPromptYesNo } from "../../discord/prompts.js";
-import { ReplyStack } from "../model/ReplyStack.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { includeDeleteButton } from "../model/utils/deleteButton.js";
@@ -378,7 +377,7 @@ async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore 
 	const boolImport = await discordPromptYesNo(sageMessage, `Try to import map: ${mapCore.name}?`, true);
 	if (boolImport) {
 		const channel = sageMessage.message.channel;
-		const pwConfiguring = await channel.send(`Importing and configuring: ${mapCore.name} ... ${ReplyStack.SpinnerEmoji}`);
+		const pwConfiguring = await channel.send(`Importing and configuring: ${mapCore.name} ... ${sageMessage.replyStack.spinnerEmoji}`);
 
 		const validatedCore = await validateMapCore(mapCore as TParsedGameMapCore, sageMessage.message.guild!);
 		const invalidUsers = validatedCore.invalidUsers ?? [];
