@@ -162,15 +162,13 @@ async function isDialogLookup(sageReaction: SageReaction): Promise<TCommand | nu
 		return null;
 	}
 
-	// we now need the message, so fetch the reaction
-	const messageReaction = await sageReaction.fetchMessageReaction();
-	let { message } = messageReaction;
-	if (message.partial) {
-		message = await message.fetch();
-	}
+	const message = await sageReaction.fetchMessage();
 
 	const authorId = await getAuthorId(message);
-	if (isSageId(authorId) || sageReaction.game) {
+	if (isSageId(authorId)) {
+		return { command: "CommandLookup|Add" };
+	}
+	if (!isTupperBoxId(authorId) || sageReaction.game) {
 		return { command: "CommandLookup|Add" };
 	}
 

@@ -49,18 +49,12 @@ export class SageReaction
 
 	public async fetchMessage(): Promise<Message> {
 		const messageReaction = await this.fetchMessageReaction();
-		const { message } = messageReaction;
-		if (message.partial) {
-			await message.fetch();
-		}
+		const message = await messageReaction.message.fetch();
 		return message as Message;
 	}
 
 	public async fetchMessageReaction(): Promise<MessageReaction> {
-		if (this.core.messageReaction.partial) {
-			await this.core.messageReaction.fetch();
-		}
-		return this.core.messageReaction as MessageReaction;
+		return this.core.messageReaction.fetch();
 	}
 
 	public async isAuthorSageOrWebhook(): Promise<boolean> {
