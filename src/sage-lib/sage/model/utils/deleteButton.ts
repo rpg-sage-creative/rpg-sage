@@ -1,8 +1,8 @@
-import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, toChannelMention, toUserMention } from "@rsc-utils/discord-utils";
+import { errorReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordApiError, toChannelMention, toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
 import { isNotBlank } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
-import { deleteMessage } from "../../../discord/deletedMessages.js";
+import { deleteMessage, MessageDeleteResults } from "../../../discord/deletedMessages.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import type { SageInteraction } from "../SageInteraction.js";
 
@@ -137,7 +137,25 @@ async function messageDeleteButtonHandler(sageInteraction: SageInteraction<Butto
 	}
 
 	// delete the message
-	await deleteMessage(message);
+	const result = await deleteMessage(message);
+	if (result === MessageDeleteResults.NotDeletable) {
+		let content = `Sorry, RPG Sage is not able to delete this message: ${toMessageUrl(message)}`;
+		if (!message.channel.isDMBased()) {
+			const perms = message.channel.permissionsFor(sageInteraction.bot.did);
+			if (perms) {
+				if (perms.missing("ManageMessages")) {
+					content += `\n- RPG Sage doesn't appear to have the ManageMessages permission in that channel.`;
+				}
+			}else {
+				content += `\n- RPG Sage doesn't appear to have access to that channel.`;
+			}
+		}
+		const dm = await sageInteraction.user.send({ content }).catch(errorReturnNull);
+		if (!dm) {
+			content += `\n*Note: We tried to DM this alert to you, but were unable to.*`;
+			await sageInteraction.replyStack.whisper(content, { forceEphemeral:true });
+		}
+	}
 }
 
 export function registerDeleteButtonHandler(): void {
