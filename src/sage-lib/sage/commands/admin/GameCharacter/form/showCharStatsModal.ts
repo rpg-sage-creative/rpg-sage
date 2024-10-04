@@ -56,7 +56,8 @@ async function handleCharStatsSubmit(sageInteraction: SageInteraction, idParts: 
 		pairs.push({ key:"maxHp", value:form.maxHp });
 		pairs.push({ key:"conditions", value:form.conditions });
 		pairs.push(...parseKeyValueArgs(form.other.replace(/\n/g, " ")));
-		await char.updateStats(pairs, false);
+		const gameSystem = sageInteraction.game?.gameSystem ?? sageInteraction.server.gameSystem;
+		await char.updateStats(pairs, gameSystem, false);
 	}
 	return showCharForm(sageInteraction, idParts.charId);
 }

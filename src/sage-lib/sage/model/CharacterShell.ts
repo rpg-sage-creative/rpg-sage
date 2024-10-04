@@ -1,10 +1,11 @@
+import type { GameSystem } from "@rsc-sage/types";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
-import type { Snowflake } from "@rsc-utils/core-utils";
 
 export type CharacterShellCore = {
 	/** id of the GameCharacter */
@@ -63,9 +64,9 @@ export class CharacterShell {
 		return getCharWealth(this, summaryTemplate);
 	}
 
-	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
+	public async updateStats(pairs: TKeyValuePair[], gameSystem: Optional<GameSystem>, save: boolean): Promise<boolean> {
 		if (this.game && ["pc","companion"].includes(this.game.type)) {
-			return this.game.updateStats(pairs, save);
+			return this.game.updateStats(pairs, gameSystem, save);
 		}
 		let changes = false;
 		const partyStats = this.core.stats ?? (this.core.stats = {});

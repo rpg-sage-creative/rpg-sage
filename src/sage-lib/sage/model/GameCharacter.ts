@@ -1,4 +1,4 @@
-import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { NIL_SNOWFLAKE, applyChanges, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
@@ -7,6 +7,7 @@ import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-ut
 import { isBlank, isWrapped, unwrap, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
+import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
@@ -604,13 +605,27 @@ export class GameCharacter implements IHasSave {
 		return null;
 	}
 
-	public async modStats(pairs: StatModPair[], save: boolean, boundsChecker?: (pair: TKeyValuePair) => string | undefined): Promise<boolean> {
+	public async processStatsAndMods({ stats, mods }: { stats?:TKeyValuePair[]; mods?:StatModPair[] }, gameSystem: Optional<GameSystem>): Promise<boolean> {
+		let updated = false;
+		if (stats?.length) {
+			updated = await this.updateStats(stats, gameSystem, false);
+		}
+
+		let modded = false;
+		if (mods?.length) {
+			modded = await this.modStats(mods, gameSystem, false);
+		}
+
+		return updated || modded;
+	}
+
+	public async modStats(pairs: StatModPair[], gameSystem: Optional<GameSystem>, save: boolean): Promise<boolean> {
 		let changes = false;
 		for (const pair of pairs) {
 			const oldValue = this.getStat(pair.key) ?? 0;
 			const math = `${oldValue}${pair.modifier}${pair.value}`;
 			const newValue = doStatMath(math);
-			const updated = await this.updateStats([{ key:pair.key, value:newValue }], false, boundsChecker);
+			const updated = await this.updateStats([{ key:pair.key, value:newValue }], gameSystem, false);
 			changes ||= updated;
 		}
 		if (save && changes) {
@@ -619,7 +634,7 @@ export class GameCharacter implements IHasSave {
 		return false;
 	}
 
-	public async updateStats(pairs: TKeyValuePair[], save: boolean, boundsChecker?: (pair: TKeyValuePair) => string | undefined): Promise<boolean> {
+	public async updateStats(pairs: TKeyValuePair[], gameSystem: Optional<GameSystem>, save: boolean): Promise<boolean> {
 		let changes = false;
 		const forNotes: TKeyValuePair[] = [];
 		const pb = this.pathbuilder;
@@ -673,10 +688,10 @@ export class GameCharacter implements IHasSave {
 			}
 			forNotes.push({ key:correctedKey??key, value:correctedValue??value });
 		}
-		// this allows us to pass in a function per gameSystem (or other criteria) that lets us check the bounds of a value, ex: PF2/SF2 Dying (min 0, max 5)
-		if (boundsChecker) {
-			forNotes.forEach(pair => pair.value = boundsChecker(pair) ?? pair.value);
-		}
+
+		// iterate the stat pairs to double check bounds
+		forNotes.forEach(pair => pair.value = checkStatBounds(this, gameSystem, pair) ?? pair.value);
+
 		const updatedNotes = await this.notes.updateStats(forNotes, save);
 		return changes || updatedNotes;
 	}
