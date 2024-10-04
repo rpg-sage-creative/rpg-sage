@@ -4,7 +4,7 @@ import { debug, isDefined, orNilSnowflake, type Optional, type Snowflake } from 
 import type { DInteraction, DiscordKey, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
-import { ComponentType, InteractionType, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
+import { ComponentType, InteractionType, Message, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -137,6 +137,8 @@ export abstract class SageCommand<
 
 	/** @todo: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
 	public clone(): this { return this; }
+
+	public abstract fetchMessage(): Promise<Message | undefined>;
 
 	/** @todo what is the reason for both reply /AND/ whisper? */
 	public abstract reply(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void>;
