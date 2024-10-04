@@ -1,8 +1,8 @@
 import { EphemeralSet } from "@rsc-utils/cache-utils";
-import { debug, errorReturnNull, verbose } from "@rsc-utils/core-utils";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { debug, errorReturnNull, verbose } from "@rsc-utils/core-utils";
 import type { Message, PartialMessage } from "discord.js";
-import { GameMapBase } from "../sage/commands/map/GameMapBase";
+import { GameMapBase } from "../sage/commands/map/GameMapBase.js";
 
 /* We only really need to store deleted state for seconds due to races with Tupper. */
 const deleted = new EphemeralSet<Snowflake>(1000 * 60);
@@ -56,6 +56,7 @@ export async function deleteMessage(message: Optional<Message | PartialMessage>)
 /** @private Worker function for deleteMessage. */
 async function _deleteMessage(message: Optional<Message | PartialMessage>): Promise<MessageDeleteResults> {
 	if (!message?.id) return MessageDeleteResults.InvalidMessage; //NOSONAR
+	if (message.partial) await message.fetch();
 	if (!message.deletable) return MessageDeleteResults.NotDeletable; //NOSONAR
 	if (isDeleted(message.id as Snowflake)) return MessageDeleteResults.AlreadyDeleted; //NOSONAR
 	const results = await message.delete().catch(errorReturnNull);

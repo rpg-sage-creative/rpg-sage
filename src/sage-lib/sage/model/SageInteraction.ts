@@ -3,7 +3,7 @@ import { debug, isDefined, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, type DInteraction, type MessageTarget } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { isString } from "@rsc-utils/string-utils";
-import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
+import { MessageContextMenuCommandInteraction, type InteractionReplyOptions, type InteractionUpdateOptions, type Message, type User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
@@ -52,6 +52,13 @@ export class SageInteraction<T extends DInteraction = any>
 	private constructor(protected core: SageInteractionCore, cache?: Cache) {
 		super(core, cache);
 		this.args = new SageInteractionArgs(this);
+	}
+
+	public async fetchMessage(): Promise<Message | undefined> {
+		if (this.isSageInteraction<MessageContextMenuCommandInteraction>()) {
+			return this.interaction.targetMessage.fetch();
+		}
+		return undefined;
 	}
 
 	//#region HasSageCache

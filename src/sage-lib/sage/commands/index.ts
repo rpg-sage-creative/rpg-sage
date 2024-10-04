@@ -7,6 +7,7 @@ import { registerDeleteAfter } from "./deleteAfter.js";
 import { registerDialog } from "./dialog.js";
 import { registerDeleteReaction } from "./dialog/processDelete.js";
 import { registerPinReaction } from "./dialog/processPin.js";
+import { registerDialogLookup } from "./dialogLookup.js";
 import { registerDice } from "./dice.js";
 import { registerE20 } from "./e20.js";
 import { registerHelpCommands } from "./help.js";
@@ -43,5 +44,6 @@ export function registerCommandHandlers(): void {
 
 	registerDeleteButtonHandler();
 	registerDeleteAfter();
+	registerDialogLookup();
 }
 

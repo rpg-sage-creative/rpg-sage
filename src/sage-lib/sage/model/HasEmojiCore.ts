@@ -9,6 +9,7 @@ export enum EmojiType {
 	CommandError = 14,
 	CommandDelete = 15,
 	CommandPin = 16,
+	CommandLookup = 17,
 
 	// Permission = 2
 	PermissionDenied = 21,

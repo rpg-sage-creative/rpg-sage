@@ -1,4 +1,4 @@
-import { error, type Optional, warn } from "@rsc-utils/core-utils";
+import { error, omit, type Optional, warn } from "@rsc-utils/core-utils";
 import { type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { BaseMessageOptions, InteractionReplyOptions, Message, MessageEditOptions } from "discord.js";
 import { deleteMessage, isDeletable } from "../../discord/deletedMessages.js";
@@ -43,14 +43,29 @@ async function deleteIfNotThenReturnNull(message: Optional<Message>, id?: string
 	return message;
 }
 
-type ResolveArgs = { appendSpinner?:boolean; fetchReply?:boolean; };
+type ResolveArgs = {
+	/** appends the :purple_spinner: to the content */
+	appendSpinner?: boolean;
+	/** fetches the reply and stores it in the replystack */
+	fetchReply?: boolean;
+	/** @deprecated temp way to ensure the whisper command replies as ephemeral */
+	forceEphemeral?: boolean;
+};
 
 /**
  * A temporary placeholder for new send/reply logic.
  * SageCommand and its children need to be rewritten so that they all follow the same send/reply/edit logic.
  */
 export class ReplyStack {
-	public static readonly SpinnerEmoji = `<a:purple_spinner:1247285832822554738>`;
+	// public static readonly SpinnerEmoji = `<a:purple_spinner:1247285832822554738>`;
+	public static readonly SpinnerEmojiStable = `<a:purple_spinner:1291462571815211030>`;
+	public static readonly SpinnerEmojiBeta = `<a:purple_spinner:1291462784185405615>`;
+	public static readonly SpinnerEmojiDev = `<a:purple_spinner:1291462881384337469>`;
+	public get spinnerEmoji() {
+		if (this.sageCommand.bot.codeName === "dev") return ReplyStack.SpinnerEmojiDev;
+		if (this.sageCommand.bot.codeName === "beta") return ReplyStack.SpinnerEmojiBeta;
+		return ReplyStack.SpinnerEmojiStable;
+	}
 
 	public constructor(public sageCommand: SageCommand, private deletableBy = sageCommand.authorDid) { }
 
@@ -114,7 +129,7 @@ export class ReplyStack {
 		if (this.thinkingMessage) return; //NOSONAR
 
 		// create the send/reply args
-		const content = `RPG Sage is thinking ... ${ReplyStack.SpinnerEmoji}`;
+		const content = `RPG Sage is thinking ... ${this.spinnerEmoji}`;
 		const replyArgs = this.deletable
 			 ? includeDeleteButton({ content }, this.deletableBy)
 			 : { content };
@@ -191,17 +206,20 @@ export class ReplyStack {
 
 	//#endregion
 
-
 	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options?: { appendSpinner?:boolean; }): BaseMessageOptions;
-	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options: { fetchReply:true }): InteractionReplyOptions & { fetchReply:true };
+	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options: { fetchReply:true, forceEphemeral?:boolean; }): InteractionReplyOptions & { fetchReply:true };
 	private resolveArgs(renderable: RenderableContentResolvable | TSendArgs, options?: ResolveArgs): BaseMessageOptions | InteractionReplyOptions {
-		const args = typeof(renderable) === "string" ? { content:renderable } : renderable;
+		const args = typeof(renderable) === "string" ? { content:this.sageCommand.sageCache.format(renderable) } : renderable;
 		const messageOptions = this.sageCommand.resolveToOptions(args);
 		if (options?.appendSpinner) {
-			messageOptions.content = `${messageOptions.content ?? ""} ${ReplyStack.SpinnerEmoji}`.trim();
+			messageOptions.content = `${messageOptions.content ?? ""} ${this.spinnerEmoji}`.trim();
 		}
 		if (options?.fetchReply) {
 			(messageOptions as InteractionReplyOptions).fetchReply = true;
+		}
+		if (options?.forceEphemeral) {
+			this._ephemeral = true;
+			messageOptions.ephemeral = true;
 		}
 		if (this.deletable) {
 			return includeDeleteButton(messageOptions, this.deletableBy);
@@ -228,7 +246,7 @@ export class ReplyStack {
 		}else if (this.sageCommand.isSageInteraction("REPLIABLE")) {
 			// it should be safe to use the interaction reply mechanism
 			const { interaction } = this.sageCommand;
-			const replyArgs = this.resolveArgs(_args, { fetchReply:true });
+			const replyArgs = this.resolveArgs(_args, { ...omit(replyOpts, "appendSpinner"), fetchReply:true });
 			this.replyMessage = await interaction.reply(replyArgs) as Message;
 
 		}else {
@@ -312,8 +330,8 @@ export class ReplyStack {
 
 	//#region whisper
 
-	private async _whisper(contentOrArgs: TSendArgs | RenderableContentResolvable): Promise<void> {
-		const updated = await this._reply(contentOrArgs);
+	private async _whisper(contentOrArgs: TSendArgs | RenderableContentResolvable, opts?: { forceEphemeral:true }): Promise<void> {
+		const updated = await this._reply(contentOrArgs, opts);
 		if (updated) {
 			// whisper is intended to be the only response, so we clear out all the others
 			this.thinkingMessage = await deleteIfNotThenReturnNull(this.thinkingMessage, updated.id);
@@ -323,8 +341,8 @@ export class ReplyStack {
 		}
 	}
 
-	public whisper(contentOrArgs: TSendArgs | RenderableContentResolvable): Promise<void> {
-		return this.pushToReplyStack(async () => this._whisper(contentOrArgs));
+	public whisper(contentOrArgs: TSendArgs | RenderableContentResolvable, opts?: { forceEphemeral:true }): Promise<void> {
+		return this.pushToReplyStack(async () => this._whisper(contentOrArgs, opts));
 	}
 
 	public whisperWikiHelp(...pages: { isHelp?:boolean; message?:string; page:string; label?:string; }[]): Promise<void> {

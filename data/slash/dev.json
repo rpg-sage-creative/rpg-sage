@@ -23,7 +23,7 @@
 							{ "name": "VtM5e", "value": "VtM5e" }
 						],
 						"name": "system",
-						"description": "Game System, ex: PF2e or DnD5e",
+						"description": "Game System, ex: PF2e, SF2e, or DnD5e",
 						"required": false
 					},
 					{ "name": "ic-channel", "description": "In Character Channel", "required": false, "type": 7 },
@@ -117,7 +117,7 @@
 							{ "name": "VtM5e", "value": "VtM5e" }
 						],
 						"name": "system",
-						"description": "Game System, ex: PF2e or DnD5e",
+						"description": "Game System, ex: PF2e, SF2e, or DnD5e",
 						"required": false
 					},
 					{ "name": "ic-channel", "description": "In Character Channel", "required": false, "type": 7 },
@@ -204,6 +204,16 @@
 				"description": "Import from Pathbuilder 2e using 'Export to JSON'",
 				"options": [
 					{ "type": 10, "name": "id", "description": "'Export to JSON' id", "required": true },
+					{ "name": "attach", "description": "Attach as a Markdown formatted .txt", "required": false, "type": 5 },
+					{ "name": "pin", "description": "Pin character", "required": false, "type": 5 }
+				]
+			},
+			{
+				"type": 1,
+				"name": "starfinder-2e",
+				"description": "Import a Starfinder 2e character from PDF",
+				"options": [
+					{ "type": 3, "name": "pdf", "description": "URL to pdf or Message with PDF attached", "required": true },
 					{ "name": "attach", "description": "Attach as a Markdown formatted .txt", "required": false, "type": 5 },
 					{ "name": "pin", "description": "Pin character", "required": false, "type": 5 }
 				]
@@ -328,5 +338,6 @@
 		"name": "sage-dev-pf2e",
 		"description": "sage-dev-PF2E"
 	},
-	{ "name": "Delete After", "type": 3 }
+	{ "name": "Delete After", "type": 3 },
+	{ "name": "Dialog Lookup", "type": 3 }
 ]

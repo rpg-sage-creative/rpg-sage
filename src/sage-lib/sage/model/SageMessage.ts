@@ -75,6 +75,11 @@ export class SageMessage
 		clone._ = this._;
 		return clone as this;
 	}
+
+	public async fetchMessage(): Promise<Message> {
+		return this.message.fetch();
+	}
+
 	public clear(): void {
 		debug("Clearing SageMessage");
 		this.cache.clear();
