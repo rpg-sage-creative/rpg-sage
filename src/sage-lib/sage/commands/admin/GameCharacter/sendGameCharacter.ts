@@ -69,10 +69,10 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		}
 	}
 
-	const notes = character.notes.getUncategorizedNotes().map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
-	if (notes.length) {
-		renderableContent.appendTitledSection(`<b>Notes</b>`, ...notes);
-	}
+	// const notes = character.notes.getUncategorizedNotes().map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
+	// if (notes.length) {
+	// 	renderableContent.appendTitledSection(`<b>Notes</b>`, ...notes);
+	// }
 
 	const targetChannel = sageMessage.message.channel;
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
