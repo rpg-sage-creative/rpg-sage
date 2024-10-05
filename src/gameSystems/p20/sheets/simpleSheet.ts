@@ -69,8 +69,8 @@ function hpToHtml(char: GameCharacter): string | undefined {
 }
 
 function conditionsToHtml(char: GameCharacter): string | undefined {
-	const conditions = char.getConditions();
-	if (conditions.length) {
+	const conditions = char.getStat("conditions")?.split(/\s*,\s*/);
+	if (conditions?.length) {
 		return conditions.join(", ");
 	}
 	return undefined;

@@ -1,3 +1,4 @@
+import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 import { parseKeyValueArgs } from "@rsc-utils/string-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
@@ -8,7 +9,6 @@ import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
 import { showCharForm } from "./showCharForm.js";
 import type { CustomIdParts } from "./types.js";
-import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 
 export type CharStatsForm = {
 	conditions: string;
@@ -56,8 +56,7 @@ async function handleCharStatsSubmit(sageInteraction: SageInteraction, idParts: 
 		pairs.push({ key:"maxHp", value:form.maxHp });
 		pairs.push({ key:"conditions", value:form.conditions });
 		pairs.push(...parseKeyValueArgs(form.other.replace(/\n/g, " ")));
-		const gameSystem = sageInteraction.game?.gameSystem ?? sageInteraction.server.gameSystem;
-		await char.updateStats(pairs, gameSystem, false);
+		await char.updateStats(pairs, false);
 	}
 	return showCharForm(sageInteraction, idParts.charId);
 }

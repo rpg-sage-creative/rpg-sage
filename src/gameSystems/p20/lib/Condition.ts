@@ -53,6 +53,23 @@ export class Condition {
 		];
 	}
 
+	public static getConditionRiders(condition: string): string[] {
+		switch(condition.toLowerCase()) {
+			case "confused": return ["off-guard"];
+			case "encumbered": return ["clumsy 1", "-10ft speed"];
+			case "grabbed": return ["off-guard", "immobilized"];
+			case "invisible": return ["undetected"];
+			case "paralyzed": return ["off-guard"];
+			case "prone": return ["off-guard"];
+			case "restrained": return ["off-guard", "immobilized"];
+			case "suppressed": return ["-5ft speed"];
+			case "unconscious": return ["blinded", "off-guard", "prone"];
+			case "unnoticed": return ["undetected"];
+			case "untethered": return ["clumsy", "off-guard"];
+			default: return [];
+		}
+	}
+
 	// store as Disposition (default 0) and allow ++ or -- to move up/down the scale of -2 to +2
 	// public static getDispositionConditions(): string[] {
 	// 	return [

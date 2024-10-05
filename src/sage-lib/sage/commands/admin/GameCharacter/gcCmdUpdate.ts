@@ -31,7 +31,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 			}
 		}
 
-		await character.processStatsAndMods({ stats, mods }, sageMessage.game?.gameSystem ?? sageMessage.server.gameSystem);
+		await character.processStatsAndMods(stats, mods);
 
 		if (!core && (stats?.length || mods?.length)) {
 			const statModKeys = (stats?.map(pair => pair.key) ?? []).concat(mods?.map(pair => pair.key) ?? []);

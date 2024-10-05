@@ -47,7 +47,7 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const newChar = new GameCharacter(core, characterManager);
-	await newChar.processStatsAndMods({ stats, mods }, sageMessage.game?.gameSystem ?? sageMessage.server.gameSystem);
+	await newChar.processStatsAndMods(stats, mods);
 
 	return promptCharConfirm(sageMessage, newChar, `Create ${characterTypeMeta.singularDescriptor} ${newChar.name}?`, async char => {
 		if (sageMessage.game && userId) {

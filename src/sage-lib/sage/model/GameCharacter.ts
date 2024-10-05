@@ -1,4 +1,4 @@
-import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { NIL_SNOWFLAKE, applyChanges, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
@@ -486,27 +486,6 @@ export class GameCharacter implements IHasSave {
 		return parseGameSystem(this.notes.getStat("gameSystem")?.note);
 	}
 
-	public getConditions(): string[] {
-		const manual = this.getStat("conditions");
-		if (manual) return [manual];
-
-		const gameSystem = this.gameSystem;
-		if (!gameSystem?.isP20) return [];
-
-		const conditions: string[] = [];
-
-		Condition.getToggledConditions().forEach(key => {
-			if (this.getStat(key) !== null) conditions.push(key);
-		});
-
-		Condition.getValuedConditions().forEach(key => {
-			const value = this.getStat(key);
-			if (value !== null) conditions.push(`${key} ${value}`);
-		});
-
-		return conditions;
-	}
-
 	public getStat(key: string): string | null {
 		if (/^name$/i.test(key)) {
 			return this.name;
@@ -594,39 +573,53 @@ export class GameCharacter implements IHasSave {
 			}
 		}
 
+		if (/^conditions$/i.test(key) && this.gameSystem?.isP20) {
+			const conditions: string[] = [];
+
+			Condition.getToggledConditions().forEach(condition => {
+				if (this.getStat(key) !== null) {
+					const riders = Condition.getConditionRiders(condition);
+					const riderText = riders.length ? ` (${riders.join(", ")})` : ``;
+					conditions.push(condition + riderText);
+				}
+			});
+
+			Condition.getValuedConditions().forEach(condition => {
+				const value = this.getStat(condition);
+				if (value !== null) {
+					conditions.push(`${condition} ${value}`);
+				}
+			});
+
+			conditions.sort();
+
+			return conditions.join(", ");
+		}
+
 		return null;
 	}
 
-	public async processStatsAndMods({ stats, mods }: { stats?:TKeyValuePair[]; mods?:StatModPair[] }, gameSystem: Optional<GameSystem>): Promise<boolean> {
+	public async processStatsAndMods(stats?: TKeyValuePair[], mods?:StatModPair[]): Promise<boolean> {
 		let updated = false;
 		if (stats?.length) {
-			updated = await this.updateStats(stats, gameSystem, false);
+			updated = await this.updateStats(stats, false);
 		}
 
 		let modded = false;
 		if (mods?.length) {
-			modded = await this.modStats(mods, gameSystem, false);
+			for (const pair of mods) {
+				const oldValue = this.getStat(pair.key) ?? 0;
+				const math = `${oldValue}${pair.modifier}${pair.value}`;
+				const newValue = doStatMath(math);
+				const updated = await this.updateStats([{ key:pair.key, value:newValue }], false);
+				modded ||= updated;
+			}
 		}
 
 		return updated || modded;
 	}
 
-	public async modStats(pairs: StatModPair[], gameSystem: Optional<GameSystem>, save: boolean): Promise<boolean> {
-		let changes = false;
-		for (const pair of pairs) {
-			const oldValue = this.getStat(pair.key) ?? 0;
-			const math = `${oldValue}${pair.modifier}${pair.value}`;
-			const newValue = doStatMath(math);
-			const updated = await this.updateStats([{ key:pair.key, value:newValue }], gameSystem, false);
-			changes ||= updated;
-		}
-		if (save && changes) {
-			return this.save();
-		}
-		return false;
-	}
-
-	public async updateStats(pairs: TKeyValuePair[], gameSystem: Optional<GameSystem>, save: boolean): Promise<boolean> {
+	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
 		let changes = false;
 		const forNotes: TKeyValuePair[] = [];
 		const pb = this.pathbuilder;
@@ -682,7 +675,7 @@ export class GameCharacter implements IHasSave {
 		}
 
 		// iterate the stat pairs to double check bounds
-		forNotes.forEach(pair => pair.value = checkStatBounds(this, gameSystem, pair) ?? pair.value);
+		forNotes.forEach(pair => pair.value = checkStatBounds(this, pair) ?? pair.value);
 
 		const updatedNotes = await this.notes.updateStats(forNotes, save);
 		return changes || updatedNotes;
