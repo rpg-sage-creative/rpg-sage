@@ -547,8 +547,8 @@ export class GameCharacter implements IHasSave {
 		const pb = this.pathbuilder;
 		if (pb) {
 			let pbKey = key;
-			if (/^explorationmode$/i.test(key)) pbKey = "activeExploration";
-			if (/^explorationskill$/i.test(key)) pbKey = "initskill";
+			if (/^explorationMode$/i.test(key)) pbKey = "activeExploration";
+			if (/^explorationSkill$/i.test(key)) pbKey = "initskill";
 			const pbStat = pb.getStat(pbKey) ?? null;
 			if (pbStat !== null) {
 				return String(pbStat);
@@ -559,7 +559,7 @@ export class GameCharacter implements IHasSave {
 		if (/^ogac$/i.test(key)) {
 			const ac = this.getStat("ac");
 			if (ac !== null) {
-				return doStatMath(ac + "-2");
+				return doStatMath(`${ac}-2`);
 			}
 		}
 
@@ -591,14 +591,6 @@ export class GameCharacter implements IHasSave {
 				if (abilityValue !== null) {
 					return doStatMath(`floor((${abilityValue}-10)/2)`);
 				}
-			}
-		}
-
-		if (/^(strength|dexterity|constitution|intelligence|wisdom|charisma)$/i.test(key)) {
-			const statKey = key.slice(4);
-			const statValue = this.getStat(statKey);
-			if (statValue !== null) {
-				return doStatMath(`floor((${statValue}-10)/2)`);
 			}
 		}
 
