@@ -1,6 +1,6 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { NIL_SNOWFLAKE, applyChanges, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, applyChanges, debug, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -9,6 +9,7 @@ import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
+import { isStatsKey } from "../../../gameSystems/sheets.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
@@ -213,12 +214,12 @@ export class GameCharacter implements IHasSave {
 		const companionType = this.isPCorCompanion ? "companion" : "minion";
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
 
-		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []), this.owner);
+		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
 	}
 
 	/** nickname (aka) */
 	public get aka(): string | undefined { return this.core.aka ?? this.notes.getStat("nickname")?.note.trim(); }
-	public set aka(aka: string | undefined) { this.core.aka = aka; this.notes.unsetStat("nickname"); }
+	public set aka(aka: string | undefined) { this.core.aka = aka; this.notes.setStat("nickname", ""); }
 
 	/** short name used to ease dialog access */
 	public get alias(): string | undefined {
@@ -486,6 +487,14 @@ export class GameCharacter implements IHasSave {
 		return parseGameSystem(this.notes.getStat("gameSystem")?.note);
 	}
 
+	public getNonGameStatsOutput(): string[] {
+		const { gameSystem } = this;
+		const allStatsNotes = this.notes.getStats();
+		const nonGameStatsNotes = gameSystem ? allStatsNotes.filter(note => !isStatsKey(note.title, gameSystem)) : allStatsNotes;
+		const sortedNonGameStatsNotes = nonGameStatsNotes.sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
+		return sortedNonGameStatsNotes.map(note => `<b>${note.title}</b> ${note.note}`);
+	}
+
 	public getStat(key: string): string | null {
 		if (/^name$/i.test(key)) {
 			return this.name;
@@ -574,10 +583,12 @@ export class GameCharacter implements IHasSave {
 		}
 
 		if (/^conditions$/i.test(key) && this.gameSystem?.isP20) {
+			debug("conditions");
 			const conditions: string[] = [];
 
 			Condition.getToggledConditions().forEach(condition => {
-				if (this.getStat(key) !== null) {
+				debug({condition,value:this.getStat(key)});
+				if (this.getStat(condition) !== null) {
 					const riders = Condition.getConditionRiders(condition);
 					const riderText = riders.length ? ` (${riders.join(", ")})` : ``;
 					conditions.push(condition + riderText);
@@ -653,19 +664,21 @@ export class GameCharacter implements IHasSave {
 				if (/^level$/i.test(key) && +value) {
 					const updatedLevel = await pb.setLevel(+value, save);
 					if (updatedLevel) {
-						this.notes.unsetStats("level");
+						const unset = this.notes.setStat("level", "");
+						if (unset) changes = true;
 					}
-					changes = updatedLevel;
 					continue;
 				}
 				if (isExplorationMode) {
 					pb.setSheetValue("activeExploration", correctedValue ?? "Other");
-					this.notes.unsetStats(correctedKey ?? key);
+					const unset = this.notes.setStat(correctedKey ?? key, "");
+					if (unset) changes = true;
 					continue;
 				}
 				if (isExplorationSkill) {
 					pb.setSheetValue("activeSkill", correctedValue ?? "Perception");
-					this.notes.unsetStats(correctedKey ?? key);
+					const unset = this.notes.setStat(correctedKey ?? key, "");
+					if (unset) changes = true;
 					continue;
 				}
 				// abilities?
@@ -677,7 +690,7 @@ export class GameCharacter implements IHasSave {
 		// iterate the stat pairs to double check bounds
 		forNotes.forEach(pair => pair.value = checkStatBounds(this, pair) ?? pair.value);
 
-		const updatedNotes = await this.notes.updateStats(forNotes, save);
+		const updatedNotes = this.notes.updateStats(forNotes);
 		return changes || updatedNotes;
 	}
 

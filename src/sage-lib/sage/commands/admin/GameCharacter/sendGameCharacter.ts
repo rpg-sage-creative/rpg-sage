@@ -1,7 +1,7 @@
 import { mapAsync } from "@rsc-utils/array-utils";
 import { toChannelMention, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
-import { canProcessStats, isStatsKey, statsToHtml } from "../../../../../gameSystems/sheets.js";
+import { canProcessStats, statsToHtml } from "../../../../../gameSystems/sheets.js";
 import { sendWebhook } from "../../../../discord/messages.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -54,25 +54,16 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`<b>Auto Dialog</b> <i>none</i>`);
 	}
 
-	const gameSystem = character.gameSystem;
-	const sortedStats = character.notes.getStats().sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
-	if (canProcessStats(gameSystem)) {
-		renderableContent.appendTitledSection(`<b>Stats</b> ${gameSystem?.code}`, ...statsToHtml(character, gameSystem));
-		const otherStats = sortedStats.filter(note => !isStatsKey(note.title, gameSystem)).map(note => `<b>${note.title}</b> ${note.note}`);
-		if (otherStats.length) {
-			renderableContent.appendTitledSection(`<b>Other Stats</b>`, ...otherStats);
-		}
-	}else {
-		const stats = sortedStats.map(note => `<b>${note.title}</b> ${note.note}`);
-		if (stats.length) {
-			renderableContent.appendTitledSection(`<b>Stats</b>`, ...stats);
-		}
+	let statsTitle = "Stats";
+	if (canProcessStats(character)) {
+		const { gameSystem } = character;
+		renderableContent.appendTitledSection(`<b>Stats</b> ${gameSystem?.code}`, ...statsToHtml(character));
+		statsTitle = "Other Stats";
 	}
-
-	// const notes = character.notes.getUncategorizedNotes().map(note => note.title ? `<b>${note.title}</b> ${note.note}` : note.note);
-	// if (notes.length) {
-	// 	renderableContent.appendTitledSection(`<b>Notes</b>`, ...notes);
-	// }
+	const stats = character.getNonGameStatsOutput();
+	if (stats.length) {
+		renderableContent.appendTitledSection(`<b>${statsTitle}</b>`, ...stats);
+	}
 
 	const targetChannel = sageMessage.message.channel;
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;

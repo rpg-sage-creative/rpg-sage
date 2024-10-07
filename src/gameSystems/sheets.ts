@@ -5,7 +5,7 @@ import { isStatsKey as isStatsKeyD20, statsToHtml as statsToHtmlD20 } from "./d2
 import { isStatsKey as isStatsKeyP20, statsToHtml as statsToHtmlP20 } from "./p20/sheets/simpleSheet.js";
 import { isStatsKey as isStatsKeySF1e, statsToHtml as statsToHtmlSF1e } from "./sf1e/sheets/simpleSheet.js";
 
-export function canProcessStats(gameSystem: Optional<GameSystem>): boolean {
+export function canProcessStats({ gameSystem }: GameCharacter): boolean {
 	if (gameSystem) {
 		return ["DnD5e", "PF1e", "PF2e", "SF1e", "SF2e"].includes(gameSystem.code);
 	}
@@ -24,7 +24,8 @@ export function isStatsKey(key: string, gameSystem: Optional<GameSystem>): boole
 	}
 }
 
-export function statsToHtml(character: GameCharacter, gameSystem: Optional<GameSystem>): string[] {
+export function statsToHtml(character: GameCharacter): string[] {
+	const { gameSystem } = character;
 	if (!gameSystem) return [];
 	switch(gameSystem.code) {
 		case "DnD5e": return statsToHtmlD20(character);

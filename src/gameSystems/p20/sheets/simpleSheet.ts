@@ -61,10 +61,11 @@ function acSavesToHtml(char: GameCharacter): string | undefined {
 }
 
 function hpToHtml(char: GameCharacter): string | undefined {
+	const tempHp = char.getStat("tempHp");
 	const hp = char.getStat("hp");
 	const maxHp = char.getStat("maxHp");
-	return hp || maxHp
-		? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}`
+	return hp || maxHp || tempHp
+		? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}; <b>Temp HP</b> ${tempHp ?? "0"}`
 		: undefined;
 }
 

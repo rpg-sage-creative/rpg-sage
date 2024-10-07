@@ -42,14 +42,16 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 
 	let opUpdated = false;
 	let ptUpdated = false;
+	const { sageUser } = sageMessage;
 
 	if (validKeys.includes("orgPlayId")) {
 		const orgPlayId = sageMessage.args.getString("orgPlayId");
 		if (orgPlayId) {
-			opUpdated = await sageMessage.sageUser.notes.setCategorizedNote("Uncategorized", "orgPlayId", orgPlayId);
+			opUpdated = sageUser.notes.setCategorizedNote("Uncategorized", "orgPlayId", orgPlayId);
 		}else {
-			opUpdated = await sageMessage.sageUser.notes.setCategorizedNote("Uncategorized", "orgPlayId", "");
+			opUpdated = sageUser.notes.setCategorizedNote("Uncategorized", "orgPlayId", "");
 		}
+		if (opUpdated) await sageUser.save();
 	}
 
 	if (validKeys.includes("dialogDiceBehavior") || validKeys.includes("dialogPostType") || validKeys.includes("sagePostType") || validKeys.includes("dmOnDelete") || validKeys.includes("dmOnEdit")) {
@@ -58,7 +60,7 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		const sagePostType = sageMessage.args.getEnum(DialogPostType, "sagePostType");
 		const dmOnDelete = sageMessage.args.getBoolean("dmOnDelete");
 		const dmOnEdit = sageMessage.args.getBoolean("dmOnEdit");
-		ptUpdated = await sageMessage.sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType });
+		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType });
 	}
 
 	if (opUpdated || ptUpdated) {

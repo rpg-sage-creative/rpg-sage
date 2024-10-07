@@ -27,10 +27,20 @@ export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair): 
 		return undefined;
 	}
 
+	if (keyLower === "temphp" && isZeroOrLess) {
+		return "";
+	}
+
 	// conditions have a min value of 0
 	const valuedConditions = Condition.getValuedConditions();
 	if (valuedConditions.includes(keyLower)) {
 		if (isZeroOrLess) return "";
+	}
+
+	// toggled conditions are tracked using a 1 for on
+	const toggledConditions = Condition.getToggledConditions();
+	if (toggledConditions.includes(keyLower)) {
+		return isZeroOrLess ? "" : "1";
 	}
 
 	return undefined;
