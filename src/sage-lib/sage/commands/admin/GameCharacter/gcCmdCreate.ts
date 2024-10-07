@@ -26,7 +26,7 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
 	}
 
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
+	const hasCharacters = sageMessage.game ?? sageMessage.sageUser;
 
 	let characterManager: CharacterManager | undefined = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {

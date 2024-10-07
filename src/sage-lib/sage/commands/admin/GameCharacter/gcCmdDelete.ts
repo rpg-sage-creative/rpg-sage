@@ -12,7 +12,7 @@ export async function gcCmdDelete(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const userDid = await getUserDid(sageMessage),
-		hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser,
+		hasCharacters = sageMessage.game ?? sageMessage.sageUser,
 		characterManager = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters,
 		names = sageMessage.args.removeAndReturnNames(true);
 
