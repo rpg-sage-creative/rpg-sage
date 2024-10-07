@@ -33,9 +33,8 @@ export class Ability {
 	public static findByName(name: Optional<string>): Ability | undefined
 	public static findByName(name: Optional<string>): Ability | undefined {
 		if (!name) return undefined;
-		// if we have a valid name, we also have a valid abbr; this is faster and allows for simple typos
-		const abbrKey = name.slice(0, 3).toLowerCase();
-		return Ability.all().find(ability => ability.abbrKey === abbrKey);
+		const lower = name.toLowerCase();
+		return Ability.all().find(ability => ability.abbrKey === lower || ability.key === lower);
 	}
 
 	public static isValid(ability: Optional<string>): ability is AbilityName | AbilityAbbr | AbilityKey | AbilityAbbrKey {
