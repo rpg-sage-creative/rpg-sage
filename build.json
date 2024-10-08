@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.11",
+"version":"1.7.12",
 "branch":"main",
-"commit":"14f30aca1f7c34e98f3a58c6b580c3d3e1ca25a2",
-"commitSubject":"Merge pull request #104 from rpg-sage-creative/emoji-color-list-fix",
-"commitTs":1727209807000,
-"commitDate":"2024-09-24-1330",
-"buildTs":1727211286000,
-"buildDate":"2024-09-24-1354",
+"commit":"a61f9caafa36787efb0f76d56db76a2e76f1dd22",
+"commitSubject":"Merge pull request #107 from rpg-sage-creative/stat-increments",
+"commitTs":1728424403000,
+"commitDate":"2024-10-08-1453",
+"buildTs":1728424549000,
+"buildDate":"2024-10-08-1455",
 "author":"Randal"
 }
