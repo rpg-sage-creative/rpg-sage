@@ -70,9 +70,9 @@ function hpToHtml(char: GameCharacter): string | undefined {
 }
 
 function conditionsToHtml(char: GameCharacter): string | undefined {
-	const conditions = char.getStat("conditions")?.split(/\s*,\s*/);
+	const conditions = char.getStat("conditions")?.split(/\s*,\s*/).filter(s => s);
 	if (conditions?.length) {
-		return conditions.join(", ");
+		return `<b>Conditions</b> ${conditions.join(", ")}`;
 	}
 	return undefined;
 }
@@ -90,8 +90,7 @@ export function isStatsKey(key: string): boolean {
 	const lower = key.toLowerCase();
 	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower)
 		|| ["mod.fortitude", "fortitude", "fort", "mod.reflex", "reflex", "ref", "mod.will", "will"].includes(lower)
-		|| ["ac", "hp", "maxhp"].includes(lower)
-		|| Condition.getToggledConditions().includes(lower)
-		|| Condition.getValuedConditions().includes(lower)
+		|| ["ac", "hp", "maxhp", "temphp"].includes(lower)
+		|| !!Condition.isConditionKey(lower)
 		;
 }
