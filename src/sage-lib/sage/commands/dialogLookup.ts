@@ -112,6 +112,7 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 		game = await sageCommand.sageCache.games.getById(gameId) ?? undefined;
 	}
 
+	/** we can't use sageCommand.findCharacter because the game and user aren't linked to the command */
 	const character = game?.playerCharacters.findById(characterId)
 		?? game?.nonPlayerCharacters.findById(characterId)
 		?? (game?.gmCharacter.equals(characterId) ? game.gmCharacter : undefined)
@@ -123,12 +124,17 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 		return whisper(sageCommand, `Sorry, we could't find the RPG Sage Character.`);
 	}
 
+	const isGameChar = game?.findCharacterOrCompanion(character.id);
+
 	const renderable = createRenderableContent(sageCommand.getHasColors(), ColorType.Command, "RPG Sage Dialog Lookup");
 	renderable.setThumbnailUrl(character.tokenUrl ?? character.avatarUrl);
 	renderable.append(getMessageLink(message));
 	renderable.append(getCharacterName(character));
 	renderable.append(await getUserName(sageCommand, guildMember, userDid, game));
 	renderable.append(getGameName(game));
+	if (game && !isGameChar) {
+		renderable.append(`> *NOTE: This character is a User Character, **NOT** a Game Character.*`);
+	}
 	renderable.append(getServerName(sageCommand.discord.guild));
 
 	await whisper(sageCommand, renderable);

@@ -225,6 +225,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
 	public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
 	public findCharacterOrCompanion(name: string): GameCharacter | CharacterShell | undefined {
+		if (this.gmCharacter.matches(name)) return this.gmCharacter;
 		return this.playerCharacters.findByName(name)
 			?? this.playerCharacters.findCompanionByName(name)
 			?? this.nonPlayerCharacters.findByName(name)
