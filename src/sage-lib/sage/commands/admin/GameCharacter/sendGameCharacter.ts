@@ -21,7 +21,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 
 	renderableContent.append(`<b>Alias</b> ${character.alias ?? "<i>unset</i>"}`);
 
-	const ownerOrPlayer = character.isGMorNPC ? "Owner" : "Player";
+	const ownerOrPlayer = character.isGmOrNpc ? "Owner" : "Player";
 	const ownerTag = await toReadableOwner(sageMessage, character.userDid);
 	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
 
@@ -29,7 +29,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`<b>Character</b> ${character.parent?.name ?? "<i>unknown</i>"}`);
 	} else {
 		const companionNames = character.companions.map(companion => companion.name).join("\n- ");
-		const companionType = character.isPC ? `Companions` : `Minions`;
+		const companionType = character.isPc ? `Companions` : `Minions`;
 		renderableContent.append(`<b>${companionType}</b> ${companionNames || "<i>none</i>"}`);
 	}
 	renderableContent.append(`<b>Dialog Color</b> ${character.embedColor ?? "<i>unset</i>"}`);
@@ -54,22 +54,33 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`<b>Auto Dialog</b> <i>none</i>`);
 	}
 
-	let statsTitle = "Stats";
-	if (canProcessStats(character)) {
-		const { gameSystem } = character;
-		renderableContent.appendTitledSection(`<b>Stats</b> ${gameSystem?.code}`, ...statsToHtml(character));
-		statsTitle = "Other Stats";
-	}
-	const stats = character.getNonGameStatsOutput();
-	if (stats.length) {
-		renderableContent.appendTitledSection(`<b>${statsTitle}</b>`, ...stats);
+	if (character.hasStats) {
+		const { isGmOrNpcOrMinion } = character;
+		const gmChannel = isGmOrNpcOrMinion ? await sageMessage.game?.gmGuildChannel() : undefined;
+		const hasGmChannel = !!gmChannel;
+		const isGmChannel = gmChannel ? gmChannel.id === sageMessage.channelDid : false;
+		if (isGmOrNpcOrMinion && hasGmChannel && !isGmChannel) {
+			renderableContent.appendTitledSection(`<b>Stats</b>`, `<i>NPC stats viewable in GM channel ...</i>`);
+
+		}else {
+			let statsTitle = "Stats";
+			if (canProcessStats(character)) {
+				const { gameSystem } = character;
+				renderableContent.appendTitledSection(`<b>Stats</b> ${gameSystem?.code}`, ...statsToHtml(character));
+				statsTitle = "Other Stats";
+			}
+			const stats = character.getNonGameStatsOutput();
+			if (stats.length) {
+				renderableContent.appendTitledSection(`<b>${statsTitle}</b>`, ...stats);
+			}
+		}
 	}
 
 	const targetChannel = sageMessage.message.channel;
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
 
 	const sageCache = sageMessage.caches;
-	const authorOptions = { avatarURL: avatarUrl, username: character.name };
+	const authorOptions = { avatarURL: avatarUrl, username: character.toDisplayName() };
 	const dialogType = sageMessage.dialogPostType;
 	const messages = await sendWebhook(targetChannel, { authorOptions, dialogType, renderableContent, sageCache });
 	return messages ?? [];

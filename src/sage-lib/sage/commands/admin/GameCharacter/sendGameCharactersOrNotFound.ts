@@ -31,21 +31,21 @@ export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, cha
 
 			renderableContent.append(`### ${character.name}`);
 
-			const hasOwner = !!character.userDid || character.isPC;
+			const hasOwner = !!character.userDid || character.isPc;
 			const hasParent = character.isCompanionOrMinion;
 			const hasCompanions = character.companions.length > 0;
 
 			const charInfo: string[] = [];
 			if (hasOwner || hasCompanions || hasParent) {
 				if (hasOwner) {
-					const ownerOrPlayer = character.isGMorNPC ? "Owner" : "Player";
+					const ownerOrPlayer = character.isGmOrNpc ? "Owner" : "Player";
 					const owner = await toReadableOwner(sageMessage, character.userDid);
 					const ownerTag = owner ?? "<i>none</i>";
 					charInfo.push(`<b>${ownerOrPlayer}</b> ${ownerTag}`);
 				}
 
 				if (hasCompanions) {
-					const companionType = character.isPC ? `Companions` : `Minions`;
+					const companionType = character.isPc ? `Companions` : `Minions`;
 					if (character.companions.length) {
 						const companionNames = character.companions.map(companion => `\n- ${companion.name}`).join("");
 						charInfo.push(`<b>${companionType}</b>${companionNames}`);

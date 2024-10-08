@@ -1,6 +1,6 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { NIL_SNOWFLAKE, applyChanges, debug, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, applyChanges, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -199,19 +199,7 @@ export class GameCharacter implements IHasSave {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		updateCore(core);
 
-		this.isGM = this.type === "gm";
-		this.isNPC = this.type === "npc";
-		this.isMinion = this.type === "minion";
-		this.isGMorNPC = this.isGM || this.isNPC;
-		this.isGMorNPCorMinion = this.isGM || this.isNPC || this.isMinion;
-
-		this.isCompanion = this.type === "companion";
-		this.isPC = this.type === "pc";
-		this.isPCorCompanion = this.isPC || this.isCompanion;
-
-		this.isCompanionOrMinion = this.isCompanion || this.isMinion;
-
-		const companionType = this.isPCorCompanion ? "companion" : "minion";
+		const companionType = this.isPcOrCompanion ? "companion" : "minion";
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
@@ -261,15 +249,15 @@ export class GameCharacter implements IHasSave {
 	/** Unique ID of this character */
 	public get id(): Snowflake { return this.core.id; }
 
-	public isGM: boolean;// = this.type === "gm"
-	public isNPC: boolean;// = this.type === "npc";
-	public isMinion: boolean;
-	public isGMorNPC: boolean;// = this.isGM || this.isNPC;
-	public isGMorNPCorMinion: boolean;
-	public isPC: boolean;// = this.type === "pc";
-	public isCompanion: boolean;// = this.type === "companion";
-	public isPCorCompanion: boolean;// = this.isPC || this.isCompanion;
-	public isCompanionOrMinion: boolean;
+	public get isGm(): boolean { return this.type === "gm"; }
+	public get isNpc(): boolean { return this.type === "npc"; }
+	public get isMinion(): boolean { return this.type === "minion"; }
+	public get isGmOrNpc(): boolean { return this.isGm || this.isNpc; }
+	public get isGmOrNpcOrMinion(): boolean { return this.isGm || this.isNpc || this.isMinion; }
+	public get isPc(): boolean { return this.type === "pc"; }
+	public get isCompanion(): boolean { return this.type === "companion"; }
+	public get isPcOrCompanion(): boolean { return this.isPc || this.isCompanion; }
+	public get isCompanionOrMinion(): boolean { return this.isCompanion || this.isMinion; }
 
 	/** A list of the character's last messages by channel. */
 	public get lastMessages(): TDialogMessage[] {
@@ -487,6 +475,8 @@ export class GameCharacter implements IHasSave {
 		return parseGameSystem(this.notes.getStat("gameSystem")?.note);
 	}
 
+	public get hasStats(): boolean { return this.notes.getStats().length > 0; }
+
 	public getNonGameStatsOutput(): string[] {
 		const { gameSystem } = this;
 		const allStatsNotes = this.notes.getStats();
@@ -583,11 +573,9 @@ export class GameCharacter implements IHasSave {
 		}
 
 		if (/^conditions$/i.test(key) && this.gameSystem?.isP20) {
-			debug("conditions");
 			const conditions: string[] = [];
 
 			Condition.getToggledConditions().forEach(condition => {
-				debug({condition,value:this.getStat(key)});
 				if (this.getStat(condition) !== null) {
 					const riders = Condition.getConditionRiders(condition);
 					const riderText = riders.length ? ` (${riders.join(", ")})` : ``;

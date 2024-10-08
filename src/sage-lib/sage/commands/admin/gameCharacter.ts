@@ -4,19 +4,13 @@ import { gcCmdAutoOn } from "./GameCharacter/gcCmdAutoOn.js";
 // import { registerGcCmdAutoDialog } from "./GameCharacter/gcCmdAutoDialog.js";
 import { gcCmdCreate } from "./GameCharacter/gcCmdCreate.js";
 import { gcCmdDelete } from "./GameCharacter/gcCmdDelete.js";
-import { gcCmdDetails } from "./GameCharacter/gcCmdDetails.js";
 import { gcCmdList } from "./GameCharacter/gcCmdList.js";
 import { gcCmdUpdate } from "./GameCharacter/gcCmdUpdate.js";
 
 export function registerGameCharacter(): void {
-	registerListeners({ commands:["pc|list", "pcs|list", "my|pc|list", "my|pcs"], message:gcCmdList });
-	registerListeners({ commands:["npc|list", "npcs|list", "my|npc|list", "my|npcs"], message:gcCmdList });
-	registerListeners({ commands:["companion|list", "my|companion|list", "my|companions"], message:gcCmdList });
-	registerListeners({ commands:["minion|list", "my|minion|list", "my|minions"], message:gcCmdList });
-	registerListeners({ commands:["pc|details", "npc|details", "companion|details", "gm|details", "minion|details"], message:gcCmdDetails });
+	registerListeners({ commands:["pc|list", "pcs|list", "npc|list", "npcs|list", "companion|list", "minion|list"], message:gcCmdList });
 	registerListeners({ commands:[`pc|create`, `npc|create`, `companion|create`, `minion|create`], message:gcCmdCreate });
-	registerListeners({ commands:["pc|update", "npc|update", "companion|update", "gm|update", "minion|update"], message:gcCmdUpdate });
-	registerListeners({ commands:["pc|stats", "npc|stats", "companion|stats", "minion|stats"], message:gcCmdUpdate });
+	registerListeners({ commands:[/(?<object>pc|npc|companion|minion|gm)\s*(?<verb>details|update|stats)/i, /(?<alias>\w+)/i], message:gcCmdUpdate });
 	registerListeners({ commands:["pc|delete", "npc|delete", "companion|delete", "minion|delete"], message:gcCmdDelete });
 	registerListeners({ commands:["pc|auto|on", "gm|auto|on", "npc|auto|on", "minion|auto|on", "companion|auto|on"], message:gcCmdAutoOn });
 	// registerGcCmdAutoDialog();

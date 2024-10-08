@@ -12,7 +12,13 @@ export async function promptModsConfirm(sageMessage: SageMessage, character: Gam
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (yes === true) {
 		const updated = await action(character);
-		await sageMessage.reactSuccessOrFailure(updated);
+		if (updated) {
+			await sageMessage.replyStack.editLast(`Character Updated.`);
+		}else {
+			await sageMessage.replyStack.whisper({ content:"Unknown Error; Character NOT Updated!" });
+		}
+	}else {
+		await sageMessage.replyStack.editLast(`Character ***NOT*** Updated.`);
 	}
 }
 
@@ -23,6 +29,12 @@ export async function promptCharConfirm(sageMessage: SageMessage, character: Gam
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (yes === true) {
 		const updated = await action(character);
-		await sageMessage.reactSuccessOrFailure(updated);
+		if (updated) {
+			await sageMessage.replyStack.editLast(`Character Updated.`);
+		}else {
+			await sageMessage.replyStack.whisper({ content:"Unknown Error; Character NOT Updated!" });
+		}
+	}else {
+		await sageMessage.replyStack.editLast(`Character ***NOT*** Updated.`);
 	}
 }

@@ -1,12 +1,16 @@
+import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterArgs } from "./getCharacterArgs.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
+import { getUserDid } from "./getUserDid.js";
 import { promptCharConfirm, promptModsConfirm } from "./promptCharConfirm.js";
+import { sendGameCharacter } from "./sendGameCharacter.js";
+import { sendNotFound } from "./sendNotFound.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
-export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
-	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
+export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameCharacter): Promise<void> {
+	const characterTypeMeta = getCharacterTypeMeta(sageMessage, character);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
 		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
 			return sageMessage.replyStack.whisper(`Sorry, NPCs only exist inside a Game.`);
@@ -17,12 +21,30 @@ export async function gcCmdUpdate(sageMessage: SageMessage): Promise<void> {
 	const { core, mods, names, stats, userId } = getCharacterArgs(sageMessage, characterTypeMeta.isGm, true);
 
 	if (!core && !mods?.length && !stats?.length) {
-		return sageMessage.replyStack.whisper("Nothing to do.");
+		// instead of simply failing, treat this as a details command.
+		if (!character) {
+			const userId = getUserDid(sageMessage);
+			const names = sageMessage.args.getNames();
+			const alias = sageMessage.args.getString("alias") ?? undefined;
+
+			character = await getCharacter(sageMessage, characterTypeMeta, userId, names, alias);
+
+			if (!character) {
+				await sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor} Details`, characterTypeMeta.singularDescriptor!, names.name);
+				return;
+			}
+		}
+
+		await sendGameCharacter(sageMessage, character);
+		return;
 	}
 
-	const character = characterTypeMeta.isGm
-		? sageMessage.gmCharacter
-		: await getCharacter(sageMessage, characterTypeMeta, userId, names, core?.alias);
+	if (!character) {
+		character = characterTypeMeta.isGm
+			? sageMessage.gmCharacter
+			: await getCharacter(sageMessage, characterTypeMeta, userId, names, core?.alias);
+	}
+
 	if (character) {
 		if (core) {
 			await character.update(core, false);
