@@ -39,11 +39,21 @@ function createInteractionTester(command: Command) {
 	return (cmd: SageInteraction) => cmd.customIdMatches(command);
 }
 
+function createCommandRegexWithArgsCaptureGroup(commandRegex: string): RegExp {
+	return new RegExp(`^${commandRegex}(?:$|(?<args>\\s+(?:.|\\n)*?)$)`, "i");
+}
+
 function commandToMatcher(command: Command): RegExp {
+	// we have to build the regexp for testing the command and getting args
 	if (typeof(command) === "string") {
 		const commandParts = command.split("|");
 		const keyRegex = commandParts.join(" ").replace(/[-\s]+/g, "[\\-\\s]");
-		return new RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
+		return createCommandRegexWithArgsCaptureGroup(keyRegex);
+
+	// the regex doesn't include command arg capture group
+	}else if (!command.source.startsWith("^") && !command.source.endsWith("$")) {
+		return createCommandRegexWithArgsCaptureGroup(command.source);
+
 	}
 	return command;
 }
@@ -54,7 +64,16 @@ function createMessageTester(command: Command) {
 			const matcher = commandToMatcher(command);
 			const match = matcher.exec(sageMessage.slicedContent.replace(/^!!?/, "").trim());
 			if (match) {
-				return { command:String(command), args: new ArgsManager(match[1]) };
+				const args = match.groups?.args ?? match[match.length - 1] ?? "";
+				const alias = match.groups?.alias;
+				if (alias) {
+					const char = sageMessage.findCharacterByAlias(alias);
+					if (char) {
+						return { command:String(command), args: new ArgsManager(args), data:char } as TCommandAndArgs;
+					}
+					return null;
+				}
+				return { command:String(command), args: new ArgsManager(args) };
 			}
 		}
 		return null;
