@@ -67,7 +67,7 @@ function createMessageTester(command: Command) {
 				const args = match.groups?.args ?? match[match.length - 1] ?? "";
 				const alias = match.groups?.alias;
 				if (alias) {
-					const char = sageMessage.findCharacterByAlias(alias);
+					const char = sageMessage.findCharacter(alias);
 					if (char) {
 						return { command:String(command), args: new ArgsManager(args), data:char } as TCommandAndArgs;
 					}
