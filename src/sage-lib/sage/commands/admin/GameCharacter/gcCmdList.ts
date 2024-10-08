@@ -15,7 +15,7 @@ export async function gcCmdList(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisper(`Sorry, you cannot list characters here.`);
 	}
 
-	const hasCharacters = sageMessage.game && !characterTypeMeta.isMy ? sageMessage.game : sageMessage.sageUser;
+	const hasCharacters = sageMessage.game ?? sageMessage.sageUser;
 
 	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {

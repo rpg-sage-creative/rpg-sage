@@ -343,6 +343,34 @@ export abstract class SageCommand<
 		);
 	}
 
+	/**
+	 * Looks for a Character with the given name or alias by checking the Game (if one exists) before checking the SageUser.
+	 * PCs (and then Companions) are checked before NPCs (and then Minions).
+	 */
+	public findCharacter(value: string): GameCharacter | undefined {
+		const find = ({ playerCharacters, nonPlayerCharacters }: Game | User) => {
+			return playerCharacters.findByName(value)
+				?? playerCharacters.findCompanion(value)
+				?? nonPlayerCharacters.findByName(value)
+				?? nonPlayerCharacters.findCompanion(value);
+		};
+
+		const { game } = this;
+		if (game) {
+			if (game.gmCharacter.matches(value)) {
+				return game.gmCharacter;
+			}
+			const gameChar = find(game);
+			if (gameChar) return gameChar;
+		}else {
+			const { server } = this;
+			if (server.gmCharacter.matches(value)) {
+				return server.gmCharacter;
+			}
+		}
+		return find(this.sageUser);
+	}
+
 	//#endregion
 
 	//#region colors

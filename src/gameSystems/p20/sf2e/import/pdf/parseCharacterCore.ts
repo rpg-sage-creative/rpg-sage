@@ -1,8 +1,7 @@
 import { debug, randomSnowflake, type Optional } from "@rsc-utils/core-utils";
 import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
 import { toMod } from "../../../../../sage-dice/index.js";
-import { type TPathbuilderCharacter } from "../../../../../sage-pf2e/index.js";
-import type { TPathbuilderCharacterWeapon } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import type { TPathbuilderCharacter, TPathbuilderCharacterWeapon } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { ProficiencyType, SizeType } from "../../../lib/types.js";
 import type { PdfKeyMap } from "./types.js";
 

@@ -42,14 +42,16 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 
 	let opUpdated = false;
 	let ptUpdated = false;
+	const { sageUser } = sageMessage;
 
 	if (validKeys.includes("orgPlayId")) {
 		const orgPlayId = sageMessage.args.getString("orgPlayId");
 		if (orgPlayId) {
-			opUpdated = await sageMessage.sageUser.notes.setUncategorizedNote("orgPlayId", orgPlayId);
+			opUpdated = sageUser.notes.setCategorizedNote("Uncategorized", "orgPlayId", orgPlayId);
 		}else {
-			opUpdated = await sageMessage.sageUser.notes.unsetUncategorizedNote("orgPlayId");
+			opUpdated = sageUser.notes.setCategorizedNote("Uncategorized", "orgPlayId", "");
 		}
+		if (opUpdated) await sageUser.save();
 	}
 
 	if (validKeys.includes("dialogDiceBehavior") || validKeys.includes("dialogPostType") || validKeys.includes("sagePostType") || validKeys.includes("dmOnDelete") || validKeys.includes("dmOnEdit")) {
@@ -58,7 +60,7 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		const sagePostType = sageMessage.args.getEnum(DialogPostType, "sagePostType");
 		const dmOnDelete = sageMessage.args.getBoolean("dmOnDelete");
 		const dmOnEdit = sageMessage.args.getBoolean("dmOnEdit");
-		ptUpdated = await sageMessage.sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType });
+		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType });
 	}
 
 	if (opUpdated || ptUpdated) {
@@ -104,7 +106,7 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 	const sagePostType = DialogPostType[sageUser.sagePostType!] ?? `<i>unset (Embed)</i>`;
 	renderableContent.append(`<b>Preferred Sage Post Type</b> ${sagePostType}`);
 
-	const orgPlayId = sageUser.notes.getUncategorizedNote("orgPlayId")?.note ?? `<i>unset</i>`;
+	const orgPlayId = sageUser.notes.getCategorizedNote("Uncategorized", "orgPlayId")?.note ?? `<i>unset</i>`;
 	renderableContent.append(`<b>Paizo Organized Play #</b> ${orgPlayId}`);
 
 	const dmOnDelete = sageUser.dmOnDelete === true ? `Yes` : `No`;

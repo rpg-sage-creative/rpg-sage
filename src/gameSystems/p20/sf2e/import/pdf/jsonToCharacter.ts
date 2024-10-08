@@ -1,8 +1,8 @@
 import { PdfJsonFieldManager, type PdfJson } from "@rsc-utils/io-utils";
-import { PathbuilderCharacter } from "../../../../../sage-pf2e/index.js";
-import { parseCharacterCore } from "./parseCharacterCore.js";
+import { PathbuilderCharacter } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { getDemiplanePdfKeyMap } from "./keyMap/getDemiplanePdfKeyMap.js";
 import { getPlaytestPdfKeyMap } from "./keyMap/getPlaytestPdfKeyMap.js";
+import { parseCharacterCore } from "./parseCharacterCore.js";
 
 type Field = { name:string; value:string; } | { name:string; checked:boolean; };
 

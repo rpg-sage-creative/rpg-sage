@@ -1,5 +1,6 @@
 import type { Awaitable } from "@rsc-utils/core-utils";
 import { debug } from "@rsc-utils/core-utils";
+import XRegExp from "xregexp";
 import type { SageCommand } from "../../sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage/model/SageInteraction.js";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
@@ -39,22 +40,44 @@ function createInteractionTester(command: Command) {
 	return (cmd: SageInteraction) => cmd.customIdMatches(command);
 }
 
+function createCommandRegexWithArgsCaptureGroup(commandRegex: string): RegExp {
+	return new RegExp(`^${commandRegex}(?:$|\\s+(?<args>(?:.|\\n)*?)$)`, "i");
+}
+
 function commandToMatcher(command: Command): RegExp {
+	// we have to build the regexp for testing the command and getting args
 	if (typeof(command) === "string") {
 		const commandParts = command.split("|");
-		const keyRegex = commandParts.join(" ").replace(/[-\s]+/g, "[\\-\\s]");
-		return new RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
+		const keyRegex = commandParts.map(part => XRegExp.escape(part)).join("\\s+");
+		return createCommandRegexWithArgsCaptureGroup(keyRegex);
+
+	// the regex doesn't include command arg capture group
+	}else if (!command.source.startsWith("^") && !command.source.endsWith("$")) {
+		return createCommandRegexWithArgsCaptureGroup(command.source);
+
 	}
 	return command;
 }
 
-function createMessageTester(command: Command) {
+function createMessageTester(_command: Command) {
 	return async function (sageMessage: SageMessage): Promise<TCommandAndArgs | null> {
 		if (sageMessage.hasPrefix && /^!!?/.test(sageMessage.slicedContent)) {
-			const matcher = commandToMatcher(command);
+			const matcher = commandToMatcher(_command);
 			const match = matcher.exec(sageMessage.slicedContent.replace(/^!!?/, "").trim());
 			if (match) {
-				return { command:String(command), args: new ArgsManager(match[1]) };
+				const { object, verb, args, alias } = match.groups ?? {};
+				const toCommandAndArgs = (data?: any) => {
+					return {
+						command: object && verb ? `${object}|${verb}` : String(_command),
+						args: new ArgsManager(args ?? match[match.length - 1] ?? ""),
+						data
+					} as TCommandAndArgs;
+				};
+				if (alias) {
+					const char = sageMessage.findCharacter(alias);
+					return char ? toCommandAndArgs(char) : null;
+				}
+				return toCommandAndArgs();
 			}
 		}
 		return null;

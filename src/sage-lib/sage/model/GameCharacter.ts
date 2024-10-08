@@ -1,4 +1,4 @@
-import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { NIL_SNOWFLAKE, applyChanges, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
@@ -7,7 +7,12 @@ import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-ut
 import { isBlank, isWrapped, unwrap, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
-import { PathbuilderCharacter, getExplorationModes, getSkills, type TPathbuilderCharacter } from "../../../sage-pf2e/index.js";
+import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
+import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
+import { isStatsKey } from "../../../gameSystems/sheets.js";
+import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
+import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
@@ -194,27 +199,15 @@ export class GameCharacter implements IHasSave {
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		updateCore(core);
 
-		this.isGM = this.type === "gm";
-		this.isNPC = this.type === "npc";
-		this.isMinion = this.type === "minion";
-		this.isGMorNPC = this.isGM || this.isNPC;
-		this.isGMorNPCorMinion = this.isGM || this.isNPC || this.isMinion;
-
-		this.isCompanion = this.type === "companion";
-		this.isPC = this.type === "pc";
-		this.isPCorCompanion = this.isPC || this.isCompanion;
-
-		this.isCompanionOrMinion = this.isCompanion || this.isMinion;
-
-		const companionType = this.isPCorCompanion ? "companion" : "minion";
+		const companionType = this.isPcOrCompanion ? "companion" : "minion";
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
 
-		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []), this.owner);
+		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
 	}
 
 	/** nickname (aka) */
 	public get aka(): string | undefined { return this.core.aka ?? this.notes.getStat("nickname")?.note.trim(); }
-	public set aka(aka: string | undefined) { this.core.aka = aka; this.notes.unsetStat("nickname"); }
+	public set aka(aka: string | undefined) { this.core.aka = aka; this.notes.setStat("nickname", ""); }
 
 	/** short name used to ease dialog access */
 	public get alias(): string | undefined {
@@ -256,15 +249,15 @@ export class GameCharacter implements IHasSave {
 	/** Unique ID of this character */
 	public get id(): Snowflake { return this.core.id; }
 
-	public isGM: boolean;// = this.type === "gm"
-	public isNPC: boolean;// = this.type === "npc";
-	public isMinion: boolean;
-	public isGMorNPC: boolean;// = this.isGM || this.isNPC;
-	public isGMorNPCorMinion: boolean;
-	public isPC: boolean;// = this.type === "pc";
-	public isCompanion: boolean;// = this.type === "companion";
-	public isPCorCompanion: boolean;// = this.isPC || this.isCompanion;
-	public isCompanionOrMinion: boolean;
+	public get isGm(): boolean { return this.type === "gm"; }
+	public get isNpc(): boolean { return this.type === "npc"; }
+	public get isMinion(): boolean { return this.type === "minion"; }
+	public get isGmOrNpc(): boolean { return this.isGm || this.isNpc; }
+	public get isGmOrNpcOrMinion(): boolean { return this.isGm || this.isNpc || this.isMinion; }
+	public get isPc(): boolean { return this.type === "pc"; }
+	public get isCompanion(): boolean { return this.type === "companion"; }
+	public get isPcOrCompanion(): boolean { return this.isPc || this.isCompanion; }
+	public get isCompanionOrMinion(): boolean { return this.isCompanion || this.isMinion; }
 
 	/** A list of the character's last messages by channel. */
 	public get lastMessages(): TDialogMessage[] {
@@ -478,6 +471,20 @@ export class GameCharacter implements IHasSave {
 		return this.fetchedMacros ?? [];
 	}
 
+	public get gameSystem() {
+		return parseGameSystem(this.notes.getStat("gameSystem")?.note);
+	}
+
+	public get hasStats(): boolean { return this.notes.getStats().length > 0; }
+
+	public getNonGameStatsOutput(): string[] {
+		const { gameSystem } = this;
+		const allStatsNotes = this.notes.getStats();
+		const nonGameStatsNotes = gameSystem ? allStatsNotes.filter(note => !isStatsKey(note.title, gameSystem)) : allStatsNotes;
+		const sortedNonGameStatsNotes = nonGameStatsNotes.sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
+		return sortedNonGameStatsNotes.map(note => `<b>${note.title}</b> ${note.note}`);
+	}
+
 	public getStat(key: string): string | null {
 		if (/^name$/i.test(key)) {
 			return this.name;
@@ -518,8 +525,8 @@ export class GameCharacter implements IHasSave {
 		const pb = this.pathbuilder;
 		if (pb) {
 			let pbKey = key;
-			if (/^explorationmode$/i.test(key)) pbKey = "activeExploration";
-			if (/^explorationskill$/i.test(key)) pbKey = "initskill";
+			if (/^explorationMode$/i.test(key)) pbKey = "activeExploration";
+			if (/^explorationSkill$/i.test(key)) pbKey = "initskill";
 			const pbStat = pb.getStat(pbKey) ?? null;
 			if (pbStat !== null) {
 				return String(pbStat);
@@ -530,7 +537,7 @@ export class GameCharacter implements IHasSave {
 		if (/^ogac$/i.test(key)) {
 			const ac = this.getStat("ac");
 			if (ac !== null) {
-				return doStatMath(ac + "-2");
+				return doStatMath(`${ac}-2`);
 			}
 		}
 
@@ -565,15 +572,50 @@ export class GameCharacter implements IHasSave {
 			}
 		}
 
-		if (/^(strength|dexterity|constitution|intelligence|wisdom|charisma)$/i.test(key)) {
-			const statKey = key.slice(4);
-			const statValue = this.getStat(statKey);
-			if (statValue !== null) {
-				return doStatMath(`floor((${statValue}-10)/2)`);
-			}
+		if (/^conditions$/i.test(key) && this.gameSystem?.isP20) {
+			const conditions: string[] = [];
+
+			Condition.getToggledConditions().forEach(condition => {
+				if (this.getStat(condition) !== null) {
+					const riders = Condition.getConditionRiders(condition);
+					const riderText = riders.length ? ` (${riders.join(", ")})` : ``;
+					conditions.push(condition + riderText);
+				}
+			});
+
+			Condition.getValuedConditions().forEach(condition => {
+				const value = this.getStat(condition);
+				if (value !== null) {
+					conditions.push(`${condition} ${value}`);
+				}
+			});
+
+			conditions.sort();
+
+			return conditions.join(", ");
 		}
 
 		return null;
+	}
+
+	public async processStatsAndMods(stats?: TKeyValuePair[], mods?:StatModPair[]): Promise<boolean> {
+		let updated = false;
+		if (stats?.length) {
+			updated = await this.updateStats(stats, false);
+		}
+
+		let modded = false;
+		if (mods?.length) {
+			for (const pair of mods) {
+				const oldValue = this.getStat(pair.key) ?? 0;
+				const math = `${oldValue}${pair.modifier}${pair.value}`;
+				const newValue = doStatMath(math);
+				const updated = await this.updateStats([{ key:pair.key, value:newValue }], false);
+				modded ||= updated;
+			}
+		}
+
+		return updated || modded;
 	}
 
 	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
@@ -581,13 +623,14 @@ export class GameCharacter implements IHasSave {
 		const forNotes: TKeyValuePair[] = [];
 		const pb = this.pathbuilder;
 		for (const pair of pairs) {
-			const { key, value } = pair;
+			const key = pair.key;
+			const value = pair.value ?? "";
 			if (/^name$/i.test(key) && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
 				this.name = value;
 				if (pb) {
 					pb.name = value;
 				}
-				changes ||= true;
+				changes = true;
 				continue;
 			}
 
@@ -609,19 +652,21 @@ export class GameCharacter implements IHasSave {
 				if (/^level$/i.test(key) && +value) {
 					const updatedLevel = await pb.setLevel(+value, save);
 					if (updatedLevel) {
-						this.notes.unsetStats("level");
+						const unset = this.notes.setStat("level", "");
+						if (unset) changes = true;
 					}
-					changes ||= updatedLevel;
 					continue;
 				}
 				if (isExplorationMode) {
 					pb.setSheetValue("activeExploration", correctedValue ?? "Other");
-					this.notes.unsetStats(correctedKey ?? key);
+					const unset = this.notes.setStat(correctedKey ?? key, "");
+					if (unset) changes = true;
 					continue;
 				}
 				if (isExplorationSkill) {
 					pb.setSheetValue("activeSkill", correctedValue ?? "Perception");
-					this.notes.unsetStats(correctedKey ?? key);
+					const unset = this.notes.setStat(correctedKey ?? key, "");
+					if (unset) changes = true;
 					continue;
 				}
 				// abilities?
@@ -629,7 +674,11 @@ export class GameCharacter implements IHasSave {
 			}
 			forNotes.push({ key:correctedKey??key, value:correctedValue??value });
 		}
-		const updatedNotes = await this.notes.updateStats(forNotes, save);
+
+		// iterate the stat pairs to double check bounds
+		forNotes.forEach(pair => pair.value = checkStatBounds(this, pair) ?? pair.value);
+
+		const updatedNotes = this.notes.updateStats(forNotes);
 		return changes || updatedNotes;
 	}
 

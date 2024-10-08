@@ -79,7 +79,7 @@ export class User extends HasDidCore<UserCore> {
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 
-		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []), this);
+		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
 
 		this.isSuperAdmin = core.did === getSuperAdminId();
 		this.isSuperUser = core.did === getSuperUserId();

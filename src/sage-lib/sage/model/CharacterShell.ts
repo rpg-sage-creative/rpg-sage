@@ -1,10 +1,10 @@
+import type { Snowflake } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
-import type { Snowflake } from "@rsc-utils/core-utils";
 
 export type CharacterShellCore = {
 	/** id of the GameCharacter */
@@ -74,7 +74,7 @@ export class CharacterShell {
 			const keyRegex = new RegExp(`^${XRegExp.escape(key)}$`, "i");
 			const statKey = Object.keys(partyStats).find(pKey => keyRegex.test(pKey)) ?? key;
 			if (partyStats[statKey] !== value) {
-				if (!value.trim()) {
+				if (!value?.trim()) {
 					delete partyStats[statKey];
 				}else {
 					partyStats[statKey] = value;

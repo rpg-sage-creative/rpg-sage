@@ -11,9 +11,7 @@ export async function getCharacter(sageCommand: SageCommand, characterTypeMeta: 
 		return sageCommand.gmCharacter;
 	}
 
-	const hasCharacters = sageCommand.game && !characterTypeMeta.isMy
-		? sageCommand.game
-		: sageCommand.sageUser;
+	const hasCharacters = sageCommand.game ?? sageCommand.sageUser;
 
 	let characterManager: CharacterManager | undefined = characterTypeMeta.isGmOrNpcOrMinion
 		? hasCharacters.nonPlayerCharacters

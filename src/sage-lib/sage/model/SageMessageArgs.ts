@@ -11,7 +11,13 @@ import { SageCommandArgs, type Names } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
 import type { Server } from "./Server.js";
 
-export type TKeyValuePair = { key: string; value: string; };
+/** Represents an argument that was 'key=value'. If value is an empty string, it will be set as NULL. */
+export type TKeyValuePair<T extends string = string> = {
+	/** The value on the left of the first equals sign. */
+	key: string;
+	/** This value is null if they value was an empty string. */
+	value: T | null;
+};
 
 type TArgIndexRet<T> = { arg: string; index: number; ret: T };
 

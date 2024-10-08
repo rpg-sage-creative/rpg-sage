@@ -8,10 +8,6 @@ export { RenderableContent } from "./data/RenderableContent.js";
 export * as Repository from "./data/Repository.js";
 //#endregion
 
-//#region map
-export * from "./map/map.js";
-//#endregion
-
 //#region model
 //#region model/base
 export { Base, type BaseCore } from "./model/base/Base.js";
@@ -19,28 +15,6 @@ export { HasSource, type SourcedCore, type TSourceInfo, type TSourceInfoRaw } fr
 export { Source, type SourceCore } from "./model/base/Source.js";
 export { SourceNotationMap } from "./model/base/SourceNotationMap.js";
 export * from "./model/base/interfaces.js";
-//#endregion
-
-//#region model/bestiary
-export { Creature } from "./model/bestiary/Creature.js";
-export { CreatureCategory, type CreatureCategoryCore, type IHasLevelAndName, sortByLevelThenName } from "./model/bestiary/CreatureCategory.js";
-export { CreatureLanguages } from "./model/bestiary/CreatureLanguages.js";
-export * from "./model/bestiary/ICreature.js";
-//#endregion
-
-//#region model/pc
-export { Abilities, type IHasAbilities } from "./model/pc/Abilities.js";
-export { ArmorClasses } from "./model/pc/ArmorClasses.js";
-export { Check, type TCheckPlayerCharacter } from "./model/pc/Check.js";
-export { Encumbrance } from "./model/pc/Encumbrance.js";
-export { Equipment, type IEquipment } from "./model/pc/Equipment.js";
-export { EquipmentItem, type EquipmentItemCore } from "./model/pc/EquipmentItem.js";
-export { EquipmentList, type EquipmentListCore } from "./model/pc/EquipmentList.js";
-export { PathbuilderCharacter, type TPathbuilderCharacter, type TPathbuilderCharacterAbilityKey } from "./model/pc/PathbuilderCharacter.js";
-export { type IHasProficiencies, PlayerCharacter, type PlayerCharacterCore } from "./model/pc/PlayerCharacter.js";
-export { type IHasSavingThrows, SavingThrows } from "./model/pc/SavingThrows.js";
-export { Skills } from "./model/pc/Skills.js";
-export { Speeds } from "./model/pc/Speeds.js";
 //#endregion
 
 //#region model/.

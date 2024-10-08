@@ -1,3 +1,4 @@
+import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 import { parseKeyValueArgs } from "@rsc-utils/string-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
@@ -8,7 +9,6 @@ import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
 import { showCharForm } from "./showCharForm.js";
 import type { CustomIdParts } from "./types.js";
-import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 
 export type CharStatsForm = {
 	conditions: string;
