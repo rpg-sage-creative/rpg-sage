@@ -1,6 +1,26 @@
 export class Condition {
 	// public constructor(public name: string) { }
 
+	public static isConditionKey(condition: string): "valued" | "toggled" | false;
+	public static isConditionKey(condition: string, which?: "valued" | "toggled"): boolean;
+	public static isConditionKey(condition: string, which?: "valued" | "toggled"): "valued" | "toggled" | boolean {
+		const lower = condition.toLowerCase();
+
+		// check valued
+		const checkValued = !which || which == "valued";
+		if (checkValued && Condition.getValuedConditions().includes(lower)) {
+			return which ? true : "valued";
+		}
+
+		// check toggled
+		const checkToggled = !which || which === "toggled";
+		if (checkToggled && Condition.getToggledConditions().includes(lower)) {
+			return which ? true : "toggled";
+		}
+
+		return false;
+	}
+
 	/** These conditions are removed when their value reaches 0. */
 	public static getValuedConditions(): string[] {
 		return [
@@ -53,6 +73,7 @@ export class Condition {
 		];
 	}
 
+	/** @todo figure out if i even need a recursive option */
 	public static getConditionRiders(condition: string): string[] {
 		switch(condition.toLowerCase()) {
 			case "confused": return ["off-guard"];
