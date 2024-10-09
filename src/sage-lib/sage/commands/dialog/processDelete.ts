@@ -1,5 +1,5 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
+import { type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordApiError, isDiscordApiError, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder, User } from "discord.js";
 import { deleteMessage } from "../../../discord/deletedMessages.js";
 import { registerReactionListener } from "../../../discord/handlers.js";
@@ -18,7 +18,16 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	}
 
 	// we now need the message, so fetch the reaction
-	const messageReaction = await sageReaction.fetchMessageReaction();
+	const messageReaction = await sageReaction.fetchMessageReaction().catch(err => {
+		return isDiscordApiError(err, 10008) ? null : DiscordApiError.process(err);
+	});
+	if (messageReaction === null) {
+		await sageReaction.replyStack.whisper(`We're sorry, the message you tried to delete doesn't exist.\n\n> Note: If you are trying to delete a dialog post that has been reposted (or "proxied") in character, it is possible that you are trying to delete an "echo" of the original post. An "echo" occurs sometimes when Discord receives dialog delete/repost messages simultaneously. If this is the case, closing and reopening Discord should make the "echo" go away.`, { forceEphemeral:true });
+		return null;
+	}
+	if (!messageReaction) return null;
+
+	// grab the message now that we have a valid message reaction
 	const { message } = messageReaction;
 
 	// check deletable
