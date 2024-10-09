@@ -47,10 +47,12 @@ export class SageReaction
 		return this.core.messageReaction.emoji;
 	}
 
-	public async fetchMessage(): Promise<Message> {
-		const messageReaction = await this.fetchMessageReaction();
-		const message = await messageReaction.message.fetch();
-		return message as Message;
+	public fetchMessage(): Promise<Message> {
+		return new Promise<Message>((resolve, reject) => {
+			this.fetchMessageReaction().then(messageReaction => {
+				messageReaction.message.fetch().then(resolve, reject);
+			}, reject);
+		});
 	}
 
 	public async fetchMessageReaction(): Promise<MessageReaction> {
