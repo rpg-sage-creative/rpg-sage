@@ -1,3 +1,4 @@
+import { SageChannelType } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/array-utils";
 import { toChannelMention, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
@@ -55,11 +56,29 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	}
 
 	if (character.hasStats) {
+		let isGmChannel = false;
+		let hasGmChannels = false;
 		const { isGmOrNpcOrMinion } = character;
-		const gmChannel = isGmOrNpcOrMinion ? await sageMessage.game?.gmGuildChannel() : undefined;
-		const hasGmChannel = !!gmChannel;
-		const isGmChannel = gmChannel ? gmChannel.id === sageMessage.channelDid : false;
-		if (isGmOrNpcOrMinion && hasGmChannel && !isGmChannel) {
+		if (isGmOrNpcOrMinion) {
+			const { channelDid, game, threadDid } = sageMessage;
+			const { channels } = game ?? {};
+			const gmChannels = channels?.filter(ch => ch.type === SageChannelType.GameMaster);
+			if (gmChannels?.length) {
+				hasGmChannels = true;
+				if (threadDid) {
+					// thread is gm channel
+					isGmChannel = gmChannels.some(ch => (ch.did ?? ch.id) === threadDid);
+					// thread is not channel and channel is gm channel
+					if (!isGmChannel) {
+						isGmChannel = !channels?.some(ch => (ch.did ?? ch.id) === threadDid)
+							&& gmChannels.some(ch => (ch.did ?? ch.id) === channelDid);
+					}
+				}else {
+					isGmChannel = gmChannels.some(ch => (ch.did ?? ch.id) === channelDid);
+				}
+			}
+		}
+		if (isGmOrNpcOrMinion && hasGmChannels && !isGmChannel) {
 			renderableContent.appendTitledSection(`<b>Stats</b>`, `<i>NPC stats viewable in GM channel ...</i>`);
 
 		}else {

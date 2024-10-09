@@ -1,4 +1,3 @@
-import { debug } from "@rsc-utils/core-utils";
 
 type Command = { commandMatches(regex: RegExp): boolean; };
 
@@ -38,7 +37,6 @@ export type TCharacterTypeMeta = TCharacterTypeMetaMatchFlags & {
 };
 
 export function getCharacterTypeMeta(command: Command, matchFlags = getCharacterTypeMetaMatchFlags(command)): TCharacterTypeMeta {
-	debug(matchFlags);
 	const getDescriptor = (values: string[]) => {
 		if (matchFlags.isCompanion) return values[0];
 		if (matchFlags.isPc) return values[1];
