@@ -249,6 +249,12 @@ export class ReplyStack {
 			const replyArgs = this.resolveArgs(_args, { ...omit(replyOpts, "appendSpinner"), fetchReply:true });
 			this.replyMessage = await interaction.reply(replyArgs) as Message;
 
+		// this is a SageReaction, to avoid lots of sage / discord channel / perm checking, just DM the user
+		}else if (this.sageCommand.isSageReaction()) {
+			const replyArgs = this.resolveArgs(_args);
+			const user = await this.sageCommand.sageCache.discord.fetchUser(this.sageCommand.sageUser.did);
+			await user?.send(replyArgs);
+
 		}else {
 			warn(`ReplyStack._reply ELSE!?`);
 		}
