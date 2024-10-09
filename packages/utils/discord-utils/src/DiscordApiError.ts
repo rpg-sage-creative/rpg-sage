@@ -4,12 +4,16 @@ import { toHumanReadable, type Readable } from "./humanReadable/toHumanReadable.
 
 /** https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes */
 
+type ErrorCode = 10003 | 10004 | 10007 | 10008 | 10011 | 10013 | 10014 | 10015 | 10062 | 50035;
+
 export function isDiscordApiError(reason: unknown): reason is TDiscordApiError;
-export function isDiscordApiError(reason: any): reason is TDiscordApiError {
-	return reason?.name === "DiscordAPIError"
-		|| isErrorCode(reason?.code)
-		|| isWarnCode(reason?.code)
-		;
+export function isDiscordApiError<T extends ErrorCode>(reason: unknown, code: T): reason is (TDiscordApiError & { code:T });
+export function isDiscordApiError(reason: any, code?: number): reason is TDiscordApiError {
+	if (reason?.name === "DiscordAPIError") {
+		if (code) return reason.code === code;
+		return isErrorCode(reason?.code) || isWarnCode(reason?.code);
+	}
+	return false;
 }
 
 function isErrorCode(code?: string | number): boolean {
