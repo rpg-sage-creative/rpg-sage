@@ -13,12 +13,12 @@ import { parseOrAutoDialogContent } from "./dialog/parseOrAutoDialog.js";
 
 /** Returns the dialog content if found or null otherwise. */
 async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<DialogContent[]> | null> {
-	if (!sageMessage.allowDialog) {
+	if (!sageMessage.allowDialog || !sageMessage.message.content) {
 		return null;
 	}
 
 	const dialogContents = parseOrAutoDialogContent(sageMessage);
-	if (!dialogContents?.length || !sageMessage.message.content) {
+	if (!dialogContents?.length) {
 		return null;
 	}
 
