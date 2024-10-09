@@ -18,7 +18,7 @@ async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndDat
 	}
 
 	const dialogContents = parseOrAutoDialogContent(sageMessage);
-	if (!dialogContents?.length) {
+	if (!dialogContents?.length || !sageMessage.message.content) {
 		return null;
 	}
 
