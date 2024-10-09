@@ -1,6 +1,7 @@
 import { EphemeralSet } from "@rsc-utils/cache-utils";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { debug, errorReturnNull, verbose } from "@rsc-utils/core-utils";
+import { debug, verbose } from "@rsc-utils/core-utils";
+import { DiscordApiError, isDiscordApiError } from "@rsc-utils/discord-utils";
 import type { Message, PartialMessage } from "discord.js";
 import { GameMapBase } from "../sage/commands/map/GameMapBase.js";
 
@@ -28,7 +29,14 @@ export function isDeletable(message: Optional<Message>): message is Message {
 	return message ? message.deletable && !isDeleted(message.id as Snowflake) : false;
 }
 
-export enum MessageDeleteResults { InvalidMessage = -2, NotDeletable = -1, NotDeleted = 0, Deleted = 1, AlreadyDeleted = 2 }
+export enum MessageDeleteResults {
+	UnknownMessage = -3,
+	InvalidMessage = -2,
+	NotDeletable = -1,
+	NotDeleted = 0,
+	Deleted = 1,
+	AlreadyDeleted = 2
+}
 
 /**
  * Tries to safely delete all the given messages.
@@ -53,14 +61,27 @@ export async function deleteMessage(message: Optional<Message | PartialMessage>)
 	return result;
 }
 
+function messageCatcher(err: unknown): MessageDeleteResults.UnknownMessage | undefined {
+	return isDiscordApiError(10008) ? MessageDeleteResults.UnknownMessage : DiscordApiError.process(err);
+}
+
 /** @private Worker function for deleteMessage. */
 async function _deleteMessage(message: Optional<Message | PartialMessage>): Promise<MessageDeleteResults> {
 	if (!message?.id) return MessageDeleteResults.InvalidMessage; //NOSONAR
-	if (message.partial) await message.fetch();
+
+	if (message.partial) {
+		const results = await message.fetch().catch(messageCatcher);
+		if (results === MessageDeleteResults.UnknownMessage) return MessageDeleteResults.UnknownMessage; // NOSONAR
+		if (!results) return MessageDeleteResults.NotDeleted; // NOSONAR
+	}
+
 	if (!message.deletable) return MessageDeleteResults.NotDeletable; //NOSONAR
+
 	if (isDeleted(message.id as Snowflake)) return MessageDeleteResults.AlreadyDeleted; //NOSONAR
-	const results = await message.delete().catch(errorReturnNull);
-	if (results) return MessageDeleteResults.Deleted; // NOSONAR
-	// if (results?.deletable === false) return MessageDeleteResults.Deleted; //NOSONAR
-	return MessageDeleteResults.NotDeleted;
+
+	const results = await message.delete().catch(messageCatcher);
+	if (results === MessageDeleteResults.UnknownMessage) return MessageDeleteResults.UnknownMessage; // NOSONAR
+	if (!results) return MessageDeleteResults.NotDeleted; // NOSONAR
+
+	return MessageDeleteResults.Deleted;
 }
