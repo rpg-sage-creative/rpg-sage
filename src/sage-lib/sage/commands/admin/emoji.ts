@@ -33,7 +33,7 @@ function getEmojiAndTypes(sageCommand: SageCommand): TEmojiAndType[] {
 	// get emoji by key/value pair, where key is keyof EmojiType
 	const types = getEnumValues<EmojiType>(EmojiType);
 	types.forEach(type => {
-		const replacement = sageCommand.args.getString(EmojiType[type]);
+		const replacement = sageCommand.args.getString(EmojiType[type])?.trim();
 		if (replacement) {
 			results.push({ replacement, type });
 		}
@@ -41,7 +41,7 @@ function getEmojiAndTypes(sageCommand: SageCommand): TEmojiAndType[] {
 
 	// If none found, fall back to the old way of type="keyof EmojiType" and emoji="replacement"
 	if (!results.length) {
-		const replacement = sageCommand.args.getString("emoji");
+		const replacement = sageCommand.args.getString("emoji")?.trim();
 		const type = sageCommand.args.getEnum(EmojiType, "type");
 		if (replacement && isDefined(type)) {
 			results.push({ replacement, type });
