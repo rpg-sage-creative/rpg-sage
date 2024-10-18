@@ -126,5 +126,10 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpda
 	/** @todo determine how this userId is being used to decide if we need to return it at all */
 	const userId = args.getUserId("newUser") ?? args.getUserId("user") ?? getUserDid(sageMessage) ?? undefined;
 
+	// set the userId when creating a new character
+	if (core && !isUpdate) {
+		core.userDid = userId;
+	}
+
 	return { core, mods, names, stats, userId };
 }
