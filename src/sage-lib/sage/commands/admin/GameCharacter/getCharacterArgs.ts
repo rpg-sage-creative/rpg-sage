@@ -38,7 +38,7 @@ function parseStatModKeyValuePair(arg: string): StatModPair | undefined {
 	return undefined;
 }
 
-function getCore({ args }: SageMessage, names: Names, isUpdate: boolean): GameCharacterCore | undefined {
+function getCore({ args, message }: SageMessage, names: Names, isUpdate: boolean): GameCharacterCore | undefined {
 	const useAliasAsName = isUpdate && !names.isRename && !names.name;
 
 	let hasKeys = false;
@@ -92,6 +92,21 @@ function getCore({ args }: SageMessage, names: Names, isUpdate: boolean): GameCh
 			core.name = urlToName(core.tokenUrl) ?? urlToName(core.avatarUrl);
 		}
 		if (core.name) {
+			hasKeys = true;
+		}
+	}
+
+	// let's see if they dropped an image to be set on the character
+	if (tokenUrl === undefined || avatarUrl === undefined) {
+		const images = message.attachments.filter(att => att.contentType?.startsWith("image/"));
+		const tokenImage = images.find(att => /token/.test(att.name)) ?? images.find(att => !/avatar/.test(att.name)) ?? images.first();
+		const avatarImage = images.find(att => /avatar/.test(att.name)) ?? images.find(att => !/token/.test(att.name) && att !== tokenImage) ?? images.find(att => att !== tokenImage);
+		if (tokenUrl === undefined && tokenImage) {
+			core.tokenUrl = tokenImage.url;
+			hasKeys = true;
+		}
+		if (avatarUrl === undefined && avatarImage) {
+			core.avatarUrl = avatarImage.url;
 			hasKeys = true;
 		}
 	}
