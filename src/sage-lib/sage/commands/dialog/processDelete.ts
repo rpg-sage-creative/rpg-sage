@@ -1,7 +1,7 @@
 import { type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, isDiscordApiError, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
+import { DiscordApiError, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder, User } from "discord.js";
-import { deleteMessage } from "../../../discord/deletedMessages.js";
+import { deleteMessage, isDeleted } from "../../../discord/deletedMessages.js";
 import { registerReactionListener } from "../../../discord/handlers.js";
 import { ReactionType, type TCommand } from "../../../discord/index.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
@@ -18,13 +18,9 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	}
 
 	// we now need the message, so fetch the reaction
-	const messageReaction = await sageReaction.fetchMessageReaction().catch(err => {
-		return isDiscordApiError(err, 10008) ? null : DiscordApiError.process(err);
-	});
-	if (messageReaction === null) {
-		await sageReaction.replyStack.whisper(`We're sorry, the message you tried to delete doesn't exist.\n\n> Note: If you are trying to delete a dialog post that has been reposted (or "proxied") in character, it is possible that you are trying to delete an "echo" of the original post. An "echo" occurs sometimes when Discord receives dialog delete/repost messages simultaneously. If this is the case, closing and reopening Discord should make the "echo" go away.`, { forceEphemeral:true });
-		return null;
-	}
+	const messageReaction = await sageReaction.fetchMessageReaction().catch(DiscordApiError.ignore(10008));
+
+	// we failed to find a messageReaction, so do nothing
 	if (!messageReaction) return null;
 
 	// grab the message now that we have a valid message reaction
@@ -32,6 +28,12 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 
 	// check deletable
 	if (!message.deletable) {
+		return null;
+	}
+
+	// pause to see if Tupper is handling this one
+	await sageReaction.sageCache.pauseForTupper(sageReaction.discordKey);
+	if (isDeleted(message.id as Snowflake)) {
 		return null;
 	}
 
@@ -72,7 +74,12 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 }
 
 async function doDelete(sageReaction: SageReaction): Promise<void> {
-	const message = await sageReaction.fetchMessage();
+	const message = await sageReaction.fetchMessage().catch(DiscordApiError.process);
+
+	// we can't work without a message
+	if (!message) {
+		return;
+	}
 
 	const sendDm = async (user: User, actor = "You") => {
 		if (user) {

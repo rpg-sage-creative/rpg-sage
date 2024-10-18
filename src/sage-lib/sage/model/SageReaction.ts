@@ -1,7 +1,7 @@
 import { isSageId } from "@rsc-sage/env";
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug, type Snowflake } from "@rsc-utils/core-utils";
-import type { MessageOrPartial, ReactionOrPartial, UserOrPartial } from "@rsc-utils/discord-utils";
+import { DiscordApiError, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Message, MessageReaction } from "discord.js";
 import { ReactionType } from "../../discord/index.js";
 import { GameRoleType } from "./Game.js";
@@ -50,17 +50,28 @@ export class SageReaction
 	public fetchMessage(): Promise<Message> {
 		return new Promise<Message>((resolve, reject) => {
 			this.fetchMessageReaction().then(messageReaction => {
-				messageReaction.message.fetch().then(resolve, reject);
+				if (messageReaction.message.partial) {
+					messageReaction.message.fetch().then(resolve, reject);
+				}else {
+					resolve(messageReaction.message);
+				}
 			}, reject);
 		});
 	}
 
-	public async fetchMessageReaction(): Promise<MessageReaction> {
-		return this.core.messageReaction.fetch();
+	public fetchMessageReaction(): Promise<MessageReaction> {
+		return new Promise<MessageReaction>(async (resolve, reject) => {
+			if (this.core.messageReaction.partial) {
+				this.core.messageReaction.fetch().then(resolve, reject);
+			}else {
+				resolve(this.core.messageReaction);
+			}
+		});
 	}
 
 	public async isAuthorSageOrWebhook(): Promise<boolean> {
-		const message = await this.fetchMessage();
+		const message = await this.fetchMessage().catch(DiscordApiError.process);
+		if (!message) return false;
 
 		const messageAuthorId = message.author.id;
 		if (isSageId(messageAuthorId)) {

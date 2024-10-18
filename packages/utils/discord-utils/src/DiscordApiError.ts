@@ -7,10 +7,11 @@ import { toHumanReadable, type Readable } from "./humanReadable/toHumanReadable.
 type ErrorCode = 10003 | 10004 | 10007 | 10008 | 10011 | 10013 | 10014 | 10015 | 10062 | 50035;
 
 export function isDiscordApiError(reason: unknown): reason is TDiscordApiError;
-export function isDiscordApiError<T extends ErrorCode>(reason: unknown, code: T): reason is (TDiscordApiError & { code:T });
-export function isDiscordApiError(reason: any, code?: number): reason is TDiscordApiError {
-	if (reason?.name === "DiscordAPIError") {
-		if (code) return reason.code === code;
+export function isDiscordApiError<T extends ErrorCode>(reason: unknown, codes: T): reason is (TDiscordApiError & { code:T });
+export function isDiscordApiError<T extends ErrorCode>(reason: unknown, ...codes: T[]): reason is TDiscordApiError;
+export function isDiscordApiError(reason: any, ...codes: number[]): reason is TDiscordApiError {
+	if (/DiscordAPIError(\[\d+\])?/.test(String(reason?.name))) {
+		if (codes.some(code => reason.code === code)) return true;
 		return isErrorCode(reason?.code) || isWarnCode(reason?.code);
 	}
 	return false;
@@ -82,5 +83,13 @@ export class DiscordApiError {
 			}
 		}
 		return options?.retVal as T;
+	}
+
+	public static ignore<T extends ErrorCode>(...codes: T[]): (reason: unknown) => undefined {
+		return (reason: unknown) => {
+			if (!isDiscordApiError(reason, ...codes)) {
+				DiscordApiError.process(reason);
+			}
+		};
 	}
 }
