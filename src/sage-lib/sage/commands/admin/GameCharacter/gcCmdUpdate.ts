@@ -66,13 +66,18 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 			});
 		}
 
-		return promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
-			const charSaved = await char.save();
-			if (charSaved && characterTypeMeta.isGm) {
-				return sageMessage.game!.update({ gmCharacterName:char.name });
+		let updated = false;
+		await promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
+			updated = await char.save();
+			if (updated && characterTypeMeta.isGm) {
+				updated = await sageMessage.game!.update({ gmCharacterName:char.name });
 			}
-			return charSaved;
+			return updated;
 		});
+
+		const not = updated ? "" : "***NOT***";
+		await sageMessage.replyStack.reply(`Character "${character.name}" ${not} Updated!`);
+		return;
 	}
 
 	if (!names.name && !names.oldName && !core?.alias) {

@@ -1,3 +1,4 @@
+import { deleteMessages } from "../../../../discord/deletedMessages.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -23,7 +24,7 @@ export async function promptModsConfirm(sageMessage: SageMessage, character: Gam
 }
 
 export async function promptCharConfirm(sageMessage: SageMessage, character: GameCharacter, prompt: string, action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
-	await sendGameCharacter(sageMessage, character);
+	const details = await sendGameCharacter(sageMessage, character);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
 	promptRenderable.append(prompt);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
@@ -36,5 +37,6 @@ export async function promptCharConfirm(sageMessage: SageMessage, character: Gam
 		}
 	}else {
 		await sageMessage.replyStack.editLast(`Character ***NOT*** Updated.`);
+		await deleteMessages(details);
 	}
 }

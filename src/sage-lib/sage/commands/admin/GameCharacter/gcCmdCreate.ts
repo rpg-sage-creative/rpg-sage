@@ -49,7 +49,8 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	const newChar = new GameCharacter(core, characterManager);
 	await newChar.processStatsAndMods(stats, mods);
 
-	return promptCharConfirm(sageMessage, newChar, `Create ${characterTypeMeta.singularDescriptor} ${newChar.name}?`, async char => {
+	let created = false;
+	await promptCharConfirm(sageMessage, newChar, `Create ${characterTypeMeta.singularDescriptor} ${newChar.name}?`, async char => {
 		if (sageMessage.game && userId) {
 			// why? debug("Checking owner's status as player/gm ...");
 			if (characterTypeMeta.isNpc) {
@@ -71,7 +72,11 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 			}
 		}
 		const gc = await characterManager!.addCharacter(char.toJSON());
+		created = !!gc;
 		// debug(gc, gc?.toJSON())
-		return Promise.resolve(!!gc);
+		return created;
 	});
+
+	const not = created ? "" : "***NOT***";
+	await sageMessage.replyStack.reply(`Character "${newChar.name}" ${not} Created!`);
 }
