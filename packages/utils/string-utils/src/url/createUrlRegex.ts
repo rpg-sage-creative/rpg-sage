@@ -24,8 +24,8 @@ function getDomainRegex(): RegExp {
 	const alpha = `[a-z\\u00a1-\\uffff]`;
 	const alphaNumeric = `[a-z\\u00a1-\\uffff0-9]`;
 
-	const host = `(?:(?:${alphaNumeric}[-_]*)*${alphaNumeric}+)`;
-	const domain = `(?:\\.(?:${alphaNumeric}-*)*${alphaNumeric}+)*`;
+	const host = `(?:(?:${alphaNumeric}[-_]*)*${alphaNumeric}+\\.)`;
+	const domain = `(?:(?:${alphaNumeric}-*)*${alphaNumeric}+\\.)*`;
 	const tld = `(?:${alpha}{2,})`;
 
 	return new RegExp(host + domain + tld, "i");
