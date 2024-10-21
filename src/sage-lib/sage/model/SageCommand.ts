@@ -355,15 +355,15 @@ export abstract class SageCommand<
 				?? nonPlayerCharacters.findCompanion(value);
 		};
 
-		const { game } = this;
+		const { game, server } = this;
 		if (game) {
 			if (game.gmCharacter.matches(value)) {
 				return game.gmCharacter;
 			}
 			const gameChar = find(game);
 			if (gameChar) return gameChar;
-		}else {
-			const { server } = this;
+
+		}else if (server) {
 			if (server.gmCharacter.matches(value)) {
 				return server.gmCharacter;
 			}
