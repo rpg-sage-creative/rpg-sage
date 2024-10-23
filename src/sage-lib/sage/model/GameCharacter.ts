@@ -608,7 +608,7 @@ export class GameCharacter implements IHasSave {
 		if (mods?.length) {
 			for (const pair of mods) {
 				const oldValue = this.getStat(pair.key) ?? 0;
-				const math = `${oldValue}${pair.modifier}${pair.value}`;
+				const math = `(${oldValue}${pair.modifier}${pair.value})`;
 				const newValue = doStatMath(math);
 				const updated = await this.updateStats([{ key:pair.key, value:newValue }], false);
 				modded ||= updated;
