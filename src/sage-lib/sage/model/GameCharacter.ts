@@ -537,7 +537,7 @@ export class GameCharacter implements IHasSave {
 		if (/^ogac$/i.test(key)) {
 			const ac = this.getStat("ac");
 			if (ac !== null) {
-				return doStatMath(`${ac}-2`);
+				return doStatMath(`(${ac}-2)`);
 			}
 		}
 
@@ -545,7 +545,7 @@ export class GameCharacter implements IHasSave {
 		if (/^cantrip\.rank$/i.test(key)) {
 			const level = this.getStat("level");
 			if (level !== null) {
-				const mathed = doStatMath(level);
+				const mathed = doStatMath(`(${level})`);
 				const rank = Math.ceil(+mathed / 2);
 				return String(rank);
 			}
@@ -556,7 +556,7 @@ export class GameCharacter implements IHasSave {
 			const statKey = key.slice(3);
 			const statValue = this.getStat(statKey);
 			if (statValue !== null) {
-				return doStatMath(statValue + "+10");
+				return doStatMath(`(${statValue}+10)`);
 			}
 		}
 
