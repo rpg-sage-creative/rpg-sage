@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.12",
+"version":"1.7.13",
 "branch":"main",
-"commit":"a61f9caafa36787efb0f76d56db76a2e76f1dd22",
-"commitSubject":"Merge pull request #107 from rpg-sage-creative/stat-increments",
-"commitTs":1728424403000,
-"commitDate":"2024-10-08-1453",
-"buildTs":1728424549000,
-"buildDate":"2024-10-08-1455",
+"commit":"1b8fb51ab0cad0c9d7cac0b16a1c659eed7cff38",
+"commitSubject":"fix stat increment doStatMath",
+"commitTs":1729701027000,
+"commitDate":"2024-10-23-0930",
+"buildTs":1729701069000,
+"buildDate":"2024-10-23-0931",
 "author":"Randal"
 }
