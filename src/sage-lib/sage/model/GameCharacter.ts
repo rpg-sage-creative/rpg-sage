@@ -19,6 +19,26 @@ import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
 import type { TMacro } from "./types.js";
 
+/*
+Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
+Character will save snapshots .snapshots[... { ts, core }]
+Character snapshots will be created when imported to Game or added to Encounter.
+Character snapshots will be created on request for Patrons.
+
+Importing a character to a Game will create a GameCharacter.
+GameCharacter will get stored in /games/GAME_ID/characters/CHARACTER_ID.
+GameCharacter will store a reference to original Character as .original = { id, ts, type:"Character" }
+GameCharacter will save snapshots as .snapshots[... { ts, core }]
+GameCharacter snapshots will be created when added to Encounter.
+GameCharacter snapshots will be created on request for Patrons.
+
+Adding a character to an Encounter will create an EncounterCharacter.
+? EncounterCharacter will get stored in /encounters/ENCOUNTER_ID/characters/CHARACTER_ID.
+EncounterCharacter will store a reference to original Character as .original = { id, ts, type:"Character"|"GameCharacter" }
+EncounterCharacter will save snapshots as .snapshots[... { ts, core }]
+EncounterCharacter snapshots will be created at the start of every round.
+*/
+
 export type TDialogMessage = {
 	channelDid: Snowflake;
 	characterId: Snowflake;
