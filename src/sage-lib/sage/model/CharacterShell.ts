@@ -32,6 +32,10 @@ export class CharacterShell {
 	public get id(): string {
 		return this.core.id;
 	}
+	public get alias(): string | undefined {
+		// return this.game?.alias;
+		return undefined;
+	}
 	public get name(): string {
 		return this.core.label;
 		// const { nickname, suffix } = this.party;
@@ -61,6 +65,11 @@ export class CharacterShell {
 
 	public getWealth(summaryTemplate?: string | null): Wealth {
 		return getCharWealth(this, summaryTemplate);
+	}
+
+	public matches(_name: string): boolean {
+		// return this.game?.matches(name) ?? false;
+		return false;
 	}
 
 	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
