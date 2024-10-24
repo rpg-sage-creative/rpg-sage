@@ -2,6 +2,7 @@ import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethod
 import type { Optional } from "@rsc-utils/core-utils";
 import { error } from "@rsc-utils/core-utils";
 import { processStatBlocks } from "@rsc-utils/dice-utils";
+import { xRegExp } from "@rsc-utils/dice-utils/build/internal/xRegExp.js";
 import { type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
 import type { ButtonInteraction } from "discord.js";
@@ -197,6 +198,21 @@ function redactContent(content: string): string {
 		redacted = redactedTokens.join("");
 	}
 
+	// let's redact links
+	const linkRegex = xRegExp(`
+		\\[
+			[^\\]]+
+		\\]
+		\\(
+			(
+			<(s?ftp|https?)://[^\\)]+>
+			|
+			(s?ftp|https?)://[^\\)]+
+			)
+		\\)
+	`, "gix");
+	redacted = redacted.replace(linkRegex, link => "".padEnd(link.length, "*"));
+
 	return redacted;
 }
 
@@ -209,8 +225,8 @@ export async function parseDiceMatches(sageMessage: TInteraction, content: strin
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = isWrapped(match, "[[]]");
-		const output = await parseDiscordMacro(sageMessage, content.slice(index, index + match.length))
-			?? await parseMatch(sageMessage, content.slice(index, index + match.length));
+		const output = await parseDiscordMacro(sageMessage, redacted.slice(index, index + match.length))
+			?? await parseMatch(sageMessage, redacted.slice(index, index + match.length));
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}

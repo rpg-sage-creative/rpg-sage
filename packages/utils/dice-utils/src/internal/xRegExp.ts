@@ -3,7 +3,6 @@ import XRegExp from "xregexp";
 const DEBUG = false;
 
 /**
- * @internal
  * The "x" flag from XRegExp is great for readability, but it creates a _LOT_ of (?:) bits in the regex.
  * This cleans the comments and whitespace from "x" flag XRegExp when _NOT_ in debug mode.
  */
