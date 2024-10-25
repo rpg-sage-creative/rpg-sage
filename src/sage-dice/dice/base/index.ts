@@ -318,8 +318,8 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	}
 	private get biggest(): number { return this.adjustedCount * this.sides + this.modifier; }
 	private get smallest(): number { return this.adjustedCount + this.modifier; }
-	public get max(): number { return this.sign === "-" ? -1 * this.smallest : this.sign === "+" ? this.biggest : 0; }
-	public get min(): number { return this.sign === "-" ? -1 * this.biggest : this.sign === "+" ? this.smallest : 0; }
+	public get max(): number { return ["*","/"].includes(this.sign!) ? 0 : this.sign === "-" ? -1 * this.smallest :this.biggest; }
+	public get min(): number { return ["*","/"].includes(this.sign!) ? 0 : this.sign === "-" ? -1 * this.biggest : this.smallest; }
 	//#endregion
 
 	//#region flags
