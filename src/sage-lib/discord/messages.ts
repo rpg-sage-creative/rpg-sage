@@ -106,6 +106,9 @@ export async function replaceWebhook(originalMessage: MessageOrPartial, webhookO
 	}
 
 	const embeds = resolveToEmbeds(sageCache.cloneForChannel(originalMessage.channel), renderableContent);
+	if (embeds.length === 1 && !embeds[0].length && files?.length) {
+		embeds.length = 0;
+	}
 
 	const contentToEmbeds = dialogType === DialogType.Embed;
 	const embedsToContent = dialogType === DialogType.Post;

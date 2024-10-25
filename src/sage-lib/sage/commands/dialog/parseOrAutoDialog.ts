@@ -23,6 +23,23 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): DialogConten
 			const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(userDid, channelDid)
 				?? sageMessage.sageUser.getAutoCharacterForChannel(channelDid);
 			if (autoCharacter) {
+
+
+				// check content length; if no content and no image attached, fail out
+				if (!content) {
+					let hasImage = false;
+					for (const att of sageMessage.message.attachments.values()) {
+						if (att.contentType?.match(/image/i) && att.url) {
+							hasImage = true;
+							break;
+						}
+					}
+					if (!hasImage) {
+						return [];
+					}
+				}
+
+
 				const autoChannel = autoCharacter.getAutoChannel({ channelDid, userDid });
 				return [{
 					type: autoCharacter.type,
@@ -35,7 +52,7 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): DialogConten
 					// title: undefined,
 					// imageUrl: undefined,
 					// embedColor: undefined,
-					content: sageMessage.slicedContent
+					content
 				}];
 			}
 		}

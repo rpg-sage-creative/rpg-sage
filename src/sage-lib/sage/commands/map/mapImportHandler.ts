@@ -12,10 +12,10 @@ import { renderMap } from "./renderMap.js";
 
 function getValidUrl(attachment: Attachment): string | null {
 	const regex = /map\.txt$/i;
-	if (regex.test(attachment.url.split("?")[0])) {
+	if (regex.test(attachment.url.split(/[\?\#]/)[0])) {
 		return attachment.url;
 	}
-	if (regex.test(attachment.proxyURL.split("?")[0])) {
+	if (regex.test(attachment.proxyURL.split(/[\?\#]/)[0])) {
 		return attachment.proxyURL;
 	}
 	if (attachment.name && regex.test(attachment.name)) {

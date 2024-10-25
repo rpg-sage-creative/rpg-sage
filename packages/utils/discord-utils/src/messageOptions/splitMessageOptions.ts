@@ -200,7 +200,7 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 	if (components?.length || files?.length) {
 		// if we somehow don't have a payload, add one
 		if (!payloads.length) {
-			payloads.push({ } as T);
+			payloads.push({ ...baseOptions } as T);
 		}
 
 		// only include attachments in the first payload
