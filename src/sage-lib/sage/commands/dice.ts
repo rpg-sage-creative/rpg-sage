@@ -225,8 +225,8 @@ export async function parseDiceMatches(sageMessage: TInteraction, content: strin
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = isWrapped(match, "[[]]");
-		const output = await parseDiscordMacro(sageMessage, redacted.slice(index, index + match.length))
-			?? await parseMatch(sageMessage, redacted.slice(index, index + match.length));
+		const output = await parseDiscordMacro(sageMessage, content.slice(index, index + match.length))
+			?? await parseMatch(sageMessage, content.slice(index, index + match.length));
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}
