@@ -129,7 +129,9 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpda
 	/** @todo move the names logic into the getCore() function */
 	const names = args.getNames();
 	if (isGm && names.newName) {
+		if (!names.oldName) names.count = (names.count ?? 1) + 1;
 		names.oldName = sageMessage.gmCharacter.name;
+		names.isRename = true;
 	}
 	const core = getCore(sageMessage, names, isUpdate);
 
