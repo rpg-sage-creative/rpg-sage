@@ -2,8 +2,8 @@ import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOption
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { type Args, type EnumLike, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { type MessageChannel, parseIds } from "@rsc-utils/discord-utils";
-import { isUrl } from "@rsc-utils/io-utils";
-import { unwrap } from "@rsc-utils/string-utils";
+import { type VALID_URL } from "@rsc-utils/io-utils";
+import { createUrlRegex, unwrap } from "@rsc-utils/string-utils";
 import type { Attachment, Role, User } from "discord.js";
 import type { SageCommand } from "./SageCommand.js";
 
@@ -228,10 +228,11 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns undefined if not found.
 	 * Returns null if empty, invalid or "unset".
 	 */
-	public getUrl(name: string): string | null | undefined {
+	public getUrl(name: string): VALID_URL | null | undefined {
 		const url = this.getString(name);
-		if (url) {
-			return isUrl(url) ? unwrap(url, "<>") : null;
+		if (isDefined(url)) {
+			const regex = createUrlRegex({ anchored:true, wrapOptional:true, wrapChars:"<>" });
+			return regex.test(url) ? unwrap(url, "<>") as VALID_URL : null;
 		}
 		return url;
 	}
