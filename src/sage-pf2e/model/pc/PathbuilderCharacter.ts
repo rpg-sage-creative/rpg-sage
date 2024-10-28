@@ -1079,22 +1079,35 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 	//#region fetch
 
-	public static fetch(id: number, flags?: TPathbuilderCharacterCustomFlags): Promise<PathbuilderCharacter | null> {
-		return this.fetchCore(id)
+	public static fetch(idOrUrl: number | string, flags?: TPathbuilderCharacterCustomFlags): Promise<PathbuilderCharacter | null> {
+		return this.fetchCore(idOrUrl)
 			.then(core => new PathbuilderCharacter(core, flags), () => null);
 	}
 
-	public static fetchCore(id: number): Promise<TPathbuilderCharacter> {
+	public static fetchCore(idOrUrl: number | string): Promise<TPathbuilderCharacter> {
 		return new Promise<TPathbuilderCharacter>(async (resolve, reject) => {
 			try {
-				const url = `https://pathbuilder2e.com/json.php?id=${id}`;
-				const json = await getJson<TPathbuilderCharacterResponse>(url).catch(reject);
-// writeFileSync(`pathfbuilder2e-${id}.json`, json);
-				if (json?.success) {
-					json.build.exportJsonId = id;
-					resolve(json.build);
+				if (typeof(idOrUrl) === "number") {
+					const url = `https://pathbuilder2e.com/json.php?id=${idOrUrl}`;
+					const json = await getJson<TPathbuilderCharacterResponse>(url).catch(reject);
+					// writeFileSync(`pathfbuilder2e-${id}.json`, json);
+					if (json?.success) {
+						json.build.exportJsonId = idOrUrl;
+						resolve(json.build);
+					}else {
+						reject(stringify(json));
+					}
 				}else {
-					reject(stringify(json));
+					const json = await getJson<TPathbuilderCharacterResponse | TPathbuilderCharacter>(idOrUrl).catch(reject);
+					if (json) {
+						if ("success" in json && "build" in json) {
+							resolve(json.build);
+						}else if ("name" in json && "class" in json) {
+							resolve(json);
+						}else {
+							reject(stringify(json));
+						}
+					}
 				}
 			}catch (ex) {
 				reject(ex);
@@ -1140,8 +1153,8 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	public async save(): Promise<boolean> {
 		return PathbuilderCharacter.saveCharacter(this);
 	}
-	public static async refresh(options: { characterId:string; pathbuilderId?:number; newName?:string; pdfUrl?:string; pdfAttachment?:Attachment }): Promise<RefreshResult> {
-		const { characterId, pathbuilderId, newName, pdfUrl, pdfAttachment } = options;
+	public static async refresh(options: { characterId:string; pathbuilderId?:number; newName?:string; jsonUrl?:string; jsonAttachment?:Attachment; pdfUrl?:string; pdfAttachment?:Attachment }): Promise<RefreshResult> {
+		const { characterId, pathbuilderId, newName, jsonUrl, jsonAttachment, pdfUrl, pdfAttachment } = options;
 		const oldChar = await this.loadCharacter(characterId);
 		if (!oldChar) {
 			return "INVALID_CHARACTER_ID";
@@ -1149,7 +1162,17 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 		let newChar: TPathbuilderCharacter | undefined;
 
-		if (pdfUrl) {
+		if (jsonUrl) {
+			newChar = await PathbuilderCharacter.fetchCore(jsonUrl);
+			if (!newChar) return "INVALID_JSON_URL";
+		}
+
+		if (!newChar && jsonAttachment) {
+			newChar = await PathbuilderCharacter.fetchCore(jsonAttachment.url);
+			if (!newChar) return "INVALID_JSON_ATTACHMENT";
+		}
+
+		if (!newChar && pdfUrl) {
 			const json = await PdfCacher.read<PdfJson>(pdfUrl);
 			if (json) {
 				newChar = jsonToCharacter(json)?.toJSON();
@@ -1195,4 +1218,4 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 	//#endregion
 }
-type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | "INVALID_PDF_URL" | "INVALID_PDF_ATTACHMENT" | "UNSUPPORTED_PDF" | true | false;
+type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | "INVALID_JSON_URL" | "INVALID_JSON_ATTACHMENT" | "INVALID_PDF_URL" | "INVALID_PDF_ATTACHMENT" | "UNSUPPORTED_PDF" | true | false;
