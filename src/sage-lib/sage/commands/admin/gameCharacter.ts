@@ -4,6 +4,8 @@ import { gcCmdAutoOn } from "./GameCharacter/gcCmdAutoOn.js";
 // import { registerGcCmdAutoDialog } from "./GameCharacter/gcCmdAutoDialog.js";
 import { gcCmdCreate } from "./GameCharacter/gcCmdCreate.js";
 import { gcCmdDelete } from "./GameCharacter/gcCmdDelete.js";
+import { gcCmdExport } from "./GameCharacter/gcCmdExport.js";
+import { gcCmdImport } from "./GameCharacter/gcCmdImport.js";
 import { gcCmdList } from "./GameCharacter/gcCmdList.js";
 import { gcCmdUpdate } from "./GameCharacter/gcCmdUpdate.js";
 
@@ -13,6 +15,8 @@ export function registerGameCharacter(): void {
 	registerListeners({ commands:[/(?<object>pc|npc|companion|minion|gm)\s*(?<verb>details|update|stats)/i, /(?<alias>\w+)/i], message:gcCmdUpdate });
 	registerListeners({ commands:["pc|delete", "npc|delete", "companion|delete", "minion|delete"], message:gcCmdDelete });
 	registerListeners({ commands:["pc|auto|on", "gm|auto|on", "npc|auto|on", "minion|auto|on", "companion|auto|on"], message:gcCmdAutoOn });
+	registerListeners({ commands:[/(?<object>pc|npc|companion|minion|gm)\s*(?<verb>import)/i], message:gcCmdImport });
+	registerListeners({ commands:[/(?<object>pc|npc|companion|minion|gm)\s*(?<verb>export)/i], message:gcCmdExport });
 	// registerGcCmdAutoDialog();
 	registerListeners({ commands:["pc|auto|off", "gm|auto|off", "npc|auto|off", "minion|auto|off", "companion|auto|off"], message:gcCmdAutoOff });
 	// registerListeners({ commands:["pc-link", "npc-link", "companion-link", "minion-link"], message:characterLink });

@@ -1,10 +1,14 @@
-import { type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { dequote, getQuotedRegexSource, getWordCharacterRegexSource } from "@rsc-utils/string-utils";
+import { Color } from "@rsc-utils/color-utils";
+import { debug, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { VALID_URL } from "@rsc-utils/io-utils";
+import { dequote, getQuotedRegexSource, getWordCharacterRegexSource, isBlank } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
+import { GameUserType } from "../../../model/Game.js";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { TKeyValuePair } from "../../../model/SageMessageArgs.js";
+import { fetchTsv } from "../../../model/utils/tsv.js";
 import { getUserDid } from "./getUserDid.js";
 
 export type StatModPair = TKeyValuePair<string> & { modifier?:"+"|"-" };
@@ -15,6 +19,7 @@ type Results = {
 	names: Names;
 	stats?: TKeyValuePair<string>[];
 	userId?: Snowflake;
+	type?: "pc" | "npc" | "companion" | "minion";
 };
 
 function createStatModKeyValuePairRegex(): RegExp {
@@ -114,17 +119,20 @@ function getCore({ args, message }: SageMessage, names: Names, isUpdate: boolean
 	return hasKeys ? core as GameCharacterCore : undefined;
 }
 
-export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpdate: boolean): Results {
-	const { args } = sageMessage;
-
+function isValidCoreKey(key: string): boolean {
 	const validCoreKeys = [
 		// basics
 		"alias", "avatar", "color", "token",
 		// user
 		"newuser", "user",
 		// names
-		"charname", "char", "oldname", "name", "newname"
+		"charname", "oldname", "name", "newname"
 	];
+	return validCoreKeys.includes(key.toLowerCase());
+}
+
+export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpdate: boolean): Results {
+	const { args } = sageMessage;
 
 	/** @todo move the names logic into the getCore() function */
 	const names = args.getNames();
@@ -133,12 +141,8 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpda
 		names.oldName = sageMessage.gmCharacter.name;
 		names.isRename = true;
 	}
+
 	const core = getCore(sageMessage, names, isUpdate);
-
-	// only do mods on an update
-	const mods = isUpdate ? args.toArray().map(parseStatModKeyValuePair).filter(pair => pair) as StatModPair[] : [];
-
-	const stats = args.keyValuePairs().filter(pair => !validCoreKeys.includes(pair.key.toLowerCase()) && !/[+-]$/.test(pair.key));
 
 	/** @todo determine how this userId is being used to decide if we need to return it at all */
 	const userId = args.getUserId("newUser") ?? args.getUserId("user") ?? getUserDid(sageMessage) ?? undefined;
@@ -148,5 +152,90 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpda
 		core.userDid = userId;
 	}
 
+	// only do mods on an update
+	const mods = isUpdate ? args.toArray().map(parseStatModKeyValuePair).filter(pair => pair) as StatModPair[] : [];
+
+	const stats = args.keyValuePairs().filter(pair => !isValidCoreKey(pair.key) && !/[+-]$/.test(pair.key));
+
 	return { core, mods, names, stats, userId };
+}
+
+export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean, isUpdate: boolean): Promise<Results[]> {
+	// const tsvUrl = sageMessage.args.getUrl("tsv");
+	// const tsvAttachment = sageMessage.message.attachments.find(att => att.contentType?.includes("text") && att.url.includes(".tsv"));
+	// if (!tsvUrl && !tsvAttachment) return sageMessage.replyStack.whisper(`Sorry, this command is still being developed and only imports from tsv urls.`);
+
+	const tsvUrl = sageMessage.args.getUrl("tsv");
+	let tsvResults = tsvUrl ? await fetchTsv(tsvUrl) : undefined;
+
+	if (!tsvResults) {
+		const tsvAttachment = sageMessage.message.attachments.find(att => att.contentType?.includes("text") && att.url.includes(".tsv"));
+		if (tsvAttachment) tsvResults = await fetchTsv(tsvAttachment.url as VALID_URL);
+	}
+
+	if (!tsvResults) return [getCharacterArgs(sageMessage, isGm, isUpdate)];
+
+	const results: Results[] = [];
+
+	if (tsvResults?.items.length) {
+		const playerMap = new Map<string, Snowflake>();
+		if (sageMessage.game) {
+			for (const user of sageMessage.game?.users) {
+				if (user.type === GameUserType.Player) {
+					const dUser = await sageMessage.discord.fetchUser(user.did);
+					if (dUser) playerMap.set(dUser.username.toLowerCase().replace(/^@/, ""), user.did);
+				}
+			}
+		}
+		tsvResults.items.forEach(item => {
+			let core: GameCharacterCore | undefined;
+			const getCore = () => (core ?? (core = {} as GameCharacterCore));
+			let names: Names | undefined;
+			const getNames = () => (names ?? (names = {} as Names));
+			let stats: TKeyValuePair[] | undefined;
+			let type: "pc" | "npc" | "companion" | "minion" | undefined;
+			const typeRegexp = /^type$/i;
+			let userId: Snowflake | undefined;
+			const userRegexp = /^user$/i;
+			const unsetRegexp = /^unset$/i;
+
+			Object.entries(item).forEach(([key, value]) => {
+				const valueOrNull = isBlank(value) || unsetRegexp.test(value) ? null : value;
+				if (typeRegexp.test(key)) {
+					type = /^(gm|pc|npc|companion|minion)$/i.test(value) ? value.toLowerCase() as "pc" : undefined;
+				}else if (userRegexp.test(key)) {
+					if (valueOrNull) {
+						userId = sageMessage.game?.hasPlayer(value) ? value as Snowflake : playerMap.get(value.toLowerCase().replace(/^@/, ""));
+					}
+				}else if (isValidCoreKey(key)) {
+					switch(key.toLowerCase()) {
+						// core
+						case "alias": getCore().alias = valueOrNull!; break;
+						case "avatar": getCore().avatarUrl = valueOrNull!; break;
+						case "color": getCore().embedColor = valueOrNull ? Color.from(value).hex : valueOrNull as any; break;
+						case "token": getCore().tokenUrl = valueOrNull!; break;
+						// names
+						case "charname": getNames().charName = value; break;
+						case "name": getCore().name = value; getNames().name = value; break;
+						case "newname": getNames().newName = value; break;
+						case "oldname": getNames().oldName = value; break;
+
+						default: debug({key,value}); break;
+					}
+				}else {
+					(stats ?? (stats = [])).push({ key, value:valueOrNull });
+				}
+			});
+
+			if (names) {
+				names.count = Object.values(names).length;
+			}else {
+				names = { count:0 };
+			}
+
+			results.push({ core, names, stats, userId, type });
+		});
+	}
+
+	return results;
 }

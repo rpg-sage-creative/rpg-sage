@@ -34,6 +34,7 @@ export type TCharacterTypeMeta = TCharacterTypeMetaMatchFlags & {
 	commandDescriptor?: string;
 	pluralDescriptor?: string;
 	singularDescriptor?: string;
+	type?: "gm" | "npc" | "minion" | "pc" | "companion";
 };
 
 export function getCharacterTypeMeta(command: Command, matchFlags = getCharacterTypeMetaMatchFlags(command)): TCharacterTypeMeta {
@@ -51,5 +52,6 @@ export function getCharacterTypeMeta(command: Command, matchFlags = getCharacter
 		commandDescriptor: getDescriptor(["companion", "playerCharacter", "nonPlayerCharacter", "gameMaster", "minion"]),
 		pluralDescriptor: getDescriptor(["Companions", "Player Characters", "Non-Player Characters", "Game Masters", "Minions"]),
 		singularDescriptor: getDescriptor(["Companion", "Player Character", "Non-Player Character", "Game Master", "Minion"]),
+		type: isGm ? "gm" : isNpc ? "npc" : isMinion ? "minion" : isPc ? "pc" : isCompanion ? "companion" : undefined
 	};
 }
