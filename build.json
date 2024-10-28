@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.7.13",
+"version":"1.8.0",
 "branch":"main",
-"commit":"1b8fb51ab0cad0c9d7cac0b16a1c659eed7cff38",
-"commitSubject":"fix stat increment doStatMath",
-"commitTs":1729701027000,
-"commitDate":"2024-10-23-0930",
-"buildTs":1729701069000,
-"buildDate":"2024-10-23-0931",
+"commit":"a7a99cb160feec28b37e6842fffa3bd0b765eda2",
+"commitSubject":"initial character import/export offering",
+"commitTs":1730153508000,
+"commitDate":"2024-10-28-1511",
+"buildTs":1730159815000,
+"buildDate":"2024-10-28-1656",
 "author":"Randal"
 }
