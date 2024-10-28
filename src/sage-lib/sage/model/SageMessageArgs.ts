@@ -185,7 +185,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	/** @deprecated */
 	public removeAndReturnNames(defaultJoinRemaining = false, defaultJoinSeparator = " "): Names {
 		const names = {
-			charName: this.argsManager.removeByKey("charName") ?? this.argsManager.removeByKey("char"),
+			charName: this.argsManager.removeByKey("charName"),
 			oldName: this.argsManager.removeByKey("oldName"),
 			name: this.argsManager.removeByKey("name"),
 			newName: this.argsManager.removeByKey("newName"),

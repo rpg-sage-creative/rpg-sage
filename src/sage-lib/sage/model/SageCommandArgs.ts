@@ -403,7 +403,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	/** Gets all the different names that might be passed into the command. */
 	public getNames(): Names {
-		const charName = this.getString("charName") ?? this.getString("char") ?? undefined;
+		const charName = this.getString("charName") ?? undefined;
 		const oldName = this.getString("oldName") ?? undefined;
 		const name = this.getString("name") ?? undefined;
 		const newName = this.getString("newName") ?? undefined;
