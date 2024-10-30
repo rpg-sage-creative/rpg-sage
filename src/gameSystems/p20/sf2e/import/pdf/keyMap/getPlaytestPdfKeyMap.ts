@@ -567,9 +567,9 @@ export function getPlaytestPdfKeyMap(): PdfKeyMap {
 		[703, { sageKey: "spellDcExpert", checked: true }],
 		[704, { sageKey: "spellDcMaster", checked: true }],
 		[705, { sageKey: "spellDcLegendary", checked: true }],
-		[706, { sageKey: "spellAtkTrained", checked: true }],
-		[707, { sageKey: "spellAtkExpert", checked: true }],
-		[708, { sageKey: "spellAtkMaster", checked: true }],
-		[709, { sageKey: "spellAtkLegendary", checked: true }],
+		[706, { sageKey: "spellAttackTrained", checked: true }],
+		[707, { sageKey: "spellAttackExpert", checked: true }],
+		[708, { sageKey: "spellAttackMaster", checked: true }],
+		[709, { sageKey: "spellAttackLegendary", checked: true }],
 	]);
 }
