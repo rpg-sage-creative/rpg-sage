@@ -656,7 +656,9 @@ function getWeaponSpecMod(char: PathbuilderCharacter, weapon: TPathbuilderCharac
 }
 
 function getWeaponDamageDice(weapon: TPathbuilderCharacterWeapon): string {
-	const dmgDice = `${strikingToDiceCount(weapon.str)}${weapon.die}`;
+	const dmgDieCount = strikingToDiceCount(weapon.str);
+	const dmgDieSize = weapon.die?.replace(/\dd/, "d");
+	const dmgDice = `${dmgDieCount}${dmgDieSize}`;
 	const dmgBonus = weapon.damageBonus ? toModifier(weapon.damageBonus) : "";
 	const dmgType = weapon.damageType ?? "";
 	const damage = `${dmgDice} ${dmgBonus} ${dmgType}`.replace(/\s+/, " ").trim();
@@ -827,7 +829,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 			case "initskill": return this.getInitSkill();
 			case "level": return this.level;
 			case "maxhp": return this.maxHp;
-			case "ac": return prefix === "prof" ? this.core.acTotal.acProfBonus : this.core.acTotal.acTotal;
+			case "ac": return prefix === "prof" ? this.core.acTotal?.acProfBonus : this.core.acTotal?.acTotal;
 			default: return this.createCheck(statLower)?.toStatString(prefix) ?? null;
 		}
 	}
@@ -1059,7 +1061,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		if (includes(["All", "Stats"])) {
 			push();
 			push(`${abilitiesToHtml(this)}`);
-			push(`<b>AC</b> ${this.core.acTotal.acTotal}; ${this.savingThrows.toHtml()}`);
+			push(`<b>AC</b> ${this.core.acTotal?.acTotal ?? "??"}; ${this.savingThrows.toHtml()}`);
 			push(`<b>HP</b> ${this.maxHp}`);
 		}
 
