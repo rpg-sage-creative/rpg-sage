@@ -2,7 +2,8 @@
 build/
 logs/
 node_modules/
-leader-board/
+scripts/leader-board/
+scripts/foundry/
 
 **/.DS_Store
 **/tsconfig.tsbuildinfo
