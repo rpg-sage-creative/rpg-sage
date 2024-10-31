@@ -1,7 +1,6 @@
-import { debug, randomSnowflake, type Optional } from "@rsc-utils/core-utils";
+import { randomSnowflake, type Optional } from "@rsc-utils/core-utils";
 import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
-import { toMod } from "../../../../../sage-dice/index.js";
-import type { TPathbuilderCharacter, TPathbuilderCharacterWeapon } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import type { TPathbuilderCharacter, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { ProficiencyType, SizeType } from "../../../lib/types.js";
 import type { PdfKeyMap } from "./types.js";
 
@@ -91,16 +90,32 @@ function parseEquipment(mgr: PdfJsonFieldManager): [string, number][] {
 function _parseWeapon(mgr: PdfJsonFieldManager, key: string): TPathbuilderCharacterWeapon | undefined {
 	const name = mgr.getValue(`${key}Name`);
 	if (name) {
-		const damage = mgr.getValue(`${key}Damage`);
+		const attack = mgr.getNumber(`${key}Mod`, 0);
+		const damage = mgr.getValue(`${key}Damage`, "");
 		if (damage) {
-			const stat = key.startsWith("m") ? "Str" : "Dex";
-			debug({ key, mod:mgr.getNumber(`${key}Mod`), stat:mgr.getNumber(`${key}${stat}Mod`, 0) });
-			const diceAttack = mgr.getNumber(`${key}Mod`)
-				?? (mgr.getNumber(`${key}${stat}Mod`, 0) + mgr.getNumber(`${key}ProfMod`, 0) + mgr.getNumber(`${key}ItemMod`, 0));
-			const traits = mgr.getArray(`${key}Traits`)?.map(s => s.trim()).filter(s => s) ?? [];
-			const diceTraits = traits.length ? ` (${traits.join(", ")})` : ``;
-			const dice = `[1d20 ${toMod(diceAttack)} ${name}${diceTraits}; ${damage}]`;
-			return { name, dice } as TPathbuilderCharacterWeapon;
+			const { count = "0", size = "0", mod = "0" } = /(?<count>\d)d(?<size>\d+)\s*(?<mod>\b[+-]\s*\d+\b)?/i.exec(damage)?.groups ?? {};
+			const pot = +/^\+(?<pot>[123])\D/.exec(name)?.groups?.pot! || 0;
+			const str = ["", "", "striking", "greater striking", "major striking"][+count] as "striking" ?? "";
+			const die = `d${size}`;
+			const damageBonus = +mod.replace(/\s+/g, "");
+			const damageType = /(?<damageType>[SBPECFAM]|So|Po)$/.exec(damage)?.groups?.damageType ?? "";
+			return {
+				name,
+				qty: 1,
+				// prof: "martial",
+				die,
+				pot,
+				str,
+				// mat: null,
+				display: name,
+				// runes: [],
+				damageType,
+				attack,
+				damageBonus,
+				// extraDamage: [],
+				// increasedDice: false,
+				// isInventor: false,
+			} as TPathbuilderCharacterWeapon;
 		}
 	}
 	return undefined;
@@ -110,23 +125,127 @@ function parseWeapons(mgr: PdfJsonFieldManager): TPathbuilderCharacterWeapon[] {
 	["melee", "ranged"].forEach(which => {
 		for (let i = 1; i < 5; i++) {
 			const weapon = _parseWeapon(mgr, `${which}${i}`);
-			if (weapon) weapons.push(weapon);
+			if (weapon) {
+				weapons.push(weapon);
+			}
 		}
 	});
 	return weapons;
 }
 
+type SpellByName = { name:string; actions:string; rank:number; prepared:number; costs:string; frequency:string; };
+function parseSpellsByName(mgr: PdfJsonFieldManager, base: string): SpellByName[] {
+	const spells: SpellByName[] = [];
+	const suffixes = ["spell", "ritual"].includes(base) ? ["", "2"] : [""];
+	suffixes.forEach(suffix => {
+		const names = mgr.getArray(`${base}Names${suffix}`, /[\n\r]/) ?? [];
+		if (names.length) {
+			const actions = mgr.getArray(`${base}Actions${suffix}`, /[\n\r]/) ?? [];
+			const prepared = mgr.getArray(`${base}Prepared${suffix}`, /[\n\r]/) ?? [];
+			const ranks = mgr.getArray(`${base}Ranks${suffix}`, /[\n\r]/) ?? [];
+			const costs = mgr.getArray(`${base}Costs${suffix}`, /[\n\r]/) ?? [];
+			const frequencies = mgr.getArray(`${base}Frequency${suffix}`, /[\n\r]/) ?? [];
+			names.forEach((name, index) => spells.push({
+				name,
+				actions: actions[index],
+				rank: (+ranks[index] || 0),
+				prepared: (+prepared[index] || 0),
+				costs: costs[index],
+				frequency:frequencies[index]
+			}));
+		}
+	});
+	return spells;
+}
+function parseSpells(mgr: PdfJsonFieldManager, level: number, keyAbility: TPathbuilderCharacterAbilityKey): TPathbuilderCharacterSpellCaster[] {
+	const proficiency = Math.max(_getProfMod(mgr, "spellAttack", level), _getProfMod(mgr, "spellDc", level));
+	const perDay = [1,2,3,4,5,6,7,8,9,10].map(level => mgr.getNumber(`spellsPerDay${level}`, 0));
+	perDay.unshift(mgr.getNumber("cantripsPerDay", 0));
+	const spells = parseSpellsByName(mgr, "cantrip").concat(parseSpellsByName(mgr, "spell"));
+	if (proficiency || perDay.some(n => n) || spells.length) {
+		return [{
+			name: mgr.getValue("class", ""),
+			magicTradition: "arcane",
+			spellcastingType: spells.find(sp => sp.prepared > 0) ? "prepared" : "spontaneous",
+			ability: keyAbility,
+			proficiency,
+			focusPoints: 0,
+			innate: false,
+			perDay,
+			spells: [0,1,2,3,4,5,6,7,8,9,10].map(spellLevel => {
+				return { spellLevel, list:spells.filter(spell => spell.rank === spellLevel).map(spell => spell.name) };
+			}).filter(({ list }) => list.length),
+			prepared: [0,1,2,3,4,5,6,7,8,9,10].map(spellLevel => {
+				const list: string[] = [];
+				spells.forEach(spell => { if (spell.rank === spellLevel) for (let i = 0; i < spell.prepared; i++) list.push(spell.name); });
+				return { spellLevel, list };
+			}).filter(({ list }) => list.length),
+			blendedSpells: [],
+		}];
+	}
+	return [];
+}
+function parseFocusSpells(mgr: PdfJsonFieldManager, level: number, keyAbility: TPathbuilderCharacterAbilityKey): TPathbuilderCharacterSpellCaster[] {
+	const spells = parseSpellsByName(mgr, "focusSpell");
+	if (spells.length) {
+		return [{
+			name: "Focus Spells",
+			magicTradition: "focus",
+			spellcastingType: "spontaneous",
+			ability: keyAbility,
+			proficiency: Math.max(_getProfMod(mgr, "spellAttack", level), _getProfMod(mgr, "spellDc", level)),
+			focusPoints: 0,
+			innate: false,
+			perDay: [],
+			spells: [{ spellLevel:0, list:spells.map(spell => spell.name) }],
+			prepared: [],
+			blendedSpells: [],
+		}];
+	}
+	return [];
+}
+function parseInnateSpells(mgr: PdfJsonFieldManager, level: number, keyAbility: TPathbuilderCharacterAbilityKey): TPathbuilderCharacterSpellCaster[] {
+	const spells = parseSpellsByName(mgr, "innateSpell");
+	if (spells.length) {
+		return [{
+			name: "Innate Spells",
+			magicTradition: "arcane",
+			spellcastingType: "spontaneous",
+			ability: keyAbility,
+			proficiency: Math.max(_getProfMod(mgr, "spellAttack", level), _getProfMod(mgr, "spellDc", level)),
+			focusPoints: 0,
+			innate: true,
+			perDay: [],
+			spells: [{ spellLevel:0, list:spells.map(spell => spell.name) }],
+			prepared: [],
+			blendedSpells: [],
+		}];
+	}
+	return [];
+	// const rituals = parseSpellsByName(mgr, "ritual");
+	// return { level, rank, perDay, spells };
+}
+function parseSpellCasters(mgr: PdfJsonFieldManager, level: number, keyAbility: TPathbuilderCharacterAbilityKey): TPathbuilderCharacterSpellCaster[] {
+	const spellCasters: TPathbuilderCharacterSpellCaster[] = [];
+	spellCasters.push(...parseSpells(mgr, level, keyAbility));
+	spellCasters.push(...parseFocusSpells(mgr, level, keyAbility));
+	spellCasters.push(...parseInnateSpells(mgr, level, keyAbility));
+	return spellCasters;
+}
+function _getProfMod(mgr: PdfJsonFieldManager, what: string, level?: number): number {
+	const woLevel = (value?: number | null) => value ? value - (level ?? mgr.getNumber("level", 1)) : value;
+	return (mgr.getChecked(`${what}Legendary`) ? ProficiencyType.Legendary : undefined)
+		?? (mgr.getChecked(`${what}Master`) ? ProficiencyType.Master : undefined)
+		?? (mgr.getChecked(`${what}Expert`) ? ProficiencyType.Expert : undefined)
+		?? (mgr.getChecked(`${what}Trained`) ? ProficiencyType.Trained : undefined)
+		?? woLevel(mgr.getNumber(`${what}ProfMod`))
+		?? ProficiencyType.Untrained;
+}
 export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMap): TPathbuilderCharacter | undefined {
+	const level = mgr.getNumber("level", 1);
 	const getAbility = (key: string) => parseAbilityScore(mgr.getValue(key));
-	const getArray = (key: string, delim = ",") => mgr.getArray(key, delim)?.map(s => s.trim()).filter(s => s) ?? [];
-	const getProfMod = (skill: string): number => {
-		return (mgr.getChecked(`${skill}Legendary`) ? ProficiencyType.Legendary : undefined)
-			?? (mgr.getChecked(`${skill}Master`) ? ProficiencyType.Master : undefined)
-			?? (mgr.getChecked(`${skill}Expert`) ? ProficiencyType.Expert : undefined)
-			?? (mgr.getChecked(`${skill}Trained`) ? ProficiencyType.Trained : undefined)
-			?? mgr.getNumber(`${skill}ProfMod`)
-			?? ProficiencyType.Untrained;
-	};
+	const getArray = (key: string) => mgr.getArray(key)?.map(s => s.trim()).filter(s => s) ?? [];
+	const getProfMod = (skill: string): number => _getProfMod(mgr, skill, level);
 	const abilities = {
 		str: getAbility("strMod"),
 		dex: getAbility("dexMod"),
@@ -145,7 +264,7 @@ export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMa
 		name: mgr.getValue("name") ?? undefined,
 		class: mgr.getValue("class", ""),
 		// dualClass?: string;
-		level: mgr.getNumber("level", 1),
+		level,
 		ancestry: mgr.getValue("ancestry", ""),
 		heritage: mgr.getValue("heritage", ""),
 		background: mgr.getValue("background", ""),
@@ -217,7 +336,7 @@ export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMa
 		weapons: parseWeapons(mgr),
 		money: { credits:mgr.getNumber("credits", 0), upb:mgr.getNumber("upb", 0) },
 		armor: [],//TPathbuilderCharacterArmor[];
-		spellCasters: [],//TPathbuilderCharacterSpellCaster[];
+		spellCasters: parseSpellCasters(mgr, level, keyability),
 		formula: [],//TPathbuilderCharacterFormula[];
 		pets: [],//TPathbuilderCharacterPet[];
 		acTotal: {

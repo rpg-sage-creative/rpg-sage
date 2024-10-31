@@ -48,14 +48,20 @@ export class PdfJsonFieldManager {
 
 	/**
 	 * Returns a string array if the field exists as a valid string.
+	 * If delimRegex is given, then it is used to split the string and each part is trimmed (but empty strings can be returned).
+	 * If delimRegex is NOT given, then any newline characters are replaced with commas, the string is split on commas, each item is trimmed, and only nonBlank values are returned.
 	 * Returns null if the field is not a string.
 	 * Returns undefined if not found.
 	 */
-	public getArray(key: Optional<string | number>, delim = ","): Optional<string[]> {
+	public getArray(key: Optional<string | number>, delimRegex?: RegExp): Optional<string[]> {
 		const value = this.getValue(key);
-		return isDefined(value)
-			? value.replace(/\n/g, delim).split(delim)
-			: value;
+		if (isDefined(value)) {
+			if (delimRegex) {
+				return value.split(delimRegex).map(s => s.trim());
+			}
+			return value.replace(/[\r\n]/g, ",").split(",").map(s => s.trim()).filter(s => s)
+		}
+		return value;
 	}
 
 	/**
@@ -89,7 +95,7 @@ export class PdfJsonFieldManager {
 	}
 
 	/**
-	 * Finds the given field and returns the value as a non-blank string.
+	 * Finds the given field and returns the value as a non-blank string (trimmed).
 	 * Returns null if the value is not a string or empty.
 	 * Returns undefined if not found.
 	 */
@@ -99,7 +105,8 @@ export class PdfJsonFieldManager {
 		const field = this.find<TextField>(key);
 		if (field) {
 			if (typeof(field.value) === "string") {
-				return field.value.trim() === "" ? null : field.value;
+				const trimmed = field.value.trim();
+				return !trimmed ? null : trimmed;
 			}
 			return defValue ?? null;
 		}
