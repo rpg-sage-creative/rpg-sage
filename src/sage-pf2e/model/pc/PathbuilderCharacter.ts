@@ -405,6 +405,9 @@ function isArcaneSense(spellCaster: TPathbuilderCharacterSpellCaster): boolean {
 	return /^(caster )?arcane sense$/i.test(spellCaster.name);
 }
 function spellCasterToLabel(spellCaster: TPathbuilderCharacterSpellCaster): string {
+	if (/^(arcane|divine|occult|primal) (prepared|spontaneous) spells$/i.test(spellCaster.name)) {
+		return spellCaster.name;
+	}
 	if (/(^(wand|scroll|staff|cantrip deck) of)|((staff|wand)$)/i.test(spellCaster.name)) {
 		return spellCaster.name;
 	}
