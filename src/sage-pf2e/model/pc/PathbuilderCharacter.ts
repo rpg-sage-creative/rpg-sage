@@ -402,14 +402,14 @@ function calculateSpeed(char: PathbuilderCharacter): number {
 //#region spellCaster
 
 function spellCasterToLabel(spellCaster: TPathbuilderCharacterSpellCaster): string {
+	if (/(^(wand|scroll|staff|cantrip deck) of)|((staff|wand)$)/i.test(spellCaster.name)) {
+		return spellCaster.name;
+	}
+	if (["Cleric Font", "Other Spells (Staves etc)"].includes(spellCaster.name)) {
+		return spellCaster.name;
+	}
 	if (spellCaster.name.startsWith("Caster ")) {
 		return spellCaster.name.slice("Caster ".length);
-	}
-	if (spellCaster.name === "Cleric Font") {
-		return spellCaster.name;
-	}
-	if (spellCaster.name === "Other Spells (Staves etc)") {
-		return spellCaster.name;
 	}
 	if (spellCaster.magicTradition === "focus") {
 		return "Focus Spells";
@@ -439,7 +439,6 @@ function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilder
 		+ char.abilities.getAbilityScoreModifier(ABILITIES.find(abil => abil.toLowerCase().startsWith(spellCaster.ability))!)
 		+ spellCaster.proficiency;
 	const isFocus = spellCaster.magicTradition === "focus" || spellCaster.focusPoints > 0;
-	const focusPoints = isFocus ? ` ${spellCaster.focusPoints} Focus Points;` : ``;
 	const dcAttackLabel = spellCaster.name === "Caster Arcane Sense" ? `` : ` DC ${10+mod}, attack +${mod};`;
 	const spellLevels = spellCaster.spells.map((spells, level) => {
 		if (!isFocus && spellCaster.perDay[level] === 0) {
@@ -450,10 +449,10 @@ function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilder
 		const list = spellsListToHtml(spells.list);
 		return `${levelLabel}${slots} ${list}`;
 	}).filter(s => s).reverse();
-	return `<b>${label}</b>${dcAttackLabel}${focusPoints} ${spellLevels.join("; ")}`;
+	return `<b>${label}</b>${dcAttackLabel} ${spellLevels.join("; ")}`;
 }
 function focusSpellsToHtml(char: PathbuilderCharacter): string[] {
-	const { focusPoints, focus } = char.toJSON();
+	const { focus } = char.toJSON();
 	const focusSpells: string[] = [];
 	if (focus) {
 		Object.keys(focus).forEach(tradition => {
@@ -475,9 +474,6 @@ function focusSpellsToHtml(char: PathbuilderCharacter): string[] {
 				});
 			}
 		});
-	}
-	if (focusSpells.length) {
-		focusSpells.unshift(`${focusPoints ?? 0} Focus Points`);
 	}
 	return focusSpells;
 }
@@ -1015,10 +1011,18 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 			|| s.startsWith("Tremorsense")
 			);
 	}
+	/** max hit points */
 	public get maxHp(): number {
 		const attributes = this.core.attributes;
 		return attributes.ancestryhp + attributes.bonushp
 			+ (attributes.classhp + attributes.bonushpPerLevel + this.abilities.conMod) * this.level;
+	}
+
+	/** max focus points */
+	public get maxFp(): number {
+		let focusPoints = this.core.focusPoints ?? 0;
+		this.core.spellCasters.forEach(sc => focusPoints = Math.max(focusPoints, sc.focusPoints));
+		return focusPoints;
 	}
 
 	//#region toHtml
@@ -1062,7 +1066,10 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 			push();
 			push(`${abilitiesToHtml(this)}`);
 			push(`<b>AC</b> ${this.core.acTotal?.acTotal ?? "??"}; ${this.savingThrows.toHtml()}`);
-			push(`<b>HP</b> ${this.maxHp}`);
+			const hitFocusPoints = [`<b>HP</b> ${this.maxHp}`];
+			const maxFp = this.maxFp;
+			if (maxFp) hitFocusPoints.push(`<b>Focus Points</b> ${maxFp}`);
+			push(hitFocusPoints.join("; "));
 		}
 
 		if (includes(["All", "Speed"])) {
