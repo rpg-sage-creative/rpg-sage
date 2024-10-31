@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.8.0",
+"version":"1.8.1",
 "branch":"main",
-"commit":"a7a99cb160feec28b37e6842fffa3bd0b765eda2",
-"commitSubject":"initial character import/export offering",
-"commitTs":1730153508000,
-"commitDate":"2024-10-28-1511",
-"buildTs":1730159815000,
-"buildDate":"2024-10-28-1656",
+"commit":"a332fe946d7711ffe716f5b7f413ac8f8eeb4c19",
+"commitSubject":"Pathbuilder updates (#109)",
+"commitTs":1730410126000,
+"commitDate":"2024-10-31-1428",
+"buildTs":1730410190000,
+"buildDate":"2024-10-31-1429",
 "author":"Randal"
 }
