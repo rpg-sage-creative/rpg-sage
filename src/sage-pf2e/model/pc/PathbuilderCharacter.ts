@@ -401,9 +401,15 @@ function calculateSpeed(char: PathbuilderCharacter): number {
 
 //#region spellCaster
 
+function isArcaneSense(spellCaster: TPathbuilderCharacterSpellCaster): boolean {
+	return /^(caster )?arcane sense$/i.test(spellCaster.name);
+}
 function spellCasterToLabel(spellCaster: TPathbuilderCharacterSpellCaster): string {
 	if (/(^(wand|scroll|staff|cantrip deck) of)|((staff|wand)$)/i.test(spellCaster.name)) {
 		return spellCaster.name;
+	}
+	if (isArcaneSense(spellCaster)) {
+		return "Arcane Sense";
 	}
 	if (["Cleric Font", "Other Spells (Staves etc)"].includes(spellCaster.name)) {
 		return spellCaster.name;
@@ -416,7 +422,7 @@ function spellCasterToLabel(spellCaster: TPathbuilderCharacterSpellCaster): stri
 	}
 	const tradition = capitalize(spellCaster.magicTradition);
 	const type = capitalize(spellCaster.spellcastingType);
-	return `${tradition} ${type} Spells`;
+	return `${spellCaster.name} Spells (${tradition} ${type})`;
 }
 
 function spellsListToHtml(spells: string[]): string {
@@ -439,7 +445,7 @@ function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilder
 		+ char.abilities.getAbilityScoreModifier(ABILITIES.find(abil => abil.toLowerCase().startsWith(spellCaster.ability))!)
 		+ spellCaster.proficiency;
 	const isFocus = spellCaster.magicTradition === "focus" || spellCaster.focusPoints > 0;
-	const dcAttackLabel = spellCaster.name === "Caster Arcane Sense" ? `` : ` DC ${10+mod}, attack +${mod};`;
+	const dcAttackLabel = isArcaneSense(spellCaster) ? `` : ` DC ${10+mod}, attack +${mod};`;
 	const spellLevels = spellCaster.spells.map((spells, level) => {
 		if (!isFocus && spellCaster.perDay[level] === 0) {
 			return null;
