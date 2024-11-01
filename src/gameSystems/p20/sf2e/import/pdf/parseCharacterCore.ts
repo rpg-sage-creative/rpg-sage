@@ -3,6 +3,7 @@ import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
 import type { TPathbuilderCharacter, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { ProficiencyType, SizeType } from "../../../lib/types.js";
 import type { PdfKeyMap } from "./types.js";
+import { capitalize } from "@rsc-utils/string-utils";
 
 function parseSize(value: Optional<string>): SizeType {
 	if (value) {
@@ -98,7 +99,7 @@ function _parseWeapon(mgr: PdfJsonFieldManager, key: string): TPathbuilderCharac
 			const str = ["", "", "striking", "greater striking", "major striking"][+count] as "striking" ?? "";
 			const die = `d${size}`;
 			const damageBonus = +mod.replace(/\s+/g, "");
-			const damageType = /(?<damageType>[SBPECFAM]|So|Po)$/.exec(damage)?.groups?.damageType ?? "";
+			const damageType = capitalize(/(?<damageType>[SBPECFAM]|So|Po)$/i.exec(damage)?.groups?.damageType ?? "");
 			return {
 				name,
 				qty: 1,
