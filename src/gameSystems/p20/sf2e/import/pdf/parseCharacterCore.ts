@@ -1,21 +1,10 @@
 import { randomSnowflake, type Optional } from "@rsc-utils/core-utils";
 import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
-import type { TPathbuilderCharacter, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
-import { ProficiencyType, SizeType } from "../../../lib/types.js";
-import type { PdfKeyMap } from "./types.js";
 import { capitalize } from "@rsc-utils/string-utils";
-
-function parseSize(value: Optional<string>): SizeType {
-	if (value) {
-		const letter = value[0].toUpperCase();
-		for (const key in SizeType) {
-			if (String(key)[0] === letter) {
-				return SizeType[key as keyof typeof SizeType];
-			}
-		}
-	}
-	return SizeType.Medium;
-}
+import type { TPathbuilderCharacter, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import { parseSize } from "../../../import/pathbuilder-2e/parseSize.js";
+import { ProficiencyType } from "../../../lib/types.js";
+import type { PdfKeyMap } from "./types.js";
 
 function parseAbilityScore(sValue: Optional<string>): number {
 	if (!sValue?.trim()) return 10;
@@ -99,7 +88,7 @@ function _parseWeapon(mgr: PdfJsonFieldManager, key: string): TPathbuilderCharac
 			const str = ["", "", "striking", "greater striking", "major striking"][+count] as "striking" ?? "";
 			const die = `d${size}`;
 			const damageBonus = +mod.replace(/\s+/g, "");
-			const damageType = capitalize(/(?<damageType>[SBPECFAM]|So|Po)$/i.exec(damage)?.groups?.damageType ?? "");
+			const damageType = capitalize(/[^a-z](?<damageType>[SBPECFAM]|So|Po)$/i.exec(damage)?.groups?.damageType ?? "");
 			return {
 				name,
 				qty: 1,
@@ -255,6 +244,7 @@ export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMa
 		wis: getAbility("wisMod"),
 		cha: getAbility("chaMod"),
 	};
+	const { size, sizeName } = parseSize(mgr.getValue("size"));
 	// hack: let's assume the highest ability is their key ability
 	const keyability = ["str","dex","con","int","wis","cha"].reduce((key, abil) =>
 		abilities[key as keyof typeof abilities] > abilities[abil as keyof typeof abilities] ? key : abil
@@ -264,7 +254,7 @@ export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMa
 		id: randomSnowflake(),
 		name: mgr.getValue("name") ?? undefined,
 		class: mgr.getValue("class", ""),
-		// dualClass?: string;
+		dualClass: null,
 		level,
 		ancestry: mgr.getValue("ancestry", ""),
 		heritage: mgr.getValue("heritage", ""),
@@ -272,7 +262,8 @@ export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMa
 		gender: mgr.getValue("pronouns", ""),
 		age: mgr.getValue("age", ""),
 		deity: mgr.getValue("philosophy", ""),
-		size: parseSize(mgr.getValue("size")),
+		size,
+		sizeName,
 		keyability,
 		languages: getArray("languages"),
 		attributes: {
