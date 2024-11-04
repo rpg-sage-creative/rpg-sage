@@ -1,0 +1,133 @@
+{
+	"success": true,
+	"build": {
+		"name": "New Character",
+		"class": "Operative",
+		"level": 1,
+		"ancestry": "Ysoki",
+		"heritage": null,
+		"background": "Athlete",
+		"gender": "",
+		"age": "",
+		"deity": "",
+		"size": 1,
+		"sizeName": "Small",
+		"keyability": "dex",
+		"languages": [],
+		"attributes": {
+			"ancestryhp": 6,
+			"classhp": 8,
+			"bonushp": 0,
+			"bonushpPerLevel": 0,
+			"speed": 25,
+			"speedBonus": 0
+		},
+		"abilities": {
+			"str": 8,
+			"dex": 14,
+			"con": 10,
+			"int": 12,
+			"wis": 10,
+			"cha": 10,
+			"breakdown": {
+				"ancestryFree": [],
+				"ancestryBoosts": [
+					"dex",
+					"int"
+				],
+				"ancestryFlaws": [
+					"str"
+				],
+				"backgroundBoosts": [],
+				"classBoosts": [
+					"dex"
+				],
+				"mapLevelledBoosts": {}
+			}
+		},
+		"proficiencies": {
+			"classDC": 2,
+			"perception": 4,
+			"fortitude": 2,
+			"reflex": 4,
+			"will": 4,
+			"heavy": 0,
+			"medium": 0,
+			"light": 2,
+			"unarmored": 2,
+			"advanced": 0,
+			"martial": 2,
+			"simple": 2,
+			"unarmed": 2,
+			"castingArcane": 0,
+			"castingDivine": 0,
+			"castingOccult": 0,
+			"castingPrimal": 0,
+			"acrobatics": 0,
+			"arcana": 0,
+			"athletics": 2,
+			"crafting": 0,
+			"deception": 0,
+			"diplomacy": 0,
+			"intimidation": 2,
+			"medicine": 0,
+			"nature": 0,
+			"occultism": 0,
+			"performance": 0,
+			"religion": 0,
+			"society": 0,
+			"stealth": 0,
+			"survival": 0,
+			"thievery": 0
+		},
+		"feats": [
+			[
+				"Deadlift",
+				null,
+				"Awarded Feat",
+				1
+			]
+		],
+		"specials": [
+			"Low-Light Vision"
+		],
+		"lores": [
+			[
+				"Sports",
+				2
+			]
+		],
+		"equipmentContainers": {},
+		"equipment": [],
+		"weapons": [
+			{
+				"name": "Fist",
+				"qty": 1,
+				"prof": "unarmed",
+				"die": "1d4",
+				"pot": 0,
+				"str": "",
+				"mat": null,
+				"display": "Fist",
+				"runes": [],
+				"damageType": "B",
+				"attack": 5,
+				"damageBonus": 2,
+				"extraDamage": [],
+				"increasedDice": false,
+				"isInventor": false
+			}
+		],
+		"money": {
+			"cp": 0,
+			"sp": 0,
+			"gp": 0,
+			"pp": 0
+		},
+		"armor": [],
+		"spellCasters": [],
+		"formula": [],
+		"pets": [],
+		"familiars": []
+	}
+}
