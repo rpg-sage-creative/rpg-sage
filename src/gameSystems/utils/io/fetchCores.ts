@@ -1,17 +1,22 @@
+import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
 import { debug } from "@rsc-utils/core-utils";
 import { parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import { getJson, PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
-import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
-
-type FetchResultError = "INVALID_ID"
-	| "INVALID_JSON_URL" | "INVALID_JSON_ATTACHMENT" | "INVALID_JSON" | "UNSUPPORTED_JSON"
-	| "INVALID_PDF_URL" | "INVALID_PDF_ATTACHMENT" | "INVALID_PDF" | "UNSUPPORTED_PDF";
+import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
+import type { FetchResultError } from "./handleImportErrors.js";
 
 type FetchCoreResult<T extends CharacterBaseCore, U extends CharacterBase<T> = CharacterBase<T>> = {
-	char?: U;
-	core?: T;
-	error?: FetchResultError;
+	char: U;
+	core: T;
+	error?: never;
+} | {
+	char?: never;
+	core?: never;
+	error: FetchResultError;
+} | {
+	char?: never;
+	core: T;
+	error: "INVALID_NAME";
 };
 
 type Handlers<T extends CharacterBaseCore, U extends CharacterBase<T> = CharacterBase<T>> = {
@@ -23,13 +28,22 @@ type Handlers<T extends CharacterBaseCore, U extends CharacterBase<T> = Characte
 	raw: (rawJson: unknown) => T | undefined;
 };
 
+function hasDiscordInName(name?: string): boolean {
+	return /discord/i.test(name ?? "");
+}
+
 export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string, error: FetchResultError, handlers: Handlers<T>): Promise<FetchCoreResult<T>> {
 	const json = await getJson(jsonUrl)
 		.catch(err => { debug(err); return undefined; });
 	if (!json) return { error };
 
 	const core = handlers.raw(json);
-	if (core) return { core, char:handlers.char(core) };
+	if (core) {
+		if (hasDiscordInName(core.name)) {
+			return { core, error:"INVALID_NAME" };
+		}
+		return { core, char:handlers.char(core) };
+	}
 
 	return { error:"UNSUPPORTED_JSON" };
 }
@@ -40,13 +54,17 @@ async function fetchPdfCore<T extends CharacterBaseCore>(pdfUrl: string, error: 
 	if (!pdfJson) return { error };
 
 	const core = handlers.pdf(pdfJson);
-	if (core) return { core, char:handlers.char(core) };
+	if (core) {
+		if (hasDiscordInName(core.name)) {
+			return { core, error:"INVALID_NAME" };
+		}
+		return { core, char:handlers.char(core) };
+	}
 
 	return { error:"UNSUPPORTED_PDF" };
 }
 
 export type FetchResult<T extends CharacterBaseCore> = FetchCoreResult<T> & {
-
 	/** name of the attachment parsed */
 	attachmentName?: string;
 	/** id used to construct a url */
@@ -60,11 +78,12 @@ export type FetchResult<T extends CharacterBaseCore> = FetchCoreResult<T> & {
 type FetchByUrlArgs<T extends CharacterBaseCore> = {
 	argKey: string;
 	defaultError: FetchResultError;
-	messageHandler: (message: MessageOrPartial, handlers: Handlers<T>) => Promise<FetchResult<T>[]>;
+	firstOnly: boolean;
+	messageHandler: (message: MessageOrPartial, handlers: Handlers<T>, args: FetchArgs) => Promise<FetchResult<T>[]>;
 	urlHandler: (url: string, defaultError: FetchResultError, handlers: Handlers<T>) => Promise<FetchCoreResult<T>>;
 	urlKey: "jsonUrl" | "pdfUrl";
 }
-async function _fetchByUrl<T extends CharacterBaseCore>(sageCommand: SageCommand, args: FetchByUrlArgs<T>, handlers: Handlers<T>): Promise<FetchResult<T>[]> {
+async function _fetchByUrl<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>, args: FetchByUrlArgs<T>): Promise<FetchResult<T>[]> {
 	const results: FetchResult<T>[] = [];
 	const url = sageCommand.args.getUrl(args.argKey);
 	if (url) {
@@ -73,7 +92,7 @@ async function _fetchByUrl<T extends CharacterBaseCore>(sageCommand: SageCommand
 		if (messageReference) {
 			const message = await sageCommand.discord.fetchMessage(messageReference, sageCommand.authorDid);
 			if (message) {
-				results.push(...await args.messageHandler(message, handlers));
+				results.push(...await args.messageHandler(message, handlers, { firstOnly:args.firstOnly }));
 			}else {
 				const result: FetchResult<T> = { error:args.defaultError };
 				result[args.urlKey] = url;
@@ -93,10 +112,11 @@ async function _fetchByUrl<T extends CharacterBaseCore>(sageCommand: SageCommand
 type FetchByAttachmentArgs<T extends CharacterBaseCore> = {
 	defaultError: FetchResultError;
 	endsWith: string;
+	firstOnly: boolean;
 	urlHandler: (url: string, defaultError: FetchResultError, handlers: Handlers<T>) => Promise<FetchCoreResult<T>>;
 	urlKey: "jsonUrl" | "pdfUrl";
 }
-async function _fetchByAttachment<T extends CharacterBaseCore>(message: MessageOrPartial, args: FetchByAttachmentArgs<T>, handlers: Handlers<T>): Promise<FetchResult<T>[]> {
+async function _fetchByAttachment<T extends CharacterBaseCore>(message: MessageOrPartial, handlers: Handlers<T>, args: FetchByAttachmentArgs<T>): Promise<FetchResult<T>[]> {
 	const results: FetchResult<T>[] = [];
 	if (message.partial) {
 		await message.fetch();
@@ -108,93 +128,84 @@ async function _fetchByAttachment<T extends CharacterBaseCore>(message: MessageO
 			result.attachmentName = attachment.name;
 			result[args.urlKey] = attachment.url;
 			results.push(result);
+			if (args.firstOnly) break;
 		}
 	}
 	return results;
 }
 
-async function _fetchByJsonAttachment<T extends CharacterBaseCore>(message: MessageOrPartial, handlers: Handlers<T>): Promise<FetchResult<T>[]> {
-	return _fetchByAttachment(message, {
+type FetchArgs = { firstOnly:boolean; };
+
+async function _fetchByJsonAttachment<T extends CharacterBaseCore>(message: MessageOrPartial, handlers: Handlers<T>, args: FetchArgs): Promise<FetchResult<T>[]> {
+	return _fetchByAttachment(message, handlers, {
 		defaultError: "INVALID_JSON_ATTACHMENT",
 		endsWith: ".json",
+		firstOnly: args.firstOnly,
 		urlHandler: fetchJsonCore,
 		urlKey: "jsonUrl"
-	}, handlers);
+	});
 }
 
-async function fetchByJsonAttachment<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>): Promise<FetchResult<T>[]> {
+async function fetchByJsonAttachment<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>, args: FetchArgs): Promise<FetchResult<T>[]> {
 	if (sageCommand.isSageMessage()) {
-		return _fetchByJsonAttachment(sageCommand.message, handlers);
+		return _fetchByJsonAttachment(sageCommand.message, handlers, args);
 	}
 	return [];
 }
 
-async function fetchByJsonUrl<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>): Promise<FetchResult<T>[]> {
-	return _fetchByUrl(sageCommand, {
+async function fetchByJsonUrl<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>, args: FetchArgs): Promise<FetchResult<T>[]> {
+	return _fetchByUrl(sageCommand, handlers, {
 		argKey: "json",
 		defaultError: "INVALID_JSON_URL",
+		firstOnly: args.firstOnly,
 		messageHandler: _fetchByJsonAttachment,
 		urlHandler: fetchJsonCore,
 		urlKey: "jsonUrl"
-	}, handlers);
+	});
 }
 
-async function _fetchByPdfAttachment<T extends CharacterBaseCore>(message: MessageOrPartial, handlers: Handlers<T>): Promise<FetchResult<T>[]> {
-	return _fetchByAttachment(message, {
+async function _fetchByPdfAttachment<T extends CharacterBaseCore>(message: MessageOrPartial, handlers: Handlers<T>, args: FetchArgs): Promise<FetchResult<T>[]> {
+	return _fetchByAttachment(message, handlers, {
 		defaultError: "INVALID_PDF_ATTACHMENT",
 		endsWith: ".pdf",
+		firstOnly: args.firstOnly,
 		urlHandler: fetchPdfCore,
 		urlKey: "pdfUrl"
-	}, handlers);
+	});
 }
 
-async function fetchByPdfAttachment<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>): Promise<FetchResult<T>[]> {
+async function fetchByPdfAttachment<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>, args: FetchArgs): Promise<FetchResult<T>[]> {
 	if (sageCommand.isSageMessage()) {
-		return _fetchByPdfAttachment(sageCommand.message, handlers);
+		return _fetchByPdfAttachment(sageCommand.message, handlers, args);
 	}
 	return [];
 }
 
-async function fetchByPdfUrl<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>): Promise<FetchResult<T>[]> {
-	return _fetchByUrl(sageCommand, {
+async function fetchByPdfUrl<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>, args: FetchArgs): Promise<FetchResult<T>[]> {
+	return _fetchByUrl(sageCommand, handlers, {
 		argKey: "pdf",
 		defaultError: "INVALID_PDF_URL",
+		firstOnly: args.firstOnly,
 		messageHandler: _fetchByPdfAttachment,
 		urlHandler: fetchPdfCore,
 		urlKey: "pdfUrl"
-	}, handlers);
+	});
 }
 
-export async function fetchCore<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>): Promise<FetchResult<T>> {
-	const results: FetchResult<T>[] = [];
-	if (!results.length) results.push(...await fetchByJsonAttachment<T>(sageCommand, handlers));
-	if (!results.length) results.push(...await fetchByJsonUrl<T>(sageCommand, handlers));
-	if (!results.length) results.push(...await fetchByPdfAttachment<T>(sageCommand, handlers));
-	if (!results.length) results.push(...await fetchByPdfUrl<T>(sageCommand, handlers));
-	return results[0];
+export async function fetchCore<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>): Promise<FetchResult<T> | undefined> {
+	const args = { firstOnly:true };
+	return (await fetchByJsonAttachment<T>(sageCommand, handlers, args))[0]
+		?? (await fetchByJsonUrl<T>(sageCommand, handlers, args))[0]
+		?? (await fetchByPdfAttachment<T>(sageCommand, handlers, args))[0]
+		?? (await fetchByPdfUrl<T>(sageCommand, handlers, args))[0];
 }
 
 export async function fetchCores<T extends CharacterBaseCore>(sageCommand: SageCommand, handlers: Handlers<T>): Promise<FetchResult<T>[]> {
+	const args = { firstOnly:false };
 	const results: FetchResult<T>[] = [];
-	results.push(...await fetchByJsonAttachment<T>(sageCommand, handlers));
-	results.push(...await fetchByJsonUrl<T>(sageCommand, handlers));
-	results.push(...await fetchByPdfAttachment<T>(sageCommand, handlers));
-	results.push(...await fetchByPdfUrl<T>(sageCommand, handlers));
+	results.push(...await fetchByJsonAttachment<T>(sageCommand, handlers, args));
+	results.push(...await fetchByJsonUrl<T>(sageCommand, handlers, args));
+	results.push(...await fetchByPdfAttachment<T>(sageCommand, handlers, args));
+	results.push(...await fetchByPdfUrl<T>(sageCommand, handlers, args));
 	return results;
-}
-
-type FetchErrorHandler<T extends SageCommand> = (sageCommand: T, message: string) => Promise<void>;
-export async function handleFetchError<T extends SageCommand>(sageCommand: T, fetchResult: FetchResult<any>, handler: FetchErrorHandler<T>): Promise<void> {
-	switch (fetchResult.error) {
-		case "INVALID_ID": return handler(sageCommand, "the given ID is invalid.");
-		case "INVALID_JSON_ATTACHMENT": return handler(sageCommand, "The attached JSON is invalid.");
-		case "INVALID_JSON_URL": return handler(sageCommand, "The given JSON url is invalid.");
-		case "INVALID_JSON": return handler(sageCommand, "The given JSON is invalid.");
-		case "UNSUPPORTED_JSON": return handler(sageCommand, "The given JSON is unsupported.");
-		case "INVALID_PDF_ATTACHMENT": return handler(sageCommand, "The attached PDF is invalid.");
-		case "INVALID_PDF_URL": return handler(sageCommand, "The given PDF url is invalid.");
-		case "INVALID_PDF": return handler(sageCommand, "The given PDF is invalid.");
-		case "UNSUPPORTED_PDF": return handler(sageCommand, "The given PDF is unsupported.");
-		default: debug({fetchResult}); return handler(sageCommand, "Sorry, we don't know what went wrong!");
-	}
 }

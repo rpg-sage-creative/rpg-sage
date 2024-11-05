@@ -1232,23 +1232,23 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		return `${getDataRoot("sage")}/pb2e/${characterId}.json`;
 	}
 	public static exists(characterId: string): boolean {
-		return fileExistsSync(this.createFilePath(characterId));
+		return fileExistsSync(PathbuilderCharacter.createFilePath(characterId));
 	}
 	public static loadCharacterSync(characterId: string): PathbuilderCharacter | null {
 		try {
-			const core = readJsonFileSync<TPathbuilderCharacter>(this.createFilePath(characterId));
+			const core = readJsonFileSync<TPathbuilderCharacter>(PathbuilderCharacter.createFilePath(characterId));
 			return core ? new PathbuilderCharacter(core) : null;
 		}catch(ex) {
 			return errorReturnNull(ex);
 		}
 	}
 	public static async loadCharacter(characterId: string): Promise<PathbuilderCharacter | null> {
-		const core = await readJsonFile<TPathbuilderCharacter>(this.createFilePath(characterId)).catch(errorReturnNull);
+		const core = await readJsonFile<TPathbuilderCharacter>(PathbuilderCharacter.createFilePath(characterId)).catch(errorReturnNull);
 		return core ? new PathbuilderCharacter(core) : null;
 	}
 	public static async saveCharacter(character: TPathbuilderCharacter | PathbuilderCharacter): Promise<boolean> {
 		const json = "toJSON" in character ? character.toJSON() : character;
-		return writeFile(this.createFilePath(character.id), json, true).catch(errorReturnFalse);
+		return writeFile(PathbuilderCharacter.createFilePath(character.id), json, true).catch(errorReturnFalse);
 	}
 	public async save(): Promise<boolean> {
 		return PathbuilderCharacter.saveCharacter(this);

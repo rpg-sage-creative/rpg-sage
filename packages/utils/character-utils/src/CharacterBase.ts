@@ -111,4 +111,6 @@ export abstract class CharacterBase<T extends CharacterBaseCore<U> = CharacterBa
 
 	/** Returns the character "sheet" formatted in HTML. */
 	public abstract toHtml<V>(sections: V[]): string;
+
+	public abstract save(): Promise<boolean>;
 }

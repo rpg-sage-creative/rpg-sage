@@ -3,7 +3,7 @@ import { PlayerCharacterPR } from "../../../sage-e20/pr/PlayerCharacterPR.js";
 import { PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer.js";
 import type { TEssence20CharacterCore } from "../../../sage-lib/sage/commands/e20.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
-import { fetchCores as fetchAll, fetchCore as fetchOne, type FetchResult } from "../../utils/fetchCore.js";
+import { fetchCores as fetchAll, fetchCore as fetchOne, type FetchResult } from "../../utils/io/fetchCores.js";
 import { jsonToCharacterCore } from "./pdf/jsonToCharacter.js";
 
 function createHandlers() {
@@ -20,7 +20,7 @@ function createHandlers() {
 	};
 }
 
-export async function fetchCore(sageCommand: SageCommand): Promise<FetchResult<TEssence20CharacterCore>> {
+export async function fetchCore(sageCommand: SageCommand): Promise<FetchResult<TEssence20CharacterCore> | undefined> {
 	return fetchOne(sageCommand, createHandlers());
 }
 

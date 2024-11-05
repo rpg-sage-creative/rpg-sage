@@ -1,10 +1,10 @@
-import type { Optional, Snowflake, UUID } from "@rsc-utils/core-utils";
-import { errorReturnFalse, errorReturnNull, getDataRoot } from "@rsc-utils/core-utils";
-import { type MessageTarget, toUserMention } from "@rsc-utils/discord-utils";
-import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { ActionRowBuilder, type BaseMessageOptions, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnNull } from "@rsc-utils/core-utils";
+import { EmbedBuilder, type MessageTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
+import { readJsonFile } from "@rsc-utils/io-utils";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20/index.js";
-import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
+import { PlayerCharacterE20, type TSkillE20, type TSkillSpecialization, type TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
 import { type PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
 import { type PlayerCharacterCorePR, PlayerCharacterPR, type TCharacterSectionType, type TCharacterViewType, type TSkillZord, type TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";
 import { type PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer.js";
@@ -16,8 +16,9 @@ import type { SageInteraction } from "../model/SageInteraction.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 
-export type TEssence20CharacterCore = TPlayerCharacterCore;
+export type TEssence20Character = TPlayerCharacter;
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
+export type TEssence20CharacterCore = TPlayerCharacterCore;
 type TPlayerCharacterCore = PlayerCharacterCoreJoe | PlayerCharacterCorePR | PlayerCharacterCoreTransformer;
 
 function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuilder<StringSelectMenuBuilder> {
@@ -30,11 +31,8 @@ function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuil
 	return new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(selectMenu);
 }
 
-async function saveCharacter(character: TPlayerCharacter): Promise<boolean> {
-	return writeFile(getPath(character.id), character.toJSON(), true).catch(errorReturnFalse);
-}
-async function loadCharacter(characterId: UUID): Promise<TPlayerCharacter | null> {
-	const core = await readJsonFile<TPlayerCharacterCore>(getPath(characterId)).catch(errorReturnNull);
+export async function loadCharacter(characterId: string): Promise<TPlayerCharacter | null> {
+	const core = await readJsonFile<TPlayerCharacterCore>(PlayerCharacterE20.createFilePath(characterId)).catch(errorReturnNull);
 	if (core?.gameType === "E20 - G.I. Joe") {
 		return new PlayerCharacterJoe(core);
 	}
@@ -46,14 +44,14 @@ async function loadCharacter(characterId: UUID): Promise<TPlayerCharacter | null
 	}
 	return null;
 }
-function charFileExists(characterId: string): boolean {
-	return fileExistsSync(getPath(characterId));
-}
-function getPath(characterId: string): string {
-	return `${getDataRoot("sage")}/e20/${characterId}.json`;
-}
 
-function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): BaseMessageOptions {
+// function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): BaseMessageOptions {
+// 	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character) as any));
+// 	const components = createComponents(character);
+// 	return { embeds, components };
+// }
+type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
+function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutput {
 	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character) as any));
 	const components = createComponents(character);
 	return { embeds, components };
@@ -61,7 +59,7 @@ function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): BaseM
 
 /** posts the imported character to the channel */
 export async function postCharacter({ sageCache }: SageCommand, channel: Optional<MessageTarget>, character: TPlayerCharacter, pin: boolean): Promise<void> {
-	const saved = await saveCharacter(character);
+	const saved = await character.save();
 	if (saved) {
 		const output = prepareOutput(sageCache, character);
 		const message = await channel?.send(output).catch(errorReturnNull);
@@ -80,10 +78,35 @@ export async function postCharacter({ sageCache }: SageCommand, channel: Optiona
 	}
 }
 
-async function updateSheet(sageInteraction: SageInteraction, character: TPlayerCharacter) {
-	const output = prepareOutput(sageInteraction.caches, character);
-	const message = sageInteraction.interaction.message as Message;
-	await message.edit(output);
+// async function updateSheet(sageInteraction: SageInteraction, character: TPlayerCharacter, message?: Message) {
+// 	const output = prepareOutput(sageInteraction.caches, character);
+// 	const message = sageInteraction.interaction.message as Message;
+// 	await message.edit(output);
+// }
+export async function updateSheet({ sageCache }: SageCommand, character: TPlayerCharacter, message?: Message) {
+	if (message) {
+		// we have a message, update the sheet reference just in case
+		if (character.setSheetRef(parseReference(message))) {
+			// if it was updated, save the character
+			await character.save();
+		}
+
+	}else {
+		// we don't have a message, go find it
+		if (character.hasSheetRef) {
+			const messageReference = character.sheetRef;
+			// handle old data before we stored the full MessageReference
+			if (messageReference?.channelId) {
+				message = await sageCache.fetchMessage(messageReference);
+			}
+		}
+	}
+	if (message) {
+		// const macroUser = await sageCache.users.getById(character.getSheetValue("macroUserId"));
+		const output = prepareOutput(sageCache, character);
+		await message.edit(output);
+		// await notifyOfSlicedMacros(sageCache, character);
+	}
 }
 
 function getActiveSections(character: TPlayerCharacter): TCharacterSectionType[] {
@@ -307,7 +330,7 @@ export function getValidE20CharacterId(customId?: string | null): string | undef
 	}
 
 	const [_e20, characterId] = customId.split("|");
-	if (_e20 === "E20" && charFileExists(characterId)) {
+	if (_e20 === "E20" && PlayerCharacterE20.exists(characterId)) {
 		return characterId;
 	}
 	return undefined;
@@ -333,14 +356,14 @@ async function viewHandler(sageInteraction: SageInteraction<StringSelectMenuInte
 	}
 	character.setSheetValue("activeView", undefined);
 	character.setSheetValue("activeSections", activeSections);
-	await saveCharacter(character);
+	await character.save();
 	return updateSheet(sageInteraction, character);
 }
 
 async function skillHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
-	await saveCharacter(character);
+	await character.save();
 	return updateSheet(sageInteraction, character);
 }
 
@@ -350,7 +373,7 @@ async function edgeSnagShiftHandler(sageInteraction: SageInteraction, character:
 		values.length = 0;
 	}
 	character.setSheetValue("activeEdgeSnagShift", values.join(","));
-	await saveCharacter(character);
+	await character.save();
 	return updateSheet(sageInteraction, character);
 }
 function testEdgeSnag<T>(testValues: TEdgeSnagShift[], outValues: { edge: T, snag: T, none: T }): T {
