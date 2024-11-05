@@ -1,26 +1,22 @@
 import type { Optional, Snowflake, UUID } from "@rsc-utils/core-utils";
 import { errorReturnFalse, errorReturnNull, getDataRoot } from "@rsc-utils/core-utils";
-import { DiscordKey, type MessageOrPartial, type MessageTarget, toUserMention } from "@rsc-utils/discord-utils";
-import type { PdfJson } from "@rsc-utils/io-utils";
-import { PdfCacher, PdfJsonManager, fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { ActionRowBuilder, AttachmentBuilder, type BaseMessageOptions, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
+import { type MessageTarget, toUserMention } from "@rsc-utils/discord-utils";
+import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { ActionRowBuilder, type BaseMessageOptions, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20/index.js";
 import type { TSkillE20, TSkillSpecialization, TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
 import { type PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
-import { PdfJsonParserJoe } from "../../../sage-e20/joe/parse.js";
 import { type PlayerCharacterCorePR, PlayerCharacterPR, type TCharacterSectionType, type TCharacterViewType, type TSkillZord, type TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";
-import { PdfJsonParserPR } from "../../../sage-e20/pr/parse.js";
 import { type PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer.js";
-import { PdfJsonParserTransformer } from "../../../sage-e20/transformer/parse.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
-import type { SageMessage } from "../model/SageMessage.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 
+export type TEssence20CharacterCore = TPlayerCharacterCore;
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
 type TPlayerCharacterCore = PlayerCharacterCoreJoe | PlayerCharacterCorePR | PlayerCharacterCoreTransformer;
 
@@ -34,38 +30,7 @@ function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuil
 	return new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(selectMenu);
 }
 
-async function attachCharacter(sageCache: SageCache, channel: MessageTarget, attachmentName: string, character: TPlayerCharacter, pin: boolean): Promise<void> {
-	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.getDescription()).join("");
-	const buffer = Buffer.from(raw, "utf-8");
-	const attachment = new AttachmentBuilder(buffer, { name:`${attachmentName}.txt` });
-	const message = await channel.send({
-		content: `Attaching Character: ${character.name}`,
-		files:[attachment]
-	}).catch(errorReturnNull);
-	if (pin && message?.pinnable) {
-		await message.pin();
-	}
-	return Promise.resolve();
-}
-
-function jsonToCharacter(rawJson: PdfJson): TPlayerCharacter | null {
-	const pdfJsonManager = PdfJsonManager.from(rawJson);
-	if (PdfJsonParserJoe.isJoePdf(pdfJsonManager)) {
-		const core = PdfJsonParserJoe.parseCharacter(pdfJsonManager);
-		return core ? new PlayerCharacterJoe(core) : null;
-	}
-	if (PdfJsonParserPR.isPowerRangerPdf(pdfJsonManager)) {
-		const core = PdfJsonParserPR.parseCharacter(pdfJsonManager);
-		return core ? new PlayerCharacterPR(core) : null;
-	}
-	if (PdfJsonParserTransformer.isTransformerPdf(pdfJsonManager)) {
-		const core = PdfJsonParserTransformer.parseCharacter(pdfJsonManager);
-		return core ? new PlayerCharacterTransformer(core) : null;
-	}
-	return null;
-}
-
-function saveCharacter(character: TPlayerCharacter): Promise<boolean> {
+async function saveCharacter(character: TPlayerCharacter): Promise<boolean> {
 	return writeFile(getPath(character.id), character.toJSON(), true).catch(errorReturnFalse);
 }
 async function loadCharacter(characterId: UUID): Promise<TPlayerCharacter | null> {
@@ -94,17 +59,21 @@ function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): BaseM
 	return { embeds, components };
 }
 
-async function postCharacter(sageCache: SageCache, channel: MessageTarget, character: TPlayerCharacter, pin: boolean): Promise<void> {
+/** posts the imported character to the channel */
+export async function postCharacter({ sageCache }: SageCommand, channel: Optional<MessageTarget>, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const saved = await saveCharacter(character);
 	if (saved) {
 		const output = prepareOutput(sageCache, character);
-		const message = await channel.send(output).catch(errorReturnNull);
-		if (pin && message?.pinnable) {
-			await message.pin();
+		const message = await channel?.send(output).catch(errorReturnNull);
+		if (message) {
+			// await addOrUpdateCharacter(sageCommand, character, message);
+			if (pin && message.pinnable) {
+				await message.pin();
+			}
 		}
 	}else {
 		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
-		const message = await channel.send(output).catch(errorReturnNull);
+		const message = await channel?.send(output).catch(errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();
 		}
@@ -469,112 +438,3 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 export function registerE20(): void {
 	registerInteractionListener(sheetTester, sheetHandler);
 }
-
-type AttachmentData = { json?:PdfJson; fileName?:string; };
-async function getJsonFromAttachment(message: Optional<MessageOrPartial>): Promise<AttachmentData> {
-	const attachment = message?.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
-	if (attachment) {
-		const fileName = attachment.name;
-		const json = await PdfCacher.read<PdfJson>(attachment.url);
-		return { json, fileName };
-	}
-	return { };
-}
-
-export async function handleEssence20Import(sageCommand: SageCommand): Promise<void> {
-	await sageCommand.replyStack.startThinking();
-
-	let json: PdfJson | undefined;
-	let fileName: string | undefined;
-
-	if (sageCommand.isSageMessage()) {
-		({ json, fileName } = await getJsonFromAttachment(sageCommand.message));
-	}
-
-	if (!json) {
-		const value = sageCommand.args.getString("pdf") ?? "";
-		const isPdfUrl = /^http.*?\.pdf$/.test(value);
-		const isMessageUrl = value.startsWith("https://discord.com/channels/");
-
-		if (isPdfUrl) {
-			json = await PdfCacher.read<PdfJson>(value);
-			fileName = value.split("/").pop();
-
-		}else if (isMessageUrl) {
-			const discordKey = DiscordKey.fromUrl(value);
-			const message = discordKey ? await sageCommand.sageCache.fetchMessage(discordKey) : undefined;
-			({ json, fileName } = await getJsonFromAttachment(message));
-		}
-	}
-
-	if (!json) {
-		return sageCommand.replyStack.whisper(`Failed to find pdf!`);
-	}
-
-	const character = jsonToCharacter(json);
-	if (!character) {
-		return sageCommand.replyStack.whisper(`Failed to import character from: ${fileName}!`);
-	}
-	if (/discord/i.test(character.name)) {
-		return sageCommand.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
-	}
-
-	const importing = await sageCommand.replyStack.reply(`Importing ${character.name ?? "<i>Unnamed Character</i>"} ...`, false);
-
-	const channel = sageCommand.dChannel as MessageTarget;
-	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
-
-	const pin = sageCommand.args.getBoolean("pin") ?? false;
-	const attach = sageCommand.args.getBoolean("attach") ?? false;
-	if (attach) {
-		await attachCharacter(sageCommand.sageCache, channel ?? user, fileName!, character, pin);
-	}else {
-		await postCharacter(sageCommand.sageCache, channel ?? user, character, pin);
-	}
-
-	await importing?.delete();
-
-	if (sageCommand.isSageInteraction()) {
-		await sageCommand.replyStack.deleteReply();
-	}
-
-	await sageCommand.replyStack.stopThinking();
-}
-
-//#region reimport
-
-// async function handleReimportError(sageCommand: SageMessage, errorMessage: string): Promise<void> {
-// 	const content = [
-// 		`Reimport Error!`,
-// 		`> ` + errorMessage,
-// 		`To reimport, please reply to your imported character sheet with:`,
-// 		"```sage!reimport pdf=\"\"```",
-// 		`If your updated charater has a new name, please include it:`,
-// 		"```sage!reimport pdf=\"\" name=\"\"```",
-// 		`***pdf** is url to the pdf*`,
-// 	];
-// 	return sageCommand.whisper(content.join("\n"));
-// }
-
-export async function handleEssence20Reimport(sageCommand: SageMessage, message: Message, characterId: string): Promise<void> {
-	sageCommand.whisper("Sorry, not yet enabled!");
-	message;
-	characterId;
-	// const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
-	// const updatedName = sageCommand.args.getString("name") ?? undefined;
-	// const refreshResult = await PathbuilderCharacter.refresh(characterId, pathbuilderId, updatedName);
-	// switch (refreshResult) {
-	// 	case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
-	// 	case "MISSING_JSON_ID": return handleReimportError(sageCommand, "You are missing a 'Export JSON' id.");
-	// 	case "INVALID_JSON_ID": return handleReimportError(sageCommand, "Unable to fetch the 'Export JSON' id.");
-	// 	case "INVALID_CHARACTER_NAME": return handleReimportError(sageCommand, "The character names do not match!");
-	// 	case false: return sageCommand.whisper("Sorry, we don't know what happened!");
-	// 	default:
-	// 		const char = await PathbuilderCharacter.loadCharacter(characterId);
-	// 		await updateSheet(sageCommand.sageCache, char!, message);
-	// 		await sageCommand.message.delete();
-	// 		return;
-	// }
-}
-
-//#endregion

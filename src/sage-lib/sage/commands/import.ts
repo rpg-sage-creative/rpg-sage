@@ -1,10 +1,13 @@
 import type { Message } from "discord.js";
-import { handleSf2eImport } from "../../../gameSystems/p20/sf2e/handleSf2eImport.js";
+import { handleImport as handleImportE20 } from "../../../gameSystems/e20/import/handleImport.js";
+import { handleReimport as handleReimportE20 } from "../../../gameSystems/e20/import/handleReimport.js";
+import { handleImport as handleImportP20 } from "../../../gameSystems/p20/import/handleImport.js";
+import { handleReimport as handleReimportP20 } from "../../../gameSystems/p20/import/handleReimport.js";
 import { registerCommand } from "../../discord/handlers/registerCommand.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../model/SageMessage.js";
-import { getValidE20CharacterId, handleEssence20Import, handleEssence20Reimport } from "./e20.js";
-import { getValidPathbuilderCharacterId, handlePathbuilder2eImport, handlePathbuilder2eReimport } from "./pathbuilder.js";
+import { getValidE20CharacterId } from "./e20.js";
+import { getValidPathbuilderCharacterId } from "./pathbuilder.js";
 
 // pb2eId=118142
 
@@ -27,7 +30,7 @@ function findImportedCharacter(message: Message): ImportedCharacter | undefined 
 }
 
 async function reimportHelp(sageCommand: SageMessage): Promise<void> {
-	await sageCommand.whisper("To reimport, please reply to your imported character sheet with:\n```sage!reimport id=\"\"```or```sage!reimport pdf=\"\"```");
+	await sageCommand.whisper(`For information on reimporting characters, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Character-Management#importing-characters>)`);
 }
 async function reimportHandler(sageCommand: SageMessage): Promise<void> {
 	// no reference means no reply, means no link back to the character to reimport
@@ -44,16 +47,23 @@ async function reimportHandler(sageCommand: SageMessage): Promise<void> {
 
 	const importedCharacter = findImportedCharacter(charMessage);
 	switch (importedCharacter?.type) {
-		case "E20": return handleEssence20Reimport(sageCommand, charMessage, importedCharacter.id);
-		case "PB2E": return handlePathbuilder2eReimport(sageCommand, charMessage, importedCharacter.id);
+		case "E20": return handleReimportE20(sageCommand, charMessage, importedCharacter.id);
+		case "PB2E": return handleReimportP20(sageCommand, charMessage, importedCharacter.id);
 		default: return reimportHelp(sageCommand);
 	}
 
 }
 
 export function registerImport(): void {
-	registerListeners({ commands:["import|pathbuilder-2e"], interaction:handlePathbuilder2eImport, message:handlePathbuilder2eImport });
-	registerListeners({ commands:["import|essence20-pdf"], interaction:handleEssence20Import, message:handleEssence20Import });
-	registerListeners({ commands:["import|starfinder2e-pdf", "import|sf2e-pdf"], interaction:handleSf2eImport, message:handleSf2eImport });
+	registerListeners({
+		commands: ["import|essence20-pdf", "import|essence20", "import|e20"],
+		interaction: handleImportE20,
+		message: handleImportE20
+	});
+	registerListeners({
+		commands: ["import|pathbuilder-2e", "import|pathfinder2e", "import|pf2e", "import|starfinder2e", "import|sf2e"],
+		interaction: handleImportP20,
+		message: handleImportP20
+	});
 	registerCommand(reimportHandler, "reimport");
 }
