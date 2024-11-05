@@ -1,18 +1,16 @@
 import { Collection } from "@rsc-utils/array-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
 import { debug, errorReturnFalse, errorReturnNull, getDataRoot, randomSnowflake, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
-import { fileExistsSync, getJson, PdfCacher, readJsonFile, readJsonFileSync, writeFile, type PdfJson } from "@rsc-utils/io-utils";
+import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { addCommas, nth } from "@rsc-utils/number-utils";
 import { capitalize, StringMatcher } from "@rsc-utils/string-utils";
-import type { Attachment } from "discord.js";
-import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
+import { Ability, type AbilityAbbr, type AbilityAbbrKey } from "../../../gameSystems/d20/lib/Ability.js";
 import type { IHasAbilities } from "../../../gameSystems/p20/lib/Abilities.js";
 import { Check } from "../../../gameSystems/p20/lib/Check.js";
 import type { IHasProficiencies } from "../../../gameSystems/p20/lib/Proficiencies.js";
 import { Proficiency } from "../../../gameSystems/p20/lib/Proficiency.js";
 import { Skill } from "../../../gameSystems/p20/lib/Skill.js";
 import { ProficiencyType, SizeType } from "../../../gameSystems/p20/lib/types.js";
-import { jsonToCharacter } from "../../../gameSystems/p20/sf2e/import/pdf/jsonToCharacter.js";
 import { toModifier } from "../../../gameSystems/utils/toModifier.js";
 import type { TMacro } from "../../../sage-lib/sage/model/types.js";
 import type { GetStatPrefix } from "../../common.js";
@@ -26,20 +24,21 @@ import { SavingThrows, type IHasSavingThrows } from "./SavingThrows.js";
 
 export type TPathbuilderCharacterAbilityKey = keyof Omit<TPathbuilderCharacterAbilities, "breakdown">;
 
-type TPathbuilderCharacterAbilities = {
-	str: number;
-	dex: number;
-	con: number;
-	int: number;
-	wis: number;
-	cha: number;
+type BreakdownAbility = AbilityAbbr | AbilityAbbrKey;
+export type TPathbuilderCharacterAbilities = {
+	str: number; // 16
+	dex: number; // 12
+	con: number; // 12
+	int: number; // 10
+	wis: number; // 10
+	cha: number; // 10
 	breakdown?: {
-		ancestryFree: []; // Str
-		ancestryBoosts: [];
-		ancestryFlaws: [];
-		backgroundBoosts: [];
-		classBoosts: [];
-		mapLevelledBoosts: {
+		ancestryFree: BreakdownAbility[];     // [ "Str", "Dex" ]
+		ancestryBoosts: BreakdownAbility[];   // []
+		ancestryFlaws: BreakdownAbility[];    // []
+		backgroundBoosts: BreakdownAbility[]; // [ "Con", "Str" ]
+		classBoosts: BreakdownAbility[];      // [ "Str" ]
+		mapLevelledBoosts: {  // {}
 			[level: string]: [];
 		}
 	}
@@ -53,7 +52,7 @@ type TPathbuilderCharacterArmorClassTotal = {
 	shieldBonus?: number;
 };
 
-type TPathbuilderCharacterArmor = {
+export type TPathbuilderCharacterArmor = {
 	name: string;
 	qty: number;
 	/** "light" */
@@ -70,12 +69,12 @@ type TPathbuilderCharacterArmor = {
 };
 
 type TPathbuilderCharacterAttributes = {
-	ancestryhp: number;
-	classhp: number;
-	bonushp: number;
-	bonushpPerLevel: number;
-	speed: number;
-	speedBonus: number;
+	ancestryhp: number;      // 8
+	classhp: number;         // 10
+	bonushp: number;         // 0
+	bonushpPerLevel: number; // 0
+	speed: number;           // 25
+	speedBonus: number;      // 0
 };
 
 /** [ [name, null, type, level, `${source} Feat ${level}`, "standardChoice", null] ] */
@@ -85,7 +84,8 @@ type TPathbuilderCharacterFeat = [string, null, string, number] | [string, null,
 type TPathbuilderCharacterLore = [string, number];
 
 /** [ [name, count] | [name, count, "Invested"] | [name, count, containerId, "Invested"] ] */
-type TPathbuilderCharacterEquipment = [string, number] | [string, number, string] | [string, number, string, string];
+export type TPathbuilderCharacterEquipment = [string, number] | [string, number, string] | [string, number, string, string];
+export type TPathbuilderEquipmentContainers = { [key: string]: { containerName:string; bagOfHolding:boolean; backpack:boolean; } };
 
 type TPathbuilderCharacterFormula = {
 	/** "other" */
@@ -102,8 +102,8 @@ type TPathbuilderCharacterMoney = {
 	upb?: number;
 };
 
-type TPathbuilderCharacterProficienciesKey = keyof TPathbuilderCharacterProficiencies;
-type TPathbuilderCharacterProficiencies = {
+export type TPathbuilderCharacterProficienciesKey = keyof TPathbuilderCharacterProficiencies;
+export type TPathbuilderCharacterProficiencies = {
 	classDC: ProficiencyType;
 	perception: ProficiencyType;
 	fortitude: ProficiencyType;
@@ -138,8 +138,8 @@ type TPathbuilderCharacterProficiencies = {
 	survival: ProficiencyType;
 	thievery: ProficiencyType;
 	// Starfinder Hack
-	piloting: ProficiencyType;
-	computers: ProficiencyType;
+	piloting?: ProficiencyType;
+	computers?: ProficiencyType;
 };
 
 type TPathbuilderCharacterSpecificProficiencies = {
@@ -202,7 +202,7 @@ export type TPathbuilderCharacterWeapon = {
 	/* potency: +1 */
 	pot: number;
 	/* Striking, Greater Striking, Major Striking */
-	str: "striking" | "greater striking" | "major striking";
+	str: "striking" | "greater striking" | "major striking" | "";
 	/* material */
 	mat: null;
 	display: string;
@@ -255,24 +255,24 @@ export type TPathbuilderCharacterCustomFlags = {
 type TPathbuilderCharacterCustomFlag = keyof TPathbuilderCharacterCustomFlags;
 export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter" | "P20Character"> & TPathbuilderCharacterCustomFlags & {
 	/** Clean this up! */
-	// name (core)
-	class: string;
-	dualClass?: string;
-	level: number;
-	ancestry: string;
-	heritage: string;
-	background: string;
-	// alignment (deprecated)
-	gender: string;
-	age: string;
-	deity: string;
-	size: SizeType;
-	sizeName?: keyof typeof SizeType;
-	keyability: TPathbuilderCharacterAbilityKey;
-	languages: string[];
-	rituals?: string[];
-	resistances?: [];
-	inventorMods?: [];
+	// name (core) // "Unknown Adventurer"
+	class: string; // "Fighter"
+	dualClass: string | null;
+	level: number; // 1
+	ancestry: string; // "Human"
+	heritage: string | null; // ""
+	background: string; // "Barkeep"
+	// alignment (deprecated) // "N"
+	gender: string; // "Not set"
+	age: string; // "Not set"
+	deity: string; // "Not set"
+	size: SizeType; // 2
+	sizeName?: keyof typeof SizeType; // "Medium"
+	keyability: TPathbuilderCharacterAbilityKey; // "str"
+	languages: string[]; // ["None selected"]
+	rituals?: string[]; // []
+	resistances?: []; // []
+	inventorMods?: []; // []
 	attributes: TPathbuilderCharacterAttributes;
 	abilities: TPathbuilderCharacterAbilities;
 	proficiencies: TPathbuilderCharacterProficiencies;
@@ -282,7 +282,7 @@ export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter" | "
 	lores: TPathbuilderCharacterLore[];
 	equipmentContainers?: { [key: string]: { containerName:string; bagOfHolding:boolean; backpack:boolean; } };
 	equipment: TPathbuilderCharacterEquipment[];
-	specificProficiencies: TPathbuilderCharacterSpecificProficiencies;
+	specificProficiencies?: TPathbuilderCharacterSpecificProficiencies;
 	weapons: TPathbuilderCharacterWeapon[];
 	money: TPathbuilderCharacterMoney;
 	armor: TPathbuilderCharacterArmor[];
@@ -290,8 +290,9 @@ export type TPathbuilderCharacter = CharacterBaseCore<"PathbuilderCharacter" | "
 	focusPoints?: number;
 	focus?: TPathbuilderCharacterFocus;
 	formula: TPathbuilderCharacterFormula[];
+	acTotal?: TPathbuilderCharacterArmorClassTotal;
 	pets: TPathbuilderCharacterPet[];
-	acTotal: TPathbuilderCharacterArmorClassTotal;
+	familiars?: [];
 	exportJsonId?: number;
 };
 type TPathbuilderCharacterFocus = {
@@ -313,17 +314,17 @@ type TPathbuilderCharacterFocusStat = {
 	focusSpells: string[];
 };
 
-type TPathbuilderCharacterResponse = {
-	success: boolean;
-	build: TPathbuilderCharacter;
-};
+// type TPathbuilderCharacterResponse = {
+// 	success: boolean;
+// 	build: TPathbuilderCharacter;
+// };
 
 //#endregion
 
 //#region helpers
 
 function bracketTraits(...traits: string[]): string {
-	const filtered = traits.filter(t => t && t.trim());
+	const filtered = traits.map(t => t?.trim()).filter(t => t);
 	return `[${filtered.join("] [")}]`;
 }
 
@@ -834,7 +835,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 			case "initskill": return this.getInitSkill();
 			case "level": return this.level;
 			case "maxhp": return this.maxHp;
-			case "ac": return prefix === "prof" ? this.core.acTotal?.acProfBonus : this.core.acTotal?.acTotal;
+			case "ac": return prefix === "prof" ? this.core.acTotal?.acProfBonus ?? null : this.core.acTotal?.acTotal ?? null;
 			default: return this.createCheck(statLower)?.toStatString(prefix) ?? null;
 		}
 	}
@@ -1050,7 +1051,7 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 		push(`<b><u>${this.toHtmlName()}</u></b>`);
 
 		if (includes(["All", "Traits"])) {
-			push(`${bracketTraits(SizeType[this.core.size], this.core.ancestry, this.core.heritage)}`);
+			push(`${bracketTraits(SizeType[this.core.size], this.core.ancestry, this.core.heritage ?? "")}`);
 		}
 
 		if (includes(["All", "Perception"])) {
@@ -1225,55 +1226,6 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 
 	//#endregion
 
-	//#region fetch
-
-	public static fetch(idOrUrl: number | string, flags?: TPathbuilderCharacterCustomFlags): Promise<PathbuilderCharacter | null> {
-		return this.fetchCore(idOrUrl)
-			.then(core => new PathbuilderCharacter(core, flags), () => null);
-	}
-
-	public static fetchCore(idOrUrl: number | string): Promise<TPathbuilderCharacter> {
-		return new Promise<TPathbuilderCharacter>(async (resolve, reject) => {
-			try {
-				if (typeof(idOrUrl) === "number") {
-					const url = `https://pathbuilder2e.com/json.php?id=${idOrUrl}`;
-					const json = await getJson<TPathbuilderCharacterResponse>(url).catch(reject);
-					// writeFileSync(`pathfbuilder2e-${id}.json`, json);
-					if (json?.success) {
-						json.build.exportJsonId = idOrUrl;
-						resolve(json.build);
-					}else {
-						reject(stringify(json));
-					}
-				}else {
-					const json = await getJson<TPathbuilderCharacterResponse | TPathbuilderCharacter>(idOrUrl).catch(reject);
-					if (json) {
-						if ("success" in json && "build" in json) {
-							resolve(json.build);
-						}else if ("name" in json && "class" in json) {
-							resolve(json);
-						}else {
-							reject(stringify(json));
-						}
-					}
-				}
-			}catch (ex) {
-				reject(ex);
-			}
-		});
-	}
-	/*
-	Pathbuilder uses the Share Character build number by POSTing the following JSON:
-		{ "id": "622381" }
-	to the url:
-		https://pathbuilder2e.com/app/fetch_emailed.php
-	with content type:
-		"application/json"
-	theh results are the raw json used by pathbuilder to manage a character ... NOT THE EXPORTED JSON
-	 */
-
-	//#endregion
-
 	//#region save/load
 
 	public static createFilePath(characterId: string): string {
@@ -1301,69 +1253,6 @@ export class PathbuilderCharacter extends CharacterBase<TPathbuilderCharacter> i
 	public async save(): Promise<boolean> {
 		return PathbuilderCharacter.saveCharacter(this);
 	}
-	public static async refresh(options: { characterId:string; pathbuilderId?:number; newName?:string; jsonUrl?:string; jsonAttachment?:Attachment; pdfUrl?:string; pdfAttachment?:Attachment }): Promise<RefreshResult> {
-		const { characterId, pathbuilderId, newName, jsonUrl, jsonAttachment, pdfUrl, pdfAttachment } = options;
-		const oldChar = await this.loadCharacter(characterId);
-		if (!oldChar) {
-			return "INVALID_CHARACTER_ID";
-		}
-
-		let newChar: TPathbuilderCharacter | undefined;
-
-		if (jsonUrl) {
-			newChar = await PathbuilderCharacter.fetchCore(jsonUrl);
-			if (!newChar) return "INVALID_JSON_URL";
-		}
-
-		if (!newChar && jsonAttachment) {
-			newChar = await PathbuilderCharacter.fetchCore(jsonAttachment.url);
-			if (!newChar) return "INVALID_JSON_ATTACHMENT";
-		}
-
-		if (!newChar && pdfUrl) {
-			const json = await PdfCacher.read<PdfJson>(pdfUrl);
-			if (json) {
-				newChar = jsonToCharacter(json)?.toJSON();
-				if (!newChar) return "UNSUPPORTED_PDF";
-			}else {
-				return "INVALID_PDF_URL";
-			}
-		}
-
-		if (!newChar && pdfAttachment) {
-			const json = await PdfCacher.read<PdfJson>(pdfAttachment.url);
-			if (json) {
-				newChar = jsonToCharacter(json)?.toJSON();
-				if (!newChar) return "UNSUPPORTED_PDF";
-			}else {
-				return "INVALID_PDF_ATTACHMENT";
-			}
-		}
-
-		if (!newChar) {
-			const exportJsonId = pathbuilderId ?? oldChar.exportJsonId;
-			if (!exportJsonId) {
-				return "MISSING_JSON_ID";
-			}
-
-			newChar = await this.fetchCore(exportJsonId);
-			if (!newChar) {
-				return "INVALID_JSON_ID";
-			}
-		}
-
-		if (oldChar.name !== newChar.name && newChar.name !== newName) {
-			return "INVALID_CHARACTER_NAME";
-		}
-
-		newChar.id = oldChar.id;
-		newChar.characterId = oldChar.characterId;
-		newChar.sheetRef = oldChar.sheetRef;
-		newChar.userId = oldChar.userId;
-
-		return this.saveCharacter(newChar);
-	}
 
 	//#endregion
 }
-type RefreshResult = "INVALID_CHARACTER_ID" | "MISSING_JSON_ID" | "INVALID_JSON_ID" | "INVALID_CHARACTER_NAME" | "INVALID_JSON_URL" | "INVALID_JSON_ATTACHMENT" | "INVALID_PDF_URL" | "INVALID_PDF_ATTACHMENT" | "UNSUPPORTED_PDF" | true | false;
