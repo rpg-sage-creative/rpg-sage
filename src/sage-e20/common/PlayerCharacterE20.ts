@@ -57,7 +57,7 @@ export type TWeaponJoe = TWeaponE20 & {
 
 export interface PlayerCharacterCoreE20 extends CharacterBaseCore<"PlayerCharacter"> {
 	diceEngine: "E20";
-	gameType: string;
+	gameType: "E20 - G.I. Joe" | "E20 - Power Rangers" | "E20 - Transformers";
 
 	abilities: TStatE20[];
 	armor: TArmorE20[];
