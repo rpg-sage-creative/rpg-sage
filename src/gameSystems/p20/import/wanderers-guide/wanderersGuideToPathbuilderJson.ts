@@ -450,7 +450,7 @@ function parseProficiencies(content: WanderersGuideContent): TPathbuilderCharact
 	});
 	return out as TPathbuilderCharacterProficiencies;
 }
-export function pathbuildeCoreOrUndefined(json: any): TPathbuilderCharacter | undefined {
+export function wanderersGuideToPathbuilderJson(json: any): TPathbuilderCharacter | undefined {
 	if (isValidJson(json)) {
 		const { character, content } = json;
 		const { details, level } = character;
