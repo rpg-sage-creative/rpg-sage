@@ -19,26 +19,11 @@ import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
 import type { SageCache } from "./SageCache.js";
 import type { Server } from "./Server.js";
 
-export type TGameRoleType = keyof typeof GameRoleType;
 export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
-export function getRoleTypes(roleType: GameRoleType): GameRoleType[] {
-	switch (roleType) {
-		// case GameRoleType.Table: return [];
-		// case GameRoleType.Cast: return [];
-		case GameRoleType.GameMaster: return [GameRoleType.GameMaster, GameRoleType.Cast, GameRoleType.Table];
-		case GameRoleType.Player: return [GameRoleType.Player, GameRoleType.Cast, GameRoleType.Table];
-		case GameRoleType.Spectator: return [GameRoleType.Spectator, GameRoleType.Table];
-		default: return [];
-	}
-}
-export interface IGameRole {
-	did: Snowflake;
-	type: GameRoleType;
-	dicePing: boolean;
-}
+export type GameRoleData = { did: Snowflake; type: GameRoleType; dicePing: boolean; };
 
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
-export interface IGameUser { did: Snowflake; type: GameUserType; dicePing: boolean; }
+export type GameUserData = { did: Snowflake; type: GameUserType; dicePing: boolean; };
 
 export interface GameCore extends IdCore, IHasColors, IHasEmoji, Partial<GameOptions> {
 	objectType: "Game";
@@ -51,9 +36,9 @@ export interface GameCore extends IdCore, IHasColors, IHasEmoji, Partial<GameOpt
 	serverDid: Snowflake;
 
 	channels: SageChannel[];
-	roles?: IGameRole[];
+	roles?: GameRoleData[];
 
-	users?: IGameUser[];
+	users?: GameUserData[];
 
 	gmCharacter?: GameCharacter | GameCharacterCore;
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
@@ -63,21 +48,22 @@ export interface GameCore extends IdCore, IHasColors, IHasEmoji, Partial<GameOpt
 	encounters?: EncounterCore[] | EncounterManager;
 }
 
-export type TMappedChannelNameTags = {
+type MappedChannelNameTags = {
 	ic: boolean;
 	ooc: boolean;
 	gm: boolean;
 	dice: boolean;
 	misc: boolean;
 };
-export type TMappedGameChannel = {
+
+type MappedGameChannel = {
 	id: Snowflake;
 	sChannel: SageChannel;
 	gChannel: GuildTextBasedChannel | undefined;
-	nameTags: TMappedChannelNameTags;
+	nameTags: MappedChannelNameTags;
 };
 
-function sageChannelTypeToNameTags(channelType?: SageChannelType): TMappedChannelNameTags {
+function sageChannelTypeToNameTags(channelType?: SageChannelType): MappedChannelNameTags {
 	const gm = channelType === SageChannelType.GameMaster;
 	const ooc = channelType === SageChannelType.OutOfCharacter;
 	const ic = channelType === SageChannelType.InCharacter;
@@ -88,10 +74,11 @@ function sageChannelTypeToNameTags(channelType?: SageChannelType): TMappedChanne
 }
 
 /** Reads IChannel properties to determine channel type: IC, GM, OOC, MISC */
-export function mapSageChannelNameTags(channel: SageChannel): TMappedChannelNameTags {
+export function mapSageChannelNameTags(channel: SageChannel): MappedChannelNameTags {
 	return sageChannelTypeToNameTags(channel.type);
 }
-export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
+
+export function nameTagsToType(nameTags: MappedChannelNameTags): string {
 	if (nameTags.gm) {
 		return "GM <i>(Game Master)</i>";
 	}
@@ -111,14 +98,14 @@ export function nameTagsToType(nameTags: TMappedChannelNameTags): string {
 }
 
 /** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
-function mapGuildChannelNameTags(channel: GuildTextBasedChannel): TMappedChannelNameTags {
+function mapGuildChannelNameTags(channel: GuildTextBasedChannel): MappedChannelNameTags {
 	return sageChannelTypeToNameTags(parseSageChannelType(channel.name));
 }
 
 /** Returns [guildChannels.concat(sageChannels), guildChannels, sageChannels] */
-async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promise<[TMappedGameChannel[], TMappedGameChannel[], TMappedGameChannel[]]> {
-	const sChannels: TMappedGameChannel[] = [];
-	const gChannels: TMappedGameChannel[] = [];
+async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promise<[MappedGameChannel[], MappedGameChannel[], MappedGameChannel[]]> {
+	const sChannels: MappedGameChannel[] = [];
+	const gChannels: MappedGameChannel[] = [];
 	for (const sChannel of channels) {
 		sChannels.push({
 			id: sChannel.id,
@@ -148,7 +135,7 @@ function fixDupeUsers(game: GameCore): void {
 	const users = game.users ?? [];
 	users?.forEach(user => sets[user.type ?? 0].add(user.did));
 
-	const filtered: IGameUser[] = [];
+	const filtered: GameUserData[] = [];
 	while (sets.length) {
 		// do them in priority order: gm, player, other
 		const set = sets.pop()!;
@@ -210,10 +197,10 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get serverId(): UUID { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }
 
-	public get gmRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.GameMaster); }
+	public get gmRole(): GameRoleData | undefined { return this.roles.find(role => role.type === GameRoleType.GameMaster); }
 	public get gmRoleDid(): Snowflake | undefined { return this.gmRole?.did; }
 
-	public get playerRole(): IGameRole | undefined { return this.roles.find(role => role.type === GameRoleType.Player); }
+	public get playerRole(): GameRoleData | undefined { return this.roles.find(role => role.type === GameRoleType.Player); }
 	public get playerRoleDid(): Snowflake | undefined { return this.playerRole?.did; }
 	/** Returns users assigned manually, NOT users assigned via Player role. */
 	private get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
@@ -233,8 +220,8 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			?? this.encounters.findCharacter(name)
 			?? this.parties.findCharacter(name);
 	}
-	public get roles(): IGameRole[] { return this.core.roles ?? (this.core.roles = []); }
-	public get users(): IGameUser[] { return this.core.users ?? (this.core.users = []); }
+	public get roles(): GameRoleData[] { return this.core.roles ?? (this.core.roles = []); }
+	public get users(): GameUserData[] { return this.core.users ?? (this.core.users = []); }
 
 	public get encounters(): EncounterManager { return this.core.encounters as EncounterManager; }
 	public get parties(): PartyManager { return this.core.parties as PartyManager; }
@@ -290,7 +277,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
 		return this.channels.filter((_, index) => !all[index]);
 	}
-	public async orphanUsers(): Promise<IGameUser[]> {
+	public async orphanUsers(): Promise<GameUserData[]> {
 		const all = await Promise.all(this.users.map(user => this.discord.fetchGuildMember(user.did)));
 		return this.users.filter((_, index) => !all[index]);
 	}
@@ -486,7 +473,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			return false;
 		}
 
-		const players = filtered.map(userDid => (<IGameUser>{ did: userDid, type: GameUserType.Player }));
+		const players = filtered.map(userDid => (<GameUserData>{ did: userDid, type: GameUserType.Player }));
 		(this.core.users ?? (this.core.users = [])).push(...players);
 		/*
 		// const saved = await this.save();
@@ -602,11 +589,11 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		return undefined;
 	}
 
-	public getRole(roleType: GameRoleType): IGameRole | undefined {
+	public getRole(roleType: GameRoleType): GameRoleData | undefined {
 		return this.roles.find(role => role.type === roleType);
 	}
 
-	public getUser(userResolvable: Optional<CanBeUserIdResolvable>): IGameUser | undefined {
+	public getUser(userResolvable: Optional<CanBeUserIdResolvable>): GameUserData | undefined {
 		const userId = resolveUserId(userResolvable);
 		return this.users.find(user => user.did === userId);
 	}

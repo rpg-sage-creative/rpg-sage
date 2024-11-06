@@ -2,7 +2,7 @@ import type { GameOptions, SageChannel } from "@rsc-sage/types";
 import type { Args, Snowflake } from "@rsc-utils/core-utils";
 import { applyChanges, cloneJson, isEmpty } from "@rsc-utils/core-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
-import { Game, type GameCore, type IGameUser } from "../../../model/Game.js";
+import { Game, type GameCore, type GameUserData } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { getGameChannels } from "./getGameChannels.js";
 import { getGameUsers } from "./getGameUsers.js";
@@ -11,7 +11,7 @@ import { gSendDetails } from "./gSendDetails.js";
 type UpdateGameOptions = {
 	gameOptions: Args<GameOptions>;
 	channelsToAdd: SageChannel[];
-	usersToAdd: IGameUser[];
+	usersToAdd: GameUserData[];
 	channelsToRemove: Snowflake[];
 	usersToRemove: Snowflake[];
 };

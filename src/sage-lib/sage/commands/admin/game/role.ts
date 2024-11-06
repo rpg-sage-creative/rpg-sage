@@ -1,11 +1,7 @@
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
-import { type IGameRole, type TGameRoleType, GameRoleType } from "../../../model/Game.js";
+import { GameRoleType } from "../../../model/Game.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";
-
-function getGameRoleLabel(gameRole: IGameRole): TGameRoleType {
-	return <TGameRoleType>GameRoleType[gameRole.type || 0];
-}
 
 async function gameRoleList(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminGame) {
@@ -18,7 +14,7 @@ async function gameRoleList(sageMessage: SageMessage): Promise<void> {
 	if (game.roles.length) {
 		for (const gameRole of game.roles) {
 			const role = await sageMessage.discord.fetchGuildRole(gameRole.did);
-			const title = `<b>${getGameRoleLabel(gameRole)}</b> @${role?.name}`;
+			const title = `<b>${GameRoleType[gameRole.type || 0]}</b> @${role?.name}`;
 			const roleId = `<b>Role Id</b> ${gameRole.did}`;
 			renderableContent.appendTitledSection(title, roleId);
 			// TODO: list users
