@@ -64,6 +64,21 @@ async function fetchPdfCore<T extends CharacterBaseCore>(pdfUrl: string, error: 
 	return { error:"UNSUPPORTED_PDF" };
 }
 
+// async function fetchTsvCores(tsvUrl: string, error: FetchResultError, handlers: Handlers<any>): Promise<FetchCoreResult<any>> {
+// 	const tsv = await fetchTsv(tsvUrl as VALID_URL)
+// 		.catch(() => { error = "INVALID_TSV"; return undefined; });
+// 	if (!tsv) return { error };
+
+// 	if (tsv.keys.length && tsv.items.length) {
+// 		if (tsv.items.some(item => hasDiscordInName(item["name"]))) {
+// 			return { tsv, error:"INVALID_NAME" };
+// 		}
+// 		return { tsv };
+// 	}
+
+// 	return { error:"UNSUPPORTED_PDF" };
+// }
+
 export type FetchResult<T extends CharacterBaseCore> = FetchCoreResult<T> & {
 	/** name of the attachment parsed */
 	attachmentName?: string;
