@@ -1,7 +1,7 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { errorReturnNull } from "@rsc-utils/core-utils";
 import { EmbedBuilder, type MessageTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
-import { readJsonFile } from "@rsc-utils/io-utils";
+import { readJsonFile, readJsonFileSync } from "@rsc-utils/io-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/essence20/index.js";
 import { PlayerCharacterE20, type TSkillE20, type TSkillSpecialization, type TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
@@ -33,6 +33,13 @@ function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuil
 
 export async function loadCharacter(characterId: string): Promise<TPlayerCharacter | null> {
 	const core = await readJsonFile<TPlayerCharacterCore>(PlayerCharacterE20.createFilePath(characterId)).catch(errorReturnNull);
+	return loadCharacterCore(core) ?? null;
+}
+export function loadCharacterSync(characterId: string): TPlayerCharacter | null {
+	const core = readJsonFileSync<TPlayerCharacterCore>(PlayerCharacterE20.createFilePath(characterId));
+	return loadCharacterCore(core) ?? null;
+}
+export function loadCharacterCore(core: Optional<TPlayerCharacterCore>): TPlayerCharacter | undefined {
 	if (core?.gameType === "E20 - G.I. Joe") {
 		return new PlayerCharacterJoe(core);
 	}
@@ -42,14 +49,9 @@ export async function loadCharacter(characterId: string): Promise<TPlayerCharact
 	if (core?.gameType === "E20 - Transformers") {
 		return new PlayerCharacterTransformer(core);
 	}
-	return null;
+	return undefined;
 }
 
-// function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): BaseMessageOptions {
-// 	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character) as any));
-// 	const components = createComponents(character);
-// 	return { embeds, components };
-// }
 type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
 function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutput {
 	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character) as any));
@@ -57,14 +59,66 @@ function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutp
 	return { embeds, components };
 }
 
-/** posts the imported character to the channel */
-export async function postCharacter({ sageCache }: SageCommand, channel: Optional<MessageTarget>, character: TPlayerCharacter, pin: boolean): Promise<void> {
+/** adds the character to the game for this channel ... creating the character if need be */
+async function addOrUpdateCharacter(sageCommand: SageCommand, eChar: TPlayerCharacter, message: Message): Promise<boolean> {
+	const { tokenUrl, avatarUrl } = sageCommand.isSageMessage()
+		? sageCommand.args.getCharacterOptions({}) ?? { }
+		: { } as { tokenUrl?:string; avatarUrl?:string; };
+
+	// get or create character
+	const owner = sageCommand.game ?? sageCommand.sageUser;
+	const existing = owner.findCharacterOrCompanion(eChar.name);
+	const oChar = existing
+		? ("game" in existing ? existing.game : existing)
+		: await owner.playerCharacters.addCharacter({
+			avatarUrl,
+			id: eChar.id as Snowflake,
+			name: eChar.name,
+			essence20Id: eChar.id,
+			tokenUrl,
+			userDid: eChar.userId as Snowflake
+		});
+
+	// if something went wrong, fail out
+	if (!oChar) return false;
+
+	// link gamecharacter to pbcharacter
+	eChar.characterId = oChar.id;
+	eChar.setSheetRef(parseReference(message));
+	eChar.userId = oChar.userDid;
+	const eCharSaved = await eChar.save();
+
+	if (eCharSaved) {
+		await updateSheet(sageCommand, eChar, message);
+	}
+
+	// newly created character should already be linked
+	if (oChar.essence20Id === eChar.id) {
+		return eCharSaved;
+	}
+
+	// link pbcharacter to gamecharacter
+	oChar.essence20Id = eChar.id;
+	// optionally update images
+	if (avatarUrl) oChar.avatarUrl = avatarUrl;
+	if (tokenUrl) oChar.tokenUrl = tokenUrl;
+	const oCharSaved = eCharSaved ? await owner.save() : false;
+
+	return oCharSaved;
+}
+
+/**
+ * posts the imported character to the channel
+ * @todo implement or stub macro logic from pathbuilder and then use shared/reusable code.
+ */
+export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: TPlayerCharacter, pin: boolean): Promise<void> {
+	const { sageCache } = sageCommand;
 	const saved = await character.save();
 	if (saved) {
 		const output = prepareOutput(sageCache, character);
 		const message = await channel?.send(output).catch(errorReturnNull);
 		if (message) {
-			// await addOrUpdateCharacter(sageCommand, character, message);
+			await addOrUpdateCharacter(sageCommand, character, message);
 			if (pin && message.pinnable) {
 				await message.pin();
 			}
@@ -78,11 +132,7 @@ export async function postCharacter({ sageCache }: SageCommand, channel: Optiona
 	}
 }
 
-// async function updateSheet(sageInteraction: SageInteraction, character: TPlayerCharacter, message?: Message) {
-// 	const output = prepareOutput(sageInteraction.caches, character);
-// 	const message = sageInteraction.interaction.message as Message;
-// 	await message.edit(output);
-// }
+/** @todo implement or stub macro logic from pathbuilder and then use shared/reusable code. */
 export async function updateSheet({ sageCache }: SageCommand, character: TPlayerCharacter, message?: Message) {
 	if (message) {
 		// we have a message, update the sheet reference just in case

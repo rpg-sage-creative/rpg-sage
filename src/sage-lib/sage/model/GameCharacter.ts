@@ -13,6 +13,7 @@ import { isStatsKey } from "../../../gameSystems/sheets.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
+import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
@@ -82,6 +83,8 @@ export type GameCharacterCore = {
 	/** The character's Pathbuilder build. */
 	pathbuilder?: TPathbuilderCharacter;
 	pathbuilderId?: string;
+	essence20?: TEssence20CharacterCore;
+	essence20Id?: string;
 	/** The image used to represent the character to the left of the post */
 	tokenUrl?: string;
 	/** The character's user's Discord ID */
@@ -315,6 +318,23 @@ export class GameCharacter implements IHasSave {
 	}
 	/** The ID of the parent of a companion. */
 	public get parentId(): Snowflake | undefined { return this.parent?.id; }
+
+	private _essence20: TEssence20Character | null | undefined;
+	public get essence20(): TEssence20Character | null {
+		if (this._essence20 === undefined) {
+			if (this.core.essence20) {
+				this._essence20 = loadCharacterCore(this.core.essence20) ?? null;
+			}
+			if (this.core.essence20Id) {
+				this._essence20 = loadCharacterSync(this.core.essence20Id);
+			}
+		}
+		return this._essence20 ?? null;
+	}
+
+	/** @todo figure out what this id is and what it represents */
+	public get essence20Id(): string | undefined { return this.core.essence20Id; }
+	public set essence20Id(essence20Id: Optional<string>) { this.core.essence20Id = essence20Id ?? undefined; }
 
 	private _pathbuilder: PathbuilderCharacter | null | undefined;
 	public get pathbuilder(): PathbuilderCharacter | null {
