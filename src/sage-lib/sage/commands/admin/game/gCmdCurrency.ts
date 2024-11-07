@@ -4,7 +4,7 @@ import { registerListeners } from "../../../../discord/handlers/registerListener
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
-import { addPostCurrencyEvent, removePostCurrency, renderPostCurrency } from "../PostCurrency.js";
+import { addPostCurrencyEvent, removePostCurrency, renderPostCurrency, togglePostCurrency } from "../PostCurrency.js";
 
 async function gCmdAddCurrency(sageCommand: SageCommand): Promise<void> {
 	sageCommand.replyStack.startThinking();
@@ -96,6 +96,53 @@ async function gCmdRemoveCurrency(sageCommand: SageCommand): Promise<void> {
 
 	}
 }
+async function gCmdToggleCurrency(sageCommand: SageCommand): Promise<void> {
+	sageCommand.replyStack.startThinking();
+
+	if (!sageCommand.game) {
+		return sageCommand.replyStack.whisper("There is no Game!");
+	}
+
+	if (!sageCommand.canAdminGame) {
+		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to manage this Game.");
+	}
+
+	const key = sageCommand.args.getString("key");
+	if (!key) {
+		return sageCommand.replyStack.whisper(`Your command must include key="".`);
+	}
+
+	const currency = sageCommand.game.postCurrency[key];
+	if (!currency) {
+		return sageCommand.replyStack.whisper(`Post Currency "${key}" not found!`);
+	}
+
+	togglePostCurrency(sageCommand.game, { key });
+
+	sageCommand.replyStack.stopThinking();
+
+	await _gCmdShowCurrency(sageCommand);
+
+	const displayName = currency.name ?? currency.key;
+	const label = currency.disabled ? "Disable" : "Enable";
+	const labeld = currency.disabled ? "disabled" : "enabled";
+	const note = currency.disabled ? `\n> *NOTE: Post counts are not tracked at all while disabled.*` : ``;
+
+	const save = await discordPromptYesNo(sageCommand, `${label} Post Currency: ${displayName}?${note}`, true);
+	if (save) {
+		const saved = await sageCommand.game.save();
+		if (saved) {
+			await sageCommand.replyStack.editLast(`Post Currency "${displayName}" ${labeld}.`);
+
+		}else {
+			await sageCommand.replyStack.whisper(`Unknown Error; Post Currency "${displayName}" NOT ${labeld}!`);
+
+		}
+	}else {
+		await sageCommand.replyStack.editLast(`Post Currency "${displayName}" ***NOT*** ${labeld}.`);
+
+	}
+}
 
 async function gCmdShowCurrency(sageCommand: SageCommand): Promise<void> {
 	sageCommand.replyStack.startThinking();
@@ -130,4 +177,5 @@ export function registerPostCurrency(): void {
 	registerListeners({ commands:["currency|add"], message:gCmdAddCurrency });
 	registerListeners({ commands:["currency|remove"], message:gCmdRemoveCurrency });
 	registerListeners({ commands:["currency|details"], message:gCmdShowCurrency });
+	registerListeners({ commands:["currency|toggle"], message:gCmdToggleCurrency });
 }

@@ -1,4 +1,4 @@
-import { type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, type Snowflake } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
 
@@ -34,6 +34,7 @@ type PostCurrencyData = {
 	key: string;
 	name: string;
 	description?: string;
+	disabled?: boolean;
 	events: PostCurrencyDataEvent[];
 	totals: PostCurrencyDataTotal[];
 };
@@ -100,8 +101,10 @@ function logPostsWithAll({ postCurrency }: HasPostCurrency, ...bulkUserCounts: P
 	let changes = false;
 	const postCurrencyDatas = Object.values(postCurrency ?? {});
 	for (const postCurrencyData of postCurrencyDatas) {
-		const changed = logPostsWithOne(postCurrencyData, ...bulkUserCounts);
-		changes ||= changed;
+		if (!postCurrencyData.disabled) {
+			const changed = logPostsWithOne(postCurrencyData, ...bulkUserCounts);
+			changes ||= changed;
+		}
 	}
 	return changes;
 }
@@ -190,7 +193,7 @@ export function addPostCurrencyEvent({ postCurrency }: HasPostCurrency, options:
 		const increments: PostCurrencyIncrement[] = [];
 		types.forEach(postType => {
 			const increment = options[`${postType}Increment` as "dialogIncrement"];
-			if (increment) {
+			if (isDefined(increment)) {
 				increments.push({ postType, increment });
 			}
 		});
@@ -235,15 +238,33 @@ export function removePostCurrency({ postCurrency }: HasPostCurrency, options: R
 	return false;
 }
 
+type TogglePostCurrencyOptions = {
+	key: string;
+};
+
+/** Toggles a type of Currency between enabled and disabled. */
+export function togglePostCurrency({ postCurrency }: HasPostCurrency, options: TogglePostCurrencyOptions): boolean {
+	const key = options.key.toLowerCase();
+	if (postCurrency[key]) {
+		postCurrency[key].disabled = !postCurrency[key].disabled;
+		return true;
+	}
+	return false;
+}
+
 type PlayerInfo = { userId:Snowflake; name:string; };
 export function renderPostCurrency({ postCurrency }: HasPostCurrency, renderableContent: RenderableContent, players: PlayerInfo[]): void {
 	const postCurrencyData = Object.values(postCurrency);
 	if (postCurrencyData.length) {
 		renderableContent.append(`<b>Post Currency Settings</b>`);
 		postCurrencyData.forEach(data => {
-			data.events[0].increments.forEach(inc => {
-				renderableContent.append(`[spacer]${data.name ?? data.key}: ${inc.increment} ${inc.postType} posts`);
-			});
+			if (data.disabled) {
+				renderableContent.append(`[spacer]${data.name ?? data.key}: *disabled*`);
+			}else {
+				data.events[0].increments.forEach(inc => {
+					renderableContent.append(`[spacer]${data.name ?? data.key}: ${inc.increment ?? 0} ${inc.postType} posts`);
+				});
+			}
 		});
 		renderableContent.append(`<b>Post Currency Values</b>`);
 		players.map(player => {
