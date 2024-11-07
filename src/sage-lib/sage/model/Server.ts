@@ -24,6 +24,7 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Pa
 	admins: IAdminUser[];
 	channels: SageChannel[];
 	commandPrefix?: string;
+	gameId?: string;
 	gmCharacter?: GameCharacter | GameCharacterCore;
 	name: string;
 	roles: IAdminRole[];
@@ -58,6 +59,8 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
+	public get gameId(): string | undefined { return this.core.gameId; }
+	public set gameId(gameId: string | undefined) { this.core.gameId = gameId; }
 	private _gameSystem?: GameSystem | null;
 	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
 	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
@@ -82,6 +85,13 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 
 	// #region Game actions
 	public async findActiveGame(channelId: Snowflake): Promise<Game | undefined> {
+		// check to see if we have a server-wide game
+		if (this.core.gameId) {
+			const game = await this.sageCache.games.getById(this.core.gameId as Snowflake);
+			if (game && !game.isArchived) {
+				return game;
+			}
+		}
 		return this.sageCache.games.findActive({ guildId:this.did, channelId, messageId:undefined });
 	}
 	// public async addGame(channelDid: Snowflake, name: string, _gameType: Optional<GameType>, _dialogType: Optional<DialogType>, _critMethodType: Optional<CritMethodType>, _diceOutputType: Optional<DiceOutputType>, _dicePostType: Optional<DicePostType>, _diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
