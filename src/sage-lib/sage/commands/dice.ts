@@ -17,6 +17,7 @@ import { SageCommand } from "../model/SageCommand.js";
 import { SageInteraction } from "../model/SageInteraction.js";
 import { SageMessage } from "../model/SageMessage.js";
 import type { TMacro, User } from "../model/User.js";
+import { logPostCurrency } from "./admin/PostCurrency.js";
 import { registerDiceTest } from "./dice/diceTest.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
@@ -276,6 +277,9 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 		await sendDiceToMultiple(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
 	}else {
 		await sendDiceToSingle(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
+	}
+	if (count) {
+		await logPostCurrency(sageMessage, "dice");
 	}
 	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasSecret };
 }

@@ -12,6 +12,7 @@ import type { SageMessage } from "../../model/SageMessage.js";
 import { DialogDiceBehaviorType } from "../../model/User.js";
 import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
+import { logPostCurrency } from "../admin/PostCurrency.js";
 import { parseDiceMatches, sendDice, type TDiceMatch } from "../dice.js";
 import type { ChatOptions } from "./chat/ChatOptions.js";
 import { sendDialogRenderable } from "./sendDialogRenderable.js";
@@ -121,6 +122,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const messages = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete })
 		.catch(errorReturnEmptyArray);
 	if (messages.length) {
+		await logPostCurrency(sageMessage, "dialog");
 		const last = messages[messages.length - 1];
 
 		//#region dice

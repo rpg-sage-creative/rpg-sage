@@ -10,6 +10,7 @@ import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequ
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
+import { renderPostCurrency } from "../PostCurrency.js";
 
 async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 	let game: Optional<Game> = sageCommand.game;
@@ -194,9 +195,15 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 	renderableContent.append(`<b>NonPlayer Characters</b> ${game.nonPlayerCharacters.length}`);
 
 	const playerGuildMembers = await game.pGuildMembers();
-	const players = playerGuildMembers.map(pGuildMember => ({ name:toHumanReadable(pGuildMember), character:game.playerCharacters.findByUser(pGuildMember.id as Snowflake)?.name }));
+	const players = playerGuildMembers.map(pGuildMember => {
+		return {
+			userId: pGuildMember.id as Snowflake,
+			name: toHumanReadable(pGuildMember),
+			characters: game.playerCharacters.filterByUser(pGuildMember.id as Snowflake).map(char => char.name).join("; ")
+		};
+	});
 	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
-	players.forEach(player => renderableContent.append(`[spacer]${player.name}${player.character ? ` (${player.character})` : ``}`));
+	players.forEach(player => renderableContent.append(`[spacer]${player.name}${player.characters ? ` (${player.characters})` : ``}`));
 
 	const orphanUsers = await game.orphanUsers();
 	if (orphanUsers.length) {
@@ -213,6 +220,8 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 	await showGameRenderDialogType(renderableContent, sageCommand, game);
 	gameDetailsAppendDice(renderableContent, game);
 	await showGameRenderServer(renderableContent, sageCommand, game);
+
+	renderPostCurrency(game, renderableContent, players);
 
 	return renderableContent;
 }
