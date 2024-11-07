@@ -1,4 +1,5 @@
 import { error, omit, type Optional, warn } from "@rsc-utils/core-utils";
+import { splitMessageOptions } from "@rsc-utils/discord-utils";
 import { type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { BaseMessageOptions, InteractionReplyOptions, Message, MessageEditOptions } from "discord.js";
 import { deleteMessage, isDeletable } from "../../discord/deletedMessages.js";
@@ -303,7 +304,10 @@ export class ReplyStack {
 		// send directly to the discord channel, bypassing interactions
 		if (this.sageCommand.dChannel) {
 			const sendOptions = this.resolveArgs(args, opts);
-			this.lastMessage = await this.sageCommand.dChannel.send(sendOptions);
+			const payloads = splitMessageOptions(sendOptions);
+			for (const payload of payloads) {
+				this.lastMessage = await this.sageCommand.dChannel.send(payload);
+			}
 		}else {
 			warn(`ReplyStack._send w/o a sageCommand.dChannel!`);
 		}
