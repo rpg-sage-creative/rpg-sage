@@ -1,5 +1,7 @@
 import { isDefined, type Snowflake } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { splitMessageOptions, toChannelUrl, toDiscordDate, toHumanReadable } from "@rsc-utils/discord-utils";
+import { addCommas } from "@rsc-utils/number-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -173,9 +175,89 @@ async function _gCmdShowCurrency(sageCommand: SageCommand): Promise<void> {
 	await sageCommand.replyStack.send({ embeds:renderableContent });
 }
 
+async function gCmdAuditCurrency(sageCommand: SageCommand): Promise<void> {
+	sageCommand.replyStack.startThinking();
+
+	if (!sageCommand.game) {
+		return sageCommand.replyStack.whisper("There is no Game!");
+	}
+
+	if (!sageCommand.canAdminGame) {
+		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to manage this Game.");
+	}
+
+	const { postCurrency } = sageCommand.game;
+	const postCurrencyData = Object.values(postCurrency);
+
+	if (!postCurrencyData.length) {
+		return sageCommand.replyStack.whisper("There are no Post Currencies for this Game.");
+	}
+
+	const user = sageCommand.args.getUser("user");
+	const userId = user?.id;
+	if (!userId) {
+		return sageCommand.replyStack.whisper(`Your command must include user="".`);
+	}
+
+	const readableUser = toHumanReadable(user);
+	const isValidUser = sageCommand.game.hasPlayer(userId) || postCurrencyData.some(data => data.totals.some(total => total.userId === userId));
+	if (!isValidUser) {
+		return sageCommand.replyStack.whisper(`The given user (${readableUser}) has no currency.`);
+	}
+
+	const guildId = sageCommand.server.did;
+
+	const renderableContent = createAdminRenderableContent(sageCommand.game);
+	renderableContent.append(`<h2>Post Currency Audit</h2>`);
+	renderableContent.append(`<b>User:</b> ${readableUser}`);
+	renderableContent.append(`- ${userId}`);
+	renderableContent.append(`<b>Game:</b> ${sageCommand.game.name ?? sageCommand.game.id}`);
+	if (sageCommand.game.name) {
+		renderableContent.append(`- ${sageCommand.game.id}`);
+	}
+	postCurrencyData.forEach(data => {
+		let totalValue = 0;
+		const lines: string[] = [];
+		data.events.forEach(({ beginTs, endTs, increments, userCounts }) => {
+			lines.push(`${toDiscordDate(beginTs, "d")} - ${endTs ? toDiscordDate(endTs, "d") : "*current*"}`);
+			increments.forEach(({ channelId, increment, postType }) => {
+				lines.push(`> Increment: ${channelId ? toChannelUrl({ guildId, channelId, messageId:undefined }) : ""} ${addCommas(increment)} ${postType} posts`);
+				const filteredUserCounts = userCounts.filter(uc => uc.userId === userId && (!channelId || channelId === uc.channelId) && (postType === "all" || postType === uc.postType));
+				let total = 0;
+				filteredUserCounts.forEach(({ channelId, count, postType }) => {
+					total += count;
+					lines.push(`> - ${capitalize(postType)} Posts: ${addCommas(count)} in ${toChannelUrl({ guildId, channelId, messageId:undefined })}`);
+				});
+				const value = increment ? Math.floor(total / increment) : 0;
+				lines.push(`> Total ${capitalize(postType)} Posts: ${addCommas(total)} for ${addCommas(value)} ${data.name ?? data.key}`);
+				totalValue += value;
+			});
+		});
+		renderableContent.append(`\n<b>Currency: ${data.name ?? data.key} (${addCommas(totalValue)})</b>`);
+		if (data.description) {
+			renderableContent.append(data.description);
+		}
+		renderableContent.append(...lines);
+	});
+
+	const gmUser = await sageCommand.discord.fetchUser(sageCommand.authorDid);
+	if (gmUser) {
+		const sendArgs = sageCommand.resolveToOptions(renderableContent);
+		const payloads = splitMessageOptions(sendArgs);
+		for (const payload of payloads) {
+			await gmUser.send(payload);
+		}
+	}else {
+		await sageCommand.replyStack.whisper("Sorry, we can't DM you!");
+	}
+
+	sageCommand.replyStack.stopThinking();
+}
+
 export function registerPostCurrency(): void {
 	registerListeners({ commands:["currency|add"], message:gCmdAddCurrency });
 	registerListeners({ commands:["currency|remove"], message:gCmdRemoveCurrency });
 	registerListeners({ commands:["currency|details"], message:gCmdShowCurrency });
 	registerListeners({ commands:["currency|toggle"], message:gCmdToggleCurrency });
+	registerListeners({ commands:["currency|audit"], message:gCmdAuditCurrency });
 }
