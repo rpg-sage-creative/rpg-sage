@@ -20,7 +20,8 @@ type PostCurrencyUserCount = {
 type PostCurrencyDataEvent = {
 	increments: PostCurrencyIncrement[];
 	userCounts: PostCurrencyUserCount[];
-	ts: number;
+	beginTs: number;
+	endTs?: number;
 };
 
 type PostCurrencyDataTotal = {
@@ -197,7 +198,11 @@ export function addPostCurrencyEvent({ postCurrency }: HasPostCurrency, options:
 				increments.push({ postType, increment });
 			}
 		});
-		postCurrencyData.events.unshift({ increments, ts:Date.now(), userCounts:[] })
+		const now = Date.now();
+		if (postCurrencyData.events[0]) {
+			postCurrencyData.events[0].endTs = now;
+		}
+		postCurrencyData.events.unshift({ increments, beginTs:now, userCounts:[] })
 		changed = true;
 	}
 
