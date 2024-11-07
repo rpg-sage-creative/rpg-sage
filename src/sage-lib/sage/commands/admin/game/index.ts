@@ -3,6 +3,7 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import { registerGame as _registerGame } from "./game.js";
 import { gCmdArchive } from "./gCmdArchive.js";
 import { gCmdCreate } from "./gCmdCreate.js";
+import { registerPostCurrency } from "./gCmdCurrency.js";
 import { gCmdDetails } from "./gCmdDetails.js";
 import { gCmdUpdate } from "./gCmdUpdate.js";
 import { registerRole } from "./role.js";
@@ -36,4 +37,5 @@ export function registerGame(): void {
 	registerListeners({ commands:["game|update", "update|game"], interaction:gCmdUpdate, message:gCmdUpdate });
 	registerListeners({ commands:["game|archive", "archive|game"], interaction:gCmdArchive, message:gCmdArchive });
 	registerListeners({ commands:["game", "game|help", "gm", "gm|help", "player", "player|help"], handler:gameHelp });
+	registerPostCurrency();
 }

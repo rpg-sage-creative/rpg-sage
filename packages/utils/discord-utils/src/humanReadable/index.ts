@@ -1,4 +1,5 @@
 export * from "./toChannelName.js";
+export * from "./toDiscordDate.js";
 export * from "./toGuildMemberName.js";
 export * from "./toGuildName.js";
 export * from "./toHumanReadable.js";
