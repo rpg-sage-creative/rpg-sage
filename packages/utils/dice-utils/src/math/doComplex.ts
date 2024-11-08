@@ -14,7 +14,8 @@ type Options = {
  * max(...number[])
  * floor(number)
  * ceil(number)
- * round(number)
+ * round(number, number?)
+ * hypot(number, number, number?)
  */
 export function getComplexRegex(options?: Options): RegExp {
 	const flags = options?.globalFlag ? "xgi" : "xi";
@@ -27,7 +28,7 @@ export function getComplexRegex(options?: Options): RegExp {
 		(?:                             # open non-capture group for multiplier/function
 			(${numberRegex})\\s*        # capture a multiplier, ex: 3(4-2) <-- 3 is the multiplier
 			|
-			(min|max|floor|ceil|round)  # capture a math function
+			(min|max|floor|ceil|round|hypot)  # capture a math function
 		)?                              # close non-capture group for multiplier/function; make it optional
 
 		\\(\\s*                         # open parentheses, optional spaces
@@ -47,6 +48,31 @@ export function getComplexRegex(options?: Options): RegExp {
 /** Convenience for getMathFunctionRegex().test(value) */
 export function hasComplex(value: string, options?: Omit<Options, "globalFlag">): boolean {
 	return getComplexRegex(options).test(value);
+}
+
+type SageMathFunction = "min" | "max" | "floor" | "ceil" | "round" | "hypot";
+
+const SageMath = {
+	min: (...args: number[]) => Math.min(...args),
+	max: (...args: number[]) => Math.max(...args),
+	floor: (...args: number[]) => Math.floor(args[0]),
+	ceil: (...args: number[]) => Math.ceil(args[0]),
+	round: (...args: number[]) => {
+		const [n, places] = args;
+		if (typeof(places) === "number") {
+			const mult = Math.pow(10, places);
+			return Math.round(n * mult) / mult;
+		}
+		return Math.round(n);
+	},
+	hypot: (...args: number[]) => {
+		const [x, y, z] = args;
+		const xy = Math.hypot(x, y);
+		if (typeof(z) === "number") {
+			return Math.hypot(xy, z);;
+		}
+		return xy;
+	},
 }
 
 /** Checks the value for min/max/floor/ceil/round and replaces it with the result. */
@@ -69,9 +95,9 @@ export function doComplex(input: string, options?: Omit<Options, "globalFlag">):
 			// handle a math function
 			if (_functionName !== undefined) {
 				// lower case and cast type
-				const functionName = _functionName?.toLowerCase() as "min";
+				const functionName = _functionName.toLowerCase() as SageMathFunction;
 				// do the math
-				const result = Math[functionName](...args);
+				const result = SageMath[functionName](...args);
 				// return a string
 				return retVal(result);
 			}
