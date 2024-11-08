@@ -1,6 +1,7 @@
-import { randomSnowflake, type Optional, type UUID } from "@rsc-utils/core-utils";
+import { debug, randomSnowflake, type Optional, type UUID } from "@rsc-utils/core-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import type { TPathbuilderCharacter, TPathbuilderCharacterAbilities, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterArmor, TPathbuilderCharacterEquipment, TPathbuilderCharacterProficiencies, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, TPathbuilderEquipmentContainers } from "../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import { Ability } from "../../../d20/lib/Ability.js";
 import { Skill } from "../../lib/Skill.js";
 import { parseSize } from "../pathbuilder-2e/parseSize.js";
 
@@ -275,7 +276,7 @@ function isValidJson(json: any): json is WanderersGuideJson {
 	return json && ["version", "character", "content"].every(key => key in json) && json.version === 4;
 }
 function getOpDataVal<T extends string | number>({ operations }: HasOperations, type: OperationType, variable: OperationDataVariable): T | undefined {
-	return operations.find(op => op.type === type && op.data.variable === variable)?.data.value as T;
+	return operations.find(op => op.type === type && op.data.variable === variable)?.data.value as T ?? 0;
 }
 function getOpDataAttr({ operations }: HasOperations, type: OperationType, variable: OperationDataVariable): TPathbuilderCharacterAbilityKey | undefined {
 	const dataValue = operations.find(op => op.type === type && op.data.variable === variable)?.data.value as { value:string; attribute:string; };
@@ -333,14 +334,15 @@ function parseArmor(armor: Optional<WanderersGuideArmor>): TPathbuilderCharacter
 	}
 	return [];
 }
-function parseSpellcasters({ spell_raw_data, spells, spell_sources }: WanderersGuideContent, level: number, abilities: TPathbuilderCharacterAbilities, proficiencies: TPathbuilderCharacterProficiencies): TPathbuilderCharacterSpellCaster[] {
+function parseSpellcasters({ spell_raw_data, spells, spell_sources, focus_spells }: WanderersGuideContent, level: number, abilities: TPathbuilderCharacterAbilities, proficiencies: TPathbuilderCharacterProficiencies): TPathbuilderCharacterSpellCaster[] {
 	const spellCasters: TPathbuilderCharacterSpellCaster[] = [];
 	const { all } = spells;
 	for (const spellSource of spell_sources) {
 		const ability = spellSource.source.attribute.slice(-3).toLowerCase() as "str";
 		const magicTradition = spellSource.source.tradition.toLowerCase() as "arcane";
-		const proficiency = spellSource.stats.spell_dc.total - 10 - level - (abilities[ability] ?? 0);
-		const name = capitalize(spellSource.source.name);
+		const profKey = `casting${capitalize(magicTradition)}` as "castingArcane";
+		const proficiency = proficiencies[profKey] ?? spellSource.stats.spell_dc.total - 10 - level - Ability.scoreToMod(abilities[ability] ?? 10);
+		const name = spellSource.source.name.toLowerCase().split(" ").map(capitalize).join(" ");
 		const slots = spell_raw_data.slots?.filter(slot => slot.source === spellSource.source.name) ?? [];
 		const list = spell_raw_data.list?.filter(spell => spell.source === spellSource.source.name) ?? [];
 		const focus = spell_raw_data.focus?.filter(spell => spell.source === spellSource.source.name) ?? [];
@@ -351,7 +353,15 @@ function parseSpellcasters({ spell_raw_data, spells, spell_sources }: WanderersG
 
 			const spells: TPathbuilderCharacterSpellCasterSpells[] = [];
 			const getSpellRank = (spellLevel: number) => spells[spellLevel] ?? (spells[spellLevel] = { spellLevel, list:[] as string[] });
-			list.forEach(spell => getSpellRank(spell.rank).list.push(all.find(sp => sp.id === spell.spell_id)?.name!));
+			list.forEach(spell => {
+				const spellRankList = getSpellRank(spell.rank).list;
+				const found = all.find(sp => sp.id === spell.spell_id);
+				if (!found?.name) {
+					debug({ spell, found });
+				}else {
+					spellRankList.push(found.name);
+				}
+			});
 
 			spellCasters.push({
 				ability,
@@ -368,12 +378,21 @@ function parseSpellcasters({ spell_raw_data, spells, spell_sources }: WanderersG
 			});
 
 			// update the proficiencies data
-			const profKey = `casting${capitalize(magicTradition)}` as "castingArcane";
 			proficiencies[profKey] = Math.max(proficiencies[profKey] ?? 0, proficiency);
 		}
 		if (focus.length) {
 			const spells: TPathbuilderCharacterSpellCasterSpells[] = [];
-			focus.forEach(spell => (spells[spell.rank] ?? (spells[spell.rank] = { spellLevel:spell.rank, list:[] as string[] }).list.push(all.find(sp => sp.id === spell.spell_id)?.name!)));
+			const getSpellRank = (spellLevel: number) => spells[spellLevel] ?? (spells[spellLevel] = { spellLevel, list:[] as string[] });
+			focus.forEach(spell => {
+				const spellRankList = getSpellRank(spell.rank).list;
+				const found = focus_spells.find(sp => sp.id === spell.spell_id)
+					?? all.find(sp => sp.id === spell.spell_id);
+				if (!found?.name) {
+					debug({ spell, found });
+				}else {
+					spellRankList.push(found.name);
+				}
+			});
 
 			spellCasters.push({
 				ability,
@@ -422,9 +441,14 @@ function parseAbilities(content: WanderersGuideContent): TPathbuilderCharacterAb
 	};
 }
 function parseProficiencies(content: WanderersGuideContent): TPathbuilderCharacterProficiencies {
-	const getProfMod = (key: string) => content.proficiencies[key.toUpperCase()].parts.profValue;
+	const getProfMod = (key: string) => {
+		const prof = content?.proficiencies[key.toUpperCase()];
+		// if (!prof) debug({key,prof});
+		return prof?.parts?.profValue ?? 0;
+	}
 	const out: Partial<TPathbuilderCharacterProficiencies> & { lore?:number; } = {
 		classDC: getProfMod("class_dc"),
+		perception: getProfMod("perception"),
 
 		fortitude: getProfMod("save_fort"),
 		reflex: getProfMod("save_reflex"),
@@ -440,12 +464,13 @@ function parseProficiencies(content: WanderersGuideContent): TPathbuilderCharact
 		simple: getProfMod("simple_weapons"),
 		unarmed: getProfMod("unarmed_attacks"),
 
-		// castingArcane: getProfMod("castingArcane"),
-		// castingDivine: getProfMod("castingDivine"),
-		// castingOccult: getProfMod("castingOccult"),
-		// castingPrimal: getProfMod("castingPrimal"),
+		// spellcasters use their highest DC post remaster
+		castingArcane: getProfMod("spell_dc"),
+		castingDivine: getProfMod("spell_dc"),
+		castingOccult: getProfMod("spell_dc"),
+		castingPrimal: getProfMod("spell_dc"),
 	};
-	Skill.all({ includePerception:true }).forEach(skill => {
+	Skill.all().forEach(skill => {
 		out[skill.key] = getProfMod(`skill_${skill.name}`);
 	});
 	return out as TPathbuilderCharacterProficiencies;
@@ -474,7 +499,7 @@ export function wanderersGuideToPathbuilderJson(json: any): TPathbuilderCharacte
 			size,
 			sizeName,
 			keyability: getOpDataAttr(details.class, "setValue", "CLASS_DC")!,
-			languages: content.languages,
+			languages: content.languages.map(lang => capitalize(lang.toLowerCase())),
 			attributes: {
 				ancestryhp: getOpDataVal(details.ancestry, "setValue", "MAX_HEALTH_ANCESTRY") as number,
 				bonushp: getOpDataVal(details.ancestry, "setValue", "MAX_HEALTH_BONUS") as number,
@@ -492,8 +517,8 @@ export function wanderersGuideToPathbuilderJson(json: any): TPathbuilderCharacte
 				.map(f => [f.name, null, f.type, f.level]),
 			specials: [],
 			lores: Object.keys(content.proficiencies)
-						.filter(key => key.startsWith("SKILL_LORE"))
-						.map(key => ([key.split("_").slice(2).map(capitalize).join(" "), content.proficiencies[key].parts.profValue])),
+						.filter(key => key.startsWith("SKILL_LORE") && key !== "SKILL_LORE____")
+						.map(key => ([key.split("_").slice(2).filter(s => s.trim()).map(lore => capitalize(lore.toLowerCase())).join(" "), content.proficiencies[key].parts.profValue])),
 			equipment,
 			equipmentContainers,
 			specificProficiencies: {
