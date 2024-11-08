@@ -25,8 +25,12 @@ function isValidCore(json: any): boolean {
 			"weapons",
 			"money",
 			"armor",
-			"acTotal", // hephaistos is missing this
-		].every(key => key in json);
+			// "acTotal", // hephaistos is missing this
+		].every(key => {
+			const isPresent = key in json;
+			// debug({key,isPresent});
+			return isPresent;
+		});
 	}
 	return false;
 }
