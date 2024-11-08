@@ -1,10 +1,11 @@
+import { isDefined, parseEnum, type Args, type EnumLike } from "@rsc-utils/core-utils";
 import { Season, TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "@rsc-utils/date-utils";
-import { parseEnum } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
-import { isDefined, type Args, type EnumLike } from "@rsc-utils/core-utils";
+import { AttachmentBuilder } from "discord.js";
 import { GDate } from "../../../sage-cal/pf2e/GDate.js";
-import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType } from "../../../sage-pf2e/index.js";
+import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType, type IWeatherDayResult } from "../../../sage-pf2e/index.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import { createCommandRenderableContent } from "./cmd.js";
@@ -78,6 +79,26 @@ function createWeatherRenderable(args: WeatherArgs): RenderableContent {
 	return content;
 }
 
+type Time = "day" | "week" | "month" | "year";
+async function exportWeather(sageCommand: SageCommand, args: WeatherArgs, time: Time, delimiter: "," | "\t" | "|"): Promise<void> {
+	const { climateType, elevationType } = args;
+	const gDate = getGDate(args);
+	const generator = new WeatherGenerator(climateType, elevationType, gDate);
+	let days: IWeatherDayResult[] = [];
+	switch(time) {
+		case "day": days[0] = generator.createToday(); break;
+		case "week": days = generator.createNextWeek(); break;
+		case "month": days = generator.createNextMonth(); break;
+		case "year": days = generator.createYear(); break;
+		default: return sageCommand.whisper("Sorry, something went wrong.");
+	}
+	const raw = WeatherGenerator.createExport(days, delimiter);
+	const ext = delimiter === "," ? "csv" : "tsv";
+	const name = `RPGSage-RandomWeather-${capitalize(time)}.${ext}`;
+	const attachment = new AttachmentBuilder(Buffer.from(raw), { name });
+	await sageCommand.replyStack.reply({ content:"Here is your weather!", files:[attachment] });
+}
+
 //#region slash command
 
 /** Checks the command for the arg/enum to either process or alert of an issue. */
@@ -135,11 +156,18 @@ async function weatherHandler(sageCommand: SageCommand): Promise<void> {
 		await sageCommand.whisperWikiHelp({ message:"For Help, try\n```sage! weather help```... or ...", page:"Weather" });
 
 	}else {
-
 		const climateType = climateInfo.value;
 		const elevationType = elevationInfo.value;
 		const seasonType = seasonInfo.value;
 		const args = parseWeatherArgs({ climateType, elevationType, seasonType });
+
+		const timeArg = sageCommand.args.getString("export")?.toLowerCase();
+		const time = ["day", "week", "month", "year"].find(s => s === timeArg) as "year";
+		if (time) {
+			const delimiterArg = sageCommand.args.getString("delimiter");
+			const delimiter = [",", "|", "\t"].find(s => s === delimiterArg) as "\t" ?? "\t";
+			return exportWeather(sageCommand, args, time, delimiter);
+		}
 
 		const renderable = createWeatherRenderable(args);
 		await sageCommand.reply(renderable, false);
