@@ -431,8 +431,10 @@ function spellCasterToLabel(spellCaster: TPathbuilderCharacterSpellCaster): stri
 
 function spellsListToHtml(spells: string[]): string {
 	const mapped = spells.reduce((map, spell) => {
-		const lower = spell.toLowerCase();
-		map.set(lower, (map.get(lower) ?? 0) + 1);
+		if (spell) {
+			const lower = spell.toLowerCase();
+			map.set(lower, (map.get(lower) ?? 0) + 1);
+		}
 		return map;
 	}, new Map<string, number>());
 	const flattened = Array.from(mapped.entries()).map(([spell, count]) => {
@@ -451,11 +453,12 @@ function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilder
 	const isFocus = spellCaster.magicTradition === "focus" || spellCaster.focusPoints > 0;
 	const dcAttackLabel = isArcaneSense(spellCaster) ? `` : ` DC ${10+mod}, attack +${mod};`;
 	const spellLevels = spellCaster.spells.map((spells, level) => {
+		if (!spells) return null;
 		if (!isFocus && spellCaster.perDay[level] === 0) {
 			return null;
 		}
 		const levelLabel = `<b>${spellCasterLevelToHtml(char, spellCaster, spells, Math.ceil(char.level / 2))}</b>`;
-		const slots = !isFocus && spellCaster.spellcastingType === "spontaneous" && level ? ` (${spellCaster.perDay[level]} slots)` : ``;
+		const slots = !isFocus && spellCaster.spellcastingType === "spontaneous" && level ? ` (${spellCaster.perDay[level] ?? 0} slots)` : ``;
 		const list = spellsListToHtml(spells.list);
 		return `${levelLabel}${slots} ${list}`;
 	}).filter(s => s).reverse();
