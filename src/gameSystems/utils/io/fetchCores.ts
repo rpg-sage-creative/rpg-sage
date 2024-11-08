@@ -35,7 +35,10 @@ function hasDiscordInName(name?: string): boolean {
 export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string, error: FetchResultError, handlers: Handlers<T>): Promise<FetchCoreResult<T>> {
 	const json = await getJson(jsonUrl)
 		.catch(err => { debug(err); return undefined; });
-	if (!json) return { error };
+	if (!json) {
+		// debug({ jsonUrl, error });
+		return { error };
+	}
 
 	const core = handlers.raw(json);
 	if (core) {
@@ -51,7 +54,10 @@ export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string
 async function fetchPdfCore<T extends CharacterBaseCore>(pdfUrl: string, error: FetchResultError, handlers: Handlers<T>): Promise<FetchCoreResult<T>> {
 	const pdfJson = await PdfCacher.read<PdfJson>(pdfUrl)
 		.catch(() => { error = "INVALID_PDF"; return undefined; });
-	if (!pdfJson) return { error };
+	if (!pdfJson) {
+		// debug({ pdfUrl, error });
+		return { error };
+	}
 
 	const core = handlers.pdf(pdfJson);
 	if (core) {
@@ -126,7 +132,7 @@ async function _fetchByUrl<T extends CharacterBaseCore>(sageCommand: SageCommand
 
 type FetchByAttachmentArgs<T extends CharacterBaseCore> = {
 	defaultError: FetchResultError;
-	endsWith: string;
+	contentTypes: string[];
 	firstOnly: boolean;
 	urlHandler: (url: string, defaultError: FetchResultError, handlers: Handlers<T>) => Promise<FetchCoreResult<T>>;
 	urlKey: "jsonUrl" | "pdfUrl";
@@ -138,7 +144,8 @@ async function _fetchByAttachment<T extends CharacterBaseCore>(message: MessageO
 	}
 	const attachments = message.attachments.values();
 	for (const attachment of attachments) {
-		if (attachment.url.endsWith(args.endsWith)) {
+		const isMatch = args.contentTypes.some(type => attachment.contentType?.includes(type));
+		if (isMatch) {
 			const result: FetchResult<T> = await args.urlHandler(attachment.url, args.defaultError, handlers);
 			result.attachmentName = attachment.name;
 			result[args.urlKey] = attachment.url;
@@ -153,8 +160,8 @@ type FetchArgs = { firstOnly:boolean; };
 
 async function _fetchByJsonAttachment<T extends CharacterBaseCore>(message: MessageOrPartial, handlers: Handlers<T>, args: FetchArgs): Promise<FetchResult<T>[]> {
 	return _fetchByAttachment(message, handlers, {
+		contentTypes: ["text/plain", "json"],
 		defaultError: "INVALID_JSON_ATTACHMENT",
-		endsWith: ".json",
 		firstOnly: args.firstOnly,
 		urlHandler: fetchJsonCore,
 		urlKey: "jsonUrl"
@@ -181,8 +188,8 @@ async function fetchByJsonUrl<T extends CharacterBaseCore>(sageCommand: SageComm
 
 async function _fetchByPdfAttachment<T extends CharacterBaseCore>(message: MessageOrPartial, handlers: Handlers<T>, args: FetchArgs): Promise<FetchResult<T>[]> {
 	return _fetchByAttachment(message, handlers, {
+		contentTypes: ["pdf"],
 		defaultError: "INVALID_PDF_ATTACHMENT",
-		endsWith: ".pdf",
 		firstOnly: args.firstOnly,
 		urlHandler: fetchPdfCore,
 		urlKey: "pdfUrl"
