@@ -6,6 +6,7 @@ import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { AttachmentBuilder } from "discord.js";
 import { GDate } from "../../../sage-cal/pf2e/GDate.js";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType, type IWeatherDayResult } from "../../../sage-pf2e/index.js";
+import type { ExportDelimiter } from "../../../sage-pf2e/weather/WeatherGenerator.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import { createCommandRenderableContent } from "./cmd.js";
@@ -80,17 +81,27 @@ function createWeatherRenderable(args: WeatherArgs): RenderableContent {
 }
 
 type Time = "day" | "week" | "month" | "year";
-async function exportWeather(sageCommand: SageCommand, args: WeatherArgs, time: Time, delimiter: "," | "\t" | "|"): Promise<void> {
+async function exportWeather(sageCommand: SageCommand, args: WeatherArgs, time: Time, delimiter: ExportDelimiter): Promise<void> {
 	const { climateType, elevationType } = args;
 	const gDate = getGDate(args);
 	const generator = new WeatherGenerator(climateType, elevationType, gDate);
 	let days: IWeatherDayResult[] = [];
 	switch(time) {
-		case "day": days[0] = generator.createToday(); break;
-		case "week": days = generator.createNextWeek(); break;
-		case "month": days = generator.createNextMonth(); break;
-		case "year": days = generator.createYear(); break;
-		default: return sageCommand.whisper("Sorry, something went wrong.");
+		case "day":
+			days[0] = generator.createToday();
+			break;
+		case "week":
+			days = generator.createNextWeek();
+			break;
+		case "month":
+			days = generator.createNextMonth();
+			break;
+		case "year":
+			days = generator.createYear();
+			break;
+		default:
+			await sageCommand.whisper("Sorry, something went wrong.");
+			return;
 	}
 	const raw = WeatherGenerator.createExport(days, delimiter);
 	const ext = delimiter === "," ? "csv" : "tsv";
@@ -166,11 +177,12 @@ async function weatherHandler(sageCommand: SageCommand): Promise<void> {
 		if (time) {
 			const delimiterArg = sageCommand.args.getString("delimiter");
 			const delimiter = [",", "|", "\t"].find(s => s === delimiterArg) as "\t" ?? "\t";
-			return exportWeather(sageCommand, args, time, delimiter);
-		}
+			await exportWeather(sageCommand, args, time, delimiter);
 
-		const renderable = createWeatherRenderable(args);
-		await sageCommand.reply(renderable, false);
+		}else {
+			const renderable = createWeatherRenderable(args);
+			await sageCommand.reply(renderable, false);
+		}
 
 	}
 }
