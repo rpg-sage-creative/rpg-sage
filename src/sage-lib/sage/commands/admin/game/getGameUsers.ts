@@ -1,8 +1,8 @@
-import { GameUserType, type IGameUser } from "../../../model/Game.js";
+import { GameUserType, type GameUserData } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
-export async function getGameUsers(sageCommand: SageCommand): Promise<IGameUser[]> {
-	const users: IGameUser[] = [];
+export async function getGameUsers(sageCommand: SageCommand): Promise<GameUserData[]> {
+	const users: GameUserData[] = [];
 
 	// do both "gm" and "gms" in case a posted command has the old gm= for the GM and not for the GM Channel
 	const gmIds = await sageCommand.args.getUserIds("gm", true);

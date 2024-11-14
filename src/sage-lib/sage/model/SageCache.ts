@@ -259,7 +259,17 @@ export class SageCache {
 		core.home = await core.servers.getHome();
 		if (message.guild) {
 			core.server = await core.servers.getOrCreateByGuild(message.guild);
-			core.game = await core.games.findActive(message);
+			// check to see if we have a server-wide game
+			if (core.server.gameId) {
+				const game = await core.games.getById(core.server.gameId as Snowflake);
+				if (game && !game.isArchived) {
+					core.game = game;
+				}
+			}
+			// fall back to the active game for the channel
+			if (!core.game) {
+				core.game = await core.games.findActive(message);
+			}
 		}
 		core.user = await core.users.getOrCreateByDid(orNilSnowflake(userDid));
 		return sageCache;
@@ -275,7 +285,17 @@ export class SageCache {
 		core.home = await core.servers.getHome();
 		if (interaction.guild) {
 			core.server = await core.servers.getOrCreateByGuild(interaction.guild);
-			core.game = await core.games.findActive(interaction);
+			// check to see if we have a server-wide game
+			if (core.server.gameId) {
+				const game = await core.games.getById(core.server.gameId as Snowflake);
+				if (game && !game.isArchived) {
+					core.game = game;
+				}
+			}
+			// fall back to the active game for the channel
+			if (!core.game) {
+				core.game = await core.games.findActive(interaction);
+			}
 		}
 		core.user = await core.users.getOrCreateByDid(interaction.user.id as Snowflake);
 		return sageCache;

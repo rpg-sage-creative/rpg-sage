@@ -1,0 +1,8 @@
+services:
+  mono:
+    container_name: "mono"
+    build:
+      dockerfile: ./Dockerfile
+    volumes:
+      - "./docker-volumes/rpg-sage-mono/pf2e:/rpg-sage/data/pf2e"
+      - "./docker-volumes/rpg-sage-mono/sage:/rpg-sage/data/sage"

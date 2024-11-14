@@ -17,8 +17,12 @@ scripts/foundry/
 *.sh
 # negate ignore scripts folder scripts
 !scripts/**/*.sh
-!docker/**/*.sh
 !**/core-utils/**/*.sh
+
+/docker-volumes/rpg-sage-mono/foundry
+/docker-volumes/rpg-sage-mono/pf2e
+/docker-volumes/**/*.json
+!/docker-volumes/rpg-sage-mono/sage/bots/bot.template.json
 
 # docker
 shared-local-instance.db

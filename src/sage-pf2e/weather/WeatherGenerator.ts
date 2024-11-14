@@ -1,9 +1,9 @@
-import { rollDiceString, rollDie, type SimpleDice } from "@rsc-utils/dice-utils";
-import { randomBoolean, randomInt } from "@rsc-utils/dice-utils";
+import { isDefined, parse, stringify } from "@rsc-utils/core-utils";
+import { Season } from "@rsc-utils/date-utils";
+import { randomBoolean, randomInt, rollDiceString, rollDie, type SimpleDice } from "@rsc-utils/dice-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
-import { isDefined } from "@rsc-utils/core-utils";
-import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "..";
-import { GDate } from "../../sage-cal/pf2e/GDate";
+import { GDate } from "../../sage-cal/pf2e/GDate.js";
+import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "../index.js";
 import {
 	ClimateType,
 	CloudCoverType,
@@ -15,9 +15,7 @@ import {
 	getBasePrecipitationIntensity,
 	getBaseTemp,
 	testForPrecipitation
-} from "./weather";
-import { Season } from "@rsc-utils/date-utils";
-import { parse, stringify } from "@rsc-utils/core-utils";
+} from "./weather.js";
 
 const HeavySnow = "Heavy Snow";
 
@@ -103,18 +101,22 @@ export class WeatherGenerator {
 		return days;
 	}
 
-	public static createExport(day: IWeatherDayResult): string;
-	public static createExport(day: IWeatherDayResult, delimiter: "," | "\t"): string;
-	public static createExport(days: IWeatherDayResult[]): string;
-	public static createExport(days: IWeatherDayResult[], delimiter: "," | "\t"): string;
-	public static createExport(dayOrDays: IWeatherDayResult | IWeatherDayResult[], delimiter: "," | "\t" = ","): string {
+	/**
+	 * Creates export data for the given days.
+	 * Defaults to TSV.
+	 */
+	public static createExport(dayOrDays: IWeatherDayResult | IWeatherDayResult[], delimiter: ExportDelimiter = "\t"): string {
 		return createExport(Array.isArray(dayOrDays) ? dayOrDays : [dayOrDays], delimiter);
 	}
 }
+export type ExportDelimiter = "," | "\t" | "|";
 
-function createExport(days: IWeatherDayResult[], delimiter: "," | "\t"): string {
+function createExport(days: IWeatherDayResult[], delimiter: ExportDelimiter): string {
 	const output: string[] = [];
-	output.push([
+	const join = delimiter === ","
+		? (cols: string[]) => cols.map(s => String(s).includes(",") ? `"${s}"` : s).join(",")
+		: (cols: string[]) => cols.join(delimiter);
+	output.push(join([
 		"Elevation",
 		"Climate",
 		"Desert",
@@ -138,7 +140,7 @@ function createExport(days: IWeatherDayResult[], delimiter: "," | "\t"): string 
 		"Wind Type",
 		"Wind Speed",
 		"Description"
-	].join(delimiter));
+	]));
 	days.forEach(day => {
 		const dayColumns = <any[]>[
 			ElevationType[day.genProps.elevation],
@@ -168,7 +170,7 @@ function createExport(days: IWeatherDayResult[], delimiter: "," | "\t"): string 
 				hour.windSpeed,
 				hour.description
 			];
-			output.push(dayColumns.concat(hourColumns).join(delimiter));
+			output.push(join(dayColumns.concat(hourColumns)));
 		});
 	});
 	return output.join("\n");
@@ -284,6 +286,7 @@ function createHourlyResults(days: IWeatherDayResult[]): void {
 			hasPrecip = true;
 
 			precip = getPrecipitation(day.precipIntensity, day.hours[day.precipStart].temp);
+			day.precipItem = precip;
 			day.precipDuration = roll(precip.duration);
 			precipEnd = day.precipStart + day.precipDuration;
 
@@ -332,7 +335,7 @@ function doTomorrow(days: IWeatherDayResult[], todayIndex: number, todayHasPreci
 	}
 }
 function createHourResult(day: IWeatherDayResult, hour: number, temp: number, precipitation?: string, wind?: WindTableItem): IWeatherHourResult {
-	if (precipitation && precipitation.includes("Sleet")) {
+	if (precipitation?.includes("Sleet")) {
 		precipitation = precipitation.split("|")[temp < 40 ? 1 : 0];
 	}
 	if (!precipitation && day.hours[hour]) {
@@ -346,7 +349,7 @@ function createHourResult(day: IWeatherDayResult, hour: number, temp: number, pr
 		precipitation: precipitation,
 		windStrength: WindType[<keyof typeof WindType>wind?.strength],
 		windSpeed: wind ? roll(wind.speed) : undefined,
-		description: undefined
+		// description: undefined,
 	};
 }
 function normalizeHourlyResults(days: IWeatherDayResult[]): void {
@@ -423,11 +426,11 @@ function randomWeather(properties: IGenParameters, date: GDate): IWeatherDayResu
 			cloudCover: cloudCover,
 			precipIntensity: precipIntensity,
 			precipStart: hasPrecip ? randomInt(0, 23) : undefined,
-			precipDuration: undefined,
-			precipItem: undefined,
-			windStrength: undefined,
+			// precipDuration: undefined,
+			// precipItem: undefined,
+			// windStrength: undefined,
 			hours: [],
-			description: undefined
+			// description: undefined
 		});
 		date = date.getNextDay();
 	}

@@ -1,8 +1,10 @@
+import { registerMapActivate } from "./map/mapActiveHandler.js";
 import { registerMapButtons } from "./map/mapButtonHandler.js";
 import { registerMapImport } from "./map/mapImportHandler.js";
 import { registerMapMove } from "./map/mapMoveHandler.js";
 
 export function registerMap(): void {
+	registerMapActivate();
 	registerMapButtons();
 	registerMapImport();
 	registerMapMove();

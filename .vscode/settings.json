@@ -1,10 +1,5 @@
 // Place your settings in this file to overwrite the default settings
 {
-	"terminal.integrated.automationProfile.osx": {
-		"path": "/usr/local/bin/zsh"
-	},
-	"terminal.integrated.defaultProfile.osx": "zsh",
-
 	"diffEditor.ignoreTrimWhitespace": true,
 
 	"editor.folding": true,

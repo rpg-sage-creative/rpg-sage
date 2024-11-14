@@ -32,7 +32,9 @@ async function whisper(sageCommand: SageCommand, content: string | RenderableCon
 		const opts = sageCommand.resolveToOptions(renderable);
 		const user = await sageCommand.discord.fetchUser(sageCommand.authorDid);
 		const dm = await user?.send(opts).catch(errorReturnNull);
-		if (dm) sent = true;
+		if (dm) {
+			sent = true;
+		}
 	}
 	if (sent && sageCommand.isSageReaction()) {
 		const reaction = await sageCommand.fetchMessageReaction();
@@ -59,9 +61,9 @@ function getMessageLink(message: Message): string {
 function getCharacterName(character?: Optional<GameCharacter>): string {
 	let type: string;
 	switch(character?.type) {
-		case "gm": type = "(GM)"; break;
-		case "npc": case "companion": type = "(NPC)"; break;
-		default: type = ""; break;
+		case "gm": type = "(GM)"; break; // NOSONAR
+		case "npc": case "minion": type = "(NPC)"; break; // NOSONAR
+		default: type = ""; break; // NOSONAR
 	}
 	return `<b>Character:</b> ${character?.name ?? "<i>no character</i>"} ${type}`;
 }
@@ -99,7 +101,8 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 	const discordKey = DiscordKey.from(message);
 	const messageInfo = await DialogMessageRepository.read(discordKey);
 	if (!messageInfo) {
-		return whisper(sageCommand, `Sorry, we could't find any RPG Sage Dialog info for that message.`);
+		await whisper(sageCommand, `Sorry, we could't find any RPG Sage Dialog info for that message.`);
+		return;
 	}
 
 	const { characterId, gameId, userDid } = messageInfo;
@@ -121,7 +124,8 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 		?? sageUser?.nonPlayerCharacters.findById(characterId);
 
 	if (!character) {
-		return whisper(sageCommand, `Sorry, we could't find the RPG Sage Character.`);
+		await whisper(sageCommand, `Sorry, we could't find the RPG Sage Character.`);
+		return;
 	}
 
 	const isGameChar = game?.findCharacterOrCompanion(character.id);
@@ -141,7 +145,7 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 }
 
 async function processTupperDialog(sageCommand: SageCommand): Promise<void> {
-	const content = `That message was posted by [Tupperbox](<https://tupperbox.app>). React to it with :question: to get a response from Tupperbox.`
+	const content = `That message was posted by [Tupperbox](<https://tupperbox.app>). React to it with :question: to get a response from Tupperbox.`;
 	return whisper(sageCommand, content);
 }
 
@@ -206,7 +210,7 @@ async function dialogLookup(sageCommand: SageCommand): Promise<void> {
 			return processGameDialog(sageCommand);
 		}
 	}
-	await whisper(sageCommand, `Sorry, we could't find any RPG Sage Dialog info for that message.`);
+	return whisper(sageCommand, `Sorry, we could't find any RPG Sage Dialog info for that message.`);
 }
 
 export function registerDialogLookup(): void {
