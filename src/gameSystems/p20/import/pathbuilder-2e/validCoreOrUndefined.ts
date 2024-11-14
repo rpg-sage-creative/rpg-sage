@@ -25,12 +25,9 @@ function isValidCore(json: any): boolean {
 			"weapons",
 			"money",
 			"armor",
-			// "acTotal", // hephaistos is missing this
-		].every(key => {
-			const isPresent = key in json;
-			// debug({key,isPresent});
-			return isPresent;
-		});
+			"acTotal",
+		]
+		.every(key => key in json);
 	}
 	return false;
 }
@@ -46,7 +43,11 @@ function isValidJson(json: any): boolean {
 }
 
 export function validCoreOrUndefined(json: unknown): TPathbuilderCharacter | undefined {
-	if (isValidCore(json)) return json;
-	if (isValidJson(json)) return json.build;
+	if (isValidCore(json)) {
+		return json;
+	}
+	if (isValidJson(json)) {
+		return json.build;
+	}
 	return undefined;
 }
