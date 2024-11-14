@@ -19,10 +19,10 @@ scripts/foundry/
 !scripts/**/*.sh
 !**/core-utils/**/*.sh
 
-/docker-volumes/sage-data/foundry
-/docker-volumes/sage-data/pf2e
+/docker-volumes/rpg-sage-mono/foundry
+/docker-volumes/rpg-sage-mono/pf2e
 /docker-volumes/**/*.json
-!/docker-volumes/sage-data/sage/bots/bot.template.json
+!/docker-volumes/rpg-sage-mono/sage/bots/bot.template.json
 
 # docker
 shared-local-instance.db
