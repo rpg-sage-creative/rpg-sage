@@ -1,4 +1,4 @@
-import type { TPathbuilderCharacter } from "../../../../sage-pf2e/model/pc/PathbuilderCharacter";
+import type { TPathbuilderCharacter } from "../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 
 type TPathbuilderJson = {
 	success: boolean;
