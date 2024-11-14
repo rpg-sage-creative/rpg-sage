@@ -1,9 +1,27 @@
 import { existsSync, mkdirSync } from "fs";
 import type { Optional } from "../types/generics.js";
 import { getFromProcess } from "./internal/getFromProcess.js";
+import path from "path";
 
+/** Converts a path relative to the executing .*js file to an absolute path. */
+function relativeToAbsolute(relative: string): string {
+	const filename = process.argv[1];
+	const dirname = path.dirname(filename);
+	const absolute = path.join(dirname, relative);
+	console.log({ relative, filename, dirname, absolute });
+	return absolute;
+}
+
+/** Checks to see  */
 function isValid(value: Optional<string | number>): value is string {
-	return !!value && existsSync(String(value));
+	if (value) {
+		const string = String(value);
+		if (string.startsWith(".")) {
+			return existsSync(relativeToAbsolute(string));
+		}
+		return existsSync(string);
+	}
+	return false;
 }
 
 let _dataRoot: string;
