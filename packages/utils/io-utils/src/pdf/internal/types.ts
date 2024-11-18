@@ -5,7 +5,7 @@ export type TextField = { name:string; value:string; };
 /** @internal */
 export type CheckField = { name:string; checked:boolean; };
 
-/** @internal */
+/** @-internal @todo make this internal again when i fix the use of it ... */
 export type Field = TextField | CheckField;
 
 /** @internal */
@@ -29,7 +29,7 @@ export type TextJson = {
 	R?: {
 		T: string;
 	}[];
-}
+};
 
 /** @internal */
 export type PageJson = {

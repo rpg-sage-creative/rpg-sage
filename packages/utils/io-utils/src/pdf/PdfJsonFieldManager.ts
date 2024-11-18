@@ -4,6 +4,10 @@ import type { CheckField, Field, TextField } from "./internal/types.js";
 import type { PdfJson } from "./types.js";
 
 type TransmutedField = Field & { id?:string | number; };
+type TransmutedTextField = TextField & {
+	id?: string | number;
+	valueParser?: (mgr: PdfJsonFieldManager, value: Optional<string>, defValue?: string) => Optional<string>;
+};
 type Transmuter = (fields: Field) => TransmutedField;
 
 export class PdfJsonFieldManager {
@@ -59,7 +63,7 @@ export class PdfJsonFieldManager {
 			if (delimRegex) {
 				return value.split(delimRegex).map(s => s.trim());
 			}
-			return value.replace(/[\r\n]/g, ",").split(",").map(s => s.trim()).filter(s => s)
+			return value.replace(/[\r\n]/g, ",").split(",").map(s => s.trim()).filter(s => s);
 		}
 		return value;
 	}
@@ -90,7 +94,9 @@ export class PdfJsonFieldManager {
 	public getNumber(key: Optional<string | number>, defValue: number): number;
 	public getNumber(key: Optional<string | number>, defValue?: number): Optional<number> {
 		const sValue = this.getValue(key);
-		if (isDefined(sValue)) return +sValue;
+		if (isDefined(sValue)) {
+			return +sValue;
+		}
 		return defValue ?? sValue;
 	}
 
@@ -102,13 +108,17 @@ export class PdfJsonFieldManager {
 	public getValue(key?: Optional<string | number>): Optional<string>;
 	public getValue(key: Optional<string | number>, defValue: string): string;
 	public getValue(key: Optional<string | number>, defValue?: string): Optional<string> {
-		const field = this.find<TextField>(key);
+		const field = this.find<TransmutedTextField>(key);
 		if (field) {
-			if (typeof(field.value) === "string") {
-				const trimmed = field.value.trim();
-				return !trimmed ? null : trimmed;
+			if (field.valueParser) {
+				return field.valueParser(this, field.value, defValue);
+			}else {
+				if (typeof(field.value) === "string") {
+					const trimmed = field.value.trim();
+					return !trimmed ? null : trimmed;
+				}
+				return defValue ?? null;
 			}
-			return defValue ?? null;
 		}
 		return defValue ?? undefined;
 	}

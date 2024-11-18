@@ -1,5 +1,6 @@
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
-import type { Optional } from "@rsc-utils/core-utils";
+import { errorReturnFalse, getDataRoot, type Optional } from "@rsc-utils/core-utils";
+import { fileExistsSync, writeFile } from "@rsc-utils/io-utils";
 import type { TSkillDie } from "../../sage-dice/dice/essence20";
 
 export type TArmorE20 = {
@@ -57,7 +58,7 @@ export type TWeaponJoe = TWeaponE20 & {
 
 export interface PlayerCharacterCoreE20 extends CharacterBaseCore<"PlayerCharacter"> {
 	diceEngine: "E20";
-	gameType: string;
+	gameType: "E20 - G.I. Joe" | "E20 - Power Rangers" | "E20 - Transformers";
 
 	abilities: TStatE20[];
 	armor: TArmorE20[];
@@ -250,4 +251,17 @@ export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> exten
 		return [];
 	}
 
+	public static createFilePath(characterId: string): string {
+		return `${getDataRoot("sage")}/e20/${characterId}.json`;
+	}
+	public static exists(characterId: string): boolean {
+		return fileExistsSync(PlayerCharacterE20.createFilePath(characterId));
+	}
+	public static async saveCharacter(character: PlayerCharacterE20<any> | PlayerCharacterCoreE20): Promise<boolean> {
+		const json = "toJSON" in character ? character.toJSON() : character;
+		return writeFile(PlayerCharacterE20.createFilePath(character.id), json, true).catch(errorReturnFalse);
+	}
+	public async save(): Promise<boolean> {
+		return PlayerCharacterE20.saveCharacter(this);
+	}
 }

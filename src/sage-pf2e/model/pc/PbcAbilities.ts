@@ -1,10 +1,10 @@
 import { Ability, type AbilityName } from "../../../gameSystems/d20/lib/Ability.js";
+import type { TPathbuilderCharacterAbilityKey } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Abilities } from "../../../gameSystems/p20/lib/Abilities.js";
-import type { TPathbuilderCharacterAbilityKey } from "./PathbuilderCharacter.js";
 import { PathbuilderCharacter } from "./PathbuilderCharacter.js";
 
 export class PbcAbilities extends Abilities {
-	public constructor(private pbc: PathbuilderCharacter) { super(); }
+	public constructor(private readonly pbc: PathbuilderCharacter) { super(); }
 
 	public getAbilityScore(ability: AbilityName): number {
 		const abilities = this.pbc.toJSON().abilities;

@@ -3,7 +3,7 @@ import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { errorReturnNull, isDefined } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
-import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
@@ -11,7 +11,6 @@ import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
-import type { SageMessage } from "../model/SageMessage.js";
 import type { User } from "../model/User.js";
 import type { TMacro } from "../model/types.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
@@ -83,20 +82,6 @@ function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	}
 }
 
-export async function attachCharacter(sageCache: SageCache, channel: Optional<MessageTarget>, attachmentName: string, character: PathbuilderCharacter, pin: boolean): Promise<void> {
-	const raw = resolveToEmbeds(sageCache, character.toHtml()).map(e => e.getDescription()).join("");
-	const buffer = Buffer.from(raw, "utf-8");
-	const attachment = new AttachmentBuilder(buffer, { name:`${attachmentName}.txt` });
-	const message = await channel?.send({
-		content: `Attaching Character: ${character.name}`,
-		files:[attachment]
-	}).catch(errorReturnNull);
-	if (pin && message?.pinnable) {
-		await message.pin();
-	}
-	return Promise.resolve();
-}
-
 async function notifyOfSlicedMacros(sageCache: SageCache, character: PathbuilderCharacter): Promise<void> {
 	const slicedMacros = character.getSheetValue<string[]>("slicedMacros") ?? [];
 	if (slicedMacros.length) {
@@ -107,8 +92,11 @@ async function notifyOfSlicedMacros(sageCache: SageCache, character: Pathbuilder
 	}
 }
 
+/** adds the character to the game for this channel ... creating the character if need be */
 async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: PathbuilderCharacter, message: Message): Promise<boolean> {
-	const { tokenUrl, avatarUrl } = sageCommand.isSageMessage() ? sageCommand.args.getCharacterOptions({}) ?? { } : { } as { tokenUrl?:string; avatarUrl?:string; };
+	const { tokenUrl, avatarUrl } = sageCommand.isSageMessage()
+		? sageCommand.args.getCharacterOptions({}) ?? { }
+		: { } as { tokenUrl?:string; avatarUrl?:string; };
 
 	// get or create character
 	const owner = sageCommand.game ?? sageCommand.sageUser;
@@ -152,6 +140,7 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: Pathbuilde
 	return oCharSaved;
 }
 
+/** posts the imported character to the channel */
 export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	const { sageCache } = sageCommand;
 	setMacroUser(character, sageCache.user);
@@ -611,119 +600,6 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 		}
 	}
 	return Promise.resolve();
-}
-
-//#endregion
-
-//#region slash command
-
-async function fetchOrParseAttachment(sageCommand: SageCommand): Promise<Optional<PathbuilderCharacter>> {
-	// original from id
-	const pathbuilderId = sageCommand.args.getNumber("id");
-	if (pathbuilderId) {
-		await sageCommand.reply(`Fetching Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}`, false);
-		const character = await PathbuilderCharacter.fetch(pathbuilderId, { });
-		if (!character) {
-			await sageCommand.reply(`Failed to fetch Pathbuilder 2e character using 'Export JSON' id: ${pathbuilderId}!`, false);
-		}
-		return character;
-	}
-
-	// from given url, expecting either a raw pathbuilder json or just the "build"
-	const pathbuilderUrl = sageCommand.args.getUrl("json");
-	if (pathbuilderUrl) {
-		await sageCommand.reply(`Fetching Pathbuilder 2e character from url: <${pathbuilderUrl}>`, false);
-		const character = PathbuilderCharacter.fetch(pathbuilderUrl, { });
-		if (!character) {
-			await sageCommand.reply(`Failed to fetch Pathbuilder 2e character from url: <${pathbuilderUrl}>!`, false);
-		}
-		return character;
-	}
-
-	if (!sageCommand.isSageMessage()) return undefined;
-
-	// from an attachment, expecting either a raw pathbuilder json or just the "build"
-	const attachment = sageCommand.message.attachments.find(att => att.url.includes(".json"));
-	if (attachment) {
-		await sageCommand.reply(`Fetching Pathbuilder 2e character from attachment: ${attachment.name ?? attachment.url}`, false);
-		const character = PathbuilderCharacter.fetch(attachment.url, { });
-		if (!character) {
-			await sageCommand.reply(`Failed to fetch Pathbuilder 2e character from attachment: <${attachment.name ?? attachment.url}>!`, false);
-		}
-		return character;
-	}
-
-	return undefined;
-}
-
-export async function handlePathbuilder2eImport(sageCommand: SageCommand): Promise<void> {
-	const pathbuilderChar = await fetchOrParseAttachment(sageCommand);
-	if (!pathbuilderChar) return;
-
-	if (/discord/i.test(pathbuilderChar.name)) {
-		return sageCommand.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
-	}
-
-	const channel = sageCommand.dChannel;
-	const user = channel ? undefined : await sageCommand.sageCache.discord.fetchUser(sageCommand.sageUser.did);
-
-	const pin = sageCommand.args.getBoolean("pin") ?? false;
-	const attach = sageCommand.args.getBoolean("attach") ?? false;
-	if (attach) {
-		const name = pathbuilderChar.name.replace(/\W+/g, "");
-		await attachCharacter(sageCommand.sageCache, channel ?? user, `pathbuilder2e-${name}`, pathbuilderChar, pin);
-	}else {
-		await postCharacter(sageCommand, channel ?? user, pathbuilderChar, pin);
-	}
-
-	if (sageCommand.isSageInteraction()) {
-		await sageCommand.deleteReply();
-	}
-}
-
-//#endregion
-
-//#region reimport
-
-async function handleReimportError(sageCommand: SageMessage, errorMessage: string): Promise<void> {
-	const content = [
-		`Reimport Error!`,
-		`> ` + errorMessage,
-		`To reimport, please reply to your imported character sheet with:`,
-		"```sage!reimport id=\"\"```",
-		`If your updated charater has a new name, please include it:`,
-		"```sage!reimport id=\"\" name=\"\"```",
-		`***id** is the "Export JSON" id*`,
-	];
-	return sageCommand.whisper(content.join("\n"));
-}
-
-export async function handlePathbuilder2eReimport(sageCommand: SageMessage, message: Message, characterId: string): Promise<void> {
-	const pathbuilderId = sageCommand.args.getNumber("id") ?? undefined;
-	const newName = sageCommand.args.getString("name") ?? undefined;
-	const jsonUrl = sageCommand.args.getUrl("json") ?? undefined;
-	const jsonAttachment = sageCommand.message.attachments.find(att => att.name?.endsWith(".json") === true);
-	const pdfUrl = sageCommand.args.getUrl("pdf") ?? undefined;
-	const pdfAttachment = sageCommand.message.attachments.find(att => att.contentType === "application/pdf" || att.name?.endsWith(".pdf") === true);
-	const refreshResult = await PathbuilderCharacter.refresh({ characterId, pathbuilderId, newName, jsonUrl, jsonAttachment, pdfUrl, pdfAttachment });
-	switch (refreshResult) {
-		case "INVALID_CHARACTER_ID": return handleReimportError(sageCommand, "Unable to find an imported character to update.");
-		case "UNSUPPORTED_PDF": return handleReimportError(sageCommand, "The given PDF isn't supported.");
-		case "INVALID_JSON_URL": return handleReimportError(sageCommand, "The given JSON url is invalid.");
-		case "INVALID_JSON_ATTACHMENT": return handleReimportError(sageCommand, "The attached JSON is invalid.");
-		case "INVALID_PDF_URL": return handleReimportError(sageCommand, "The given PDF url is invalid.");
-		case "INVALID_PDF_ATTACHMENT": return handleReimportError(sageCommand, "The attached PDF is invalid.");
-		case "MISSING_JSON_ID": return handleReimportError(sageCommand, "You are missing a 'Export JSON' id.");
-		case "INVALID_JSON_ID": return handleReimportError(sageCommand, "Unable to fetch the 'Export JSON' id.");
-		case "INVALID_CHARACTER_NAME": return handleReimportError(sageCommand, "The character names do not match!");
-		case false: return sageCommand.whisper("Sorry, we don't know what happened!");
-		default: {
-			const char = await PathbuilderCharacter.loadCharacter(characterId);
-			await updateSheet(sageCommand, char!, message);
-			await sageCommand.message.delete();
-			return;
-		}
-	}
 }
 
 //#endregion

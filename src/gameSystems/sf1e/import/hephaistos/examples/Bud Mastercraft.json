@@ -1,0 +1,934 @@
+{
+	"version": {
+		"major": 1,
+		"minor": 6
+	},
+	"type": "character",
+	"name": "Bud Mastercraft",
+	"description": "",
+	"gender": "he/him",
+	"homeworld": "Akiton",
+	"deity": "",
+	"alignment": "",
+	"quickNotes": "",
+	"languages": "",
+	"campaignNotes": "",
+	"situationalBonuses": [
+		{
+			"bonus": "Reduce the DC of Culture or Profession (bounty hunter) checks to recall knowledge about your mark, as well as to recall knowledge about law-enforcement individuals and practices, by 5.",
+			"source": "Theme Knowledge (Bounty Hunter)"
+		},
+		{
+			"bonus": "When attempting an Acrobatics check to tumble through the space of an opponent at least one size category larger than himself, a ysoki receive a +5 racial bonus to the check.",
+			"source": "Moxie (Ysoki)"
+		}
+	],
+	"conditions": {
+		"asleep": {
+			"active": false,
+			"notes": ""
+		},
+		"bleeding": {
+			"active": false,
+			"notes": ""
+		},
+		"blinded": {
+			"active": false,
+			"notes": ""
+		},
+		"broken": {
+			"active": false,
+			"notes": ""
+		},
+		"burning": {
+			"active": false,
+			"notes": ""
+		},
+		"confused": {
+			"active": false,
+			"notes": ""
+		},
+		"cowering": {
+			"active": false,
+			"notes": ""
+		},
+		"dazed": {
+			"active": false,
+			"notes": ""
+		},
+		"dazzled": {
+			"active": false,
+			"notes": ""
+		},
+		"dead": {
+			"active": false,
+			"notes": ""
+		},
+		"deafened": {
+			"active": false,
+			"notes": ""
+		},
+		"dying": {
+			"active": false,
+			"notes": ""
+		},
+		"encumbered": {
+			"active": false,
+			"notes": ""
+		},
+		"entangled": {
+			"active": false,
+			"notes": ""
+		},
+		"exhausted": {
+			"active": false,
+			"notes": ""
+		},
+		"fascinated": {
+			"active": false,
+			"notes": ""
+		},
+		"fatigued": {
+			"active": false,
+			"notes": ""
+		},
+		"flatFooted": {
+			"active": false,
+			"notes": ""
+		},
+		"frightened": {
+			"active": false,
+			"notes": ""
+		},
+		"grappled": {
+			"active": false,
+			"notes": ""
+		},
+		"helpless": {
+			"active": false,
+			"notes": ""
+		},
+		"nauseated": {
+			"active": false,
+			"notes": ""
+		},
+		"offKilter": {
+			"active": false,
+			"notes": ""
+		},
+		"offTarget": {
+			"active": false,
+			"notes": ""
+		},
+		"overburdened": {
+			"active": false,
+			"notes": ""
+		},
+		"panicked": {
+			"active": false,
+			"notes": ""
+		},
+		"paralyzed": {
+			"active": false,
+			"notes": ""
+		},
+		"pinned": {
+			"active": false,
+			"notes": ""
+		},
+		"prone": {
+			"active": false,
+			"notes": ""
+		},
+		"shaken": {
+			"active": false,
+			"notes": ""
+		},
+		"sickened": {
+			"active": false,
+			"notes": ""
+		},
+		"stable": {
+			"active": false,
+			"notes": ""
+		},
+		"staggered": {
+			"active": false,
+			"notes": ""
+		},
+		"stunned": {
+			"active": false,
+			"notes": ""
+		},
+		"unconscious": {
+			"active": false,
+			"notes": ""
+		}
+	},
+	"negativeLevels": {
+		"permanent": 0,
+		"temporary": 0
+	},
+	"afflictions": [],
+	"abilityScores": {
+		"strength": {
+			"total": 9,
+			"base": null,
+			"override": null,
+			"increases": 0,
+			"pointBuy": 1,
+			"damage": 0,
+			"scoreBonuses": [
+				{
+					"value": -2,
+					"type": "Racial",
+					"source": "Ysoki"
+				}
+			],
+			"modifierBonuses": [],
+			"notes": ""
+		},
+		"dexterity": {
+			"total": 14,
+			"base": null,
+			"override": null,
+			"increases": 0,
+			"pointBuy": 2,
+			"damage": 0,
+			"scoreBonuses": [
+				{
+					"value": 2,
+					"type": "Racial",
+					"source": "Ysoki"
+				}
+			],
+			"modifierBonuses": [],
+			"notes": ""
+		},
+		"constitution": {
+			"total": 12,
+			"base": null,
+			"override": null,
+			"increases": 0,
+			"pointBuy": 1,
+			"damage": 0,
+			"scoreBonuses": [
+				{
+					"value": 1,
+					"type": "Theme",
+					"source": "Theme Knowledge (Bounty Hunter)"
+				}
+			],
+			"modifierBonuses": [],
+			"notes": ""
+		},
+		"intelligence": {
+			"total": 16,
+			"base": null,
+			"override": null,
+			"increases": 0,
+			"pointBuy": 4,
+			"damage": 0,
+			"scoreBonuses": [
+				{
+					"value": 2,
+					"type": "Racial",
+					"source": "Ysoki"
+				}
+			],
+			"modifierBonuses": [],
+			"notes": ""
+		},
+		"wisdom": {
+			"total": 12,
+			"base": null,
+			"override": null,
+			"increases": 0,
+			"pointBuy": 2,
+			"damage": 0,
+			"scoreBonuses": [],
+			"modifierBonuses": [],
+			"notes": ""
+		},
+		"charisma": {
+			"total": 10,
+			"base": null,
+			"override": null,
+			"increases": 0,
+			"pointBuy": 0,
+			"damage": 0,
+			"scoreBonuses": [],
+			"modifierBonuses": [],
+			"notes": ""
+		},
+		"increases": [],
+		"method": "Point Buy"
+	},
+	"skills": [
+		{
+			"total": 2,
+			"override": null,
+			"skill": "Acrobatics",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Dexterity",
+			"classSkill": false,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 3,
+			"override": null,
+			"skill": "Athletics",
+			"name": null,
+			"ranks": 1,
+			"bonuses": [],
+			"ability": "Strength",
+			"classSkill": true,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 0,
+			"override": null,
+			"skill": "Bluff",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Charisma",
+			"classSkill": false,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 8,
+			"override": null,
+			"skill": "Computers",
+			"name": null,
+			"ranks": 1,
+			"bonuses": [
+				{
+					"value": 1,
+					"type": "Insight",
+					"source": "Bypass (Mechanic)"
+				}
+			],
+			"ability": "Intelligence",
+			"classSkill": true,
+			"trainedOnly": true,
+			"notes": ""
+		},
+		{
+			"total": 3,
+			"override": null,
+			"skill": "Culture",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Intelligence",
+			"classSkill": false,
+			"trainedOnly": true,
+			"notes": ""
+		},
+		{
+			"total": 0,
+			"override": null,
+			"skill": "Diplomacy",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Charisma",
+			"classSkill": false,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 0,
+			"override": null,
+			"skill": "Disguise",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Charisma",
+			"classSkill": false,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 10,
+			"override": null,
+			"skill": "Engineering",
+			"name": null,
+			"ranks": 1,
+			"bonuses": [
+				{
+					"value": 2,
+					"type": "Racial",
+					"source": "Scrounger (Ysoki)"
+				},
+				{
+					"value": 1,
+					"type": "Insight",
+					"source": "Bypass (Mechanic)"
+				}
+			],
+			"ability": "Intelligence",
+			"classSkill": true,
+			"trainedOnly": true,
+			"notes": ""
+		},
+		{
+			"total": 0,
+			"override": null,
+			"skill": "Intimidate",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Charisma",
+			"classSkill": false,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 3,
+			"override": null,
+			"skill": "Life Science",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Intelligence",
+			"classSkill": false,
+			"trainedOnly": true,
+			"notes": ""
+		},
+		{
+			"total": 7,
+			"override": null,
+			"skill": "Medicine",
+			"name": null,
+			"ranks": 1,
+			"bonuses": [],
+			"ability": "Intelligence",
+			"classSkill": true,
+			"trainedOnly": true,
+			"notes": ""
+		},
+		{
+			"total": 1,
+			"override": null,
+			"skill": "Mysticism",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Wisdom",
+			"classSkill": false,
+			"trainedOnly": true,
+			"notes": ""
+		},
+		{
+			"total": 5,
+			"override": null,
+			"skill": "Perception",
+			"name": null,
+			"ranks": 1,
+			"bonuses": [],
+			"ability": "Wisdom",
+			"classSkill": true,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 7,
+			"override": null,
+			"skill": "Physical Science",
+			"name": null,
+			"ranks": 1,
+			"bonuses": [],
+			"ability": "Intelligence",
+			"classSkill": true,
+			"trainedOnly": true,
+			"notes": ""
+		},
+		{
+			"total": 6,
+			"override": null,
+			"skill": "Piloting",
+			"name": null,
+			"ranks": 1,
+			"bonuses": [],
+			"ability": "Dexterity",
+			"classSkill": true,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 1,
+			"override": null,
+			"skill": "Sense Motive",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Wisdom",
+			"classSkill": false,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 2,
+			"override": null,
+			"skill": "Sleight of Hand",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Dexterity",
+			"classSkill": false,
+			"trainedOnly": true,
+			"notes": ""
+		},
+		{
+			"total": 4,
+			"override": null,
+			"skill": "Stealth",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [
+				{
+					"value": 2,
+					"type": "Racial",
+					"source": "Scrounger (Ysoki)"
+				}
+			],
+			"ability": "Dexterity",
+			"classSkill": false,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 3,
+			"override": null,
+			"skill": "Survival",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [
+				{
+					"value": 2,
+					"type": "Racial",
+					"source": "Scrounger (Ysoki)"
+				}
+			],
+			"ability": "Wisdom",
+			"classSkill": true,
+			"trainedOnly": false,
+			"notes": ""
+		},
+		{
+			"total": 3,
+			"override": null,
+			"skill": "Profession",
+			"name": null,
+			"ranks": 0,
+			"bonuses": [],
+			"ability": "Intelligence",
+			"classSkill": true,
+			"trainedOnly": true,
+			"notes": ""
+		}
+	],
+	"vitals": {
+		"temporary": 0,
+		"stamina": {
+			"max": 7,
+			"override": null,
+			"damage": 0,
+			"bonuses": [
+				{
+					"value": 1,
+					"type": "Misc",
+					"source": "Constitution"
+				},
+				{
+					"value": 6,
+					"type": "Misc",
+					"source": "Mechanic"
+				}
+			],
+			"notes": ""
+		},
+		"health": {
+			"max": 8,
+			"override": null,
+			"damage": 0,
+			"bonuses": [
+				{
+					"value": 2,
+					"type": "Misc",
+					"source": "Ysoki"
+				},
+				{
+					"value": 6,
+					"type": "Misc",
+					"source": "Mechanic"
+				}
+			],
+			"notes": ""
+		},
+		"resolve": {
+			"max": 4,
+			"override": null,
+			"damage": 0,
+			"bonuses": [
+				{
+					"value": 1,
+					"type": "Misc",
+					"source": "Level"
+				},
+				{
+					"value": 3,
+					"type": "Misc",
+					"source": "Key Ability Score (Intelligence, Mechanic)"
+				}
+			],
+			"notes": ""
+		}
+	},
+	"speed": {
+		"notes": "",
+		"land": 30
+	},
+	"initiative": {
+		"total": 2,
+		"bonuses": [],
+		"notes": ""
+	},
+	"armorClass": {
+		"eac": {
+			"total": 12,
+			"override": null,
+			"bonuses": [],
+			"notes": ""
+		},
+		"kac": {
+			"total": 12,
+			"override": null,
+			"bonuses": [],
+			"notes": ""
+		},
+		"acVsCombatManeuver": {
+			"total": 20,
+			"override": null,
+			"bonuses": [],
+			"notes": ""
+		}
+	},
+	"resistances": {
+		"dr": {},
+		"er": {},
+		"sr": 0
+	},
+	"saves": {
+		"fortitude": {
+			"total": 3,
+			"override": null,
+			"base": 2,
+			"bonuses": [],
+			"ability": "Constitution",
+			"notes": ""
+		},
+		"reflex": {
+			"total": 4,
+			"override": null,
+			"base": 2,
+			"bonuses": [],
+			"ability": "Dexterity",
+			"notes": ""
+		},
+		"will": {
+			"total": 1,
+			"override": null,
+			"base": 0,
+			"bonuses": [],
+			"ability": "Wisdom",
+			"notes": ""
+		}
+	},
+	"attackBonuses": {
+		"bab": {
+			"total": 0,
+			"base": 0,
+			"notes": ""
+		},
+		"melee": {
+			"total": -1,
+			"override": null,
+			"ability": "Strength",
+			"bonuses": [],
+			"notes": ""
+		},
+		"ranged": {
+			"total": 2,
+			"override": null,
+			"ability": "Dexterity",
+			"bonuses": [],
+			"notes": ""
+		},
+		"thrown": {
+			"total": -1,
+			"override": null,
+			"ability": "Strength",
+			"bonuses": [],
+			"notes": ""
+		},
+		"otherBonuses": []
+	},
+	"race": {
+		"name": "Ysoki",
+		"description": "Small and furtive, the ysoki are often overlooked by larger races. Yet through wit and technological prowess, they’ve spread throughout the Solar system, giving truth to the old adage that every starship needs a few rats.",
+		"size": "Small",
+		"hitPoints": 2,
+		"selectedTraits": [
+			{
+				"name": "Cheek Pouches",
+				"description": "Ysoki can store up to 1 cubic foot of items weighing up to 1 bulk in total in their cheek pouches, and they can transfer a single object between hand and cheek as a swift action. A ysoki can disgorge the entire contents of his pouch onto the ground in his square as a move action that does not provoke an attack of opportunity.",
+				"selectedOptions": null
+			},
+			{
+				"name": "Darkvision",
+				"description": "Ysoki can see up to 60 feet in the dark.",
+				"selectedOptions": null
+			},
+			{
+				"name": "Moxie",
+				"description": "Ysoki are scrappy and nimble even when the odds are against them. A ysoki can stand from prone as a swift action. Additionally, when off-kilter, a ysoki does not take the normal penalties to attacks or gain the flat-footed condition. When attempting an Acrobatics check to tumble through the space of an opponent at least one size category larger than himself, a ysoki receive a +5 racial bonus to the check.",
+				"selectedOptions": null
+			},
+			{
+				"name": "Scrounger",
+				"description": "Ysoki receive a +2 racial bonus to Engineering, Stealth, and Survival checks.",
+				"selectedOptions": null
+			}
+		],
+		"abilityAdjustment": {
+			"name": "Standard",
+			"description": "Base Ability Adjustment",
+			"adjustment": [
+				"+2 dex",
+				"+2 int",
+				"-2 str"
+			]
+		},
+		"speed": {
+			"land": 30
+		},
+		"reference": {
+			"name": "Core Rulebook",
+			"shortName": "CRB",
+			"page": 54
+		}
+	},
+	"theme": {
+		"name": "Bounty Hunter",
+		"bonus": "+1 con",
+		"description": "You track people down for money. It is a dangerous profession, as most of your targets understandably don’t wish to be caught. You wouldn’t have it any other way. You might have a code of ethics, never taking jobs that, say, target children or members of your own race. You might hunt down only escaped criminals. Or you might be completely amoral, taking any job that comes along — for the right price.",
+		"benefits": [
+			{
+				"name": "Theme Knowledge",
+				"level": 1,
+				"description": "Your mind is a cold steel trap when it comes to scraps of information about the creatures you’re tracking down. Choose a specific sentient creature that you can identify by name, alias, or specific identity to be your mark. Reduce the DC of Culture or Profession (bounty hunter) checks to recall knowledge about your mark, as well as to recall knowledge about law-enforcement individuals and practices, by 5. If you choose a mark that is known only by an alias or secret identity, this ability helps you learn facts only about the identity you know about, not any other unknown identities. Once you defeat your mark, as an action that takes 1 minute, you can study dossiers and database information about another individual to be your new mark. You can instead abandon your mark for a new one without defeating it, but if you do so, you take a –2 penalty to all skill checks for 1 week. Survival is a class skill for you, though if it is a class skill from the class you take at 1st level, you instead gain a +1 bonus to Survival checks. In addition, you gain an ability adjustment of +1 to Constitution at character creation.",
+				"selectedOptions": null
+			},
+			{
+				"name": "Swift Hunter",
+				"level": 6,
+				"description": "You know just how to ask around about your marks to gain information and insight in a hurry. You can use Diplomacy to gather information about a specific individual in half the normal time, and you reduce the penalty for following tracks using Survival while moving at full speed to 0.",
+				"selectedOptions": null
+			},
+			{
+				"name": "Relentless",
+				"level": 12,
+				"description": "You never seem to get tired, even when working longer and harder than everyone else in pursuit of your mark; some of your targets might even refer to you as a tireless ghost or an all-seeing hunter. You can walk or be otherwise active for 12 hours instead of 8 before needing to attempt Constitution checks for a forced march, and you can hustle for 2 hours a day during overland travel instead of 1 hour. Reduce the penalty for following tracks using Survival while moving at double speed to –10.",
+				"selectedOptions": null
+			},
+			{
+				"name": "Master Hunter",
+				"level": 18,
+				"description": "Your relentless pursuit of your mark steels your determination and can renew your inner reserves of strength. Once per day while in pursuit of your mark, you can review current information about your mark for 10 minutes to regain 1 Resolve Point; this doesn’t count as resting to regain Stamina Points. Additionally, once per day when you defeat your mark, you regain 1 Resolve Point.",
+				"selectedOptions": null
+			}
+		],
+		"reference": {
+			"name": "Core Rulebook",
+			"shortName": "CRB",
+			"page": 30
+		}
+	},
+	"classes": [
+		{
+			"name": "Mechanic",
+			"description": "You are a master of machines, from advanced supercomputers to simple magnetic engines. Understanding how these devices work gives you insight into the world around you, allowing you to make the most of your gear, circumvent hardened defenses, and even take over remote systems. Your programming skill also gives you the ability to create a powerful ally, in the form of either an implanted artificial intelligence or a robotic drone, which can assist you with a variety of tasks. If there’s a computer or machine that needs to be fixed, bypassed, or destroyed, you’re the first on the scene. Whether you’re a skilled scientist, a starship engineer, or a battlefield technician, you’re no stranger to combat—but you find it much more reasonable to have your AI or drone do the fighting for you.",
+			"baseHitPoints": 6,
+			"baseStaminaPoints": 6,
+			"baseSkillRanksPerLevel": 4,
+			"keyAbility": "Intelligence",
+			"levels": 1,
+			"spells": [],
+			"spellsUsed": [],
+			"spellsKnown": [
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0
+			],
+			"spellsPerDay": [
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0
+			],
+			"baseAttackBonus": 0,
+			"savingThrows": {
+				"fortitude": 2,
+				"reflex": 2,
+				"will": 0
+			},
+			"classSkills": [
+				"Athletics",
+				"Computers",
+				"Engineering",
+				"Medicine",
+				"Perception",
+				"Physical Science",
+				"Piloting",
+				"Profession"
+			],
+			"features": [
+				{
+					"name": "Artificial Intelligence",
+					"description": "You construct an artificial intelligence (or AI), a sophisticated program of self-motivated code that you can access for help in a variety of endeavors. This AI is the product of your own genius, far more advanced and complicated than any available for sale to consumers (though it falls short of being truly self-aware), and only you know the secrets of its creation and operation. Your AI can take one of two forms: a drone or an exocortex. You must pick one of these forms upon taking your first level of mechanic, and once this choice is made, it cannot be changed.",
+					"options": []
+				},
+				{
+					"name": "Bypass",
+					"description": "You are skilled at getting inside computer systems and electronic devices. At 1st level, you gain a +1 insight bonus to Computers and Engineering skill checks. At 5th level, every 4 levels thereafter, and at 20th level, this bonus increases by 1.",
+					"options": []
+				},
+				{
+					"name": "Custom Rig",
+					"description": "You have created a customized toolkit you can use to hack systems and items. Your custom rig can be configured to take up an upgrade slot on your armor or can be installed as a cybernetic augmentation system in your brain (though it can be combined with a datajack for the same price as installing a datajack normally), your eyes, or an arm. Alternatively, you can configure it to be a handheld device, meaning that you must retrieve it and hold it to use it effectively. While using this rig, you always count as having the appropriate tool or basic kit for any Computers or Engineering skill check you attempt. Some mechanic tricks and drone mods require the use of a custom rig. In addition, you can use your custom rig as a personal comm unit. Finally, if you have a drone, you can use your custom rig to communicate over an encrypted channel with your drone to issue commands to its AI or directly control it at a range of 2,500 feet. If your custom rig is damaged, destroyed, lost, or stolen, you can kitbash a new one from any engineering kit, hacking kit, or other technological toolkit, reconfiguring the materials into a new custom rig with 1 hour of work. You can have only one custom rig at a time. If you create a new custom rig, your old one functions as a normal toolkit of whatever type you made it from and can no longer be used with your mechanic tricks.",
+					"options": []
+				}
+			],
+			"archetype": null
+		}
+	],
+	"freeArchetypes": [],
+	"feats": {
+		"acquiredFeats": [
+			{
+				"name": "Jet Dash",
+				"description": "You are swift of foot and can make enormous leaps.",
+				"prerequisite": null,
+				"benefit": "When running, you move six times your land speed. Whenever you jump, double the height and distance you can jump. While running, you don’t gain the flat-footed condition.",
+				"benefitEffect": null,
+				"normal": "You move four times your land speed and gain the flat-footed condition while running.",
+				"special": null,
+				"isCombatFeat": false,
+				"selectedOptions": null,
+				"reference": {
+					"name": "Core Rulebook",
+					"shortName": "CRB",
+					"page": 158
+				}
+			}
+		],
+		"notes": ""
+	},
+	"inventory": [
+		{
+			"type": "Weapon",
+			"id": "Unarmed Strike",
+			"name": "Unarmed Strike",
+			"description": "An unarmed strike can be dealt with any limb or appendage. Unarmed strikes deal nonlethal damage, and the damage from an unarmed strike is considered weapon damage for the purposes of effects that give you a bonus to weapon damage rolls.",
+			"level": 1,
+			"price": 0,
+			"bulk": 0,
+			"weaponType": "Basic Melee",
+			"handedness": 1,
+			"category": null,
+			"toHit": -1,
+			"damage": {
+				"dice": {
+					"count": 1,
+					"sides": 3
+				},
+				"damage": [
+					"B"
+				],
+				"alternateDamage": null
+			},
+			"damageBonus": -1,
+			"critical": null,
+			"special": [
+				{
+					"name": "Archaic",
+					"additionalInfo": null
+				},
+				{
+					"name": "Nonlethal",
+					"additionalInfo": null
+				}
+			],
+			"range": null,
+			"capacity": null,
+			"ammunitionType": null,
+			"ammunitionId": null,
+			"usage": null,
+			"accessoryIds": [],
+			"fusionIds": [],
+			"reference": {
+				"name": "Core Rulebook",
+				"shortName": "CRB",
+				"page": 171
+			},
+			"isEquipped": true,
+			"stashed": false,
+			"proficient": true,
+			"specialization": false,
+			"notes": "",
+			"quantity": 1
+		}
+	],
+	"bulk": {
+		"current": {
+			"total": 0,
+			"override": null,
+			"notes": ""
+		},
+		"encumbered": {
+			"limit": 4
+		},
+		"overburdened": {
+			"limit": 9,
+			"override": null,
+			"notes": ""
+		}
+	},
+	"credits": 0,
+	"upbs": 0,
+	"senses": [
+		{
+			"senseType": "Darkvision",
+			"additionalInfo": null,
+			"range": 60
+		}
+	],
+	"counters": [],
+	"additionalSpells": [],
+	"drone": null
+}
