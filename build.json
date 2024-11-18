@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.8.1",
+"version":"1.8.2",
 "branch":"main",
-"commit":"a332fe946d7711ffe716f5b7f413ac8f8eeb4c19",
-"commitSubject":"Pathbuilder updates (#109)",
-"commitTs":1730410126000,
-"commitDate":"2024-10-31-1428",
-"buildTs":1730410190000,
-"buildDate":"2024-10-31-1429",
+"commit":"851ad68e8a56713f07d4d0ee3fb7154b47323cab",
+"commitSubject":"use potency or grade for weapon item bonus",
+"commitTs":1731969939000,
+"commitDate":"",
+"buildTs":1731969965000,
+"buildDate":"",
 "author":"Randal"
 }
