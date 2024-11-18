@@ -1,8 +1,8 @@
 import { randomSnowflake, type Optional } from "@rsc-utils/core-utils";
 import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import type { TPathbuilderCharacter, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { parseSize } from "../../../import/pathbuilder-2e/parseSize.js";
+import type { PathbuilderCharacterCore, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../import/pathbuilder-2e/types.js";
 import { ProficiencyType } from "../../../lib/types.js";
 import type { PdfKeyMap } from "./types.js";
 
@@ -89,6 +89,7 @@ function _parseWeapon(mgr: PdfJsonFieldManager, key: string): TPathbuilderCharac
 			const die = `d${size}`;
 			const damageBonus = +mod.replace(/\s+/g, "");
 			const damageType = capitalize(/[^a-z](?<damageType>[SBPECFAM]|So|Po)$/i.exec(damage)?.groups?.damageType ?? "");
+			const grade = /\b(?<grade>commercial|tactical|advanced|superior|elite|ultimate|paragon)\b/i.exec(name)?.groups?.grade.toLowerCase() ?? "";
 			return {
 				name,
 				qty: 1,
@@ -105,6 +106,7 @@ function _parseWeapon(mgr: PdfJsonFieldManager, key: string): TPathbuilderCharac
 				// extraDamage: [],
 				// increasedDice: false,
 				// isInventor: false,
+				grade,
 			} as TPathbuilderCharacterWeapon;
 		}
 	}
@@ -231,7 +233,7 @@ function _getProfMod(mgr: PdfJsonFieldManager, what: string, level?: number): nu
 		?? woLevel(mgr.getNumber(`${what}ProfMod`))
 		?? ProficiencyType.Untrained;
 }
-export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMap): TPathbuilderCharacter | undefined {
+export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMap): PathbuilderCharacterCore | undefined {
 	const level = mgr.getNumber("level", 1);
 	const getAbility = (key: string) => parseAbilityScore(mgr.getValue(key));
 	const getArray = (key: string) => mgr.getArray(key)?.map(s => s.trim()).filter(s => s) ?? [];

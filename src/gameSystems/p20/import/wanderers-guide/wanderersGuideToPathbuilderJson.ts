@@ -1,9 +1,9 @@
 import { debug, randomSnowflake, type Optional, type UUID } from "@rsc-utils/core-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import type { TPathbuilderCharacter, TPathbuilderCharacterAbilities, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterArmor, TPathbuilderCharacterEquipment, TPathbuilderCharacterProficiencies, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, TPathbuilderEquipmentContainers } from "../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { Ability } from "../../../d20/lib/Ability.js";
 import { Skill } from "../../lib/Skill.js";
 import { parseSize } from "../pathbuilder-2e/parseSize.js";
+import type { PathbuilderCharacterCore, TPathbuilderCharacterAbilities, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterArmor, TPathbuilderCharacterEquipment, TPathbuilderCharacterProficiencies, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, TPathbuilderEquipmentContainers } from "../pathbuilder-2e/types.js";
 
 type Base = {
 	id: number;
@@ -475,7 +475,7 @@ function parseProficiencies(content: WanderersGuideContent): TPathbuilderCharact
 	});
 	return out as TPathbuilderCharacterProficiencies;
 }
-export function wanderersGuideToPathbuilderJson(json: any): TPathbuilderCharacter | undefined {
+export function wanderersGuideToPathbuilderJson(json: any): PathbuilderCharacterCore | undefined {
 	if (isValidJson(json)) {
 		const { character, content } = json;
 		const { details, level } = character;
