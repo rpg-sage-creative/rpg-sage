@@ -420,6 +420,20 @@ function getWeaponDamageDicePart(weapon: TPathbuilderCharacterWeapon): string {
 	return damage.replace(/\s+/, " ").trim();
 }
 
+/** Get's the weapon's item bonus to attack from a potency crystal or weapon grade. */
+function getWeaponAttackItemBonus(weapon: TPathbuilderCharacterWeapon): number {
+	switch(weapon.grade) {
+		case "commercial": return 0;
+		case "tactical": return 1;
+		case "advanced": return 1;
+		case "superior": return 2;
+		case "elite": return 2;
+		case "ultimate": return 3;
+		case "paragon": return 3;
+		default: return weapon.pot || 0;
+	}
+}
+
 function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): string {
 	if (weapon.dice) {
 		return `<b>${weapon.name}</b> ${weapon.dice}`;
@@ -435,7 +449,7 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 		const mod = levelMod
 			+ weaponToAttackStatMod(wpnItem, char.abilities.strMod, char.abilities.dexMod)
 			+ char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name)
-			+ weapon.pot;
+			+ getWeaponAttackItemBonus(weapon);
 		const dmg = weaponToDamage(char, weapon, wpnItem);
 		return `<b>${wpnItem.type}</b> ${weapon.display} ${toModifier(mod)} <b>Damage</b> ${dmg}`;
 	}else {
@@ -445,7 +459,7 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 		const levelMod = char.getLevelMod(profMod);
 		const mod = levelMod
 			+ profMod
-			+ weapon.pot;
+			+ getWeaponAttackItemBonus(weapon);
 		const dmg = getWeaponDamageDice(weapon);
 		return `<b>${type}</b> ${weapon.display} ${toModifier(mod)} <b>Damage</b> ${dmg}; <i>Dex/Str/Spec mods not included</i>`;
 	}
@@ -470,7 +484,7 @@ function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacter
 		const mod = levelMod
 			+ weaponToAttackStatMod(wpnItem, char.abilities.strMod, char.abilities.dexMod)
 			+ profMod
-			+ weapon.pot;
+			+ getWeaponAttackItemBonus(weapon);
 		const dmg = weaponToDamage(char, weapon, wpnItem);
 		return { name:weapon.display, dice:`[1d20${mod ? toModifier(mod) : ""} "${weapon.display}"; ${dmg}]` };
 	}else {
@@ -478,7 +492,7 @@ function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacter
 		const levelMod = char.getLevelMod(profMod);
 		const mod = levelMod
 			+ profMod
-			+ weapon.pot;
+			+ getWeaponAttackItemBonus(weapon);
 		const dmg = getWeaponDamageDice(weapon);
 		return { name:weapon.display, dice:`[1d20${mod ? toModifier(mod) : ""} "${weapon.display}"; ${dmg} <i>Dex/Str/Spec mods not included</i>]` };
 	}
