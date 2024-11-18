@@ -1,15 +1,13 @@
 import { existsSync, mkdirSync } from "fs";
+import path from "path";
 import type { Optional } from "../types/generics.js";
 import { getFromProcess } from "./internal/getFromProcess.js";
-import path from "path";
 
 /** Converts a path relative to the executing .*js file to an absolute path. */
 function relativeToAbsolute(relative: string): string {
 	const filename = process.argv[1];
 	const dirname = path.dirname(filename);
-	const absolute = path.join(dirname, relative);
-	console.log({ relative, filename, dirname, absolute });
-	return absolute;
+	return path.join(dirname, relative);
 }
 
 /** Checks to see  */
