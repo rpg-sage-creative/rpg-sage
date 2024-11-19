@@ -1,5 +1,5 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { chunk, isNotBlank } from "@rsc-utils/string-utils";
+import { type Optional } from "@rsc-utils/core-utils";
+import { chunk, ELLIPSIS, isNotBlank } from "@rsc-utils/string-utils";
 import { type APIEmbed, type ColorResolvable, type Embed, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
 import { EmbedBuilder } from "../embed/EmbedBuilder.js";
 import { type EmbedResolvable } from "../embed/EmbedResolvable.js";
@@ -123,6 +123,16 @@ function mergeEmbeds(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>, 
 export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitMessageOptions<T>, splitOptions?: SplitOptions): T[] {
 	// break out the content, embeds, and files; saving the remaining options to be used in each payload
 	const { components, content, embedContent, embeds, files, replyingTo, ...baseOptions } = msgOptions;
+
+	// let's do some name maintenance here ...
+	if ("username" in baseOptions) {
+		const { username } = baseOptions;
+		if (typeof(username) === "string") {
+			if (username.length > DiscordMaxValues.usernameLength) {
+				baseOptions.username = username.slice(0, 79) + ELLIPSIS;
+			}
+		}
+	}
 
 	// convert incoming embedContent to embeds
 	const convertedEmbeds = contentToEmbeds(embedContent, splitOptions?.embedColor) as MsgEmbed[] ?? [];
