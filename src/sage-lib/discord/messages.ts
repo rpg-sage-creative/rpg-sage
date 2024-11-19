@@ -1,9 +1,10 @@
 import { error, warn, warnReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, isDMBased, isGuildBased, toHumanReadable, toInviteUrl, toMessageUrl, toUserUrl, type MessageOrPartial, type MessageTarget } from "@rsc-utils/discord-utils";
+import { DiscordKey, isDMBased, isGuildBased, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
+import { DialogMessageRepository } from "../sage/repo/DialogMessageRepository.js";
 import { createMessageEmbed } from "./createMessageEmbed.js";
 import { deleteMessage, deleteMessages } from "./deletedMessages.js";
 import { resolveToEmbeds } from "./resolvers/resolveToEmbeds.js";
@@ -101,8 +102,10 @@ export async function replaceWebhook(originalMessage: MessageOrPartial, webhookO
 	let replyingTo: string | undefined;
 	if (originalMessage.reference?.messageId) {
 		const referenceMessage = await sageCache.fetchMessage(originalMessage.reference);
+		const dialogMessage = await DialogMessageRepository.read(originalMessage.reference);
+		const userMention = dialogMessage?.userDid ? toUserMention(dialogMessage.userDid) : ``;
 		const displayName = referenceMessage ? `*${referenceMessage.author.displayName}*` : ``;
-		replyingTo = `*replying to* ${displayName} ${toMessageUrl(originalMessage.reference)}`;
+		replyingTo = `*replying to* ${displayName} ${userMention} ${toMessageUrl(originalMessage.reference)}`.replace(/\s+/g, " ");
 	}
 
 	const embeds = resolveToEmbeds(sageCache.cloneForChannel(originalMessage.channel), renderableContent);
