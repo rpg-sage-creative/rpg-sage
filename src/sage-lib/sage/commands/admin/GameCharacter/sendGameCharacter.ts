@@ -1,6 +1,8 @@
 import { SageChannelType } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/array-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { toChannelMention, toHumanReadable } from "@rsc-utils/discord-utils";
+import { stringOrUndefined } from "@rsc-utils/string-utils";
 import type { Message } from "discord.js";
 import { canProcessStats, statsToHtml } from "../../../../../gameSystems/sheets.js";
 import { sendWebhook } from "../../../../discord/messages.js";
@@ -9,6 +11,18 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { toReadableOwner } from "./toReadableOwner.js";
+
+function orNone(text: Optional<string>): string {
+	return stringOrUndefined(text) ?? "<i>none</i>";
+}
+
+function orUnset(text: Optional<string>): string {
+	return stringOrUndefined(text) ?? "<i>unset</i>";
+}
+
+function orUnknown(text: Optional<string>): string {
+	return stringOrUndefined(text) ?? "<i>unknown</i>";
+}
 
 export async function sendGameCharacter(sageMessage: SageMessage, character: GameCharacter): Promise<Message[]> {
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
@@ -20,20 +34,29 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.setThumbnailUrl(character.avatarUrl);
 	}
 
-	renderableContent.append(`<b>Alias</b> ${character.alias ?? "<i>unset</i>"}`);
-
-	const ownerOrPlayer = character.isGmOrNpc ? "Owner" : "Player";
 	const ownerTag = await toReadableOwner(sageMessage, character.userDid);
-	renderableContent.append(`<b>${ownerOrPlayer}</b> ${ownerTag ?? "<i>none</i>"}`);
+	renderableContent.append(`<b>Owner</b> ${orNone(ownerTag)}`);
+
+	renderableContent.append(`<b>Alias</b> ${orUnset(character.alias)}`);
+
+	renderableContent.append(`<b>Embed Color</b> ${orUnset(character.embedColor)}`);
+
+	const imageUrls = [
+		character.tokenUrl ? `[token](<${character.tokenUrl}>)` : undefined,
+		character.avatarUrl ? `[avatar](<${character.avatarUrl}>)` : undefined,
+	].filter(s => s);
+	const imageLinks = imageUrls.length ? imageUrls.join(" ") : undefined;
+	renderableContent.append(`<b>Images</b> ${orNone(imageLinks)}`);
+
+	renderableContent.append("");
 
 	if (character.isCompanion || character.isMinion) {
-		renderableContent.append(`<b>Character</b> ${character.parent?.name ?? "<i>unknown</i>"}`);
+		renderableContent.append(`<b>Character</b> ${orUnknown(character.parent?.name)}`);
 	} else {
 		const companionNames = character.companions.map(companion => companion.name).join("\n- ");
 		const companionType = character.isPc ? `Companions` : `Minions`;
-		renderableContent.append(`<b>${companionType}</b> ${companionNames || "<i>none</i>"}`);
+		renderableContent.append(`<b>${companionType}</b> ${orNone(companionNames)}`);
 	}
-	renderableContent.append(`<b>Dialog Color</b> ${character.embedColor ?? "<i>unset</i>"}`);
 
 	const autoChannels = character.autoChannels;
 	const autoChannelItems = await mapAsync(autoChannels, async data => {
@@ -96,11 +119,15 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	}
 
 	const targetChannel = sageMessage.message.channel;
-	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
-
-	const sageCache = sageMessage.caches;
-	const authorOptions = { avatarURL: avatarUrl, username: character.toDisplayName() };
-	const dialogType = sageMessage.dialogPostType;
-	const messages = await sendWebhook(targetChannel, { authorOptions, dialogType, renderableContent, sageCache });
+	const webhookOptions = {
+		authorOptions: {
+			avatarURL: character.tokenUrl ?? sageMessage.bot.tokenUrl,
+			username: character.toDisplayName()
+		},
+		dialogType: sageMessage.dialogPostType,
+		renderableContent,
+		sageCache: sageMessage.sageCache,
+	};
+	const messages = await sendWebhook(targetChannel, webhookOptions);
 	return messages ?? [];
 }
