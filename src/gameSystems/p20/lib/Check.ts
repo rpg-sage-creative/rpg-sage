@@ -284,11 +284,11 @@ export class Check {
 		return values.join("<br/>");
 	}
 
-	public static forSkill(char: TCheckPlayerCharacter, skill?: Skill): Check | undefined {
+	public static forSkill<T extends Skill>(char: TCheckPlayerCharacter, skill?: T): Check | undefined {
 		if (!skill) return undefined;
 
 		const check = new Check(char, skill.name);
-		check.addProficiency(skill.name);
+		check.addProficiency(skill.isLore()? skill.topic : skill.name);
 		check.setAbility(skill.ability.name);
 		return check;
 	}

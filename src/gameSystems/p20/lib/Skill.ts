@@ -4,7 +4,8 @@ import { Ability, type AbilityAbbr } from "../../d20/lib/Ability.js";
 export type SkillName = "Perception"
 	| "Acrobatics" | "Arcana" | "Athletics" | "Crafting" | "Deception" | "Diplomacy" | "Intimidation" | "Medicine" | "Nature" | "Occultism" | "Performance" | "Religion" | "Society" | "Stealth" | "Survival" | "Thievery"
 	| "Lore"
-	| "Computers" | "Piloting"
+	| "Computers" | "Piloting";
+
 export type SkillKey = Lowercase<SkillName>;
 
 type Options = {
@@ -27,6 +28,8 @@ export class Skill {
 
 	/** this.name.toLowerCase(); used as the key in objects/maps */
 	public readonly key: Lowercase<SkillName>;
+
+	public isLore(): this is Lore { return false; }
 
 	private static _all: Skill[];
 	public static all(options?: Options): Skill[] {
@@ -77,4 +80,6 @@ class Lore extends Skill {
 	public constructor(public topic: string) {
 		super("Lore", "Int");
 	}
+
+	public isLore(): this is Lore { return true; }
 }
