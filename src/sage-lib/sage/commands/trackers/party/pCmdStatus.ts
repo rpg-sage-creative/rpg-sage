@@ -59,7 +59,7 @@ export async function pCmdStatus(sageMessage: SageMessage): Promise<void> {
 	const isUnpin = (/\bunpin\b$/i).test(command);
 	const isUnpinAll = (/\bunpin[-.]?all\b/i).test(command);
 
-	const partyName = sageMessage.args.removeAndReturnName();
+	const partyName = sageMessage.args.getString("name");
 	const party = game.parties.getOrDefault(partyName);
 
 	const channelId = await sageMessage.args.removeAndReturnChannelDid(true);

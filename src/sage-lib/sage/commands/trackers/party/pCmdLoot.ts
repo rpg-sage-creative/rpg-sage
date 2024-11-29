@@ -10,7 +10,7 @@ export async function pCmdLoot(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyForGame("Party Loot");
 	}
 
-	const partyName = sageMessage.args.removeAndReturnName();
+	const partyName = sageMessage.args.getString("name");
 	const party = game.parties.getOrDefault(partyName);
 	await sageMessage.sendPost(party.renderLoot());
 }

@@ -16,7 +16,7 @@ export async function eCmdAdd(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyForCanAdminGame(cmdLabel);
 	}
 
-	const encounterName = sageMessage.args.removeAndReturnName();
+	const encounterName = sageMessage.args.getString("name");
 	const encounter = encounterName ? game.encounters.getOrOnly(encounterName) : game.encounters.only;
 	const charArgs = getCharArgs(sageMessage);
 	const parties = getPartyArgs(sageMessage);

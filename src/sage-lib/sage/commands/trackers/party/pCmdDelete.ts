@@ -12,7 +12,7 @@ export async function pCmdDelete(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const partyName = sageMessage.args.removeAndReturnName();
+	const partyName = sageMessage.args.getString("name");
 	const party = partyName ? game.parties.get(partyName) : null;
 	if (!party) {
 		await sageMessage.reactFailure(`Unable to delete Party. A Party by the name "${partyName}" doesn't exists.`);

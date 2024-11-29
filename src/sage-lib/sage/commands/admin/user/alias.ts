@@ -221,7 +221,7 @@ async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Delete Alias", "You cannot manage your aliases here.");
 	}
 
-	const aliasName = sageMessage.args.removeAndReturnName();
+	const aliasName = sageMessage.args.getString("name");
 	const alias = aliasName ? sageMessage.sageUser.aliases.findByName(aliasName) : null;
 	if (!aliasName || !alias) {
 		const details = [
@@ -244,7 +244,7 @@ async function aliasDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Alias Details", "You cannot manage your aliases here.");
 	}
 
-	const aliasName = sageMessage.args.getString("name") ?? sageMessage.args.removeAndReturnName();
+	const aliasName = sageMessage.args.getString("name");
 	const alias = aliasName ? sageMessage.sageUser.aliases.findByName(aliasName) : null;
 	if (!aliasName || !alias) {
 		const details = [

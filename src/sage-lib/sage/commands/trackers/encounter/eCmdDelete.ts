@@ -12,7 +12,7 @@ export async function eCmdDelete(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const encounterName = sageMessage.args.removeAndReturnName();
+	const encounterName = sageMessage.args.getString("name");
 	const encounter = encounterName ? game.encounters.get(encounterName) : null;
 	if (!encounter) {
 		await sageMessage.reactFailure(`Unable to delete Encounter. A Encounter by the name "${encounterName}" doesn't exists.`);

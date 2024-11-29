@@ -16,7 +16,7 @@ export async function eCmdRemove(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const encounterName = sageMessage.args.removeAndReturnName();
+	const encounterName = sageMessage.args.getString("name");
 	const encounter = encounterName ? game.encounters.getOrOnly(encounterName) : game.encounters.only;
 	const charArgs = getCharArgs(sageMessage).filter(charArg => encounter?.hasChar(charArg.nickname));
 	if (!encounter || !charArgs.length) {

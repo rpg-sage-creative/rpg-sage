@@ -12,7 +12,7 @@ export async function pCmdCreate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyForCanAdminGame("Create Party");
 	}
 
-	const partyName = sageMessage.args.removeAndReturnName();
+	const partyName = sageMessage.args.getString("name");
 	const existingParty = partyName ? game.parties.get(partyName) : null;
 	const charArgs = getCharArgs(sageMessage);
 	if (!partyName || existingParty) {

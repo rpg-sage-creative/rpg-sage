@@ -13,7 +13,7 @@ export async function eCmdCreate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyForCanAdminGame("Create Encounter");
 	}
 
-	const encounterName = sageMessage.args.removeAndReturnName();
+	const encounterName = sageMessage.args.getString("name");
 	const existingEncounter = encounterName ? game.encounters.get(encounterName) : null;
 	const charArgs = getCharArgs(sageMessage);
 	const parties = getPartyArgs(sageMessage);

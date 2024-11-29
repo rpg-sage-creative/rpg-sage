@@ -257,7 +257,7 @@ async function macroDetails(sageMessage: SageMessage): Promise<void> {
 
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>Macro Details</b>`);
 
-	const macroName = sageMessage.args.removeAndReturnName(true);
+	const macroName = sageMessage.args.getString("name") ?? undefined;
 	const existing = findMacro(sageMessage, macroName);
 	if (existing) {
 		const warning = checkForOverride(sageMessage, `[${existing.name}]`);

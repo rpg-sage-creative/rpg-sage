@@ -12,7 +12,7 @@ export async function pCmdAdd(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyForCanAdminGame("Party Add");
 	}
 
-	const partyName = sageMessage.args.removeAndReturnName();
+	const partyName = sageMessage.args.getString("name");
 	const party = partyName ? game.parties.get(partyName) : null;
 	const charArgs = getCharArgs(sageMessage);
 	if (!partyName || !party || !charArgs.length) {

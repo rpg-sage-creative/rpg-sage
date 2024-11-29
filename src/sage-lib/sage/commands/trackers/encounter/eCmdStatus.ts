@@ -60,7 +60,7 @@ export async function eCmdStatus(sageMessage: SageMessage): Promise<void> {
 	const isUnpin = (/\bunpin\b$/i).test(command);
 	const isUnpinAll = (/\bunpin[-.]?all\b/i).test(command);
 
-	const encounterName = sageMessage.args.removeAndReturnName();
+	const encounterName = sageMessage.args.getString("name");
 	const encounter = game.encounters.getOrFirst(encounterName);
 
 	const channelId = await sageMessage.args.removeAndReturnChannelDid(true);
