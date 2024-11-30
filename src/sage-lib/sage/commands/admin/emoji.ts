@@ -119,7 +119,7 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType, ca
 	if (!render) {
 		if (which !== BotServerGameType.Bot && canSync) {
 			const prompt = `**No ${getEmojiName(which)} Emoji Found!**\n> Sync with ${getOtherName(which)}?`;
-			const booleanResponse = await discordPromptYesNo(sageMessage, prompt).catch(errorReturnNull);
+			const booleanResponse = await discordPromptYesNo(sageMessage, prompt, true).catch(errorReturnNull);
 			if (booleanResponse) {
 				emoji.sync(getOtherEmoji(sageMessage, which));
 				render = await getWhichEntity(sageMessage, which)?.save() ?? false;
@@ -311,7 +311,7 @@ async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
 
 	const { server } = sageMessage;
 
-	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync emoji with Sage?");
+	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync emoji with Sage?", true);
 	if (booleanResponse) {
 		server.emoji.sync(sageMessage.bot.emoji);
 		const saved = await server.save();
@@ -333,7 +333,7 @@ async function emojiSyncGame(sageMessage: SageMessage): Promise<void> {
 
 	const { game } = sageMessage;
 
-	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync emoji with Server?");
+	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync emoji with Server?", true);
 	if (booleanResponse) {
 		game.emoji.sync(game.server.emoji);
 		const saved = await game.save();
