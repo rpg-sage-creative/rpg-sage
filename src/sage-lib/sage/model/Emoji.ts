@@ -1,36 +1,24 @@
+import type { Optional } from "@rsc-utils/core-utils";
 import { tokenize } from "@rsc-utils/string-utils";
-import { type Optional } from "@rsc-utils/core-utils";
-import XRegExp from "xregexp";
 import type { EmojiType, IEmoji } from "./HasEmojiCore.js";
 
 export type TEmojiAndType = { type: EmojiType; replacement: string; };
 
-const actionMatches = ["A", "AA", "AAA", "R", "F"];
 function emojify(text: string, matches: string[], replacement: string): string {
 	if (!text || !matches.length) {
 		return text;
 	}
 
-	const markedMatches: string[] = [];
-	matches.forEach(match => {
-		markedMatches.push(`[${match}]`);
-		if (actionMatches.includes(match)) {
-			markedMatches.push(`[${match.split("").join("][")}]`, `{${match}}`, `(${match})`);
-		}
-		return markedMatches;
-	});
+	const emojiRegexParts = matches.map(match => `\\[${match.replace(/-/, `[ -]?`)}\\]`);
+	const emojiRegex = new RegExp(emojiRegexParts.join("|"), "i");
 
 	const parsers = {
 		redacted: /```[^`]*```|``[^`]*``|`[^`]*`/,
-		boundary: /:/,
-		emoji: XRegExp(markedMatches.map(XRegExp.escape).join("|"), "i")
+		emoji: emojiRegex
 	};
 
-	const tokenized = tokenize(text, parsers).map((token, i, arr) => {
+	const tokenized = tokenize(text, parsers).map(token => {
 		if (token.key !== "emoji") {
-			return token.token;
-		}
-		if (arr[i - 1]?.token === ":" && arr[i + 1]?.token === ":") {
 			return token.token;
 		}
 		return replacement;
