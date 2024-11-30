@@ -21,6 +21,11 @@ export enum EmojiType {
 	ActionsThree = 33,
 	ActionsReaction = 34,
 	ActionsFree = 35,
+	ActionsOne2 = 321,
+	ActionsTwo2 = 322,
+	ActionsThree2 = 323,
+	ActionsReaction2 = 324,
+	ActionsFree2 = 325,
 
 	// Dice
 	Die = 4,
@@ -60,19 +65,11 @@ export enum EmojiType {
 	PromptSpacer = 70,
 	PromptChecked = 701,
 	PromptUnchecked = 702,
+	PromptGreenArrowRight = 703,
 	PromptYes = 71,
 	PromptNo = 711,
-
-	// Map = 8
-	// MapNorthWest = 8000,
-	// MapNorth = 8001,
-	// MapNorthEast = 8002,
-	// MapWest = 8003,
-	// MapCenter = 8004,
-	// MapEast = 8005,
-	// MapSouthWest = 8006,
-	// MapSouth = 8007,
-	// MapSouthEast = 8008,
+	PromptNice = 712,
+	PromptPleaseWait = 72,
 
 	MapMoveNorthWest = 8100,
 	MapMoveNorth = 8101,
@@ -89,8 +86,30 @@ export enum EmojiType {
 }
 
 export type IEmoji = {
+	/** @deprecated The old number value of EnumType. Remove when all old data is converted to remove "type". */
 	type: EmojiType;
+	/** Array of string literal matches that trigger the emoji. */
 	matches: string[];
+	/** The emoji (one or more) to replace the match with. */
+	replacement: string;
+};
+
+type EmojiCategory = "Command" | "Condition" | "Dialog" | "Dice" | "DiceResults" | "Logo" | "Map" | "MapMovement" | "Permission";
+
+export type IEmojiV2 = {
+	/** @deprecated The old number value of EnumType. Remove when all old data is converted to remove "type". */
+	type: number;
+	/** Command, Condition, Dialog, Dice, DiceResults, Map, Permission, etc. */
+	category: EmojiCategory;
+	/** Specifies if users can change/customize this emoji. */
+	isCustomizable: boolean;
+	/** @deprecated The old string value of EnumType. Remove when all old data is converted to remove "type". */
+	label: string;
+	/** The name of the emoji. */
+	name: string;
+	/** Array of string literal matches that trigger the emoji. */
+	matches: string[];
+	/** The emoji (one or more) to replace the match with. */
 	replacement: string;
 };
 
