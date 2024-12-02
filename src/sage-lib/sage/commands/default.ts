@@ -184,16 +184,16 @@ function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 // 	return false;
 // }
 /** Checks searchText for the word table, then checks to see if the rest of the text is a table name; if so, renders table */
-async function repositoryFindRenderTable(sageMessage: SageMessage): Promise<boolean> {
-	const searchText = sageMessage.args.join(" ");
-	const tableName = searchText.match(/\btable\b/i) && searchText.replace(/\btable\b/i, "") || "";
-	const table = Repository.findByValue("Table", tableName);
-	if (table) {
-		await sageMessage.send(table);
-		return true;
-	}
-	return false;
-}
+// async function repositoryFindRenderTable(sageMessage: SageMessage): Promise<boolean> {
+// 	const searchText = sageMessage.args.join(" ");
+// 	const tableName = searchText.match(/\btable\b/i) && searchText.replace(/\btable\b/i, "") || "";
+// 	const table = Repository.findByValue("Table", tableName);
+// 	if (table) {
+// 		await sageMessage.send(table);
+// 		return true;
+// 	}
+// 	return false;
+// }
 function findTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	const slicedContent = sageMessage.slicedContent;
 	if (sageMessage.hasPrefix && /^\?!\s*\w+/.test(slicedContent)) {
@@ -210,9 +210,9 @@ async function findHandler(sageMessage: SageMessage): Promise<void> {
 	}
 
 	// if (await repositoryFind_listObjectType(sageMessage, parsedSearchInfo)) return;
-	if (await repositoryFindRenderTable(sageMessage)) {
-		return Promise.resolve();
-	}
+	// if (await repositoryFindRenderTable(sageMessage)) {
+	// 	return Promise.resolve();
+	// }
 	return searchHandler(sageMessage, true);
 }
 
