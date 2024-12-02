@@ -62,7 +62,7 @@ async function canAdminRoleType(sageMessage: SageMessage, action: "add" | "updat
 	const roleType = sageMessage.args.getEnum(AdminRoleType, "type") ?? undefined;
 	const hasRoleType = isDefined(roleType);
 
-	const userId = await sageMessage.args.removeAndReturnUserDid() ?? undefined;
+	const userId = sageMessage.message.mentions.users.first()?.id as Snowflake;
 	const userRoleType = isDefined(userId) ? sageMessage.server.admins.find(admin => admin.did === userId)?.role : undefined;
 
 	let canAdminThis = false;
