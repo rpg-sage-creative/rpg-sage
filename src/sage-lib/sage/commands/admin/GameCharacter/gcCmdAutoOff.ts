@@ -1,9 +1,9 @@
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { toChannelMention } from "@rsc-utils/discord-utils";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
-import { removeAndReturnChannelDids } from "./removeAndReturnChannelDids.js";
 import { removeAuto } from "./removeAuto.js";
 import { sendNotFound } from "./sendNotFound.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
@@ -13,9 +13,6 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
 		return sageMessage.reactBlock();
 	}
-
-	// removeAndReturnChannelDids MUST RUN BEFORE removeAndReturnName
-	const channelDids = await removeAndReturnChannelDids(sageMessage);
 
 	let name = sageMessage.args.removeAndReturnName();
 	let character = characterTypeMeta.isGm
@@ -30,6 +27,7 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 		return sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor}-auto-off`, characterTypeMeta.singularDescriptor!, name);
 	}
 
+	const channelDids = sageMessage.message.mentions.channels.map(ch => ch.id as Snowflake);
 	const autoChannelDids = channelDids.filter(did => character?.autoChannels.find(channel => channel.channelDid === did));
 	if (autoChannelDids.length) {
 		const channelLinks = autoChannelDids.map(channelDid => toChannelMention(channelDid));

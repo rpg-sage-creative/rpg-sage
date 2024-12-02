@@ -62,7 +62,7 @@ export async function pCmdStatus(sageMessage: SageMessage): Promise<void> {
 	const partyName = sageMessage.args.getString("name");
 	const party = game.parties.getOrDefault(partyName);
 
-	const channelId = await sageMessage.args.removeAndReturnChannelDid(true);
+	const channelId = sageMessage.message.mentions.channels.first()?.id ?? sageMessage.message.channelId;
 
 	if (isUnpinAll) {
 		// unpin all status posts for all parties in this channel

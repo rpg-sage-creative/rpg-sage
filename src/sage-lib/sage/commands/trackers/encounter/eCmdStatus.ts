@@ -63,7 +63,7 @@ export async function eCmdStatus(sageMessage: SageMessage): Promise<void> {
 	const encounterName = sageMessage.args.getString("name");
 	const encounter = game.encounters.getOrFirst(encounterName);
 
-	const channelId = await sageMessage.args.removeAndReturnChannelDid(true);
+	const channelId = sageMessage.message.mentions.channels.first()?.id ?? sageMessage.message.channelId;
 
 	if (isUnpinAll) {
 		// unpin all status posts for all encounters in this channel

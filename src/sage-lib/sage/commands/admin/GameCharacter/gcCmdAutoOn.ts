@@ -1,11 +1,11 @@
 import { DialogPostType } from "@rsc-sage/types";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { toChannelMention } from "@rsc-utils/discord-utils";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
-import { removeAndReturnChannelDids } from "./removeAndReturnChannelDids.js";
 import { removeAuto } from "./removeAuto.js";
 import { sendNotFound } from "./sendNotFound.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
@@ -16,8 +16,6 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	// MUST RUN removeAndReturnChannelDids BEFORE NAME
-	const channelDids = await removeAndReturnChannelDids(sageMessage);
 	const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType") ?? undefined;
 
 	let name = sageMessage.args.removeAndReturnName();
@@ -29,6 +27,7 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 	}
 
 	if (character) {
+		const channelDids = sageMessage.message.mentions.channels.map(ch => ch.id as Snowflake);
 		const channelLinks = channelDids.map(channelDid => toChannelMention(channelDid));
 		const dialogType = dialogPostType !== undefined ? ` (${DialogType[dialogPostType]})` : "";
 		const prompt = channelDids.length > 1 || channelDids[0] !== sageMessage.channelDid
