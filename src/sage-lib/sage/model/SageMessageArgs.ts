@@ -1,15 +1,11 @@
-import { type SageChannel } from "@rsc-sage/types";
-import { isDefined, isNonNilSnowflake, isNonNilUuid, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { parseId, type MessageChannel } from "@rsc-utils/discord-utils";
 import { isNotBlank } from "@rsc-utils/string-utils";
-import type { Attachment, Collection, Role, User } from "discord.js";
+import type { Attachment, Role, User } from "discord.js";
 import type { ArgsManager } from "../../discord/ArgsManager.js";
-import type { TColorAndType } from "./Colors.js";
 import type { GameCharacterCore } from "./GameCharacter.js";
-import { ColorType } from "./HasColorsCore.js";
 import { SageCommandArgs, type Names } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
-import type { Server } from "./Server.js";
 
 /** Represents an argument that was 'key=value'. If value is an empty string, it will be set as NULL. */
 export type TKeyValuePair<T extends string = string> = {
@@ -18,8 +14,6 @@ export type TKeyValuePair<T extends string = string> = {
 	/** This value is null if they value was an empty string. */
 	value: T | null;
 };
-
-type TArgIndexRet<T> = { arg: string; index: number; ret: T };
 
 export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public constructor(sageMessage: SageMessage, private argsManager: ArgsManager) {
@@ -42,53 +36,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	//#endregion
 
 	//#region Old
-
-	/** @deprecated */
-	private attachments?: Collection<string, Attachment>;
-
-	/** @deprecated */
-	public removeAndReturnAttachmentUrl(): string | undefined {
-		const attachments = this.attachments ?? (this.attachments = this.sageCommand.message.attachments.clone());
-		if (attachments.size) {
-			const first = attachments.first();
-			attachments.delete(<string>attachments.firstKey());
-			return first!.url;
-		}
-		return this.argsManager.removeAndReturnUrl();
-	}
-
-	/** @deprecated */
-	protected async findChannelIndexWithDid(): Promise<TArgIndexRet<Snowflake> | undefined> {
-		if (this.argsManager.isEmpty) {
-			return undefined;
-		}
-
-		return <Promise<TArgIndexRet<Snowflake> | undefined>>this.argsManager.asyncFindArgIndexRet(async arg => {
-			const trimmed = arg?.trim();
-			const channelId = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "channel");
-			if (channelId) {
-				const channel = await this.sageCommand.sageCache.fetchChannel(channelId);
-				return channel?.id;
-			}
-			return undefined;
-		});
-	}
-
-	/** @deprecated */
-	public async removeAndReturnChannelDid(): Promise<Snowflake | null>;
-	/** @deprecated */
-	public async removeAndReturnChannelDid(defaultThisChannel: false): Promise<Snowflake | null>;
-	/** @deprecated */
-	public async removeAndReturnChannelDid(defaultThisChannel: true): Promise<Snowflake>;
-	/** @deprecated */
-	public async removeAndReturnChannelDid(defaultThisChannel = false): Promise<Snowflake | null> {
-		const withIndex = await this.findChannelIndexWithDid();
-		if (withIndex) {
-			this.argsManager.removeByArgAndIndex(withIndex);
-			return withIndex.ret;
-		}
-		return defaultThisChannel ? this.sageCommand.threadOrChannelDid : null;
-	}
 
 	/** @deprecated */
 	public getCharacterOptions(names: Names, userDid?: Snowflake): GameCharacterCore {
@@ -125,42 +72,10 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return characterCore;
 	}
 
-	/** @deprecated */
-	public removeAndReturnColorAndType(): TColorAndType | null {
-		if (this.argsManager.isEmpty) {
-			return null;
-		}
-		//TODO: find them separately before removing them
-		const color = this.argsManager.removeAndReturnColor(),
-			type = this.argsManager.removeAndReturnEnum<ColorType>(ColorType);
-		if (color && type) {
-			return { color: color, type: type };
-		}
-		return null;
-	}
-
-	/** @deprecated */
-	public async removeAndReturnGameChannel(): Promise<SageChannel | null> {
-		const game = this.sageCommand.game;
-		if (!game) {
-			return null;
-		}
-
-		const withIndex = await this.findChannelIndexWithDid();
-		if (withIndex) {
-			const channel = game.getChannel(withIndex.ret);
-			if (channel) {
-				this.argsManager.removeByArgAndIndex(withIndex);
-				return channel;
-			}
-		}
-
-		return game.getChannel(this.sageCommand.channelDid) ?? null;
-	}
 
 	/** @deprecated */
 	public removeAndReturnName(defaultJoinRemaining = false, defaultJoinSeparator = " "): string | undefined {
-		const keyValue = this.argsManager.removeKeyValuePair("name");
+		const keyValue = this.argsManager.findKeyValueArgIndex("name")?.ret;
 		if (keyValue) {
 			return keyValue.value ?? undefined;
 		}
@@ -172,7 +87,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		}
 
 		if (defaultJoinRemaining) {
-			const name = this.argsManager.removeAndReturnNonArgs()
+			const name = this.argsManager.findArgIndexNonArgs()
 				.map(withIndex => withIndex.arg)
 				.join(defaultJoinSeparator)
 				.trim();
@@ -185,10 +100,10 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	/** @deprecated */
 	public removeAndReturnNames(defaultJoinRemaining = false, defaultJoinSeparator = " "): Names {
 		const names = {
-			charName: this.argsManager.removeByKey("charName"),
-			oldName: this.argsManager.removeByKey("oldName"),
-			name: this.argsManager.removeByKey("name"),
-			newName: this.argsManager.removeByKey("newName"),
+			charName: this.argsManager.findKeyValueArgIndex("charName")?.ret?.value,
+			oldName: this.argsManager.findKeyValueArgIndex("oldName")?.ret?.value,
+			name: this.argsManager.findKeyValueArgIndex("name")?.ret?.value,
+			newName: this.argsManager.findKeyValueArgIndex("newName")?.ret?.value,
 			count: 0
 		} as Names;
 		names.count = (names.charName ? 1 : 0) + (names.oldName ? 1 : 0) + (names.name ? 1 : 0) + (names.newName ? 1 : 0);
@@ -196,79 +111,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			names.name = this.removeAndReturnName(defaultJoinRemaining, defaultJoinSeparator);
 		}
 		return names;
-	}
-
-	/** @deprecated */
-	public async removeAndReturnRoleDid(): Promise<Snowflake | null> {
-		if (this.argsManager.isEmpty) {
-			return null;
-		}
-
-		const roleDid = await this.argsManager.asyncFindArgAndRemoveAndMap<Snowflake | undefined>(async arg => {
-			const trimmed = arg?.trim();
-			const did = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "role");
-			if (did) {
-				const role = await this.sageCommand.discord.fetchGuildRole(did);
-				return role?.id as Snowflake;
-			}
-			return undefined;
-		});
-
-		return roleDid ?? null;
-	}
-
-	/** @deprecated */
-	public async removeAndReturnServer(): Promise<Optional<Server>> {
-		if (this.argsManager.isEmpty) {
-			return null;
-		}
-
-		const servers = this.sageCommand.sageCache.servers;
-
-		const server = await this.argsManager.asyncFindArgAndRemoveAndMap<Optional<Server>>(async arg =>
-			isNonNilUuid(arg) ? servers.getById(arg)
-			: isNonNilSnowflake(arg) ? servers.getByDid(arg)
-			: undefined
-		);
-
-		return server ?? null;
-	}
-
-	/** @deprecated */
-	public async removeAndReturnUserDid(argKey?: string, defaultIfNoArg = true): Promise<Snowflake | null> {
-		if (this.argsManager.isEmpty) {
-			return null;
-		}
-
-		const discord = this.sageCommand.sageCache.discord;
-		const userRepo = this.sageCommand.sageCache.users;
-
-		let userDid: Optional<Snowflake>;
-		if (argKey && this.argsManager.findKeyValueArgIndex(argKey)) {
-			userDid = await argToSnowflake(this.argsManager.removeByKey(argKey)!);
-		}
-		if (!userDid && defaultIfNoArg) {
-			userDid = await this.argsManager.asyncFindArgAndRemoveAndMap<Snowflake | undefined>(async arg => argToSnowflake(arg));
-		}
-		return userDid ?? null;
-
-		async function argToSnowflake(arg: string): Promise<Snowflake | undefined> {
-			const trimmed = arg?.trim();
-			const userId = isNonNilSnowflake(trimmed) ? trimmed : parseId(trimmed, "user");
-			if (userId) return userId;
-
-			if (isNonNilSnowflake(arg)) {
-				const member = await discord.fetchGuildMember(arg);
-				return member?.id as Snowflake;
-			}
-
-			if (isNonNilUuid(arg)) {
-				const user = await userRepo.getById(arg);
-				return user?.did;
-			}
-
-			return undefined;
-		}
 	}
 
 	//#endregion

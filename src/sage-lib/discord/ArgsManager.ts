@@ -1,5 +1,5 @@
 import { ArgsManager as _ArgsManager } from "@rsc-utils/args-utils";
-import { type Optional, type OrUndefined, isNullOrUndefined } from "@rsc-utils/core-utils";
+import { type OrUndefined, isNullOrUndefined } from "@rsc-utils/core-utils";
 import { type KeyValueArg, type TokenParsers, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, parseKeyValueArg, tokenize } from "@rsc-utils/string-utils";
 
 type TArgIndexRet<T> = {
@@ -7,7 +7,6 @@ type TArgIndexRet<T> = {
 	index: number;
 	ret: T | null
 };
-type TArgAndIndex = TArgIndexRet<any>;
 
 export class ArgsManager<T extends string = string> extends _ArgsManager<T> {
 	public constructor(private argsManagerInitialInput: string | ArrayLike<string> | Iterable<string>) {
@@ -15,20 +14,8 @@ export class ArgsManager<T extends string = string> extends _ArgsManager<T> {
 	}
 
 	//#region overrides to make things public ahead of rewrite
-	public async asyncFindArgIndexRet<U>(predicate: (value: T, index: number, obj: T[]) => Promise<U>, thisArg?: any): Promise<OrUndefined<TArgIndexRet<U>>> {
-		return super.asyncFindArgIndexRet(predicate, thisArg);
-	}
-	public removeByArgAndIndex(...withIndexes: TArgAndIndex[]): void {
-		return super.removeByArgAndIndex(...withIndexes);
-	}
 	public findArgIndexNonArgs(): TArgIndexRet<string>[] {
 		return super.findArgIndexNonArgs();
-	}
-	public removeAndReturnNonArgs(): TArgIndexRet<string>[] {
-		return super.removeAndReturnNonArgs();
-	}
-	public removeByKey(key: string): Optional<string> {
-		return super.removeByKey(key);
 	}
 	public findKeyValueArgIndex(key: string): OrUndefined<TArgIndexRet<KeyValueArg>> {
 		return super.findKeyValueArgIndex(key);
