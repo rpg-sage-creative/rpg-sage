@@ -193,7 +193,7 @@ export class Check {
 	}
 
 	/** Used to output a value for use with stats in dice rolls. */
-	public toStatString(prefix: string): number | string {
+	public toStatString(prefix?: string): number | string {
 		if (prefix) {
 			switch(prefix) {
 				case "dc": return this.dc;

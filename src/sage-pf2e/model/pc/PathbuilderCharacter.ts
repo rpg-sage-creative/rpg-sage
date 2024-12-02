@@ -600,7 +600,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 
 	public getStat(stat: string): number | string | null {
 		const lower = stat.toLowerCase();
-		const [prefix, statLower] = lower.includes(".") ? lower.split(".") as [GetStatPrefix, string] : ["", lower] as [GetStatPrefix, string];
+		const [prefix, statLower] = lower.includes(".") ? lower.split(".") as [GetStatPrefix, string] : [undefined, lower] as [GetStatPrefix | undefined, string];
 
 		// special case for showing full ability score
 		if (!prefix && Ability.isValid(statLower) && stat.length > 3) {
@@ -613,7 +613,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			case "level": return this.level;
 			case "maxhp": return this.maxHp;
 			case "ac": return prefix === "prof" ? this.core.acTotal?.acProfBonus ?? null : this.core.acTotal?.acTotal ?? null;
-			case "classdc": return this.createCheck(statLower)?.dc ?? null;
+			case "classdc": return this.createCheck(statLower)?.toStatString(prefix ?? "dc") ?? null;
 			default: return this.createCheck(statLower)?.toStatString(prefix) ?? null;
 		}
 	}
