@@ -108,10 +108,11 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 // #endregion
 
 async function objectsBy(sageMessage: SageMessage): Promise<void> {
-	const objectTypePlural = sageMessage.args.shift()!,
+	const args = sageMessage.args.toArray();
+	const objectTypePlural = args.shift()!,
 		objectType = Repository.parseObjectType(oneToUS(objectTypePlural.replace(/gods/i, "deities")))!,
-		traitOr = sageMessage.args.shift() ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
-		searchTerm = sageMessage.args.shift()!;
+		traitOr = args.shift() ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
+		searchTerm = args.shift()!;
 
 	const content = createCommandRenderableContent(),
 		trait = traitOr === "trait" && Repository.findByValue("Trait", searchTerm),

@@ -8,7 +8,7 @@ import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
 
 // #region rpg.SpUtils
 async function spUtils(sageMessage: SageMessage): Promise<void> {
-	const data = sageMessage.args.shift()!;
+	const data = sageMessage.args.toArray()[0];
 
 	const values = data.match(/\s*[\-\+]?\s*\d+(?:,\d{3})*\s*(?:cp|sp|gp|pp)/gi)!,
 		signedAndSorted = values.map(s => ("+" + s).replace(/\s+/g, "").replace(/\+([\-\+])/, "$1").toLowerCase()).sort(),
@@ -29,13 +29,11 @@ async function spUtils(sageMessage: SageMessage): Promise<void> {
 
 // #region Earned Income
 async function incomeEarnedA(sageMessage: SageMessage): Promise<void> {
-	const taskLevelString = sageMessage.args.shift()!;
-	const proficiencyString = sageMessage.args.shift()!;
+	const [taskLevelString, proficiencyString] = sageMessage.args.toArray();
 	_incomeEarned(sageMessage, taskLevelString, proficiencyString);
 }
 async function incomeEarnedB(sageMessage: SageMessage): Promise<void> {
-	const proficiencyString = sageMessage.args.shift()!;
-	const taskLevelString = sageMessage.args.shift()!;
+	const [proficiencyString, taskLevelString] = sageMessage.args.toArray();
 	_incomeEarned(sageMessage, taskLevelString, proficiencyString);
 }
 async function _incomeEarned(sageMessage: SageMessage, taskLevelString: string, proficiencyString: string): Promise<void> {

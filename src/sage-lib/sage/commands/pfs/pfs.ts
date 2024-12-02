@@ -42,10 +42,7 @@ function summaryForDays(incomeRolls: TIncomeRoll[], days: number): string {
 
 // #region Earn Income
 function earnIncome(sageMessage: SageMessage): void {
-	const pcLevelString = sageMessage.args.shift()!;
-	const proficiencyString = sageMessage.args.shift()!;
-	const modifierString = sageMessage.args.shift()!;
-	const daysString = sageMessage.args.shift()!;
+	const [pcLevelString, proficiencyString, modifierString, daysString] = sageMessage.args.toArray();
 	//this: Discord.Message, pcLevelString: string, proficiencyString: string, modifierString: string, daysString: string
 
 	const renderable = createPfsRenderableContent(sageMessage),

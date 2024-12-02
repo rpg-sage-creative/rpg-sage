@@ -18,16 +18,12 @@ function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {
 }
 
 async function spellListA(sageMessage: SageMessage): Promise<void> {
-	const levelString = sageMessage.args.shift()!;
-	const traditionString = sageMessage.args.shift()!;
-	const by = <"school">sageMessage.args.shift();
-	_spellList(sageMessage, traditionString, levelString, by);
+	const [levelString, traditionString, by] = sageMessage.args.toArray();
+	_spellList(sageMessage, traditionString, levelString, by as "school");
 }
 async function spellListB(sageMessage: SageMessage): Promise<void> {
-	const traditionString = sageMessage.args.shift()!;
-	const levelString = sageMessage.args.shift()!;
-	const by = <"school">sageMessage.args.shift();
-	_spellList(sageMessage, traditionString, levelString, by);
+	const [traditionString, levelString, by] = sageMessage.args.toArray();
+	_spellList(sageMessage, traditionString, levelString, by as "school");
 }
 async function _spellList(sageMessage: SageMessage, traditionString: string, levelString: string, by: "school"): Promise<void> {
 	/*// debug("spellList", traditionString, levelString);*/
@@ -167,8 +163,9 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 type TSpecialistListModifier = "+" | "-" | "|" | "&";
 const SpecialistCommands = "+-|&";
 async function specialistLists(sageMessage: SageMessage): Promise<void> {
-	const levelString = sageMessage.args.shift()!;
-	const traditionStrings = sageMessage.args;
+	const args = sageMessage.args.toArray();
+	const levelString = args[0]
+	const traditionStrings = args.slice(1);
 
 	const traditionsAndModifiers = traditionStrings.filter(s => s).map(traditionString => {
 		let tradition: TMagicTradition;

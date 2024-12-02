@@ -22,8 +22,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 	//#region deprecated passthroughs
 	/** @deprecated */
-	public shift() { return this.argsManager.shift(); }
-	/** @deprecated */
 	public keyValuePairs() { return this.argsManager.keyValuePairs(); }
 	/** @deprecated */
 	public filter(predicate: (value: string, index: number, array: string[]) => unknown, arg?: any) { return this.argsManager.filter(predicate, arg); }
