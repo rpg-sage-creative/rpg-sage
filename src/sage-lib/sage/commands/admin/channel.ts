@@ -118,7 +118,7 @@ async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: S
 	const guildChannels = await mapAsync(channels, async channel => sageMessage.sageCache.fetchChannel(channel.id));
 	const existing = guildChannels.filter(isDefined) as GuildChannel[];
 
-	const filter = sageMessage.args.join(" ").trim();
+	const filter = sageMessage.args.getString("filter");
 	if (filter && existing.length) {
 		const lower = filter.toLowerCase();
 		return existing.filter(guildChannel => guildChannel.name.toLowerCase().includes(lower));

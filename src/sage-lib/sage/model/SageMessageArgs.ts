@@ -22,8 +22,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 	//#region deprecated passthroughs
 	/** @deprecated */
-	public join(joiner?: string) { return this.argsManager.join(joiner); }
-	/** @deprecated */
 	public shift() { return this.argsManager.shift(); }
 	/** @deprecated */
 	public keyValuePairs() { return this.argsManager.keyValuePairs(); }

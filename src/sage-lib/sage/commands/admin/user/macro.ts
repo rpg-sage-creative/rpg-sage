@@ -197,7 +197,7 @@ async function macroSet(sageMessage: SageMessage): Promise<void> {
 		contentPair.value = wrap(tableValue, "[]");
 	}
 
-	const content = sageMessage.args.join(" ");
+	const content = sageMessage.message.content ?? "";
 	const diceMatch = (contentPair?.value ?? content).match(/\[[^\]]+\]/ig);
 	if (!diceMatch) {
 		return sageMessage.reactFailure();

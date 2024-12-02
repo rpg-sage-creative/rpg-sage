@@ -31,7 +31,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 	});
 
 	if (users) {
-		const filter = sageMessage.args.join(" ");
+		const filter = sageMessage.args.getString("filter");
 		if (filter && users.length) {
 			const lower = filter.toLowerCase();
 			users = users.filter(user => user?.discordUser?.username?.toLowerCase().includes(lower));

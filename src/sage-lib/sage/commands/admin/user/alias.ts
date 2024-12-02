@@ -169,8 +169,7 @@ async function aliasSet(sageMessage: SageMessage): Promise<void> {
 	const aliasName = sageMessage.args.getString("name");
 	const aliasTarget = sageMessage.args.getString("for")
 		?? sageMessage.args.getString("target")
-		?? sageMessage.args.getString("value")
-		?? sageMessage.args.join(" ");
+		?? sageMessage.args.getString("value");
 
 	const dialogContent = aliasTarget ? parseDialogContent(aliasTarget) : null;
 	const validTarget = dialogContent ? aliasTest(sageMessage, dialogContent) : false;
