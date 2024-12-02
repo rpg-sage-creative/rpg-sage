@@ -583,6 +583,18 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			return this.abilities.getCheck(key);
 		}
 
+		const profKeyRegex = new RegExp(`^${key}$`, "i");
+		const profKey = Object.keys(this.core.proficiencies).find(profKey => profKeyRegex.test(profKey)) as TPathbuilderCharacterProficienciesKey;
+		if (profKey) {
+			const check = new Check(this, profKey);
+			check.addProficiency(profKey);
+			if (profKey === "classDC") {
+				check.setAbility(Ability.findByName(this.core.keyability).name);
+			}
+			/** @todo take a long look at all other proficiencies to see how this needs to be expanded */
+			return check;
+		}
+
 		return undefined;
 	}
 
@@ -601,6 +613,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			case "level": return this.level;
 			case "maxhp": return this.maxHp;
 			case "ac": return prefix === "prof" ? this.core.acTotal?.acProfBonus ?? null : this.core.acTotal?.acTotal ?? null;
+			case "classdc": return this.createCheck(statLower)?.dc ?? null;
 			default: return this.createCheck(statLower)?.toStatString(prefix) ?? null;
 		}
 	}
