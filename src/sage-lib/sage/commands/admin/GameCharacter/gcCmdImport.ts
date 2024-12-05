@@ -1,3 +1,4 @@
+import { isUnsafeName } from "@rsc-utils/discord-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
@@ -19,10 +20,10 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 	if (!allResults) return sageMessage.replyStack.whisper(`Sorry, this command only imports tsv attachments or urls.`);
 
 	let badName = false;
-	let discordName = false; const discordRegexp = /discord/i;
+	let discordName = false;
 	for (const { core } of allResults) {
 		if (!core?.name) badName = true;
-		else if (discordRegexp.test(core.name)) discordName = true;
+		else if (isUnsafeName(core.name)) discordName = true;
 	}
 	if (badName || discordName) {
 		return sageMessage.replyStack.whisper(`Sorry, at least one character is missing a name or has "discord" in the name.`);
@@ -49,7 +50,7 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 	for (const oneResult of allResults) {
 		const { core, mods, names, stats, userId = pcUserId, type = characterTypeMeta.type } = oneResult;
 		if (!core?.name) { continue; }
-		if (discordRegexp.test(core.name)) { continue; }
+		if (isUnsafeName(core.name)) { continue; }
 
 		let characterManager: CharacterManager | undefined = ["gm","npc","minion"].includes(type!) ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 		if (type === "companion") {

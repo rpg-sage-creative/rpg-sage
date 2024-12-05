@@ -1,3 +1,4 @@
+import { isUnsafeName } from "@rsc-utils/discord-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { getCharacter } from "./getCharacter.js";
@@ -48,7 +49,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 	if (character) {
 		if (core) {
 			await character.update(core, false);
-			if (/discord/i.test(core.name)) {
+			if (isUnsafeName(core.name)) {
 				return sageMessage.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
 			}
 		}

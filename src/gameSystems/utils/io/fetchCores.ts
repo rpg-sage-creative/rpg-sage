@@ -1,5 +1,5 @@
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
-import { parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
+import { isUnsafeName, parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import { getJson, PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import type { FetchResultError } from "./handleImportErrors.js";
@@ -27,10 +27,6 @@ type Handlers<T extends CharacterBaseCore, U extends CharacterBase<T> = Characte
 	raw: (rawJson: unknown) => T | undefined;
 };
 
-function hasDiscordInName(name?: string): boolean {
-	return /discord/i.test(name ?? "");
-}
-
 export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string, error: FetchResultError, handlers: Handlers<T>): Promise<FetchCoreResult<T>> {
 	const json = await getJson(jsonUrl).catch(() => undefined);
 	if (!json) {
@@ -39,7 +35,7 @@ export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string
 
 	const core = handlers.raw(json);
 	if (core) {
-		if (hasDiscordInName(core.name)) {
+		if (isUnsafeName(core.name)) {
 			return { core, error:"INVALID_NAME" };
 		}
 		return { core, char:handlers.char(core) };
@@ -60,7 +56,7 @@ async function fetchPdfCore<T extends CharacterBaseCore>(pdfUrl: string, default
 
 	const core = handlers.pdf(pdfJson);
 	if (core) {
-		if (hasDiscordInName(core.name)) {
+		if (isUnsafeName(core.name)) {
 			return { core, error:"INVALID_NAME" };
 		}
 		return { core, char:handlers.char(core) };
