@@ -70,8 +70,9 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 		let updated = false;
 		await promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
 			updated = await char.save();
-			if (updated && characterTypeMeta.isGm) {
-				updated = await sageMessage.game!.update({ gmCharacterName:char.name });
+			if (characterTypeMeta.isGm) {
+				const core = sageMessage.game?.toJSON();
+				if (core) core.gmCharacterName = char.name;
 			}
 			return updated;
 		});
