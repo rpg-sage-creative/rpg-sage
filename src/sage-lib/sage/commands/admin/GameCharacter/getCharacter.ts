@@ -23,6 +23,19 @@ export async function getCharacter(sageCommand: SageCommand, characterTypeMeta: 
 		characterManager = characterManager?.findByName(names.charName)?.companions;
 	}
 
-	return characterManager?.findByName(names.oldName ?? names.name)
-		?? characterManager?.findByName(alias);
+	if (names.oldName || names.name) {
+		const byName = characterManager?.findByName(names.oldName ?? names.name);
+		if (byName) return byName;
+
+	}else if (alias) {
+		const byAlias = characterManager?.findByName(alias);
+		if (byAlias) return byAlias;
+
+	}
+
+	if (characterTypeMeta.isPc && !names.count && !alias) {
+		return sageCommand.playerCharacter
+	}
+
+	return undefined;
 }
