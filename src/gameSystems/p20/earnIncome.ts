@@ -257,10 +257,7 @@ export function getEarnIncomeByTaskLevel(selected: Args): RenderableContent {
 	}
 	renderable.appendBlock(
 		`Task Level ${selected.taskLevel}`,
-	);
-	renderable.append(`<b>DC</b>`);
-	renderable.appendBlock(
-		String(taskItem.dc)
+		`DC ${taskItem.dc}`,
 	);
 	renderable.append(`<b>Critical Success</b>`);
 	renderable.appendBlock(
@@ -399,7 +396,8 @@ async function rollEarnIncome(sageInteraction: SageInteraction<ButtonInteraction
 		`<b>24 days</b> ${multiplyIncome(incomePerDay, 24)}`,
 		`<b>36 days</b> ${multiplyIncome(incomePerDay, 36)}`,
 	);
-	await sageInteraction.send(renderable);
+
+	await sageInteraction.replyStack.send({ content:renderable });
 }
 
 export function registerEarnIncome(): void {
