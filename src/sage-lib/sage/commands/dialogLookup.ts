@@ -99,7 +99,7 @@ function getServerName(guild: Optional<Guild>): string {
 
 async function processSageDialog(sageCommand: SageCommand, message: Message): Promise<void> {
 	const discordKey = DiscordKey.from(message);
-	const messageInfo = await DialogMessageRepository.read(discordKey);
+	const messageInfo = await DialogMessageRepository.read(discordKey, { ignoreMissingFile:true });
 	if (!messageInfo) {
 		await whisper(sageCommand, `Sorry, we could't find any RPG Sage Dialog info for that message.`);
 		return;
