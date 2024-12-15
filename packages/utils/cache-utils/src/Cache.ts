@@ -67,10 +67,22 @@ export class Cache {
 
 	/**
 	 * Returns the value for the key.
+	 * If it hasn't been cached yet, undefined is returned instead.
+	 */
+	public get<T>(key: string): T | undefined {
+		const map = this.getOrCreateCache();
+		if (!map.has(key)) {
+			return undefined;
+		}
+		return map.get(key);
+	}
+
+	/**
+	 * Returns the value for the key.
 	 * If it hasn't been cached yet, the function is called to cache and return the value.
 	 * Asynchronous version of get.
 	 */
-	public async fetch<T>(key: string, fn:() => Awaitable<T>): Promise<T> {
+	public async getOrFetch<T>(key: string, fn:() => Awaitable<T>): Promise<T> {
 		const map = this.getOrCreateCache();
 		if (!map.has(key)) {
 			map.set(key, await fn());
@@ -82,7 +94,7 @@ export class Cache {
 	 * Returns the value for the key.
 	 * If it hasn't been cached yet, the function is called to cache and return the value.
 	 */
-	public get<T>(key: string, fn:() => T): T {
+	public getOrSet<T>(key: string, fn:() => T): T {
 		const map = this.getOrCreateCache();
 		if (!map.has(key)) {
 			map.set(key, fn());

@@ -69,14 +69,14 @@ async function canAdminRoleType(sageMessage: SageMessage, action: "add" | "updat
 
 	if (action === "add" && hasRoleType) {
 		switch(roleType) {
-			case AdminRoleType.SageAdmin: canAdminThis = sageMessage.isOwner; break;        // NOSONAR
+			case AdminRoleType.SageAdmin: canAdminThis = await sageMessage.checkCanManageServer(); break; // NOSONAR
 			case AdminRoleType.ServerAdmin: canAdminThis = sageMessage.canAdminSage; break; // NOSONAR
 			case AdminRoleType.GameAdmin: canAdminThis = sageMessage.canAdminServer; break; // NOSONAR
 		}
 	}
 	if (action === "update" && hasRoleType && isDefined(userRoleType)) {
 		if (roleType === AdminRoleType.SageAdmin || userRoleType === AdminRoleType.SageAdmin) {
-			canAdminThis = sageMessage.isOwner;
+			canAdminThis = await sageMessage.checkCanManageServer();
 		}else if (roleType === AdminRoleType.ServerAdmin || userRoleType === AdminRoleType.ServerAdmin) {
 			canAdminThis = sageMessage.canAdminSage;
 		}else if (roleType === AdminRoleType.GameAdmin || userRoleType === AdminRoleType.GameAdmin) {
@@ -85,7 +85,7 @@ async function canAdminRoleType(sageMessage: SageMessage, action: "add" | "updat
 	}
 	if (action === "remove" && isDefined(userRoleType)) {
 		switch(userRoleType) {
-			case AdminRoleType.SageAdmin: canAdminThis = sageMessage.isOwner; break;        // NOSONAR
+			case AdminRoleType.SageAdmin: canAdminThis = await sageMessage.checkCanManageServer(); break; // NOSONAR
 			case AdminRoleType.ServerAdmin: canAdminThis = sageMessage.canAdminSage; break; // NOSONAR
 			case AdminRoleType.GameAdmin: canAdminThis = sageMessage.canAdminServer; break; // NOSONAR
 		}

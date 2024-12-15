@@ -1,9 +1,9 @@
 import { getTupperBoxId } from "@rsc-sage/env";
 import { uncache } from "@rsc-utils/cache-utils";
-import { debug, errorReturnFalse, orNilSnowflake, silly, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { debug, errorReturnFalse, orNilSnowflake, parseUuid, silly, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordKey, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
-import type { Channel, Client, Interaction, Message, MessageReference } from "discord.js";
+import type { Channel, Client, User as DUser, Guild, GuildMember, Interaction, Message, MessageReference } from "discord.js";
 import { DiscordCache } from "../../discord/DiscordCache.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
@@ -13,7 +13,7 @@ import { GameRepo } from "../repo/GameRepo.js";
 import { ServerRepo } from "../repo/ServerRepo.js";
 import { UserRepo } from "../repo/UserRepo.js";
 import type { Bot } from "./Bot.js";
-import type { Game } from "./Game.js";
+import { GameRoleType, type Game } from "./Game.js";
 import type { Server } from "./Server.js";
 import type { User } from "./User.js";
 
@@ -33,6 +33,36 @@ export type TSageCacheCore = {
 	game?: Game;
 	user: User;
 
+	actor?: EnsuredUser;
+	author?: EnsuredUser;
+	_server?: EnsuredServer;
+
+	actorOrPartial?: UserOrPartial;
+	messageOrPartial?: MessageOrPartial;
+	reactionOrPartial?: ReactionOrPartial;
+};
+
+/**
+ * @todo have ensureActor(), ensureGame(), ensureGuild()
+ * Move isGameX to EnsuredGame
+ * Move canManageServer, member to EnsuredGuild
+ */
+
+type EnsuredUser = {
+	canManageServer: boolean;
+	discord?: DUser;
+	id?: Snowflake;
+	isGameMaster: boolean;
+	isGamePlayer: boolean;
+	member?: GuildMember;
+	sage?: User;
+	uuid?: UUID;
+};
+
+type EnsuredServer = {
+	discord?: Guild;
+	id?: Snowflake;
+	sage?: Server;
 };
 
 function createCoreAndCache(): [TSageCacheCore, SageCache] {
@@ -62,6 +92,53 @@ export class SageCache {
 		this.canReactToMap.clear();
 		this.canWebhookToMap.clear();
 		uncache(this.core);
+	}
+
+	public get actor(): EnsuredUser | undefined { return this.core.actor; }
+	public async ensureActor(): Promise<boolean> {
+		if (!this.core.actor) {
+			const { actorOrPartial, messageOrPartial, reactionOrPartial } = this.core;
+			let discord = await actorOrPartial?.fetch();
+			if (!discord && !reactionOrPartial && messageOrPartial) {
+				const message = await messageOrPartial.fetch();
+				discord = message.author;
+			}
+			if (!discord && reactionOrPartial) {
+				const reaction = await reactionOrPartial.fetch();
+				const message = await reaction.message.fetch();
+				discord = message.author;
+			}
+			discord = discord?.partial ? await discord.fetch() : discord;
+			const sage = await this.core.users.getByDid(discord?.id as Snowflake) ?? undefined;
+			const uuid = parseUuid(sage?.id);
+			const guild = await this.ensureGuild() ? this.core._server?.discord : undefined;
+			const member = discord ? await guild?.members.fetch(discord.id) : undefined;
+			const isGameMaster = await this.core.game?.hasUser(discord?.id, GameRoleType.GameMaster) ?? false;
+			const isGamePlayer = await this.core.game?.hasUser(discord?.id, GameRoleType.Player) ?? false;
+			const canManageServer = guild
+				? guild.ownerId === discord?.id || member?.permissions.has("Administrator") === true || member?.permissions.has("ManageGuild") === true
+				: false;
+			this.core.actor = {
+				canManageServer,
+				discord,
+				id: discord?.id as Snowflake,
+				isGameMaster,
+				isGamePlayer,
+				member,
+				sage,
+				uuid,
+			};
+		}
+		return !!this.core.actor.id;
+	}
+	public async ensureGuild(): Promise<boolean> {
+		if (!this.core._server) {
+			const sage = this.core.server;
+			const id = sage?.did;
+			const discord = await this.discord.fetchGuild(sage?.did);
+			this.core._server = { discord, id, sage };
+		}
+		return !!this.core._server.discord;
 	}
 
 	private canSendMessageToMap = new Map<string, boolean>();
@@ -251,12 +328,13 @@ export class SageCache {
 	// 	core.user = await core.users.getOrCreateByDid(guildMember.id as Snowflake);
 	// 	return sageCache;
 	// }
-	public static async fromMessage(message: MessageOrPartial, userDid = message.author?.id): Promise<SageCache> {
+	public static async fromMessage(message: Message): Promise<SageCache> {
 		const [core, sageCache] = createCoreAndCache();
+		core.bot = ActiveBot.active;
 		core.discord = DiscordCache.from(message);
 		core.discordKey = DiscordKey.from(message);
-		core.bot = ActiveBot.active;
 		core.home = await core.servers.getHome();
+		core.messageOrPartial = message;
 		if (message.guild) {
 			core.server = await core.servers.getOrCreateByGuild(message.guild);
 			// check to see if we have a server-wide game
@@ -271,17 +349,44 @@ export class SageCache {
 				core.game = await core.games.findActive(message);
 			}
 		}
-		core.user = await core.users.getOrCreateByDid(orNilSnowflake(userDid));
+		core.user = await core.users.getOrCreateByDid(orNilSnowflake(message.author?.id));
+		await sageCache.ensureActor();
 		return sageCache;
 	}
 	public static async fromMessageReaction(messageReaction: ReactionOrPartial, user: UserOrPartial): Promise<SageCache> {
-		return SageCache.fromMessage(messageReaction.message, user.id);
+		const { message } = messageReaction;
+		const [core, sageCache] = createCoreAndCache();
+		core.bot = ActiveBot.active;
+		core.discord = DiscordCache.from(message);
+		core.discordKey = DiscordKey.from(message);
+		core.home = await core.servers.getHome();
+		core.messageOrPartial = message;
+		if (message.guild) {
+			core.server = await core.servers.getOrCreateByGuild(message.guild);
+			// check to see if we have a server-wide game
+			if (core.server.gameId) {
+				const game = await core.games.getById(core.server.gameId as Snowflake);
+				if (game && !game.isArchived) {
+					core.game = game;
+				}
+			}
+			// fall back to the active game for the channel
+			if (!core.game) {
+				core.game = await core.games.findActive(message);
+			}
+		}
+		core.user = await core.users.getOrCreateByDid(orNilSnowflake(user.id));
+
+		sageCache.core.actorOrPartial;
+		sageCache.core.reactionOrPartial = messageReaction;
+		return sageCache;
 	}
 	public static async fromInteraction(interaction: DInteraction): Promise<SageCache> {
 		const [core, sageCache] = createCoreAndCache();
+		core.actorOrPartial = interaction.user;
+		core.bot = ActiveBot.active;
 		core.discord = DiscordCache.from(interaction);
 		core.discordKey = DiscordKey.from(interaction as Interaction);
-		core.bot = ActiveBot.active;
 		core.home = await core.servers.getHome();
 		if (interaction.guild) {
 			core.server = await core.servers.getOrCreateByGuild(interaction.guild);

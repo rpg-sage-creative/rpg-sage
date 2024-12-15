@@ -243,12 +243,12 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
-		return this.cache.get("channel", () => this.gameChannel ?? this.serverChannel);
+		return this.cache.getOrSet("channel", () => this.gameChannel ?? this.serverChannel);
 	}
 
 	/** Returns the channelDid this message (or its thread) is in. */
 	public get channelDid(): Snowflake | undefined {
-		return this.cache.get("channelDid", () => {
+		return this.cache.getOrSet("channelDid", () => {
 			if (this.interaction.channel?.isThread()) {
 				return this.interaction.channel.parentId as Snowflake ?? undefined;
 			}
@@ -258,17 +258,17 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Returns the gameChannel meta for the message, checking the thread before checking its channel. */
 	public get gameChannel(): IChannel | undefined {
-		return this.cache.get("gameChannel", () => this.game?.getChannel(this.discordKey));
+		return this.cache.getOrSet("gameChannel", () => this.game?.getChannel(this.discordKey));
 	}
 
 	/** Returns the serverChannel meta for the message, checking the thread before checking its channel. */
 	public get serverChannel(): IChannel | undefined {
-		return this.cache.get("serverChannel", () => this.server?.getChannel(this.discordKey));
+		return this.cache.getOrSet("serverChannel", () => this.server?.getChannel(this.discordKey));
 	}
 
 	/** Returns the threadDid this message is in. */
 	public get threadDid(): Snowflake | undefined {
-		return this.cache.get("threadDid", () => {
+		return this.cache.getOrSet("threadDid", () => {
 			if (this.interaction.channel?.isThread()) {
 				return this.interaction.channelId as Snowflake ?? undefined;
 			}
@@ -278,7 +278,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Returns either the message's threadDid or channelDid if there is no thread. */
 	public get threadOrChannelDid(): Snowflake {
-		return this.cache.get("channelDid", () => this.threadDid ?? this.channelDid ?? this.interaction.channelId as Snowflake);
+		return this.cache.getOrSet("channelDid", () => this.threadDid ?? this.channelDid ?? this.interaction.channelId as Snowflake);
 	}
 
 	// #endregion
@@ -287,7 +287,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
 	public get playerCharacter(): GameCharacter | undefined {
-		return this.cache.get("playerCharacter", () => {
+		return this.cache.getOrSet("playerCharacter", () => {
 			const channelDid = this.channel?.id as Snowflake;
 			const userDid = this.sageUser.did;
 			const autoChannelData = { channelDid, userDid };

@@ -178,12 +178,12 @@ export abstract class SageCommand<
 
 	/** Author of the message */
 	public get authorDid(): Snowflake {
-		return this.cache.get("authorDid", () => orNilSnowflake(this.sageCache.user.did));
+		return this.cache.getOrSet("authorDid", () => orNilSnowflake(this.sageCache.user.did));
 	}
 
-	/** Is the author the owner of the message's server */
+	/** @deprecated Is the author the owner of the message's server */
 	public get isOwner(): boolean {
-		return this.cache.get("isOwner", () => {
+		return this.cache.getOrSet("isOwner", () => {
 			if (this.isSageInteraction()) {
 				return this.interaction.guild?.ownerId === this.authorDid;
 			}else if (this.isSageMessage() || this.isSageReaction()) {
@@ -193,19 +193,33 @@ export abstract class SageCommand<
 		});
 	}
 
+	public get canManageServer(): boolean {
+		return this.cache.get("canManageServer") ?? this.isOwner;
+	}
+
+	/** Returns true if the acting user is the server owner, a server administrator, or has the manage server permission. */
+	public checkCanManageServer(): Promise<boolean> {
+		return this.cache.getOrFetch("canManageServer", async () => {
+			if (await this.sageCache.ensureActor()) {
+				return this.sageCache.actor?.canManageServer ?? false;
+			}
+			return false;
+		});
+	}
+
 	/** Can admin Sage settings, Server channels, Games, and Game channels */
 	public get isSageAdmin(): boolean {
-		return this.cache.get("isSageAdmin", () => (this.authorDid && this.server?.hasSageAdmin(this.authorDid)) === true);
+		return this.cache.getOrSet("isSageAdmin", () => (this.authorDid && this.server?.hasSageAdmin(this.authorDid)) === true);
 	}
 
 	/** Can admin Server channels and Game channels */
 	public get isServerAdmin(): boolean {
-		return this.cache.get("isServerAdmin", () => (this.authorDid && this.server?.hasServerAdmin(this.authorDid)) === true);
+		return this.cache.getOrSet("isServerAdmin", () => (this.authorDid && this.server?.hasServerAdmin(this.authorDid)) === true);
 	}
 
 	/** Can admin Games and Game channels */
 	public get isGameAdmin(): boolean {
-		return this.cache.get("isGameAdmin", () => (this.authorDid && this.server?.hasGameAdmin(this.authorDid)) === true);
+		return this.cache.getOrSet("isGameAdmin", () => (this.authorDid && this.server?.hasGameAdmin(this.authorDid)) === true);
 	}
 
 	// #endregion
@@ -214,22 +228,22 @@ export abstract class SageCommand<
 
 	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
 	public get canAdminSage(): boolean {
-		return this.cache.get("canAdminSage", () => !!this.server && (this.isSuperUser || this.isOwner || this.isSageAdmin));
+		return this.cache.getOrSet("canAdminSage", () => !!this.server && (this.isSuperUser || this.canManageServer || this.isSageAdmin));
 	}
 
 	/** Quick flag for Server admins (canAdminSage || isServerAdmin) */
 	public get canAdminServer(): boolean {
-		return this.cache.get("canAdminServer", () => this.canAdminSage || (!!this.server && this.isServerAdmin));
+		return this.cache.getOrSet("canAdminServer", () => this.canAdminSage || (!!this.server && this.isServerAdmin));
 	}
 
 	/** Quick flag for Game admins (canAdminServer || isGameAdmin) */
 	public get canAdminGames(): boolean {
-		return this.cache.get("canAdminGames", () => this.canAdminServer || this.isGameAdmin);
+		return this.cache.getOrSet("canAdminGames", () => this.canAdminServer || this.isGameAdmin);
 	}
 
 	/** Quick flag for "this" Game (game && (canAdminGames || isGameMaster)) */
 	public get canAdminGame(): boolean {
-		return this.cache.get("canAdminGame", () => !!this.game && (this.canAdminGames || this.isGameMaster));
+		return this.cache.getOrSet("canAdminGame", () => !!this.game && (this.canAdminGames || this.isGameMaster));
 	}
 
 	// #endregion
@@ -242,7 +256,7 @@ export abstract class SageCommand<
 	}
 
 	public get allowCommand(): boolean {
-		return this.cache.get("allowCommand", () => {
+		return this.cache.getOrSet("allowCommand", () => {
 			const channel = this.channel;
 			// allow all in unconfigured channels
 			if (!channel) {
@@ -269,11 +283,11 @@ export abstract class SageCommand<
 	}
 
 	public get allowDialog(): boolean {
-		return this.cache.get("allowDialog", () => !this.channel || ![SageChannelType.None,SageChannelType.Dice].includes(this.channel.type!));
+		return this.cache.getOrSet("allowDialog", () => !this.channel || ![SageChannelType.None,SageChannelType.Dice].includes(this.channel.type!));
 	}
 
 	public get allowDice(): boolean {
-		return this.cache.get("allowDice", () => !this.channel || this.channel.type !== SageChannelType.None);
+		return this.cache.getOrSet("allowDice", () => !this.channel || this.channel.type !== SageChannelType.None);
 	}
 
 	/** @deprecated Use .allowCommand */
@@ -282,7 +296,7 @@ export abstract class SageCommand<
 	}
 
 	public get dialogPostType(): DialogPostType {
-		return this.cache.get("dialogPostType", () => this.sageUser.dialogPostType ?? this.gameChannel?.dialogPostType ?? this.game?.dialogPostType ?? this.serverChannel?.dialogPostType ?? this.server?.dialogPostType ?? 0);
+		return this.cache.getOrSet("dialogPostType", () => this.sageUser.dialogPostType ?? this.gameChannel?.dialogPostType ?? this.game?.dialogPostType ?? this.serverChannel?.dialogPostType ?? this.server?.dialogPostType ?? 0);
 	}
 
 	// #endregion
@@ -297,7 +311,7 @@ export abstract class SageCommand<
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
-		return this.cache.get("channel", () => {
+		return this.cache.getOrSet("channel", () => {
 			debug(`caching sageCommand.channel ${this.discordKey.channelId}`);
 			return this.gameChannel ?? this.serverChannel;
 		});
@@ -305,12 +319,12 @@ export abstract class SageCommand<
 
 	/** Returns the gameChannel meta for the message, checking the thread before checking its channel. */
 	public get gameChannel(): IChannel | undefined {
-		return this.cache.get("gameChannel", () => this.game?.getChannel(this.discordKey));
+		return this.cache.getOrSet("gameChannel", () => this.game?.getChannel(this.discordKey));
 	}
 
 	/** Returns the serverChannel meta for the message, checking the thread before checking its channel. */
 	public get serverChannel(): IChannel | undefined {
-		return this.cache.get("serverChannel", () => this.server?.getChannel(this.discordKey));
+		return this.cache.getOrSet("serverChannel", () => this.server?.getChannel(this.discordKey));
 	}
 
 	/** Returns the channelDid this message (or its thread) is in. */
@@ -327,7 +341,7 @@ export abstract class SageCommand<
 	 * 3. Non-Game PC for user with auto dialog in this channel
 	 */
 	public get playerCharacter(): GameCharacter | undefined {
-		return this.cache.get("playerCharacter", () => {
+		return this.cache.getOrSet("playerCharacter", () => {
 			const channelDid = this.channel?.id as Snowflake;
 			const userDid = this.sageUser.did;
 			const autoChannelData = { channelDid, userDid };
@@ -338,7 +352,7 @@ export abstract class SageCommand<
 	}
 
 	public get gmCharacter(): GameCharacter {
-		return this.cache.get("gmCharacter", () =>
+		return this.cache.getOrSet("gmCharacter", () =>
 			this.game?.gmCharacter ?? this.server.gmCharacter
 		);
 	}
@@ -413,11 +427,11 @@ export abstract class SageCommand<
 	//#region dice settings
 
 	public get gameSystemType(): GameSystemType {
-		return this.cache.get("gameType", () => this.game?.gameSystemType ?? this.serverChannel?.gameSystemType ?? this.server?.gameSystemType ?? 0);
+		return this.cache.getOrSet("gameType", () => this.game?.gameSystemType ?? this.serverChannel?.gameSystemType ?? this.server?.gameSystemType ?? 0);
 	}
 
 	public get diceCritMethodType(): DiceCritMethodType {
-		return this.cache.get("diceCritMethodType", () => {
+		return this.cache.getOrSet("diceCritMethodType", () => {
 			const diceCritMethodType = this.gameChannel?.diceCritMethodType
 				?? this.game?.diceCritMethodType
 				?? this.serverChannel?.diceCritMethodType
@@ -431,19 +445,19 @@ export abstract class SageCommand<
 	}
 
 	public get dicePostType(): DicePostType {
-		return this.cache.get("dicePostType", () => this.gameChannel?.dicePostType ?? this.game?.dicePostType ?? this.serverChannel?.dicePostType ?? this.server?.dicePostType ?? 0);
+		return this.cache.getOrSet("dicePostType", () => this.gameChannel?.dicePostType ?? this.game?.dicePostType ?? this.serverChannel?.dicePostType ?? this.server?.dicePostType ?? 0);
 	}
 
 	public get diceOutputType(): DiceOutputType {
-		return this.cache.get("diceOutputType", () => this.gameChannel?.diceOutputType ?? this.game?.diceOutputType ?? this.serverChannel?.diceOutputType ?? this.server?.diceOutputType ?? 0);
+		return this.cache.getOrSet("diceOutputType", () => this.gameChannel?.diceOutputType ?? this.game?.diceOutputType ?? this.serverChannel?.diceOutputType ?? this.server?.diceOutputType ?? 0);
 	}
 
 	public get diceSecretMethodType(): DiceSecretMethodType {
-		return this.cache.get("diceSecretMethodType", () => this.gameChannel?.diceSecretMethodType ?? this.game?.diceSecretMethodType ?? this.serverChannel?.diceSecretMethodType ?? this.server?.diceSecretMethodType ?? 0);
+		return this.cache.getOrSet("diceSecretMethodType", () => this.gameChannel?.diceSecretMethodType ?? this.game?.diceSecretMethodType ?? this.serverChannel?.diceSecretMethodType ?? this.server?.diceSecretMethodType ?? 0);
 	}
 
 	public get diceSortType(): DiceSortType {
-		return this.cache.get("diceSortType", () => this.gameChannel?.diceSortType ?? this.game?.diceSortType ?? this.serverChannel?.diceSortType ?? this.server?.diceSortType ?? 0);
+		return this.cache.getOrSet("diceSortType", () => this.gameChannel?.diceSortType ?? this.game?.diceSortType ?? this.serverChannel?.diceSortType ?? this.server?.diceSortType ?? 0);
 	}
 
 	//#endregion
