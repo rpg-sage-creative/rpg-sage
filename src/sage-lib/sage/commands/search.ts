@@ -22,10 +22,10 @@ async function invalidGame(sageMessage: SageMessage): Promise<void> {
 	const unableSearchResults = new RenderableContent(`<b>Cannot Perform Search</b>`);
 	unableSearchResults.append(`Currently, we can only search Pathfinder or Starfinder content. Please set your channel, game, or server to Pathfinder or Starfinder if you would like to enable searching for content.`);
 	unableSearchResults.append(`<br/>Example:`);
-	unableSearchResults.append(`<code>sage! channel update gameType="PF2E"</code>`);
-	unableSearchResults.append(`<code>sage! game update gameType="PF2E"</code>`);
-	unableSearchResults.append(`<code>sage! server update gameType="PF2E"</code>`);
-	unableSearchResults.append(`<br/>Acceptable gameType values are:<ul><li>"PF" (Pathfinder)</li><li>"PF2E" (Pathfinder 2e)</li><li>"SF" (Starfinder)</li></ul>`);
+	unableSearchResults.append(`<code>sage! channel update gameSystem="PF2E"</code>`);
+	unableSearchResults.append(`<code>sage! game update gameSystem="PF2E"</code>`);
+	unableSearchResults.append(`<code>sage! server update gameSystem="PF2E"</code>`);
+	unableSearchResults.append(`<br/>Acceptable gameSystem values are:<ul><li>"PF" (Pathfinder)</li><li>"PF2E" (Pathfinder 2e)</li><li>"SF" (Starfinder)</li></ul>`);
 	unableSearchResults.append(`<br/>For more information, see <https://rpgsage.io>`);
 	await send(sageMessage.caches, sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();

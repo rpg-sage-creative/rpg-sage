@@ -194,7 +194,16 @@ export abstract class SageCommand<
 	}
 
 	public get canManageServer(): boolean {
-		return this.cache.get("canManageServer") ?? this.isOwner;
+		// check that it is cached
+		if (this.cache.get("canManageServer")) return true;
+		// if we have an actor, we can cache the results
+		if (this.sageCache.actor) {
+			return this.cache.getOrSet("canManageServer", () => {
+				return this.sageCache.actor!.canManageServer;
+			});
+		}
+		// revert to isOwner
+		return this.isOwner;
 	}
 
 	/** Returns true if the acting user is the server owner, a server administrator, or has the manage server permission. */

@@ -1,7 +1,7 @@
 import { getTupperBoxId } from "@rsc-sage/env";
 import { uncache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnFalse, orNilSnowflake, parseUuid, silly, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordKey, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordKey, fetchIfPartial, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Channel, Client, User as DUser, Guild, GuildMember, Interaction, Message, MessageReference } from "discord.js";
 import { DiscordCache } from "../../discord/DiscordCache.js";
@@ -98,23 +98,24 @@ export class SageCache {
 	public async ensureActor(): Promise<boolean> {
 		if (!this.core.actor) {
 			const { actorOrPartial, messageOrPartial, reactionOrPartial } = this.core;
-			let discord = await actorOrPartial?.fetch();
+			let discord = await fetchIfPartial(actorOrPartial);
 			if (!discord && !reactionOrPartial && messageOrPartial) {
-				const message = await messageOrPartial.fetch();
+				const message = await fetchIfPartial(messageOrPartial);
 				discord = message.author;
 			}
 			if (!discord && reactionOrPartial) {
-				const reaction = await reactionOrPartial.fetch();
-				const message = await reaction.message.fetch();
+				const reaction = await fetchIfPartial(reactionOrPartial);
+				const message = await fetchIfPartial(reaction.message);
 				discord = message.author;
 			}
-			discord = discord?.partial ? await discord.fetch() : discord;
+			discord = await fetchIfPartial(discord);
 			const sage = await this.core.users.getByDid(discord?.id as Snowflake) ?? undefined;
 			const uuid = parseUuid(sage?.id);
 			const guild = await this.ensureGuild() ? this.core._server?.discord : undefined;
 			const member = discord ? await guild?.members.fetch(discord.id) : undefined;
-			const isGameMaster = await this.core.game?.hasUser(discord?.id, GameRoleType.GameMaster) ?? false;
-			const isGamePlayer = await this.core.game?.hasUser(discord?.id, GameRoleType.Player) ?? false;
+			// NOTE: hasUser checks users and roles so is preferred
+			const isGameMaster = discord ? await this.core.game?.hasUser(discord?.id, GameRoleType.GameMaster) ?? false : false;
+			const isGamePlayer = discord ? await this.core.game?.hasUser(discord?.id, GameRoleType.Player) ?? false : false;
 			const canManageServer = guild
 				? guild.ownerId === discord?.id || member?.permissions.has("Administrator") === true || member?.permissions.has("ManageGuild") === true
 				: false;
@@ -135,7 +136,7 @@ export class SageCache {
 		if (!this.core._server) {
 			const sage = this.core.server;
 			const id = sage?.did;
-			const discord = await this.discord.fetchGuild(sage?.did);
+			const discord = id ? await this.discord.fetchGuild(id) : undefined;
 			this.core._server = { discord, id, sage };
 		}
 		return !!this.core._server.discord;
