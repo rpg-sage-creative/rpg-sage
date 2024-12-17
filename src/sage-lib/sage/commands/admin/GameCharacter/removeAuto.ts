@@ -1,10 +1,15 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
-import type { SageMessage } from "../../../model/SageMessage.js";
+import type { SageCommand } from "../../../model/SageCommand.js";
 
-export async function removeAuto(sageMessage: SageMessage, ...channelDids: Snowflake[]): Promise<void> {
-	const { game, sageUser } = sageMessage;
-	const userDid = sageUser.did;
-	for (const channelDid of channelDids) {
+type Options = {
+	userId: Snowflake;
+	channelIds: Snowflake[];
+};
+
+export async function removeAuto(sageCommand: SageCommand, options: Options): Promise<void> {
+	const { game, sageUser } = sageCommand;
+	const userDid = options.userId;
+	for (const channelDid of options.channelIds) {
 		const gameChar = game?.getAutoCharacterForChannel(userDid, channelDid);
 		if (gameChar) {
 			await gameChar.removeAutoChannel({ channelDid, userDid }, false);

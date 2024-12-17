@@ -618,10 +618,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		return this.getUser(userResolvable)?.type === GameUserType.Player;
 	}
 
-	/** Returns true if the game has the given User. */
-	public async hasUser(userResolvable: Optional<CanBeUserIdResolvable>): Promise<boolean>;
 	/** Returns true if the game has the given User for the given RoleType. */
-	public async hasUser(userResolvable: Optional<CanBeUserIdResolvable>, roleType: GameRoleType): Promise<boolean>;
 	public async hasUser(userResolvable: Optional<CanBeUserIdResolvable>, roleType?: GameRoleType): Promise<boolean> {
 		const userId = resolveUserId(userResolvable);
 		if (!userId) {
