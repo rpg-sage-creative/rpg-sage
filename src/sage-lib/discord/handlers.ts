@@ -291,10 +291,10 @@ function isEditWeCanIgnore(message: MessageOrPartial, originalMessage: Optional<
 
 /** Discord has a lot of message types. We only want to respond to default messages and replies. */
 function isMessageWeCanIgnore(message: MessageOrPartial, _originalMessage: Optional<MessageOrPartial>): boolean {
-	const { author, deletable, id, system, type, webhookId } = message;
+	const { author, id, system, type, webhookId } = message;
 	return system || !!webhookId
 		|| author?.bot || author?.system
-		|| deletable === false || isDeleted(id as Snowflake)
+		|| isDeleted(id as Snowflake)
 		|| (type !== null ? ![DMessageType.Default, DMessageType.Reply].includes(type) : false);
 }
 
