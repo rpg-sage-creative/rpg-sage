@@ -1,7 +1,7 @@
 import { SageChannelType } from "@rsc-sage/types";
 import { Cache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnNull, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, DiscordKey, fetchIfPartial, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial } from "@rsc-utils/discord-utils";
+import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Message, User } from "discord.js";
 import XRegExp from "xregexp";
@@ -45,8 +45,7 @@ export class SageMessage
 		return this.commandAndArgs?.command?.toLowerCase().split("|") ?? [];
 	}
 
-	public static async fromMessage(message: MessageOrPartial): Promise<SageMessage> {
-		message = await fetchIfPartial(message);
+	public static async fromMessage(message: Message): Promise<SageMessage> {
 		const sageCache = await SageCache.fromMessage(message);
 		const prefixOrDefault = sageCache.getPrefixOrDefault();
 		const regexOr = prefixOrDefault ? XRegExp.escape(prefixOrDefault) : `sage`;

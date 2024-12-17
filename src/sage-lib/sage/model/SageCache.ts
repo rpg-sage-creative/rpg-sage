@@ -113,12 +113,12 @@ export class SageCache {
 			let discord = await fetchIfPartial(userOrPartial);
 			if (!discord && !reactionOrPartial && messageOrPartial) {
 				const message = await fetchIfPartial(messageOrPartial);
-				discord = message.author;
+				discord = message?.author;
 			}
 			if (!discord && reactionOrPartial) {
 				const reaction = await fetchIfPartial(reactionOrPartial);
-				const message = await fetchIfPartial(reaction.message);
-				discord = message.author;
+				const message = await fetchIfPartial(reaction?.message);
+				discord = message?.author;
 			}
 			discord = await fetchIfPartial(discord);
 

@@ -1,7 +1,7 @@
 import { hasSageId } from "@rsc-sage/env";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { error, isNullOrUndefined, verbose, warn } from "@rsc-utils/core-utils";
-import { toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { fetchIfPartial, toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
@@ -304,8 +304,9 @@ export async function handleMessage(message: MessageOrPartial, originalMessage: 
 	try {
 		const canIgnore = isMessageWeCanIgnore(message, originalMessage)
 			|| isEditWeCanIgnore(message, originalMessage);
-		if (!canIgnore) {
-			const sageMessage = await SageMessage.fromMessage(message);
+		const fetchedMessage = canIgnore ? undefined : await fetchIfPartial(message);
+		if (!canIgnore && fetchedMessage) {
+			const sageMessage = await SageMessage.fromMessage(fetchedMessage);
 			await handleMessages(sageMessage, messageType, output);
 			sageMessage.clear();
 		}
