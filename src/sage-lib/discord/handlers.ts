@@ -1,11 +1,12 @@
 import { hasSageId } from "@rsc-sage/env";
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { error, isNullOrUndefined, verbose, warn } from "@rsc-utils/core-utils";
 import { toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
 import { SageReaction } from "../sage/model/SageReaction.js";
+import { isDeleted } from "./deletedMessages.js";
 import { MessageType, ReactionType } from "./enums.js";
 import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types.js";
 
@@ -290,17 +291,20 @@ function isEditWeCanIgnore(message: MessageOrPartial, originalMessage: Optional<
 
 /** Discord has a lot of message types. We only want to respond to default messages and replies. */
 function isMessageWeCanIgnore(message: MessageOrPartial, _originalMessage: Optional<MessageOrPartial>): boolean {
-	return message.type !== DMessageType.Default
-		&& message.type !== DMessageType.Reply;
+	const { author, deletable, id, system, type, webhookId } = message;
+	return system || !!webhookId
+		|| author?.bot || author?.system
+		|| deletable === false || isDeleted(id as Snowflake)
+		|| (type !== null ? ![DMessageType.Default, DMessageType.Reply].includes(type) : false);
 }
 
 export async function handleMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>, messageType: MessageType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
+
 	try {
-		const isBot = message.author?.bot;
-		const isWebhook = !!message.webhookId;
-		const canIgnore = isMessageWeCanIgnore(message, originalMessage) || isEditWeCanIgnore(message, originalMessage);
-		if (!isBot && !isWebhook && !canIgnore) {
+		const canIgnore = isMessageWeCanIgnore(message, originalMessage)
+			|| isEditWeCanIgnore(message, originalMessage);
+		if (!canIgnore) {
 			const sageMessage = await SageMessage.fromMessage(message);
 			await handleMessages(sageMessage, messageType, output);
 			sageMessage.clear();
