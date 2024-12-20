@@ -4,6 +4,7 @@ import { debug, errorReturnFalse, orNilSnowflake, silly, type Optional, type Sno
 import { canSendMessageTo, DiscordKey, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Channel, Client, Interaction, Message, MessageReference } from "discord.js";
+import { getLocalizedText, type LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
 import { DiscordCache } from "../../discord/DiscordCache.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
@@ -206,11 +207,18 @@ export class SageCache {
 		}
 		return this.bot.emojify(text);
 	}
+
 	public format(text: string): string {
 		return toMarkdown(this.emojify(text));
 	}
+
 	public getPrefixOrDefault(): string {
 		return this.server?.getPrefixOrDefault() ?? "";
+	}
+
+	public getLocalizer() {
+		const lang = this.user.preferredLang ?? "en-US";
+		return (key: LocalizedTextKey, ...args: string[]) => getLocalizedText(key, lang, ...args);
 	}
 
 	public async fetchChannel<T extends Channel = Channel>(channelId: Optional<Snowflake>): Promise<T | undefined> {
