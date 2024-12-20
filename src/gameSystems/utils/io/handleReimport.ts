@@ -1,6 +1,6 @@
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
 import { error } from "@rsc-utils/core-utils";
-import { isUnsafeName } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import { type FetchResult } from "./fetchCores.js";
@@ -21,8 +21,9 @@ export async function handleReimport
 	await sageCommand.replyStack.startThinking();
 
 	const newName = sageCommand.args.getString("name") ?? undefined;
-	if (isUnsafeName(newName)) {
-		return handleImportErrors(sageCommand, [{ error:"INVALID_NAME" }], "Reimport");
+	const invalidName = isInvalidWebhookUsername(newName);
+	if (invalidName) {
+		return handleImportErrors(sageCommand, [{ error:"INVALID_NAME", invalidName }], "Reimport");
 	}
 
 	// look for old character

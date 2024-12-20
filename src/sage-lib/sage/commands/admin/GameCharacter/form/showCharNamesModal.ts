@@ -1,3 +1,4 @@
+import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
@@ -7,7 +8,6 @@ import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
 import { showCharForm } from "./showCharForm.js";
 import type { CustomIdParts } from "./types.js";
-import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 
 export type CharNamesForm = {
 	name: string;
@@ -17,16 +17,17 @@ export type CharNamesForm = {
 };
 
 export function showCharNamesModal(sageInteraction: SageInteraction, char: GameCharacter): Promise<void> {
+	const { maxLength } = DiscordMaxValues.webhook.username;
 	const modal = createCharModal({
 		userId: sageInteraction.authorDid,
 		charId: char.isCompanionOrMinion ? char.parentId ?? NIL_SNOWFLAKE : char.id,
 		compId: char.isCompanionOrMinion ? char.id : NIL_SNOWFLAKE,
 		action: "SubmitNames",
 		fields: [
-			["name", "Character Name", char.name, DiscordMaxValues.usernameLength, true],
-			["aka", "Character Nickname (aka)", char.aka ?? "", DiscordMaxValues.usernameLength],
-			["alias", "Character Alias (used for RPG Sage commands)", char.alias ?? "", DiscordMaxValues.usernameLength],
-			["displayNameTemplate", "Display Name Template", char.displayNameTemplate ?? "", DiscordMaxValues.usernameLength]
+			["name", "Character Name", char.name, maxLength, true],
+			["aka", "Character Nickname (aka)", char.aka ?? "", maxLength],
+			["alias", "Character Alias (used for RPG Sage commands)", char.alias ?? "", maxLength],
+			["displayNameTemplate", "Display Name Template", char.displayNameTemplate ?? "", maxLength]
 		]
 	});
 	return sageInteraction.interaction.showModal(modal);

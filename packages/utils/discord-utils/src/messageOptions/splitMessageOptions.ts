@@ -128,7 +128,7 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 	if ("username" in baseOptions) {
 		const { username } = baseOptions;
 		if (typeof(username) === "string") {
-			if (username.length > DiscordMaxValues.usernameLength) {
+			if (username.length > DiscordMaxValues.webhook.username.maxLength) {
 				baseOptions.username = username.slice(0, 79) + ELLIPSIS;
 			}
 		}

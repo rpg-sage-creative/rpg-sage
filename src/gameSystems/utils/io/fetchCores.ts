@@ -1,8 +1,8 @@
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
-import { isUnsafeName, parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername, parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import { getJson, PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
-import type { FetchResultError } from "./handleImportErrors.js";
+import type { DiscordPolicyNameError, FetchResultError } from "./handleImportErrors.js";
 
 type FetchCoreResult<T extends CharacterBaseCore, U extends CharacterBase<T> = CharacterBase<T>> = {
 	char: U;
@@ -15,7 +15,8 @@ type FetchCoreResult<T extends CharacterBaseCore, U extends CharacterBase<T> = C
 } | {
 	char?: never;
 	core: T;
-	error: "INVALID_NAME";
+	error: DiscordPolicyNameError;
+	invalidName: string | true;
 };
 
 type Handlers<T extends CharacterBaseCore, U extends CharacterBase<T> = CharacterBase<T>> = {
@@ -35,8 +36,9 @@ export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string
 
 	const core = handlers.raw(json);
 	if (core) {
-		if (isUnsafeName(core.name)) {
-			return { core, error:"INVALID_NAME" };
+		const invalidName = isInvalidWebhookUsername(core.name);
+		if (invalidName) {
+			return { core, error:"INVALID_NAME", invalidName };
 		}
 		return { core, char:handlers.char(core) };
 	}
@@ -56,8 +58,9 @@ async function fetchPdfCore<T extends CharacterBaseCore>(pdfUrl: string, default
 
 	const core = handlers.pdf(pdfJson);
 	if (core) {
-		if (isUnsafeName(core.name)) {
-			return { core, error:"INVALID_NAME" };
+		const invalidName = isInvalidWebhookUsername(core.name);
+		if (invalidName) {
+			return { core, error:"INVALID_NAME", invalidName };
 		}
 		return { core, char:handlers.char(core) };
 	}

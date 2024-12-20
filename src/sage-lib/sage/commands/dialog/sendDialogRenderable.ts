@@ -1,7 +1,8 @@
 import { errorReturnEmptyArray } from "@rsc-utils/core-utils";
-import { isUnsafeName } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Message } from "discord.js";
+import { getLocalizedText } from "../../../../sage-lang/getLocalizedText.js";
 import { replaceWebhook, sendWebhook, type AuthorOptions } from "../../../discord/messages.js";
 import type { AttachmentResolvable } from "../../../discord/sendTo.js";
 import type { SageMessage } from "../../model/SageMessage.js";
@@ -20,9 +21,15 @@ type DialogRenderableOptions = {
  * @todo sort out why i am casting caches to <any>
  */
 export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, renderableContent, sageMessage, skipDelete }: DialogRenderableOptions): Promise<Message[]> {
-	if (isUnsafeName(authorOptions.username)) {
-		await sageMessage.message.reply({ content:`Due to Discord policy, you cannot have a username with "discord" in the name!` });
-		return [];
+	if (authorOptions.username) {
+		const invalidName = isInvalidWebhookUsername(authorOptions.username);
+		if (invalidName) {
+			const content = invalidName === true
+				? getLocalizedText("USERNAME_TOO_LONG", "en-US")
+				: getLocalizedText("USERNAME_BANNED", "en-US", invalidName)
+			await sageMessage.message.reply({ content });
+			return [];
+		}
 	}
 
 	const sageCache = sageMessage.caches;

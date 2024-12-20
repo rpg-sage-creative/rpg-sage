@@ -1,4 +1,5 @@
-import { isUnsafeName } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
+import { getLocalizedText } from "../../../../../sage-lang/getLocalizedText.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { getCharacter } from "./getCharacter.js";
@@ -49,8 +50,12 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 	if (character) {
 		if (core) {
 			await character.update(core, false);
-			if (isUnsafeName(core.name)) {
-				return sageMessage.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+			const invalidName = isInvalidWebhookUsername(core.name);
+			if (invalidName) {
+				const content = invalidName === true
+					? getLocalizedText("USERNAME_TOO_LONG", "en-US")
+					: getLocalizedText("USERNAME_BANNED", "en-US", invalidName)
+				return sageMessage.replyStack.whisper(content);
 			}
 		}
 
