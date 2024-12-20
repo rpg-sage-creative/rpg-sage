@@ -1,8 +1,8 @@
 import { stringFormat } from "@rsc-utils/string-utils";
 
-const enUS = {
-	"DISCORD_POLICY": `(Discord Policy)`,
+const DISCORD_POLICY = `[(Discord Policy)](<https://discord.com/developers/docs/resources/user>)`;
 
+const enUS = {
 	"CREATE": "Create",
 	"UPDATE": "Update",
 	"IMPORT": "Import",
@@ -20,6 +20,7 @@ const enUS = {
 	"AT_LEAST_ONE_OCCURRED": `Sorry, at least one of the following occurred:`,
 
 	"NPC_ONLY_IN_GAME": `Sorry, NPCs only exist inside a Game.`,
+	"DIALOG_NOT_IN_DMS": `Sorry, Dialog does not function in DMs.`,
 
 	"CANNOT_CREATE_CHARACTERS_HERE": `Sorry, you cannot create characters here.`,
 
@@ -44,9 +45,9 @@ const enUS = {
 	"CHARACTER_S_NOT_UPDATED": `Character "#{0}" ***NOT*** updated!`,
 	"CHARACTER_S_NOT_FOUND": `Character "#{0}" ***NOT*** found!`,
 
-	"USERNAME_S_BANNED": `The username is invalid due to your use of "#{0}". (Discord Policy)`,
+	"USERNAME_S_BANNED": `The username is invalid due to your use of "#{0}". ${DISCORD_POLICY}`,
 	"USERNAME_MISSING": `The username is missing.`,
-	"USERNAME_TOO_LONG": `The username is too long. (Discord Policy)`,
+	"USERNAME_TOO_LONG": `The username is too long. ${DISCORD_POLICY}`,
 
 	// IMPORT ERRORS
 	"NOTHING_TO_IMPORT": `Nothing to import.`,
