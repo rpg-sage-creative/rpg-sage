@@ -218,7 +218,7 @@ export class SageCache {
 
 	public getLocalizer() {
 		const lang = this.user.preferredLang ?? "en-US";
-		return (key: LocalizedTextKey, ...args: string[]) => getLocalizedText(key, lang, ...args);
+		return (key: LocalizedTextKey, ...args: (string | number)[]) => getLocalizedText(key, lang, ...args);
 	}
 
 	public async fetchChannel<T extends Channel = Channel>(channelId: Optional<Snowflake>): Promise<T | undefined> {

@@ -20,17 +20,17 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const allResults = await getCharactersArgs(sageMessage, characterTypeMeta.isGm, false);
-	if (!allResults) return sageMessage.replyStack.whisper(`Sorry, this command only imports TSV attachments or urls.`);
+	if (!allResults) return sageMessage.replyStack.whisper(localize("COMMAND_ONLY_IMPORTS_TSV"));
 
 	const missingNames = allResults.filter(result => !result.core?.name).length;
 	const invalidNames = allResults.filter(result => result.core?.name).map(result => isInvalidWebhookUsername(result.core?.name)).filter(name => name !== false);
 	const longNames = invalidNames.filter(name => name === true).length;
 	const bannedNames = invalidNames.filter((name, i, a) => name !== true && a.indexOf(name) === i) as string[];
 	if (missingNames || longNames || bannedNames.length) {
-		let content = `Sorry, at least one of the following occurred:`;
+		let content = localize("AT_LEAST_ONE_OCCURRED");
 		if (missingNames) content += `\n- ` + localize("USERNAME_MISSING");
 		if (longNames) content += `\n- ` + localize("USERNAME_TOO_LONG");
-		bannedNames.forEach(bannedName => content += `\n- ` + localize("USERNAME_BANNED", bannedName));
+		bannedNames.forEach(bannedName => content += `\n- ` + localize("USERNAME_S_BANNED", bannedName));
 		return sageMessage.replyStack.whisper(content);
 	}
 
@@ -38,13 +38,14 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 
 	const allNames = allResults.map(({ names, type }) => {
 		const exists = hasCharacters.findCharacterOrCompanion(names.name!);
-		const action = exists ? "Update" : "Create";
-		const _type = type ? ` *(${type})*` : ``;
+		const action = localize(exists ? "UPDATE" : "CREATE");
+		const _type = type ? ` *(${localize(type.toUpperCase() as "PC").toLowerCase()})*` : ``;
 		return `\n> - ${action}: ${names.name} ${_type}`;
 	}).join("");
 
-	const response = await discordPromptYesNo(sageMessage, `Attempt import of ${allResults.length} characters? ${allNames}`, true);
-	if (!response) return sageMessage.replyStack.whisper(`No import attempted.`);
+	const prompt = localize("ATTEMPT_IMPORT_OF_X_CHARACTERS", allResults.length);
+	const response = await discordPromptYesNo(sageMessage, prompt + allNames, true);
+	if (!response) return sageMessage.replyStack.whisper(localize("NO_IMPORT_ATTEMPTED"));
 
 	const output: string[] = [];
 
@@ -68,8 +69,8 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 			characterManager = character?.companions;
 		}
 		if (!characterManager) {
-			output.push(`Cannot import "${names.name}"`);
-			output.push(`- Unable to find character "${names.charName}"`);
+			output.push(localize("CANNOT_IMPORT_S", names.name!));
+			output.push(`- ${localize("CHARACTER_S_NOT_FOUND", names.charName!)}`);
 			continue;
 		}
 
@@ -79,8 +80,8 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 			const updated = await existing.update(core, false);
 			const changed = await existing.processStatsAndMods(stats, mods);
 			changes ||= updated || changed;
-			const not = updated || changed ? "" : "***NOT***";
-			output.push(`Character "${existing.name}" ${not} Updated!`);
+			const key = updated || changed ? "CHARACTER_S_UPDATED" : "CHARACTER_S_NOT_UPDATED";
+			output.push(localize(key, existing.name));
 
 		}else {
 			core.userDid = userId;
@@ -88,8 +89,8 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 			await newChar.processStatsAndMods(stats, mods);
 			const added = await characterManager!.addCharacter(newChar.toJSON());
 			changes ||= !!added;
-			const not = added ? "" : "***NOT***";
-			output.push(`Character "${newChar.name}" ${not} Created!`);
+			const key = added ? "CHARACTER_S_CREATED" : "CHARACTER_S_NOT_CREATED";
+			output.push(localize(key, newChar.name));
 		}
 	}
 
@@ -101,5 +102,5 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 		}
 	}
 
-	await sageMessage.replyStack.send(`Sorry, there was a problem importing.`);
+	await sageMessage.replyStack.send(localize("SOMETHING_WRONG_IMPORT"));
 }

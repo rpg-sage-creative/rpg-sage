@@ -51,7 +51,7 @@ export async function handleImport
 	}
 
 	// process all results with errors
-	await handleImportErrors(sageCommand, results, "Import");
+	await handleImportErrors(sageCommand, "IMPORT", results);
 
 	// cleanup interaction reply
 	if (sageCommand.isSageInteraction()) {

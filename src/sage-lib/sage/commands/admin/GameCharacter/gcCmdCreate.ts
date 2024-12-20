@@ -28,7 +28,7 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	if (invalidName) {
 		const content = invalidName === true
 			? localize("USERNAME_TOO_LONG")
-			: localize("USERNAME_BANNED", invalidName);
+			: localize("USERNAME_S_BANNED", invalidName);
 		return sageMessage.replyStack.whisper(content);
 	}
 

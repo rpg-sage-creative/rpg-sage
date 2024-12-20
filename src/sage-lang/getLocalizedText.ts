@@ -3,14 +3,64 @@ import { stringFormat } from "@rsc-utils/string-utils";
 const enUS = {
 	"DISCORD_POLICY": `(Discord Policy)`,
 
-	"CANNOT_CREATE_CHARACTERS_HERE": `Sorry, you cannot create characters here.`,
-	"CANNOT_IMPORT_CHARACTERS_HERE": `Sorry, you cannot import characters here.`,
+	"CREATE": "Create",
+	"UPDATE": "Update",
+	"IMPORT": "Import",
+	"REIMPORT": "Reimport",
+
+	"IMPORT_ERROR": "Import Error!",
+	"REIMPORT_ERROR": "Reimport Error!",
+
+	"PC": "PC",
+	"NPC": "NPC",
+	"COMPANION": "Companion",
+	"MINION": "Minion",
+
+	"SORRY_WE_DONT_KNOW": "Sorry, we don't know what went wrong!",
+	"AT_LEAST_ONE_OCCURRED": `Sorry, at least one of the following occurred:`,
 
 	"NPC_ONLY_IN_GAME": `Sorry, NPCs only exist inside a Game.`,
 
-	"USERNAME_BANNED": `The username is invalid due to your use of "#{0}". (Discord Policy)`,
+	"CANNOT_CREATE_CHARACTERS_HERE": `Sorry, you cannot create characters here.`,
+
+	"CANNOT_IMPORT_CHARACTERS_HERE": `Sorry, you cannot import characters here.`,
+	"COMMAND_ONLY_IMPORTS_TSV": `Sorry, this command only imports TSV attachments or urls.`,
+	"ATTEMPT_IMPORT_OF_X_CHARACTERS": `Attempt import of #{0} characters?`,
+	"NO_IMPORT_ATTEMPTED": `No import attempted.`,
+	"CANNOT_IMPORT_S": `Cannot import "#{0}"`,
+	"SOMETHING_WRONG_IMPORT": `Sorry, something went wrong with the import.`,
+	"IMPORT_CHARACTERS_WIKI": `For information on importing characters, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Character-Management#importing-characters>)`,
+
+	"CANNOT_EXPORT_CHARACTERS_HERE": `Sorry, you cannot export characters here.`,
+	"CANNOT_EXPORT_GM": `Sorry, you cannot export the GM.`,
+	"SOMETHING_WRONG_EXPORT": `Sorry, something went wrong with the export.`,
+	"HERE_ARE_EXPORTED_CHARACTERS": `Here are your exported characters.`,
+
+	"CANNOT_FIND_S": `Sorry, we cannot find "#{0}".`,
+
+	"CHARACTER_S_CREATED": `Character "#{0}" created.`,
+	"CHARACTER_S_NOT_CREATED": `Character "#{0}" ***NOT*** created!`,
+	"CHARACTER_S_UPDATED": `Character "#{0}" updated.`,
+	"CHARACTER_S_NOT_UPDATED": `Character "#{0}" ***NOT*** updated!`,
+	"CHARACTER_S_NOT_FOUND": `Character "#{0}" ***NOT*** found!`,
+
+	"USERNAME_S_BANNED": `The username is invalid due to your use of "#{0}". (Discord Policy)`,
 	"USERNAME_MISSING": `The username is missing.`,
 	"USERNAME_TOO_LONG": `The username is too long. (Discord Policy)`,
+
+	// IMPORT ERRORS
+	"NOTHING_TO_IMPORT": `Nothing to import.`,
+	"NOTHING_TO_REIMPORT": `Nothing to reimport.`,
+	"INVALID_ID": "The given ID is invalid.",
+	"CHARACTER_NAME_MISMATCH": `Character names don't match.`,
+	"INVALID_JSON_ATTACHMENT": "The attached JSON is invalid.",
+	"INVALID_JSON_URL": "The given JSON url is invalid.",
+	"INVALID_JSON": "The given JSON is invalid.",
+	"UNSUPPORTED_JSON": "The given JSON is unsupported.",
+	"INVALID_PDF_ATTACHMENT": "The attached PDF is invalid.",
+	"INVALID_PDF_URL": "The given PDF url is invalid.",
+	"INVALID_PDF": "The given PDF is invalid.",
+	"UNSUPPORTED_PDF": "The given PDF is unsupported.",
 };
 
 export type LocalizedTextKey = keyof typeof enUS;
@@ -21,6 +71,11 @@ const all = {
 
 export type Lang = keyof typeof all;
 
-export function getLocalizedText(key: LocalizedTextKey, lang: Lang, ...args: string[]): string {
+type Arg = string | number;
+export function getLocalizedText(key: LocalizedTextKey, lang: Lang, ...args: Arg[]): string {
 	return stringFormat(all[lang]?.[key] ?? enUS[key], ...args);
+}
+
+export function hasLocalizedText(key: string): key is LocalizedTextKey {
+	return key in enUS;
 }

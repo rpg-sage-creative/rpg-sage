@@ -26,7 +26,7 @@ export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, 
 		if (invalidName) {
 			const content = invalidName === true
 				? getLocalizedText("USERNAME_TOO_LONG", "en-US")
-				: getLocalizedText("USERNAME_BANNED", "en-US", invalidName)
+				: getLocalizedText("USERNAME_S_BANNED", "en-US", invalidName)
 			await sageMessage.message.reply({ content });
 			return [];
 		}
