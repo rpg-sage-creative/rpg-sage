@@ -34,18 +34,16 @@ type InvalidUsername = {
  *
  * @todo make this a text file or something that can be reloaded without a restart.
  */
-function getInvalidWebhookUsernames(): InvalidUsername[] {
-	return [
-		{ name:"everyone", anchored:true, variants:true },
-		{ name:"here",     anchored:true, variants:true },
+const invalidNames: InvalidUsername[] = [
+	{ name:"everyone", anchored:true, variants:true },
+	{ name:"here",     anchored:true, variants:true },
 
-		{ name:"discord",  variants:true },
-		{ name:"clyde"     },
-		{ name:"wumpus",   },
+	{ name:"discord",  variants:true },
+	{ name:"clyde"     },
+	{ name:"wumpus",   },
 
-		{ name:"```" },
-	];
-}
+	{ name:"```" },
+];
 
 /** Creates a RegExp for testing a specific invalid username. */
 function createInvalidTestRegex({ anchored, name, variants }: InvalidUsername): RegExp {
@@ -83,7 +81,6 @@ export function isInvalidWebhookUsername(name: Optional<string>): string | boole
 		return true;
 	}
 
-	const invalidNames = getInvalidWebhookUsernames();
 	for (const invalidName of invalidNames) {
 		const regex = createInvalidTestRegex(invalidName);
 		if (regex.test(name)) {
@@ -92,4 +89,33 @@ export function isInvalidWebhookUsername(name: Optional<string>): string | boole
 	}
 
 	return false;
+}
+
+export function addInvalidWebhookUsername(username = "UNDEFINED USERNAME", invalidName: string) {
+	const found = invalidNames.find(invalid => invalid.name === invalidName);
+	const old = { ...found };
+
+	const anchored = username.length === invalidName.length;
+	const variant = !username.toLowerCase().includes(invalidName.toLowerCase());
+
+	// add it
+	if (!found) {
+		const invalidUsername = { name:invalidName, anchored };
+		invalidNames.push(invalidUsername);
+		return { old, new:invalidUsername };
+	}
+
+	// if we are anchored, check unanchored
+	if (found.anchored && !anchored) {
+		found.anchored = false;
+		return { old, new:found };
+	}
+
+	// check for variants now
+	if (!found.variants && variant) {
+		found.variants = true;
+		return { old, new:found };
+	}
+
+	return { found };
 }
