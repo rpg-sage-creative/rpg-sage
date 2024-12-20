@@ -6,6 +6,7 @@ import { getLocalizedText } from "../../../../sage-lang/getLocalizedText.js";
 import { replaceWebhook, sendWebhook, type AuthorOptions } from "../../../discord/messages.js";
 import type { AttachmentResolvable } from "../../../discord/sendTo.js";
 import type { SageMessage } from "../../model/SageMessage.js";
+import { includeDeleteButton } from "../../model/utils/deleteButton.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
 
 type DialogRenderableOptions = {
@@ -27,7 +28,7 @@ export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, 
 			const content = invalidName === true
 				? getLocalizedText("USERNAME_TOO_LONG", "en-US")
 				: getLocalizedText("USERNAME_S_BANNED", "en-US", invalidName)
-			await sageMessage.message.reply({ content });
+			await sageMessage.message.reply(includeDeleteButton({ content }, sageMessage.authorDid));
 			return [];
 		}
 	}
