@@ -100,6 +100,7 @@ export class User extends HasDidCore<UserCore> {
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public notes: NoteManager;
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
+	public get preferredLang(): "en-US" { return "en-US"; }
 
 	public isSuperAdmin: boolean;
 	public isSuperUser: boolean;
