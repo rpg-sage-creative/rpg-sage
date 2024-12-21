@@ -48,7 +48,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 	}
 
 	if (character) {
-		if (core) {
+		if (core?.name) {
 			await character.update(core, false);
 			const invalidName = isInvalidWebhookUsername(core.name);
 			if (invalidName) {
