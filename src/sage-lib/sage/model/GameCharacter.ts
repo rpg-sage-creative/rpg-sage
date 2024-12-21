@@ -19,6 +19,7 @@ import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
 import type { TMacro } from "./types.js";
+import { hpToGauge } from "./utils/hpToGauge.js";
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -525,6 +526,18 @@ export class GameCharacter implements IHasSave {
 		return sortedNonGameStatsNotes.map(note => `<b>${note.title}</b> ${note.note}`);
 	}
 
+	public getHpGauge(): string {
+		let hpStat = this.getStat("hp") ?? "0";
+		if (/^\|\|\d+\|\|$/.test(hpStat)) hpStat = hpStat.slice(2, -2);
+		const hp = +hpStat;
+
+		let maxHpStat = this.getStat("maxHp") ?? "0";
+		if (/^\|\|\d+\|\|$/.test(maxHpStat)) maxHpStat = maxHpStat.slice(2, -2);
+		const maxHp = +maxHpStat;
+
+		return hpToGauge(hp, maxHp);
+	}
+
 	public getStat(key: string): string | null {
 		if (/^name$/i.test(key)) {
 			return this.name;
@@ -534,6 +547,9 @@ export class GameCharacter implements IHasSave {
 		}
 		if (/^(aka|n(ick)?name)$/i.test(key)) {
 			return this.aka ?? this.name;
+		}
+		if (/^hpGauge$/i.test(key)) {
+			return this.getHpGauge();
 		}
 		if (/^sheet\.?url$/i.test(key)) {
 			let sheetUrl = this.notes.getStat(key)?.note.trim();
