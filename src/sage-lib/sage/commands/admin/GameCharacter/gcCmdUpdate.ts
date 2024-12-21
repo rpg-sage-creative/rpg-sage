@@ -48,15 +48,18 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 	}
 
 	if (character) {
-		// we only need to check the name if we are changing it.
-		if (core?.name) {
+		if (core) {
 			await character.update(core, false);
-			const invalidName = isInvalidWebhookUsername(core.name);
-			if (invalidName) {
-				const content = invalidName === true
-					? getLocalizedText("USERNAME_TOO_LONG", "en-US")
-					: getLocalizedText("USERNAME_S_BANNED", "en-US", invalidName)
-				return sageMessage.replyStack.whisper(content);
+
+			// we only need to check the name if we are changing it.
+			if (core.name) {
+				const invalidName = isInvalidWebhookUsername(core.name);
+				if (invalidName) {
+					const content = invalidName === true
+						? getLocalizedText("USERNAME_TOO_LONG", "en-US")
+						: getLocalizedText("USERNAME_S_BANNED", "en-US", invalidName)
+					return sageMessage.replyStack.whisper(content);
+				}
 			}
 		}
 
