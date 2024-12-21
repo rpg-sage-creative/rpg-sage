@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.8.2",
+"version":"1.8.3",
 "branch":"main",
-"commit":"f4245581ccca1ca65bccf0914cc5278d8979a790",
-"commitSubject":"build(versioning): Release - 1.8.2",
-"commitTs":1731969965000,
-"commitDate":"2024-11-18-1446",
-"buildTs":1731970716000,
-"buildDate":"2024-11-18-1458",
+"commit":"4d04c3450cf573a33720564bdfbc7e5f52d9492f",
+"commitSubject":"implement hpGauge stat",
+"commitTs":1734802415000,
+"commitDate":"2024-12-21-0933",
+"buildTs":1734802588000,
+"buildDate":"2024-12-21-0936",
 "author":"Randal"
 }
