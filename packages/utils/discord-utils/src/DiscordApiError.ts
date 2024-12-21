@@ -1,6 +1,5 @@
 import { error, formatArg, warn } from "@rsc-utils/core-utils";
 import type { DiscordAPIError as TDiscordApiError } from "discord.js";
-import { toHumanReadable, type Readable } from "./humanReadable/toHumanReadable.js";
 
 /** https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes */
 
@@ -46,13 +45,20 @@ export class DiscordApiError {
 
 	public get isFetchWebhooks() { return this.asString.includes(".fetchWebhooks"); }
 
+	public get isUsername() { return this.asString.includes("username[USERNAME_INVALID_CONTAINS]"); }
+	public getInvalidUsername() { return /Username cannot contain "(?<name>[^"]+)"/.exec(this.asString)?.groups?.name; }
+
 	public get isMissingPermissions() { return this.asString.includes("Missing Permissions"); }
 
 	/** Tries to process various DiscordApiErrors and returns true if logged in some way. */
 	public process(): boolean {
+		if (this.isUsername) {
+			error({ invalidUsername:this.getInvalidUsername() });
+			return true;
+		}
 		if (isErrorCode(this.error.code)) {
 			if (this.isAvatarUrl || this.isEmbedThumbnailUrl) {
-				warn(`An image url (avatar or thumbnail) has been flagged as invalid.`)
+				warn(`An image url (avatar or thumbnail) has been flagged as invalid.`);
 			}else {
 				error(this.error);
 			}
@@ -73,16 +79,9 @@ export class DiscordApiError {
 		return isDiscordApiError(reason) ? new DiscordApiError(reason) : undefined;
 	}
 
-	public static process<T extends any = undefined>(err: unknown, options?: { errMsg?:unknown; target?:Readable; retVal?:T; }): T {
-		const processed = DiscordApiError.from(err)?.process() ?? false;
-		if (!processed) {
-			if (options?.target || options?.errMsg) {
-				error([toHumanReadable(options.target), options.errMsg].filter(o => o).join(": "));
-			}else {
-				error(err);
-			}
-		}
-		return options?.retVal as T;
+	public static process(err: unknown): undefined {
+		DiscordApiError.from(err)?.process();
+		return undefined;
 	}
 
 	public static ignore<T extends ErrorCode>(...codes: T[]): (reason: unknown) => undefined {

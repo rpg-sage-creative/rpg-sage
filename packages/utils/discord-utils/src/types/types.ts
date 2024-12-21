@@ -1,5 +1,6 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { AnySelectMenuInteraction, AnyThreadChannel, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, GuildBasedChannel, Interaction, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
+import type { AnySelectMenuInteraction, AnyThreadChannel, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DiscordAPIError, DMChannel, ForumChannel, GuildBasedChannel, Interaction, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
+import type { DiscordApiError } from "../DiscordApiError";
 
 //#region types
 
@@ -64,7 +65,7 @@ export function isGuildBased(value: Optional<ChannelOrUser>): value is GuildBase
 	return isChannel(value) && "guild" in value;
 }
 
-export function isMessage<T extends MessageOrPartial>(value: Optional<Channel | Interaction | T | User>): value is T {
+export function isMessage<T extends MessageOrPartial>(value: Optional<Channel | Interaction | T | User | DiscordAPIError | DiscordApiError>): value is T {
 	return value ? "author" in value : false;
 }
 

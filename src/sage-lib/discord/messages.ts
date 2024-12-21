@@ -1,5 +1,5 @@
 import { error, warn, warnReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, isDMBased, isGuildBased, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget } from "@rsc-utils/discord-utils";
+import { addInvalidWebhookUsername, DiscordKey, isDMBased, isGuildBased, isMessage, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
@@ -48,7 +48,7 @@ type WebhookOptions = {
  * Currently, we don't send webhooks to DMs; if the targetChannel is a DM we send as Sage to the user.
  * If we cannot find a webhook, we return a Promise.reject.
  */
-export async function sendWebhook(targetChannel: Channel, webhookOptions: WebhookOptions): Promise<Optional<Message[]>> {
+export async function sendWebhook(targetChannel: Channel, webhookOptions: WebhookOptions): Promise<Message[] | undefined> {
 	const { authorOptions, renderableContent, dialogType, files, sageCache } = webhookOptions;
 
 	if (isDMBased(targetChannel)) {
@@ -73,7 +73,11 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 
 	const threadId = targetChannel.isThread() ? targetChannel.id as Snowflake : undefined;
 
-	return sendTo({ sageCache, target:webhook, embeds, files, threadId, ...authorOptions }, { contentToEmbeds, embedsToContent });
+	return sendTo(
+		{ sageCache, target:webhook, embeds, files, threadId, ...authorOptions },
+		{ contentToEmbeds, embedsToContent },
+		(err: unknown) => error(`${toHumanReadable(targetChannel)}${threadId?" "+threadId:""}: sendWebhook`, err)
+	);
 }
 
 export async function replaceWebhook(originalMessage: MessageOrPartial, webhookOptions: WebhookOptions): Promise<Message[]> {
@@ -94,9 +98,6 @@ export async function replaceWebhook(originalMessage: MessageOrPartial, webhookO
 
 	// this pauses in case Tupper is also deleting the message so that our delete attempt can detect if it was deleted to avoid errors
 	await sageCache.pauseForTupper(DiscordKey.from(originalMessage));
-	if (!skipDelete) {
-		await deleteMessage(originalMessage);
-	}
 
 	let content = undefined;
 	let replyingTo: string | undefined;
@@ -118,11 +119,33 @@ export async function replaceWebhook(originalMessage: MessageOrPartial, webhookO
 
 	const threadId = originalMessage.channel.isThread() ? originalMessage.channel.id as Snowflake : undefined;
 
-	const messages = await sendTo({ sageCache, target:webhook, content, embeds, files, replyingTo, threadId, ...authorOptions }, { contentToEmbeds, embedsToContent });
-	if (!messages) {
-		warn(`replaceWebhook -> sendTo = ${messages}`);
+	const results = await sendTo({ sageCache, target:webhook, content, embeds, files, replyingTo, threadId, ...authorOptions }, { contentToEmbeds, embedsToContent });
+	if (!results) {
+		warn(`${toHumanReadable(originalMessage.channel)}${threadId?" "+threadId:""}: replaceWebhook ==> canTest && !canSend (no perms)`);
 		return [];
 	}
+	const messages: Message[] = [];
+	for (const result of results) {
+		if (isMessage(result)) {
+			messages.push(result);
+
+		}else if (result?.isUsername) {
+			const invalidUsername = result.getInvalidUsername() ?? authorOptions.username ?? "unknown";
+			const dUser = await sageCache.discord.fetchUser(sageCache.user.did);
+			await dUser?.send(`We are unable to send your message for the following reason:\n${sageCache.getLocalizer()("USERNAME_S_BANNED", invalidUsername)}`);
+			const updated = addInvalidWebhookUsername(authorOptions.username, invalidUsername);
+			error({ fn:"replaceWebhook", invalidUsername, updated });
+
+		}else if (result && !result.process()) {
+			error(`${toHumanReadable(originalMessage.channel)}${threadId?" "+threadId:""}: replaceWebhook`, result.error);
+		}
+	}
+
+	// delete the original if we didn't get any errors
+	if (results.length === messages.length && !skipDelete) {
+		await deleteMessage(originalMessage);
+	}
+
 	return messages;
 }
 
@@ -161,15 +184,15 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: Re
 	if (embeds.length > 2) {
 		if (isGuildBased(targetChannel)) {
 			const embed = createMessageEmbed({ description:"*Long reply sent via direct message!*" });
-			const sent = await sendTo({ sageCache, target:targetChannel, embeds:[embed], errMsg:"Notifying of DM" }, { });
+			const sent = await sendTo({ sageCache, target:targetChannel, embeds:[embed] }, { }, (err: unknown) => error(`${toHumanReadable(targetChannel)}: Notifying of sendRenderableContent DM`, err));
 			messages.push(...sent ?? []);
 		}
 		if (originalAuthor) {
-			const sent = await sendTo({ sageCache, target:originalAuthor, embeds }, { });
+			const sent = await sendTo({ sageCache, target:originalAuthor, embeds }, { }, (err: unknown) => error(`${toHumanReadable(originalAuthor)}: Sending sendRenderableContent as DM`, err));
 			messages.push(...sent ?? []);
 		}
 	}else {
-		const sent = await sendTo({ sageCache, target:targetChannel, embeds }, { });
+		const sent = await sendTo({ sageCache, target:targetChannel, embeds }, { }, (err: unknown) => error(`${toHumanReadable(originalAuthor)}: Sending sendRenderableContent`, err));
 		messages.push(...sent ?? []);
 	}
 	return messages;

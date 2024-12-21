@@ -1,4 +1,4 @@
-import { isUnsafeName } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -7,24 +7,29 @@ import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
-
 export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
+	const localize = sageMessage.getLocalizer();
+
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
 		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
-			return sageMessage.replyStack.whisper(`Sorry, NPCs only exist inside a Game.`);
+			return sageMessage.replyStack.whisper(localize("NPC_ONLY_IN_GAME"));
 		}
-		return sageMessage.replyStack.whisper(`Sorry, you cannot create characters here.`);
+		return sageMessage.replyStack.whisper(localize("CANNOT_CREATE_CHARACTERS_HERE"));
 	}
 
 	const { core, mods, names, stats, userId } = getCharacterArgs(sageMessage, characterTypeMeta.isGm, false);
 
 	if (!core?.name) {
-		return sageMessage.replyStack.whisper("Cannot create a character without a name!");
+		return sageMessage.replyStack.whisper(localize("USERNAME_MISSING"));
 	}
 
-	if (isUnsafeName(core.name)) {
-		return sageMessage.replyStack.whisper(`Due to Discord policy, you cannot have a username with "discord" in the name!`);
+	const invalidName = isInvalidWebhookUsername(core.name);
+	if (invalidName) {
+		const content = invalidName === true
+			? localize("USERNAME_TOO_LONG")
+			: localize("USERNAME_S_BANNED", invalidName);
+		return sageMessage.replyStack.whisper(content);
 	}
 
 	const hasCharacters = sageMessage.game ?? sageMessage.sageUser;

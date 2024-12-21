@@ -1,6 +1,6 @@
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
 import { error } from "@rsc-utils/core-utils";
-import { isUnsafeName } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import { type FetchResult } from "./fetchCores.js";
@@ -21,14 +21,21 @@ export async function handleReimport
 	await sageCommand.replyStack.startThinking();
 
 	const newName = sageCommand.args.getString("name") ?? undefined;
-	if (isUnsafeName(newName)) {
-		return handleImportErrors(sageCommand, [{ error:"INVALID_NAME" }], "Reimport");
+	if (newName) {
+		// we only need to validate the name if it is new
+		const invalidName = isInvalidWebhookUsername(newName);
+		if (invalidName) {
+			if (invalidName === true) {
+				return handleImportErrors(sageCommand, "REIMPORT", [{ error:"USERNAME_TOO_LONG", invalidName:newName }]);
+			}
+			return handleImportErrors(sageCommand, "REIMPORT", [{ error:"USERNAME_S_BANNED", invalidName:newName }]);
+		}
 	}
 
 	// look for old character
 	const character = await handlers.loadCharacter(characterId);
 	if (!character) {
-		return handleImportErrors(sageCommand, [{ error:"INVALID_EXISTING_ID" }], "Reimport");
+		return handleImportErrors(sageCommand, "REIMPORT", [{ error:"INVALID_EXISTING_ID" }]);
 	}
 
 
@@ -37,16 +44,16 @@ export async function handleReimport
 
 	// handle errors or no results
 	if (!result) {
-		return handleImportErrors(sageCommand, [], "Reimport");
+		return handleImportErrors(sageCommand, "REIMPORT", []);
 	}else if (result.error) {
-		return handleImportErrors(sageCommand, [result], "Reimport");
+		return handleImportErrors(sageCommand, "REIMPORT", [result]);
 	}
 
 	const newCore = result.core;
 
 	// check names
 	if (character.name !== newCore.name && newCore.name !== newName) {
-		return handleImportErrors(sageCommand, [{ error:"NAME_MISMATCH" }], "Reimport");
+		return handleImportErrors(sageCommand, "REIMPORT", [{ error:"CHARACTER_NAME_MISMATCH" }]);
 	}
 
 	newCore.id = character.id;
@@ -62,7 +69,8 @@ export async function handleReimport
 		await handlers.updateSheet(sageCommand, newClass, message);
 	}else {
 		error(`Error saving reimported character:`, result);
-		await sageCommand.replyStack.whisper("Sorry, we don't know what went wrong!");
+		const localizer = sageCommand.getLocalizer();
+		await sageCommand.replyStack.whisper(localizer("SORRY_WE_DONT_KNOW"));
 	}
 
 	if (sageCommand.isSageMessage()) {

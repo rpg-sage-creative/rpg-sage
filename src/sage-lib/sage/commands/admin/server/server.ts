@@ -11,18 +11,6 @@ import { AdminRoleType, type IAdminRole } from "../../../model/Server.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
-async function serverInit(sageMessage: SageMessage): Promise<void> {
-	if (sageMessage.server) {
-		return Promise.resolve();
-	}
-	if (!sageMessage.isOwner && !sageMessage.isSuperUser) {
-		return sageMessage.reactBlock();
-	}
-
-	const saved = await sageMessage.caches.servers.initializeServer(sageMessage.message.guild);
-	return sageMessage.reactSuccessOrFailure(saved);
-}
-
 function serverDetailsDefaultTypes(renderableContent: RenderableContent, server: Server): void {
 	renderableContent.append(`<b>Default Dialog Type</b> ${DialogType[server.dialogPostType!] ?? "<i>unset (Embed)</i>"}`);
 	renderableContent.append(`<b>Default Game Type</b> ${server.gameSystem?.name ?? "<i>unset (None)</i>"}`);
@@ -100,7 +88,6 @@ async function serverUpdate(sageMessage: SageMessage): Promise<void> {
 }
 
 export function registerServer(): void {
-	registerListeners({ commands:["server|init"], message:serverInit });
 	registerListeners({ commands:["server|details"], message:serverDetails });
 	registerListeners({ commands:["server|update"], message:serverUpdate });
 }

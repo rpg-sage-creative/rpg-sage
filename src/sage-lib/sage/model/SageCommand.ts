@@ -530,4 +530,8 @@ export abstract class SageCommand<
 		// options.ephemeral = (ephemeral ?? renderableOrArgs.ephemeral) === true;
 		return options as T;
 	}
+
+	public getLocalizer() {
+		return this.sageCache.getLocalizer();
+	}
 }

@@ -1,6 +1,6 @@
 import { SageChannelType } from "@rsc-sage/types";
 import { Cache } from "@rsc-utils/cache-utils";
-import { debug, errorReturnNull, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { debug, error, errorReturnNull, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Message, User } from "discord.js";
@@ -144,13 +144,18 @@ export class SageMessage
 		}
 		return [];
 	}
-	public sendPost(renderableContentResolvable: RenderableContentResolvable) {
-		return sendTo({
+	public async sendPost(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]> {
+		const target = this.message.channel;
+		const sendArgs = {
 			sageCache: this.sageCache,
-			target: this.message.channel,
-			content: resolveToContent(this.sageCache, renderableContentResolvable).join("\n"),
-			errMsg: "SageMessage.sendPost"
-		}, { });
+			target,
+			content: resolveToContent(this.sageCache, renderableContentResolvable).join("\n")
+		};
+		const catchHandler = (err: unknown) => {
+			error(`${toHumanReadable(target)}: SageMessage.sendPost`, err);
+		};
+		const messages = await sendTo(sendArgs, { }, catchHandler);
+		return messages ?? [];
 	}
 	public async canSend(targetChannel = this.message.channel): Promise<boolean> {
 		return this.sageCache.canSendMessageTo(DiscordKey.from(targetChannel));

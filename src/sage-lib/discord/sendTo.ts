@@ -1,5 +1,4 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { warn } from "@rsc-utils/core-utils";
+import { error, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, splitMessageOptions, type EmbedResolvable, type MessageTarget, type SplitOptions } from "@rsc-utils/discord-utils";
 import { ActionRow, Attachment, AttachmentBuilder, Message, Webhook, type MessageActionRowComponent } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
@@ -7,13 +6,12 @@ import { DialogType } from "../sage/repo/base/IdRepository.js";
 
 export type AttachmentResolvable = Attachment | AttachmentBuilder;
 
-type TSendToArgs = {
+type SendToArgs = {
 	avatarURL?: string;
 	components?: ActionRow<MessageActionRowComponent>[];
 	content?: string;
 	embedContent?: string;
 	embeds?: EmbedResolvable[];
-	errMsg?: string;
 	files?: AttachmentResolvable[];
 	replyingTo?: string;
 	sageCache: SageCache;
@@ -22,11 +20,19 @@ type TSendToArgs = {
 	username?: string;
 };
 
+type Result = Message | DiscordApiError | undefined;
+type Results = Result[] | undefined;
+
 /**
- * Returns Message[] upon success, null upon error, and undefined if Sage doesn't have permissions to send to this channel/thread.
+ * If Sage doesn't have permissions to send to this channel/thread, then undefined is returned.
+ * If catchHandler isn't given, then an array of Message, DiscordApiError, or undefined is returned.
+ * If catchHandler is given, then an array of Message is returned and catchHandler is called for each error.
+ * If multiple sends are attempted and an error occurs, all subsequent send attempts are skipped.
  */
- export async function sendTo(sendArgs: TSendToArgs, splitOptions: SplitOptions): Promise<Message[] | null | undefined> {
-	const { avatarURL, components, content, embedContent, embeds, errMsg, files, replyingTo, sageCache, target, threadId, username } = sendArgs;
+export async function sendTo(sendArgs: SendToArgs, splitOptions: SplitOptions): Promise<(Message | DiscordApiError | undefined)[] | undefined>;
+export async function sendTo(sendArgs: SendToArgs, splitOptions: SplitOptions, catchHandler: (err: unknown) => void): Promise<Message[] | undefined>;
+export async function sendTo(sendArgs: SendToArgs, splitOptions: SplitOptions, catchHandler?: (err: unknown) => void): Promise<Results> {
+	const { avatarURL, components, content, embedContent, embeds, files, replyingTo, sageCache, target, threadId, username } = sendArgs;
 
 	// if we can check permissions then let's do so first
 	const canTest = target && ("permissionsFor" in target);
@@ -43,22 +49,19 @@ type TSendToArgs = {
 	// create post length safe payloads
 	const payloads = splitMessageOptions({ avatarURL, components, content, embedContent, embeds, files, replyingTo, threadId, username }, { ...splitOptions, contentToEmbeds, embedsToContent });
 
-	// create a rejection catcher
-	const catcher = (err: unknown) => DiscordApiError.process(err, { errMsg:errMsg && threadId ? `(${threadId}) ${errMsg}` : errMsg ?? threadId, target });
+	const catcher = catchHandler
+		? (reason: unknown) => { DiscordApiError.process(reason) ? void 0 : catchHandler(reason); return undefined; } // NOSONAR
+		: (reason: unknown) => { const apiErr = DiscordApiError.from(reason); if (!apiErr) error(reason); return apiErr; }; // NOSONAR
 
-	const messages: Message[] = [];
+	const results: Result[] = [];
 	for (const payload of payloads) {
 		const message = await target.send(payload).catch(catcher);
-		if (message) {
-			if (typeof(message.type) === "number") {
-				messages.push(message);
-			}else {
-				warn(`sendTo(): I should not hit this line of code.`);
-			}
+		if (message || !catchHandler) {
+			results.push(message);
 		}else {
-			// we logged the error in catcher
-			return null;
+			// let's stop sending if we have an error (which is most likely a username issue)
+			break;
 		}
 	}
-	return messages;
+	return results;
 }

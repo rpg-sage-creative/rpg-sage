@@ -1,5 +1,5 @@
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
-import { isUnsafeName, parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername, parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import { getJson, PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import type { FetchResultError } from "./handleImportErrors.js";
@@ -15,7 +15,12 @@ type FetchCoreResult<T extends CharacterBaseCore, U extends CharacterBase<T> = C
 } | {
 	char?: never;
 	core: T;
-	error: "INVALID_NAME";
+	error: "USERNAME_MISSING";
+} | {
+	char?: never;
+	core: T;
+	error: "USERNAME_TOO_LONG" | "USERNAME_S_BANNED";
+	invalidName: string;
 };
 
 type Handlers<T extends CharacterBaseCore, U extends CharacterBase<T> = CharacterBase<T>> = {
@@ -27,6 +32,18 @@ type Handlers<T extends CharacterBaseCore, U extends CharacterBase<T> = Characte
 	raw: (rawJson: unknown) => T | undefined;
 };
 
+function coreToResult<T extends CharacterBaseCore, U extends CharacterBase<T> = CharacterBase<T>>(core: T, toChar: (core: T) => U): FetchCoreResult<T> {
+	const invalidName = isInvalidWebhookUsername(core.name);
+	if (invalidName === true) {
+		return core.name
+			? { core, error:"USERNAME_TOO_LONG", invalidName:core.name }
+			: { core, error:"USERNAME_MISSING" };
+	}else if (invalidName) {
+		return { core, error:"USERNAME_S_BANNED", invalidName:core.name! };
+	}
+	return { core, char:toChar(core) };
+}
+
 export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string, error: FetchResultError, handlers: Handlers<T>): Promise<FetchCoreResult<T>> {
 	const json = await getJson(jsonUrl).catch(() => undefined);
 	if (!json) {
@@ -35,10 +52,7 @@ export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string
 
 	const core = handlers.raw(json);
 	if (core) {
-		if (isUnsafeName(core.name)) {
-			return { core, error:"INVALID_NAME" };
-		}
-		return { core, char:handlers.char(core) };
+		return coreToResult(core, handlers.char);
 	}
 
 	return { error:"UNSUPPORTED_JSON" };
@@ -56,10 +70,7 @@ async function fetchPdfCore<T extends CharacterBaseCore>(pdfUrl: string, default
 
 	const core = handlers.pdf(pdfJson);
 	if (core) {
-		if (isUnsafeName(core.name)) {
-			return { core, error:"INVALID_NAME" };
-		}
-		return { core, char:handlers.char(core) };
+		return coreToResult(core, handlers.char);
 	}
 
 	return { error:"UNSUPPORTED_PDF" };

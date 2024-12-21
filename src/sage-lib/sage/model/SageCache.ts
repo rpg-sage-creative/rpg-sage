@@ -3,7 +3,8 @@ import { uncache } from "@rsc-utils/cache-utils";
 import { debug, errorReturnFalse, orNilSnowflake, parseUuid, silly, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordKey, fetchIfPartial, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
-import type { Channel, Client, User as DUser, Guild, GuildMember, Interaction, Message, MessageReference } from "discord.js";
+import type { Channel, Client, Interaction, Message, MessageReference } from "discord.js";
+import { getLocalizedText, type LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
 import { DiscordCache } from "../../discord/DiscordCache.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
@@ -298,11 +299,18 @@ export class SageCache {
 		}
 		return this.bot.emojify(text);
 	}
+
 	public format(text: string): string {
 		return toMarkdown(this.emojify(text));
 	}
+
 	public getPrefixOrDefault(): string {
 		return this.server?.getPrefixOrDefault() ?? "";
+	}
+
+	public getLocalizer() {
+		const lang = this.user.preferredLang ?? "en-US";
+		return (key: LocalizedTextKey, ...args: (string | number)[]) => getLocalizedText(key, lang, ...args);
 	}
 
 	public async fetchChannel<T extends Channel = Channel>(channelId: Optional<Snowflake>): Promise<T | undefined> {
