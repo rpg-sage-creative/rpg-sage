@@ -385,16 +385,9 @@ async function rollEarnIncome(sageInteraction: SageInteraction<ButtonInteraction
 	renderable.appendBlock(
 		incomePerDay
 	);
-	renderable.append(`<b>Common PFS Increments</b>`);
+	renderable.append(`<b>Income Earned For Multiple Days</b>`);
 	renderable.appendBlock(
-		`<b>2 days</b> ${multiplyIncome(incomePerDay, 2)}`,
-		`<b>3 days</b> ${multiplyIncome(incomePerDay, 3)}`,
-		`<b>4 days</b> ${multiplyIncome(incomePerDay, 4)}`,
-		`<b>6 days</b> ${multiplyIncome(incomePerDay, 6)}`,
-		`<b>8 days</b> ${multiplyIncome(incomePerDay, 8)}`,
-		`<b>12 days</b> ${multiplyIncome(incomePerDay, 12)}`,
-		`<b>24 days</b> ${multiplyIncome(incomePerDay, 24)}`,
-		`<b>36 days</b> ${multiplyIncome(incomePerDay, 36)}`,
+		...[2,3,4,5,6,7,8].map(days => `<b>${days} days</b> ${multiplyIncome(incomePerDay, days)}`),
 	);
 
 	await sageInteraction.replyStack.send({ content:renderable });
