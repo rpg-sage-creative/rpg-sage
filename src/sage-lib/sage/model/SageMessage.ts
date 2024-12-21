@@ -45,8 +45,7 @@ export class SageMessage
 		return this.commandAndArgs?.command?.toLowerCase().split("|") ?? [];
 	}
 
-	public static async fromMessage(message: MessageOrPartial): Promise<SageMessage> {
-		if (message.partial) await message.fetch();
+	public static async fromMessage(message: Message): Promise<SageMessage> {
 		const sageCache = await SageCache.fromMessage(message);
 		const prefixOrDefault = sageCache.getPrefixOrDefault();
 		const regexOr = prefixOrDefault ? XRegExp.escape(prefixOrDefault) : `sage`;
@@ -198,7 +197,7 @@ export class SageMessage
 
 	/** Returns the channelDid this message (or its thread) is in. */
 	public get channelDid(): Snowflake | undefined {
-		return this.cache.get("channelDid", () => {
+		return this.cache.getOrSet("channelDid", () => {
 			if (this.message.channel.isThread()) {
 				return this.message.channel.parent?.id as Snowflake;
 			}
@@ -209,7 +208,7 @@ export class SageMessage
 
 	/** Returns the threadDid this message is in. */
 	public get threadDid(): Snowflake | undefined {
-		return this.cache.get("threadDid", () => {
+		return this.cache.getOrSet("threadDid", () => {
 			if (this.message.channel.isThread()) {
 				return this.message.channel.id as Snowflake;
 			}
@@ -219,7 +218,7 @@ export class SageMessage
 
 	/** Returns either the message's threadDid or channelDid if there is no thread. */
 	public get threadOrChannelDid(): Snowflake {
-		return this.cache.get("channelDid", () => this.threadDid ?? this.channelDid ?? this.message.channel.id as Snowflake);
+		return this.cache.getOrSet("channelDid", () => this.threadDid ?? this.channelDid ?? this.message.channel.id as Snowflake);
 	}
 
 	// #endregion
@@ -343,7 +342,7 @@ export class SageMessage
 
 	/** Ensures we are either in an admin channel or are the server owner or SuperUser. */
 	public testServerAdmin(): boolean {
-		return this.isOwner || this.isSuperUser || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
+		return this.canManageServer || this.isSuperUser || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
 	}
 
 	// #endregion

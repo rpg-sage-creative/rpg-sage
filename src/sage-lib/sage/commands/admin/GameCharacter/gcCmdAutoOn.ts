@@ -1,14 +1,16 @@
 import { DialogPostType } from "@rsc-sage/types";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { toChannelMention } from "@rsc-utils/discord-utils";
+import { parseIds, toChannelMention, toUserMention } from "@rsc-utils/discord-utils";
+import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
 import { removeAuto } from "./removeAuto.js";
+import { sendGameCharacter } from "./sendGameCharacter.js";
 import { sendNotFound } from "./sendNotFound.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
+import { GameRoleType } from "../../../model/Game.js";
 
 export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -16,32 +18,51 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
+	const names = sageMessage.args.getNames();
+	const alias = sageMessage.args.getString("alias") ?? undefined;
 	const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType") ?? undefined;
+	const userId = sageMessage.canAdminGame ? sageMessage.args.getUserId("user") ?? sageMessage.sageUser.did : sageMessage.sageUser.did;
 
-	let name = sageMessage.args.removeAndReturnName();
+	if (sageMessage.game && userId !== sageMessage.sageUser.did) {
+		const role = characterTypeMeta.isGmOrNpcOrMinion ? GameRoleType.GameMaster : undefined;
+		const hasUser = await sageMessage.game.hasUser(userId, role);
+		if (!hasUser) {
+			return role
+				? sageMessage.whisper(`${toUserMention(userId)} isn't a Game Master of the Game.`)
+				: sageMessage.whisper(`${toUserMention(userId)} isn't part of the Game.`);
+		}
+	}
+
 	let character = characterTypeMeta.isGm
 		? sageMessage.gmCharacter
-		: await getCharacter(sageMessage, characterTypeMeta, sageMessage.sageUser.did, { name });
+		: await getCharacter(sageMessage, characterTypeMeta, userId, names, alias);
+
 	if (!character && characterTypeMeta.isPc) {
 		character = sageMessage.playerCharacter;
 	}
 
-	if (character) {
-		const channelDids = sageMessage.message.mentions.channels.map(ch => ch.id as Snowflake);
-		const channelLinks = channelDids.map(channelDid => toChannelMention(channelDid));
-		const dialogType = dialogPostType !== undefined ? ` (${DialogType[dialogPostType]})` : "";
-		const prompt = channelDids.length > 1 || channelDids[0] !== sageMessage.channelDid
-			? `Use Auto Dialog ${dialogType} with ${character.name} for the given channel(s)?\n> ${channelLinks.join("\n> ")}`
-			: `Use Auto Dialog ${dialogType} with ${character.name}?`;
-
-		return promptCharConfirm(sageMessage, character, prompt, async char => {
-			await removeAuto(sageMessage, ...channelDids);
-			const userDid = sageMessage.sageUser.did;
-			for (const channelDid of channelDids) {
-				await char.setAutoChannel({ channelDid, dialogPostType, userDid }, false);
-			}
-			return char.save();
-		});
+	if (!character) {
+		return sendNotFound(sageMessage, `${characterTypeMeta.singularDescriptor} Auto Dialog (On)`, characterTypeMeta.singularDescriptor!, alias ?? names.name);
 	}
-	return sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor}-auto-on`, characterTypeMeta.singularDescriptor!, name);
+
+	const channelIds = parseIds(sageMessage.message, "channel");
+	const channelLinks = channelIds.map(channelId => toChannelMention(channelId));
+	const dialogType = dialogPostType !== undefined ? ` (${DialogType[dialogPostType]})` : "";
+	const prompt = channelIds.length > 1 || channelIds[0] !== sageMessage.channelDid
+		? `Start ${toUserMention(userId)} using Auto Dialog ${dialogType} with ${character.name} in the given channel(s)?\n> ${channelLinks.join("\n> ")}`
+		: `Start ${toUserMention(userId)} using Auto Dialog ${dialogType} with ${character.name}?`;
+
+	await promptCharConfirm(sageMessage, character, prompt, async char => {
+		await removeAuto(sageMessage, { userId, channelIds });
+		for (const channelDid of channelIds) {
+			await char.setAutoChannel({ channelDid, dialogPostType, userDid:userId }, false);
+		}
+		return char.save();
+	});
+
+	const deleted = await deleteMessage(sageMessage.message);
+	if (deleted === 1) {
+		await sendGameCharacter(sageMessage, character);
+	}
+
 }

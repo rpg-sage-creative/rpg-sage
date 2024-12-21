@@ -176,9 +176,9 @@ async function aliasSet(sageMessage: SageMessage): Promise<void> {
 	if (!aliasName || !aliasTarget || !dialogContent || !validTarget) {
 		const details = [
 			"The command for setting an advanced alias is:",
-			"> ```sage!!alias set name=\"\" value=\"\"```",
+			"> ```sage! alias set name=\"\" value=\"\"```",
 			"For example:",
-			"> ```sage!!alias set name=\"gobfireball\" value=\"npc::gobbo::Gobbo grabs his torch, waves it around, and casts fireball with it!\"```",
+			"> ```sage! alias set name=\"gobfireball\" value=\"npc::gobbo::Gobbo grabs his torch, waves it around, and casts fireball with it!\"```",
 		];
 		if (aliasTarget) {
 			if (!dialogContent) {
@@ -225,9 +225,9 @@ async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 	if (!aliasName || !alias) {
 		const details = [
 			"The command for deleting an advanced alias is:",
-			"> ```sage!!alias delete name=\"\"```",
+			"> ```sage! alias delete name=\"\"```",
 			"For example:",
-			"> ```sage!!alias delete name=\"gobfireball\"```",
+			"> ```sage! alias delete name=\"gobfireball\"```",
 		];
 		if (aliasName && !alias) {
 			details.push(`Error:\n> Unable to find Alias: "${aliasName}"`);
@@ -248,9 +248,9 @@ async function aliasDetails(sageMessage: SageMessage): Promise<void> {
 	if (!aliasName || !alias) {
 		const details = [
 			"The command for viewing an advanced alias is:",
-			"> ```sage!!alias details name=\"\"```",
+			"> ```sage! alias details name=\"\"```",
 			"For example:",
-			"> ```sage!!alias details name=\"gobfireball\"```",
+			"> ```sage! alias details name=\"gobfireball\"```",
 		];
 		if (aliasName && !alias) {
 			details.push(`Error:\n> Unable to find Alias: "${aliasName}"`);
@@ -269,13 +269,13 @@ async function aliasHelp(sageMessage: SageMessage): Promise<void> {
 	}
 	const details = [
 		"The command for listing advanced aliases is:",
-		"> ```sage!!alias list```",
+		"> ```sage! alias list```",
 		"The command for viewing an advanced alias is:",
-		"> ```sage!!alias details name=\"\"```",
+		"> ```sage! alias details name=\"\"```",
 		"The command for setting an advanced alias is:",
-		"> ```sage!!alias set name=\"\" value=\"\"```",
+		"> ```sage! alias set name=\"\" value=\"\"```",
 		"The command for deleting an advanced alias is:",
-		"> ```sage!!alias delete name=\"\"```",
+		"> ```sage! alias delete name=\"\"```",
 	];
 	return sageMessage.whisper(details.join("\n"));
 

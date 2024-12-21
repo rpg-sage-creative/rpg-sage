@@ -13,8 +13,9 @@ function toPath(keyOrRef: DiscordKey | MessageReference): string {
 }
 
 export class DialogMessageRepository {
-	public static async read(keyOrRef: DiscordKey | MessageReference, catcher = errorReturnNull): Promise<TDialogMessage | null> {
+	public static async read(keyOrRef: DiscordKey | MessageReference, options?: { ignoreMissingFile?: boolean }): Promise<TDialogMessage | null> {
 		const path = toPath(keyOrRef);
+		const catcher = options?.ignoreMissingFile ? () => null : errorReturnNull;
 		return readJsonFile<TDialogMessage>(path).catch(catcher);
 	}
 	public static async write(discordKey: DiscordKey, dialogMessage: TDialogMessage): Promise<boolean> {

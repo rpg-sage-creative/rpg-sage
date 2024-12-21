@@ -38,7 +38,7 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	}
 
 	const userDid = sageReaction.user.id;
-	const dialogMessage = await DialogMessageRepository.read(sageReaction.discordKey, () => null);
+	const dialogMessage = await DialogMessageRepository.read(sageReaction.discordKey, { ignoreMissingFile:true });
 	if (dialogMessage?.userDid === userDid) {
 		// This covers PCs inside a game *AND* outside a game
 		return { command: "CommandDelete|Add" };
@@ -106,7 +106,7 @@ async function doDelete(sageReaction: SageReaction): Promise<void> {
 		if (actorUser) await sendDm(actorUser);
 	}
 
-	const dialogMessage = await DialogMessageRepository.read(sageReaction.discordKey, () => null);
+	const dialogMessage = await DialogMessageRepository.read(sageReaction.discordKey, { ignoreMissingFile:true });
 	if (dialogMessage && !actor.equals(dialogMessage.userDid)) {
 		const poster = await sageReaction.sageCache.users.getByDid(dialogMessage.userDid);
 		if (poster?.dmOnDelete) {
