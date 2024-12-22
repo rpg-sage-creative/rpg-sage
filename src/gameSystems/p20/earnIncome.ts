@@ -456,7 +456,12 @@ async function rollEarnIncome(sageInteraction: SageInteraction<ButtonInteraction
 	await sageInteraction.replyStack.send({ content:renderable });
 }
 
+async function pfsIncome(sageCommand: SageCommand): Promise<void> {
+	await sageCommand.replyStack.reply({ content:`The PFS Income command was outdated and has been removed. Please use the new Earn Income command:\`\`\`sage! earn income\`\`\`` });
+}
+
 export function registerEarnIncome(): void {
+	registerListeners({ commands:["pfs|income"], handler:pfsIncome });
 	registerListeners({ commands:["earn|income", "income|earned"], handler:showEarnIncome });
 	registerListeners({ commands:[/p20\|earnIncome\|(gameSystem|taskLevel|charLevel|proficiency|modifier|verboseToggle)\|\d{16,}/], interaction:changeEarnIncome });
 	registerListeners({ commands:[/p20\|earnIncome\|rollCheck\|\d{16,}/], interaction:rollEarnIncome });

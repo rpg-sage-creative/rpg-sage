@@ -1,9 +1,5 @@
 import { error, warn } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import { capitalize } from "@rsc-utils/string-utils";
-import { Dice } from "../../../../sage-dice/dice/pf2e/index.js";
-import { DieRollGrade } from "../../../../sage-dice/index.js";
-import { Coins, PROFICIENCIES, Table, toModifier } from "../../../../sage-pf2e/index.js";
 import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { registerCommandRegex } from "../cmd.js";
@@ -14,109 +10,6 @@ export type TPfsFaction = "Horizon Hunters" | "Vigilant Seal" | "Envoys' Allianc
 export function createPfsRenderableContent(sageMessage: SageMessage): RenderableContent {
 	return createRenderableContent(sageMessage.getHasColors(), ColorType.PfsCommand);
 }
-
-type TIncomeRoll = {
-	crit: boolean;
-	success: boolean;
-	dieResult: number;
-	modifiedResult: number;
-	days: number;
-	incomePerDay: string;
-};
-
-function summaryForDays(incomeRolls: TIncomeRoll[], days: number): string {
-	const summary = <string[]>[];
-	const sum = new Coins();
-	for (const roll of incomeRolls) {
-		const rollDays = Math.min(roll.days, days);
-		const coins = Coins.parse(roll.incomePerDay || "0 sp");
-		summary.push(`${coins.toGpString()} x${rollDays}`);
-		sum.add(coins.multiply(rollDays));
-		days -= roll.days;
-		if (days < 1) {
-			break;
-		}
-	}
-	return `${sum.toGpString()} (${summary.join(", ")})`;
-}
-
-// #region Earn Income
-function earnIncome(sageMessage: SageMessage): void {
-	const [pcLevelString, proficiencyString, modifierString, daysString] = sageMessage.args.toArray();
-	//this: Discord.Message, pcLevelString: string, proficiencyString: string, modifierString: string, daysString: string
-
-	const renderable = createPfsRenderableContent(sageMessage),
-		pcLevel = +pcLevelString,
-		taskLevel = Math.max(0, pcLevel - 2),
-		proficiencyLetter = capitalize(proficiencyString ?? "")[0],
-		proficiencyLetterIndex = PROFICIENCIES.findIndex(_proficiency => _proficiency[0] === proficiencyLetter),
-		proficiency = PROFICIENCIES[proficiencyLetterIndex],
-		modifier = (modifierString.startsWith("-") ? -1 : 1) * +modifierString.match(/\d+/)![0],
-		days = +daysString || 36;
-	renderable.setTitle(`<b>Earn Income Roll</b>`);
-	if (pcLevel < 1 || 20 < pcLevel) {
-		renderable.append(`<blockquote>Invalid PC Level: ${pcLevelString}</blockquote>`);
-	} else if (proficiencyLetterIndex < 0) {
-		renderable.append(`<blockquote>Invalid Proficiency: ${proficiencyString}</blockquote>`);
-	} else {
-		const tableIncome = Table.findByNumber("4-2")!,
-			levelRow = tableIncome.rows[taskLevel + 1],
-			critRow = tableIncome.rows[taskLevel + 2],
-			dc = +Table.findByNumber("10-5")!.rows[taskLevel + 1][1];
-
-		renderable.append(`<b>PC Level</b> ${pcLevel}`);
-		renderable.append(`<b>Skill Proficiency</b> ${proficiency}`);
-		renderable.append(`<b>Skill Modifier</b> ${toModifier(modifier)}`);
-		renderable.append(`<blockquote><b>Task Level</b> ${taskLevel}\n<b>Check DC</b> ${dc}\n<b>Roll</b> 1d20${toModifier(modifier)} >= ${dc}</blockquote>`);
-		renderable.append(`<b>Possible Results</b>`);
-		renderable.append(`<blockquote><b>Critical Failure</b> -\n<b>Failure</b> ${levelRow[1]}</blockquote>`);
-		renderable.append(`<blockquote><b>Success</b> ${levelRow[1 + proficiencyLetterIndex]}\n<b>Critical Success</b> ${critRow[1 + proficiencyLetterIndex]}</blockquote>`);
-
-		const rolls: TIncomeRoll[] = [];
-		const dice = Dice.parse(`1d20+${modifier}dc${dc}`);
-		let dayCounter = days;
-		do {
-			const diceRoll = dice.roll();
-			const roll = <TIncomeRoll>{
-				crit: diceRoll.grade === DieRollGrade.CriticalFailure || diceRoll.grade === DieRollGrade.CriticalSuccess,
-				success: diceRoll.grade === DieRollGrade.Success || diceRoll.grade === DieRollGrade.CriticalSuccess,
-				dieResult: diceRoll.rolls[0].rolls[0],
-				modifiedResult: diceRoll.total,
-				days: 1,
-				incomePerDay: "0 sp"
-			};
-			if (diceRoll.grade !== DieRollGrade.CriticalFailure) {
-				roll.days = Math.min(dayCounter, 8);
-				roll.incomePerDay = !roll.success ? levelRow[1] : roll.crit ? critRow[1 + proficiencyLetterIndex] : levelRow[1 + proficiencyLetterIndex];
-			}
-			rolls.push(roll);
-			dayCounter -= roll.days;
-		} while (dayCounter > 0);
-
-		rolls.forEach((roll, rollIndex) => {
-			renderable.append(`<b>Earn Income Check (${rollIndex + 1} of ${rolls.length})</b>`);
-			renderable.append(`<blockquote><b>${roll.dieResult}</b>${toModifier(modifier)} = ${roll.modifiedResult} (${roll.crit ? "Critical " : ""}${roll.success ? "Success" : "Failure"}): ${roll.incomePerDay}/day</blockquote>`);
-		});
-		if (daysString) {
-			renderable.append(`<u>Total Income</u>`);
-			renderable.append(`<blockquote><b>${days} Days</b> ${summaryForDays(rolls, days)}</blockquote>`);
-		} else {
-			renderable.append(`<u>PFS Agent</u>`);
-			renderable.append(`<blockquote><b>2 Days</b> ${summaryForDays(rolls, 2)}</blockquote>`);
-			renderable.append(`<blockquote><b>8 Days</b> ${summaryForDays(rolls, 8)}</blockquote>`);
-			renderable.append(`<blockquote><b>24 Days</b> ${summaryForDays(rolls, 24)}</blockquote>`);
-			renderable.append(`<u>PFS Field-Commissioned Agent</u>`);
-			renderable.append(`<blockquote><b>3 Days</b> ${summaryForDays(rolls, 3)}</blockquote>`);
-			renderable.append(`<blockquote><b>12 Days</b> ${summaryForDays(rolls, 12)}</blockquote>`);
-			renderable.append(`<blockquote><b>36 Days</b> ${summaryForDays(rolls, 36)}</blockquote>`);
-		}
-	}
-	sageMessage.send(renderable);
-}
-function registerDowntime(): void {
-	registerCommandRegex(/^\s*pfs\s*income\s*(\d{1,2})\s*(\w+)\s*([\+\-]?\d{1,2})(?:\s+(\d+)\s*(days)?)?\s*$/i, earnIncome);
-}
-// #endregion Earn Income
 
 // #region Links
 // type TLink = { category: string; title: string; url: string; details: string[] };
@@ -277,7 +170,6 @@ function registerScenarios(): void {
 // #endregion Scenario/Quest Randomizer
 
 export function registerPfs(): void {
-	registerDowntime();
 	registerTiers();
 	registerScenarios();
 }
