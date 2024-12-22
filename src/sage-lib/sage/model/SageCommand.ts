@@ -81,6 +81,7 @@ export abstract class SageCommand<
 
 	public isSageInteraction(type: "BUTTON"): this is SageInteraction<ButtonInteraction>;
 	public isSageInteraction(type: "SELECT"): this is SageInteraction<StringSelectMenuInteraction>;
+	public isSageInteraction(type: "MESSAGE"): this is SageInteraction<ButtonInteraction | StringSelectMenuInteraction>;
 	public isSageInteraction(type: "TEXT"): this is SageInteraction<MessageComponentInteraction>;
 	public isSageInteraction(type: "COMPONENT"): this is SageInteraction<MessageComponentInteraction>;
 	public isSageInteraction(type: "AUTO"): this is SageInteraction<AutocompleteInteraction>;
@@ -88,39 +89,35 @@ export abstract class SageCommand<
 	public isSageInteraction(type: "SLASH"): this is SageInteraction<CommandInteraction>;
 	public isSageInteraction<T extends DRepliableInteraction>(type: "REPLIABLE"): this is SageInteraction<T>;
 	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T>;
-	public isSageInteraction(_type?: "AUTO" | "MODAL" | "SLASH" | "BUTTON" | "SELECT" | "TEXT" | "COMPONENT" | "REPLIABLE"): boolean {
+	public isSageInteraction(type?: "AUTO" | "MODAL" | "SLASH" | "BUTTON" | "SELECT" | "MESSAGE" | "TEXT" | "COMPONENT" | "REPLIABLE"): boolean {
 		if ("interaction" in this) {
-			if (!_type) {
+			if (!type) {
 				return true;
 			}
 
 			const interaction = this.interaction as DInteraction;
 
-			if (_type === "REPLIABLE") {
+			if (type === "REPLIABLE") {
 				return interaction.isRepliable();
 				// return "reply" in interaction;
 			}
 
-			let type: InteractionType | ComponentType;
-			switch(_type) {
-				// InteractionType
-				case "AUTO": type = InteractionType.ApplicationCommandAutocomplete; break; //NOSONAR
-				case "MODAL": type = InteractionType.ModalSubmit; break; //NOSONAR
-				case "SLASH": type = InteractionType.ApplicationCommand; break; //NOSONAR
-				// MessageComponentType
-				case "BUTTON": type = ComponentType.Button; break; //NOSONAR
-				case "SELECT": type = ComponentType.StringSelect; break; //NOSONAR
-				case "TEXT": type = ComponentType.TextInput; break; //NOSONAR
-				// case "COMPONENT": type = ComponentType.; break; //NOSONAR
-				default: return false;
-			}
+			// InteractionType
+			if (["AUTO", "MODAL", "SLASH"].includes(type)) {
+				switch(type) {
+					case "AUTO": return interaction.type === InteractionType.ApplicationCommandAutocomplete;
+					case "MODAL": return interaction.type === InteractionType.ModalSubmit;
+					case "SLASH": return interaction.type === InteractionType.ApplicationCommand;
+				}
 
-			if (interaction.type === type) {
-				return true;
-			}
+			// MessageComponentType
+			}else if ("componentType" in interaction && ["BUTTON", "MESSAGE", "SELECT"].includes(type)) {
+				switch(type) {
+					case "BUTTON": return interaction.componentType === ComponentType.Button;
+					case "MESSAGE": return interaction.componentType === ComponentType.Button || interaction.componentType === ComponentType.StringSelect;
+					case "SELECT": return interaction.componentType === ComponentType.StringSelect;
+				}
 
-			if ("componentType" in interaction) {
-				return type === interaction.componentType;
 			}
 		}
 		return false;
