@@ -341,10 +341,11 @@ function getVerbose(sageCommand: SageCommand, userId: Snowflake): boolean | unde
 	if (components?.length) {
 		const customId = createCustomId("verboseToggle", userId);
 		const isVerboseButton = (component: MessageActionRowComponent): component is ButtonComponent => component.customId === customId;
+		const isToggleAction = sageCommand.isSageInteraction("BUTTON") ? sageCommand.interaction.customId === customId : false;
 		for (const row of components) {
 			for (const component of row.components) {
 				if (isVerboseButton(component)) {
-					return component.label === "Verbose";
+					return isToggleAction ? component.label === "Verbose" : component.label !== "Verbose";
 				}
 			}
 		}
@@ -445,10 +446,12 @@ async function rollEarnIncome(sageInteraction: SageInteraction<ButtonInteraction
 	renderable.appendBlock(
 		incomePerDay
 	);
-	renderable.append(`<b>Income Earned For Multiple Days</b>`);
-	renderable.appendBlock(
-		...[2,3,4,5,6,7,8].map(days => `<b>${days} days</b> ${multiplyIncome(incomePerDay, days)}`),
-	);
+	if (roll.grade !== DieRollGrade.CriticalFailure) {
+		renderable.append(`<b>Income Earned For Multiple Days</b>`);
+		renderable.appendBlock(
+			...[2,3,4,5,6,7,8].map(days => `<b>${days} days</b> ${multiplyIncome(incomePerDay, days)}`),
+		);
+	}
 
 	await sageInteraction.replyStack.send({ content:renderable });
 }
