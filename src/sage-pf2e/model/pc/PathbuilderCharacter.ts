@@ -164,6 +164,19 @@ function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilder
 	return `<b>${label}</b>${dcAttackLabel} ${spellLevels.join("; ")}`;
 }
 
+function spellCasterToKnownHtml(spellCaster: TPathbuilderCharacterSpellCaster): string {
+	const label = `Spells Known (${spellCaster.name})`;
+	const spellLevels = spellCaster.spells.map((spells) => {
+		if (!spells?.list.length) {
+			return null;
+		}
+		const levelLabel = `<b>${spells.spellLevel ? nth(spells.spellLevel) : `Cantrips`}</b>`;
+		const list = spellsListToHtml(spells.list);
+		return `${levelLabel} ${list}`;
+	}).filter(s => s);
+	return `<b>${label}</b> ${spellLevels.join("; ")}`;
+}
+
 function focusSpellsToHtml(char: PathbuilderCharacter): string[] {
 	const { focus } = char.toJSON();
 	const focusSpells: string[] = [];
@@ -514,8 +527,8 @@ function eq<T, U>(a: T, b: U, matcher = false): boolean {
 	return String(a).toLowerCase() === String(b).toLowerCase();
 }
 
-export type TCharacterSectionType = "All" | "Armor" | "Attacks" | "Equipment" | "Feats" | "Formulas" | "Languages" | "Perception" | "Pets" | "Skills" | "Speed" | "Spells" | "Stats" | "Traits" | "Weapons";
-export const CharacterSectionTypes: TCharacterSectionType[] = ["All", "Armor", "Attacks", "Equipment", "Feats", "Formulas", "Languages", "Perception", "Pets", "Skills", "Speed", "Spells", "Stats", "Traits", "Weapons"];
+export type TCharacterSectionType = "All" | "Armor" | "Attacks" | "Equipment" | "Feats" | "Formulas" | "Languages" | "Perception" | "Pets" | "Skills" | "Speed" | "Spells" | "SpellsKnown" | "Stats" | "Traits" | "Weapons";
+export const CharacterSectionTypes: TCharacterSectionType[] = ["All", "Armor", "Attacks", "Equipment", "Feats", "Formulas", "Languages", "Perception", "Pets", "Skills", "Speed", "Spells", "SpellsKnown", "Stats", "Traits", "Weapons"];
 export function getCharacterSections(view: Optional<TCharacterViewType>): TCharacterSectionType[] | null {
 	switch(view) {
 		case "All": return ["All"];
@@ -524,7 +537,7 @@ export function getCharacterSections(view: Optional<TCharacterViewType>): TChara
 		case "Feats": return ["Traits", "Perception", "Languages", "Skills", "Feats"];
 		case "Formulas": return ["Traits", "Perception", "Languages", "Skills", "Formulas"];
 		case "Pets": return ["Traits", "Perception", "Languages", "Skills", "Pets"];
-		case "Spells": return ["Traits", "Perception", "Languages", "Skills", "Spells"];
+		case "Spells": return ["Traits", "Perception", "Languages", "Skills", "Spells", "SpellsKnown"];
 	}
 	return null;
 }
@@ -885,6 +898,12 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			push();
 			this.core.spellCasters.map(spellCaster => spellCasterToHtml(this, spellCaster)).forEach(push);
 			focusSpellsToHtml(this).forEach(push);
+		}
+
+		const preparedCasters = this.core.spellCasters?.filter(caster => caster?.spellcastingType === "prepared");
+		if (includes(["All", "SpellsKnown"]) && preparedCasters?.length) {
+			push();
+			preparedCasters.map(preparedCaster => spellCasterToKnownHtml(preparedCaster)).forEach(push);
 		}
 
 		if (includes(["All", "Pets"]) && this.core.pets?.length) {
