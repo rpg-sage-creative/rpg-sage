@@ -1,7 +1,7 @@
 import { SageChannelType } from "@rsc-sage/types";
 import { mapAsync } from "@rsc-utils/array-utils";
 import type { Optional } from "@rsc-utils/core-utils";
-import { toChannelMention, toHumanReadable } from "@rsc-utils/discord-utils";
+import { toChannelMention, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import type { Message } from "discord.js";
 import { canProcessStats, statsToHtml } from "../../../../../gameSystems/sheets.js";
@@ -49,6 +49,10 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	renderableContent.append(`<b>Images</b> ${orNone(imageLinks)}`);
 
 	renderableContent.append("");
+
+	if (character.pathbuilder?.hasSheetRef) {
+		renderableContent.append(`<b>Char Sheet</b> ${toMessageUrl(character.pathbuilder.sheetRef!)}`);
+	}
 
 	if (character.isCompanion || character.isMinion) {
 		renderableContent.append(`<b>Character</b> ${orUnknown(character.parent?.name)}`);
