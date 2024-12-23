@@ -1,4 +1,4 @@
-import { Collection } from "@rsc-utils/array-utils";
+import { Collection, sortPrimitive } from "@rsc-utils/array-utils";
 import { CharacterBase } from "@rsc-utils/character-utils";
 import { debug, errorReturnFalse, errorReturnNull, getDataRoot, randomSnowflake, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
@@ -122,29 +122,34 @@ function spellCasterToLabel(spellCaster: TPathbuilderCharacterSpellCaster): stri
 }
 
 function spellsListToHtml(spells: string[]): string {
-	const mapped = spells.reduce((map, spell) => {
+	const mappedSpells = spells.reduce((map, spell) => {
 		if (spell) {
-			const lower = spell.toLowerCase();
+			const lower = spell;//.toLowerCase();
 			map.set(lower, (map.get(lower) ?? 0) + 1);
 		}
 		return map;
 	}, new Map<string, number>());
-	const flattened = Array.from(mapped.entries()).map(([spell, count]) => {
+	const sortedSpells = [...mappedSpells.keys()].sort(sortPrimitive);
+	const formattedSpells = sortedSpells.map(spell => {
 		const name = `<i>${spell}</i>`;
+		const count = mappedSpells.get(spell) ?? 0;
 		const times = count > 1 ? ` x${count}` : ``;
 		return name + times;
 	});
-	return flattened.join(", ");
+	return formattedSpells.join(", ");
 }
 
 function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilderCharacterSpellCaster): string {
-	const label = spellCasterToLabel(spellCaster);
+	const label = spellCaster.spellcastingType === "prepared" ? `Prepare Spells (${spellCaster.name})` : spellCasterToLabel(spellCaster);
 	const mod = char.getLevelMod(spellCaster.proficiency)
 		+ char.abilities.getAbilityScoreModifier(ABILITIES.find(abil => abil.toLowerCase().startsWith(spellCaster.ability))!)
 		+ spellCaster.proficiency;
 	const isFocus = spellCaster.magicTradition === "focus" || spellCaster.focusPoints > 0;
 	const dcAttackLabel = isArcaneSense(spellCaster) ? `` : ` DC ${10+mod}, attack +${mod};`;
-	const spellLevels = spellCaster.spells.map((spells, level) => {
+	const spellsToDisplay = spellCaster.spellcastingType === "prepared"
+		? spellCaster.prepared
+		: spellCaster.spells;
+	const spellLevels = spellsToDisplay.map((spells, level) => {
 		if (!spells) {
 			return null;
 		}
