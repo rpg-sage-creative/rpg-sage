@@ -976,6 +976,10 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			outputTypes.push("Spells");
 		}
 
+		if (this.core.spellCasters?.filter(caster => caster?.spellcastingType === "prepared").length) {
+			outputTypes.push("SpellsKnown");
+		}
+
 		if (this.core.pets.length) {
 			outputTypes.push("Pets");
 		}
