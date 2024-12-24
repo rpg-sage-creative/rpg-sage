@@ -6,8 +6,11 @@ type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
 
 function addZeroWidthSpaces(value: string): string {
 	return value
-		.replace(/^@/, `@${ZERO_WIDTH_SPACE}`)
-		.replace(/(?<=\|)\|/g, `${ZERO_WIDTH_SPACE}|`);
+		// avoid @here and @everybody
+		.replace(/@(?!\u200B)/g, `@${ZERO_WIDTH_SPACE}`)
+		// fix spoilers
+		.replace(/(?<!\u200B)\|/g, `${ZERO_WIDTH_SPACE}|`)
+		;
 }
 
 /** Returns the user name as a readable mention or "@UnknownUser" */

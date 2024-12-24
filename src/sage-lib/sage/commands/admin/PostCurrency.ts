@@ -1,5 +1,6 @@
 import { isDefined, type Snowflake } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
 
 type PostCurrencyPostType = "all" | "command" | "dialog" | "dice" | "message" | "reaction" | "tupper";
@@ -257,6 +258,15 @@ export function togglePostCurrency({ postCurrency }: HasPostCurrency, options: T
 	return false;
 }
 
+function cleanPlayerName(playerName: string): string {
+	return playerName
+		// avoid @here and @everybody
+		.replace(/@(?!\u200B)/g, `@${ZERO_WIDTH_SPACE}`)
+		// fix spoilers
+		.replace(/(?<!\u200B)\|/g, `${ZERO_WIDTH_SPACE}|`)
+		;
+}
+
 type PlayerInfo = { userId:Snowflake; name:string; };
 export function renderPostCurrency({ postCurrency }: HasPostCurrency, renderableContent: RenderableContent, players: PlayerInfo[]): void {
 	const postCurrencyData = Object.values(postCurrency);
@@ -284,7 +294,7 @@ export function renderPostCurrency({ postCurrency }: HasPostCurrency, renderable
 				const typesText = types.length ? `(${types.join(", ")})` : ``;
 				values.push(`${value} ${data.name ?? data.key} ${typesText}`.trim());
 			});
-			renderableContent.append(`[spacer]${player.name}: ${values.join("; ")}`);
+			renderableContent.append(`[spacer]${cleanPlayerName(player.name)}: ${values.join("; ")}`);
 		});
 	}
 }
