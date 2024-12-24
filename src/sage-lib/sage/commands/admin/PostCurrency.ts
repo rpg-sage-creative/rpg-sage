@@ -2,49 +2,8 @@ import { isDefined, type Snowflake } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
-
-type PostCurrencyPostType = "all" | "command" | "dialog" | "dice" | "message" | "reaction" | "tupper";
-
-type PostCurrencyIncrement = {
-	channelId?: Snowflake;
-	postType: PostCurrencyPostType;
-	increment: number;
-};
-
-type PostCurrencyUserCount = {
-	userId: Snowflake;
-	channelId: Snowflake;
-	postType: PostCurrencyPostType;
-	count: number;
-};
-
-type PostCurrencyDataEvent = {
-	increments: PostCurrencyIncrement[];
-	userCounts: PostCurrencyUserCount[];
-	beginTs: number;
-	endTs?: number;
-};
-
-type PostCurrencyDataTotal = {
-	userId: Snowflake;
-	dialog: number;
-	dice: number;
-	value: number;
-};
-
-type PostCurrencyData = {
-	key: string;
-	name: string;
-	description?: string;
-	disabled?: boolean;
-	events: PostCurrencyDataEvent[];
-	totals: PostCurrencyDataTotal[];
-};
-// addCurrency(core, key, name, description, postIncrement, dialogIncrement, diceIncrement)
-
-type PostCurrency = {
-	[key:string]: PostCurrencyData;
-};
+import { calculatePostCurrencyTotals } from "./postCurrency/calculatePostCurrencyTotals.js";
+import type { PostCurrency, PostCurrencyData, PostCurrencyIncrement, PostCurrencyUserCount, PostCurrencyUserCountPostType } from "./postCurrency/types.js";
 
 export type CoreWithPostCurrency = {
 	postCurrency?: PostCurrency;
@@ -55,36 +14,10 @@ export interface HasPostCurrency {
 }
 
 function calculateTotals(data: PostCurrencyData): void {
-	const totals: PostCurrencyDataTotal[] = [];
-	data.events.forEach(dataEvent => {
-		dataEvent.userCounts.forEach(userCount => {
-			const increment = dataEvent.increments.find(inc => {
-				// ensure: no channel or the channels match
-				if (inc.channelId && inc.channelId !== userCount.channelId) return false;
-				// ensure: all post types or the post types match
-				if (inc.postType !== "all" && inc.postType !== userCount.postType) return false;
-				// we pass the tests
-				return true;
-			});
-			if (increment) {
-				let total = totals.find(t => t.userId === userCount.userId);
-				if (!total) {
-					total = { userId:userCount.userId, dialog:0, dice:0, value:0 };
-					totals.push(total);
-				}
-				if (["dialog", "dice"].includes(userCount.postType)) {
-					total[userCount.postType as "dialog"] += userCount.count;
-				}
-				if (increment.increment) {
-					total.value += Math.floor(userCount.count / increment.increment);
-				}
-			}
-		});
-	});
-	data.totals = totals;
+	data.totals = calculatePostCurrencyTotals(data);
 }
 
-export async function logPostCurrency(sageCommand: SageCommand, postType: Exclude<PostCurrencyPostType, "all">): Promise<void> {
+export async function logPostCurrency(sageCommand: SageCommand, postType: PostCurrencyUserCountPostType): Promise<void> {
 	if (sageCommand.game && sageCommand.channelDid) {
 		const changes = logPostsWithAll(sageCommand.game, {
 			userId: sageCommand.sageUser.did,
@@ -185,7 +118,7 @@ export function addPostCurrencyEvent({ postCurrency }: HasPostCurrency, options:
 	/* postCurrencyData.data uses unshift so that the [0] index is always the newest */
 
 	/** @todo implement other increment types and per channel differences */
-	const types = ["dialog", "dice"] as PostCurrencyPostType[];
+	const types = ["dialog", "dice"] as PostCurrencyUserCountPostType[];
 	const isDifferent = types.some(type => {
 		const optIncrement = options[`${type}Increment` as "dialogIncrement"];
 		const typeIncrement = postCurrencyData.events[0]?.increments.find(inc => inc.postType === type);

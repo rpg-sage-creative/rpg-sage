@@ -31,7 +31,7 @@ async function gCmdAddCurrency(sageCommand: SageCommand): Promise<void> {
 	const resetCounts = sageCommand.args.getBoolean("resetCounts") ?? false;
 	const recalculateTotals = sageCommand.args.getBoolean("recalculateTotals") ?? false;
 
-	addPostCurrencyEvent(sageCommand.game, { key, name, description, dialogIncrement, diceIncrement, resetCounts, recalculateTotals })
+	addPostCurrencyEvent(sageCommand.game, { key, name, description, dialogIncrement, diceIncrement, resetCounts, recalculateTotals });
 
 	sageCommand.replyStack.stopThinking();
 
