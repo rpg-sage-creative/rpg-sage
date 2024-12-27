@@ -363,9 +363,8 @@ function getArgs(sageCommand: SageCommand): Args {
 	const verbose = getVerbose(sageCommand, userId) ?? false;
 	const byCharLevel = !!charLevelArg;
 	const charLevel = boundNumber(+(charLevelArg ?? 1), { min:1, max:20, default:1 });
-	const taskLevel = charLevelArg
-		? charLevel - 2
-		: boundNumber(+(taskLevelArg ?? 1), { min:0, max:20, default:1 });
+	const taskLevelValue = charLevelArg ? Math.max(charLevel - 2, 0) : +(taskLevelArg ?? 1);
+	const taskLevel = boundNumber(taskLevelValue, { min:0, max:20, default:1 });
 	return { taskLevelArg, charLevelArg, gameSystemType, byCharLevel, charLevel, taskLevel, proficiency, modifier, userId, verbose };
 }
 
