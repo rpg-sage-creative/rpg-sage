@@ -52,12 +52,19 @@ function savesToHtml(char: GameCharacter): string | undefined {
 	return undefined;
 }
 
-function acSavesToHtml(char: GameCharacter): string | undefined {
-	const ac = acToHtml(char);
-	const saves = savesToHtml(char);
-	return ac && saves
-		? `${ac}; ${saves}`
-		: ac ?? saves;
+function classDcToHtml(char: GameCharacter): string | undefined {
+	const stat = char.getStat("classDC");
+	return stat ? `<b>Class DC</b> ${stat}` : undefined;
+}
+
+function acSavesDcToHtml(char: GameCharacter): string | undefined {
+	const parts = [
+		acToHtml(char),
+		savesToHtml(char),
+		classDcToHtml(char),
+	];
+	const existing = parts.filter(s => s);
+	return existing.join("; ");
 }
 
 function hpToHtml(char: GameCharacter): string | undefined {
@@ -80,7 +87,7 @@ function conditionsToHtml(char: GameCharacter): string | undefined {
 export function statsToHtml(char: GameCharacter): string[] {
 	const out: (string | undefined)[] = [];
 	out.push(abilitiesToHtml(char));
-	out.push(acSavesToHtml(char));
+	out.push(acSavesDcToHtml(char));
 	out.push(hpToHtml(char));
 	out.push(conditionsToHtml(char));
 	return out.filter(s => s !== undefined) as string[];
