@@ -4,8 +4,10 @@ import { randomInt as _randomInt } from "crypto";
  * Ensures min/max are correct before creating the random int.
  */
 export function randomInt(min: number, max: number): number {
-	if (min === max) {
-		return min;
+	const minInt = Math.round(Math.min(min, max));
+	const maxInt = Math.round(Math.max(min, max));
+	if (minInt === maxInt) {
+		return minInt;
 	}
-	return _randomInt(Math.min(min, max), Math.max(min, max) + 1);
+	return _randomInt(minInt, maxInt + 1);
 }
