@@ -1,9 +1,9 @@
 import { GameType } from "@rsc-sage/types";
 import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { randomSnowflake, warn } from "@rsc-utils/core-utils";
+import { isDefined, randomSnowflake, warn } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
-import { type TokenParsers, ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import {
 	CritMethodType,
@@ -11,12 +11,8 @@ import {
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
-	HasDieCore, type IDiceBase,
-	type IRollBase,
-	type TDiceLiteral,
-	type TDropKeepData,
-	type TSign,
-	type TTestData, UNICODE_LEFT_ARROW,
+	HasDieCore,
+	UNICODE_LEFT_ARROW,
 	cleanDescription,
 	dropKeepToString,
 	gradeRoll, gradeToEmoji,
@@ -25,7 +21,13 @@ import {
 	parseValueTestData,
 	sum,
 	sumDicePartRolls,
-	sumDropKeep
+	sumDropKeep,
+	type IDiceBase,
+	type IRollBase,
+	type TDiceLiteral,
+	type TDropKeepData,
+	type TSign,
+	type TTestData
 } from "../../common.js";
 import { correctEscapeForEmoji } from "../index.js";
 import type {
@@ -108,11 +110,8 @@ function reduceDiceToken<T extends DicePartCore>(core: T, token: TokenData, redu
 	if (token.matches) {
 		core.sign = <TSign>token.matches[0];
 		core.fixedRolls = (token.matches[1] ?? "").split(",").map(s => +s.trim()).filter(n => n);
-		core.count = +token.matches[2] || 0;
+		core.count = token.matches[2] ? +token.matches[2] : 1;
 		core.sides = +token.matches[3] || 0;
-		if (!core.count && core.sides) {
-			core.count = 1;
-		}
 	}
 	const dropKeep = reduceSignToDropKeepData?.find(dropKeepData => dropKeepData.test(core, token));
 	if (dropKeep) {
@@ -141,7 +140,7 @@ function reduceNoSortToken<T extends DicePartCore>(core: T, token: TokenData, la
 function reduceModToken<T extends DicePartCore>(core: T, token: TokenData): T {
 	if (token.matches) {
 		core.sign = <TSign>token.matches[0];
-		core.modifier = +token.matches[1] || 0;
+		core.modifier = token.matches[1] ? +token.matches[1] : undefined;
 	}
 	return core;
 }
@@ -234,6 +233,7 @@ function strikeDroppedRolls(dropKeep: Optional<TDropKeepData>, sortedRolls: TRol
 
 function dicePartRollToString(dicePartRoll: TDicePartRoll, diceSort?: "noSort" | "sort"): string {
 	const rollsAndIndexes = mapAndSortRolls(dicePartRoll);
+	if (!rollsAndIndexes.length) return ``;
 	strikeDroppedRolls(dicePartRoll.dice.dropKeep, rollsAndIndexes.byRoll);
 	const sort = diceSort === "noSort" ? false : diceSort === "sort" ? true : !dicePartRoll.dice.noSort; // NOSONAR
 	const outputRollsAndIndexes = sort ? rollsAndIndexes.byRoll : rollsAndIndexes.byIndex;
@@ -246,11 +246,11 @@ type TDicePartToString = (dicePartRoll: TDicePartRoll) => string;
 function mapDicePartRollToString(dicePartRoll: TDicePartRoll, includeSign: boolean, includeModifier: boolean, includeDescription: boolean, dieModToString: TDicePartToString): string {
 	let dicePartRollOutput = "";
 	const dice = dicePartRoll.dice;
-	if (includeSign && (dice.hasDie || dice.modifier)) {
+	if (includeSign && (dice.hasValue || !dice.hasTest)) {
 		dicePartRollOutput += ` ${dicePartRoll.sign || "+"}`;
 	}
 	dicePartRollOutput += ` ${dieModToString(dicePartRoll)}`;
-	if (includeModifier && dice.modifier) {
+	if (includeModifier && dice.hasModifier) {
 		dicePartRollOutput += ` ${Math.abs(dice.modifier)}`;
 	}
 	if (includeDescription) {
@@ -268,19 +268,21 @@ type TDicePartRollToString = (dicePartRoll: TDicePartRoll, index: number, hideRo
 function mapDicePartRollToStringWithDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean, diceSort?: "noSort" | "sort"): string {
 	return mapDicePartRollToString(dicePartRoll, index > 0 || (dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+"), true, true, dpr => {
 		const rollemSpacer = rollem ? " " : "";
-		if (hideRolls && dpr.dice.hasDie) {
+		const showRolls = dpr.dice.hasDie || !(dpr.dice.hasModifier || dpr.dice.hasTest);
+		if (hideRolls && showRolls) {
 			return ` ||${dicePartRollToString(dpr, diceSort)}||${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} `;
 		}
-		return dpr.dice.hasDie ? ` ${dicePartRollToString(dpr, diceSort)}${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} ` : ``;
+		return showRolls ? ` ${dicePartRollToString(dpr, diceSort)}${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} ` : ``;
 	});
 }
 
 function mapDicePartRollToStringWithoutDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, _rollem: boolean, diceSort?: "noSort" | "sort"): string {
 	return mapDicePartRollToString(dicePartRoll, index > 0 || dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+", true, true, dpr => {
-		if (hideRolls && dpr.dice.hasDie) {
+		const showRolls = dpr.dice.hasDie || !(dpr.dice.hasModifier || dpr.dice.hasTest);
+		if (hideRolls && showRolls) {
 			return ` ||${dicePartRollToString(dpr, diceSort)}|| `;
 		}
-		return dpr.dice.hasDie ? ` ${dicePartRollToString(dpr, diceSort)} ` : ``;
+		return showRolls ? ` ${dicePartRollToString(dpr, diceSort)} ` : ``;
 	});
 }
 
@@ -293,7 +295,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	public get count(): number { return this.core.count; }
 	public get description(): string { return this.core.description; }
 	public get dropKeep(): OrUndefined<TDropKeepData> { return this.core.dropKeep; }
-	public get modifier(): number { return this.core.modifier; }
+	public get modifier(): number { return this.core.modifier ?? 0; }
 	public get noSort(): boolean { return this.core.noSort; }
 	public get fixedRolls(): OrUndefined<number[]> { return this.core.fixedRolls; }
 	public get sides(): number { return this.core.sides; }
@@ -323,10 +325,19 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	//#endregion
 
 	//#region flags
+	/** true if the description has length > 0 */
 	public get hasDescription(): boolean { return this.core.description.length > 0; }
+	/** true if count > 0 and sides is > 0 */
 	public get hasDie(): boolean { return this.count > 0 && this.sides > 0; }
-	public get hasDropKeep(): boolean { return this.dropKeep !== null && this.dropKeep !== undefined; }
-	public get hasTest(): boolean { return this.test !== null && this.test !== undefined; }
+	/** true if dropkeep is defined */
+	public get hasDropKeep(): boolean { return isDefined(this.dropKeep); }
+	/** true if this dicepart has a modifier, even if that modifier is +/- 0 */
+	public get hasModifier(): boolean { return isDefined(this.core.modifier); }
+	/** true if test is defined */
+	public get hasTest(): boolean { return isDefined(this.test); }
+	/** true if this.hasDie || this.hasModifier */
+	public get hasValue(): boolean { return this.hasDie || this.hasModifier; }
+	/** true if count and sides and modifier are all 0s */
 	public get isEmpty(): boolean { return this.count === 0 && this.sides === 0 && this.modifier === 0; }
 	//#endregion
 
@@ -353,7 +364,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 		return <U>_constructor.Roll.create(this);
 	}
 	public toString(index?: number, outputType?: DiceOutputType): string {
-		const die = this.count && this.sides ? `${this.count}d${this.sides}` : ``,
+		const die = this.hasDie ? `${this.count}d${this.sides}` : ``,
 			dropKeep = this.dropKeep ? ` ${dropKeepToString(this.dropKeep)}` : ``,
 			mod = this.modifier ? ` ${this.modifier}` : ``,
 			valueTest = this.hasTest ? ` ${this.test!.alias} ${this.test!.hidden ? "??" : this.test!.value}` : ``,
@@ -361,7 +372,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 		if (outputType === DiceOutputType.S) {
 			return withoutDescription;
 		}
-		const sign = index && !this.isEmpty ? `${this.sign || "+"}` : ``;
+		const sign = index && this.hasValue ? `${this.sign || "+"}` : ``;
 		return `${sign} ${withoutDescription} ${this.description}`.trim();
 	}
 	//#endregion
@@ -376,7 +387,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 			count: count ?? 0,
 			description: cleanDescription(description),
 			dropKeep: dropKeep ?? undefined,
-			modifier: modifier ?? 0,
+			modifier: modifier ?? undefined,
 			noSort: noSort === true,
 			fixedRolls: fixedRolls ?? undefined,
 			sides: sides ?? 0,

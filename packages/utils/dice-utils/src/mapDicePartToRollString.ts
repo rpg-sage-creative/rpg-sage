@@ -10,10 +10,10 @@ type MapDicePartRollOptions = {
 
 function dicePartToRollString(dicePart: TDicePart, hideRolls?: boolean): string {
 	const sortedRollData = dicePart.sortedRollData;
-	if (sortedRollData) {
+	if (sortedRollData?.count) {
 		const outputRollsAndIndexes = sortedRollData.noSort ? sortedRollData.byIndex : sortedRollData.byValue;
-		const mappedOutuputRolls = outputRollsAndIndexes.map(rollData => rollData.text);
-		const output = `[${mappedOutuputRolls.join(", ")}]`;
+		const mappedOutputRolls = outputRollsAndIndexes.map(rollData => rollData.text);
+		const output = `[${mappedOutputRolls.join(", ")}]`;
 		return hideRolls ? `||${output}||` : output;
 	}
 	return "";
@@ -22,15 +22,17 @@ function dicePartToRollString(dicePart: TDicePart, hideRolls?: boolean): string 
 export function mapDicePartToRollString(dicePart: TDicePart, dicePartIndex: number, options: MapDicePartRollOptions): string {
 	let dicePartRollOutput = "";
 
+
 	// leading sign
 	const sign = dicePart.sign ?? "+";
 	const includeSign = dicePartIndex > 0 || sign !== "+";
-	if (includeSign && (dicePart.hasDie || dicePart.modifier)) {
+	if (includeSign && (dicePart.hasValue || !dicePart.hasTest)) {
 		dicePartRollOutput += ` ${dicePart.sign ?? "+"}`;
 	}
 
 	// dice
-	if (dicePart.hasDie) {
+	const showRolls = dicePart.hasDie || !(dicePart.modifier || dicePart.hasTest);
+	if (showRolls) {
 		dicePartRollOutput += ` ${dicePartToRollString(dicePart, options.hideRolls)}`;
 		if (!options.noDice) {
 			const rollemSpacer = options.isRollem ? " " : "";
@@ -39,7 +41,7 @@ export function mapDicePartToRollString(dicePart: TDicePart, dicePartIndex: numb
 	}
 
 	// modifier
-	if (!options.noModifier && dicePart.modifier) {
+	if (!options.noModifier && dicePart.hasModifier) {
 		dicePartRollOutput += ` ${Math.abs(dicePart.modifier)}`;
 	}
 

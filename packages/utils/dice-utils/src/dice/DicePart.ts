@@ -100,14 +100,27 @@ export class DicePart<
 
 	//#region flags
 
+	/** true if the description has length > 0 */
 	public get hasDescription(): boolean { return this.description.length > 0; }
+	/** true if count > 0 and sides is > 0 */
 	public get hasDie(): boolean { return this.count > 0 && this.sides > 0; }
+	/** has some form of manipulation, ex: dropkeep */
 	public get hasManipulation(): boolean { return this.manipulation.length > 0; }
+	/** true if this dicepart has a modifier, even if that modifier is +/- 0 */
+	public get hasModifier(): boolean { return this.core.modifier !== undefined; }
+	/** has roll data */
 	public get hasRolls(): boolean { return !!this.sortedRollData; }
+	/** is marked as secret */
 	public get hasSecret(): boolean { return hasSecretFlag(this.description); }
+	/** has a test */
 	public get hasTest(): boolean { return !this.test.isEmpty; }
+	/** true if this.hasDie || this.hasModifier */
+	public get hasValue(): boolean { return this.hasDie || this.hasModifier; }
+	/** count and sides and modifier are all 0 */
 	public get isEmpty(): boolean { return this.count === 0 && this.sides === 0 && this.modifier === 0; }
+	/** is this roll max, ex: 6 on 1d6 */
 	public get isMax(): boolean { return this.total === this.max; }
+	/** is this roll min, ex: 1 on 1d6 */
 	public get isMin(): boolean { return this.total === this.min; }
 
 	//#endregion
@@ -162,7 +175,7 @@ export class DicePart<
 
 	public toDiceString(outputType?: DiceOutputType, index?: number): string {
 		const fixed = this.fixedRolls.length ? `(${this.fixedRolls})` : ``;
-		const die = this.count && this.sides ? `${fixed}${this.count}d${this.sides}` : ``;
+		const die = this.hasDie ? `${fixed}${this.count}d${this.sides}` : ``;
 		const manipulation = this.toManipulationString(" ");
 		const mod = this.modifier ? ` ${this.modifier}` : ``;
 		const valueTest = this.test.toString();
@@ -170,7 +183,7 @@ export class DicePart<
 		if (outputType === DiceOutputType.S) {
 			return withoutDescription;
 		}
-		const sign = index && !this.isEmpty ? `${this.sign ?? "+"}` : ``;
+		const sign = index && this.hasValue ? `${this.sign ?? "+"}` : ``;
 		return `${sign} ${withoutDescription} ${this.description}`.trim();
 	}
 

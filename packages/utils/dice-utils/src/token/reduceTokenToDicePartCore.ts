@@ -24,11 +24,8 @@ function reduceDiceToken<T extends DicePartCore>(core: T, token: TokenData, redu
 		if (token.matches) {
 			core.sign = token.matches[0] as DiceOperator;
 			core.fixedRolls = (token.matches[1] ?? "").split(",").map(s => +s.trim()).filter(n => n);
-			core.count = +token.matches[2] || 0;
+			core.count = token.matches[2] ? +token.matches[2] : 1;
 			core.sides = +token.matches[3] || 0;
-			if (!core.count && core.sides) {
-				core.count = 1;
-			}
 			hasChanges = true;
 		}
 		const dropKeep = reduceSignToDropKeepData?.find(dropKeepData => dropKeepData.test(core, token));
@@ -46,7 +43,7 @@ function reduceDiceToken<T extends DicePartCore>(core: T, token: TokenData, redu
 function reduceModToken<T extends DicePartCore>(core: T, token: TokenData): T {
 	if (token.key === "mod" && token.matches) {
 		core.sign = token.matches[0] as DiceOperator;
-		core.modifier = +token.matches[1] || 0;
+		core.modifier = token.matches[1] ? +token.matches[1] : undefined;
 	}
 	return core;
 }

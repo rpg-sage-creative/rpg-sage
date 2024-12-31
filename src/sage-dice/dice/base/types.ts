@@ -20,7 +20,7 @@ interface DicePartCoreBase {
 	fixedRolls?: number[];
 
 	/** roll modifier */
-	modifier: number;
+	modifier?: number;
 
 	/** no sort notation flag */
 	noSort: boolean;
