@@ -427,7 +427,7 @@ function critByRollingTwice(diceGroupRoll: DiceGroupRoll): void {
 			damageRoll.toJSON().rolls[index].rolls.push(...dicePart.roll().rolls);
 			dicePart.toJSON().count *= 2;
 		}else if (dicePart.modifier) {
-			dicePart.toJSON().modifier *= 2;
+			dicePart.toJSON().modifier! *= 2;
 		}
 	});
 
