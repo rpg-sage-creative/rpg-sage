@@ -83,7 +83,8 @@ export function getParsers(): TokenParsers {
 		noSort: /(ns)/i,
 		mod: /([-+*/])\s*(\d+)(?!d\d)/i,
 		quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
-		test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i
+		test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i,
+		break: /;/,
 	};
 }
 
@@ -241,50 +242,56 @@ function dicePartRollToString(dicePartRoll: TDicePartRoll, diceSort?: "noSort" |
 	return `[${mappedOutuputRolls.join(", ")}]`;
 }
 
-type TDicePartToString = (dicePartRoll: TDicePartRoll) => string;
-
-function mapDicePartRollToString(dicePartRoll: TDicePartRoll, includeSign: boolean, includeModifier: boolean, includeDescription: boolean, dieModToString: TDicePartToString): string {
+function mapDicePartRollToString(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean, showDice: boolean, diceSort?: "noSort" | "sort"): string {
 	let dicePartRollOutput = "";
-	const dice = dicePartRoll.dice;
-	if (includeSign && (dice.hasValue || !dice.hasTest)) {
-		dicePartRollOutput += ` ${dicePartRoll.sign || "+"}`;
+	const dicePart = dicePartRoll.dice;
+
+	const includeSign = index > 0 || (dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+");
+
+	let dieRoll = "";
+	if (dicePart.hasDie) {
+		if (showDice) {
+			const rollemSpacer = rollem ? " " : "";
+			if (hideRolls) {
+				dieRoll = ` ||${dicePartRollToString(dicePartRoll, diceSort)}||${rollemSpacer}${dicePart.count}d${dicePart.sides} `;
+			}
+			dieRoll = ` ${dicePartRollToString(dicePartRoll, diceSort)}${rollemSpacer}${dicePart.count}d${dicePart.sides} `;
+
+		}else {
+			if (hideRolls) {
+				dieRoll = ` ||${dicePartRollToString(dicePartRoll, diceSort)}|| `;
+			}
+			dieRoll = ` ${dicePartRollToString(dicePartRoll, diceSort)} `;
+
+		}
 	}
-	dicePartRollOutput += ` ${dieModToString(dicePartRoll)}`;
-	if (includeModifier && dice.hasModifier) {
-		dicePartRollOutput += ` ${Math.abs(dice.modifier)}`;
+	if (dieRoll) {
+		if (includeSign) {
+			dicePartRollOutput += ` ${dicePartRoll.sign || "+"}`;
+		}
+		dicePartRollOutput += ` ${dieRoll}`;
 	}
-	if (includeDescription) {
-		dicePartRollOutput += ` ${dice.description}`;
+
+	if (dicePart.hasModifier) {
+		if (includeSign) {
+			dicePartRollOutput += ` ${dicePartRoll.sign || "+"}`;
+		}
+		dicePartRollOutput += ` ${Math.abs(dicePart.modifier)}`;
 	}
-	if (dice.hasTest) {
-		const { alias, value, hidden } = dice.test!;
+
+	if (dicePart.description) {
+		dicePartRollOutput += ` ${dicePart.description}`;
+	}
+
+	if (dicePart.hasTest) {
+		const { alias, value, hidden } = dicePart.test!;
 		dicePartRollOutput += ` ${alias} ${hidden ? "??" : value}`;
 	}
+
 	return dicePartRollOutput.replace(/ +/g, " ").trim();
 }
 
-type TDicePartRollToString = (dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean, diceSort?: "noSort" | "sort") => string;
-
-function mapDicePartRollToStringWithDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean, diceSort?: "noSort" | "sort"): string {
-	return mapDicePartRollToString(dicePartRoll, index > 0 || (dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+"), true, true, dpr => {
-		const rollemSpacer = rollem ? " " : "";
-		const showRolls = dpr.dice.hasDie || !(dpr.dice.hasModifier || dpr.dice.hasTest);
-		if (hideRolls && showRolls) {
-			return ` ||${dicePartRollToString(dpr, diceSort)}||${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} `;
-		}
-		return showRolls ? ` ${dicePartRollToString(dpr, diceSort)}${rollemSpacer}${dpr.dice.count}d${dpr.dice.sides} ` : ``;
-	});
-}
-
-function mapDicePartRollToStringWithoutDice(dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, _rollem: boolean, diceSort?: "noSort" | "sort"): string {
-	return mapDicePartRollToString(dicePartRoll, index > 0 || dicePartRoll.sign !== undefined && dicePartRoll.sign !== "+", true, true, dpr => {
-		const showRolls = dpr.dice.hasDie || !(dpr.dice.hasModifier || dpr.dice.hasTest);
-		if (hideRolls && showRolls) {
-			return ` ||${dicePartRollToString(dpr, diceSort)}|| `;
-		}
-		return showRolls ? ` ${dicePartRollToString(dpr, diceSort)} ` : ``;
-	});
-}
+type TDicePartRollToString = (dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean, showDice: boolean, diceSort?: "noSort" | "sort") => string;
 
 //#endregion
 
@@ -328,7 +335,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	/** true if the description has length > 0 */
 	public get hasDescription(): boolean { return this.core.description.length > 0; }
 	/** true if count > 0 and sides is > 0 */
-	public get hasDie(): boolean { return this.count > 0 && this.sides > 0; }
+	public get hasDie(): boolean { return this.count > 0 || this.sides > 0; }
 	/** true if dropkeep is defined */
 	public get hasDropKeep(): boolean { return isDefined(this.dropKeep); }
 	/** true if this dicepart has a modifier, even if that modifier is +/- 0 */
@@ -619,10 +626,10 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		return this._rolls;
 	}
 	//#region toString
-	protected _toString(renderer: TDicePartRollToString, hideRolls: boolean, rollem = false, diceSort?: "noSort" | "sort"): string {
+	protected _toString(renderer: TDicePartRollToString, hideRolls: boolean, rollem: boolean, showDice: boolean, diceSort?: "noSort" | "sort"): string {
 		const xxs = this.toStringXXS(hideRolls);
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
-		const description = this.rolls.map((roll, index) => renderer(roll, index, hideRolls, rollem, diceSort)).join(" ");
+		const description = this.rolls.map((roll, index) => renderer(roll, index, hideRolls, rollem, showDice, diceSort)).join(" ");
 		if (rollem) {
 			const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "").trim();
 			const [_, emoji, total] = stripped.match(/^(?:(.*?)\s+)(\d+)$/) ?? ["","",stripped];
@@ -667,12 +674,12 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const outputType = <DiceOutputType>args.find(arg => !!(DiceOutputType[<DiceOutputType>arg] ?? false)) ?? DiceOutputType.M;
 		const diceSort = args.find(arg => arg === "noSort" || arg === "sort") as "noSort" | "sort";
 		switch (outputType) {
-			case DiceOutputType.ROLLEM: return this._toString(mapDicePartRollToStringWithDice, hideRolls, true, diceSort);
-			case DiceOutputType.XXL: return this._toString(mapDicePartRollToStringWithDice, hideRolls, undefined, diceSort);
-			case DiceOutputType.XL: return this._toString(mapDicePartRollToStringWithDice, hideRolls, undefined, diceSort);
-			case DiceOutputType.L: return this._toString(mapDicePartRollToStringWithoutDice, hideRolls, undefined, diceSort);
-			case DiceOutputType.M: return this._toString(mapDicePartRollToStringWithDice, hideRolls, undefined, diceSort);
-			case DiceOutputType.S: return this._toString(mapDicePartRollToStringWithoutDice, hideRolls, undefined, diceSort);
+			case DiceOutputType.ROLLEM: return this._toString(mapDicePartRollToString, hideRolls, true, true, diceSort);
+			case DiceOutputType.XXL: return this._toString(mapDicePartRollToString, hideRolls, false, true, diceSort);
+			case DiceOutputType.XL: return this._toString(mapDicePartRollToString, hideRolls, false, true, diceSort);
+			case DiceOutputType.L: return this._toString(mapDicePartRollToString, hideRolls, false, false, diceSort);
+			case DiceOutputType.M: return this._toString(mapDicePartRollToString, hideRolls, false, true, diceSort);
+			case DiceOutputType.S: return this._toString(mapDicePartRollToString, hideRolls, false, false, diceSort);
 			case DiceOutputType.XS: return this.toStringXS(hideRolls);
 			case DiceOutputType.XXS: return this.toStringXXS(hideRolls);
 			default: {
@@ -713,8 +720,52 @@ function isTestOrTarget(currentToken: TokenData): boolean {
 	return ["test","target"].includes(currentToken.key);
 }
 
-function shouldStartNewPart(currentPart: TokenData[], currentToken: TokenData): boolean {
-	return !currentPart || ["dice","mod","test"].includes(currentToken.key);
+/** Determines if we should stop adding to the current dicePart to start a new one. */
+function shouldStartNewDicePart(currentDicePart: TokenData[] | undefined, token: TokenData): boolean {
+	// no current dicePart
+	if (!currentDicePart) {
+		return true;
+	}
+
+	// if the currenty dicePart is empty, then we really don't need to start a new one
+	const TRUE = currentDicePart.length > 0;
+
+	// each of these should be their own dicePart
+	if (["dice","mod","test","break"].includes(token.key)) {
+		// we only need to
+		return TRUE;
+	}
+
+	return false;
+}
+
+/** Determines if we should stop adding to the current dice to start a new one. */
+function shouldStartNewDice(currentDice: TDicePart[], dicePart: TDicePart): boolean {
+	// no current dice
+	if (!currentDice) {
+		return true;
+	}
+
+	// if the currenty dice is empty, then we really don't need to start a new one
+	const TRUE = currentDice.length > 0;
+
+	// if we have dice but no +/- then we aren't technically adding/subtracting and should start new dice
+	if (dicePart.hasDie && !dicePart.sign) {
+		return TRUE;
+	}
+
+	// we only allow one test per dice
+	if (dicePart.hasTest && currentDice.find(_dicePart => _dicePart.hasTest)) {
+		return TRUE;
+	}
+
+	// we say we use the semicolon to distinguish dice; let's go ahead and make it official
+	// cleanDescription removes a single ";" from the description, so if we have an empty dicePart, then it was probably a "break" / ";"
+	if (!dicePart.hasDie && !dicePart.hasModifier && !dicePart.hasTest && !dicePart.description) {
+		return TRUE;
+	}
+
+	return false;
 }
 
 export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDiceGroupRoll> extends HasDieCore<T> implements IDiceBase<V> {
@@ -774,11 +825,16 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 		let currentPart: TokenData[];
 		const partedTokens: TokenData[][] = [];
 		tokens.forEach(token => {
-			if (shouldStartNewPart(currentPart, token)) {
+			// check to see if this token needs to start a new dicePart
+			if (shouldStartNewDicePart(currentPart, token)) {
 				currentPart = [];
 				partedTokens.push(currentPart);
 			}
+
+			// add the token
 			currentPart.push(token);
+
+			// tests should be the only thing in their dicePart
 			if (isTestOrTarget(token)) {
 				currentPart = [];
 				partedTokens.push(currentPart);
@@ -789,12 +845,13 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 		let currentDice: TDicePart[];
 		const partedDice: TDicePart[][] = [];
 		diceParts.forEach(dicePart => {
-			if (!currentDice
-				|| dicePart.hasDie && !dicePart.sign
-				|| dicePart.hasTest && currentDice.find(_dicePart => _dicePart.hasTest)) {
+			// check to see if this dicePart needs to start new dice
+			if (shouldStartNewDice(currentDice, dicePart)) {
 				currentDice = [];
 				partedDice.push(currentDice);
 			}
+
+			// add the dicePart
 			currentDice.push(dicePart);
 			//TODO: After a test, wee need to start another dicepart ... Or a test becomes its own dicepart
 		});
