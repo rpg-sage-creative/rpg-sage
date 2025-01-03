@@ -6,7 +6,7 @@ import { deleteMessage, MessageDeleteResults } from "../../../discord/deletedMes
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import type { SageInteraction } from "../SageInteraction.js";
 
-type ButtonOptions = { style?:ButtonStyle; emoji?:string; label?:string; };
+type ButtonOptions = { customId?:string; style?:ButtonStyle; emoji?:string; label?:string; };
 
 /** Creates regex to test if the customId is a valid delete button customId. */
 function getCustomIdRegex(): RegExp {
@@ -36,7 +36,7 @@ function getUserId(customId: string): Snowflake | undefined {
 export function createMessageDeleteButton(userId: Snowflake, options?: ButtonOptions): ButtonBuilder {
 	/** @todo update all Sage "delete" icons to use custom trashcan or wastebin emoji 🗑️ instead of ❌ */
 	return new ButtonBuilder()
-		.setCustomId(createCustomId(userId))
+		.setCustomId(options?.customId ?? createCustomId(userId))
 		.setStyle(options?.style ?? ButtonStyle.Secondary)
 		.setEmoji(isNotBlank(options?.emoji) ? options.emoji : "❌")
 		.setLabel(isNotBlank(options?.label) ? options.label : "Delete this alert.");
