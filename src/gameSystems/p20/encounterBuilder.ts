@@ -225,7 +225,6 @@ async function parseEncounter(sageCommand?: SageCommand, messages?: Message[], c
 			});
 		}
 	}
-	warn({encounter})
 	return encounter;
 }
 
