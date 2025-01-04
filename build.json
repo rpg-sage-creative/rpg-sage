@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.8.3",
+"version":"1.8.4",
 "branch":"main",
-"commit":"4d04c3450cf573a33720564bdfbc7e5f52d9492f",
-"commitSubject":"implement hpGauge stat",
-"commitTs":1734802415000,
-"commitDate":"2024-12-21-0933",
-"buildTs":1734802588000,
-"buildDate":"2024-12-21-0936",
+"commit":"b70ca755343b1af2a20c18c28b64f4aafc45aab4",
+"commitSubject":"P20 encounter builder (#126)",
+"commitTs":1735963183000,
+"commitDate":"2025-01-03-1959",
+"buildTs":1735963323000,
+"buildDate":"2025-01-03-2002",
 "author":"Randal"
 }
