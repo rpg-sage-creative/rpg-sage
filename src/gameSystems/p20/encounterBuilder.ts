@@ -1,9 +1,9 @@
 import { GameSystemType, parseGameSystem } from "@rsc-sage/types";
-import type { SortResult } from "@rsc-utils/array-utils";
+import { toUnique, type SortResult } from "@rsc-utils/array-utils";
 import { warn, type Snowflake } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { deleteMessage } from "../../sage-lib/discord/deletedMessages.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
@@ -26,7 +26,7 @@ type CustomIdArgsBase<GameSystem extends string, FormId extends string, Control 
 	control: Control;
 };
 
-type Control = "gameSystem" | "partyLevel" | "partySize" | "creature" | "simpleHazard" | "complexHazard" | "removeItem" | "resetForm" | "deleteForm";
+type Control = "gameSystem" | "partyLevel" | "partySize" | "creature" | "simpleHazard" | "complexHazard" | "removeItem" | "resetForm" | "deleteForm" | "verboseToggle";
 
 type CustomIdArgs<ControlArg extends Control> = CustomIdArgsBase<"p20", "encounterBuilder", ControlArg>;
 
@@ -171,9 +171,9 @@ function encounterItemSorter(a: EncounterItem, b: EncounterItem): SortResult {
 }
 function createRemoveSelect<ControlArg extends Control>(args: CustomIdArgs<ControlArg>, encounter: Encounter, partyLevel: number): StringSelectMenuBuilder {
 	const items: EncounterItem[] = [];
-	encounter.creatures.forEach(level => items.push(createEncounterItem("creature", level)));
-	encounter.simpleHazards.forEach(level => items.push(createEncounterItem("simpleHazard", level)));
-	encounter.complexHazards.forEach(level => items.push(createEncounterItem("complexHazard", level)));
+	encounter.creatures.filter(toUnique).forEach(level => items.push(createEncounterItem("creature", level)));
+	encounter.simpleHazards.filter(toUnique).forEach(level => items.push(createEncounterItem("simpleHazard", level)));
+	encounter.complexHazards.filter(toUnique).forEach(level => items.push(createEncounterItem("complexHazard", level)));
 	items.sort(encounterItemSorter);
 
 	const selectBuilder = new StringSelectMenuBuilder()
@@ -181,13 +181,14 @@ function createRemoveSelect<ControlArg extends Control>(args: CustomIdArgs<Contr
 		.setPlaceholder(`Remove a Creature or Hazard ...`);
 	items.forEach(({ code, label, level, type }) => {
 		const data = getXpData({ type, level, partyLevel });
+		const value = `${code}${level}`;
 		const absDelta = Math.abs(data.delta);
 		const role = type === "creature" ? `- ${data.role}` : ``;
 		selectBuilder.addOptions(
 			new StringSelectMenuOptionBuilder()
 				.setLabel(`${label} Level ${level} (${data.xp} XP)`)
 				.setDescription(`Party Level ${data.sign} ${absDelta} ${role}`)
-				.setValue(`${code}${level}`)
+				.setValue(value)
 		);
 	});
 	if (!items.length) {
@@ -227,7 +228,15 @@ async function parseEncounter(sageCommand?: SageCommand, messages?: Message[], c
 	}
 	return encounter;
 }
-
+async function getVerbose(sageCommand: SageCommand, messages: Message[], customIdArgs: CustomIdArgs<any>): Promise<boolean | undefined> {
+	const button = await findComponent<ButtonComponent>([sageCommand, ...messages], createCustomId(customIdArgs, "verboseToggle"));
+	if (button) {
+		return sageCommand.isSageInteraction("BUTTON")
+			? button.label === "Verbose"
+			: button.label !== "Verbose";
+	}
+	return sageCommand.args.getBoolean("verbose") ?? undefined;
+}
 type Args = {
 	customId: string;
 	customIdArgs: CustomIdArgs<any>;
@@ -237,6 +246,7 @@ type Args = {
 	partyLevel: number;
 	partySize: number;
 	userId: Snowflake;
+	verbose: boolean;
 };
 async function getArgs(sageCommand: SageCommand, messages?: Message[]): Promise<Args | undefined> {
 	const customId = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.customId : `||${sageCommand.authorDid}||NoControl`;
@@ -252,14 +262,15 @@ async function getArgs(sageCommand: SageCommand, messages?: Message[]): Promise<
 		}
 	}
 
-	const gameSystemType = await fetchSelectedOrDefaultEnum<GameSystemType>([sageCommand, ...messages], GameSystemType, createCustomId(customIdArgs, "gameSystem"), "game") ?? sageCommand.gameSystemType ?? GameSystemType.PF2e;
-	const partyLevel = await fetchSelectedOrDefaultNumber([sageCommand, ...messages], createCustomId(customIdArgs, "partyLevel")) ?? 1;
-	const partySize = await fetchSelectedOrDefaultNumber([sageCommand, ...messages], createCustomId(customIdArgs, "partySize")) ?? 4;
+	const fetchInputs = [sageCommand, ...messages];
+	const gameSystemType = await fetchSelectedOrDefaultEnum<GameSystemType>(fetchInputs, GameSystemType, createCustomId(customIdArgs, "gameSystem"), "game") ?? sageCommand.gameSystemType ?? GameSystemType.PF2e;
+	const partyLevel = await fetchSelectedOrDefaultNumber(fetchInputs, createCustomId(customIdArgs, "partyLevel")) ?? 1;
+	const partySize = await fetchSelectedOrDefaultNumber(fetchInputs, createCustomId(customIdArgs, "partySize")) ?? 4;
+	const verbose = await getVerbose(sageCommand, messages, customIdArgs);
 
 	const encounter = customIdArgs.control !== "resetForm"
 		? await parseEncounter(sageCommand, messages, customIdArgs)
 		: await parseEncounter();
-
 	return {
 		customId,
 		customIdArgs,
@@ -269,6 +280,7 @@ async function getArgs(sageCommand: SageCommand, messages?: Message[]): Promise<
 		partyLevel,
 		partySize,
 		userId: customIdArgs.userId,
+		verbose: verbose === true,
 	};
 };
 
@@ -321,13 +333,14 @@ function buildFormTwo(args: Args): ActionRowBuilder<StringSelectMenuBuilder | Bu
 	const complexHazardSelect = createAddCreatureOrHazardSelect(args.customIdArgs, args.partyLevel, "complexHazard");
 	const removeSelect = createRemoveSelect(args.customIdArgs, args.encounter, args.partyLevel);
 	const resetButton = new ButtonBuilder().setCustomId(createCustomId(args.customIdArgs, "resetForm")).setLabel("Reset").setStyle(ButtonStyle.Primary);
+	const verboseButton = new ButtonBuilder().setCustomId(createCustomId(args.customIdArgs, "verboseToggle")).setLabel(args.verbose ? `Compact` : `Verbose`).setStyle(ButtonStyle.Secondary);
 	const deleteButton = createMessageDeleteButton(args.userId, { customId:createCustomId(args.customIdArgs, "deleteForm"), label:"Delete" });
 	return [
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(creatureSelect),
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(simpleHazardSelect),
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(complexHazardSelect),
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(removeSelect),
-		new ActionRowBuilder<ButtonBuilder>().setComponents(resetButton, deleteButton),
+		new ActionRowBuilder<ButtonBuilder>().setComponents(resetButton, verboseButton, deleteButton),
 	];
 }
 
@@ -423,7 +436,9 @@ function createContent(args: Args): RenderableContent {
 
 	const budget = createBudget(args);
 
-	budgetToString(budget).forEach(line => renderable.append(line));
+	if (args.verbose) {
+		budgetToString(budget).forEach(line => renderable.append(line));
+	}
 
 	let totalXp = 0;
 	let tpk = false;
@@ -435,7 +450,11 @@ function createContent(args: Args): RenderableContent {
 		creatures.forEach(level => {
 			const { delta, sign, xp, role } = getXpData({ type:"creature", level, partyLevel:partyLevel });
 			const absDelta = Math.abs(delta);
-			creatureLines.push(`Creature Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta} (${role})`);
+			if (args.verbose) {
+				creatureLines.push(`Creature Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta} (${role})`);
+			}else {
+				creatureLines.push(`Creature Level ${level} (${xp} XP)`);
+			}
 			totalXp += xp;
 			if (role === "TPK") tpk = true;
 			empty = false;
@@ -448,7 +467,11 @@ function createContent(args: Args): RenderableContent {
 		simpleHazards.forEach(level => {
 			const { delta, sign, xp } = getXpData({ type:"simpleHazard", level, partyLevel:partyLevel });
 			const absDelta = Math.abs(delta);
-			simpleHazardLines.push(`Simple Hazard Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta}`);
+			if (args.verbose) {
+				creatureLines.push(`Simple Hazard Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta}`);
+			}else {
+				creatureLines.push(`Simple Hazard Level ${level} (${xp} XP)`);
+			}
 			totalXp += xp;
 			empty = false;
 		});
@@ -460,7 +483,11 @@ function createContent(args: Args): RenderableContent {
 		complexHazards.forEach(level => {
 			const { delta, sign, xp } = getXpData({ type:"complexHazard", level, partyLevel:partyLevel });
 			const absDelta = Math.abs(delta);
-			complexHazardLines.push(`Complex Hazard Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta}`);
+			if (args.verbose) {
+				creatureLines.push(`Complex Hazard Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta}`);
+			}else {
+				creatureLines.push(`Complex Hazard Level ${level} (${xp} XP)`);
+			}
 			totalXp += xp;
 			empty = false;
 		});
@@ -578,6 +605,7 @@ async function resetEncounter(sageInteraction: SageInteraction<ButtonInteraction
 }
 
 async function updateEncounter(sageCommand: SageCommand, args: Args): Promise<void> {
+	// const start = Date.now();
 
 	const content = createContent(args);
 	const components = buildFormOne(args);
@@ -586,6 +614,8 @@ async function updateEncounter(sageCommand: SageCommand, args: Args): Promise<vo
 	const [messageOne, messageTwo] = args.messages;
 	await messageOne.edit(options).catch(warn);
 	await messageTwo.edit({ content:ZERO_WIDTH_SPACE, components:buildFormTwo(args) }).catch(warn);
+
+	// debug({getArgs:(Date.now()-start)});
 }
 
 async function deleteEncounter(sageCommand: SageCommand): Promise<void> {
@@ -603,7 +633,7 @@ async function deleteEncounter(sageCommand: SageCommand): Promise<void> {
 
 export function registerEncounterBuilder(): void {
 	registerListeners({ commands:["encounter|builder"], handler:showEncounter });
-	registerListeners({ commands:[/p20\|encounterBuilder\|\d{16,}\|\d{16,}\-\d{16,}\|(gameSystem|partyLevel|partySize|creature|simpleHazard|complexHazard|removeItem)/], interaction:changeEncounter });
+	registerListeners({ commands:[/p20\|encounterBuilder\|\d{16,}\|\d{16,}\-\d{16,}\|(gameSystem|partyLevel|partySize|creature|simpleHazard|complexHazard|removeItem|verboseToggle)/], interaction:changeEncounter });
 	registerListeners({ commands:[/p20\|encounterBuilder\|\d{16,}\|\d{16,}\-\d{16,}\|resetForm/], interaction:resetEncounter });
 	registerListeners({ commands:[/p20\|encounterBuilder\|\d{16,}\|\d{16,}\-\d{16,}\|deleteForm/], interaction:deleteEncounter });
 }
