@@ -4,15 +4,14 @@ import { warn, type Snowflake } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
-import { deleteMessage } from "../../sage-lib/discord/deletedMessages";
-import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners";
-import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd";
-import type { SageCommand } from "../../sage-lib/sage/model/SageCommand";
-import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction";
-import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton";
-import { findComponent } from "./lib/findComponent";
-import { getSelectedOrDefault, getSelectedOrDefaultEnum, getSelectedOrDefaultNumber } from "./lib/getSelectedOrDefault";
-import { getPaizoGameSystems } from "./lib/PaizoGameSystem";
+import { deleteMessage } from "../../sage-lib/discord/deletedMessages.js";
+import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
+import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
+import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
+import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
+import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton.js";
+import { getPaizoGameSystems } from "./lib/PaizoGameSystem.js";
+import { fetchSelectedOrDefault, fetchSelectedOrDefaultEnum, fetchSelectedOrDefaultNumber, findComponent } from "./lib/fetchSelectedOrDefault.js";
 
 type CustomIdArgsBase<GameSystem extends string, FormId extends string, Control extends string> = {
 	/** What gameSystem is selected? */
@@ -206,59 +205,82 @@ type Encounter = {
 	simpleHazards: number[];
 	complexHazards: number[];
 };
-function parseEncounter(select?: StringSelectMenuComponent): Encounter {
+async function parseEncounter(sageCommand?: SageCommand, messages?: Message[], customIdArgs?: CustomIdArgs<any>): Promise<Encounter> {
 	const encounter = {
 		creatures: [] as number[],
 		simpleHazards: [] as number[],
 		complexHazards: [] as number[],
 	};
-	select?.options.forEach(option => {
-		const type = option.value.slice(0, 2);
-		const level = +option.value.slice(2);
-		switch(type) {
-			case "sh": encounter.simpleHazards.push(level); break;
-			case "ch": encounter.complexHazards.push(level); break;
-			case "cr": default: encounter.creatures.push(level); break;
+	if (sageCommand && messages?.length && customIdArgs) {
+		const select = await findComponent<StringSelectMenuComponent>([sageCommand, ...messages], createCustomId(customIdArgs, "removeItem"));
+		if (!select?.disabled) {
+			select?.options.forEach(option => {
+				const type = option.value.slice(0, 2);
+				const level = +option.value.slice(2);
+				switch(type) {
+					case "sh": encounter.simpleHazards.push(level); break;
+					case "ch": encounter.complexHazards.push(level); break;
+					case "cr": default: encounter.creatures.push(level); break;
+				}
+			});
 		}
-	});
+	}
+	warn({encounter})
 	return encounter;
 }
 
 type Args = {
 	customId: string;
 	customIdArgs: CustomIdArgs<any>;
+	encounter: Encounter;
 	gameSystemType: GameSystemType;
+	messages: Message[];
 	partyLevel: number;
 	partySize: number;
 	userId: Snowflake;
 };
-function getArgs(sageCommand: SageCommand, messageIds?: Snowflake[]): Args {
+async function getArgs(sageCommand: SageCommand, messages?: Message[]): Promise<Args | undefined> {
 	const customId = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.customId : `||${sageCommand.authorDid}||NoControl`;
 	const customIdArgs = parseCustomId(customId);
-	if (messageIds) customIdArgs.messageIds = messageIds;
 
-	const gameSystemType = getSelectedOrDefaultEnum<GameSystemType>(sageCommand, GameSystemType, createCustomId(customIdArgs, "gameSystem"), "game") ?? sageCommand.gameSystemType ?? GameSystemType.PF2e;
-	const partyLevel = getSelectedOrDefaultNumber(sageCommand, createCustomId(customIdArgs, "partyLevel")) ?? 1;
-	const partySize = getSelectedOrDefaultNumber(sageCommand, createCustomId(customIdArgs, "partySize")) ?? 4;
+	// fetch the messages
+	if (messages) {
+		customIdArgs.messageIds = messages.map(({ id }) => id) as Snowflake[];
+	}else {
+		messages = await getMessages(sageCommand, customIdArgs.messageIds);
+		if (!messages) {
+			return undefined;
+		}
+	}
+
+	const gameSystemType = await fetchSelectedOrDefaultEnum<GameSystemType>([sageCommand, ...messages], GameSystemType, createCustomId(customIdArgs, "gameSystem"), "game") ?? sageCommand.gameSystemType ?? GameSystemType.PF2e;
+	const partyLevel = await fetchSelectedOrDefaultNumber([sageCommand, ...messages], createCustomId(customIdArgs, "partyLevel")) ?? 1;
+	const partySize = await fetchSelectedOrDefaultNumber([sageCommand, ...messages], createCustomId(customIdArgs, "partySize")) ?? 4;
+
+	const encounter = customIdArgs.control !== "resetForm"
+		? await parseEncounter(sageCommand, messages, customIdArgs)
+		: await parseEncounter();
 
 	return {
 		customId,
 		customIdArgs,
+		encounter,
 		gameSystemType,
+		messages,
 		partyLevel,
 		partySize,
 		userId: customIdArgs.userId,
 	};
 };
 
-async function getMessages(sageCommand: SageCommand, args: Args): Promise<Message[] | undefined> {
+async function getMessages(sageCommand: SageCommand, messageIds: Snowflake[]): Promise<Message[] | undefined> {
 
 	const channel = await sageCommand.sageCache.fetchChannel(sageCommand.channelDid);
 	if (!channel?.isTextBased()) return undefined;
 
 	const messages: Message[] = [];
 
-	for (const messageId of args.customIdArgs.messageIds) {
+	for (const messageId of messageIds) {
 		const message = await channel.messages.fetch(messageId);
 		if (!message) return undefined;
 		messages.push(message);
@@ -294,11 +316,11 @@ creatures of party level – 2
 		new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(partySizeSelect),
 	];
 }
-function buildFormTwo(args: Args, encounter: Encounter): ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] {
+function buildFormTwo(args: Args): ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] {
 	const creatureSelect = createAddCreatureOrHazardSelect(args.customIdArgs, args.partyLevel, "creature");
 	const simpleHazardSelect = createAddCreatureOrHazardSelect(args.customIdArgs, args.partyLevel, "simpleHazard");
 	const complexHazardSelect = createAddCreatureOrHazardSelect(args.customIdArgs, args.partyLevel, "complexHazard");
-	const removeSelect = createRemoveSelect(args.customIdArgs, encounter, args.partyLevel);
+	const removeSelect = createRemoveSelect(args.customIdArgs, args.encounter, args.partyLevel);
 	const resetButton = new ButtonBuilder().setCustomId(createCustomId(args.customIdArgs, "resetForm")).setLabel("Reset").setStyle(ButtonStyle.Primary);
 	const deleteButton = createMessageDeleteButton(args.userId, { customId:createCustomId(args.customIdArgs, "deleteForm"), label:"Delete" });
 	return [
@@ -390,12 +412,13 @@ function budgetToString(budget: Budget): string[] {
 	return lines;
 }
 
-function createContent(args: Args, encounter: Encounter): RenderableContent {
+function createContent(args: Args): RenderableContent {
+	const { encounter, partyLevel } = args;
 	const renderable = createCommandRenderableContent();
 	renderable.append(`<h3>Encounter Builder</h3>`);
 	renderable.appendBlock(
 		`<b>Game System</b> ${parseGameSystem(args.gameSystemType)?.name ?? "Pathfinder 2e"}`,
-		`<b>Party Level</b> ${args.partyLevel}`,
+		`<b>Party Level</b> ${partyLevel}`,
 		`<b>Party Size</b> ${args.partySize}`,
 	);
 
@@ -411,7 +434,7 @@ function createContent(args: Args, encounter: Encounter): RenderableContent {
 	const creatures = encounter.creatures.slice().sort();
 	if (creatures.length) {
 		creatures.forEach(level => {
-			const { delta, sign, xp, role } = getXpData({ type:"creature", level, partyLevel:args.partyLevel });
+			const { delta, sign, xp, role } = getXpData({ type:"creature", level, partyLevel:partyLevel });
 			const absDelta = Math.abs(delta);
 			creatureLines.push(`Creature Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta} (${role})`);
 			totalXp += xp;
@@ -424,9 +447,9 @@ function createContent(args: Args, encounter: Encounter): RenderableContent {
 	const simpleHazards = encounter.simpleHazards.slice().sort();
 	if (simpleHazards.length) {
 		simpleHazards.forEach(level => {
-			const { delta, sign, xp, role } = getXpData({ type:"simpleHazard", level, partyLevel:args.partyLevel });
+			const { delta, sign, xp } = getXpData({ type:"simpleHazard", level, partyLevel:partyLevel });
 			const absDelta = Math.abs(delta);
-			simpleHazardLines.push(`Simple Hazard Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta} (${role})`);
+			simpleHazardLines.push(`Simple Hazard Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta}`);
 			totalXp += xp;
 			empty = false;
 		});
@@ -436,9 +459,9 @@ function createContent(args: Args, encounter: Encounter): RenderableContent {
 	const complexHazards = encounter.complexHazards.slice().sort();
 	if (complexHazards.length) {
 		complexHazards.forEach(level => {
-			const { delta, sign, xp, role } = getXpData({ type:"complexHazard", level, partyLevel:args.partyLevel });
+			const { delta, sign, xp } = getXpData({ type:"complexHazard", level, partyLevel:partyLevel });
 			const absDelta = Math.abs(delta);
-			complexHazardLines.push(`Complex Hazard Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta} (${role})`);
+			complexHazardLines.push(`Complex Hazard Level ${level} (${xp} XP)\n- Party Level ${sign} ${absDelta}`);
 			totalXp += xp;
 			empty = false;
 		});
@@ -474,53 +497,60 @@ function createContent(args: Args, encounter: Encounter): RenderableContent {
 }
 
 async function showEncounter(sageCommand: SageCommand): Promise<void> {
-	const localize = sageCommand.getLocalizer();
+	const sorry = async (...messages: Message[]) => {
+		for (const message of messages) await deleteMessage(message);
+		sageCommand.replyStack.whisper({ content:sageCommand.getLocalizer()("SORRY_WE_DONT_KNOW") });
+	};
 
 	const messageOne = await sageCommand.replyStack.reply({ content:"Loading ..." }, true).catch(warn);
-	if (!messageOne) return sageCommand.replyStack.whisper({ content:localize("SORRY_WE_DONT_KNOW") });
+	if (!messageOne) {
+		return sorry();
+	}
 
 	const messageTwo = await sageCommand.replyStack.send({ content:"Loading ..." }, true).catch(warn);
 	if (!messageTwo) {
-		await deleteMessage(messageOne);
-		return sageCommand.replyStack.whisper({ content:localize("SORRY_WE_DONT_KNOW") });
+		return sorry(messageOne);
 	}
 
-	const args = getArgs(sageCommand, [messageOne.id as Snowflake, messageTwo.id as Snowflake]);
-	const encounter = parseEncounter();
+	const args = await getArgs(sageCommand, [messageOne, messageTwo]);
+	if (!args) {
+		return sorry(messageOne, messageTwo);
+	}
 
-	await updateEncounter(sageCommand, { args, encounter, messages:[messageOne, messageTwo] });
+	await updateEncounter(sageCommand, args);
 }
 
 async function changeEncounter(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
-	const args = getArgs(sageInteraction);
-
-	const messages = await getMessages(sageInteraction, args);
-	if (!messages) {
+	const args = await getArgs(sageInteraction);
+	if (!args) {
 		const localize = sageInteraction.getLocalizer();
 		return sageInteraction.replyStack.whisper({ content:localize("SORRY_WE_DONT_KNOW") });
 	}
 
-	const encounter = parseEncounter(await findComponent<StringSelectMenuComponent>(sageInteraction, createCustomId(args.customIdArgs, "removeItem")))
+	const { encounter } = args;
 
 	// add creature
-	const creatureLevel = getSelectedOrDefaultNumber(sageInteraction, createCustomId(args.customIdArgs, "creature"));
+	const creatureLevel = await fetchSelectedOrDefaultNumber(sageInteraction, createCustomId(args.customIdArgs, "creature"));
 	if (creatureLevel !== undefined) {
 		encounter.creatures.push(creatureLevel);
 	}
+
 	// add simple hazard
-	const simpleHazardLevel = getSelectedOrDefaultNumber(sageInteraction, createCustomId(args.customIdArgs, "simpleHazard"));
+	const simpleHazardLevel = await fetchSelectedOrDefaultNumber(sageInteraction, createCustomId(args.customIdArgs, "simpleHazard"));
 	if (simpleHazardLevel !== undefined) {
 		encounter.simpleHazards.push(simpleHazardLevel);
 	}
+
 	// add complex hazard
-	const complexHazardLevel = getSelectedOrDefaultNumber(sageInteraction, createCustomId(args.customIdArgs, "complexHazard"));
+	const complexHazardLevel = await fetchSelectedOrDefaultNumber(sageInteraction, createCustomId(args.customIdArgs, "complexHazard"));
 	if (complexHazardLevel !== undefined) {
 		encounter.complexHazards.push(complexHazardLevel);
 	}
+
 	// remove item
-	const itemCode = getSelectedOrDefault(sageInteraction, createCustomId(args.customIdArgs, "removeItem"));
+	const itemCode = await fetchSelectedOrDefault(sageInteraction, createCustomId(args.customIdArgs, "removeItem"));
 	if (itemCode) {
 		const type = itemCode.slice(0, 2);
 		const level = +itemCode.slice(2);
@@ -533,52 +563,41 @@ async function changeEncounter(sageInteraction: SageInteraction<StringSelectMenu
 		}
 	}
 
-	await updateEncounter(sageInteraction, { args, encounter, messages });
+	await updateEncounter(sageInteraction, args);
 }
 
 async function resetEncounter(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
-	const args = getArgs(sageInteraction);
-
-	const messages = await getMessages(sageInteraction, args);
-	if (!messages) {
+	const args = await getArgs(sageInteraction);
+	if (!args) {
 		const localize = sageInteraction.getLocalizer();
 		return sageInteraction.replyStack.whisper({ content:localize("SORRY_WE_DONT_KNOW") });
 	}
 
-	const encounter = parseEncounter();
-
-	await updateEncounter(sageInteraction, { args, encounter, messages });
+	await updateEncounter(sageInteraction, args);
 }
 
-type UpdateEncounterArgs = {
-	args: Args;
-	encounter: Encounter;
-	messages: Message[];
-};
-async function updateEncounter(sageCommand: SageCommand, { args, encounter, messages }: UpdateEncounterArgs): Promise<void> {
+async function updateEncounter(sageCommand: SageCommand, args: Args): Promise<void> {
 
-	const content = createContent(args, encounter);
+	const content = createContent(args);
 	const components = buildFormOne(args);
 	const options = sageCommand.resolveToOptions({ content, components });
 
-	const [messageOne, messageTwo] = messages;
+	const [messageOne, messageTwo] = args.messages;
 	await messageOne.edit(options).catch(warn);
-	await messageTwo.edit({ content:ZERO_WIDTH_SPACE, components:buildFormTwo(args, encounter) }).catch(warn);
+	await messageTwo.edit({ content:ZERO_WIDTH_SPACE, components:buildFormTwo(args) }).catch(warn);
 }
 
 async function deleteEncounter(sageCommand: SageCommand): Promise<void> {
 	const localize = sageCommand.getLocalizer();
 
-	const args = getArgs(sageCommand);
-
-	const messages = await getMessages(sageCommand, args);
-	if (!messages) {
+	const args = await getArgs(sageCommand);
+	if (!args) {
 		return sageCommand.replyStack.whisper({ content:localize("SORRY_WE_DONT_KNOW") });
 	}
 
-	for (const message of messages) {
+	for (const message of args.messages) {
 		await deleteMessage(message);
 	}
 }
