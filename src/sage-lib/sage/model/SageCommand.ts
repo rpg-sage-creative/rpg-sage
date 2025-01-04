@@ -4,7 +4,7 @@ import { debug, isDefined, orNilSnowflake, type Optional, type Snowflake } from 
 import type { DInteraction, DiscordKey, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
-import { ComponentType, InteractionType, Message, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
+import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -87,9 +87,12 @@ export abstract class SageCommand<
 	public isSageInteraction(type: "AUTO"): this is SageInteraction<AutocompleteInteraction>;
 	public isSageInteraction(type: "MODAL"): this is SageInteraction<ModalSubmitInteraction>;
 	public isSageInteraction(type: "SLASH"): this is SageInteraction<CommandInteraction>;
+	public isSageInteraction(type: "MSG_CONTEXT"): this is SageInteraction<MessageContextMenuCommandInteraction>;
+	public isSageInteraction(type: "USR_CONTEXT"): this is SageInteraction<UserContextMenuCommandInteraction>;
+	public isSageInteraction(type: "CONTEXT"): this is SageInteraction<MessageContextMenuCommandInteraction | UserContextMenuCommandInteraction>;
 	public isSageInteraction<T extends DRepliableInteraction>(type: "REPLIABLE"): this is SageInteraction<T>;
 	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T>;
-	public isSageInteraction(type?: "AUTO" | "MODAL" | "SLASH" | "BUTTON" | "SELECT" | "MESSAGE" | "TEXT" | "COMPONENT" | "REPLIABLE"): boolean {
+	public isSageInteraction(type?: "AUTO" | "MODAL" | "SLASH" | "BUTTON" | "SELECT" | "MESSAGE" | "TEXT" | "COMPONENT" | "REPLIABLE" | "MSG_CONTEXT" | "USR_CONTEXT" | "CONTEXT"): boolean {
 		if ("interaction" in this) {
 			if (!type) {
 				return true;
@@ -100,6 +103,16 @@ export abstract class SageCommand<
 			if (type === "REPLIABLE") {
 				return interaction.isRepliable();
 				// return "reply" in interaction;
+			}
+
+			if (type === "CONTEXT") {
+				return interaction.isContextMenuCommand();
+			}
+			if (type === "MSG_CONTEXT") {
+				return interaction.isMessageContextMenuCommand();
+			}
+			if (type === "USR_CONTEXT") {
+				return interaction.isUserContextMenuCommand();
 			}
 
 			// InteractionType
