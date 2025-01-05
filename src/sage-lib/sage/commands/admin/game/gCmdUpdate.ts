@@ -98,7 +98,7 @@ export async function gCmdUpdate(sageCommand: SageCommand): Promise<void> {
 		await sageCommand.replyStack.whisper({ content:"Unknown Error; Game NOT Updated!" });
 
 	}else if (updated === null) {
-		await sageCommand.replyStack.whisper({ content:"Please try /sage-game-update" });
+		await sageCommand.replyStack.whisper({ content:"Please try /sage-game update" });
 
 	}else if (updated === undefined) {
 		// do nothing
