@@ -95,7 +95,7 @@ export async function gCmdCreate(sageCommand: SageCommand): Promise<void> {
 		await sageCommand.replyStack.whisper({ content:"Unknown Error; Game NOT Created!" });
 
 	}else if (updated === null) {
-		await sageCommand.replyStack.whisper({ content:"Please try /sage-game-create" });
+		await sageCommand.replyStack.whisper({ content:"Please try /sage-game create" });
 
 	}else if (updated === undefined) {
 		// do nothing
