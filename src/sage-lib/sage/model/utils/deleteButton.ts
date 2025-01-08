@@ -1,12 +1,20 @@
+import { getSageId } from "@rsc-sage/env";
 import { errorReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, toChannelMention, toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
 import { isNotBlank } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
+import { getLocalizedText, type LocalizedTextKey } from "../../../../sage-lang/getLocalizedText.js";
 import { deleteMessage, MessageDeleteResults } from "../../../discord/deletedMessages.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
+import type { SageCommand } from "../SageCommand.js";
 import type { SageInteraction } from "../SageInteraction.js";
 
-type ButtonOptions = { customId?:string; style?:ButtonStyle; emoji?:string; label?:string; };
+type ButtonOptions = {
+	customId?: string;
+	style?: ButtonStyle;
+	emoji?: string;
+	label?: string;
+};
 
 /** Creates regex to test if the customId is a valid delete button customId. */
 function getCustomIdRegex(): RegExp {
@@ -30,16 +38,29 @@ function getUserId(customId: string): Snowflake | undefined {
 
 /**
  * Creates a "Delete" MessageButton.
- * The button responds only the given user and deletes the message the button is attached to.
- * Optionally, the style, emoji, or label can be changed.
+ * The button responds only the given user or game/server admins and deletes the message the button is attached to.
+ * Optionally, the customId, style, emoji, or label can be changed.
+ * @deprecated use createMessageDeleteButton(sageCommand: SageCommand, options?: ButtonOptions)
  */
-export function createMessageDeleteButton(userId: Snowflake, options?: ButtonOptions): ButtonBuilder {
+export function createMessageDeleteButton(userId: Snowflake, options?: ButtonOptions): ButtonBuilder;
+
+/**
+ * Creates a "Delete" MessageButton.
+ * The button responds only the sageUser or game/server admins and deletes the message the button is attached to.
+ * Optionally, the customId, style, emoji, or label can be changed.
+ */
+export function createMessageDeleteButton(sageCommand: SageCommand, options?: ButtonOptions): ButtonBuilder;
+
+export function createMessageDeleteButton(commandOrUserId: SageCommand | Snowflake, options?: ButtonOptions): ButtonBuilder {
+	const userId = typeof(commandOrUserId) === "string" ? commandOrUserId : commandOrUserId.actorId;
+	const localizer = typeof(commandOrUserId) === "string" ? (key: LocalizedTextKey) => getLocalizedText(key, "en-US") : commandOrUserId.getLocalizer();
+
 	/** @todo update all Sage "delete" icons to use custom trashcan or wastebin emoji 🗑️ instead of ❌ */
 	return new ButtonBuilder()
 		.setCustomId(options?.customId ?? createCustomId(userId))
 		.setStyle(options?.style ?? ButtonStyle.Secondary)
 		.setEmoji(isNotBlank(options?.emoji) ? options.emoji : "❌")
-		.setLabel(isNotBlank(options?.label) ? options.label : "Delete this alert.");
+		.setLabel(isNotBlank(options?.label) ? options.label : localizer("DELETE_THIS_ALERT"));
 }
 
 /**
@@ -116,6 +137,8 @@ function messageDeleteButtonTester(sageInteraction: SageInteraction<ButtonIntera
 
 /** Handles the interaction used for deleting messages. */
 async function messageDeleteButtonHandler(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
+	const localize = sageInteraction.getLocalizer();
+
 	const customId = sageInteraction.interaction.customId;
 	const actorId = sageInteraction.user.id as Snowflake;
 	const buttonUserId = getUserId(customId)!;
@@ -128,9 +151,9 @@ async function messageDeleteButtonHandler(sageInteraction: SageInteraction<Butto
 		const actor = toUserMention(actorId);
 		const buttonUser = await sageInteraction.discord.fetchUser(buttonUserId);
 		const content = [
-			`A message from RPG Sage to you was deleted in ${channel} by ${actor}.`,
-			message.content ? `### Content\n${message.content}` : "",
-			...message.embeds.map((embed, index) => `### Embed #${index + 1}\n${embed.description}`)
+			localize("MESSAGE_WAS_DELETED", channel, actor),
+			message.content ? `### ${localize("CONTENT")}\n${message.content}` : "",
+			...message.embeds.map((embed, index) => `### ${localize("EMBED")} #${index + 1}\n${embed.description}`)
 		].filter(s => s).join("\n");
 		const sendArgs = includeDeleteButton({ content }, buttonUserId);
 		await buttonUser?.send(sendArgs);
@@ -139,20 +162,20 @@ async function messageDeleteButtonHandler(sageInteraction: SageInteraction<Butto
 	// delete the message
 	const result = await deleteMessage(message);
 	if (result === MessageDeleteResults.NotDeletable) {
-		let content = `Sorry, RPG Sage is not able to delete this message: ${toMessageUrl(message)}`;
+		let content = localize("UNABLE_TO_DELETE_MESSAGE_:", toMessageUrl(message));
 		if (!message.channel.isDMBased()) {
-			const perms = message.channel.permissionsFor(sageInteraction.bot.did);
+			const perms = message.channel.permissionsFor(getSageId());
 			if (perms) {
 				if (perms.missing("ManageMessages")) {
-					content += `\n- RPG Sage doesn't appear to have the ManageMessages permission in that channel.`;
+					content += `\n- ${localize("SAGE_MISSING_PERM_IN_THAT_CHANNEL", "ManageMessages")}`;
 				}
 			}else {
-				content += `\n- RPG Sage doesn't appear to have access to that channel.`;
+				content += `\n- ${localize("SAGE_MISSING_ACCESS_TO_THAT_CHANNEL")}`;
 			}
 		}
 		const dm = await sageInteraction.user.send({ content }).catch(errorReturnNull);
 		if (!dm) {
-			content += `\n*Note: We tried to DM this alert to you, but were unable to.*`;
+			content += `\n*${localize("NOTE")}: ${localize("WE_TRIED_TO_DM_YOU")}*`;
 			await sageInteraction.replyStack.whisper(content, { forceEphemeral:true });
 		}
 	}
