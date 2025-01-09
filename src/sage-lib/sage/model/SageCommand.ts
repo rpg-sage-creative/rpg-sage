@@ -555,7 +555,8 @@ export abstract class SageCommand<
 		renderableContent.setColor(this.getHasColors().toHexColorString(colorType));
 		return renderableContent;
 	}
-	public createAdminRenderable(title?: LocalizedTextKey): RenderableContent {
-		return this.createRenderable(ColorType.AdminCommand, title);
+	public createAdminRenderable(title?: LocalizedTextKey, ...args: any[]): RenderableContent {
+		const localized = title ? this.getLocalizer()(title, ...args) : undefined;
+		return this.createRenderable(ColorType.AdminCommand, localized);
 	}
 }
