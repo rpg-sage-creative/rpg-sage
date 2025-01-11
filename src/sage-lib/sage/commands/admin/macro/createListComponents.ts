@@ -1,15 +1,14 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
-import { createCustomId as _createCustomId, type MacroAction } from "./customId.js";
 import type { Args } from "./getArgs.js";
 
-function createCustomId(sageCommand: SageCommand, action: MacroAction, name = ""): string {
-	const userId = sageCommand.actorId;
-	const ownerId = userId;
-	const type = "user";
-	return _createCustomId({ action, ownerId, name, type, userId });
-}
+// function createCustomId(sageCommand: SageCommand, action: MacroAction, name = ""): string {
+// 	const userId = sageCommand.actorId;
+// 	const ownerId = userId;
+// 	const type = "user";
+// 	return _createCustomId({ action, ownerId, name, type, userId });
+// }
 
 type Uncategorized = "Uncategorized";
 const Uncategorized: Uncategorized = "Uncategorized";
@@ -47,7 +46,7 @@ function createSelectCategorySelect(sageCommand: SageCommand, { owner, selectedC
 }
 
 function createSelectMacroPageSelect(sageCommand: SageCommand, { owner, selectedCategory, selectedMacroPageIndex }: Args): StringSelectMenuBuilder {
-	const select = new StringSelectMenuBuilder().setCustomId(createCustomId(sageCommand, "selectMacroPage"));
+	const select = new StringSelectMenuBuilder().setCustomId(owner.createCustomId({ action:"selectMacroPage", userId:sageCommand.actorId }));
 	const pages = owner.macroPageCounts[selectedCategory ?? Uncategorized];
 	for (let index = 0; index < pages; index++) {
 		select.addOptions(
@@ -61,7 +60,8 @@ function createSelectMacroPageSelect(sageCommand: SageCommand, { owner, selected
 }
 
 function createSelectMacroSelect(sageCommand: SageCommand, { owner, selectedCategory, selectedMacroPageIndex, selectedMacro }: Args): StringSelectMenuBuilder {
-	const select = new StringSelectMenuBuilder().setCustomId(createCustomId(sageCommand, "selectMacro")).setPlaceholder(`Select a Macro ...`);
+	const select = new StringSelectMenuBuilder().setCustomId(owner.createCustomId({ action:"selectMacro", userId:sageCommand.actorId }));
+	select.setPlaceholder(`Select a Macro ...`);
 	const selectedPageMacros = owner.getMacros({ category:selectedCategory ?? Uncategorized, pageIndex:selectedMacroPageIndex ?? 0 }).macros;
 	selectedPageMacros.forEach(({ name }) => select.addOptions(
 		new StringSelectMenuOptionBuilder()
@@ -73,18 +73,26 @@ function createSelectMacroSelect(sageCommand: SageCommand, { owner, selectedCate
 	return select;
 }
 
-function createDeleteCategoryButton(sageCommand: SageCommand): ButtonBuilder {
+function createNewMacroButton(sageCommand: SageCommand, { owner, macro }: Args): ButtonBuilder {
 	return new ButtonBuilder()
-		.setCustomId(createCustomId(sageCommand, "deleteCategory"))
+		.setCustomId(owner.createCustomId({ action:"showNewMacro", userId:sageCommand.actorId, name:macro?.name }))
+		.setStyle(ButtonStyle.Secondary)
+		.setLabel(sageCommand.getLocalizer()("NEW"))
+		;
+}
+
+function createDeleteCategoryButton(sageCommand: SageCommand, { owner }: Args): ButtonBuilder {
+	return new ButtonBuilder()
+		.setCustomId(owner.createCustomId({ action:"deleteCategory", userId:sageCommand.actorId }))
 		.setStyle(ButtonStyle.Danger)
 		.setLabel(sageCommand.getLocalizer()("DELETE_CATEGORY"))
 		.setDisabled(true)
 		;
 }
 
-function createDeleteAllButton(sageCommand: SageCommand): ButtonBuilder {
+function createDeleteAllButton(sageCommand: SageCommand, { owner }: Args): ButtonBuilder {
 	return new ButtonBuilder()
-		.setCustomId(createCustomId(sageCommand, "deleteAll"))
+		.setCustomId(owner.createCustomId({ action:"deleteAll", userId:sageCommand.actorId }))
 		.setStyle(ButtonStyle.Danger)
 		.setLabel(sageCommand.getLocalizer()("DELETE_ALL"))
 		.setDisabled(true)
@@ -125,10 +133,11 @@ export function createListComponents(sageCommand: SageCommand, args: Args): Acti
 	}
 
 	// add buttons
-	const deleteButton = createDeleteCategoryButton(sageCommand);
-	const deleteAllButton = createDeleteAllButton(sageCommand);
+	const newButton = createNewMacroButton(sageCommand, args);
+	const deleteButton = createDeleteCategoryButton(sageCommand, args);
+	const deleteAllButton = createDeleteAllButton(sageCommand, args);
 	const closeButton = createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary });
-	components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(deleteButton, deleteAllButton, closeButton));
+	components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(newButton, deleteButton, deleteAllButton, closeButton));
 
 	return components;
 }

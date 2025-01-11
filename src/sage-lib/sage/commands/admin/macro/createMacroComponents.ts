@@ -16,10 +16,9 @@ function createCustomId(sageCommand: SageCommand, { name }: TMacro, action: Macr
 
 function createNewMacroButton(sageCommand: SageCommand, macro: Macro): ButtonBuilder {
 	return new ButtonBuilder()
-		.setCustomId(createCustomId(sageCommand, macro, "newMacro"))
+		.setCustomId(createCustomId(sageCommand, macro, "showNewMacro"))
 		.setStyle(ButtonStyle.Secondary)
 		.setLabel(sageCommand.getLocalizer()("NEW"))
-		.setDisabled(true)
 		;
 }
 

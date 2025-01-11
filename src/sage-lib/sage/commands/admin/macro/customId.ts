@@ -6,7 +6,8 @@ export type MacroAction =
 	| "selectMacroPage" | "selectMacro"
 	| "promptDeleteMacro" | "confirmDeleteMacro" | "cancelDeleteMacro"
 	| "showEditMacro" | "promptEditMacro" | "confirmEditMacro" | "cancelEditMacro"
-	| "newMacro" | "copyMacro"
+	| "showNewMacro" | "promptNewMacro"
+	| "copyMacro"
 	| "deleteCategory" | "deleteAll"
 	;
 

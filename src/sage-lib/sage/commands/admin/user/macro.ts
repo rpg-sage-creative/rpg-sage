@@ -159,7 +159,17 @@ export function registerMacro(): void {
 	registerListeners({ commands:["macro|delete|all"], message:macroDeleteAll });
 	// registerListeners({ commands:["macro|delete|category"], message:macroDeleteCategory });
 
-	registerListeners({ commands:[createCustomIdRegExp("promptDeleteMacro", "confirmDeleteMacro", "cancelDeleteMacro", "showEditMacro", "confirmEditMacro", "cancelEditMacro")], interaction:handleMacroButton });
+	registerListeners({ commands:[createCustomIdRegExp(
+		"promptDeleteMacro",
+		"confirmDeleteMacro",
+		"cancelDeleteMacro",
+
+		"showEditMacro",
+		"confirmEditMacro",
+		"cancelEditMacro",
+
+		"showNewMacro",
+	)], interaction:handleMacroButton });
 
 	registerListeners({ commands:[createCustomIdRegExp("promptEditMacro")], interaction:handleMacroModal });
 }

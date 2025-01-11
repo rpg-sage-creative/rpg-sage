@@ -49,24 +49,35 @@ async function showEditMacro(sageInteraction: SageInteraction<ButtonInteraction>
 	await sageInteraction.interaction.showModal(modal);
 }
 
+async function showNewMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args): Promise<void> {
+	const modal = await createMacroModal(sageInteraction, args, "promptNewMacro");
+	await sageInteraction.interaction.showModal(modal);
+}
+
 export async function handleMacroButton(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
 	// sageInteraction.replyStack.defer();
 
-	const args = await getArgs<true>(sageInteraction);
-	if (!args.macro) {
+	const args = await getArgs(sageInteraction);
+	const action = args.customIdArgs.action;
+
+	if (action !== "showNewMacro" && !args.macro) {
 		const localize = sageInteraction.getLocalizer();
 		return sageInteraction.replyStack.whisper(localize("CANNOT_FIND_S", args.selectedMacro));
 	}
 
 	switch(args.customIdArgs.action) {
 		case "copyMacro": break;
-		case "promptDeleteMacro": return promptDeleteMacro(sageInteraction, args);
-		case "confirmDeleteMacro": return handleDeleteMacro(sageInteraction, args);
-		case "cancelDeleteMacro": return handleDeleteMacro(sageInteraction, args);
+
+		case "promptDeleteMacro": return promptDeleteMacro(sageInteraction, args as Args<true>);
+		case "confirmDeleteMacro": return handleDeleteMacro(sageInteraction, args as Args<true>);
+		case "cancelDeleteMacro": return handleDeleteMacro(sageInteraction, args as Args<true>);
+
 		case "showEditMacro": return showEditMacro(sageInteraction, args);
-		case "confirmEditMacro": return handleEditMacro(sageInteraction, args);
-		case "cancelEditMacro": return handleEditMacro(sageInteraction, args);
-		case "newMacro": break;
+		case "confirmEditMacro": return handleEditMacro(sageInteraction, args as Args<true>);
+		case "cancelEditMacro": return handleEditMacro(sageInteraction, args as Args<true>);
+
+		case "showNewMacro": return showNewMacro(sageInteraction, args);
+
 		default:
 			const localize = sageInteraction.getLocalizer();
 			return sageInteraction.replyStack.whisper(localize("FEATURE_NOT_IMPLEMENTED"));
