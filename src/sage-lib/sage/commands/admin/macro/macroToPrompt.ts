@@ -1,7 +1,6 @@
 import { quote, unwrap } from "@rsc-utils/string-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { Macro } from "./HasMacros.js";
-import { checkForEmojiOverride } from "./checkForEmojiOverride.js";
 
 type PromptOptions = {
 	share?: boolean;
@@ -35,10 +34,11 @@ export function macroToPrompt(sageCommand: SageCommand, macro: Macro, opts?: Pro
 	}
 
 	if (opts?.usage) {
-		parts.push(`\n\n*${localize("USAGE")}:* \`[${macro.name.toLowerCase()}]\``);
-		const warning = checkForEmojiOverride(sageCommand, `[${macro.name}]`);
+		const usage = `[${macro.name.toLowerCase()}]`;
+		parts.push(`\n\n*${localize("USAGE")}:* \`${usage}\``);
+		const warning = sageCommand.sageCache.emojify(usage) !== usage;
 		if (warning) {
-			parts.push(`\n***${localize("WARNING")}** ${localize("OVERRIDES_SAGE_DIALOG_EMOJI")} [${macro.name.toLowerCase()}]*`);
+			parts.push(`\n***${localize("WARNING")}** ${localize("OVERRIDES_SAGE_DIALOG_EMOJI")} ${usage}*`);
 		}
 	}
 
