@@ -47,26 +47,22 @@ export class SageReaction
 		return this.core.messageReaction.emoji;
 	}
 
-	public fetchMessage(): Promise<Message> {
-		return new Promise<Message>((resolve, reject) => {
-			this.fetchMessageReaction().then(messageReaction => {
-				if (messageReaction.message.partial) {
-					messageReaction.message.fetch().then(resolve, reject);
-				}else {
-					resolve(messageReaction.message);
-				}
-			}, reject);
-		});
+	public async fetchMessage(messageId?: Snowflake): Promise<Message> {
+		const messageReaction = await this.fetchMessageReaction();
+		const message = messageReaction.message.partial
+			? await messageReaction.message.fetch()
+			: messageReaction.message;
+		if (messageId && messageId !== message.id) {
+			return message.channel.messages.fetch(messageId)
+		}
+		return message;
 	}
 
-	public fetchMessageReaction(): Promise<MessageReaction> {
-		return new Promise<MessageReaction>(async (resolve, reject) => {
-			if (this.core.messageReaction.partial) {
-				this.core.messageReaction.fetch().then(resolve, reject);
-			}else {
-				resolve(this.core.messageReaction);
-			}
-		});
+	public async fetchMessageReaction(): Promise<MessageReaction> {
+		if (this.core.messageReaction.partial) {
+			return this.core.messageReaction.fetch();
+		}
+		return this.core.messageReaction;
 	}
 
 	public async isAuthorSageOrWebhook(): Promise<boolean> {

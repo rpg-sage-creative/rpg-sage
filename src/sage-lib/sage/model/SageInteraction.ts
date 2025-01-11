@@ -54,7 +54,15 @@ export class SageInteraction<T extends DInteraction = any>
 		this.args = new SageInteractionArgs(this);
 	}
 
-	public async fetchMessage(): Promise<Message | undefined> {
+	public async fetchMessage(messageId?: Snowflake): Promise<Message | undefined> {
+		if (messageId) {
+			let channel = this.interaction.channel;
+			if (channel?.partial) {
+				channel = await channel.fetch();
+			}
+			return channel?.messages.fetch(messageId);
+		}
+
 		let message: Message | undefined;
 		if (this.isSageInteraction("MESSAGE")) {
 			message = this.interaction.message;

@@ -149,7 +149,7 @@ export abstract class SageCommand<
 	/** @todo: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
 	public clone(): this { return this; }
 
-	public abstract fetchMessage(): Promise<Message | undefined>;
+	public abstract fetchMessage(messageId?: Snowflake): Promise<Message | undefined>;
 
 	/** @todo what is the reason for both reply /AND/ whisper? */
 	public abstract reply(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void>;
