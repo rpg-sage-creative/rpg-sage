@@ -24,6 +24,7 @@ const enUS = {
 	"NEW": `New`,
 	"NOTE": `Note`,
 	"NPC": "NPC",
+	"PAGE": `Page`,
 	"PC": "PC",
 	"REIMPORT": `Reimport`,
 	"SHARE": `Share`,
@@ -38,6 +39,8 @@ const enUS = {
 
 	"IMPORT_ERROR": "Import Error!",
 	"REIMPORT_ERROR": "Reimport Error!",
+
+	"FEATURE_NOT_IMPLEMENTED": `Sorry, that feature hasn't been implemented yet!`,
 
 	"SORRY_WE_DONT_KNOW": "Sorry, we don't know what went wrong!",
 	"AT_LEAST_ONE_OCCURRED": `Sorry, at least one of the following occurred:`,
@@ -91,8 +94,10 @@ const enUS = {
 	"CANNOT_MANAGE_MACRO_HERE": `Sorry, you cannot manage macros here.`,
 	"MACRO_DETAILS": `Macro Details`,
 	"MACRO_LIST": `Macro List`,
+	"MACRO_S_NOT_FOUND": `Macro "#{0}" ***NOT*** found!`,
 	"NO_MACROS_FOUND": `No Macros Found!`,
 	"TO_VIEW_MACRO_USE_:": `To view a macro, use:`,
+	"TO_CREATE_MACRO_USE_:": `To create a macro, use:`,
 
 	"INVALID_TABLE_DATA": `Invalid Table Data.`,
 
@@ -107,7 +112,11 @@ const enUS = {
 
 	"CREATE_MACRO_?": `Create Macro?`,
 
+	"DELETE_ALL": `Delete All`,
+	"DELETE_CATEGORY": `Delete Category`,
+
 	"DELETE_MACRO_?": `Delete Macro?`,
+	"DELETE_ALL_X_MACROS_?": `Delete All #{0} Macros?`,
 	"MACRO_S_DELETED": `Macro "#{0}" deleted.`,
 	"MACRO_S_NOT_DELETED": `Macro "#{0}" ***NOT*** deleted!`,
 
@@ -116,6 +125,9 @@ const enUS = {
 	"MACRO_S_NOT_UPDATED": `Macro "#{0}" ***NOT*** updated!`,
 
 	"OVERRIDES_SAGE_DIALOG_EMOJI": `This overrides Sage dialog emoji:`,
+
+	// sample macro name
+	"MACRO_NAME_EXAMPLE": `SwordAttack`,
 
 	// deleteButton
 	"DELETE_THIS_ALERT": `Delete this alert.`,
