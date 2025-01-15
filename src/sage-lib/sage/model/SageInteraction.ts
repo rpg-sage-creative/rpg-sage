@@ -21,19 +21,22 @@ interface SageInteractionCore extends SageCommandCore {
 	type: InteractionType;
 }
 
-/** Parses a string of type `{indicator}|{userId}|{action}|...` */
-type IdParts = {
+type IdPartsBase = {
 	/** Generally the tool or feature of Sage */
 	indicator: string;
-	/** Generally the user doing the action. */
-	userId: Snowflake;
 	/** The action being performed. */
 	action: string;
+};
+
+/** Parses a string of type `{indicator}|{userId}|{action}|...` */
+type IdParts = IdPartsBase & {
+	/** Generally the user doing the action. */
+	userId: Snowflake;
 	/** any remaining values */
 	args?: string[];
 };
 
-type CustomIdParser<T extends IdParts> = (customId: string) => T | undefined;
+type CustomIdParser<T extends IdPartsBase = IdParts> = (customId: string) => T | undefined;
 
 function defaultCustomIdParser<T extends IdParts>(customId: string): T | undefined {
 	const args = customId.split("|");
@@ -164,9 +167,9 @@ export class SageInteraction<T extends DInteraction = any>
 		return false;
 	}
 
-	public parseCustomId<T extends IdParts>(parser?: CustomIdParser<T>): T | undefined {
+	public parseCustomId<T extends IdPartsBase = IdParts>(parser?: CustomIdParser<T>): T | undefined {
 		if ("customId" in this.interaction) {
-			return (parser ?? defaultCustomIdParser)(this.interaction.customId);
+			return (parser ?? defaultCustomIdParser)(this.interaction.customId) as T;
 		}
 		return undefined;
 	}
