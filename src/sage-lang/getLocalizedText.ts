@@ -112,7 +112,7 @@ const enUS = {
 	"TO_VIEW_MACRO_USE_:": `To view a macro, use:`,
 	"TO_CREATE_MACRO_USE_:": `To create a macro, use:`,
 
-	"SELECT_MACRO_TYPE": `"Select Macro Type ..."`,
+	"SELECT_MACRO_TYPE": `Select Macro Type ...`,
 	"SELECT_A_MACRO": `"Select a Macro ..."`,
 	"CHARACTER_MACROS": `Character Macros`,
 	"USER_MACROS": `User Macros`,
