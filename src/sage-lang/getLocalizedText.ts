@@ -6,6 +6,8 @@ const DISCORD_POLICY = `[(Discord Policy)](<https://discord.com/developers/docs/
 const enUS = {
 
 	"CATEGORY": `Category`,
+	"CATEGORIES": `Categories`,
+	"CHARACTERS": `Characters`,
 	"CLOSE": `Close`,
 	"COMPANION": "Companion",
 	"CONTENT": `Content`,
@@ -15,25 +17,34 @@ const enUS = {
 	"DICE": `Dice`,
 	"EDIT": `Edit`,
 	"EMBED": `Embed`,
-	"FROM": `From`,
+	"FROM": `From`, // context: we are changing a value "from" something "to" something else
+	"GAMES": `Games`,
+	"GLOBAL": `Global`,
 	"IMPORT": `Import`,
 	"ITEMS": `Items`,
+	"MACRO": "Macro",
+	"MACROS": "Macros",
 	"MATH": `Math`,
 	"MINION": "Minion",
 	"NAME": `Name`,
 	"NEW": `New`,
+	"NO": `No`, // context: for a "yes" or "no" confirmation prompt
 	"NOTE": `Note`,
 	"NPC": "NPC",
+	"OWNERS": `Owners`,
 	"PAGE": `Page`,
 	"PC": "PC",
 	"REIMPORT": `Reimport`,
+	"SERVERS": `Servers`,
 	"SHARE": `Share`,
 	"TABLE": `Table`,
-	"TO": `To`,
+	"TO": `To`, // context: we are changing a value "from" something "to" something else
 	"UNCATEGORIZED": `Uncategorized`,
 	"UPDATE": `Update`,
 	"USAGE": `Usage`,
+	"USERS": `Users`,
 	"WARNING": `Warning`,
+	"YES": `Yes`, // context: for a "yes" or "no" confirmation prompt
 
 	"TABLE_URL": `Table Url`,
 
@@ -75,6 +86,8 @@ const enUS = {
 	"USERNAME_MISSING": `The username is missing.`,
 	"USERNAME_TOO_LONG": `The username is too long. ${DISCORD_POLICY}`,
 
+	"PAGE_X_OF_Y": `Page #{0} of #{1}`,
+
 	// IMPORT ERRORS
 	"NOTHING_TO_IMPORT": `Nothing to import.`,
 	"NOTHING_TO_REIMPORT": `Nothing to reimport.`,
@@ -99,7 +112,18 @@ const enUS = {
 	"TO_VIEW_MACRO_USE_:": `To view a macro, use:`,
 	"TO_CREATE_MACRO_USE_:": `To create a macro, use:`,
 
-	"INVALID_TABLE_DATA": `Invalid Table Data.`,
+	"SELECT_MACRO_TYPE": `"Select Macro Type ..."`,
+	"SELECT_A_MACRO": `"Select a Macro ..."`,
+	"CHARACTER_MACROS": `Character Macros`,
+	"USER_MACROS": `User Macros`,
+	"GAME_MACROS": `Game Macros`,
+	"SERVER_MACROS": `Server Macros`,
+	"GLOBAL_MACROS": `Global Macros`,
+
+	"INVALID_MACRO_NAME": `Macro names should only contain letters, numbers, spaces, underscores, and dashes.`,
+	"INVALID_MACRO_DUPLICATE": `There is already a macro with that name.`,
+	"INVALID_MACRO_DICE": `Your macro dice is invalid. For information on macros, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Dice-Macros>).`,
+	"INVALID_MACRO_TABLE": `Your macro table is invalid.`,
 
 	"CREATE_USER_MACRO": `Create User Macro`,
 	"EDIT_USER_MACRO": `Edit User Macro`,
