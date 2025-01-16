@@ -4,16 +4,15 @@ import { createMacroComponents } from "./createMacroComponents.js";
 import { getArgs, type Args } from "./getArgs.js";
 import { macroToPrompt } from "./macroToPrompt.js";
 
-function toRenderableContent(sageCommand: SageCommand, { owner, selectedMacro }: Args): RenderableContent {
+function toRenderableContent(sageCommand: SageCommand, { macro }: Args): RenderableContent {
 	const localize = sageCommand.getLocalizer();
 
 	const renderableContent = sageCommand.createAdminRenderable("MACRO_DETAILS");
 
-	const macro = owner.find({ name:selectedMacro });
 	if (macro) {
 		renderableContent.append(macroToPrompt(sageCommand, macro, { share:true, usage:true }));
 	} else {
-		renderableContent.append(localize("MACRO_S_NOT_FOUND", selectedMacro));
+		renderableContent.append(localize("MACRO_S_NOT_FOUND", sageCommand.args.getString("name")));
 	}
 
 	return renderableContent;

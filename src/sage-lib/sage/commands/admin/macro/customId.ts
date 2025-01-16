@@ -1,82 +1,118 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { stringOrUndefined } from "@rsc-utils/string-utils";
+import { type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import type { MacroState } from "./getArgs.js";
+import { MacroOwnerType, type MacroOwnerTypeKey } from "./Owner.js";
 
-export type MacroAction =
-	"selectCategoryPage" | "selectCategory"
-	| "selectMacroPage" | "selectMacro"
-	| "promptDeleteMacro" | "confirmDeleteMacro" | "cancelDeleteMacro"
-	| "showEditMacro" | "promptEditMacro" | "confirmEditMacro" | "cancelEditMacro"
-	| "showNewMacro" | "promptNewMacro"
-	| "copyMacro"
-	| "deleteCategory" | "deleteAll"
-	;
+function compressId(value?: Snowflake | UUID): string | undefined {
+	if (!value) return undefined;
 
-type MacroType = "character" | "user" | "game" | "server" | "global";
+	// remove dashes from uuid
+	if (value.includes("-")) return value.replace(/-/g, "");
+
+	// convert snowflake to hex
+	return BigInt(value).toString(16);
+}
+
+function decompressId<Type extends Snowflake | UUID>(value?: string): Type | undefined {
+	if (!value) return undefined;
+
+	// put dashes back into uuid
+	if (value.length === 32) {
+		return [
+			value.slice(0, 8),
+			value.slice(8, 12),
+			value.slice(12, 16),
+			value.slice(16, 20),
+			value.slice(20)
+		].join("-") as Type;
+	}
+
+	// convert hex to snowflake
+	return BigInt(`0x${value}`).toString() as Type;
+}
+
+export type MacroActionKey = keyof typeof MacroAction;
+
+export enum MacroAction {
+	selectOwnerType,
+	selectOwnerPage,
+	selectOwnerId,
+
+	selectCategoryPage,
+	selectCategory,
+
+	selectMacroPage,
+	selectMacro,
+
+	showNewMacro,
+	promptNewMacro,
+	confirmNewMacro,
+	cancelNewMacro,
+
+	showEditMacro,
+	promptEditMacro,
+	confirmEditMacro,
+	cancelEditMacro,
+
+	promptDeleteMacro,
+	confirmDeleteMacro,
+	cancelDeleteMacro,
+}
+// | "copyMacro" | "deleteCategory" | "deleteAll"
 
 export type CustomIdArgs = {
 	/** needed for SageInteraction.parseCustomId */
-	indicator: "macro";
+	indicator: "macros";
 
 	/** the user doing actions */
-	userId: Snowflake;
+	actorId: Snowflake;
 
-	/** which type of macro are we dealing with, determines owner id */
-	type: MacroType;
-
-	/** id that owns the macros/categories: char id, user id, game id, server id */
-	ownerId: Snowflake;
+	state: MacroState;
 
 	/** what are we doing */
-	action: MacroAction;
+	action: MacroActionKey;
 
 	/** message that opened the modal */
 	messageId?: Snowflake;
-
-	/** what are we doing it to: macro name or category name */
-	name?: string;
 };
 
-export type Uncategorized = "Uncategorized";
-export const Uncategorized: Uncategorized = "Uncategorized";
-
-export function createCustomId({ action, messageId, name, ownerId, type, userId }: Omit<CustomIdArgs, "indicator">): string {
+export function createCustomId({ actorId, state, action, messageId }: Omit<CustomIdArgs, "indicator">): string {
+	const { ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex, macroIndex } = state;
 	return [
-		userId,
-		type,
-		ownerId,
-		action,
-		messageId ?? "",
-		name ?? "",
-	].join("|")
+		"macros",
+		compressId(actorId),
+		[MacroOwnerType[ownerType!] ?? "", ownerPageIndex, compressId(ownerId) ?? "", categoryPageIndex, categoryIndex, macroPageIndex, macroIndex].join(","),
+		MacroAction[action],
+		compressId(messageId) ?? "",
+	].join("|");
 }
 
-export function createCustomIdRegExp(...actions: MacroAction[]): RegExp {
-	return new RegExp([
-		/(?<userId>\d{16,})/,
-		/(?<ownerType>character|user|game|server|global)/,
-		/(?<ownerId>\d{16,})/,
-		new RegExp(`(?<action>${actions.join("|")})`),
-		/(?<messageId>\d{16,})?/,
-		/(?<macroName>\w*)/
-	].map(r => r.source).join(`\\|`));
+export function createCustomIdRegExp(...actions: MacroActionKey[]): RegExp {
+	const source = [
+		/macros/,
+		/(?<actorId>[\da-f]+)/,
+		/(?<ownerType>\d)?,(?<ownerPageIndex>-?\d+),(?<ownerId>[\da-f]+)?,(?<categoryPageIndex>-?\d+),(?<categoryIndex>-?\d+),(?<macroPageIndex>-?\d+),(?<macroIndex>-?\d+)/,
+		new RegExp(`(?<action>${actions.length ? actions.map(key => MacroAction[key]).join("|") : "\\d+"})`),
+		/(?<messageId>[\da-f]+)?/,
+	].map(r => r.source).join(`\\|`);
+	return new RegExp(`^${source}$`);
 }
 
 export function parseCustomId(customId: string): CustomIdArgs {
-	const [
-		userId,
-		type,
-		ownerId,
-		action,
-		messageId,
-		name,
-	] = customId.split("|");
+	const match = createCustomIdRegExp().exec(customId);
+	const { actorId, ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex, macroIndex, action, messageId } = match!.groups!;
 	return {
-		indicator: "macro",
-		userId: userId as Snowflake,
-		type: type as MacroType,
-		ownerId: ownerId as Snowflake,
-		action: action as MacroAction,
-		messageId: stringOrUndefined(messageId) as Snowflake,
-		name: stringOrUndefined(name),
+		indicator: "macros",
+		actorId: decompressId(actorId) as Snowflake,
+		state: {
+			ownerType: MacroOwnerType[+ownerType] as MacroOwnerTypeKey,
+			ownerPageIndex: +ownerPageIndex,
+			ownerId: decompressId(ownerId) as Snowflake,
+			categoryPageIndex: +categoryPageIndex,
+			categoryIndex: +categoryIndex,
+			macroPageIndex: +macroPageIndex,
+			macroIndex: +macroIndex,
+		},
+		action: MacroAction[+action] as MacroActionKey,
+		messageId: decompressId(messageId) as Snowflake,
 	};
 }

@@ -1,24 +1,28 @@
 import { type Snowflake } from "@rsc-utils/core-utils";
 import { ModalBuilder } from "@rsc-utils/discord-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import { type MacroAction } from "./customId.js";
+import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args } from "./getArgs.js";
+import type { MacroOwnerTypeKey } from "./Owner.js";
 
-export async function createMacroModal(sageCommand: SageCommand, { customIdArgs, owner, macro, selectedCategory }: Args, action: MacroAction): Promise<ModalBuilder> {
+export async function createMacroModal(sageCommand: SageCommand, args: Args<true>, action: MacroActionKey): Promise<ModalBuilder> {
 	const localize = sageCommand.getLocalizer();
 
+	const { actorId } = sageCommand;
+	const { macro, macros } = args;
+	const state = args.state.prev;
+
 	const modal = new ModalBuilder();
-	const message = await sageCommand.fetchMessage(customIdArgs?.messageId);
+	const message = await sageCommand.fetchMessage(args.customIdArgs?.messageId);
 	const messageId = message?.id as Snowflake;
-	const customId = owner.createCustomId({ action, messageId, name:macro?.name, userId:sageCommand.actorId });
-	modal.setCustomId(customId);
+	modal.setCustomId(createCustomId({ action, actorId, messageId, state }));
 
 	let name = "";
-	let category = macro?.category ?? selectedCategory ?? "";
+	let category = macro?.category ?? macros.getCategory(state) ?? "";
 	let dice = "";
 
 
-	const actionType: `${typeof action}|${typeof owner.type}` = `${action}|${owner.type}`;
+	const actionType: `${typeof action}|${MacroOwnerTypeKey}` = `${action}|${macros.type}`;
 	switch(actionType) {
 		case "promptNewMacro|user":
 			modal.setTitle(localize("CREATE_USER_MACRO"));

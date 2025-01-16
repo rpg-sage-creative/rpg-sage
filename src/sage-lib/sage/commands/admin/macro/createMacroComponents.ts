@@ -1,66 +1,67 @@
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from "discord.js";
+import type { Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import type { TMacro } from "../../../model/types.js";
 import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
 import { createListComponents } from "./createListComponents.js";
-import { createCustomId as _createCustomId, type MacroAction } from "./customId.js";
-import type { Args } from "./getArgs.js";
-import type { Macro } from "./HasMacros.js";
+import { createCustomId } from "./customId.js";
+import type { Args, MacroState } from "./getArgs.js";
 
-function createCustomId(sageCommand: SageCommand, { name }: TMacro, action: MacroAction): string {
-	const userId = sageCommand.actorId;
-	const ownerId = userId;
-	const type = "user";
-	return _createCustomId({ action, ownerId, name, type, userId });
-}
+type CreateArgs = { actorId: Snowflake; localize: Localizer; messageId?: Snowflake; state: MacroState; };
 
-function createNewMacroButton(sageCommand: SageCommand, macro: Macro): ButtonBuilder {
+function createNewMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
 	return new ButtonBuilder()
-		.setCustomId(createCustomId(sageCommand, macro, "showNewMacro"))
+		.setCustomId(createCustomId({ action:"showNewMacro", actorId, messageId, state }))
 		.setStyle(ButtonStyle.Secondary)
-		.setLabel(sageCommand.getLocalizer()("NEW"))
+		.setLabel(localize("NEW"))
 		;
 }
 
-function createShowEditMacroButton(sageCommand: SageCommand, macro: Macro): ButtonBuilder {
+function createShowEditMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
 	return new ButtonBuilder()
-		.setCustomId(createCustomId(sageCommand, macro, "showEditMacro"))
+		.setCustomId(createCustomId({ action:"showEditMacro", actorId, messageId, state }))
 		.setStyle(ButtonStyle.Primary)
-		.setLabel(sageCommand.getLocalizer()("EDIT"))
+		.setLabel(localize("EDIT"))
 		;
 }
 
-function createCopyMacroButton(sageCommand: SageCommand, macro: Macro): ButtonBuilder {
-	return new ButtonBuilder()
-		.setCustomId(createCustomId(sageCommand, macro, "copyMacro"))
-		.setStyle(ButtonStyle.Secondary)
-		.setLabel(sageCommand.getLocalizer()("COPY"))
-		.setDisabled(true)
-		;
-}
+// function createCopyMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
+// 	return new ButtonBuilder()
+// 		.setCustomId(createCustomId({ action:"copyMacro", actorId, messageId, state }))
+// 		.setStyle(ButtonStyle.Secondary)
+// 		.setLabel(localize("COPY"))
+// 		.setDisabled(true)
+// 		;
+// }
 
-function createDeleteMacroButton(sageCommand: SageCommand, macro: Macro): ButtonBuilder {
+function createDeleteMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
 	return new ButtonBuilder()
-		.setCustomId(createCustomId(sageCommand, macro, "promptDeleteMacro"))
+		.setCustomId(createCustomId({ action:"promptDeleteMacro", actorId, messageId, state }))
 		.setStyle(ButtonStyle.Danger)
-		.setLabel(sageCommand.getLocalizer()("DELETE"))
+		.setLabel(localize("DELETE"))
 		;
 }
 
 export function createMacroComponents(sageCommand: SageCommand, args: Args): ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] {
+
 	const components = createListComponents(sageCommand, args);
 
-	const macro = args.owner.find({ name:args.selectedMacro });
-	if (!macro) return components;
+	if (!args.macro) return components;
 
-	const newButton = createNewMacroButton(sageCommand, macro);
-	const editButton = createShowEditMacroButton(sageCommand, macro);
-	const copyButton = createCopyMacroButton(sageCommand, macro);
-	const deleteButton = createDeleteMacroButton(sageCommand, macro);
-	const closeButton = createMessageDeleteButton(sageCommand, { label:sageCommand.getLocalizer()("CLOSE"), style:ButtonStyle.Secondary });
+	const { actorId } = sageCommand;
+	const localize = sageCommand.getLocalizer();
+	const messageId = args.customIdArgs?.messageId;
+	const state = args.state.prev;
+	const buttonArgs = { actorId, localize, messageId, state };
+
+	const newButton = createNewMacroButton(buttonArgs);
+	const editButton = createShowEditMacroButton(buttonArgs);
+	// const copyButton = createCopyMacroButton(buttonArgs);
+	const deleteButton = createDeleteMacroButton(buttonArgs);
+	const closeButton = createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary });
 
 	components.pop();
-	components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(newButton, editButton, copyButton, deleteButton, closeButton));
+	components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(newButton, editButton, deleteButton, closeButton));
 
 	return components;
 }

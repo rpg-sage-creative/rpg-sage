@@ -1,8 +1,11 @@
+import { debug, type Snowflake } from "@rsc-utils/core-utils";
 import { getSelectedOrDefault, getSelectedOrDefaultNumber } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
-import { parseCustomId, type CustomIdArgs, type MacroAction } from "./customId.js";
-import { HasMacros, type Macro } from "./HasMacros.js";
+import { createCustomId as _createCustomId, parseCustomId, type CustomIdArgs, type MacroActionKey } from "./customId.js";
+import { Macro } from "./Macro.js";
+import { Macros, type MacroIndex } from "./Macros.js";
+import type { MacroOwnerTypeKey } from "./Owner.js";
 
 type ArgPair = { key:string; value:string; };
 function pair(sageComand: SageCommand, ...keys: string[]): ArgPair | undefined {
@@ -21,85 +24,135 @@ export function getArgPairs(sageComand: SageCommand): ArgPairs {
 	return { namePair, categoryPair, contentPair };
 }
 
-export type Args<HasMacro extends boolean = false> = {
-	customIdArgs: HasMacro extends true ? CustomIdArgs : CustomIdArgs | undefined;
-	macro: HasMacro extends true ? Macro : Macro | undefined;
-	owner: HasMacros;
-	selectedCategoryPageIndex: HasMacro extends true ? number : number | undefined;
-	selectedCategory: HasMacro extends true ? string : string | undefined;
-	selectedMacroPageIndex: HasMacro extends true ? number : number | undefined;
-	selectedMacro: HasMacro extends true ? string : string | undefined;
+export type MacroState<HasMacro extends boolean = false> = MacroIndex & {
+	ownerType: HasMacro extends true ? MacroOwnerTypeKey : MacroOwnerTypeKey | undefined;
+	ownerPageIndex: number;
+	ownerId: HasMacro extends true ? Snowflake : Snowflake | undefined;
 };
 
-function getCategoryMeta(owner: HasMacros, selectedCategory?: string) {
-	if (selectedCategory) {
-		const categoryMeta = owner.getCategoryMeta({ selectedCategory });
-		if (categoryMeta) {
-			return {
-				selectedCategory: categoryMeta.category,
-				selectedCategoryPageIndex: categoryMeta.categoryPageIndex,
-				// selectedMacroPageIndex
-			};
-		}
+function updateMacroState(state: MacroState, args: Partial<MacroState>): MacroState {
+	const ret = (changes: Partial<MacroState>) => ({ ownerType:undefined, ownerPageIndex:-1, ownerId:undefined, categoryPageIndex:-1, categoryIndex:-1, macroPageIndex:-1, macroIndex:-1, ...changes });
+
+	const { ownerType, ownerPageIndex = -1, ownerId } = args;
+
+	if (ownerType !== state.ownerType) {
+		return ret({ ownerType });
 	}
-	return undefined;
-}
 
-function getMacroMeta(owner: HasMacros, selectedMacro?: string) {
-	if (selectedMacro) {
-		const macroMeta = owner.getMacroMeta({ name:selectedMacro });
-		if (macroMeta) {
-			return {
-				macro: macroMeta.macro,
-				selectedCategoryPageIndex: macroMeta.categoryPageIndex,
-				selectedCategory: macroMeta.category,
-				selectedMacroPageIndex: macroMeta.macroPageIndex,
-				selectedMacro: macroMeta.macro.name
-			};
-		}
+	if (ownerPageIndex !== state.ownerPageIndex) {
+		return ret({ ownerType, ownerPageIndex });
 	}
-	return undefined;
+
+	if (ownerId !== state.ownerId) {
+		return ret({ ownerType, ownerPageIndex, ownerId });
+	}
+
+	return ret({ ownerType, ownerPageIndex, ownerId, ...Macro.updateMacroIndex(state, args) });
 }
 
-export async function getOwner(sageCommand: SageCommand): Promise<HasMacros> {
-	const owner = await HasMacros.parse(sageCommand, { ownerType:"user" });
-	return owner;
-}
+export type Args<HasMacros extends boolean = false, HasMacro extends boolean = false> = {
+	customIdArgs: HasMacro extends true ? CustomIdArgs : CustomIdArgs | undefined;
+	macro: HasMacro extends true ? Macro : Macro | undefined;
+	macros: HasMacros extends true ? Macros : Macros | undefined;
+	state: {
+		prev: MacroState<HasMacro>;
+		next: MacroState;
+	};
+};
 
-export async function getArgs<HasMacro extends boolean = false>(sageInteraction: SageInteraction): Promise<Args<HasMacro> & { customIdArgs:CustomIdArgs; }>;
-export async function getArgs<HasMacro extends boolean = false>(sageCommand: SageCommand): Promise<Args<HasMacro> & { customIdArgs?:CustomIdArgs; }>;
+export async function getArgs<HasMacros extends boolean = false, HasMacro extends boolean = false>(sageInteraction: SageInteraction): Promise<Args<HasMacros, HasMacro> & { customIdArgs:CustomIdArgs; }>;
+export async function getArgs<HasMacros extends boolean = false, HasMacro extends boolean = false>(sageCommand: SageCommand): Promise<Args<HasMacros, HasMacro> & { customIdArgs?:CustomIdArgs; }>;
 export async function getArgs(sageCommand: SageCommand): Promise<Args> {
-	const owner = await getOwner(sageCommand);
+	const { actorId } = sageCommand;
+	const customIdArgs = sageCommand.parseCustomId(parseCustomId);
+	const { messageId, state = { ownerType:undefined, ownerPageIndex:-1, ownerId:undefined, categoryPageIndex:-1, categoryIndex:-1, macroPageIndex:-1, macroIndex:-1 } } = customIdArgs ?? {};
+	const owner = state.ownerType && state.ownerId ? { type:state.ownerType, id:state.ownerId } : undefined;
+	let macros = owner ? await Macros.parse(sageCommand, owner) : undefined;
+	let macro: Macro | undefined;
 
-	const customIdArgs = sageCommand.isSageInteraction() ? sageCommand.parseCustomId(parseCustomId) : undefined;
+	const createCustomId = (action: MacroActionKey) => _createCustomId({ action, actorId, messageId, state });
+	const ret = (args: Partial<MacroState>) => {
+		const updatedArgs = { customIdArgs, macro, macros, state:{ prev:state, next:updateMacroState(state, args) } };
+		debug({ fn:"getArgs", action:customIdArgs?.action, state:updatedArgs.state });
+		return updatedArgs;
+	};
 
-	const createCustomId = (action: MacroAction) => owner.createCustomId({ userId:sageCommand.actorId, action });
-	const customIdMatches = (customId: string) => sageCommand.isSageInteraction() ? sageCommand.customIdMatches(customId) : false;
-
-	const selectCategoryPageCustomId = createCustomId("selectCategoryPage");
-	const selectedCategoryPageIndex = getSelectedOrDefaultNumber(sageCommand, selectCategoryPageCustomId);
-
-	const selectCategoryCustomId = createCustomId("selectCategory");
-	const selectedCategory = getSelectedOrDefault(sageCommand, selectCategoryCustomId, "cat", "category") ?? (selectedCategoryPageIndex ? owner.getCategories(selectedCategoryPageIndex)[0] : undefined);
-
-	if (customIdMatches(selectCategoryPageCustomId) || customIdMatches(selectCategoryCustomId)) {
-		const categoryMeta = getCategoryMeta(owner, selectedCategory)
-		return { customIdArgs, owner, ...(categoryMeta ?? { owner, selectedCategoryPageIndex, selectedCategory }) } as Args<false>;
+	let { ownerType } = state;
+	const selectOwnerTypeId = createCustomId("selectOwnerType");
+	if (sageCommand.customIdMatches(selectOwnerTypeId)) {
+		ownerType = getSelectedOrDefault(sageCommand, selectOwnerTypeId) as MacroOwnerTypeKey;
+		macros = undefined;
+		return ret({ ownerType });
 	}
 
-	const selectMacroPageCustomId = createCustomId("selectMacroPage");
-	const selectedMacroPageIndex = getSelectedOrDefaultNumber(sageCommand, selectMacroPageCustomId);
-	if (customIdMatches(selectMacroPageCustomId)) {
-		return { customIdArgs, owner, selectedCategoryPageIndex, selectedCategory, selectedMacroPageIndex } as Args<false>;
+	let { ownerPageIndex } = state;
+	const selectOwnerPageIndexId = createCustomId("selectOwnerPage");
+	if (sageCommand.customIdMatches(selectOwnerPageIndexId)) {
+		ownerPageIndex = getSelectedOrDefaultNumber(sageCommand, selectOwnerPageIndexId) ?? -1;
+		macros = undefined;
+		return ret({ ownerType, ownerPageIndex });
 	}
 
-	const selectedMacro = customIdArgs?.name ?? getSelectedOrDefault(sageCommand, createCustomId("selectMacro"), "name");
+	let { ownerId } = state;
+	const selectOwnerId = createCustomId("selectOwnerId");
+	if (sageCommand.customIdMatches(selectOwnerId)) {
+		ownerId = getSelectedOrDefault(sageCommand, selectOwnerId) as Snowflake;
+		macros = await Macros.parse(sageCommand, { id:ownerId, type:ownerType! });
+		return ret({ ownerType, ownerPageIndex, ownerId });
+	}
 
-	const macroMeta = getMacroMeta(owner, selectedMacro);
-	if (macroMeta) return { customIdArgs, owner, ...macroMeta };
+	let { categoryPageIndex } = state;
+	const categoryPageIndexId = createCustomId("selectCategoryPage");
+	if (sageCommand.customIdMatches(selectOwnerId)) {
+		categoryPageIndex = getSelectedOrDefaultNumber(sageCommand, categoryPageIndexId) ?? -1;
+		return ret({ ownerType, ownerPageIndex, ownerId, categoryPageIndex });
+	}
 
-	const categoryMeta = getCategoryMeta(owner, selectedCategory);
-	if (categoryMeta) return { customIdArgs, owner, ...categoryMeta } as Args<false>;
+	let { categoryIndex } = state;
+	const categoryIndexId = createCustomId("selectCategory");
+	if (sageCommand.customIdMatches(categoryIndexId)) {
+		categoryIndex = getSelectedOrDefaultNumber(sageCommand, categoryIndexId) ?? -1;
+		return ret({ ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex });
+	}
 
-	return { customIdArgs, owner, selectedCategoryPageIndex, selectedCategory, selectedMacroPageIndex, selectedMacro } as Args<false>;
+	const categoryPair = pair(sageCommand, "cat", "category");
+	if (categoryPair?.value) {
+		const categoryMeta = macros?.findCategoryMeta(categoryPair.value);
+		if (categoryMeta) {
+			categoryPageIndex = categoryMeta.categoryPageIndex;
+			categoryIndex = categoryMeta.categoryIndex;
+			return ret({ ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex });
+		}
+	}
+
+	let { macroPageIndex } = state;
+	const macroPageIndexId = createCustomId("selectMacroPage");
+	if (sageCommand.customIdMatches(macroPageIndexId)) {
+		macroPageIndex = getSelectedOrDefaultNumber(sageCommand, macroPageIndexId) ?? -1;
+		return ret({ ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex });
+	}
+
+	let { macroIndex } = state;
+	debug({ macroIndex });
+	const macroIndexId = createCustomId("selectMacro");
+	if (sageCommand.customIdMatches(macroIndexId)) {
+		macroIndex = getSelectedOrDefaultNumber(sageCommand, macroIndexId) ?? -1;
+		debug({ macroIndexId, selected:getSelectedOrDefaultNumber(sageCommand, macroIndexId), macroIndex });
+	}
+
+	const macroPair = pair(sageCommand, "name");
+	if (macroPair?.value) {
+		const macroMeta = macros?.findMacroMeta(macroPair.value);
+		if (macroMeta) {
+			categoryPageIndex = macroMeta.categoryPageIndex;
+			categoryIndex = macroMeta.categoryIndex;
+			macroPageIndex = macroMeta.macroPageIndex;
+			macroIndex = macroMeta.macroIndex;
+			debug({ macroMeta });
+		}
+	}
+
+	macro = macros?.getMacro({ categoryPageIndex, categoryIndex, macroPageIndex, macroIndex });
+
+	return ret({ ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex, macroIndex });
 }
