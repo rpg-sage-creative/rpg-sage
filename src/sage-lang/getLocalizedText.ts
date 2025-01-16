@@ -46,6 +46,8 @@ const enUS = {
 	"WARNING": `Warning`,
 	"YES": `Yes`, // context: for a "yes" or "no" confirmation prompt
 
+	"NONE_FOUND": `None found.`,
+
 	"TABLE_URL": `Table Url`,
 
 	"IMPORT_ERROR": "Import Error!",
@@ -86,6 +88,7 @@ const enUS = {
 	"USERNAME_MISSING": `The username is missing.`,
 	"USERNAME_TOO_LONG": `The username is too long. ${DISCORD_POLICY}`,
 
+	"X_OF_Y": `#{0} of #{1}`,
 	"PAGE_X_OF_Y": `Page #{0} of #{1}`,
 
 	// IMPORT ERRORS
@@ -107,13 +110,15 @@ const enUS = {
 	"CANNOT_MANAGE_MACRO_HERE": `Sorry, you cannot manage macros here.`,
 	"MACRO_DETAILS": `Macro Details`,
 	"MACRO_LIST": `Macro List`,
+	"MACRO_TYPE_LIST": `Macro Type List`,
+	"MACRO_OWNER_LIST": `Macro Owner List`,
 	"MACRO_S_NOT_FOUND": `Macro "#{0}" ***NOT*** found!`,
 	"NO_MACROS_FOUND": `No Macros Found!`,
 	"TO_VIEW_MACRO_USE_:": `To view a macro, use:`,
 	"TO_CREATE_MACRO_USE_:": `To create a macro, use:`,
 
 	"SELECT_MACRO_TYPE": `Select Macro Type ...`,
-	"SELECT_A_MACRO": `"Select a Macro ..."`,
+	"SELECT_A_MACRO": `Select a Macro ...`,
 	"CHARACTER_MACROS": `Character Macros`,
 	"USER_MACROS": `User Macros`,
 	"GAME_MACROS": `Game Macros`,
