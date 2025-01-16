@@ -51,7 +51,7 @@ export function createMacroComponents(sageCommand: SageCommand, args: Args): Act
 	const { actorId } = sageCommand;
 	const localize = sageCommand.getLocalizer();
 	const messageId = args.customIdArgs?.messageId;
-	const state = args.state.prev;
+	const state = args.state.next;
 	const buttonArgs = { actorId, localize, messageId, state };
 
 	const newButton = createNewMacroButton(buttonArgs);
