@@ -82,7 +82,9 @@ export enum EmojiType {
 	MapMoveSouthEast = 8108,
 
 	// Other = 9
-	AoN = 90
+	AoN = 90,
+	Tupperbox = 900,
+	Rollem = 901
 }
 
 export type IEmoji = {
