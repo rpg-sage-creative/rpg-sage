@@ -12,7 +12,7 @@ import type { IChannel } from "../repo/base/IdRepository.js";
 import { GameRoleType } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import { SageCache } from "./SageCache.js";
-import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
+import { SageCommand, type IdPartsBase, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
 import type { HasChannels, HasGame } from "./index.js";
 
@@ -21,22 +21,15 @@ interface SageInteractionCore extends SageCommandCore {
 	type: InteractionType;
 }
 
-type IdPartsBase = {
-	/** Generally the tool or feature of Sage */
-	indicator: string;
-	/** The action being performed. */
-	action: string;
-};
-
 /** Parses a string of type `{indicator}|{userId}|{action}|...` */
-type IdParts = IdPartsBase & {
+export type IdParts = IdPartsBase & {
 	/** Generally the user doing the action. */
 	userId: Snowflake;
 	/** any remaining values */
 	args?: string[];
 };
 
-type CustomIdParser<T extends IdPartsBase = IdParts> = (customId: string) => T | undefined;
+export type CustomIdParser<T extends IdPartsBase = IdParts> = (customId: string) => T | undefined;
 
 function defaultCustomIdParser<T extends IdParts>(customId: string): T | undefined {
 	const args = customId.split("|");

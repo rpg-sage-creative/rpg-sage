@@ -47,6 +47,15 @@ export type TSendOptions<HasEphemeral extends boolean = boolean> = {
 	files?: AttachmentBuilder[];
 };
 
+export type IdPartsBase = {
+	/** Generally the tool or feature of Sage */
+	indicator: string;
+	/** The action being performed. */
+	action: string;
+};
+
+type CustomIdParser<T extends IdPartsBase> = (customId: string) => T | undefined;
+
 export abstract class SageCommand<
 			T extends SageCommandCore = any,
 			U extends SageCommandArgs<any> = SageCommandArgs<any>
@@ -559,4 +568,16 @@ export abstract class SageCommand<
 		const localized = title ? this.getLocalizer()(title, ...args) : undefined;
 		return this.createRenderable(ColorType.AdminCommand, localized);
 	}
+
+	//#region customId
+
+	public customIdMatches(_valueOrRegex: string | RegExp): boolean {
+		return false;
+	}
+
+	public parseCustomId<T extends IdPartsBase>(_parser?: CustomIdParser<T>): T | undefined {
+		return undefined;
+	}
+
+	//#endregion
 }
