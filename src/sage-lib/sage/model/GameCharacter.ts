@@ -77,6 +77,7 @@ export type GameCharacterCore = {
 	id: Snowflake;
 	/** A list of the character's last messages by channel. */
 	lastMessages?: TDialogMessage[];
+	macros?: TMacro[];
 	/** The character's name */
 	name: string;
 	/** The character's notes (stats & journal too) */
@@ -133,7 +134,6 @@ function parseFetchedStatsLine(values: string[], alias?: string) {
 
 	}
 	return { key, value };
-
 }
 
 /** Temp convenience function to get a DiscordKey from varying input */
@@ -287,6 +287,8 @@ export class GameCharacter implements IHasSave {
 	public get lastMessages(): TDialogMessage[] {
 		return this.core.lastMessages ?? (this.core.lastMessages = []);
 	}
+
+	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 
 	/** The character's name */
 	public get name(): string {

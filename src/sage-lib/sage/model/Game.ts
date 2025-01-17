@@ -19,6 +19,7 @@ import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
 import type { SageCache } from "./SageCache.js";
 import type { Server } from "./Server.js";
+import type { TMacro } from "./types.js";
 
 export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
 export type GameRoleData = { did: Snowflake; type: GameRoleType; dicePing: boolean; };
@@ -47,6 +48,8 @@ export interface GameCore extends IdCore, IHasColors, IHasEmoji, Partial<GameOpt
 
 	parties?: PartyCore[] | PartyManager;
 	encounters?: EncounterCore[] | EncounterManager;
+
+	macros?: TMacro[];
 }
 
 type MappedChannelNameTags = {
@@ -197,6 +200,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get serverDid(): Snowflake { return this.core.serverDid; }
 	public get serverId(): UUID { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }
+	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 
 	public get gmRole(): GameRoleData | undefined { return this.roles.find(role => role.type === GameRoleType.GameMaster); }
 	public get gmRoleDid(): Snowflake | undefined { return this.gmRole?.did; }
