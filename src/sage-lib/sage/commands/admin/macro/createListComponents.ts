@@ -61,6 +61,7 @@ function createSelectOwnerPageSelect({ actorId, localize, ownerPages, state }: H
 	}
 
 	disableIfEmpty(select);
+	if (state.ownerType !== "user") select.setDisabled(true);
 	return select;
 }
 
@@ -174,7 +175,7 @@ export function createListComponents(sageCommand: SageCommand, args: Args): Acti
 
 	const { actorId } = sageCommand;
 	const { macros } = args;
-	const state = args.state.next;
+	const state = args.state?.next;
 
 	// if we don't have macros then that means we haven't selected a macro owner ... show those separately from the macro selection sequence
 	if (!macros) {

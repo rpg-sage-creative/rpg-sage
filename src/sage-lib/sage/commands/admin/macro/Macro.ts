@@ -44,6 +44,10 @@ export class Macro<Category extends string = string> {
 		delete this._type;
 	}
 
+	public get hasArgs(): boolean {
+		return /\{(\w+)(?:\:(\w+))?\}/.test(this.base.dice);
+	}
+
 	public get isUncategorized(): boolean {
 		return !this.base.category;
 	}

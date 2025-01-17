@@ -62,6 +62,11 @@ export function registerMacro(): void {
 	registerListeners({ commands:["macro|details", createCustomIdRegExp("selectMacro")], message:mCmdDetails, interaction:mCmdDetails });
 
 	registerListeners({ commands:[createCustomIdRegExp(
+		"toggleMacroMode",
+		"rollMacro",
+		"showMacroArgs",
+		"rollMacroArgs",
+
 		"promptDeleteMacro",
 		"confirmDeleteMacro",
 		"cancelDeleteMacro",

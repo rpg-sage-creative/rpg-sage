@@ -175,7 +175,7 @@ export class Macros<Category extends string = string> {
 	}
 
 	public getCategoryMeta(indexes: CategoryIndex): CategoryMeta<Category> | undefined {
-		return this.getCategoryPage(indexes)?.categories[indexes.categoryIndex];
+		return this.getCategoryPage(indexes)?.categories[Math.max(0, indexes.categoryIndex)];
 	}
 	public getCategory(indexes: CategoryIndex): Category | Uncategorized | undefined {
 		return this.getCategoryPage(indexes)?.categories[indexes.categoryIndex]?.category;

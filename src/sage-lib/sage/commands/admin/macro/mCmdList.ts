@@ -68,7 +68,7 @@ function toRenderableContent(sageCommand: SageCommand, args: Args): RenderableCo
 
 	const content = sageCommand.createAdminRenderable(getOwnerType(macros.type)?.typeKey);
 	if (pageMacros.length) {
-		const pages = macroPageCount > 1 ? `(${localize("X_OF_Y", state.macroPageIndex + 1, macroPageCount)})` : ``;
+		const pages = macroPageCount > 1 ? `(${localize("X_OF_Y", Math.max(1, state.macroPageIndex + 1), macroPageCount)})` : ``;
 		content.appendTitledSection(
 			`${categoryLabel} ${pages}`,
 			toList(pageMacros)

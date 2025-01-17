@@ -1,21 +1,22 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
-import { type Snowflake } from "@rsc-utils/core-utils";
+import { debug, type Snowflake } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalSubmitInteraction, type ButtonInteraction } from "discord.js";
 import type { LocalizedTextKey, Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
-import { createMacroModal } from "./createMacroModal.js";
+import { createMacroArgsModal, createMacroModal } from "./createMacroModal.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
-import { getArgs, type Args } from "./getArgs.js";
+import { getArgs, type Args, type MacroState } from "./getArgs.js";
 import { Macro, type MacroBase } from "./Macro.js";
 import type { Macros } from "./Macros.js";
 import { macroToPrompt } from "./macroToPrompt.js";
 import { mCmdDetails } from "./mCmdDetails.js";
 import { mCmdList } from "./mCmdList.js";
+import { parseDiceMatches, sendDice } from "../../dice.js";
 
-async function handleDeleteMacro(sageInteraction: SageInteraction<ButtonInteraction>, { macros, macro }: Args<true, true>): Promise<void> {
+async function handleDeleteMacro(sageInteraction: SageInteraction<ButtonInteraction>, { customIdArgs, macros, macro }: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
-	const isConfirmed = sageInteraction.customIdMatches(/confirmDeleteMacro/);
+	const isConfirmed = customIdArgs.action === "confirmDeleteMacro";
 	if (isConfirmed) {
 		const deleted = await macros.removeAndSave(macro);
 		if (deleted) {
@@ -33,23 +34,22 @@ async function promptDeleteMacro(sageInteraction: SageInteraction<ButtonInteract
 
 	const localize = sageInteraction.getLocalizer();
 
-
-	const content = sageInteraction.createAdminRenderable();
-	content.append(`<h3>${localize("DELETE_MACRO_?")}</h3>`);
-	content.append(`<h2>${args.macro.name}</h2>`);
-
-	const { actorId } = sageInteraction;
-	const { messageId } = args.customIdArgs;
-	const state = args.state.prev;
-
-	const customId = (action: MacroActionKey) => createCustomId({ action, actorId, messageId, state });
-	const yes = createYesNoButton(customId("confirmNewMacro"), "YES", localize);
-	const no = createYesNoButton(customId("confirmNewMacro"), "NO", localize);
-	const components = [new ActionRowBuilder<ButtonBuilder>().addComponents(yes, no)];
-
 	const message = await sageInteraction.fetchMessage();
 	if (message) {
+		const { actorId } = sageInteraction;
+		const { messageId } = args.customIdArgs;
+		const state = args.state.prev;
+
+		const content = sageInteraction.createAdminRenderable();
+		content.append(`<h3>${localize("DELETE_MACRO_?")}</h3>`);
+		content.append(`<h2>${args.macro.name}</h2>`);
+
+		const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelDeleteMacro", state, yesAction:"confirmDeleteMacro" });
+
 		await message.edit(sageInteraction.resolveToOptions({ embeds:content, components }));
+
+	}else {
+		await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
 	}
 }
 
@@ -61,6 +61,32 @@ async function showEditMacro(sageInteraction: SageInteraction<ButtonInteraction>
 async function showNewMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
 	const modal = await createMacroModal(sageInteraction, args, "promptNewMacro");
 	await sageInteraction.interaction.showModal(modal);
+}
+
+async function rollMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+	sageInteraction.replyStack.defer();
+	const macro = args.macro;
+	const matches = await parseDiceMatches(sageInteraction, `[${macro.name}]`);
+	const outputs = matches.map(m => m.output).flat();
+	await sendDice(sageInteraction, outputs);
+}
+
+async function showMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+	sageInteraction.replyStack.defer();
+	const macro = args.macro;
+	const macroArgs = macro.dice.matchAll(/\{(\w+)(?:\:(\w+))?\}/g) ?? [];
+	const argPairs = [...macroArgs].map(match => ({ key:match[1], defaultValue:match[2] }));
+	const trailingArgs = macro.dice.includes("{...}");
+	const modal = await createMacroArgsModal(args, argPairs, trailingArgs);
+	await sageInteraction.interaction.showModal(modal);
+	debug("showMacroArgs:sent");
+}
+
+async function rollMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+	sageInteraction.replyStack.defer();
+
+	const macroArgs = sageInteraction.getModalForm<MacroBase>();
+	debug({macro:args.macro.dice,macroArgs});
 }
 
 export async function handleMacroInteraction(sageInteraction: SageInteraction<any>): Promise<void> {
@@ -77,6 +103,10 @@ export async function handleMacroInteraction(sageInteraction: SageInteraction<an
 
 	switch(action) {
 		// case "copyMacro": break;
+		case "toggleMacroMode": return mCmdDetails(sageInteraction);
+		case "rollMacro": return rollMacro(sageInteraction, args);
+		case "showMacroArgs": return showMacroArgs(sageInteraction, args);
+		case "rollMacroArgs": return rollMacroArgs(sageInteraction, args);
 
 		case "promptDeleteMacro": return promptDeleteMacro(sageInteraction, args);
 		case "confirmDeleteMacro": return handleDeleteMacro(sageInteraction, args);
@@ -148,23 +178,21 @@ async function promptEditMacro(sageInteraction: SageInteraction<ButtonInteractio
 			return showNewMacro(sageInteraction, args);
 		}
 
-		const cacheKey = createCustomId({ action:"promptEditMacro", actorId, messageId, state });
-		editCache.set(cacheKey, { oldMacro, newMacro });
-
-		const existingPrompt = macroToPrompt(sageInteraction, oldMacro);
-		const updatedPrompt = macroToPrompt(sageInteraction, newMacro, { usage:true });
-
-		const content = sageInteraction.createAdminRenderable("UPDATE_MACRO_?");
-		content.append(`${localize("FROM")}:${existingPrompt}\n${localize("TO")}:${updatedPrompt}`);
-
-		const customId = (action: MacroActionKey) => createCustomId({ action, actorId, messageId, state });
-		const yes = createYesNoButton(customId("confirmEditMacro"), "YES", localize);
-		const no = createYesNoButton(customId("cancelEditMacro"), "NO", localize);
-		const components = [new ActionRowBuilder<ButtonBuilder>().addComponents(yes, no)];
-
 		const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs.messageId!);
 		if (message) {
+			const cacheKey = createCustomId({ action:"promptEditMacro", actorId, messageId, state });
+			editCache.set(cacheKey, { oldMacro, newMacro });
+
+			const existingPrompt = macroToPrompt(sageInteraction, oldMacro);
+			const updatedPrompt = macroToPrompt(sageInteraction, newMacro, { usage:true });
+
+			const content = sageInteraction.createAdminRenderable("UPDATE_MACRO_?");
+			content.append(`${localize("FROM")}:${existingPrompt}\n${localize("TO")}:${updatedPrompt}`);
+
+			const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelEditMacro", state, yesAction:"confirmEditMacro" });
+
 			await message.edit(sageInteraction.resolveToOptions({ embeds:content, components }));
+
 		}else {
 			await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
 		}
@@ -186,10 +214,17 @@ async function handleEditMacro(sageInteraction: SageInteraction<ModalSubmitInter
 	const macroPair = editCache.get(cacheKey);
 	editCache.delete(cacheKey);
 
-	const isConfirmed = sageInteraction.customIdMatches(/confirmEditMacro/);
+	const isConfirmed = args.customIdArgs.action === "confirmEditMacro";
 	if (isConfirmed) {
 		const saved = macroPair?.oldMacro ? await args.macros.updateAndSave(macroPair as MacroPair) : false;
-		if (!saved) {
+		if (saved) {
+			// update args to have new meta ...
+			const { ownerType, ownerPageIndex, ownerId } = args.state.next;
+			const { categoryPageIndex = -1, categoryIndex = -1, macroPageIndex = -1, macroIndex = -1 } = args.macros.findMacroMeta(macroPair?.newMacro.name!) ?? {};
+			args.state.next = { ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex, macroIndex };
+			args.macro = macroPair?.newMacro!;
+
+		}else {
 			const localize = sageInteraction.getLocalizer();
 			// await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
 			await sageInteraction.replyStack.reply(localize("SORRY_WE_DONT_KNOW"));
@@ -197,14 +232,28 @@ async function handleEditMacro(sageInteraction: SageInteraction<ModalSubmitInter
 	}
 
 	// return to viewing the macro
-	await mCmdDetails(sageInteraction);
+	await mCmdDetails(sageInteraction, args as Args<any, any>);
 }
 
-function createYesNoButton(customId: string, yesNo: "YES" | "NO", localize: Localizer): ButtonBuilder {
-	return new ButtonBuilder()
-		.setCustomId(customId)
+type YesNoArgs = {
+	actorId: Snowflake;
+	localize: Localizer;
+	messageId?: Snowflake;
+	noAction: MacroActionKey;
+	state: MacroState<true>;
+	yesAction: MacroActionKey;
+};
+function createYesNoComponents(args: YesNoArgs): ActionRowBuilder<ButtonBuilder>[] {
+	const { actorId, localize, messageId, noAction, state, yesAction } = args;
+
+	const button = (action: MacroActionKey, yesNo: "YES" | "NO") => new ButtonBuilder()
+		.setCustomId(createCustomId({ action, actorId, messageId, state }))
 		.setLabel(localize(yesNo))
 		.setStyle(yesNo === "YES" ? ButtonStyle.Success : ButtonStyle.Secondary);
+
+	const yes = button(yesAction, "YES");
+	const no = button(noAction, "NO");
+	return [new ActionRowBuilder<ButtonBuilder>().addComponents(yes, no)];
 }
 
 async function promptNewMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
@@ -228,20 +277,18 @@ async function promptNewMacro(sageInteraction: SageInteraction<ButtonInteraction
 			return showNewMacro(sageInteraction, args);
 		}
 
-		const cacheKey = createCustomId({ action:"promptNewMacro", actorId, messageId, state });
-		editCache.set(cacheKey, { newMacro });
-
-		const content = sageInteraction.createAdminRenderable("CREATE_MACRO_?");
-		content.append(macroToPrompt(sageInteraction, newMacro, { usage:true }));
-
-		const customId = (action: MacroActionKey) => createCustomId({ action, actorId, messageId, state });
-		const yes = createYesNoButton(customId("confirmNewMacro"), "YES", localize);
-		const no = createYesNoButton(customId("confirmNewMacro"), "NO", localize);
-		const components = [new ActionRowBuilder<ButtonBuilder>().addComponents(yes, no)];
-
 		const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs?.messageId!);
 		if (message) {
+			const cacheKey = createCustomId({ action:"promptNewMacro", actorId, messageId, state });
+			editCache.set(cacheKey, { newMacro });
+
+			const content = sageInteraction.createAdminRenderable("CREATE_MACRO_?");
+			content.append(macroToPrompt(sageInteraction, newMacro, { usage:true }));
+
+			const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelNewMacro", state, yesAction:"confirmNewMacro" });
+
 			await message.edit(sageInteraction.resolveToOptions({ embeds:content, components }));
+
 		}else {
 			await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
 		}
@@ -262,7 +309,7 @@ async function handleNewMacro(sageInteraction: SageInteraction<ModalSubmitIntera
 	const macro = editCache.get(cacheKey)?.newMacro;
 	editCache.delete(cacheKey);
 
-	const isConfirmed = sageInteraction.customIdMatches(/confirmNewMacro/);
+	const isConfirmed = args.customIdArgs?.action === "confirmNewMacro";
 	if (isConfirmed) {
 		const saved = macro ? await macros.addAndSave(macro) : false;
 		if (!saved) {

@@ -18,7 +18,8 @@ function toRenderableContent(sageCommand: SageCommand, { macro }: Args): Rendera
 	return renderableContent;
 }
 
-export async function mCmdDetails(sageCommand: SageCommand): Promise<void> {
+/** args is true when coming in the first time from post/slash ... */
+export async function mCmdDetails(sageCommand: SageCommand, args?: Args | boolean): Promise<void> {
 	sageCommand.replyStack.defer();
 
 	const localize = sageCommand.getLocalizer();
@@ -27,7 +28,9 @@ export async function mCmdDetails(sageCommand: SageCommand): Promise<void> {
 		return sageCommand.replyStack.whisper(localize("CANNOT_MANAGE_MACRO_HERE"));
 	}
 
-	const args = await getArgs(sageCommand);
+	if (!args || args === true) {
+		args = await getArgs(sageCommand);
+	}
 
 	const content = toRenderableContent(sageCommand, args);
 	const components = createMacroComponents(sageCommand, args);

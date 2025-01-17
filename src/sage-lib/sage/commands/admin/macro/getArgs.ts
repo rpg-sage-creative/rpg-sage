@@ -1,4 +1,4 @@
-import { debug, type Snowflake } from "@rsc-utils/core-utils";
+import { type Snowflake } from "@rsc-utils/core-utils";
 import { getSelectedOrDefault, getSelectedOrDefaultNumber } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
@@ -73,7 +73,6 @@ export async function getArgs(sageCommand: SageCommand): Promise<Args> {
 	const createCustomId = (action: MacroActionKey) => _createCustomId({ action, actorId, messageId, state });
 	const ret = (args: Partial<MacroState>) => {
 		const updatedArgs = { customIdArgs, macro, macros, state:{ prev:state, next:updateMacroState(state, args) } };
-		debug({ fn:"getArgs", action:customIdArgs?.action, state:updatedArgs.state });
 		return updatedArgs;
 	};
 
@@ -133,11 +132,9 @@ export async function getArgs(sageCommand: SageCommand): Promise<Args> {
 	}
 
 	let { macroIndex } = state;
-	debug({ macroIndex });
 	const macroIndexId = createCustomId("selectMacro");
 	if (sageCommand.customIdMatches(macroIndexId)) {
 		macroIndex = getSelectedOrDefaultNumber(sageCommand, macroIndexId) ?? -1;
-		debug({ macroIndexId, selected:getSelectedOrDefaultNumber(sageCommand, macroIndexId), macroIndex });
 	}
 
 	const macroPair = pair(sageCommand, "name");
@@ -148,7 +145,6 @@ export async function getArgs(sageCommand: SageCommand): Promise<Args> {
 			categoryIndex = macroMeta.categoryIndex;
 			macroPageIndex = macroMeta.macroPageIndex;
 			macroIndex = macroMeta.macroIndex;
-			debug({ macroMeta });
 		}
 	}
 

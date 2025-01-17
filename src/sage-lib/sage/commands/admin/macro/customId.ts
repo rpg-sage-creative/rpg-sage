@@ -43,6 +43,8 @@ export enum MacroAction {
 	selectMacroPage,
 	selectMacro,
 
+	toggleMacroMode,
+
 	showNewMacro,
 	promptNewMacro,
 	confirmNewMacro,
@@ -56,6 +58,10 @@ export enum MacroAction {
 	promptDeleteMacro,
 	confirmDeleteMacro,
 	cancelDeleteMacro,
+
+	rollMacro,
+	showMacroArgs,
+	rollMacroArgs,
 }
 // | "copyMacro" | "deleteCategory" | "deleteAll"
 

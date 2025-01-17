@@ -5,6 +5,24 @@ import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args } from "./getArgs.js";
 import type { MacroOwnerTypeKey } from "./Owner.js";
 
+type MacroArgPair = { key:string; defaultValue?:string; };
+export async function createMacroArgsModal(args: Args<true, true>, pairs: MacroArgPair[], trailingArgs: boolean): Promise<ModalBuilder> {
+	const modal = new ModalBuilder();
+	modal.setCustomId(createCustomId({ ...args.customIdArgs, action:"rollMacroArgs" }));
+
+	const totalFields = pairs.length + (trailingArgs ? 1 : 0);
+	if (totalFields > 5) {
+		const value = pairs.map(({ key, defaultValue }) => `${key}=${defaultValue}`).join("\n");
+		modal.addParagraph().setCustomId("all").setLabel("Type arguments on separate lines: arg=value").setPlaceholder("Type arguments on separate lines: arg=value").setValue(value);
+	}else {
+		pairs.forEach(({ key, defaultValue }) => {
+			modal.addShortText({ maxLength:80 }).setCustomId(key).setLabel(key).setPlaceholder(defaultValue ?? "").setValue(defaultValue ?? "");
+		});
+		modal.addParagraph().setCustomId("args").setLabel("Type arguments on separate lines: arg=value").setPlaceholder("Type arguments on separate lines: arg=value").setValue("");
+	}
+	return modal;
+}
+
 export async function createMacroModal(sageCommand: SageCommand, args: Args<true>, action: MacroActionKey): Promise<ModalBuilder> {
 	const localize = sageCommand.getLocalizer();
 

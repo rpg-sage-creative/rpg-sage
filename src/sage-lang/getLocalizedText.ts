@@ -35,6 +35,7 @@ const enUS = {
 	"PAGE": `Page`,
 	"PC": "PC",
 	"REIMPORT": `Reimport`,
+	"ROLL": `Roll`,
 	"SERVERS": `Servers`,
 	"SHARE": `Share`,
 	"TABLE": `Table`,
@@ -125,6 +126,7 @@ const enUS = {
 	"SERVER_MACROS": `Server Macros`,
 	"GLOBAL_MACROS": `Global Macros`,
 
+
 	"INVALID_MACRO_NAME": `Macro names should only contain letters, numbers, spaces, underscores, and dashes.`,
 	"INVALID_MACRO_DUPLICATE": `There is already a macro with that name.`,
 	"INVALID_MACRO_DICE": `Your macro dice is invalid. For information on macros, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Dice-Macros>).`,
@@ -140,6 +142,8 @@ const enUS = {
 	"MACRO_DICE_PLACEHOLDER": `The dice you wish to roll, ex: [1d20 attack; 1d6 damage]`,
 
 	"CREATE_MACRO_?": `Create Macro?`,
+
+	"PROMPT_ROLL": `Prompt Roll`,
 
 	"DELETE_ALL": `Delete All`,
 	"DELETE_CATEGORY": `Delete Category`,

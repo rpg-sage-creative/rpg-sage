@@ -3,19 +3,16 @@ import type { Optional } from "@rsc-utils/core-utils";
 import { error } from "@rsc-utils/core-utils";
 import { processStatBlocks } from "@rsc-utils/dice-utils";
 import { xRegExp } from "@rsc-utils/dice-utils/build/internal/xRegExp.js";
-import { type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
+import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
-import type { ButtonInteraction } from "discord.js";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import type { CharacterManager } from "../model/CharacterManager.js";
-import { GameCharacter } from "../model/GameCharacter.js";
+import type { GameCharacter } from "../model/GameCharacter.js";
 import type { NamedCollection } from "../model/NamedCollection.js";
-import { SageCommand } from "../model/SageCommand.js";
-import { SageInteraction } from "../model/SageInteraction.js";
-import { SageMessage } from "../model/SageMessage.js";
+import type { SageCommand } from "../model/SageCommand.js";
 import type { TMacro, User } from "../model/User.js";
 import { logPostCurrency } from "./admin/PostCurrency.js";
 import { registerDiceTest } from "./dice/diceTest.js";
@@ -29,8 +26,6 @@ import { rollRandomItem } from "./dice/rollRandomItem.js";
 import { rollTable } from "./dice/rollTable.js";
 import { sendDiceToMultiple } from "./dice/sendDiceToMultiple.js";
 import { sendDiceToSingle } from "./dice/sendDiceToSingle.js";
-
-type TInteraction = SageMessage | SageInteraction;
 
 type TGmChannel = Optional<MessageTarget>;
 
@@ -57,7 +52,7 @@ function getBasicBracketRegex(): RegExp {
 	return /\[{2}[^\]]+\]{2}|\[[^\]]+\]/ig;
 }
 
-async function prepStatsAndMacros(sageCommand: TInteraction) {
+async function prepStatsAndMacros(sageCommand: SageCommand) {
 	const { game, isGameMaster, isPlayer, sageUser } = sageCommand;
 	if (!game || isGameMaster || isPlayer) {
 		const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
@@ -100,7 +95,7 @@ async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User
 	return out;
 }
 
-async function parseDiscordDice(sageCommand: TInteraction, diceString: string, overrides?: TDiscordDiceParseOptions): Promise<DiscordDice | null> {
+async function parseDiscordDice(sageCommand: SageCommand, diceString: string, overrides?: TDiscordDiceParseOptions): Promise<DiscordDice | null> {
 	if (!diceString) {
 		return null;
 	}
@@ -120,9 +115,9 @@ async function parseDiscordDice(sageCommand: TInteraction, diceString: string, o
 }
 
 async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, macroStack: string[] = []): Promise<TDiceOutput[] | null> {
-	if (!sageCommand.isSageMessage()) {
-		return null;
-	}
+	// if (!sageCommand.isSageMessage()) {
+	// 	return null;
+	// }
 
 	const statsAndMacros = await prepStatsAndMacros(sageCommand);
 	const tsvMacros = statsAndMacros?.macros ?? [];
@@ -156,34 +151,34 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 	return null;
 }
 
-async function parseMatch(sageMessage: TInteraction, match: string, overrides?: TDiscordDiceParseOptions, tableIterations = 0): Promise<TDiceOutput[]> {
+async function parseMatch(sageCommand: SageCommand, match: string, overrides?: TDiscordDiceParseOptions, tableIterations = 0): Promise<TDiceOutput[]> {
 	const noBraces = unwrap(match, "[]");
 
 	const table = await fetchTableFromUrl(match) ?? parseTable(match);
 	if (table) {
-		const tableResults = await rollTable(sageMessage, noBraces, table);
+		const tableResults = await rollTable(sageCommand, noBraces, table);
 		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(getBasicBracketRegex()) ?? []).flat() ?? [];
 		// debug({tableResults,tableResultsDice})
 		for (const diceToParse of childDice) {
-			const childMatches = await parseMatch(sageMessage, diceToParse, overrides, tableIterations + 1);
+			const childMatches = await parseMatch(sageCommand, diceToParse, overrides, tableIterations + 1);
 			tableResults.push(...childMatches.flat());
 		}
 		return tableResults;
 	}
 
-	const dice = await parseDiscordDice(sageMessage, `[${noBraces}]`, overrides);
+	const dice = await parseDiscordDice(sageCommand, `[${noBraces}]`, overrides);
 	if (dice) {
 		// debug("dice", match);
-		const diceSort = sageMessage.diceSortType === 2 ? "noSort" : sageMessage.diceSortType === 1 ? "sort" : undefined; // NOSONAR
-		return dice.roll().toStrings(sageMessage.diceOutputType, diceSort);
+		const diceSort = sageCommand.diceSortType === 2 ? "noSort" : sageCommand.diceSortType === 1 ? "sort" : undefined; // NOSONAR
+		return dice.roll().toStrings(sageCommand.diceOutputType, diceSort);
 	}
 	if (isMath(match)) {
 		// verbose("math", match);
-		return rollMath(sageMessage, noBraces);
+		return rollMath(sageCommand, noBraces);
 	}
 	if (isRandomItem(match)) {
 		// verbose("simple", match);
-		return rollRandomItem(sageMessage, noBraces);
+		return rollRandomItem(sageCommand, noBraces);
 	}
 	return [];
 }
@@ -217,7 +212,7 @@ function redactContent(content: string): string {
 	return redacted;
 }
 
-export async function parseDiceMatches(sageMessage: TInteraction, content: string): Promise<TDiceMatch[]> {
+export async function parseDiceMatches(sageCommand: SageCommand, content: string): Promise<TDiceMatch[]> {
 	const diceMatches: TDiceMatch[] = [];
 	const redacted = redactContent(content);
 	const regex = getBasicBracketRegex();
@@ -226,8 +221,8 @@ export async function parseDiceMatches(sageMessage: TInteraction, content: strin
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = isWrapped(match, "[[]]");
-		const output = await parseDiscordMacro(sageMessage, content.slice(index, index + match.length))
-			?? await parseMatch(sageMessage, content.slice(index, index + match.length));
+		const output = await parseDiscordMacro(sageCommand, content.slice(index, index + match.length))
+			?? await parseMatch(sageCommand, content.slice(index, index + match.length));
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}
@@ -239,15 +234,18 @@ export async function parseDiceMatches(sageMessage: TInteraction, content: strin
 
 //#region listener / handler
 
-async function hasUnifiedDiceCommand(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TDiceOutput[]> | undefined> {
-	if (!sageMessage.allowDice) {
+async function hasUnifiedDiceCommand(sageCommand: SageCommand): Promise<TCommandAndArgsAndData<TDiceOutput[]> | undefined> {
+	if (!sageCommand.isSageMessage()) {
 		return undefined;
 	}
-	if (sageMessage.game && !(sageMessage.isGameMaster || sageMessage.isPlayer)) {
+	if (!sageCommand.allowDice) {
+		return undefined;
+	}
+	if (sageCommand.game && !(sageCommand.isGameMaster || sageCommand.isPlayer)) {
 		return undefined;
 	}
 
-	const matches = await parseDiceMatches(sageMessage, sageMessage.slicedContent);
+	const matches = await parseDiceMatches(sageCommand, sageCommand.slicedContent);
 	if (matches.length > 0) {
 		const output = matches.map(m => m.output).flat();
 		return { command: "unified-dice", data: output };
@@ -263,23 +261,23 @@ type TSendDiceResults = {
 	hasGmChannel: boolean;
 	hasSecret: boolean;
 };
-export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]): Promise<TSendDiceResults> {
+export async function sendDice(sageCommand: SageCommand, outputs: TDiceOutput[]): Promise<TSendDiceResults> {
 	const count = outputs.length,
 		countSecret = outputs.filter(diceRollString => diceRollString.hasSecret).length,
 		countPublic = count - countSecret,
 		hasSecret = countSecret > 0,
 		allSecret = countSecret === count,
-		targetChannel = await ensureTargetChannel(sageMessage),
-		gmTargetChannel = await ensureGmTargetChannel(sageMessage, hasSecret),
+		targetChannel = await ensureTargetChannel(sageCommand),
+		gmTargetChannel = await ensureGmTargetChannel(sageCommand, hasSecret),
 		hasGmChannel = !!gmTargetChannel,
-		formattedOutputs = outputs.map(diceRoll => formatDiceOutput(sageMessage, diceRoll, !gmTargetChannel));
-	if (sageMessage.dicePostType === DicePostType.MultipleEmbeds || sageMessage.dicePostType === DicePostType.MultiplePosts) {
-		await sendDiceToMultiple(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
+		formattedOutputs = outputs.map(diceRoll => formatDiceOutput(sageCommand, diceRoll, !gmTargetChannel));
+	if (sageCommand.dicePostType === DicePostType.MultipleEmbeds || sageCommand.dicePostType === DicePostType.MultiplePosts) {
+		await sendDiceToMultiple(sageCommand, formattedOutputs, targetChannel, gmTargetChannel);
 	}else {
-		await sendDiceToSingle(sageMessage, formattedOutputs, targetChannel, gmTargetChannel);
+		await sendDiceToSingle(sageCommand, formattedOutputs, targetChannel, gmTargetChannel);
 	}
 	if (count) {
-		await logPostCurrency(sageMessage, "dice");
+		await logPostCurrency(sageCommand, "dice");
 	}
 	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasSecret };
 }
@@ -293,28 +291,29 @@ export async function sendDice(sageMessage: TInteraction, outputs: TDiceOutput[]
 
 //#region Channels
 
-async function ensureTargetChannel(sageMessage: TInteraction): Promise<MessageChannel> {
-	const channel = await sageMessage.sageCache.fetchChannel(sageMessage.channel?.sendDiceTo);
+async function ensureTargetChannel(sageCommand: SageCommand): Promise<MessageChannel> {
+	const channel = await sageCommand.sageCache.fetchChannel(sageCommand.channel?.sendDiceTo);
 	if (channel) {
 		return channel as MessageChannel;
 	}
-	if (sageMessage instanceof SageInteraction) {
-		return (sageMessage.interaction as ButtonInteraction).channel as MessageChannel;
+	if (sageCommand.isSageInteraction("MESSAGE")) {
+		return sageCommand.interaction.channel as MessageChannel;
 	}
-	return sageMessage.message.channel as MessageChannel;
+	const message = await sageCommand.fetchMessage();
+	return message!.channel as MessageChannel;
 }
 
-async function ensureGmTargetChannel(sageMessage: TInteraction, hasSecret: boolean): Promise<TGmChannel> {
-	if (!hasSecret || (sageMessage.diceSecretMethodType !== DiceSecretMethodType.GameMasterChannel && sageMessage.diceSecretMethodType !== DiceSecretMethodType.GameMasterDirect)) {
+async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolean): Promise<TGmChannel> {
+	if (!hasSecret || (sageCommand.diceSecretMethodType !== DiceSecretMethodType.GameMasterChannel && sageCommand.diceSecretMethodType !== DiceSecretMethodType.GameMasterDirect)) {
 		return null;
 	}
-	if (sageMessage.diceSecretMethodType === DiceSecretMethodType.GameMasterChannel) {
-		const channel = await sageMessage.game?.gmGuildChannel();
+	if (sageCommand.diceSecretMethodType === DiceSecretMethodType.GameMasterChannel) {
+		const channel = await sageCommand.game?.gmGuildChannel();
 		if (channel) {
 			return channel as MessageChannel;
 		}
 	}
-	const member = await sageMessage.game?.gmGuildMember();
+	const member = await sageCommand.game?.gmGuildMember();
 	return member?.user ?? null;
 }
 
