@@ -11,9 +11,9 @@ import { registerMessageListener } from "../../discord/handlers.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import type { CharacterManager } from "../model/CharacterManager.js";
 import type { GameCharacter } from "../model/GameCharacter.js";
-import type { NamedCollection } from "../model/NamedCollection.js";
 import type { SageCommand } from "../model/SageCommand.js";
-import type { TMacro, User } from "../model/User.js";
+import type { TMacro } from "../model/types.js";
+import type { User } from "../model/User.js";
 import { logPostCurrency } from "./admin/PostCurrency.js";
 import { registerDiceTest } from "./dice/diceTest.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
@@ -80,14 +80,19 @@ async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User
 	if (!char) return out;
 
 	const macros = await char.fetchMacros();
+
+	// if the char belongs to the active user
 	if (char.userDid === sageUser.did) {
+		// check all the macros
 		for (const macro of macros) {
+			// grab the macro if it has a unique name/category combo
 			if (!out.some(m => macro.name.toLowerCase() === m.name.toLowerCase() && m.category === char.name)) {
 				out.push({ name:macro.name, category:char.name, dice:macro.dice });
 			}
 		}
 	}
 
+	// fetch from companions as well
 	for (const companion of char.companions) {
 		out.push(...await fetchStatsAndMacros(companion, sageUser));
 	}
@@ -114,14 +119,34 @@ async function parseDiscordDice(sageCommand: SageCommand, diceString: string, ov
 	});
 }
 
-async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, macroStack: string[] = []): Promise<TDiceOutput[] | null> {
-	// if (!sageCommand.isSageMessage()) {
-	// 	return null;
-	// }
+/** Returns macros from each tier, with the lowest index having the highest priority. */
+function getTieredMacros(sageCommand: SageCommand): TMacro[][] {
+	const stack: TMacro[][] = [];
+	const push = (macros?: TMacro[]) => macros?.length ? stack.push(macros) : void 0;
+	push(sageCommand.playerCharacter?.macros);
+	push(sageCommand.sageUser.macros);
+	push(sageCommand.game?.macros);
+	push(sageCommand.server?.macros);
+	push(sageCommand.bot?.macros);
+	return stack;
+}
 
+async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, macroStack: string[] = []): Promise<TDiceOutput[] | null> {
+	// allow SageMessage and SageInteraction, but not SageReaction
+	if (sageCommand.isSageReaction()) {
+		return null;
+	}
+
+	// get tiered macros
+	const tieredMacros = getTieredMacros(sageCommand);
+	// prep stats and fetch dynamic macros
 	const statsAndMacros = await prepStatsAndMacros(sageCommand);
-	const tsvMacros = statsAndMacros?.macros ?? [];
-	const macroAndOutput = macroToDice(sageCommand.sageUser.macros.concat(tsvMacros), unwrap(macroString, "[]"));
+	// if we have more macros, unshift them to give them first priority
+	if (statsAndMacros?.macros.length) {
+		tieredMacros.unshift(statsAndMacros?.macros);
+	}
+	// find the macro
+	const macroAndOutput = macroToDice(tieredMacros, unwrap(macroString, "[]"));
 	if (macroAndOutput) {
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
@@ -324,11 +349,18 @@ async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolea
 
 //#region macro
 
-function reduceToLongestMacroName(longestMacro: TMacro | null, currentMacro: TMacro): TMacro | null {
-	if (!longestMacro || longestMacro.name.length < currentMacro.name.length) {
-		return currentMacro;
-	}
-	return longestMacro;
+/** used in a .reduce to return the macro with the longest name */
+function reduceToLongestMacroName(longestMacro?: TMacro, currentMacro?: TMacro): TMacro | undefined {
+	if (!currentMacro) return longestMacro;
+	if (!longestMacro) return currentMacro;
+	return longestMacro.name.length < currentMacro.name.length
+		? currentMacro
+		: longestMacro;
+}
+/** Used to find all macros that start with the given macro name and then return the macro with the longest name. */
+function findLongestMacroName(macros: TMacro[], cleanMacroName: string): TMacro | undefined {
+	const matchingMacros = macros.filter(macro => cleanMacroName.startsWith(macro.name.toLowerCase()));
+	return matchingMacros.reduce(reduceToLongestMacroName, undefined);
 }
 
 type TPrefix = {
@@ -359,13 +391,15 @@ function parsePrefix(prefix: string): TPrefix {
 }
 
 /** returns [cleanPrefix, TMacro, slicedArgs] */
-function findPrefixMacroArgs(userMacros: NamedCollection<TMacro>, input: string): [string, TMacro | null, string] {
+function findPrefixMacroArgs(macroTiers: TMacro[][], input: string): [string, TMacro | undefined, string] {
 	const lower = input.toLowerCase();
 	const [_, dirtyPrefix, dirtyMacro] = lower.match(/^((?:\d*#)|(?:\d*k[hl]\d*#)|(?:[\+\-]))?(.*?)$/) ?? [];
 	const cleanPrefix = (dirtyPrefix ?? "").trim();
 	const cleanMacro = (dirtyMacro ?? "").trim();
-	const matchingMacros = userMacros.filter(userMacro => cleanMacro.startsWith(userMacro.name.toLowerCase()));
-	const macro = matchingMacros.reduce(reduceToLongestMacroName, null);
+	// find the longest macro of each tier
+	const longestMacros = macroTiers.map(macros => findLongestMacroName(macros, cleanMacro));
+	// grab the longest of the longest macros
+	const macro = longestMacros.reduce(reduceToLongestMacroName, undefined);
 	let sliceIndex = (dirtyPrefix ?? "").length;
 	if (macro) {
 		sliceIndex = lower.indexOf(macro.name.toLowerCase()) + macro.name.length;
@@ -392,12 +426,12 @@ function parseMacroArgs(argString: string): TArgs {
 }
 
 type TMacroAndArgs = TArgs & { macro?: TMacro; prefix: TPrefix; };
-function parseMacroAndArgs(userMacros: NamedCollection<TMacro>, input: string): TMacroAndArgs {
-	const [prefix, userMacro, slicedArgs] = findPrefixMacroArgs(userMacros, input);
-	const macroArgs = userMacro ? parseMacroArgs(slicedArgs) : null;
+function parseMacroAndArgs(macroTiers: TMacro[][], input: string): TMacroAndArgs {
+	const [prefix, macro, slicedArgs] = findPrefixMacroArgs(macroTiers, input);
+	const macroArgs = macro ? parseMacroArgs(slicedArgs) : null;
 	return {
 		indexed: macroArgs?.indexed ?? [],
-		macro: userMacro ?? undefined,
+		macro: macro ?? undefined,
 		named: macroArgs?.named ?? [],
 		prefix: parsePrefix(prefix)
 	};
@@ -432,8 +466,8 @@ function splitKeyValueFromBraces(input: string): [string, string] {
 }
 
 type TMacroAndOutput = { macro: TMacro; output: string; };
-function macroToDice(userMacros: NamedCollection<TMacro>, input: string): TMacroAndOutput | null {
-	const { prefix, macro, indexed, named } = parseMacroAndArgs(userMacros, input);
+function macroToDice(macroTiers: TMacro[][], input: string): TMacroAndOutput | null {
+	const { prefix, macro, indexed, named } = parseMacroAndArgs(macroTiers, input);
 	if (!macro) {
 		return null;
 	}
