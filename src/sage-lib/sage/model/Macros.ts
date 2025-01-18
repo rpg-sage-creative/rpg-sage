@@ -2,14 +2,14 @@ import { partition, sortByKey, sortPrimitive, toUniqueDefined } from "@rsc-utils
 import type { Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { Bot } from "../../../model/Bot.js";
-import type { Game } from "../../../model/Game.js";
-import type { GameCharacter } from "../../../model/GameCharacter.js";
-import type { SageCommand } from "../../../model/SageCommand.js";
-import type { Server } from "../../../model/Server.js";
-import type { User } from "../../../model/User.js";
+import type { Bot } from "./Bot.js";
+import type { Game } from "./Game.js";
+import type { GameCharacter } from "./GameCharacter.js";
 import { Macro, Uncategorized, type MacroBase, type MacroOrBase } from "./Macro.js";
 import { MacroOwner, type MacroOwnerTypeKey, type TMacroOwner } from "./MacroOwner.js";
+import type { SageCommand } from "./SageCommand.js";
+import type { Server } from "./Server.js";
+import type { User } from "./User.js";
 
 type HasMacros<Category extends string = string> = {
 	macros: MacroBase<Category>[];

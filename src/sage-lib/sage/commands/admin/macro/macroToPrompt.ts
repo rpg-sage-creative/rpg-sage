@@ -1,6 +1,6 @@
 import { quote, unwrap } from "@rsc-utils/string-utils";
+import type { Macro } from "../../../model/Macro.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import type { Macro } from "./Macro.js";
 
 type PromptOptions = {
 	share?: boolean;

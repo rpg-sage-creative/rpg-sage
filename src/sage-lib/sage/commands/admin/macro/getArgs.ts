@@ -1,11 +1,11 @@
 import { type Snowflake } from "@rsc-utils/core-utils";
 import { getSelectedOrDefault, getSelectedOrDefaultNumber } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
+import { Macro } from "../../../model/Macro.js";
+import type { MacroOwnerTypeKey } from "../../../model/MacroOwner.js";
+import { Macros, type MacroIndex } from "../../../model/Macros.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
 import { createCustomId as _createCustomId, parseCustomId, type CustomIdArgs, type MacroActionKey } from "./customId.js";
-import { Macro } from "./Macro.js";
-import { Macros, type MacroIndex } from "./Macros.js";
-import type { MacroOwnerTypeKey } from "./MacroOwner.js";
 
 type ArgPair = { key:string; value:string; };
 function pair(sageComand: SageCommand, ...keys: string[]): ArgPair | undefined {

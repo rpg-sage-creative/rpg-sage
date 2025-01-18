@@ -2,12 +2,12 @@ import { partition } from "@rsc-utils/array-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { StringSelectMenuInteraction } from "discord.js";
+import type { Macro } from "../../../model/Macro.js";
+import { MacroOwner } from "../../../model/MacroOwner.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
 import { createListComponents } from "./createListComponents.js";
 import { getArgs, type Args } from "./getArgs.js";
-import type { Macro } from "./Macro.js";
-import { MacroOwner } from "./MacroOwner.js";
 
 function toList(macros: Macro[]): string {
 	const listItems = macros.map(macro => {

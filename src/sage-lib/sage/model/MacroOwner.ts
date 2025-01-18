@@ -1,7 +1,7 @@
 import { sortPrimitive } from "@rsc-utils/array-utils";
 import type { Snowflake } from "@rsc-utils/core-utils";
-import type { LocalizedTextKey } from "../../../../../sage-lang/getLocalizedText.js";
-import type { SageCommand } from "../../../model/SageCommand.js";
+import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
+import type { SageCommand } from "./SageCommand.js";
 
 export enum MacroOwnerType {
 	character,

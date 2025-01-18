@@ -1,9 +1,9 @@
 import { type Snowflake } from "@rsc-utils/core-utils";
 import { ModalBuilder } from "@rsc-utils/discord-utils";
+import type { MacroOwnerTypeKey } from "../../../model/MacroOwner.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args } from "./getArgs.js";
-import type { MacroOwnerTypeKey } from "./MacroOwner.js";
 
 type MacroArgPair = { key:string; defaultValue?:string; };
 export async function createMacroArgsModal(args: Args<true, true>, pairs: MacroArgPair[], trailingArgs: boolean): Promise<ModalBuilder> {

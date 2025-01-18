@@ -3,12 +3,12 @@ import type { Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import type { Localizer } from "../../../../../sage-lang/getLocalizedText.js";
+import { MacroOwner } from "../../../model/MacroOwner.js";
+import type { Macros } from "../../../model/Macros.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args, MacroState } from "./getArgs.js";
-import { MacroOwner } from "./MacroOwner.js";
-import type { Macros } from "./Macros.js";
 
 type CreateArgs = { actorId: Snowflake; localize: Localizer; state: MacroState; };
 type HasOwnerPagesCreateArgs = CreateArgs & { ownerPages: MacroOwner[][]; };

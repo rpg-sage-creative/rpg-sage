@@ -1,11 +1,11 @@
 import type { Optional } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { StringMatcher, stringOrUndefined, unwrap } from "@rsc-utils/string-utils";
-import { getBasicDiceRegex } from "../../../../../sage-dice/getBasicDiceRegex.js";
-import { isMath } from "../../dice/isMath.js";
-import { isRandomItem } from "../../dice/isRandomItem.js";
-import { isValidTable } from "../../dice/isValidTable.js";
-import { parseTable } from "../../dice/parseTable.js";
+import { getBasicDiceRegex } from "../../../sage-dice/getBasicDiceRegex.js";
+import { isMath } from "../commands/dice/isMath.js";
+import { isRandomItem } from "../commands/dice/isRandomItem.js";
+import { isValidTable } from "../commands/dice/isValidTable.js";
+import { parseTable } from "../commands/dice/parseTable.js";
 import type { TMacroOwner } from "./MacroOwner.js";
 
 export type Uncategorized = "Uncategorized";
