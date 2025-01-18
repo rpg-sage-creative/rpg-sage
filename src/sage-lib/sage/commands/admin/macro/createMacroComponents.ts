@@ -92,9 +92,9 @@ function getMacroMode(sageCommand: SageCommand, actorId: Snowflake, messageId: S
 	return "roll";
 }
 
-export function createMacroComponents(sageCommand: SageCommand, args: Args): ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] {
+export async function createMacroComponents(sageCommand: SageCommand, args: Args): Promise<ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[]> {
 
-	const components = createListComponents(sageCommand, args);
+	const components = await createListComponents(sageCommand, args);
 
 	if (!args.macro) return components;
 

@@ -6,9 +6,10 @@ import { isMath } from "../../dice/isMath.js";
 import { isRandomItem } from "../../dice/isRandomItem.js";
 import { isValidTable } from "../../dice/isValidTable.js";
 import { parseTable } from "../../dice/parseTable.js";
-import type { MacroIndex } from "./Macros.js";
-import type { MacroOwner } from "./Owner.js";
-import { isUncategorized, Uncategorized } from "./Uncategorized.js";
+import type { TMacroOwner } from "./MacroOwner.js";
+
+export type Uncategorized = "Uncategorized";
+export const Uncategorized: Uncategorized = "Uncategorized";
 
 export type MacroOrBase<Category extends string = string> = MacroBase<Category> | Macro<Category>;
 
@@ -24,7 +25,7 @@ export class Macro<Category extends string = string> {
 
 	private base: MacroBase<Category>;
 
-	public constructor({ name, category, dice }: MacroBase<Category>, public owner: MacroOwner) {
+	public constructor({ name, category, dice }: MacroBase<Category>, public owner: TMacroOwner) {
 		this.base = { name, category:Macro.cleanCategory(category), dice };
 	}
 
@@ -118,7 +119,7 @@ export class Macro<Category extends string = string> {
 	}
 
 	public static cleanCategory<Category extends string = string>(category: string | undefined): Category | undefined {
-		if (isUncategorized(category)) {
+		if (Macro.isUncategorized(category)) {
 			return undefined;
 		}
 		return stringOrUndefined(category) as Category;
@@ -142,28 +143,8 @@ export class Macro<Category extends string = string> {
 		return "dice";
 	}
 
-	public static updateMacroIndex(indexes: MacroIndex, args: Partial<MacroIndex>): MacroIndex {
-		const ret = (changes: Partial<MacroIndex>) => ({ categoryPageIndex:-1, categoryIndex:-1, macroPageIndex:-1, macroIndex:-1, ...changes });
-
-		const { categoryPageIndex = -1, categoryIndex = -1, macroPageIndex = -1, macroIndex = -1 } = args;
-
-		if (categoryPageIndex !== indexes.categoryPageIndex) {
-			return ret({ categoryPageIndex });
-		}
-
-		if (categoryIndex !== indexes.categoryIndex) {
-			return ret({ categoryPageIndex, categoryIndex });
-		}
-
-		if (macroPageIndex !== indexes.macroPageIndex) {
-			return ret({ categoryPageIndex, categoryIndex, macroPageIndex });
-		}
-
-		if (macroIndex !== indexes.macroIndex) {
-			return ret({ categoryPageIndex, categoryIndex, macroPageIndex, macroIndex });
-		}
-
-		return { categoryPageIndex, categoryIndex, macroPageIndex, macroIndex };
+	public static isUncategorized(value?: string): value is Uncategorized {
+		return value === Uncategorized;
 	}
 
 	public static async validateMacro(macro: MacroBase | Macro): Promise<boolean> {

@@ -8,9 +8,8 @@ import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { Server } from "../../../model/Server.js";
 import type { User } from "../../../model/User.js";
-import { Macro, type MacroBase, type MacroOrBase } from "./Macro.js";
-import type { MacroOwner, MacroOwnerTypeKey } from "./Owner.js";
-import { isUncategorized, Uncategorized } from "./Uncategorized.js";
+import { Macro, Uncategorized, type MacroBase, type MacroOrBase } from "./Macro.js";
+import { MacroOwner, type MacroOwnerTypeKey, type TMacroOwner } from "./MacroOwner.js";
 
 type HasMacros<Category extends string = string> = {
 	macros: MacroBase<Category>[];
@@ -54,12 +53,14 @@ export class Macros<Category extends string = string> {
 	public macroMap!: Map<string, MacroMeta<Category>>;
 	public tree!: CategoryPageMeta<Category>[];
 	public get type() { return this.owner.type; }
+	public get typeKey() { return this.owner.typeKey; }
 
 	public constructor(private hasMacros: HasMacros<Category>, private owner: MacroOwner) {
 		this.mapMacros();
 	}
 
 	private mapMacros(): void {
+		const { isUncategorized } = Macro;
 		// create / sort macros
 		const { owner } = this;
 		const macros = this.hasMacros.macros?.map(macro => new Macro(macro, owner)) ?? [];
@@ -76,7 +77,9 @@ export class Macros<Category extends string = string> {
 		const categoryPages = partition(categories, (_, index) => Math.floor(index / Macros.PageSize));
 		const tree = categoryPages.map((categoryPage, categoryPageIndex) => {
 			const categories = categoryPage.map((category, categoryIndex) => {
-				const categoryMacros = macros.filter(macro => (category === Uncategorized && !macro.category) || (category === macro.category));
+				const categoryMacros = isUncategorized(category)
+					? macros.filter(macro => macro.isUncategorized)
+					: macros.filter(macro => category === macro.category);
 				const categoryMacroPages = partition(categoryMacros, (_, index) => Math.floor(index / Macros.PageSize));
 				const macroPages = categoryMacroPages.map((macroPage, macroPageIndex) => {
 					const macros = macroPage.map((macro, macroIndex) => {
@@ -249,14 +252,17 @@ export class Macros<Category extends string = string> {
 		return this.hasMacros.macros;
 	}
 
-	public static async find(_sageCommand: SageCommand, _args: unknown): Promise<MacroBase | undefined> {
-		return undefined;
-		// const macros = await Macros.parse(sageCommand, args);
-		// return macros.find(args);
-	}
+	// public static async find(_sageCommand: SageCommand, _args: unknown): Promise<MacroBase | undefined> {
+	// 	return undefined;
+	// 	// const macros = await Macros.parse(sageCommand, args);
+	// 	// return macros.find(args);
+	// }
 
-	public static from(hasMacros: THasMacros): Macros {
+	public static from(hasMacros?: THasMacros): Macros | undefined {
+		if (!hasMacros) return undefined;
+
 		const id = "did" in hasMacros ? hasMacros.did : hasMacros.id as Snowflake;
+		let name = "name" in hasMacros ? hasMacros.name : hasMacros.objectType === "User" ? "@Me" : "RPG Sage";
 		let type: MacroOwnerTypeKey;
 		if ("objectType" in hasMacros) {
 			switch(hasMacros.objectType) {
@@ -269,11 +275,10 @@ export class Macros<Category extends string = string> {
 		}else {
 			type = "character";
 		}
-		/** @todo when these objects all have macros, fix this cast and the THasMacros type */
-		return new Macros(hasMacros as unknown as HasMacros, { id, type });
+		return new Macros(hasMacros as HasMacros, new MacroOwner(id, name, type));
 	}
 
-	public static async parse(sageCommand: SageCommand, owner?: MacroOwner): Promise<Macros | undefined> {
+	public static async parse(sageCommand: SageCommand, owner?: TMacroOwner): Promise<Macros | undefined> {
 		const ownerType = owner?.type;
 		const ownerId = owner?.id;
 		switch(ownerType) {
@@ -301,27 +306,10 @@ export class Macros<Category extends string = string> {
 				}
 				break;
 			};
-			case "game": {
-				if (sageCommand.game) {
-					return Macros.from(sageCommand.game);
-				}
-				break;
-			};
-			case "server": {
-				if (sageCommand.server) {
-					return Macros.from(sageCommand.server);
-				}
-				break;
-			};
-			case "global": {
-				if (sageCommand.bot) {
-					return Macros.from(sageCommand.bot);
-				}
-				break;
-			};
-			default: {
-				break;
-			};
+			case "game": return Macros.from(sageCommand.game);
+			case "server": return Macros.from(sageCommand.server);
+			case "global": return Macros.from(sageCommand.bot);
+			default: return undefined;
 		}
 		return undefined;
 	}

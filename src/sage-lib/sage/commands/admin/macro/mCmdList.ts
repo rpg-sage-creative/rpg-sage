@@ -7,7 +7,7 @@ import type { SageInteraction } from "../../../model/SageInteraction.js";
 import { createListComponents } from "./createListComponents.js";
 import { getArgs, type Args } from "./getArgs.js";
 import type { Macro } from "./Macro.js";
-import { getOwners, getOwnerType, getOwnerTypes } from "./Owner.js";
+import { MacroOwner } from "./MacroOwner.js";
 
 function toList(macros: Macro[]): string {
 	const listItems = macros.map(macro => {
@@ -19,13 +19,13 @@ function toList(macros: Macro[]): string {
 	return `<ul>${listItems.join("")}</ul>`;
 }
 
-function toRenderableContent(sageCommand: SageCommand, args: Args): RenderableContent {
+async function toRenderableContent(sageCommand: SageCommand, args: Args): Promise<RenderableContent> {
 	const localize = sageCommand.getLocalizer();
 
 	const state = args.state.next;
 
 	if (!state.ownerType) {
-		const listItems = getOwnerTypes().map(owner => `<li>${localize(owner.pluralKey)}</li>`);
+		const listItems = MacroOwner.getLabels().map(owner => `<li>${localize(owner.pluralKey)}</li>`);
 
 		const content = sageCommand.createAdminRenderable("MACRO_TYPE_LIST");
 		content.append(`<ul>${listItems.join("")}</ul>`);
@@ -33,12 +33,12 @@ function toRenderableContent(sageCommand: SageCommand, args: Args): RenderableCo
 	}
 
 	if (!state.ownerId) {
-		const owners = getOwners(sageCommand, state.ownerType);
+		const owners = await MacroOwner.getByType(sageCommand, state.ownerType);
 		const ownerPages = partition(owners, (_, index) => Math.floor(index / DiscordMaxValues.component.select.optionCount));
 		const pageIndex = Math.max(0, state.ownerPageIndex);
 		const ownerPage = ownerPages[pageIndex] ?? ownerPages[0];
 
-		const titleKey = getOwnerType(state.ownerType)?.pluralKey;
+		const titleKey = MacroOwner.getLabel(state.ownerType).pluralKey;
 		const content = sageCommand.createAdminRenderable(titleKey);
 
 		if (ownerPage) {
@@ -66,7 +66,7 @@ function toRenderableContent(sageCommand: SageCommand, args: Args): RenderableCo
 	const categoryLabel = !first || first.isUncategorized ? localize("UNCATEGORIZED") : first.category;
 	const nameLabel = first?.name ?? localize("MACRO_NAME_EXAMPLE");
 
-	const content = sageCommand.createAdminRenderable(getOwnerType(macros.type)?.typeKey);
+	const content = sageCommand.createAdminRenderable(macros.typeKey);
 	if (pageMacros.length) {
 		const pages = macroPageCount > 1 ? `(${localize("X_OF_Y", Math.max(1, state.macroPageIndex + 1), macroPageCount)})` : ``;
 		content.appendTitledSection(
@@ -98,8 +98,8 @@ export async function mCmdList(sageCommand: SageCommand): Promise<void> {
 	}
 
 	const args = await getArgs(sageCommand);
-	const content = toRenderableContent(sageCommand, args);
-	const components = createListComponents(sageCommand, args);
+	const content = await toRenderableContent(sageCommand, args);
+	const components = await createListComponents(sageCommand, args);
 
 	const message = sageCommand.isSageInteraction()
 		? await sageCommand.fetchMessage()
@@ -115,8 +115,8 @@ export async function handleSelection(sageInteraction: SageInteraction<StringSel
 	sageInteraction.replyStack.defer();
 
 	const args = await getArgs(sageInteraction);
-	const content = toRenderableContent(sageInteraction, args);
-	const components = createListComponents(sageInteraction, args);
+	const content = await toRenderableContent(sageInteraction, args);
+	const components = await createListComponents(sageInteraction, args);
 
 	const message = await sageInteraction.fetchMessage();
 	if (message) {

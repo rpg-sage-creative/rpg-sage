@@ -33,7 +33,7 @@ export async function mCmdDetails(sageCommand: SageCommand, args?: Args | boolea
 	}
 
 	const content = toRenderableContent(sageCommand, args);
-	const components = createMacroComponents(sageCommand, args);
+	const components = await createMacroComponents(sageCommand, args);
 
 	const message = await sageCommand.fetchMessage(args.customIdArgs?.messageId).catch(() => undefined);
 	if (message) {

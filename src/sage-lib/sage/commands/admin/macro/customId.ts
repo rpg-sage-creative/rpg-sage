@@ -1,6 +1,6 @@
 import { type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import type { MacroState } from "./getArgs.js";
-import { MacroOwnerType, type MacroOwnerTypeKey } from "./Owner.js";
+import { MacroOwnerType, type MacroOwnerTypeKey } from "./MacroOwner.js";
 
 function compressId(value?: Snowflake | UUID): string | undefined {
 	if (!value) return undefined;

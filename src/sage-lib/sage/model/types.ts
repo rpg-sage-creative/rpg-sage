@@ -1,4 +1,3 @@
-import type { NamedCollection } from "./NamedCollection";
 
 export type TMacro = {
 	category?: string;
@@ -6,11 +5,4 @@ export type TMacro = {
 	dice: string;
 };
 
-export type CoreWithMacros = {
-	macros?: TMacro[];
-};
 
-export type HasMacros = {
-	macros: NamedCollection<TMacro>;
-	save(): Promise<boolean>;
-};

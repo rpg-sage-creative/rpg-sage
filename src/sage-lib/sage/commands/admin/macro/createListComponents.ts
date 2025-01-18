@@ -7,13 +7,12 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args, MacroState } from "./getArgs.js";
+import { MacroOwner } from "./MacroOwner.js";
 import type { Macros } from "./Macros.js";
-import { getOwners, getOwnerType, getOwnerTypes, type NamedOwner } from "./Owner.js";
-import { isUncategorized } from "./Uncategorized.js";
 
 type CreateArgs = { actorId: Snowflake; localize: Localizer; state: MacroState; };
-type HasOwnerPagesCreateArgs = CreateArgs & { ownerPages: NamedOwner[][]; };
-type HasOwnersCreateArgs = CreateArgs & { owners: NamedOwner[]; };
+type HasOwnerPagesCreateArgs = CreateArgs & { ownerPages: MacroOwner[][]; };
+type HasOwnersCreateArgs = CreateArgs & { owners: MacroOwner[]; };
 type HasMacrosCreateArgs = CreateArgs & { macros: Macros; };
 
 function createSelect(action: MacroActionKey, actorId: Snowflake, state: MacroState, placeholder?: string): StringSelectMenuBuilder {
@@ -41,7 +40,7 @@ function createSelectOwnerTypeSelect({ actorId, localize, state }: CreateArgs): 
 
 	const selectedOwnerType = state.ownerType;
 
-	getOwnerTypes().forEach(({ type, typeKey }) =>
+	MacroOwner.getLabels().forEach(({ type, typeKey }) =>
 		select.addOptions(createOption(localize(typeKey), type, selectedOwnerType === type))
 	);
 
@@ -52,7 +51,7 @@ function createSelectOwnerTypeSelect({ actorId, localize, state }: CreateArgs): 
 function createSelectOwnerPageSelect({ actorId, localize, ownerPages, state }: HasOwnerPagesCreateArgs): StringSelectMenuBuilder {
 	const select = createSelect("selectOwnerPage", actorId, state);
 
-	const localizedPlural = localize(getOwnerType(state.ownerType)?.pluralKey ?? "OWNERS");
+	const localizedPlural = localize(state.ownerType ? MacroOwner.getLabel(state.ownerType).pluralKey : "OWNERS");
 	const pageCount = ownerPages.length;
 	const selectedIndex = state.ownerPageIndex;
 
@@ -102,7 +101,7 @@ function createSelectCategorySelect({ actorId, localize, macros, state }: HasMac
 	const selectedIndex = state.categoryIndex;
 
 	selectedPageCategories.forEach((category, index) =>
-		select.addOptions(createOption(`${localizedCategory}: ${isUncategorized(category) ? localizedUncategorized : category}`, index, selectedIndex > -1 ? index === selectedIndex : index === 0))
+		select.addOptions(createOption(`${localizedCategory}: ${category === "Uncategorized" ? localizedUncategorized : category}`, index, selectedIndex > -1 ? index === selectedIndex : index === 0))
 	);
 
 	disableIfEmpty(select);
@@ -168,7 +167,7 @@ function createNewMacroButton({ actorId, localize, state }: CreateArgs): ButtonB
 // 		;
 // }
 
-export function createListComponents(sageCommand: SageCommand, args: Args): ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] {
+export async function createListComponents(sageCommand: SageCommand, args: Args): Promise<ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[]> {
 	const localize = sageCommand.getLocalizer();
 
 	const components: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [];
@@ -183,7 +182,7 @@ export function createListComponents(sageCommand: SageCommand, args: Args): Acti
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectOwnerTypeSelect));
 
 		if (state.ownerType) {
-			const owners = getOwners(sageCommand, state.ownerType);
+			const owners = await MacroOwner.getByType(sageCommand, state.ownerType);
 			const ownerPages = partition(owners, (_, index) => Math.floor(index / DiscordMaxValues.component.select.optionCount));
 
 			if (ownerPages.length > 1) {

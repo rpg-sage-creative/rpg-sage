@@ -5,7 +5,7 @@ import type { SageInteraction } from "../../../model/SageInteraction.js";
 import { createCustomId as _createCustomId, parseCustomId, type CustomIdArgs, type MacroActionKey } from "./customId.js";
 import { Macro } from "./Macro.js";
 import { Macros, type MacroIndex } from "./Macros.js";
-import type { MacroOwnerTypeKey } from "./Owner.js";
+import type { MacroOwnerTypeKey } from "./MacroOwner.js";
 
 type ArgPair = { key:string; value:string; };
 function pair(sageComand: SageCommand, ...keys: string[]): ArgPair | undefined {
@@ -30,6 +30,30 @@ export type MacroState<HasMacro extends boolean = false> = MacroIndex & {
 	ownerId: HasMacro extends true ? Snowflake : Snowflake | undefined;
 };
 
+function updateMacroIndex(indexes: MacroIndex, args: Partial<MacroIndex>): MacroIndex {
+	const ret = (changes: Partial<MacroIndex>) => ({ categoryPageIndex:-1, categoryIndex:-1, macroPageIndex:-1, macroIndex:-1, ...changes });
+
+	const { categoryPageIndex = -1, categoryIndex = -1, macroPageIndex = -1, macroIndex = -1 } = args;
+
+	if (categoryPageIndex !== indexes.categoryPageIndex) {
+		return ret({ categoryPageIndex });
+	}
+
+	if (categoryIndex !== indexes.categoryIndex) {
+		return ret({ categoryPageIndex, categoryIndex });
+	}
+
+	if (macroPageIndex !== indexes.macroPageIndex) {
+		return ret({ categoryPageIndex, categoryIndex, macroPageIndex });
+	}
+
+	if (macroIndex !== indexes.macroIndex) {
+		return ret({ categoryPageIndex, categoryIndex, macroPageIndex, macroIndex });
+	}
+
+	return { categoryPageIndex, categoryIndex, macroPageIndex, macroIndex };
+}
+
 function updateMacroState(state: MacroState, args: Partial<MacroState>): MacroState {
 	const ret = (changes: Partial<MacroState>) => ({ ownerType:undefined, ownerPageIndex:-1, ownerId:undefined, categoryPageIndex:-1, categoryIndex:-1, macroPageIndex:-1, macroIndex:-1, ...changes });
 
@@ -47,7 +71,7 @@ function updateMacroState(state: MacroState, args: Partial<MacroState>): MacroSt
 		return ret({ ownerType, ownerPageIndex, ownerId });
 	}
 
-	return ret({ ownerType, ownerPageIndex, ownerId, ...Macro.updateMacroIndex(state, args) });
+	return ret({ ownerType, ownerPageIndex, ownerId, ...updateMacroIndex(state, args) });
 }
 
 export type Args<HasMacros extends boolean = false, HasMacro extends boolean = false> = {
