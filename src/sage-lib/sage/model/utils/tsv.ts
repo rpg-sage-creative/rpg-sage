@@ -1,7 +1,7 @@
 import { errorReturnNull, type Optional } from "@rsc-utils/core-utils";
 import { getText, type VALID_URL } from "@rsc-utils/io-utils";
 import { isWrapped, stringOrUndefined } from "@rsc-utils/string-utils";
-import type { TMacro } from "../types";
+import type { MacroBase } from "../Macro.js";
 
 type StringRecord = Record<string, string>;
 type Results<T extends StringRecord> = { keys:string[]; items:T[]; };
@@ -32,11 +32,11 @@ export async function fetchTsv<T extends Record<string, string>>(url: VALID_URL)
 	return parseTsv(raw);
 }
 
-export async function fetchTsvMacros(url: VALID_URL): Promise<TMacro[]> {
+export async function fetchTsvMacros(url: VALID_URL): Promise<MacroBase[]> {
 	const results = await fetchTsv(url);
 	if (!results?.items.length) return [];
 
-	const macros: TMacro[] = [];
+	const macros: MacroBase[] = [];
 	for (const item of results.items) {
 		if (item.name && item.dice && isWrapped(item.dice, "[]")) {
 			macros.push({ name:item.name, category:stringOrUndefined(item.category), dice:item.dice });

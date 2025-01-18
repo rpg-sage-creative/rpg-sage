@@ -7,8 +7,8 @@ import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
+import type { MacroBase } from "./Macro.js";
 import type { SageCache } from "./SageCache.js";
-import type { TMacro } from "./types.js";
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 
@@ -39,7 +39,7 @@ export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	/** Current status of the search engine by game. */
 	searchStatus: TSearchStatus;
 
-	macros?: TMacro[];
+	macros?: MacroBase[];
 }
 
 export class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmojiCore {

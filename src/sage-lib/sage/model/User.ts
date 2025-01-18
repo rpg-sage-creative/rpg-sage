@@ -4,10 +4,10 @@ import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
 import type { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
+import type { MacroBase } from "./Macro.js";
 import { NamedCollection } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { SageCache } from "./SageCache.js";
-import type { TMacro } from "./types.js";
 
 export type TAlias = {
 	name: string;
@@ -24,7 +24,7 @@ export interface UserCore extends DidCore<"User"> {
 	defaultDialogType?: DialogType;
 	defaultSagePostType?: DialogType;
 	dialogDiceBehaviorType?: DialogDiceBehaviorType;
-	macros?: TMacro[];
+	macros?: MacroBase[];
 	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
 	notes?: TNote[];
 	/** @deprecated */

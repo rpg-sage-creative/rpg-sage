@@ -5,7 +5,7 @@ import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-
 import { addCommas, nth } from "@rsc-utils/number-utils";
 import { capitalize, StringMatcher } from "@rsc-utils/string-utils";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
-import type { StrikingRune, PathbuilderCharacterCore, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
+import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import type { IHasAbilities } from "../../../gameSystems/p20/lib/Abilities.js";
 import { Check } from "../../../gameSystems/p20/lib/Check.js";
 import type { IHasProficiencies } from "../../../gameSystems/p20/lib/Proficiencies.js";
@@ -13,7 +13,7 @@ import { Proficiency } from "../../../gameSystems/p20/lib/Proficiency.js";
 import { Skill } from "../../../gameSystems/p20/lib/Skill.js";
 import { ProficiencyType, SizeType } from "../../../gameSystems/p20/lib/types.js";
 import { toModifier } from "../../../gameSystems/utils/toModifier.js";
-import type { TMacro } from "../../../sage-lib/sage/model/types.js";
+import type { MacroBase } from "../../../sage-lib/sage/model/Macro.js";
 import type { GetStatPrefix } from "../../common.js";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository.js";
 import { ABILITIES } from "../../index.js";
@@ -483,7 +483,7 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 	}
 }
 
-function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): TMacro {
+function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): MacroBase {
 	if (weapon.dice) {
 		return { name:weapon.name, dice:weapon.dice };
 	}
@@ -659,7 +659,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		this.savingThrows = SavingThrows.for(this);
 	}
 
-	public getAttackMacros(): TMacro[] { return this.core.weapons?.map(weapon => weaponToMacro(this, weapon)) ?? []; }
+	public getAttackMacros(): MacroBase[] { return this.core.weapons?.map(weapon => weaponToMacro(this, weapon)) ?? []; }
 
 	//#region flags/has
 	public hasFeat(value: string): boolean {

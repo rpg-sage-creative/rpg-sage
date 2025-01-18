@@ -8,11 +8,11 @@ import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-p
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
+import type { MacroBase } from "../model/Macro.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { User } from "../model/User.js";
-import type { TMacro } from "../model/types.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 
@@ -33,7 +33,7 @@ function createActionRow<T extends ButtonBuilder | StringSelectMenuBuilder>(...c
 	return new ActionRowBuilder<T>().setComponents(...components);
 }
 
-type TLabeledMacro = TMacro & { id:string; prefix:string; };
+type TLabeledMacro = MacroBase & { id:string; prefix:string; };
 function getAttackMacros(character: PathbuilderCharacter): TLabeledMacro[] {
 	return character.getAttackMacros()
 		.map((macro, index) => ({ id:`atk-${index}`, prefix:"Attack Roll", ...macro }));
@@ -351,7 +351,7 @@ function createButton(customId: string, label: string, style: ButtonStyle): Butt
 	return button;
 }
 
-function createRollButtonRow(character: PathbuilderCharacter, macros: TMacro[]): ActionRowBuilder<ButtonBuilder> {
+function createRollButtonRow(character: PathbuilderCharacter, macros: MacroBase[]): ActionRowBuilder<ButtonBuilder> {
 	const rollButton = createButton(`PB2E|${character.id}|Roll`, `Roll Check`, ButtonStyle.Primary);
 	const rollSecretButton = createButton(`PB2E|${character.id}|Secret`, `Roll Secret Check`, ButtonStyle.Primary);
 	const rollInitButton = createButton(`PB2E|${character.id}|Init`, `Roll Initiative`, ButtonStyle.Primary);
