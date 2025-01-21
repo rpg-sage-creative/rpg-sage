@@ -1,5 +1,5 @@
 import { GameSystemType, parseGameSystem } from "@rsc-sage/types";
-import { toUnique, type SortResult } from "@rsc-utils/array-utils";
+import { type SortResult } from "@rsc-utils/array-utils";
 import { warn, type Snowflake } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
@@ -144,19 +144,27 @@ function createAddCreatureOrHazardSelect<ControlArg extends Control>(args: Custo
 
 type EncounterItemType = "creature" | "simpleHazard" | "complexHazard";
 type EncounterItem = {
-	code: "cr" | "sh" | "ch";
+	code: EncounterItemCode;
+	count: number;
 	label: "Creature" | "Simple Hazard" | "Complex Hazard";
 	level: number;
 	type: EncounterItemType;
 };
-function createEncounterItem(type: EncounterItemType, level: number): EncounterItem {
-	const item = { type, level } as EncounterItem;
-	switch(type) {
-		case "complexHazard": item.code = "ch"; item.label = "Complex Hazard"; break;
-		case "simpleHazard": item.code = "sh"; item.label = "Simple Hazard"; break;
-		case "creature": item.code = "cr"; item.label = "Creature"; break;
+type EncounterItemCode = "cr"|"sh"|"ch";
+function addToMap(itemMap: Map<string, EncounterItem>, code: EncounterItemCode, level: number): void {
+	const key = `${code}${level}`;
+	if (itemMap.has(key)) {
+		itemMap.get(key)!.count++;
+	}else {
+		itemMap.set(key, createEncounterItem(code, level));
 	}
-	return item;
+}
+function createEncounterItem(code: EncounterItemCode, level: number, count = 1): EncounterItem {
+	switch(code) {
+		case "ch": return { code, count, label:"Complex Hazard", level, type:"complexHazard" };
+		case "sh": return { code, count, label:"Simple Hazard", level, type:"simpleHazard" };
+		case "cr": return { code, count, label:"Creature", level, type:"creature" };
+	}
 }
 function encounterItemSorter(a: EncounterItem, b: EncounterItem): SortResult {
 	if (a.level !== b.level) return a.level < b.level ? -1 : 1;
@@ -170,18 +178,20 @@ function encounterItemSorter(a: EncounterItem, b: EncounterItem): SortResult {
 	return 0;
 }
 function createRemoveSelect<ControlArg extends Control>(args: CustomIdArgs<ControlArg>, encounter: Encounter, partyLevel: number): StringSelectMenuBuilder {
-	const items: EncounterItem[] = [];
-	encounter.creatures.filter(toUnique).forEach(level => items.push(createEncounterItem("creature", level)));
-	encounter.simpleHazards.filter(toUnique).forEach(level => items.push(createEncounterItem("simpleHazard", level)));
-	encounter.complexHazards.filter(toUnique).forEach(level => items.push(createEncounterItem("complexHazard", level)));
+	const itemMap = new Map<string, EncounterItem>();
+	encounter.creatures.forEach(level => addToMap(itemMap, "cr", level));
+	encounter.simpleHazards.forEach(level => addToMap(itemMap, "sh", level));
+	encounter.complexHazards.forEach(level => addToMap(itemMap, "ch", level));
+
+	const items = [...itemMap.values()];
 	items.sort(encounterItemSorter);
 
 	const selectBuilder = new StringSelectMenuBuilder()
 		.setCustomId(createCustomId(args, "removeItem"))
 		.setPlaceholder(`Remove a Creature or Hazard ...`);
-	items.forEach(({ code, label, level, type }) => {
+	items.forEach(({ code, count, label, level, type }) => {
 		const data = getXpData({ type, level, partyLevel });
-		const value = `${code}${level}`;
+		const value = `${code}${level}x${count}`;
 		const absDelta = Math.abs(data.delta);
 		const role = type === "creature" ? `- ${data.role}` : ``;
 		selectBuilder.addOptions(
@@ -206,6 +216,11 @@ type Encounter = {
 	simpleHazards: number[];
 	complexHazards: number[];
 };
+function parseEncounterItem(value: string): EncounterItem {
+	const regex = /(?<code>sh|ch|cr)(?<level>-?\d+)x(?<count>\d+)/;
+	const { code = "cr", level = 0, count = 0 } = regex.exec(value)?.groups ?? {};
+	return createEncounterItem(code as "cr", +level, +count);
+}
 async function parseEncounter(sageCommand?: SageCommand, messages?: Message[], customIdArgs?: CustomIdArgs<any>): Promise<Encounter> {
 	const encounter = {
 		creatures: [] as number[],
@@ -216,12 +231,10 @@ async function parseEncounter(sageCommand?: SageCommand, messages?: Message[], c
 		const select = await findComponent<StringSelectMenuComponent>([sageCommand, ...messages], createCustomId(customIdArgs, "removeItem"));
 		if (!select?.disabled) {
 			select?.options.forEach(option => {
-				const type = option.value.slice(0, 2);
-				const level = +option.value.slice(2);
-				switch(type) {
-					case "sh": encounter.simpleHazards.push(level); break;
-					case "ch": encounter.complexHazards.push(level); break;
-					case "cr": default: encounter.creatures.push(level); break;
+				let { code, count, level } = parseEncounterItem(option.value);
+				const array = encounter[code === "sh" ? "simpleHazards" : code === "ch" ? "complexHazards" : "creatures"];
+				if (array && count > 0) {
+					while (count--) array.push(level);
 				}
 			});
 		}
@@ -576,15 +589,14 @@ async function changeEncounter(sageInteraction: SageInteraction<StringSelectMenu
 	}
 
 	// remove item
-	const itemCode = await fetchSelectedOrDefault(sageInteraction, createCustomId(args.customIdArgs, "removeItem"));
-	if (itemCode) {
-		const type = itemCode.slice(0, 2);
-		const level = +itemCode.slice(2);
-		if (type === "cr" && encounter.creatures.includes(level)) {
+	const optionValue = await fetchSelectedOrDefault(sageInteraction, createCustomId(args.customIdArgs, "removeItem"));
+	if (optionValue) {
+		const { code, level } = parseEncounterItem(optionValue);
+		if (code === "cr" && encounter.creatures.includes(level)) {
 			encounter.creatures.splice(encounter.creatures.indexOf(level), 1);
-		}else if (type === "sh" && encounter.simpleHazards.includes(level)) {
+		}else if (code === "sh" && encounter.simpleHazards.includes(level)) {
 			encounter.simpleHazards.splice(encounter.simpleHazards.indexOf(level), 1);
-		}else if (type === "ch" && encounter.complexHazards.includes(level)) {
+		}else if (code === "ch" && encounter.complexHazards.includes(level)) {
 			encounter.complexHazards.splice(encounter.complexHazards.indexOf(level), 1);
 		}
 	}
