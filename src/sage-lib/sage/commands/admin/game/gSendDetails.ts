@@ -2,9 +2,8 @@ import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { addZeroWidthSpaces, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import type { TextChannel } from "discord.js";
 import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
 import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
@@ -153,15 +152,6 @@ async function showGameRenderServer(renderableContent: RenderableContent, sageCo
 	}
 }
 
-function cleanCharacterName(charName: string): string {
-	return charName
-		// avoid @here and @everybody
-		.replace(/@(?!\u200B)/g, `@${ZERO_WIDTH_SPACE}`)
-		// fix spoilers
-		.replace(/(?<!\u200B)\|/g, `${ZERO_WIDTH_SPACE}|`)
-		;
-}
-
 async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<RenderableContent | undefined> {
 	const game = _game ?? await showGameGetGame(sageCommand);
 	if (!game) {
@@ -197,7 +187,7 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 
 	const gmGuildMembers = await game.gmGuildMembers();
 	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? toHumanReadable(gmGuildMember) : `<i>${game.gameMasters[index]}</i>`);
-	renderableContent.append(`<b>GM Character Name</b>`, `[spacer]${game.gmCharacter.name}`);
+	renderableContent.append(`<b>GM Character Name</b>`, `[spacer]${addZeroWidthSpaces(game.gmCharacter.name)}`);
 	renderableContent.append(`<b>Game Masters</b> ${gameMasters.length}`);
 	gameMasters.forEach(gm => renderableContent.append(`[spacer]${gm}`));
 
@@ -208,7 +198,7 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 		return {
 			userId: pGuildMember.id as Snowflake,
 			name: toHumanReadable(pGuildMember),
-			characters: game.playerCharacters.filterByUser(pGuildMember.id as Snowflake).map(char => cleanCharacterName(char.name)).join("; ")
+			characters: game.playerCharacters.filterByUser(pGuildMember.id as Snowflake).map(char => addZeroWidthSpaces(char.name)).join("; ")
 		};
 	});
 	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
@@ -223,7 +213,7 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 	const orphanPCs = game.orphanedPlayerCharacters;
 	if (orphanPCs.length) {
 		renderableContent.append(`<b>Orphaned Player Characters</b> ${orphanPCs.length}`);
-		orphanPCs.forEach(pc => renderableContent.append(`[spacer]${cleanCharacterName(pc.name)}`));
+		orphanPCs.forEach(pc => renderableContent.append(`[spacer]${addZeroWidthSpaces(pc.name)}`));
 	}
 
 	await showGameRenderDialogType(renderableContent, sageCommand, game);
