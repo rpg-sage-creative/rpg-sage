@@ -1,5 +1,6 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
-import { debug, type Snowflake } from "@rsc-utils/core-utils";
+import { type Snowflake } from "@rsc-utils/core-utils";
+import { quote } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalSubmitInteraction, type ButtonInteraction } from "discord.js";
 import type { LocalizedTextKey, Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { Macro, type MacroBase } from "../../../model/Macro.js";
@@ -13,6 +14,7 @@ import { macroToPrompt } from "./macroToPrompt.js";
 import { mCmdDetails } from "./mCmdDetails.js";
 import { mCmdList } from "./mCmdList.js";
 
+/** Responds to the Yes/No buttons when prompting to delete a macro. */
 async function handleDeleteMacro(sageInteraction: SageInteraction<ButtonInteraction>, { customIdArgs, macros, macro }: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
@@ -29,6 +31,7 @@ async function handleDeleteMacro(sageInteraction: SageInteraction<ButtonInteract
 	await mCmdDetails(sageInteraction);
 }
 
+/** Prompts the user with the details of the macro and Yes/No buttons to confirm deletion. */
 async function promptDeleteMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
@@ -53,16 +56,21 @@ async function promptDeleteMacro(sageInteraction: SageInteraction<ButtonInteract
 	}
 }
 
+/** Creates and shows the modal for editing an existing macro. */
 async function showEditMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any>): Promise<void> {
+	// sageInteraction.replyStack.defer();
 	const modal = await createMacroModal(sageInteraction, args, "promptEditMacro");
 	await sageInteraction.interaction.showModal(modal);
 }
 
+/** Creates and shows the modal for create a new macro. */
 async function showNewMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
+	// sageInteraction.replyStack.defer();
 	const modal = await createMacroModal(sageInteraction, args, "promptNewMacro");
 	await sageInteraction.interaction.showModal(modal);
 }
 
+/** Rolls the macro in the current channel with no args. */
 async function rollMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 	const macro = args.macro;
@@ -71,22 +79,56 @@ async function rollMacro(sageInteraction: SageInteraction<ButtonInteraction>, ar
 	await sendDice(sageInteraction, outputs);
 }
 
+/** Creates and shows the modal for args for rolling a macro. */
 async function showMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
-	sageInteraction.replyStack.defer();
+	// sageInteraction.replyStack.defer();
 	const macro = args.macro;
 	const macroArgs = macro.dice.matchAll(/\{(\w+)(?:\:(\w+))?\}/g) ?? [];
 	const argPairs = [...macroArgs].map(match => ({ key:match[1], defaultValue:match[2] }));
 	const trailingArgs = macro.dice.includes("{...}");
 	const modal = await createMacroArgsModal(args, argPairs, trailingArgs);
 	await sageInteraction.interaction.showModal(modal);
-	debug("showMacroArgs:sent");
 }
 
+type MacroArgsForm = { namedPairLines:string; indexedPairLines:string; [key: string]:string|undefined; };
+
+/** Handles the roll macro args modal submission and rolls the macro in the current channel with args. */
 async function rollMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
-	const macroArgs = sageInteraction.getModalForm<MacroBase>();
-	debug({macro:args.macro.dice,macroArgs});
+	let { namedPairLines, indexedPairLines, ...namedPairObj } = sageInteraction.getModalForm<MacroArgsForm>() ?? {};
+
+	const macroArgs: string[] = [];
+
+	// add the named pairs from the single entry fields
+	Object.entries(namedPairObj).forEach(([key, value]) => {
+		value = value?.trim();
+		if (value?.length) {
+			macroArgs.push(`${key}=${quote(value)}`);
+		}
+	});
+
+	// add the named pairs from the multiline entry field
+	namedPairLines?.trim().split("\n").forEach(line => {
+		line = line.trim();
+		const index = line.indexOf("=");
+		if (index > -1) {
+			const key = line.slice(0, index);
+			const value = line.slice(index + 1);
+			if (value.length) {
+				macroArgs.push(`${key}=${quote(value)}`);
+			}
+		}
+	});
+
+	indexedPairLines?.trim().split("\n").forEach(line => {
+		macroArgs.push(quote(line.trim()));
+	});
+
+	const macro = args.macro;
+	const matches = await parseDiceMatches(sageInteraction, `[${macro.name} ${macroArgs.join(" ")}]`);
+	const outputs = matches.map(m => m.output).flat();
+	await sendDice(sageInteraction, outputs);
 }
 
 export async function handleMacroInteraction(sageInteraction: SageInteraction<any>): Promise<void> {
