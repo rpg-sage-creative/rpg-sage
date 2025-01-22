@@ -80,15 +80,14 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 			for (const meta of metas) {
 				const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(meta.sageChannel.id);
 				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
-				renderableContent.append(`[spacer][spacer]${guildChannelName}`);
+
 				const missingPerms = await checkForMissingPerms(sageCommand, guildChannel);
-				if (missingPerms.length) {
-					renderableContent.append(`[spacer][spacer][spacer]Missing Perms: ${missingPerms.join(", ")}`);
-				}
+				const sageEmoji = missingPerms.length ? "[sage-missing-permissions]" : "";
+
 				const otherBots = await checkForOtherBots(guildChannel);
-				if (otherBots.length) {
-					renderableContent.append(`[spacer][spacer][spacer]Other Bots: ${otherBots.join(", ")}`);
-				}
+				const otherBotsEmoji = otherBots.map(name => `[${name}]`).join("");
+
+				renderableContent.append(`[spacer][spacer]${guildChannelName} ${sageEmoji}${otherBotsEmoji}`.trim());
 			}
 		}
 	}
