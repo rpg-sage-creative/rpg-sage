@@ -4,6 +4,7 @@ import { registerColor } from "./color.js";
 import { registerEmoji } from "./emoji.js";
 import { registerGame } from "./game";
 import { registerGameCharacter } from "./gameCharacter.js";
+import { registerMacro } from "./macro.js";
 import { registerServer } from "./server/index.js";
 import { registerUser } from "./user/index.js";
 
@@ -14,6 +15,7 @@ export function registerAdmin(): void {
 	registerEmoji();
 	registerGame();
 	registerGameCharacter();
+	registerMacro();
 	registerServer();
 	registerUser();
 }

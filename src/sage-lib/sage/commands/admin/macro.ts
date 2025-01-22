@@ -1,8 +1,8 @@
-import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
-import { createCustomIdRegExp } from "../macro/customId.js";
-import { handleMacroInteraction } from "../macro/handleMacroInteraction.js";
-import { mCmdDetails } from "../macro/mCmdDetails.js";
-import { handleSelection, mCmdList } from "../macro/mCmdList.js";
+import { registerListeners } from "../../../discord/handlers/registerListeners.js";
+import { createCustomIdRegExp } from "./macro/customId.js";
+import { handleMacroInteraction } from "./macro/handleMacroInteraction.js";
+import { mCmdDetails } from "./macro/mCmdDetails.js";
+import { handleSelection, mCmdList } from "./macro/mCmdList.js";
 
 // async function macroMove(sageMessage: SageMessage): Promise<void> {
 // 	const localize = sageMessage.getLocalizer();
@@ -55,11 +55,18 @@ import { handleSelection, mCmdList } from "../macro/mCmdList.js";
 export function registerMacro(): void {
 
 	registerListeners({ commands:["macros", "macro|list"], message:mCmdList });
-	registerListeners({ commands:[createCustomIdRegExp("selectOwnerType", "selectOwnerPage", "selectOwnerId")], interaction:handleSelection });
-	registerListeners({ commands:[createCustomIdRegExp("selectCategoryPage", "selectCategory")], interaction:handleSelection });
-	registerListeners({ commands:[createCustomIdRegExp("selectMacroPage")], interaction:handleSelection });
-
 	registerListeners({ commands:["macro|details", createCustomIdRegExp("selectMacro")], message:mCmdDetails, interaction:mCmdDetails });
+
+	registerListeners({ commands:[createCustomIdRegExp(
+		"selectOwnerType",
+		"selectOwnerPage",
+		"selectOwnerId",
+
+		"selectCategoryPage",
+		"selectCategory",
+
+		"selectMacroPage"
+	)], interaction:handleSelection });
 
 	registerListeners({ commands:[createCustomIdRegExp(
 		"toggleMacroMode",
