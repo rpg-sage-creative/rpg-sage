@@ -6,23 +6,34 @@ import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args } from "./getArgs.js";
 
 type MacroArgPair = { key:string; defaultValue?:string; };
+
+/** Creates a modal for passing args to a macro when rolling. */
 export async function createMacroArgsModal(args: Args<true, true>, pairs: MacroArgPair[], trailingArgs: boolean): Promise<ModalBuilder> {
 	const modal = new ModalBuilder();
+	modal.setTitle("Macro Arguments");
 	modal.setCustomId(createCustomId({ ...args.customIdArgs, action:"rollMacroArgs" }));
 
-	const totalFields = pairs.length + (trailingArgs ? 1 : 0);
-	if (totalFields > 5) {
-		const value = pairs.map(({ key, defaultValue }) => `${key}=${defaultValue}`).join("\n");
-		modal.addParagraph().setCustomId("all").setLabel("Type arguments on separate lines: arg=value").setPlaceholder("Type arguments on separate lines: arg=value").setValue(value);
-	}else {
-		pairs.forEach(({ key, defaultValue }) => {
-			modal.addShortText({ maxLength:80 }).setCustomId(key).setLabel(key).setPlaceholder(defaultValue ?? "").setValue(defaultValue ?? "");
+	const namedPairs = pairs.filter(pair => isNaN(+pair.key));
+	if (namedPairs.length < 5) {
+		namedPairs.forEach(({ key, defaultValue }) => {
+			modal.addShortText({ maxLength:80, required:defaultValue===undefined }).setCustomId(key).setLabel(key).setPlaceholder(defaultValue ?? "").setValue(defaultValue ?? "");
 		});
-		modal.addParagraph().setCustomId("args").setLabel("Type arguments on separate lines: arg=value").setPlaceholder("Type arguments on separate lines: arg=value").setValue("");
+	}else {
+		const value = namedPairs.map(({ key, defaultValue }) => `${key}=${defaultValue ?? ""}`).join("\n");
+		modal.addParagraph({ required:true }).setCustomId("namedPairLines").setLabel("Type arguments on separate lines: arg=value").setPlaceholder("Type arguments on separate lines: arg=value").setValue(value);
 	}
+
+	const indexedPairs = pairs.filter(pair => !namedPairs.includes(pair));
+	if (indexedPairs.length || trailingArgs) {
+		indexedPairs.sort((a, b) => +a.key - +b.key);
+		const value = indexedPairs.map(({ defaultValue }) => `${defaultValue ?? ""}`).join("\n");
+		modal.addParagraph({ required:indexedPairs.length > 0 }).setCustomId("indexedPairLines").setLabel("Type arguments on separate lines").setPlaceholder("Type arguments on separate lines").setValue(value);
+	}
+
 	return modal;
 }
 
+/** Creates a modal for new or existing macros. */
 export async function createMacroModal(sageCommand: SageCommand, args: Args<true>, action: MacroActionKey): Promise<ModalBuilder> {
 	const localize = sageCommand.getLocalizer();
 
