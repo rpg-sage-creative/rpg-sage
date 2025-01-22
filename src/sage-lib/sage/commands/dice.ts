@@ -321,7 +321,7 @@ async function ensureTargetChannel(sageCommand: SageCommand): Promise<MessageCha
 	if (channel) {
 		return channel as MessageChannel;
 	}
-	if (sageCommand.isSageInteraction("MESSAGE")) {
+	if (sageCommand.isSageInteraction("MESSAGE") || sageCommand.isSageInteraction("MODAL")) {
 		return sageCommand.interaction.channel as MessageChannel;
 	}
 	const message = await sageCommand.fetchMessage();
