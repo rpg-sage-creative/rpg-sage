@@ -20,7 +20,7 @@ type ArgPairs = { namePair?:ArgPair; categoryPair?:ArgPair; contentPair?:ArgPair
 export function getArgPairs(sageComand: SageCommand): ArgPairs {
 	const namePair = pair(sageComand, "name");
 	const categoryPair = pair(sageComand, "cat", "category");
-	const contentPair = pair(sageComand, "dice", "macro", "value", "table");
+	const contentPair = pair(sageComand, "dialog", "dice", "items", "math", "table", "tableUrl");
 	return { namePair, categoryPair, contentPair };
 }
 
