@@ -48,6 +48,8 @@ const enUS = {
 	"WARNING": `Warning`,
 	"YES": `Yes`, // context: for a "yes" or "no" confirmation prompt
 
+	"PLEASE_WAIT": `Please wait ...`,
+
 	"NONE_FOUND": `None found.`,
 
 	"TABLE_URL": `Table Url`,
