@@ -55,10 +55,10 @@ export async function createMacroModal(sageCommand: SageCommand, args: Args<true
 
 	const actionType: `${typeof action}|${MacroOwnerTypeKey}` = `${action}|${macros.type}`;
 	switch(actionType) {
-		case "promptNewMacro|user":
+		case "handleNewMacroModal|user":
 			modal.setTitle(localize("CREATE_USER_MACRO"));
 			break;
-		case "promptEditMacro|user":
+		case "handleEditMacroModal|user":
 		default:
 			name = macro?.name ?? "";
 			dice = macro?.dice ?? "";

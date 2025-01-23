@@ -57,16 +57,16 @@ async function promptDeleteMacro(sageInteraction: SageInteraction<ButtonInteract
 }
 
 /** Creates and shows the modal for editing an existing macro. */
-async function showEditMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
+async function showEditMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
 	// sageInteraction.replyStack.defer();
-	const modal = await createMacroModal(sageInteraction, args, "promptEditMacro");
+	const modal = await createMacroModal(sageInteraction, args, "handleEditMacroModal");
 	await sageInteraction.interaction.showModal(modal);
 }
 
 /** Creates and shows the modal for create a new macro. */
-async function showNewMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
+async function showNewMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
 	// sageInteraction.replyStack.defer();
-	const modal = await createMacroModal(sageInteraction, args, "promptNewMacro");
+	const modal = await createMacroModal(sageInteraction, args, "handleNewMacroModal");
 	await sageInteraction.interaction.showModal(modal);
 }
 
@@ -146,13 +146,13 @@ export async function handleMacroInteraction(sageInteraction: SageInteraction<an
 		case "confirmDeleteMacro": return handleDeleteMacro(sageInteraction, args);
 		case "cancelDeleteMacro": return handleDeleteMacro(sageInteraction, args);
 
-		case "showEditMacro": return showEditMacro(sageInteraction, args);
-		case "promptEditMacro": return promptEditMacro(sageInteraction, args);
+		case "showEditMacroModal": return showEditMacroModal(sageInteraction, args);
+		case "handleEditMacroModal": return handleEditMacroModal(sageInteraction, args);
 		case "confirmEditMacro": return handleEditMacro(sageInteraction, args);
 		case "cancelEditMacro": return handleEditMacro(sageInteraction, args);
 
-		case "showNewMacro": return showNewMacro(sageInteraction, args);
-		case "promptNewMacro": return promptNewMacro(sageInteraction, args);
+		case "showNewMacroModal": return showNewMacroModal(sageInteraction, args);
+		case "handleNewMacroModal": return handleNewMacroModal(sageInteraction, args);
 		case "confirmNewMacro": return handleNewMacro(sageInteraction, args);
 		case "cancelNewMacro": return handleNewMacro(sageInteraction, args);
 
@@ -163,7 +163,8 @@ export async function handleMacroInteraction(sageInteraction: SageInteraction<an
 
 }
 
-async function isInvalid(macros: Macros, macro: Macro, isUpdate: boolean): Promise<LocalizedTextKey | undefined> {
+type InvalidMacroKey = LocalizedTextKey & ("INVALID_MACRO_NAME" | "INVALID_MACRO_DUPLICATE" | "INVALID_MACRO_TABLE" | "INVALID_MACRO_DICE");
+async function isInvalid(macros: Macros, macro: Macro, isUpdate: boolean): Promise<InvalidMacroKey | undefined> {
 	// validate name
 	const isValidName = /^[\w -]+$/.test(macro.name);
 	if (!isValidName) {
@@ -188,7 +189,7 @@ type MacroPair = { oldMacro:Macro, newMacro:Macro };
 const editCache = new EphemeralMap<string, MacroSinglet | MacroPair>(60 * 1000);
 // const editCache = new Map<string, { oldMacro:Macro, newMacro:Macro }>();
 
-async function promptEditMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+async function handleEditMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const oldMacro = args.macro;
@@ -209,12 +210,12 @@ async function promptEditMacro(sageInteraction: SageInteraction<ButtonInteractio
 		const invalidKey = await isInvalid(args.macros, newMacro, true);
 		if (invalidKey) {
 			await sageInteraction.replyStack.reply(localize(invalidKey));
-			return showEditMacro(sageInteraction, args);
+			return showEditMacroModal(sageInteraction, args);
 		}
 
 		const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs.messageId!);
 		if (message) {
-			const cacheKey = createCustomId({ action:"promptEditMacro", actorId, messageId, state });
+			const cacheKey = createCustomId({ action:"handleEditMacroModal", actorId, messageId, state });
 			editCache.set(cacheKey, { oldMacro, newMacro });
 
 			const existingPrompt = macroToPrompt(sageInteraction, oldMacro);
@@ -244,7 +245,7 @@ async function handleEditMacro(sageInteraction: SageInteraction<ModalSubmitInter
 
 	// get pair and remove from cache immediately
 	const messageId = args.customIdArgs?.messageId ?? (await sageInteraction.fetchMessage())?.id as Snowflake;
-	const cacheKey = createCustomId({ action:"promptEditMacro", actorId, messageId, state });
+	const cacheKey = createCustomId({ action:"handleEditMacroModal", actorId, messageId, state });
 	const macroPair = editCache.get(cacheKey);
 	editCache.delete(cacheKey);
 
@@ -290,7 +291,7 @@ function createYesNoComponents(args: YesNoArgs): ActionRowBuilder<ButtonBuilder>
 	return [new ActionRowBuilder<ButtonBuilder>().addComponents(yes, no)];
 }
 
-async function promptNewMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+async function handleNewMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const macroBase = sageInteraction.getModalForm<MacroBase>();
@@ -308,12 +309,12 @@ async function promptNewMacro(sageInteraction: SageInteraction<ButtonInteraction
 		const invalidKey = await isInvalid(args.macros, newMacro, false);
 		if (invalidKey) {
 			await sageInteraction.replyStack.reply(localize(invalidKey));
-			return showNewMacro(sageInteraction, args);
+			return showNewMacroModal(sageInteraction, args);
 		}
 
 		const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs?.messageId!);
 		if (message) {
-			const cacheKey = createCustomId({ action:"promptNewMacro", actorId, messageId, state });
+			const cacheKey = createCustomId({ action:"handleNewMacroModal", actorId, messageId, state });
 			editCache.set(cacheKey, { newMacro });
 
 			const content = sageInteraction.createAdminRenderable("CREATE_MACRO_?");
@@ -339,7 +340,7 @@ async function handleNewMacro(sageInteraction: SageInteraction<ModalSubmitIntera
 
 	// get pair and remove from cache immediately
 	const messageId = args.customIdArgs?.messageId ?? (await sageInteraction.fetchMessage())?.id as Snowflake;
-	const cacheKey = createCustomId({ action:"promptNewMacro", messageId, actorId:sageInteraction.actorId, state:state.prev });
+	const cacheKey = createCustomId({ action:"handleNewMacroModal", messageId, actorId:sageInteraction.actorId, state:state.prev });
 	const macro = editCache.get(cacheKey)?.newMacro;
 	editCache.delete(cacheKey);
 

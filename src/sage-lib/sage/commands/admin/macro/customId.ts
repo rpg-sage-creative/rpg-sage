@@ -45,13 +45,13 @@ export enum MacroAction {
 
 	toggleMacroMode,
 
-	showNewMacro,
-	promptNewMacro,
+	showNewMacroModal,
+	handleNewMacroModal,
 	confirmNewMacro,
 	cancelNewMacro,
 
-	showEditMacro,
-	promptEditMacro,
+	showEditMacroModal,
+	handleEditMacroModal,
 	confirmEditMacro,
 	cancelEditMacro,
 

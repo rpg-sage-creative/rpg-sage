@@ -139,7 +139,7 @@ function createSelectMacroSelect({ actorId, localize, macros, state }: HasMacros
 }
 
 function createNewMacroButton({ actorId, localize, state }: CreateArgs): ButtonBuilder {
-	const customId = createCustomId({ actorId, action:"showNewMacro", state });
+	const customId = createCustomId({ actorId, action:"showNewMacroModal", state });
 	return new ButtonBuilder()
 		.setCustomId(customId)
 		.setStyle(ButtonStyle.Secondary)

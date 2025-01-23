@@ -48,15 +48,15 @@ function createToggleModeButton({ actorId, messageId, mode, state }: CreateArgs)
 
 function createNewMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
 	return new ButtonBuilder()
-		.setCustomId(createCustomId({ action:"showNewMacro", actorId, messageId, state }))
+		.setCustomId(createCustomId({ action:"showNewMacroModal", actorId, messageId, state }))
 		.setStyle(ButtonStyle.Secondary)
 		.setLabel(localize("NEW"))
 		;
 }
 
-function createShowEditMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
+function createShowEditMacroModalButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
 	return new ButtonBuilder()
-		.setCustomId(createCustomId({ action:"showEditMacro", actorId, messageId, state }))
+		.setCustomId(createCustomId({ action:"showEditMacroModal", actorId, messageId, state }))
 		.setStyle(ButtonStyle.Primary)
 		.setLabel(localize("EDIT"))
 		;
@@ -121,7 +121,7 @@ export async function createMacroComponents(sageCommand: SageCommand, args: Args
 
 	if (mode === "edit") {
 		const newButton = createNewMacroButton(buttonArgs);
-		const editButton = createShowEditMacroButton(buttonArgs);
+		const editButton = createShowEditMacroModalButton(buttonArgs);
 		// const copyButton = createCopyMacroButton(buttonArgs);
 		const deleteButton = createDeleteMacroButton(buttonArgs);
 

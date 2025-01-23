@@ -78,13 +78,13 @@ export function registerMacro(): void {
 		"confirmDeleteMacro",
 		"cancelDeleteMacro",
 
-		"showEditMacro",
-		"promptEditMacro",
+		"showEditMacroModal",
+		"handleEditMacroModal",
 		"confirmEditMacro",
 		"cancelEditMacro",
 
-		"showNewMacro",
-		"promptNewMacro",
+		"showNewMacroModal",
+		"handleNewMacroModal",
 		"confirmNewMacro",
 		"cancelNewMacro",
 	)], interaction:handleMacroInteraction });
