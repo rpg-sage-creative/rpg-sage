@@ -165,7 +165,7 @@ export async function handleMacroInteraction(sageInteraction: SageInteraction<an
 
 }
 
-type InvalidMacroKey = LocalizedTextKey & ("INVALID_MACRO_NAME" | "INVALID_MACRO_DUPLICATE" | "INVALID_MACRO_TABLE" | "INVALID_MACRO_DICE");
+type InvalidMacroKey = LocalizedTextKey & ("INVALID_MACRO_NAME" | "INVALID_MACRO_DUPLICATE" | "INVALID_MACRO_TABLE" | "INVALID_MACRO_DICE" | "INVALID_MACRO_DIALOG");
 async function isInvalid(macros: Macros, macro: Macro, isUpdate: boolean): Promise<InvalidMacroKey | undefined> {
 	// validate name
 	const isValidName = /^[\w -]+$/.test(macro.name);
@@ -181,7 +181,9 @@ async function isInvalid(macros: Macros, macro: Macro, isUpdate: boolean): Promi
 	// validate dice
 	const isValidDice = await Macro.validateMacro(macro);
 	if (!isValidDice) {
-		return macro.type === "table" || macro.type === "tableUrl" ? "INVALID_MACRO_TABLE" : "INVALID_MACRO_DICE";
+		if (macro.isDialog()) return "INVALID_MACRO_DIALOG";
+		if (macro.isType("table", "tableUrl")) return "INVALID_MACRO_TABLE";
+		return "INVALID_MACRO_DICE";
 	}
 	return undefined;
 }

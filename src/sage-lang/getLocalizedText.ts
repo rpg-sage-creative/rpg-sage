@@ -132,6 +132,7 @@ const enUS = {
 
 	"INVALID_MACRO_NAME": `Macro names should only contain letters, numbers, spaces, underscores, and dashes.`,
 	"INVALID_MACRO_DUPLICATE": `There is already a macro with that name.`,
+	"INVALID_MACRO_DIALOG": `Your macro dialog is invalid. For information on macros, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Dice-Macros>).`,
 	"INVALID_MACRO_DICE": `Your macro dice is invalid. For information on macros, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Dice-Macros>).`,
 	"INVALID_MACRO_TABLE": `Your macro table is invalid.`,
 

@@ -26,6 +26,12 @@ export type DiceMacroBase<Category extends string = string> = MacroBase<Category
 
 export type MacroType = "dialog" | "dice" | "items" | "math" | "table" | "tableUrl";
 
+type TypedMacro<Category extends string = string, Type extends MacroType = MacroType> = Macro<Category> & {
+	dialog: Type extends "dialog" ? string : undefined;
+	dice: Type extends Exclude<MacroType, "dialog"> ? string : undefined;
+	type: Type;
+};
+
 export class Macro<Category extends string = string> {
 
 	private base: MacroBase<Category>;
@@ -131,28 +137,33 @@ export class Macro<Category extends string = string> {
 		return false;
 	}
 
-	public isDialog(): this is Macro<Category> & { dialog:string; dice:never; } {
+	public isDialog(): this is TypedMacro<Category, "dialog"> {
 		return this.type === "dialog";
 	}
 
-	public isDice(): this is Macro<Category> & { dialog:never; dice:string; } {
+	public isDice(): this is TypedMacro<Category, "dice"> {
 		return this.type === "dice";
 	}
 
-	public isItems(): this is Macro<Category> & { dialog:never; dice:string; } {
+	public isItems(): this is TypedMacro<Category, "items"> {
 		return this.type === "items";
 	}
 
-	public isMath(): this is Macro<Category> & { dialog:never; dice:string; } {
+	public isMath(): this is TypedMacro<Category, "math"> {
 		return this.type === "math";
 	}
 
-	public isTable(): this is Macro<Category> & { dialog:never; dice:string; } {
+	public isTable(): this is TypedMacro<Category, "table"> {
 		return this.type === "table";
 	}
 
-	public isTableUrl(): this is Macro<Category> & { dialog:never; dice:string; } {
+	public isTableUrl(): this is TypedMacro<Category, "tableUrl"> {
 		return this.type === "tableUrl";
+	}
+
+	public isType<Type extends MacroType>(...types: Type[]): this is TypedMacro<Category, Type>;
+	public isType(...types: MacroType[]): boolean {
+		return types.includes(this.type);
 	}
 
 	/** same name and category ... possibly different case */
