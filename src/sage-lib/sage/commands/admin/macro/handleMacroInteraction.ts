@@ -197,10 +197,6 @@ async function handleEditMacroModal(sageInteraction: SageInteraction<ButtonInter
 	const hasChanges = oldMacro && macroBase
 		&& (macroBase.name !== oldMacro.name || macroBase.category !== oldMacro.category || macroBase.dice !== oldMacro.dice);
 	if (hasChanges) {
-		const localize = sageInteraction.getLocalizer();
-
-		const { actorId } = sageInteraction;
-		const { messageId } = args.customIdArgs;
 		const state = args.state.prev;
 		const { ownerType, ownerId } = state;
 
@@ -209,31 +205,43 @@ async function handleEditMacroModal(sageInteraction: SageInteraction<ButtonInter
 		// validate the macro
 		const invalidKey = await isInvalid(args.macros, newMacro, true);
 		if (invalidKey) {
+			const localize = sageInteraction.getLocalizer();
 			await sageInteraction.replyStack.reply(localize(invalidKey));
 			return showEditMacroModal(sageInteraction, args);
 		}
 
-		const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs.messageId!);
-		if (message) {
-			const cacheKey = createCustomId({ action:"handleEditMacroModal", actorId, messageId, state });
-			editCache.set(cacheKey, { oldMacro, newMacro });
-
-			const existingPrompt = macroToPrompt(sageInteraction, oldMacro);
-			const updatedPrompt = macroToPrompt(sageInteraction, newMacro, { usage:true });
-
-			const content = sageInteraction.createAdminRenderable("UPDATE_MACRO_?");
-			content.append(`${localize("FROM")}:${existingPrompt}\n${localize("TO")}:${updatedPrompt}`);
-
-			const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelEditMacro", state, yesAction:"confirmEditMacro" });
-
-			await message.edit(sageInteraction.resolveToOptions({ embeds:content, components }));
-
-		}else {
-			await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
-		}
+		await promptEditMacro(sageInteraction, args, { oldMacro, newMacro });
 
 	}else {
 		/* edit was canceled or nothing was changed, do nothing */
+	}
+}
+
+async function promptEditMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>, macroPair: MacroPair): Promise<void> {
+	const localize = sageInteraction.getLocalizer();
+
+	const { actorId } = sageInteraction;
+	const { messageId } = args.customIdArgs;
+	const state = args.state.prev;
+	const { oldMacro, newMacro } = macroPair;
+
+	const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs.messageId!);
+	if (message) {
+		const cacheKey = createCustomId({ action:"handleEditMacroModal", actorId, messageId, state });
+		editCache.set(cacheKey, { oldMacro, newMacro });
+
+		const existingPrompt = macroToPrompt(sageInteraction, oldMacro);
+		const updatedPrompt = macroToPrompt(sageInteraction, newMacro, { usage:true });
+
+		const content = sageInteraction.createAdminRenderable("UPDATE_MACRO_?");
+		content.append(`${localize("FROM")}:${existingPrompt}\n${localize("TO")}:${updatedPrompt}`);
+
+		const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelEditMacro", state, yesAction:"confirmEditMacro" });
+
+		await message.edit(sageInteraction.resolveToOptions({ embeds:content, components }));
+
+	}else {
+		await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
 	}
 }
 
@@ -307,11 +315,20 @@ async function handleNewMacroModal(sageInteraction: SageInteraction<ButtonIntera
 
 		// validate the macro
 		const invalidKey = await isInvalid(args.macros, newMacro, false);
+
+		// if duplicate, use the edit logic
+		if (invalidKey === "INVALID_MACRO_DUPLICATE") {
+			const oldMacro = args.macros.find(newMacro.name)!;
+			return promptEditMacro(sageInteraction, args, { oldMacro, newMacro });
+		}
+
+		// if still invalid, redo modal
 		if (invalidKey) {
 			await sageInteraction.replyStack.reply(localize(invalidKey));
 			return showNewMacroModal(sageInteraction, args);
 		}
 
+		// process new as expected
 		const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs?.messageId!);
 		if (message) {
 			const cacheKey = createCustomId({ action:"handleNewMacroModal", actorId, messageId, state });
