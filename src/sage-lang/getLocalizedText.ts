@@ -14,6 +14,7 @@ const enUS = {
 	"COPY": `Copy`,
 	"CREATE": `Create`,
 	"DELETE": `Delete`,
+	"DIALOG": `Dialog`,
 	"DICE": `Dice`,
 	"EDIT": `Edit`,
 	"EMBED": `Embed`,
