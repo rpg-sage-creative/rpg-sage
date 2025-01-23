@@ -1,10 +1,11 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
-import { debug, type Snowflake } from "@rsc-utils/core-utils";
-import { quote } from "@rsc-utils/string-utils";
+import { type Snowflake } from "@rsc-utils/core-utils";
+import { quote, ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalSubmitInteraction, type ButtonInteraction } from "discord.js";
 import type { LocalizedTextKey, Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { Macro, type MacroBase } from "../../../model/Macro.js";
-import type { Macros } from "../../../model/Macros.js";
+import { Macros } from "../../../model/Macros.js";
+import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { parseDiceMatches, sendDice } from "../../dice.js";
@@ -218,31 +219,31 @@ async function handleEditMacroModal(sageInteraction: SageInteraction<ButtonInter
 	}
 }
 
-async function promptEditMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>, macroPair: MacroPair): Promise<void> {
-	const localize = sageInteraction.getLocalizer();
+async function promptEditMacro(sageCommand: SageCommand, args: Args<true, true>, macroPair: MacroPair): Promise<void> {
+	const localize = sageCommand.getLocalizer();
 
-	const { actorId } = sageInteraction;
+	const { actorId } = sageCommand;
 	const { messageId } = args.customIdArgs;
 	const state = args.state.prev;
 	const { oldMacro, newMacro } = macroPair;
 
-	const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs.messageId!);
+	const message = await sageCommand.fetchMessage(messageId);
 	if (message) {
 		const cacheKey = createCustomId({ action:"handleEditMacroModal", actorId, messageId, state });
 		editCache.set(cacheKey, { oldMacro, newMacro });
 
-		const existingPrompt = macroToPrompt(sageInteraction, oldMacro);
-		const updatedPrompt = macroToPrompt(sageInteraction, newMacro, { usage:true });
+		const existingPrompt = macroToPrompt(sageCommand, oldMacro);
+		const updatedPrompt = macroToPrompt(sageCommand, newMacro, { usage:true });
 
-		const content = sageInteraction.createAdminRenderable("UPDATE_MACRO_?");
+		const content = sageCommand.createAdminRenderable("UPDATE_MACRO_?");
 		content.append(`${localize("FROM")}:${existingPrompt}\n${localize("TO")}:${updatedPrompt}`);
 
 		const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelEditMacro", state, yesAction:"confirmEditMacro" });
 
-		await message.edit(sageInteraction.resolveToOptions({ embeds:content, components }));
+		await message.edit(sageCommand.resolveToOptions({ content:ZERO_WIDTH_SPACE, embeds:content, components }));
 
 	}else {
-		await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
+		await sageCommand.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
 	}
 }
 
@@ -275,8 +276,14 @@ async function handleEditMacro(sageInteraction: SageInteraction<ModalSubmitInter
 		}
 	}
 
-	// return to viewing the macro
-	await mCmdDetails(sageInteraction, args as Args<any, any>);
+	if (args.macro) {
+		// return to viewing the macro
+		await mCmdDetails(sageInteraction, args as Args<any, any>);
+
+	}else {
+		// return to category list
+		await mCmdList(sageInteraction, args as Args<any, any>);
+	}
 }
 
 type YesNoArgs = {
@@ -302,7 +309,43 @@ function createYesNoComponents(args: YesNoArgs): ActionRowBuilder<ButtonBuilder>
 
 export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 	const pairs = getArgPairs(sageMessage);
-	debug(pairs);
+
+	const name = pairs.namePair?.value;
+	const category = pairs.categoryPair?.value;
+	const dialog = pairs.contentPair?.key === "dialog" ? pairs.contentPair.value : undefined;
+	const dice = pairs.contentPair?.key !== "dialog" ? pairs.contentPair?.value : undefined;
+
+	if (!name || (!dialog && !dice)) {
+		return sageMessage.replyStack.whisper("Try: `sage! macros`");
+	}
+
+	const ownerType = "user";
+	const ownerId = sageMessage.actorId;
+
+	const newMacro = new Macro({ name, category, dialog, dice }, { type:ownerType, id:ownerId });
+
+	// validate the macro
+	const macros = await Macros.parse(sageMessage, newMacro.owner);
+	if (!macros) {
+		return sageMessage.replyStack.whisper("SORRY, I NEED A BETTER ERROR MESSAGE HERE");
+	}
+
+	const message = await sageMessage.replyStack.send(sageMessage.getLocalizer()("PLEASE_WAIT"), true);
+
+	const invalidKey = await isInvalid(macros, newMacro, false);
+
+	const args = {
+		customIdArgs: { messageId: message?.id },
+		state: { prev:{ ownerType, ownerPageIndex:-1, ownerId, categoryPageIndex:-1, categoryIndex:-1, macroPageIndex:-1, macroIndex:-1 } }
+	} as Args<any, any>;
+
+	// if duplicate, use the edit logic
+	if (invalidKey === "INVALID_MACRO_DUPLICATE") {
+		const oldMacro = macros.find(newMacro.name)!;
+		return promptEditMacro(sageMessage, args, { oldMacro, newMacro });
+	}
+
+	return promptNewMacro(sageMessage, args, newMacro);
 }
 
 async function handleNewMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
@@ -312,8 +355,6 @@ async function handleNewMacroModal(sageInteraction: SageInteraction<ButtonIntera
 	if (macroBase) {
 		const localize = sageInteraction.getLocalizer();
 
-		const { actorId } = sageInteraction;
-		const { messageId } = args.customIdArgs;
 		const state = args.state.prev;
 		const { ownerType, ownerId } = state;
 
@@ -335,24 +376,34 @@ async function handleNewMacroModal(sageInteraction: SageInteraction<ButtonIntera
 		}
 
 		// process new as expected
-		const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs?.messageId!);
-		if (message) {
-			const cacheKey = createCustomId({ action:"handleNewMacroModal", actorId, messageId, state });
-			editCache.set(cacheKey, { newMacro });
-
-			const content = sageInteraction.createAdminRenderable("CREATE_MACRO_?");
-			content.append(macroToPrompt(sageInteraction, newMacro, { usage:true }));
-
-			const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelNewMacro", state, yesAction:"confirmNewMacro" });
-
-			await message.edit(sageInteraction.resolveToOptions({ embeds:content, components }));
-
-		}else {
-			await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
-		}
+		await promptNewMacro(sageInteraction, args, newMacro);
 
 	}else {
 		/* edit was canceled or nothing was changed, do nothing */
+	}
+}
+
+async function promptNewMacro(sageCommand: SageCommand, args: Args<true, true>, newMacro: Macro): Promise<void> {
+	const localize = sageCommand.getLocalizer();
+
+	const { actorId } = sageCommand;
+	const { messageId } = args.customIdArgs;
+	const state = args.state.prev;
+
+	const message = await sageCommand.fetchMessage(messageId);
+	if (message) {
+		const cacheKey = createCustomId({ action:"handleNewMacroModal", actorId, messageId, state });
+		editCache.set(cacheKey, { newMacro });
+
+		const content = sageCommand.createAdminRenderable("CREATE_MACRO_?");
+		content.append(macroToPrompt(sageCommand, newMacro, { usage:true }));
+
+		const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelNewMacro", state, yesAction:"confirmNewMacro" });
+
+		await message.edit(sageCommand.resolveToOptions({ content:ZERO_WIDTH_SPACE, embeds:content, components }));
+
+	}else {
+		await sageCommand.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
 	}
 }
 
