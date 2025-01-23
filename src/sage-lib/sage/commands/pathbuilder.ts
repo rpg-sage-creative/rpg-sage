@@ -8,7 +8,7 @@ import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-p
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
-import type { MacroBase } from "../model/Macro.js";
+import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
@@ -33,7 +33,7 @@ function createActionRow<T extends ButtonBuilder | StringSelectMenuBuilder>(...c
 	return new ActionRowBuilder<T>().setComponents(...components);
 }
 
-type TLabeledMacro = MacroBase & { id:string; prefix:string; };
+type TLabeledMacro = DiceMacroBase & { id:string; prefix:string; };
 function getAttackMacros(character: PathbuilderCharacter): TLabeledMacro[] {
 	return character.getAttackMacros()
 		.map((macro, index) => ({ id:`atk-${index}`, prefix:"Attack Roll", ...macro }));
@@ -42,8 +42,8 @@ function getAttackMacros(character: PathbuilderCharacter): TLabeledMacro[] {
 function getUserMacros(character: PathbuilderCharacter, macroUser: Optional<User>): TLabeledMacro[] {
 	if (macroUser) {
 		const matcher = new StringMatcher(character.name);
-		return macroUser.macros
-			.filter(macro => matcher.matches(macro.category))
+		return (macroUser.macros as DiceMacroBase[])
+			.filter(macro => matcher.matches(macro.category) && macro.dice)
 			.map((macro, index) => ({ id:`usr-${index}`, prefix:"Macro Roll", ...macro }));
 	}
 	return [];

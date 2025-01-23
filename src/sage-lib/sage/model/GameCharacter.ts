@@ -110,7 +110,7 @@ function parseFetchedStats(raw: string, alias?: string) {
 	lines.forEach(line => {
 		const results = parseFetchedStatsLine(line, alias);
 		if (results) {
-			if ("dice" in results) macros.push(results);
+			if ("dialog" in results || "dice" in results) macros.push(results); // || "items" in results || "math" in results || "table" in results || "tableUrl" in results
 			if ("value" in results) stats.set(results.key, results.value);
 		}
 	});

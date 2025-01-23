@@ -11,7 +11,7 @@ import { registerMessageListener } from "../../discord/handlers.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import type { CharacterManager } from "../model/CharacterManager.js";
 import type { GameCharacter } from "../model/GameCharacter.js";
-import type { MacroBase } from "../model/Macro.js";
+import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { User } from "../model/User.js";
 import { logPostCurrency } from "./admin/PostCurrency.js";
@@ -64,8 +64,8 @@ async function prepStatsAndMacros(sageCommand: SageCommand) {
 	}
 	return undefined;
 }
-async function fetchAllStatsAndMacros(npcs: CharacterManager, pcs: CharacterManager, pc: Optional<GameCharacter>, sageUser: User): Promise<MacroBase[]> {
-	const out: MacroBase[] = [];
+async function fetchAllStatsAndMacros(npcs: CharacterManager, pcs: CharacterManager, pc: Optional<GameCharacter>, sageUser: User): Promise<DiceMacroBase[]> {
+	const out: DiceMacroBase[] = [];
 	for (const npc of npcs) {
 		out.push(...await fetchStatsAndMacros(npc, sageUser));
 	}
@@ -75,8 +75,8 @@ async function fetchAllStatsAndMacros(npcs: CharacterManager, pcs: CharacterMana
 	await fetchStatsAndMacros(pc, sageUser);
 	return out;
 }
-async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User): Promise<MacroBase[]> {
-	const out: MacroBase[] = [];
+async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User): Promise<DiceMacroBase[]> {
+	const out: DiceMacroBase[] = [];
 	if (!char) return out;
 
 	const macros = await char.fetchMacros();
@@ -85,9 +85,11 @@ async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User
 	if (char.userDid === sageUser.did) {
 		// check all the macros
 		for (const macro of macros) {
-			// grab the macro if it has a unique name/category combo
-			if (!out.some(m => macro.name.toLowerCase() === m.name.toLowerCase() && m.category === char.name)) {
-				out.push({ name:macro.name, category:char.name, dice:macro.dice });
+			if (macro.dice) {
+				// grab the macro if it has a unique name/category combo
+				if (!out.some(m => macro.name.toLowerCase() === m.name.toLowerCase() && m.category === char.name)) {
+					out.push({ name:macro.name, category:char.name, dice:macro.dice });
+				}
 			}
 		}
 	}
@@ -120,9 +122,12 @@ async function parseDiscordDice(sageCommand: SageCommand, diceString: string, ov
 }
 
 /** Returns macros from each tier, with the lowest index having the highest priority. */
-function getTieredMacros(sageCommand: SageCommand): MacroBase[][] {
-	const stack: MacroBase[][] = [];
-	const push = (macros?: MacroBase[]) => macros?.length ? stack.push(macros) : void 0;
+function getTieredMacros(sageCommand: SageCommand): DiceMacroBase[][] {
+	const stack: DiceMacroBase[][] = [];
+	const push = (macros?: MacroBase[]) => {
+		const diceMacros = macros?.filter(macro => macro.dice);
+		if (diceMacros?.length) stack.push(diceMacros as DiceMacroBase[]);
+	};
 	push(sageCommand.playerCharacter?.macros);
 	push(sageCommand.sageUser.macros);
 	push(sageCommand.game?.macros);
@@ -350,7 +355,7 @@ async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolea
 //#region macro
 
 /** used in a .reduce to return the macro with the longest name */
-function reduceToLongestMacroName(longestMacro?: MacroBase, currentMacro?: MacroBase): MacroBase | undefined {
+function reduceToLongestMacroName(longestMacro?: DiceMacroBase, currentMacro?: DiceMacroBase): DiceMacroBase | undefined {
 	if (!currentMacro) return longestMacro;
 	if (!longestMacro) return currentMacro;
 	return longestMacro.name.length < currentMacro.name.length
@@ -358,7 +363,7 @@ function reduceToLongestMacroName(longestMacro?: MacroBase, currentMacro?: Macro
 		: longestMacro;
 }
 /** Used to find all macros that start with the given macro name and then return the macro with the longest name. */
-function findLongestMacroName(macros: MacroBase[], cleanMacroName: string): MacroBase | undefined {
+function findLongestMacroName(macros: DiceMacroBase[], cleanMacroName: string): DiceMacroBase | undefined {
 	const matchingMacros = macros.filter(macro => cleanMacroName.startsWith(macro.name.toLowerCase()));
 	return matchingMacros.reduce(reduceToLongestMacroName, undefined);
 }
@@ -390,8 +395,8 @@ function parsePrefix(prefix: string): TPrefix {
 	return { count:1 };
 }
 
-/** returns [cleanPrefix, MacroBase, slicedArgs] */
-function findPrefixMacroArgs(macroTiers: MacroBase[][], input: string): [string, MacroBase | undefined, string] {
+/** returns [cleanPrefix, DiceMacroBase, slicedArgs] */
+function findPrefixMacroArgs(macroTiers: DiceMacroBase[][], input: string): [string, DiceMacroBase | undefined, string] {
 	const lower = input.toLowerCase();
 	const [_, dirtyPrefix, dirtyMacro] = lower.match(/^((?:\d*#)|(?:\d*k[hl]\d*#)|(?:[\+\-]))?(.*?)$/) ?? [];
 	const cleanPrefix = (dirtyPrefix ?? "").trim();
@@ -425,8 +430,8 @@ function parseMacroArgs(argString: string): TArgs {
 	return { indexed, named };
 }
 
-type MacroBaseAndArgs = TArgs & { macro?: MacroBase; prefix: TPrefix; };
-function parseMacroAndArgs(macroTiers: MacroBase[][], input: string): MacroBaseAndArgs {
+type DiceMacroBaseAndArgs = TArgs & { macro?: DiceMacroBase; prefix: TPrefix; };
+function parseMacroAndArgs(macroTiers: DiceMacroBase[][], input: string): DiceMacroBaseAndArgs {
 	const [prefix, macro, slicedArgs] = findPrefixMacroArgs(macroTiers, input);
 	const macroArgs = macro ? parseMacroArgs(slicedArgs) : null;
 	return {
@@ -465,8 +470,8 @@ function splitKeyValueFromBraces(input: string): [string, string] {
 	return [key, value];
 }
 
-type MacroBaseAndOutput = { macro: MacroBase; output: string; };
-function macroToDice(macroTiers: MacroBase[][], input: string): MacroBaseAndOutput | null {
+type DiceMacroBaseAndOutput = { macro: DiceMacroBase; output: string; };
+function macroToDice(macroTiers: DiceMacroBase[][], input: string): DiceMacroBaseAndOutput | null {
 	const { prefix, macro, indexed, named } = parseMacroAndArgs(macroTiers, input);
 	if (!macro) {
 		return null;
@@ -475,7 +480,7 @@ function macroToDice(macroTiers: MacroBase[][], input: string): MacroBaseAndOutp
 	let maxIndex = -1;
 	let dice = macro.dice
 		// indexed args
-		.replace(/\{(\d+)(:(?!:)([-+]?\d+))?\}/g, match => {
+		.replace(/\{(\d+)(:(?!:)[^}]+)?\}/g, match => {
 			const [argIndex, defaultValue] = splitKeyValueFromBraces(match);
 			maxIndex = Math.max(maxIndex, +argIndex);
 			return nonEmptyStringOrDefaultValue(indexed[+argIndex], defaultValue);

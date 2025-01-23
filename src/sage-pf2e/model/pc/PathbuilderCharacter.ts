@@ -13,7 +13,7 @@ import { Proficiency } from "../../../gameSystems/p20/lib/Proficiency.js";
 import { Skill } from "../../../gameSystems/p20/lib/Skill.js";
 import { ProficiencyType, SizeType } from "../../../gameSystems/p20/lib/types.js";
 import { toModifier } from "../../../gameSystems/utils/toModifier.js";
-import type { MacroBase } from "../../../sage-lib/sage/model/Macro.js";
+import type { DiceMacroBase } from "../../../sage-lib/sage/model/Macro.js";
 import type { GetStatPrefix } from "../../common.js";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository.js";
 import { ABILITIES } from "../../index.js";
@@ -483,7 +483,7 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 	}
 }
 
-function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): MacroBase {
+function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): DiceMacroBase {
 	if (weapon.dice) {
 		return { name:weapon.name, dice:weapon.dice };
 	}
@@ -659,7 +659,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		this.savingThrows = SavingThrows.for(this);
 	}
 
-	public getAttackMacros(): MacroBase[] { return this.core.weapons?.map(weapon => weaponToMacro(this, weapon)) ?? []; }
+	public getAttackMacros(): DiceMacroBase[] { return this.core.weapons?.map(weapon => weaponToMacro(this, weapon)) ?? []; }
 
 	//#region flags/has
 	public hasFeat(value: string): boolean {

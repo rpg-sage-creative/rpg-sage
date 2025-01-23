@@ -1,15 +1,16 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
-import { type Snowflake } from "@rsc-utils/core-utils";
+import { debug, type Snowflake } from "@rsc-utils/core-utils";
 import { quote } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalSubmitInteraction, type ButtonInteraction } from "discord.js";
 import type { LocalizedTextKey, Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { Macro, type MacroBase } from "../../../model/Macro.js";
 import type { Macros } from "../../../model/Macros.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
 import { parseDiceMatches, sendDice } from "../../dice.js";
 import { createMacroArgsModal, createMacroModal } from "./createMacroModal.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
-import { getArgs, type Args, type MacroState } from "./getArgs.js";
+import { getArgPairs, getArgs, type Args, type MacroState } from "./getArgs.js";
 import { macroToPrompt } from "./macroToPrompt.js";
 import { mCmdDetails } from "./mCmdDetails.js";
 import { mCmdList } from "./mCmdList.js";
@@ -83,9 +84,9 @@ async function rollMacro(sageInteraction: SageInteraction<ButtonInteraction>, ar
 async function showMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
 	// sageInteraction.replyStack.defer();
 	const macro = args.macro;
-	const macroArgs = macro.dice.matchAll(/\{(\w+)(?:\:(\w+))?\}/g) ?? [];
+	const macroArgs = macro.dice?.matchAll(/\{(\w+)(?:\:(\w+))?\}/g) ?? [];
 	const argPairs = [...macroArgs].map(match => ({ key:match[1], defaultValue:match[2] }));
-	const trailingArgs = macro.dice.includes("{...}");
+	const trailingArgs = macro.dice?.includes("{...}") ?? false;
 	const modal = await createMacroArgsModal(args, argPairs, trailingArgs);
 	await sageInteraction.interaction.showModal(modal);
 }
@@ -297,6 +298,11 @@ function createYesNoComponents(args: YesNoArgs): ActionRowBuilder<ButtonBuilder>
 	const yes = button(yesAction, "YES");
 	const no = button(noAction, "NO");
 	return [new ActionRowBuilder<ButtonBuilder>().addComponents(yes, no)];
+}
+
+export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
+	const pairs = getArgPairs(sageMessage);
+	debug(pairs);
 }
 
 async function handleNewMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {

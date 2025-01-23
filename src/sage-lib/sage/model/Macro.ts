@@ -2,6 +2,7 @@ import type { Optional } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { StringMatcher, stringOrUndefined, unwrap } from "@rsc-utils/string-utils";
 import { getBasicDiceRegex } from "../../../sage-dice/getBasicDiceRegex.js";
+import { parseDialogContent } from "../commands/dialog/parseDialogContent.js";
 import { isMath } from "../commands/dice/isMath.js";
 import { isRandomItem } from "../commands/dice/isRandomItem.js";
 import { isValidTable } from "../commands/dice/isValidTable.js";
@@ -15,18 +16,27 @@ export type MacroOrBase<Category extends string = string> = MacroBase<Category> 
 
 export type MacroBase<Category extends string = string> = {
 	category?: Category;
-	dice: string;
+	dice?: string;
+	dialog?: string;
 	name: string;
 };
 
-export type MacroType = "dice" | "items" | "math" | "table" | "tableUrl";
+// type DialogMacroBase<Category extends string = string> = MacroBase<Category> & { dice:never; };
+export type DiceMacroBase<Category extends string = string> = MacroBase<Category> & { dialog?:never; dice:string; };
+
+export type MacroType = "dialog" | "dice" | "items" | "math" | "table" | "tableUrl";
 
 export class Macro<Category extends string = string> {
 
 	private base: MacroBase<Category>;
 
-	public constructor({ name, category, dice }: MacroBase<Category>, public owner: TMacroOwner) {
-		this.base = { name, category:Macro.cleanCategory(category), dice };
+	public constructor({ name, category, dialog, dice }: MacroBase<Category>, public owner: TMacroOwner) {
+		this.base = {
+			name,
+			category: Macro.cleanCategory(category),
+			dialog: stringOrUndefined(dialog),
+			dice: stringOrUndefined(dice)
+		};
 	}
 
 	public get category(): Category | Uncategorized {
@@ -37,16 +47,29 @@ export class Macro<Category extends string = string> {
 		delete this._categoryMatcher;
 	}
 
-	public get dice(): string {
+	public get dialog(): string | undefined {
+		return this.base.dialog;
+	}
+	public set dialog(dialog: string | undefined) {
+		this.base.dialog = stringOrUndefined(dialog);
+		delete this.base.dice;
+		delete this._type;
+	}
+
+	public get dice(): string | undefined {
 		return this.base.dice;
 	}
-	public set dice(dice: string) {
-		this.base.dice = dice;
+	public set dice(dice: string | undefined) {
+		this.base.dice = stringOrUndefined(dice);
+		delete this.base.dialog;
 		delete this._type;
 	}
 
 	public get hasArgs(): boolean {
-		return /\{(\w+)(?:\:(\w+))?\}/.test(this.base.dice);
+		if (this.isDice()) {
+			return /\{(\w+)(?:\:(\w+))?\}/.test(this.base.dice!);
+		}
+		return false;
 	}
 
 	public get isUncategorized(): boolean {
@@ -64,7 +87,7 @@ export class Macro<Category extends string = string> {
 	private _type?: MacroType;
 	public get type(): MacroType {
 		if (!this._type) {
-			this._type = Macro.getType(this.dice);
+			this._type = Macro.getType(this.dialog ?? this.dice);
 		}
 		return this._type!;
 	}
@@ -88,16 +111,48 @@ export class Macro<Category extends string = string> {
 
 	/** same name, category, dice ... possibly different case */
 	public equals(other: MacroBase): boolean {
-		return this.namesMatch(other.name)
-			&& this.categoriesMatch(other.category)
-			&& this.dice.toLowerCase() === other.dice.toLowerCase();
+		if (this.matches(other)) {
+			if (this.isDialog()) {
+				return this.dialog?.toLowerCase() === other.dialog?.toLowerCase();
+			}else {
+				return this.dice?.toLowerCase() === other.dice?.toLowerCase();
+			}
+		}
+		return false;
 	}
 
 	/** all values are the exact same */
 	public identical(other: MacroBase): boolean {
-		return this.category === other.category
-			&& this.name === other.name
-			&& this.dice === other.dice;
+		if (this.category === other.category && this.name === other.name) {
+			return this.isDialog()
+				? this.dialog === other.dialog
+				: this.dice === other.dice;
+		}
+		return false;
+	}
+
+	public isDialog(): this is Macro<Category> & { dialog:string; dice:never; } {
+		return this.type === "dialog";
+	}
+
+	public isDice(): this is Macro<Category> & { dialog:never; dice:string; } {
+		return this.type === "dice";
+	}
+
+	public isItems(): this is Macro<Category> & { dialog:never; dice:string; } {
+		return this.type === "items";
+	}
+
+	public isMath(): this is Macro<Category> & { dialog:never; dice:string; } {
+		return this.type === "math";
+	}
+
+	public isTable(): this is Macro<Category> & { dialog:never; dice:string; } {
+		return this.type === "table";
+	}
+
+	public isTableUrl(): this is Macro<Category> & { dialog:never; dice:string; } {
+		return this.type === "tableUrl";
 	}
 
 	/** same name and category ... possibly different case */
@@ -127,6 +182,9 @@ export class Macro<Category extends string = string> {
 
 	public static getType(value: Optional<string>): MacroType {
 		if (value) {
+			if (parseDialogContent(value)) {
+				return "dialog";
+			}
 			if (isUrl(unwrap(value, "[]"))) {
 				return "tableUrl";
 			}
@@ -150,12 +208,14 @@ export class Macro<Category extends string = string> {
 	public static async validateMacro(macro: MacroBase | Macro): Promise<boolean> {
 		const type = "type" in macro ? macro.type : Macro.getType(macro.dice);
 		switch(type) {
+			case "dialog":
+				return macro.dialog ? parseDialogContent(macro.dialog) !== undefined : false;
 			case "dice":
-				return getBasicDiceRegex().test(macro.dice);
+				return macro.dice ? getBasicDiceRegex().test(macro.dice) : false;
 			case "items":
-				return true;
+				return macro.dice ? isRandomItem(macro.dice) && !getBasicDiceRegex().test(macro.dice) : false;
 			case "math":
-				return true;
+				return macro.dice ? isMath(macro.dice) : false;
 			case "table":
 				return (await isValidTable(macro.dice)) === "table";
 			case "tableUrl":
