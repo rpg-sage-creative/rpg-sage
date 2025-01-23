@@ -7,7 +7,19 @@ import { createListComponents } from "./createListComponents.js";
 import { createCustomId } from "./customId.js";
 import type { Args, MacroState } from "./getArgs.js";
 
-type CreateArgs = { actorId: Snowflake; localize: Localizer; messageId?: Snowflake; mode:"edit"|"roll"; state: MacroState; };
+type DIE = "🎲";
+const DIE: DIE = "🎲";
+
+type GEAR = "⚙️";
+const GEAR: GEAR = "⚙️";
+
+type CreateArgs = {
+	actorId: Snowflake;
+	localize: Localizer;
+	messageId?: Snowflake;
+	mode: "edit" | "roll";
+	state: MacroState;
+};
 
 function createRollMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
 	return new ButtonBuilder()
@@ -17,16 +29,14 @@ function createRollMacroButton({ actorId, localize, messageId, state }: CreateAr
 		;
 }
 
-function createShowMacroArgsButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
+function createShowMacroArgsButton({ actorId, localize, messageId, state }: CreateArgs, disabled?: boolean): ButtonBuilder {
 	return new ButtonBuilder()
 		.setCustomId(createCustomId({ action:"showMacroArgs", actorId, messageId, state }))
 		.setStyle(ButtonStyle.Secondary)
 		.setLabel(localize("PROMPT_ROLL"))
+		.setDisabled(disabled === true)
 		;
 }
-
-const GEAR = "⚙️";
-const DIE = "🎲";
 
 function createToggleModeButton({ actorId, messageId, mode, state }: CreateArgs): ButtonBuilder {
 	return new ButtonBuilder()
@@ -108,7 +118,6 @@ export async function createMacroComponents(sageCommand: SageCommand, args: Args
 
 	components.pop();
 	const modeButton = createToggleModeButton(buttonArgs);
-	const closeButton = createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary });
 
 	if (mode === "edit") {
 		const newButton = createNewMacroButton(buttonArgs);
@@ -116,12 +125,12 @@ export async function createMacroComponents(sageCommand: SageCommand, args: Args
 		// const copyButton = createCopyMacroButton(buttonArgs);
 		const deleteButton = createDeleteMacroButton(buttonArgs);
 
-		components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(newButton, editButton, deleteButton, modeButton, closeButton));
+		components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(newButton, editButton, deleteButton, modeButton));
 
 	}else {
 		const rollButton = createRollMacroButton(buttonArgs);
-		const showArgsButton = createShowMacroArgsButton(buttonArgs);
-		if (!args.macro.hasArgs) showArgsButton.setDisabled(true);
+		const showArgsButton = createShowMacroArgsButton(buttonArgs, !args.macro.hasArgs);
+		const closeButton = createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary });
 
 		components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(rollButton, showArgsButton, modeButton, closeButton));
 
