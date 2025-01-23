@@ -57,7 +57,7 @@ async function promptDeleteMacro(sageInteraction: SageInteraction<ButtonInteract
 }
 
 /** Creates and shows the modal for editing an existing macro. */
-async function showEditMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any>): Promise<void> {
+async function showEditMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
 	// sageInteraction.replyStack.defer();
 	const modal = await createMacroModal(sageInteraction, args, "promptEditMacro");
 	await sageInteraction.interaction.showModal(modal);
@@ -132,16 +132,8 @@ async function rollMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>
 }
 
 export async function handleMacroInteraction(sageInteraction: SageInteraction<any>): Promise<void> {
-	// sageInteraction.replyStack.defer();
-
 	const args = await getArgs<any, any>(sageInteraction);
 	const action = args.customIdArgs.action;
-
-	// if (action !== "showNewMacro" && action !== "promptNewMacro" && !args.macro) {
-	// 	debug({customId:sageInteraction.interaction.customId});
-	// 	const localize = sageInteraction.getLocalizer();
-	// 	return sageInteraction.replyStack.whisper(localize("CANNOT_FIND_S", args.selectedMacro));
-	// }
 
 	switch(action) {
 		// case "copyMacro": break;
@@ -217,7 +209,7 @@ async function promptEditMacro(sageInteraction: SageInteraction<ButtonInteractio
 		const invalidKey = await isInvalid(args.macros, newMacro, true);
 		if (invalidKey) {
 			await sageInteraction.replyStack.reply(localize(invalidKey));
-			return showNewMacro(sageInteraction, args);
+			return showEditMacro(sageInteraction, args);
 		}
 
 		const message = await sageInteraction.interaction.channel?.messages.fetch(args.customIdArgs.messageId!);
@@ -354,17 +346,30 @@ async function handleNewMacro(sageInteraction: SageInteraction<ModalSubmitIntera
 	const isConfirmed = args.customIdArgs?.action === "confirmNewMacro";
 	if (isConfirmed) {
 		const saved = macro ? await macros.addAndSave(macro) : false;
-		if (!saved) {
+		if (saved) {
+			// update args to have new meta ...
+			const { ownerType, ownerPageIndex, ownerId } = args.state.next;
+			const { categoryPageIndex = -1, categoryIndex = -1, macroPageIndex = -1, macroIndex = -1 } = args.macros.findMacroMeta(macro?.name!) ?? {};
+			args.state.next = { ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex, macroIndex };
+			args.macro = macro;
+
+		}else {
 			const localize = sageInteraction.getLocalizer();
 			// await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
 			await sageInteraction.replyStack.reply(localize("SORRY_WE_DONT_KNOW"));
 		}
 
 		// return to viewing the macro
-		await mCmdDetails(sageInteraction);
+		await mCmdDetails(sageInteraction, args as Args<any>);
 
 	}else {
 		// return to viewing the category?
+		const { ownerType, ownerPageIndex, ownerId } = args.state.prev;
+		const { categoryPageIndex, categoryIndex } = args.state.prev;
+		args.state.next = { ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex:-1, macroIndex:-1 };
+		args.macro = undefined;
+
+		await mCmdList(sageInteraction, args as Args<any>);
 	}
 
 }
