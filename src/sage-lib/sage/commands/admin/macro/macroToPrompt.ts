@@ -10,9 +10,10 @@ type PromptOptions = {
 export function macroToPrompt(sageCommand: SageCommand, macro: Macro, opts?: PromptOptions): string {
 	const localize = sageCommand.getLocalizer();
 
+	const category = macro.isUncategorized ? `*${localize("UNCATEGORIZED")}*` : macro.category;
 	const parts = [
 		`\n> **${localize("NAME")}:** ${macro.name}`,
-		`\n> **${localize("CATEGORY")}:** ${macro.category ?? localize("UNCATEGORIZED")}`
+		`\n> **${localize("CATEGORY")}:** ${category}`
 	];
 
 	const unwrapped = unwrap(macro.dice, "[]");
@@ -44,9 +45,9 @@ export function macroToPrompt(sageCommand: SageCommand, macro: Macro, opts?: Pro
 
 	if (opts?.share) {
 		const nameArg = `name="${macro.name}"`;
-		const catArg = macro.category ? `cat="${macro.category}"` : ``;
-		const diceArg = `dice=${quote(macro.dice)}`;
-		parts.push(`\n\n*${localize("SHARE")}*:\`\`\`sage! macro set ${nameArg} ${catArg} ${diceArg}\`\`\``);
+		const catArg = macro.isUncategorized ? `` : ` cat="${macro.category}"`;
+		const diceArg = ` dice=${quote(macro.dice)}`;
+		parts.push(`\n\n*${localize("SHARE")}*:\`\`\`sage! macro set ${nameArg}${catArg}${diceArg}\`\`\``);
 	}
 
 	return parts.join("");
