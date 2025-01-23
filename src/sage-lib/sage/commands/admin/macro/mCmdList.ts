@@ -90,14 +90,17 @@ async function toRenderableContent(sageCommand: SageCommand, args: Args): Promis
 	return content;
 }
 
-export async function mCmdList(sageCommand: SageCommand): Promise<void> {
+export async function mCmdList(sageCommand: SageCommand, args?: Args | boolean): Promise<void> {
 	const localize = sageCommand.getLocalizer();
 
 	if (!sageCommand.allowCommand && !sageCommand.allowDice) {
 		return sageCommand.replyStack.whisper(localize("CANNOT_MANAGE_MACRO_HERE"));
 	}
 
-	const args = await getArgs(sageCommand);
+	if (!args || args === true) {
+		args = await getArgs(sageCommand);
+	}
+
 	const content = await toRenderableContent(sageCommand, args);
 	const components = await createListComponents(sageCommand, args);
 
