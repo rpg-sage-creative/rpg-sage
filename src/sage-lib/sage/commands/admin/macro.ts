@@ -1,6 +1,6 @@
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { createCustomIdRegExp } from "./macro/customId.js";
-import { handleMacroInteraction } from "./macro/handleMacroInteraction.js";
+import { handleMacroInteraction, handleSetMacro } from "./macro/handleMacroInteraction.js";
 import { mCmdDetails } from "./macro/mCmdDetails.js";
 import { handleSelection, mCmdList } from "./macro/mCmdList.js";
 
@@ -56,6 +56,7 @@ export function registerMacro(): void {
 
 	registerListeners({ commands:["macros", "macro|list"], message:mCmdList });
 	registerListeners({ commands:["macro|details", createCustomIdRegExp("selectMacro")], message:mCmdDetails, interaction:mCmdDetails });
+	registerListeners({ commands:["macro|set"], message:handleSetMacro });
 
 	registerListeners({ commands:[createCustomIdRegExp(
 		"selectOwnerType",
