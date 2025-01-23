@@ -52,7 +52,7 @@ export function macroToPrompt(sageCommand: SageCommand, macro: Macro, opts?: Pro
 
 	if (opts?.share) {
 		const nameArg = `name="${macro.name}"`;
-		const catArg = macro.isUncategorized ? `` : ` cat="${macro.category}"`;
+		const catArg = macro.isUncategorized ? `` : ` category="${macro.category}"`;
 		const contentArg = ` ${macro.type}=${quote(macro.dialog ?? macro.dice ?? "")}`;
 		parts.push(`\n\n*${localize("SHARE")}*:\`\`\`sage! macro set ${nameArg}${catArg}${contentArg}\`\`\``);
 	}
