@@ -210,7 +210,7 @@ async function handleEditMacroModal(sageInteraction: SageInteraction<ButtonInter
 		const invalidKey = await isInvalid(args.macros, newMacro, true);
 		if (invalidKey) {
 			const localize = sageInteraction.getLocalizer();
-			await sageInteraction.replyStack.reply(localize(invalidKey));
+			await sageInteraction.replyStack.reply(`${localize(invalidKey)} ${localize("MACROS_WIKI")}`);
 			return showEditMacroModal(sageInteraction, args);
 		}
 
@@ -310,6 +310,8 @@ function createYesNoComponents(args: YesNoArgs): ActionRowBuilder<ButtonBuilder>
 }
 
 export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
+	const localize = sageMessage.getLocalizer();
+
 	const pairs = getArgPairs(sageMessage);
 
 	const name = pairs.namePair?.value;
@@ -318,7 +320,7 @@ export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 	const dice = pairs.contentPair?.key !== "dialog" ? pairs.contentPair?.value : undefined;
 
 	if (!name || (!dialog && !dice)) {
-		return sageMessage.replyStack.whisper("Try: `sage! macros`");
+		return sageMessage.replyStack.whisper(`${localize("SORRY_WE_DONT_KNOW")} ${localize("MACROS_WIKI")}`);
 	}
 
 	const ownerType = "user";
@@ -329,12 +331,10 @@ export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 	// validate the macro
 	const macros = await Macros.parse(sageMessage, newMacro.owner);
 	if (!macros) {
-		return sageMessage.replyStack.whisper("SORRY, I NEED A BETTER ERROR MESSAGE HERE");
+		return sageMessage.replyStack.whisper(`${localize("SORRY_WE_DONT_KNOW")} ${localize("MACROS_WIKI")}`);
 	}
 
-	const message = await sageMessage.replyStack.send(sageMessage.getLocalizer()("PLEASE_WAIT"), true);
-
-	const invalidKey = await isInvalid(macros, newMacro, false);
+	const message = await sageMessage.replyStack.send(localize("PLEASE_WAIT"), true);
 
 	const args = {
 		customIdArgs: { messageId: message?.id },
@@ -342,6 +342,7 @@ export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 	} as Args<any, any>;
 
 	// if duplicate, use the edit logic
+	const invalidKey = await isInvalid(macros, newMacro, false);
 	if (invalidKey === "INVALID_MACRO_DUPLICATE") {
 		const oldMacro = macros.find(newMacro.name)!;
 		return promptEditMacro(sageMessage, args, { oldMacro, newMacro });
@@ -373,7 +374,7 @@ async function handleNewMacroModal(sageInteraction: SageInteraction<ButtonIntera
 
 		// if still invalid, redo modal
 		if (invalidKey) {
-			await sageInteraction.replyStack.reply(localize(invalidKey));
+			await sageInteraction.replyStack.reply(`${localize(invalidKey)} ${localize("MACROS_WIKI")}`);
 			return showNewMacroModal(sageInteraction, args);
 		}
 
