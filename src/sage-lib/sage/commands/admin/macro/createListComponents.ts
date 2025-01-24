@@ -203,15 +203,14 @@ export function createCloseButton(sageCommand: SageCommand): ButtonBuilder {
 // 		;
 // }
 
-// function createDeleteAllButton({ actorId, localize, state }: CreateArgs): ButtonBuilder {
-// 	const customId = createCustomId({ actorId, action:"deleteAll", state });
-// 	return new ButtonBuilder()
-// 		.setCustomId(customId)
-// 		.setStyle(ButtonStyle.Danger)
-// 		.setLabel(localize("DELETE_ALL"))
-// 		.setDisabled(true)
-// 		;
-// }
+function createDeleteAllButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
+	const customId = createCustomId({ action:"promptDeleteAll", actorId, messageId, state });
+	return new ButtonBuilder()
+		.setCustomId(customId)
+		.setStyle(ButtonStyle.Danger)
+		.setLabel(localize("DELETE_ALL"))
+		;
+}
 
 export async function createListComponents(sageCommand: SageCommand, args: Args): Promise<ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[]> {
 	const componentsAndMode = await createListComponentsAndMode(sageCommand, args);
@@ -231,6 +230,7 @@ export async function createListComponentsAndMode(sageCommand: SageCommand, args
 
 	const { actorId } = sageCommand;
 	const { macros } = args;
+	const { messageId } = args.customIdArgs ?? {};
 	const state = args.state?.next;
 
 	// if we don't have macros then that means we haven't selected a macro owner ... show those separately from the macro selection sequence
@@ -253,13 +253,12 @@ export async function createListComponentsAndMode(sageCommand: SageCommand, args
 			components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectOwnerIdSelect));
 		}
 
-		const closeButton = createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary });
-		components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(closeButton));
+		components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(createCloseButton(sageCommand)));
 
 		return { components, mode };
 	}
 
-	const baseArgs = { actorId, localize, macros, mode, state }
+	const baseArgs = { actorId, localize, macros, messageId, mode, state }
 
 	// add category pages dropdown if we have more than 1 page of categories
 	if (macros.shouldShowCategoryPages()) {
@@ -306,11 +305,11 @@ export async function createListComponentsAndMode(sageCommand: SageCommand, args
 		// 		createDeleteCategoryButton({ actorId, localize, state })
 		// 	);
 		// }
-		// if (!macros.isEmpty) {
-		// 	buttonRow.addComponents(
-		// 		createDeleteAllButton({ actorId, localize, state })
-		// 	);
-		// }
+		if (!macros.isEmpty) {
+			buttonRow.addComponents(
+				createDeleteAllButton(baseArgs).setDisabled(macros.isEmpty)
+			);
+		}
 		buttonRow.addComponents(
 			createToggleModeButton(baseArgs),
 		);

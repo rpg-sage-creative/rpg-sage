@@ -79,6 +79,10 @@ export function registerMacro(): void {
 		"confirmDeleteMacro",
 		"cancelDeleteMacro",
 
+		"promptDeleteAll",
+		"confirmDeleteAll",
+		"cancelDeleteAll",
+
 		"showEditMacroModal",
 		"handleEditMacroModal",
 		"confirmEditMacro",

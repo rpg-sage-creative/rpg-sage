@@ -55,6 +55,7 @@ export class Macros<Category extends string = string> {
 	public macroMap!: Map<string, MacroMeta<Category>>;
 	public tree!: CategoryPageMeta<Category>[];
 	public get isEmpty() { return this.macroMap.size === 0; }
+	public get size() { return this.macroMap.size; }
 	public get type() { return this.owner.type; }
 	public get typeKey() { return this.owner.typeKey; }
 
@@ -325,6 +326,17 @@ export class Macros<Category extends string = string> {
 		const baseMacroIndex = macros.findIndex(base => base.category === macro.category && base.name === macro.name);
 		if (baseMacroIndex > -1) {
 			macros.splice(baseMacroIndex, 1);
+			this.mapMacros();
+			return hasMacros.save();
+		}
+		return false;
+	}
+
+	public async removeAllAndSave(): Promise<boolean> {
+		const { hasMacros } = this;
+		const { macros } = hasMacros;
+		if (macros.length > 0) {
+			macros.length = 0;
 			this.mapMacros();
 			return hasMacros.save();
 		}

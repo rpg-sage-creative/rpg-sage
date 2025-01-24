@@ -48,6 +48,7 @@ async function promptDeleteMacro(sageInteraction: SageInteraction<ButtonInteract
 		const content = sageInteraction.createAdminRenderable();
 		content.append(`<h3>${localize("DELETE_MACRO_?")}</h3>`);
 		content.append(`<h2>${args.macro.name}</h2>`);
+		content.append(ansiDanger(sageInteraction));
 
 		const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelDeleteMacro", state, yesAction:"confirmDeleteMacro" });
 
@@ -56,6 +57,99 @@ async function promptDeleteMacro(sageInteraction: SageInteraction<ButtonInteract
 	}else {
 		await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
 	}
+}
+
+/**
+ * https://gist.github.com/kkrypt0nn/a02506f3712ff2d1c8ca7c9e0aed7c06
+	Text Colors
+
+	30: Gray
+	31: Red
+	32: Green
+	33: Yellow
+	34: Blue
+	35: Pink
+	36: Cyan
+	37: White
+	Background Colors
+
+	40: Firefly dark blue
+	41: Orange
+	42: Marble blue
+	43: Greyish turquoise
+	44: Gray
+	45: Indigo
+	46: Light gray
+	47: White
+ */
+function createColorCode(args?: { backColor?:number; textColor?:number; }): string {
+	if (args?.backColor && args?.textColor) {
+		return `\u001b[1;${args.backColor};${args.textColor}m`;
+
+	}else if (args?.backColor) {
+		return `\u001b[0;${args.backColor}m`;
+
+	}else if (args?.textColor) {
+		return `\u001b[1;${args.textColor}m`;
+
+	}else {
+		// return the reset code
+		return `\u001b[0m`;
+	}
+}
+
+function ansiText(text: string, colors: { backColor?:number; textColor?:number; }): string {
+	const ticks = "```";
+	const prefix = createColorCode(colors);
+	const suffix = createColorCode();
+	return `${ticks}ansi\n${prefix}${text}${suffix}\n${ticks}`;
+}
+
+function ansiDanger(sageCommand: SageCommand): string {
+	const localizedDanger = sageCommand.getLocalizer()("WARNING_CANNOT_BE_UNDONE");
+	return ansiText(localizedDanger, { textColor:31 });
+}
+
+/** Prompts the user with the count of all macros and Yes/No buttons to confirm deletion. */
+async function promptDeleteAll(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+	sageInteraction.replyStack.defer();
+
+	const localize = sageInteraction.getLocalizer();
+
+	const message = await sageInteraction.fetchMessage();
+	if (message) {
+		const { actorId } = sageInteraction;
+		const { messageId } = args.customIdArgs;
+		const state = args.state.prev;
+
+		const content = sageInteraction.createAdminRenderable();
+		content.append(`<h3>${localize("DELETE_ALL_X_MACROS_?", args.macros.size)}</h3>`);
+		content.append(ansiDanger(sageInteraction));
+
+		const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelDeleteAll", state, yesAction:"confirmDeleteAll" });
+
+		await message.edit(sageInteraction.resolveToOptions({ embeds:content, components }));
+
+	}else {
+		await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
+	}
+}
+
+/** Responds to the Yes/No buttons when prompting to delete all macros. */
+async function handleDeleteAll(sageInteraction: SageInteraction<ButtonInteraction>, { customIdArgs, macros }: Args<true, true>): Promise<void> {
+	sageInteraction.replyStack.defer();
+
+	const isConfirmed = customIdArgs.action === "confirmDeleteAll";
+	if (isConfirmed) {
+		const deleted = await macros.removeAllAndSave();
+		if (deleted) {
+			return mCmdList(sageInteraction);
+		}else {
+			const localize = sageInteraction.getLocalizer();
+			await sageInteraction.replyStack.whisper(localize("SORRY_WE_DONT_KNOW"));
+		}
+	}
+	await mCmdList(sageInteraction);
 }
 
 /** Creates and shows the modal for editing an existing macro. */
@@ -168,6 +262,10 @@ export async function handleMacroInteraction(sageInteraction: SageInteraction<an
 		case "promptDeleteMacro": return promptDeleteMacro(sageInteraction, args);
 		case "confirmDeleteMacro":
 		case "cancelDeleteMacro": return handleDeleteMacro(sageInteraction, args);
+
+		case "promptDeleteAll": return promptDeleteAll(sageInteraction, args);
+		case "confirmDeleteAll":
+		case "cancelDeleteAll": return handleDeleteAll(sageInteraction, args);
 
 		case "showEditMacroModal": return showEditMacroModal(sageInteraction, args);
 		case "handleEditMacroModal": return handleEditMacroModal(sageInteraction, args);

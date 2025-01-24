@@ -67,6 +67,10 @@ export enum MacroAction {
 	confirmDeleteMacro,
 	cancelDeleteMacro,
 
+	promptDeleteAll,
+	confirmDeleteAll,
+	cancelDeleteAll,
+
 	rollMacro,
 	showMacroArgs,
 	rollMacroArgs,
