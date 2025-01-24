@@ -189,9 +189,11 @@ const enUS = {
 	"MESSAGE_WAS_DELETED": `A message from RPG Sage to you was deleted in #{0} by #{1}.`,
 	"UNABLE_TO_DELETE_MESSAGE_:": `Sorry, RPG Sage is not able to delete this message: #{0}`,
 
-	"SAGE_MISSING_PERM_IN_THAT_CHANNEL": `RPG Sage doesn't appear to have the #{0} permission in that channel.`,
+	"SAGE_MISSING_S_PERM_IN_THAT_CHANNEL": `RPG Sage doesn't appear to have the #{0} permission in that channel.`,
 	"SAGE_MISSING_ACCESS_TO_THAT_CHANNEL": `RPG Sage doesn't appear to have access to that channel.`,
 	"WE_TRIED_TO_DM_YOU": `We tried to DM this alert to you, but were unable to.`,
+
+	"WARNING_CANNOT_BE_UNDONE": `Warning, this action cannot be undone!`,
 };
 
 export type LocalizedTextKey = keyof typeof enUS;

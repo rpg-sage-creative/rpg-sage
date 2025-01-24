@@ -167,7 +167,7 @@ async function messageDeleteButtonHandler(sageInteraction: SageInteraction<Butto
 			const perms = message.channel.permissionsFor(getSageId());
 			if (perms) {
 				if (perms.missing("ManageMessages")) {
-					content += `\n- ${localize("SAGE_MISSING_PERM_IN_THAT_CHANNEL", "ManageMessages")}`;
+					content += `\n- ${localize("SAGE_MISSING_S_PERM_IN_THAT_CHANNEL", "ManageMessages")}`;
 				}
 			}else {
 				content += `\n- ${localize("SAGE_MISSING_ACCESS_TO_THAT_CHANNEL")}`;
