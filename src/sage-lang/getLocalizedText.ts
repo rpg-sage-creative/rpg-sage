@@ -37,6 +37,7 @@ const enUS = {
 	"PAGE": `Page`,
 	"PC": "PC",
 	"REIMPORT": `Reimport`,
+	"RESET": `Reset`,
 	"ROLL": `Roll`,
 	"SERVERS": `Servers`,
 	"SHARE": `Share`,
