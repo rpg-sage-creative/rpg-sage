@@ -226,7 +226,7 @@ export async function createListComponentsAndMode(sageCommand: SageCommand, args
 	const components: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [];
 
 	const macroMode = await MacroMode.from(sageCommand);
-	const { mode } = macroMode;
+	let { mode } = macroMode;
 
 	const { actorId } = sageCommand;
 	const { macros } = args;
@@ -235,6 +235,8 @@ export async function createListComponentsAndMode(sageCommand: SageCommand, args
 
 	// if we don't have macros then that means we haven't selected a macro owner ... show those separately from the macro selection sequence
 	if (!macros) {
+		mode = "roll";
+
 		const baseArgs = { actorId, localize, macros, mode, state }
 
 		const selectOwnerTypeSelect = createSelectOwnerTypeSelect(baseArgs);
@@ -289,11 +291,14 @@ export async function createListComponentsAndMode(sageCommand: SageCommand, args
 		return { components, mode };
 	}
 
+	// we currently don't have enough buttons to need an "other" category
+	if (mode === "other") mode = "roll";
+
 	// add buttons
 
 	const buttonRow = new ActionRowBuilder<ButtonBuilder>();
 
-	const canInfo = args.customIdArgs?.actorId === sageCommand.actorId;
+	// const canInfo = args.customIdArgs?.actorId === sageCommand.actorId;
 	const canEdit = args.macros?.canActorEdit(sageCommand);
 
 	if (mode === "edit" && canEdit) {
@@ -314,13 +319,16 @@ export async function createListComponentsAndMode(sageCommand: SageCommand, args
 			createToggleModeButton(baseArgs),
 		);
 
-	}else if (mode === "other" && canInfo) {
-		buttonRow.addComponents(
-			createResetControlButton(baseArgs),
-			createToggleModeButton(baseArgs),
-		);
+	// }else if (mode === "other" && canInfo) {
+	// 	buttonRow.addComponents(
+	// 		createResetControlButton(baseArgs),
+	// 		createToggleModeButton(baseArgs),
+	// 	);
 
 	}else {
+		buttonRow.addComponents(
+			createResetControlButton(baseArgs),
+		);
 		buttonRow.addComponents(
 			createCloseButton(sageCommand),
 		);
