@@ -117,24 +117,43 @@ export async function createMacroComponents(sageCommand: SageCommand, args: Args
 	const buttonArgs = { actorId, localize, messageId, mode, state };
 
 	components.pop();
-	const modeButton = createToggleModeButton(buttonArgs);
 
-	if (mode === "edit") {
-		const newButton = createNewMacroButton(buttonArgs);
-		const editButton = createShowEditMacroModalButton(buttonArgs);
-		// const copyButton = createCopyMacroButton(buttonArgs);
-		const deleteButton = createDeleteMacroButton(buttonArgs);
+	const row = new ActionRowBuilder<ButtonBuilder>();
 
-		components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(newButton, editButton, deleteButton, modeButton));
+	let canEdit = false;
+	switch(args.macros?.type) {
+		case "global": canEdit = sageCommand.isSuperUser; break;
+		case "server": canEdit = sageCommand.canManageServer; break;
+		case "game": canEdit = sageCommand.canAdminGame; break;
+		case "user": canEdit = actorId === args.customIdArgs?.state.ownerId; break;
+		case "character": canEdit = sageCommand.findCharacter(args.customIdArgs?.state.ownerId!)?.userDid === actorId; break;
+	}
+
+	if (mode === "edit" && canEdit) {
+		row.addComponents(
+			createNewMacroButton(buttonArgs),
+			createShowEditMacroModalButton(buttonArgs),
+			createDeleteMacroButton(buttonArgs),
+			createToggleModeButton(buttonArgs)
+		);
 
 	}else {
-		const rollButton = createRollMacroButton(buttonArgs);
-		const showArgsButton = createShowMacroArgsButton(buttonArgs, !args.macro.hasArgs);
-		const closeButton = createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary });
-
-		components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(rollButton, showArgsButton, modeButton, closeButton));
+		row.addComponents(
+			createRollMacroButton(buttonArgs),
+			createShowMacroArgsButton(buttonArgs, !args.macro.hasArgs)
+		);
+		if (canEdit) {
+			row.addComponents(
+				createToggleModeButton(buttonArgs)
+			);
+		}
+		row.addComponents(
+			createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary })
+		);
 
 	}
+
+	components.push(row);
 
 	return components;
 }
