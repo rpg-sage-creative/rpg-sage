@@ -201,35 +201,40 @@ export async function createListComponents(sageCommand: SageCommand, args: Args)
 	}
 
 	// add category pages dropdown if we have more than 1 page of categories
-	if (macros.showCategoryPages()) {
+	if (macros.shouldShowCategoryPages()) {
 		const selectCategoryPageSelect = createSelectCategoryPageSelect({ actorId, localize, macros, state });
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectCategoryPageSelect));
 	}
 
 	// add category dropdown for the currently selected category page
-	if (macros.showCategories()) {
+	if (macros.shouldShowCategories()) {
 		const selectCategorySelect = createSelectCategorySelect({ actorId, localize, macros, state });
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectCategorySelect));
 	}
 
 	// add macro pages dropdown if we have more than 1 page of categories
-	if (macros.showMacroPages(state)) {
+	if (macros.shouldShowMacroPages(state)) {
 		const selectMacroPageSelect = createSelectMacroPageSelect({ actorId, localize, macros, state });
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMacroPageSelect));
 	}
 
 	// add macro dropdown
-	if (macros.showMacros(state)) {
+	if (macros.shouldShowMacros(state)) {
 		const selectMacroSelect = createSelectMacroSelect({ actorId, localize, macros, state });
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMacroSelect));
 	}
+
+	const buttonRow = new ActionRowBuilder<ButtonBuilder>();
 
 	// add buttons
 	const newButton = createNewMacroButton({ actorId, localize, state });
 	// const deleteButton = createDeleteCategoryButton({ actorId, localize, state });
 	// const deleteAllButton = createDeleteAllButton({ actorId, localize, state });
 	const closeButton = createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary });
-	components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(newButton, closeButton));
+
+	buttonRow.addComponents(newButton, closeButton)
+
+	components.push(buttonRow);
 
 	return components;
 }
