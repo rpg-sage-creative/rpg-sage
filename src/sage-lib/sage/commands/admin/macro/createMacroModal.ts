@@ -1,6 +1,5 @@
 import { type Snowflake } from "@rsc-utils/core-utils";
 import { ModalBuilder } from "@rsc-utils/discord-utils";
-import type { MacroOwnerTypeKey } from "../../../model/MacroOwner.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args } from "./getArgs.js";
@@ -50,21 +49,19 @@ export async function createMacroModal(sageCommand: SageCommand, args: Args<true
 
 	let name = "";
 	let category = macro?.category ?? macros.getCategory(state) ?? "";
+	let dialog = "";
 	let dice = "";
 
-
-	const actionType: `${typeof action}|${MacroOwnerTypeKey}` = `${action}|${macros.type}`;
-	switch(actionType) {
-		case "handleNewMacroModal|user":
-			modal.setTitle(localize("CREATE_USER_MACRO"));
-			break;
-		case "handleEditMacroModal|user":
-		default:
-			name = macro?.name ?? "";
-			dice = macro?.dice ?? "";
-			modal.setTitle(localize("EDIT_USER_MACRO"));
-			break;
+	if (action === "handleEditMacroModal") {
+		name = macro?.name ?? "";
+		dialog = macro?.dialog ?? "";
+		dice = macro?.dice ?? "";
 	}
+
+	const createOrEdit = action === "handleNewMacroModal" ? "CREATE" : "EDIT";
+	const macroType = macros.type.toUpperCase();
+	const titleKey = `${createOrEdit}_${macroType}_MACRO` as "EDIT_USER_MACRO";
+	modal.setTitle(localize(titleKey));
 
 	modal.addShortText({ maxLength:80, required:true })
 		.setCustomId("name")
@@ -78,19 +75,26 @@ export async function createMacroModal(sageCommand: SageCommand, args: Args<true
 		.setPlaceholder(localize("MACRO_CATEGORY_PLACEHOLDER"))
 		.setValue(category);
 
-	if (macro?.type === "table") {
+	if (macro?.isTable()) {
 		modal.addParagraph({ required:true })
-			.setCustomId("table")
+			.setCustomId("dice")
 			.setLabel(localize("TABLE"))
 			.setPlaceholder(localize("MACRO_TABLE_PLACEHOLDER"))
 			.setValue(dice);
 
-	}else if (macro?.type === "items") {
+	}else if (macro?.isItems()) {
 		modal.addParagraph({ required:true })
-			.setCustomId("items")
+			.setCustomId("dice")
 			.setLabel(localize("ITEMS"))
 			.setPlaceholder(localize("MACRO_ITEMS_PLACEHOLDER"))
 			.setValue(dice);
+
+	}else if (macro?.isDialog()) {
+		modal.addParagraph({ required:true })
+			.setCustomId("dialog")
+			.setLabel(localize("DIALOG"))
+			.setPlaceholder(localize("MACRO_DIALOG_PLACEHOLDER"))
+			.setValue(dialog);
 
 	}else {
 		modal.addParagraph({ required:true })
