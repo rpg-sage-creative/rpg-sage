@@ -1,4 +1,4 @@
-import { debug, type Snowflake } from "@rsc-utils/core-utils";
+import { type Snowflake } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, StringSelectMenuBuilder, type MessageActionRowComponent } from "discord.js";
 import type { Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -113,21 +113,13 @@ export async function createMacroComponents(sageCommand: SageCommand, args: Args
 	const messageId = args.customIdArgs?.messageId;
 	const state = args.state.next;
 	const mode = getMacroMode(sageCommand, actorId, messageId, state);
-	debug({action:args.customIdArgs?.action,mode});
 	const buttonArgs = { actorId, localize, messageId, mode, state };
 
 	components.pop();
 
 	const row = new ActionRowBuilder<ButtonBuilder>();
 
-	let canEdit = false;
-	switch(args.macros?.type) {
-		case "global": canEdit = sageCommand.isSuperUser; break;
-		case "server": canEdit = sageCommand.canManageServer; break;
-		case "game": canEdit = sageCommand.canAdminGame; break;
-		case "user": canEdit = actorId === args.customIdArgs?.state.ownerId; break;
-		case "character": canEdit = sageCommand.findCharacter(args.customIdArgs?.state.ownerId!)?.userDid === actorId; break;
-	}
+	const canEdit = args.macros?.canActorEdit(sageCommand);
 
 	if (mode === "edit" && canEdit) {
 		row.addComponents(

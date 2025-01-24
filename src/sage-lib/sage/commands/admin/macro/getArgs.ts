@@ -83,12 +83,24 @@ export type Args<HasMacros extends boolean = false, HasMacro extends boolean = f
 		next: MacroState;
 	};
 };
+export type InteractionArgs<HasMacros extends boolean = false, HasMacro extends boolean = false> = Args<HasMacros, HasMacro> & {
+	customIdArgs: CustomIdArgs;
+};
 
-export async function getArgs<HasMacros extends boolean = false, HasMacro extends boolean = false>(sageInteraction: SageInteraction): Promise<Args<HasMacros, HasMacro> & { customIdArgs:CustomIdArgs; }>;
-export async function getArgs<HasMacros extends boolean = false, HasMacro extends boolean = false>(sageCommand: SageCommand): Promise<Args<HasMacros, HasMacro> & { customIdArgs?:CustomIdArgs; }>;
+export const INVALID_ACTOR_ERROR = "INVALID_ACTOR_ERROR";
+export function isInvalidActorError(err: unknown): boolean {
+	return err instanceof Error && err.message === INVALID_ACTOR_ERROR;
+}
+
+export async function getArgs<HasMacros extends boolean = false, HasMacro extends boolean = false>(sageInteraction: SageInteraction): Promise<InteractionArgs<HasMacros, HasMacro>>;
+export async function getArgs<HasMacros extends boolean = false, HasMacro extends boolean = false>(sageCommand: SageCommand): Promise<Args<HasMacros, HasMacro>>;
 export async function getArgs(sageCommand: SageCommand): Promise<Args> {
 	const { actorId } = sageCommand;
 	const customIdArgs = sageCommand.parseCustomId(parseCustomId);
+
+	// we need to disallow using another user's macros form ... except to start a copy process.
+	if (customIdArgs && actorId !== customIdArgs.actorId && customIdArgs.action !== "showCopyMacro") throw new Error(INVALID_ACTOR_ERROR);
+
 	const { messageId, state = { ownerType:undefined, ownerPageIndex:-1, ownerId:undefined, categoryPageIndex:-1, categoryIndex:-1, macroPageIndex:-1, macroIndex:-1 } } = customIdArgs ?? {};
 	const owner = state.ownerType && state.ownerId ? { type:state.ownerType, id:state.ownerId } : undefined;
 	let macros = owner ? await Macros.parse(sageCommand, owner) : undefined;

@@ -224,15 +224,30 @@ export async function createListComponents(sageCommand: SageCommand, args: Args)
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMacroSelect));
 	}
 
+	// add buttons
+
 	const buttonRow = new ActionRowBuilder<ButtonBuilder>();
 
-	// add buttons
-	const newButton = createNewMacroButton({ actorId, localize, state });
-	// const deleteButton = createDeleteCategoryButton({ actorId, localize, state });
-	// const deleteAllButton = createDeleteAllButton({ actorId, localize, state });
-	const closeButton = createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary });
+	const canEdit = args.macros?.canActorEdit(sageCommand);
+	if (canEdit) {
+		buttonRow.addComponents(
+			createNewMacroButton({ actorId, localize, state })
+		);
+		// if (state.categoryPageIndex > -1) {
+		// 	buttonRow.addComponents(
+		// 		createDeleteCategoryButton({ actorId, localize, state })
+		// 	);
+		// }
+		// if (!macros.isEmpty) {
+		// 	buttonRow.addComponents(
+		// 		createDeleteAllButton({ actorId, localize, state })
+		// 	);
+		// }
+	}
 
-	buttonRow.addComponents(newButton, closeButton)
+	buttonRow.addComponents(
+		createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary })
+	);
 
 	components.push(buttonRow);
 

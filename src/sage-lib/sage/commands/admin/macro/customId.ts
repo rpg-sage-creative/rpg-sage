@@ -55,6 +55,8 @@ export enum MacroAction {
 	confirmEditMacro,
 	cancelEditMacro,
 
+	showCopyMacro,
+
 	promptDeleteMacro,
 	confirmDeleteMacro,
 	cancelDeleteMacro,

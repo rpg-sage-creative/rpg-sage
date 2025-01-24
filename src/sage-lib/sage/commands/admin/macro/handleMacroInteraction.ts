@@ -11,7 +11,7 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import { parseDiceMatches, sendDice } from "../../dice.js";
 import { createMacroArgsModal, createMacroModal } from "./createMacroModal.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
-import { getArgPairs, getArgs, type Args, type MacroState } from "./getArgs.js";
+import { getArgPairs, getArgs, isInvalidActorError, type Args, type InteractionArgs, type MacroState } from "./getArgs.js";
 import { macroToPrompt } from "./macroToPrompt.js";
 import { mCmdDetails } from "./mCmdDetails.js";
 import { mCmdList } from "./mCmdList.js";
@@ -134,7 +134,22 @@ async function rollMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>
 }
 
 export async function handleMacroInteraction(sageInteraction: SageInteraction<any>): Promise<void> {
-	const args = await getArgs<any, any>(sageInteraction);
+	// get the args
+	let args: InteractionArgs<any, any> | undefined;
+	try {
+		args = await getArgs(sageInteraction);
+
+	}catch(ex) {
+		const localize = sageInteraction.getLocalizer();
+		// gracefully handle errors trying to get the args
+		if (isInvalidActorError(ex)) {
+			await sageInteraction.user.send(localize("PLEASE_DONT_USE_CONTROLS"));
+		}else {
+			await sageInteraction.replyStack.send(localize("SORRY_WE_DONT_KNOW"));
+		}
+		return;
+	}
+
 	const action = args.customIdArgs.action;
 
 	switch(action) {

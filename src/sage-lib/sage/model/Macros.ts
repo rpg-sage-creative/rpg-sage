@@ -54,6 +54,7 @@ export class Macros<Category extends string = string> {
 	public categoryMap!: Map<string, CategoryMeta<Category>>;
 	public macroMap!: Map<string, MacroMeta<Category>>;
 	public tree!: CategoryPageMeta<Category>[];
+	public get isEmpty() { return this.macroMap.size === 0; }
 	public get type() { return this.owner.type; }
 	public get typeKey() { return this.owner.typeKey; }
 
@@ -293,6 +294,17 @@ export class Macros<Category extends string = string> {
 			return macroPage.macros.length > 0;
 		}
 		return false;
+	}
+
+	public canActorEdit(sageCommand: SageCommand): boolean {
+		switch(this.type) {
+			case "global": return sageCommand.isSuperUser;
+			case "server": return this.owner.id === sageCommand.server.did && sageCommand.canManageServer;
+			case "game": return this.owner.id === sageCommand.game?.id && sageCommand.canAdminGame;
+			case "user": return this.owner.id === sageCommand.actorId;
+			case "character": return sageCommand.findCharacter(this.owner.id)?.userDid === sageCommand.actorId;
+			default: return false;
+		}
 	}
 
 	public async addAndSave(macro: MacroOrBase<Category>): Promise<boolean> {
