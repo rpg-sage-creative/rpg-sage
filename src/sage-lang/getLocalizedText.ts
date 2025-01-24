@@ -51,6 +51,7 @@ const enUS = {
 
 	"RPG_SAGE_THINKING": `RPG Sage is thinking ...`,
 	"PLEASE_WAIT": `Please wait ...`,
+	"PLEASE_DONT_USE_CONTROLS": `Please don't use another user's controls.`,
 
 	"COMMAND_NOT_VALID": `The command you attempted is ***NOT*** valid.`,
 
