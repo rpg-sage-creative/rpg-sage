@@ -1,5 +1,6 @@
 import type { Optional } from "@rsc-utils/core-utils";
 import { stringFormat } from "@rsc-utils/string-utils";
+import { getWikiUrl, hasWikiUrl } from "./getWikiUrl.js";
 
 const DISCORD_POLICY = `[(Discord Policy)](<https://discord.com/developers/docs/resources/user>)`;
 
@@ -48,7 +49,10 @@ const enUS = {
 	"WARNING": `Warning`,
 	"YES": `Yes`, // context: for a "yes" or "no" confirmation prompt
 
+	"RPG_SAGE_THINKING": `RPG Sage is thinking ...`,
 	"PLEASE_WAIT": `Please wait ...`,
+
+	"COMMAND_NOT_VALID": `The command you attempted is ***NOT*** valid.`,
 
 	"NONE_FOUND": `None found.`,
 
@@ -73,7 +77,8 @@ const enUS = {
 	"NO_IMPORT_ATTEMPTED": `No import attempted.`,
 	"CANNOT_IMPORT_S": `Cannot import "#{0}"`,
 	"SOMETHING_WRONG_IMPORT": `Sorry, something went wrong with the import.`,
-	"IMPORT_CHARACTERS_WIKI": `For information on importing characters, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Character-Management#importing-characters>)`,
+
+	"IMPORT_CHARACTERS_WIKI": `For information about importing characters, see our [wiki](<#{0}>)`,
 
 	"CANNOT_EXPORT_CHARACTERS_HERE": `Sorry, you cannot export characters here.`,
 	"CANNOT_EXPORT_GM": `Sorry, you cannot export the GM.`,
@@ -132,17 +137,28 @@ const enUS = {
 
 	"INVALID_MACRO_NAME": `Macro names should only contain letters, numbers, spaces, underscores, and dashes.`,
 	"INVALID_MACRO_DUPLICATE": `There is already a macro with that name.`,
-	"INVALID_MACRO_DIALOG": `Your macro dialog is invalid. For information on macros, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Dice-Macros>).`,
-	"INVALID_MACRO_DICE": `Your macro dice is invalid. For information on macros, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Dice-Macros>).`,
+	"INVALID_MACRO_DIALOG": `Your macro dialog is invalid.`,
+	"INVALID_MACRO_DICE": `Your macro dice is invalid.`,
 	"INVALID_MACRO_TABLE": `Your macro table is invalid.`,
+	"MACROS_WIKI": `For information about macros, see our [wiki](<#{0}>).`,
 
+	"CREATE_CHARACTER_MACRO": `Create Character Macro`,
 	"CREATE_USER_MACRO": `Create User Macro`,
+	"CREATE_GAME_MACRO": `Create Game Macro`,
+	"CREATE_SERVER_MACRO": `Create Server Macro`,
+	"CREATE_GLOBAL_MACRO": `Create Global Macro`,
+
+	"EDIT_CHARACTER_MACRO": `Edit Character Macro`,
 	"EDIT_USER_MACRO": `Edit User Macro`,
+	"EDIT_GAME_MACRO": `Edit Game Macro`,
+	"EDIT_SERVER_MACRO": `Edit Server Macro`,
+	"EDIT_GLOBAL_MACRO": `Edit Global Macro`,
 
 	"MACRO_NAME_PLACEHOLDER": `Macro names can only be letters and numbers.`,
 	"MACRO_CATEGORY_PLACEHOLDER": `Macro categories group related macros together.`,
 	"MACRO_TABLE_PLACEHOLDER": `The table you wish to roll on or the URL to the table.`,
 	"MACRO_ITEMS_PLACEHOLDER": `The items you wish to randomly select from.`,
+	"MACRO_DIALOG_PLACEHOLDER": `The dialog you wish to send, ex: pc::{name}::**"Quoted bold dialog."**`,
 	"MACRO_DICE_PLACEHOLDER": `The dice you wish to roll, ex: [1d20 attack; 1d6 damage]`,
 
 	"CREATE_MACRO_?": `Create Macro?`,
@@ -189,7 +205,16 @@ type Arg = Optional<string | number>;
 export type Localizer = (key: LocalizedTextKey, ...args: Arg[]) => string;
 
 export function getLocalizedText(key: LocalizedTextKey, lang: Lang, ...args: Arg[]): string {
-	return stringFormat(all[lang]?.[key] ?? enUS[key], ...args);
+	const text = all[lang]?.[key] ?? enUS[key];
+
+	if (key.endsWith("_WIKI") && !args.length) {
+		const wikiUrlKey = key.slice(0, -5);
+		if (hasWikiUrl(wikiUrlKey)) {
+			args = [getWikiUrl(wikiUrlKey)];
+		}
+	}
+
+	return stringFormat(text, ...args);
 }
 
 export function hasLocalizedText(key: string): key is LocalizedTextKey {
