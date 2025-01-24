@@ -228,6 +228,8 @@ async function rollMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>
 }
 
 async function resetControl(sageInteraction: SageInteraction<ButtonInteraction>, args: Args): Promise<void> {
+	await sageInteraction.replyStack.defer();
+
 	// return to selecting the macro type / owner
 	args.state.next = { ownerType:undefined, ownerPageIndex:-1, ownerId:undefined, categoryPageIndex:-1, categoryIndex:-1, macroPageIndex:-1, macroIndex:-1 };
 	args.macro = undefined;
