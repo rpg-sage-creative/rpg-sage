@@ -1,4 +1,4 @@
-import { type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { MacroOwnerType, type MacroOwnerTypeKey } from "../../../model/MacroOwner.js";
 import type { MacroState } from "./getArgs.js";
 
@@ -26,6 +26,10 @@ function decompressId<Type extends Snowflake | UUID>(value?: string): Type | und
 		].join("-") as Type;
 	}
 
+	if (value === "0") {
+		return NIL_SNOWFLAKE as string as Type;
+	}
+
 	// convert hex to snowflake
 	return BigInt(`0x${value}`).toString() as Type;
 }
@@ -43,7 +47,9 @@ export enum MacroAction {
 	selectMacroPage,
 	selectMacro,
 
-	toggleMacroMode,
+	showRollButtons,
+	showEditButtons,
+	showOtherButtons,
 
 	showNewMacroModal,
 	handleNewMacroModal,
@@ -64,6 +70,8 @@ export enum MacroAction {
 	rollMacro,
 	showMacroArgs,
 	rollMacroArgs,
+
+	resetControl
 }
 // | "copyMacro" | "deleteCategory" | "deleteAll"
 
@@ -105,9 +113,9 @@ export function createCustomIdRegExp(...actions: MacroActionKey[]): RegExp {
 	return new RegExp(`^${source}$`);
 }
 
-export function parseCustomId(customId: string): CustomIdArgs {
-	const match = createCustomIdRegExp().exec(customId);
-	const { actorId, ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex, macroIndex, action, messageId } = match!.groups!;
+export function parseCustomId(customId: Optional<string>): CustomIdArgs {
+	const match = customId ? createCustomIdRegExp().exec(customId) : undefined;
+	const { actorId, ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex, macroIndex, action, messageId } = match?.groups ?? {};
 	return {
 		indicator: "macros",
 		actorId: decompressId(actorId) as Snowflake,

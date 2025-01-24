@@ -7,7 +7,8 @@ import { MacroOwner } from "../../../model/MacroOwner.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
 import { createListComponents } from "./createListComponents.js";
-import { getArgs, type Args } from "./getArgs.js";
+import { getArgs, isInvalidActorError, type Args, type InteractionArgs } from "./getArgs.js";
+import { mCmdDetails } from "./mCmdDetails.js";
 
 function toList(macros: Macro[]): string {
 	const listItems = macros.map(macro => {
@@ -117,7 +118,26 @@ export async function mCmdList(sageCommand: SageCommand, args?: Args | boolean):
 export async function handleSelection(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
-	const args = await getArgs(sageInteraction);
+	// get the args
+	let args: InteractionArgs<any, any> | undefined;
+	try {
+		args = await getArgs(sageInteraction);
+
+	}catch(ex) {
+		const localize = sageInteraction.getLocalizer();
+		// gracefully handle errors trying to get the args
+		if (isInvalidActorError(ex)) {
+			await sageInteraction.user.send(localize("PLEASE_DONT_USE_CONTROLS"));
+		}else {
+			await sageInteraction.replyStack.send(localize("SORRY_WE_DONT_KNOW"));
+		}
+		return;
+	}
+
+	if (args.customIdArgs.action === "selectMacro") {
+		return mCmdDetails(sageInteraction, args);
+	}
+
 	const content = await toRenderableContent(sageInteraction, args);
 	const components = await createListComponents(sageInteraction, args);
 

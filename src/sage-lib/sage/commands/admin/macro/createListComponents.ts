@@ -1,6 +1,7 @@
 import { partition } from "@rsc-utils/array-utils";
 import type { Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
+import { ELLIPSIS } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import type { Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { MacroOwner } from "../../../model/MacroOwner.js";
@@ -9,15 +10,24 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args, MacroState } from "./getArgs.js";
+import { MacroMode, type Mode } from "./MacroMode.js";
 
-type CreateArgs = { actorId: Snowflake; localize: Localizer; state: MacroState; };
+
+export type CreateArgs = {
+	actorId: Snowflake;
+	localize: Localizer;
+	messageId?: Snowflake;
+	mode: Mode;
+	state: MacroState;
+};
+
 type HasOwnerPagesCreateArgs = CreateArgs & { ownerPages: MacroOwner[][]; };
 type HasOwnersCreateArgs = CreateArgs & { owners: MacroOwner[]; };
 type HasMacrosCreateArgs = CreateArgs & { macros: Macros; };
 
-function createSelect(action: MacroActionKey, actorId: Snowflake, state: MacroState, placeholder?: string): StringSelectMenuBuilder {
+function createSelect(action: MacroActionKey, { actorId, messageId, state }: CreateArgs, placeholder?: string): StringSelectMenuBuilder {
 	const select = new StringSelectMenuBuilder()
-		.setCustomId(createCustomId({ actorId, action, state }));
+		.setCustomId(createCustomId({ actorId, action, messageId, state }));
 	if (placeholder) {
 		select.setPlaceholder(placeholder);
 	}
@@ -35,116 +45,152 @@ function createOption(label: string, value: string | number, isDefault: boolean)
 	return new StringSelectMenuOptionBuilder().setLabel(label).setValue(`${value}`).setDefault(isDefault);
 }
 
-function createSelectOwnerTypeSelect({ actorId, localize, state }: CreateArgs): StringSelectMenuBuilder {
-	const select = createSelect("selectOwnerType", actorId, state, localize("SELECT_MACRO_TYPE"));
+function createSelectOwnerTypeSelect(args: CreateArgs): StringSelectMenuBuilder {
+	const { ownerType } = args.state;
 
-	const selectedOwnerType = state.ownerType;
+	const select = createSelect("selectOwnerType", args, args.localize("SELECT_MACRO_TYPE"));
 
 	MacroOwner.getLabels().forEach(({ type, typeKey }) =>
-		select.addOptions(createOption(localize(typeKey), type, selectedOwnerType === type))
+		select.addOptions(createOption(args.localize(typeKey), type, ownerType === type))
 	);
 
 	disableIfEmpty(select);
 	return select;
 }
 
-function createSelectOwnerPageSelect({ actorId, localize, ownerPages, state }: HasOwnerPagesCreateArgs): StringSelectMenuBuilder {
-	const select = createSelect("selectOwnerPage", actorId, state);
+function createSelectOwnerPageSelect(args: HasOwnerPagesCreateArgs): StringSelectMenuBuilder {
+	const { localize } = args;
+	const { ownerPageIndex, ownerType } = args.state;
 
-	const localizedPlural = localize(state.ownerType ? MacroOwner.getLabel(state.ownerType).pluralKey : "OWNERS");
-	const pageCount = ownerPages.length;
-	const selectedIndex = state.ownerPageIndex;
+	const localizedPlural = localize(ownerType ? MacroOwner.getLabel(ownerType).pluralKey : "OWNERS");
+	const pageCount = args.ownerPages.length;
+
+	const select = createSelect("selectOwnerPage", args);
 
 	for (let index = 0; index < pageCount; index++) {
-		select.addOptions(createOption(`${localizedPlural}: ${localize("PAGE_X_OF_Y", index + 1, pageCount)}`, index, selectedIndex > -1 ? index === selectedIndex : index === 0));
+		select.addOptions(createOption(`${localizedPlural}: ${localize("PAGE_X_OF_Y", index + 1, pageCount)}`, index, ownerPageIndex > -1 ? index === ownerPageIndex : index === 0));
 	}
 
 	disableIfEmpty(select);
-	if (state.ownerType !== "user") select.setDisabled(true);
+	if (ownerType !== "user") select.setDisabled(true);
 	return select;
 }
 
-function createSelectOwnerIdSelect({ actorId, owners, state }: HasOwnersCreateArgs): StringSelectMenuBuilder {
-	const select = createSelect("selectOwnerId", actorId, state);
-	const selectedOwnerId = state.ownerId;
+function createSelectOwnerIdSelect(args: HasOwnersCreateArgs): StringSelectMenuBuilder {
+	const { ownerId } = args.state;
 
-	owners.forEach(({ id, name }) =>
-		select.addOptions(createOption(name, id, selectedOwnerId === id))
+	const select = createSelect("selectOwnerId", args);
+
+	args.owners.forEach(({ id, name }) =>
+		select.addOptions(createOption(name, id, ownerId === id))
 	);
 
 	disableIfEmpty(select);
 	return select;
 }
 
-function createSelectCategoryPageSelect({ actorId, localize, macros, state }: HasMacrosCreateArgs): StringSelectMenuBuilder {
-	const select = createSelect("selectCategoryPage", actorId, state);
+function createSelectCategoryPageSelect(args: HasMacrosCreateArgs): StringSelectMenuBuilder {
+	const { localize } = args;
 
 	const localizedCategories = localize("CATEGORIES");
-	const pageCount = macros.getCategoryPages().length;
-	const selectedIndex = state.categoryPageIndex;
+	const pageCount = args.macros.getCategoryPages().length;
+	const { categoryPageIndex } = args.state;
+
+	const select = createSelect("selectCategoryPage", args);
 
 	for (let index = 0; index < pageCount; index++) {
-		select.addOptions(createOption(`${localizedCategories}: ${localize("PAGE_X_OF_Y", index + 1, pageCount)}`, index, selectedIndex > -1 ? index === selectedIndex : index === 0));
+		select.addOptions(createOption(`${localizedCategories}: ${localize("PAGE_X_OF_Y", index + 1, pageCount)}`, index, categoryPageIndex > -1 ? index === categoryPageIndex : index === 0));
 	}
 
 	disableIfEmpty(select);
 	return select;
 }
 
-function createSelectCategorySelect({ actorId, localize, macros, state }: HasMacrosCreateArgs): StringSelectMenuBuilder {
-	const select = createSelect("selectCategory", actorId, state);
+function createSelectCategorySelect(args: HasMacrosCreateArgs): StringSelectMenuBuilder {
+	const { localize, macros, state } = args;
 
 	const localizedCategory = localize("CATEGORY");
 	const localizedUncategorized = localize("UNCATEGORIZED");
+
 	const indexes = { categoryPageIndex:Math.max(state.categoryPageIndex, 0) };
 	const selectedPageCategories = macros?.getCategories(indexes);
-	const selectedIndex = state.categoryIndex;
+
+	const { categoryIndex } = state;
+
+	const select = createSelect("selectCategory", args);
 
 	selectedPageCategories.forEach((category, index) =>
-		select.addOptions(createOption(`${localizedCategory}: ${category === "Uncategorized" ? localizedUncategorized : category}`, index, selectedIndex > -1 ? index === selectedIndex : index === 0))
+		select.addOptions(createOption(`${localizedCategory}: ${category === "Uncategorized" ? localizedUncategorized : category}`, index, categoryIndex > -1 ? index === categoryIndex : index === 0))
 	);
 
 	disableIfEmpty(select);
 	return select;
 }
 
-function createSelectMacroPageSelect({ actorId, localize, macros, state }: HasMacrosCreateArgs): StringSelectMenuBuilder {
-	const select = createSelect("selectMacroPage", actorId, state);
+function createSelectMacroPageSelect(args: HasMacrosCreateArgs): StringSelectMenuBuilder {
+	const { localize, macros, state } = args;
 
 	const localizedMacros = localize("MACROS");
 	const macroPages = macros.getMacroPages(state);
 	const pageCount = macroPages.length ?? 0;
-	const selectedIndex = state.macroPageIndex;
+	const { macroPageIndex } = state;
+
+	const select = createSelect("selectMacroPage", args);
 
 	for (let index = 0; index < pageCount; index++) {
-		select.addOptions(createOption(`${localizedMacros}: ${localize("PAGE_X_OF_Y", index + 1, pageCount)}`, index, selectedIndex > -1 ? index === selectedIndex : index === 0));
+		select.addOptions(createOption(`${localizedMacros}: ${localize("PAGE_X_OF_Y", index + 1, pageCount)}`, index, macroPageIndex > -1 ? index === macroPageIndex : index === 0));
 	}
 
 	disableIfEmpty(select);
 	return select;
 }
 
-function createSelectMacroSelect({ actorId, localize, macros, state }: HasMacrosCreateArgs): StringSelectMenuBuilder {
-	const select = createSelect("selectMacro", actorId, state, localize("SELECT_A_MACRO"));
+function createSelectMacroSelect(args: HasMacrosCreateArgs): StringSelectMenuBuilder {
+	const { localize, macros, state } = args;
 
 	const pageMacros = macros.getMacros(state);
-	const selectedIndex = state.macroIndex;
+	const { macroIndex } = state;
+
+	const select = createSelect("selectMacro", args, localize("SELECT_A_MACRO"));
 
 	pageMacros.forEach(({ name }, index) =>
-		select.addOptions(createOption(name, index, selectedIndex === index))
+		select.addOptions(createOption(name, index, macroIndex === index))
 	);
 
 	disableIfEmpty(select);
 	return select;
 }
 
-function createNewMacroButton({ actorId, localize, state }: CreateArgs): ButtonBuilder {
-	const customId = createCustomId({ actorId, action:"showNewMacroModal", state });
+function createNewMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
+	const customId = createCustomId({ actorId, action:"showNewMacroModal", messageId, state });
 	return new ButtonBuilder()
 		.setCustomId(customId)
 		.setStyle(ButtonStyle.Secondary)
 		.setLabel(localize("NEW"))
 		;
+}
+
+export function createResetControlButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
+	const customId = createCustomId({ actorId, action:"resetControl", messageId, state });
+	return new ButtonBuilder()
+		.setCustomId(customId)
+		.setStyle(ButtonStyle.Secondary)
+		.setLabel(localize("RESET"))
+		;
+}
+
+export function createToggleModeButton({ actorId, messageId, mode, state }: CreateArgs): ButtonBuilder {
+	const { action } = MacroMode.next(mode);
+	return new ButtonBuilder()
+		.setCustomId(createCustomId({ action, actorId, messageId, state }))
+		.setStyle(ButtonStyle.Secondary)
+		// .setEmoji(MacroMode.next(mode).emoji)
+		.setLabel(ELLIPSIS)
+		;
+}
+
+export function createCloseButton(sageCommand: SageCommand): ButtonBuilder {
+	return createMessageDeleteButton(sageCommand, { label:sageCommand.getLocalizer()("CLOSE"), style:ButtonStyle.Secondary });
 }
 
 // function createDeleteCategoryButton({ actorId, localize, state }: CreateArgs): ButtonBuilder {
@@ -168,9 +214,20 @@ function createNewMacroButton({ actorId, localize, state }: CreateArgs): ButtonB
 // }
 
 export async function createListComponents(sageCommand: SageCommand, args: Args): Promise<ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[]> {
+	const componentsAndMode = await createListComponentsAndMode(sageCommand, args);
+	return componentsAndMode.components;
+}
+type ComponentsAndMode = {
+	components: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[];
+	mode: Mode;
+}
+export async function createListComponentsAndMode(sageCommand: SageCommand, args: Args, noButtons?: boolean): Promise<ComponentsAndMode> {
 	const localize = sageCommand.getLocalizer();
 
 	const components: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[] = [];
+
+	const macroMode = await MacroMode.from(sageCommand);
+	const { mode } = macroMode;
 
 	const { actorId } = sageCommand;
 	const { macros } = args;
@@ -178,7 +235,9 @@ export async function createListComponents(sageCommand: SageCommand, args: Args)
 
 	// if we don't have macros then that means we haven't selected a macro owner ... show those separately from the macro selection sequence
 	if (!macros) {
-		const selectOwnerTypeSelect = createSelectOwnerTypeSelect({ actorId, localize, state });
+		const baseArgs = { actorId, localize, macros, mode, state }
+
+		const selectOwnerTypeSelect = createSelectOwnerTypeSelect(baseArgs);
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectOwnerTypeSelect));
 
 		if (state.ownerType) {
@@ -186,52 +245,61 @@ export async function createListComponents(sageCommand: SageCommand, args: Args)
 			const ownerPages = partition(owners, (_, index) => Math.floor(index / DiscordMaxValues.component.select.optionCount));
 
 			if (ownerPages.length > 1) {
-				const selectOwnerPageSelect = createSelectOwnerPageSelect({ actorId, localize, ownerPages, state });
+				const selectOwnerPageSelect = createSelectOwnerPageSelect({ ...baseArgs, ownerPages });
 				components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectOwnerPageSelect));
 			}
 
-			const selectOwnerIdSelect = createSelectOwnerIdSelect({ actorId, localize, owners, state });
+			const selectOwnerIdSelect = createSelectOwnerIdSelect({ ...baseArgs, owners });
 			components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectOwnerIdSelect));
 		}
 
 		const closeButton = createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary });
 		components.push(new ActionRowBuilder<ButtonBuilder>().addComponents(closeButton));
 
-		return components;
+		return { components, mode };
 	}
+
+	const baseArgs = { actorId, localize, macros, mode, state }
 
 	// add category pages dropdown if we have more than 1 page of categories
 	if (macros.shouldShowCategoryPages()) {
-		const selectCategoryPageSelect = createSelectCategoryPageSelect({ actorId, localize, macros, state });
+		const selectCategoryPageSelect = createSelectCategoryPageSelect(baseArgs);
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectCategoryPageSelect));
 	}
 
 	// add category dropdown for the currently selected category page
 	if (macros.shouldShowCategories()) {
-		const selectCategorySelect = createSelectCategorySelect({ actorId, localize, macros, state });
+		const selectCategorySelect = createSelectCategorySelect(baseArgs);
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectCategorySelect));
 	}
 
 	// add macro pages dropdown if we have more than 1 page of categories
 	if (macros.shouldShowMacroPages(state)) {
-		const selectMacroPageSelect = createSelectMacroPageSelect({ actorId, localize, macros, state });
+		const selectMacroPageSelect = createSelectMacroPageSelect(baseArgs);
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMacroPageSelect));
 	}
 
 	// add macro dropdown
 	if (macros.shouldShowMacros(state)) {
-		const selectMacroSelect = createSelectMacroSelect({ actorId, localize, macros, state });
+		const selectMacroSelect = createSelectMacroSelect(baseArgs);
 		components.push(new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMacroSelect));
+	}
+
+	// if we are creating buttons for details, let's not bother making the list buttons
+	if (noButtons) {
+		return { components, mode };
 	}
 
 	// add buttons
 
 	const buttonRow = new ActionRowBuilder<ButtonBuilder>();
 
+	const canInfo = args.customIdArgs?.actorId === sageCommand.actorId;
 	const canEdit = args.macros?.canActorEdit(sageCommand);
-	if (canEdit) {
+
+	if (mode === "edit" && canEdit) {
 		buttonRow.addComponents(
-			createNewMacroButton({ actorId, localize, state })
+			createNewMacroButton(baseArgs)
 		);
 		// if (state.categoryPageIndex > -1) {
 		// 	buttonRow.addComponents(
@@ -243,13 +311,29 @@ export async function createListComponents(sageCommand: SageCommand, args: Args)
 		// 		createDeleteAllButton({ actorId, localize, state })
 		// 	);
 		// }
-	}
+		buttonRow.addComponents(
+			createToggleModeButton(baseArgs),
+		);
 
-	buttonRow.addComponents(
-		createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary })
-	);
+	}else if (mode === "other" && canInfo) {
+		buttonRow.addComponents(
+			createResetControlButton(baseArgs),
+			createToggleModeButton(baseArgs),
+		);
+
+	}else {
+		buttonRow.addComponents(
+			createCloseButton(sageCommand),
+		);
+		if (canEdit) {
+			buttonRow.addComponents(
+				createToggleModeButton(baseArgs),
+			);
+		}
+
+	}
 
 	components.push(buttonRow);
 
-	return components;
+	return { components, mode };
 }

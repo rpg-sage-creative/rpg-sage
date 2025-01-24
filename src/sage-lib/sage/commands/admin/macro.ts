@@ -55,7 +55,7 @@ import { handleSelection, mCmdList } from "./macro/mCmdList.js";
 export function registerMacro(): void {
 
 	registerListeners({ commands:["macros", "macro|list"], message:mCmdList });
-	registerListeners({ commands:["macro|details", createCustomIdRegExp("selectMacro")], message:mCmdDetails, interaction:mCmdDetails });
+	registerListeners({ commands:["macro|details"], message:mCmdDetails });
 	registerListeners({ commands:["macro|set"], message:handleSetMacro });
 
 	registerListeners({ commands:[createCustomIdRegExp(
@@ -66,11 +66,11 @@ export function registerMacro(): void {
 		"selectCategoryPage",
 		"selectCategory",
 
-		"selectMacroPage"
+		"selectMacroPage",
+		"selectMacro"
 	)], interaction:handleSelection });
 
 	registerListeners({ commands:[createCustomIdRegExp(
-		"toggleMacroMode",
 		"rollMacro",
 		"showMacroArgs",
 		"rollMacroArgs",
@@ -88,5 +88,11 @@ export function registerMacro(): void {
 		"handleNewMacroModal",
 		"confirmNewMacro",
 		"cancelNewMacro",
+
+		"showRollButtons",
+		"showEditButtons",
+		"showOtherButtons",
+
+		"resetControl"
 	)], interaction:handleMacroInteraction });
 }

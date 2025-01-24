@@ -133,6 +133,13 @@ async function rollMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>
 	await sendDice(sageInteraction, outputs);
 }
 
+async function resetControl(sageInteraction: SageInteraction<ButtonInteraction>, args: Args): Promise<void> {
+	// return to selecting the macro type / owner
+	args.state.next = { ownerType:undefined, ownerPageIndex:-1, ownerId:undefined, categoryPageIndex:-1, categoryIndex:-1, macroPageIndex:-1, macroIndex:-1 };
+	args.macro = undefined;
+	await mCmdList(sageInteraction, args as Args<any>);
+}
+
 export async function handleMacroInteraction(sageInteraction: SageInteraction<any>): Promise<void> {
 	// get the args
 	let args: InteractionArgs<any, any> | undefined;
@@ -154,24 +161,31 @@ export async function handleMacroInteraction(sageInteraction: SageInteraction<an
 
 	switch(action) {
 		// case "copyMacro": break;
-		case "toggleMacroMode": return mCmdDetails(sageInteraction);
 		case "rollMacro": return rollMacro(sageInteraction, args);
 		case "showMacroArgs": return showMacroArgs(sageInteraction, args);
 		case "rollMacroArgs": return rollMacroArgs(sageInteraction, args);
 
 		case "promptDeleteMacro": return promptDeleteMacro(sageInteraction, args);
-		case "confirmDeleteMacro": return handleDeleteMacro(sageInteraction, args);
+		case "confirmDeleteMacro":
 		case "cancelDeleteMacro": return handleDeleteMacro(sageInteraction, args);
 
 		case "showEditMacroModal": return showEditMacroModal(sageInteraction, args);
 		case "handleEditMacroModal": return handleEditMacroModal(sageInteraction, args);
-		case "confirmEditMacro": return handleEditMacro(sageInteraction, args);
+		case "confirmEditMacro":
 		case "cancelEditMacro": return handleEditMacro(sageInteraction, args);
 
 		case "showNewMacroModal": return showNewMacroModal(sageInteraction, args);
 		case "handleNewMacroModal": return handleNewMacroModal(sageInteraction, args);
-		case "confirmNewMacro": return handleNewMacro(sageInteraction, args);
+		case "confirmNewMacro":
 		case "cancelNewMacro": return handleNewMacro(sageInteraction, args);
+
+		case "showRollButtons":
+		case "showEditButtons":
+		case "showOtherButtons":
+			await sageInteraction.replyStack.defer();
+			return args.macro ? mCmdDetails(sageInteraction, args) : mCmdList(sageInteraction, args);
+
+		case "resetControl": return resetControl(sageInteraction, args);
 
 		default:
 			const localize = sageInteraction.getLocalizer();

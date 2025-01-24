@@ -112,6 +112,10 @@ export async function getArgs(sageCommand: SageCommand): Promise<Args> {
 		return updatedArgs;
 	};
 
+	if (sageCommand.customIdMatches(createCustomId("resetControl"))) {
+		return ret({ });
+	}
+
 	let { ownerType } = state;
 	const selectOwnerTypeId = createCustomId("selectOwnerType");
 	if (sageCommand.customIdMatches(selectOwnerTypeId)) {

@@ -1,25 +1,8 @@
-import { type Snowflake } from "@rsc-utils/core-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, StringSelectMenuBuilder, type MessageActionRowComponent } from "discord.js";
-import type { Localizer } from "../../../../../sage-lang/getLocalizedText.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from "discord.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
-import { createListComponents } from "./createListComponents.js";
+import { createCloseButton, createListComponents, createListComponentsAndMode, createResetControlButton, createToggleModeButton, type CreateArgs } from "./createListComponents.js";
 import { createCustomId } from "./customId.js";
-import type { Args, MacroState } from "./getArgs.js";
-
-type DIE = "🎲";
-const DIE: DIE = "🎲";
-
-type GEAR = "⚙️";
-const GEAR: GEAR = "⚙️";
-
-type CreateArgs = {
-	actorId: Snowflake;
-	localize: Localizer;
-	messageId?: Snowflake;
-	mode: "edit" | "roll";
-	state: MacroState;
-};
+import type { Args } from "./getArgs.js";
 
 function createRollMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
 	return new ButtonBuilder()
@@ -38,13 +21,6 @@ function createShowMacroArgsButton({ actorId, localize, messageId, state }: Crea
 		;
 }
 
-function createToggleModeButton({ actorId, messageId, mode, state }: CreateArgs): ButtonBuilder {
-	return new ButtonBuilder()
-		.setCustomId(createCustomId({ action:"toggleMacroMode", actorId, messageId, state }))
-		.setStyle(ButtonStyle.Secondary)
-		.setEmoji(mode === "edit" ? DIE : GEAR)
-		;
-}
 
 function createNewMacroButton({ actorId, localize, messageId, state }: CreateArgs): ButtonBuilder {
 	return new ButtonBuilder()
@@ -79,73 +55,58 @@ function createDeleteMacroButton({ actorId, localize, messageId, state }: Create
 		;
 }
 
-function getMacroMode(sageCommand: SageCommand, actorId: Snowflake, messageId: Snowflake | undefined, state: MacroState): "edit" | "roll" {
-	const components = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.message.components
-		: sageCommand.isSageMessage() ? sageCommand.message.components
-		: undefined;
-	if (components?.length) {
-		const customId = createCustomId({ action:"toggleMacroMode", actorId, messageId, state });
-		const isToggleButton = (component: MessageActionRowComponent): component is ButtonComponent => component.customId === customId;
-		const isToggleAction = sageCommand.isSageInteraction("BUTTON") ? sageCommand.interaction.customId === customId : false;
-		for (const row of components) {
-			for (const component of row.components) {
-				if (isToggleButton(component)) {
-					if (isToggleAction) {
-						return component.emoji?.name === DIE ? "roll" : "edit";
-					}
-					return component.emoji?.name === DIE ? "edit" : "roll";
-				}
-			}
-		}
-	}
-	// return sageCommand.args.getString("mode") ?? undefined;
-	return "roll";
-}
-
 export async function createMacroComponents(sageCommand: SageCommand, args: Args): Promise<ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[]> {
 
-	const components = await createListComponents(sageCommand, args);
+	if (!args.macro) return createListComponents(sageCommand, args);
 
-	if (!args.macro) return components;
+	const componentsAndMode = await createListComponentsAndMode(sageCommand, args, true);
+	let { components, mode } = componentsAndMode;
+	if (args.customIdArgs?.action === "selectMacro") {
+		mode = "roll";
+	}
+
+
+	const localize = sageCommand.getLocalizer();
 
 	const { actorId } = sageCommand;
-	const localize = sageCommand.getLocalizer();
 	const messageId = args.customIdArgs?.messageId;
 	const state = args.state.next;
-	const mode = getMacroMode(sageCommand, actorId, messageId, state);
 	const buttonArgs = { actorId, localize, messageId, mode, state };
 
-	components.pop();
+	const buttonRow = new ActionRowBuilder<ButtonBuilder>();
 
-	const row = new ActionRowBuilder<ButtonBuilder>();
-
+	const canInfo = args.customIdArgs?.actorId === sageCommand.actorId;
 	const canEdit = args.macros?.canActorEdit(sageCommand);
 
 	if (mode === "edit" && canEdit) {
-		row.addComponents(
+		buttonRow.addComponents(
 			createNewMacroButton(buttonArgs),
 			createShowEditMacroModalButton(buttonArgs),
 			createDeleteMacroButton(buttonArgs),
-			createToggleModeButton(buttonArgs)
+			createToggleModeButton(buttonArgs),
+		);
+
+	}else if (mode === "other" && canInfo) {
+		buttonRow.addComponents(
+			createResetControlButton(buttonArgs),
+			createToggleModeButton(buttonArgs),
 		);
 
 	}else {
-		row.addComponents(
+		buttonRow.addComponents(
 			createRollMacroButton(buttonArgs),
-			createShowMacroArgsButton(buttonArgs, !args.macro.hasArgs)
+			createShowMacroArgsButton(buttonArgs, !args.macro.hasArgs),
+			createCloseButton(sageCommand),
 		);
 		if (canEdit) {
-			row.addComponents(
-				createToggleModeButton(buttonArgs)
+			buttonRow.addComponents(
+				createToggleModeButton(buttonArgs),
 			);
 		}
-		row.addComponents(
-			createMessageDeleteButton(sageCommand, { label:localize("CLOSE"), style:ButtonStyle.Secondary })
-		);
 
 	}
 
-	components.push(row);
+	components.push(buttonRow);
 
 	return components;
 }
