@@ -96,6 +96,13 @@ export async function createMacroComponents(sageCommand: SageCommand, args: Args
 		buttonRow.addComponents(
 			createRollMacroButton(buttonArgs),
 			createShowMacroArgsButton(buttonArgs, !args.macro.hasArgs),
+		);
+		if (!canEdit) {
+			buttonRow.addComponents(
+				createResetControlButton(buttonArgs),
+			);
+		}
+		buttonRow.addComponents(
 			createCloseButton(sageCommand),
 		);
 		if (canEdit) {
