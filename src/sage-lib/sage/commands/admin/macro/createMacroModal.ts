@@ -4,27 +4,36 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args } from "./getArgs.js";
 
-type MacroArgPair = { key:string; defaultValue?:string; };
-
 /** Creates a modal for passing args to a macro when rolling. */
-export async function createMacroArgsModal(args: Args<true, true>, pairs: MacroArgPair[], trailingArgs: boolean): Promise<ModalBuilder> {
+export async function createMacroArgsModal(args: Args<true, true>): Promise<ModalBuilder> {
 	const modal = new ModalBuilder();
 	modal.setTitle("Macro Arguments");
 	modal.setCustomId(createCustomId({ ...args.customIdArgs, action:"rollMacroArgs" }));
 
+	const macro = args.macro;
+	const pairs = macro.getArgPairs();
+
 	const namedPairs = pairs.filter(pair => isNaN(+pair.key));
-	if (namedPairs.length < 5) {
-		namedPairs.forEach(({ key, defaultValue }) => {
-			modal.addShortText({ maxLength:80, required:defaultValue===undefined }).setCustomId(key).setLabel(key).setPlaceholder(defaultValue ?? "").setValue(defaultValue ?? "");
-		});
-	}else {
-		const value = namedPairs.map(({ key, defaultValue }) => `${key}=${defaultValue ?? ""}`).join("\n");
-		const required = namedPairs.some(({ defaultValue }) => defaultValue === undefined);
-		modal.addParagraph({ required }).setCustomId("namedPairLines").setLabel("Type arguments on separate lines: arg=value").setPlaceholder("Type arguments on separate lines: arg=value").setValue(value);
-	}
+	const showNamed = namedPairs.length > 0;
 
 	const indexedPairs = pairs.filter(pair => !namedPairs.includes(pair));
-	if (indexedPairs.length || trailingArgs) {
+	const { hasRemainingArgs } = macro;
+	const showIndexed = indexedPairs.length || hasRemainingArgs;
+
+	if (showNamed) {
+		const maxNamedFields = 4 + (showIndexed ? 0 : 1);
+		if (namedPairs.length <= maxNamedFields) {
+			namedPairs.forEach(({ key, defaultValue }) => {
+				modal.addShortText({ maxLength:80, required:defaultValue===undefined }).setCustomId(key).setLabel(key).setPlaceholder(defaultValue ?? "").setValue(defaultValue ?? "");
+			});
+		}else {
+			const value = namedPairs.map(({ key, defaultValue }) => `${key}=${defaultValue ?? ""}`).join("\n");
+			const required = namedPairs.some(({ defaultValue }) => defaultValue === undefined);
+			modal.addParagraph({ required }).setCustomId("namedPairLines").setLabel("Type arguments on separate lines: arg=value").setPlaceholder("Type arguments on separate lines: arg=value").setValue(value);
+		}
+	}
+
+	if (showIndexed) {
 		indexedPairs.sort((a, b) => +a.key - +b.key);
 		const value = indexedPairs.map(({ defaultValue }) => `${defaultValue ?? ""}`).join("\n");
 		const required = indexedPairs.some(({ defaultValue }) => defaultValue === undefined);

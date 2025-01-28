@@ -178,11 +178,7 @@ async function rollMacro(sageInteraction: SageInteraction<ButtonInteraction>, ar
 /** Creates and shows the modal for args for rolling a macro. */
 async function showMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
 	// sageInteraction.replyStack.defer();
-	const macro = args.macro;
-	const macroArgs = macro.dice?.matchAll(/\{(\w+)(?:\:(\w+))?\}/g) ?? [];
-	const argPairs = [...macroArgs].map(match => ({ key:match[1], defaultValue:match[2] }));
-	const trailingArgs = macro.dice?.includes("{...}") ?? false;
-	const modal = await createMacroArgsModal(args, argPairs, trailingArgs);
+	const modal = await createMacroArgsModal(args);
 	await sageInteraction.interaction.showModal(modal);
 }
 

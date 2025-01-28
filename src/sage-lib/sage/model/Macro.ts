@@ -33,6 +33,11 @@ type TypedMacro<Category extends string = string, Type extends MacroType = Macro
 	type: Type;
 };
 
+type MacroArgPair = {
+	key: string;
+	defaultValue?: string;
+};
+
 export class Macro<Category extends string = string> {
 
 	private base: MacroBase<Category>;
@@ -74,9 +79,14 @@ export class Macro<Category extends string = string> {
 
 	public get hasArgs(): boolean {
 		if (this.isDice()) {
-			return getMacroArgRegex("indexed").test(this.base.dice!)
-				|| getMacroArgRegex("named").test(this.base.dice!)
-				|| getMacroArgRegex("remaining").test(this.base.dice!);
+			return getMacroArgRegex("named").test(this.base.dice!);
+		}
+		return false;
+	}
+
+	public get hasRemainingArgs(): boolean {
+		if (this.isDice()) {
+			return getMacroArgRegex("remaining").test(this.base.dice!);
 		}
 		return false;
 	}
@@ -128,6 +138,16 @@ export class Macro<Category extends string = string> {
 			}
 		}
 		return false;
+	}
+
+	/** parses dice for {key:defaultValue} pairs ... returns empty string for any other macro type. */
+	public getArgPairs(): MacroArgPair[] {
+		if (this.isDice()) {
+			const macroArgs = this.base.dice?.matchAll(getMacroArgRegex("named")) ?? [];
+			const argPairs = [...macroArgs].map(match => ({ key:match[1], defaultValue:match[2] }));
+			return argPairs;
+		}
+		return [];
 	}
 
 	/** all values are the exact same */
