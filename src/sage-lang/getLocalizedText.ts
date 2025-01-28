@@ -62,6 +62,19 @@ const enUS = {
 	"INVALID_PDF_URL": "The given PDF url is invalid.",
 	"INVALID_PDF": "The given PDF is invalid.",
 	"UNSUPPORTED_PDF": "The given PDF is unsupported.",
+
+	//#region map specific
+	"REPLY_TO_MAP_TO_MOVE": `Please reply to the map you wish to move your token on.`,
+	"INCLUDE_MOVE_DIRECTIONS": `Please include the directions you wish to move your token.`,
+	"FOR_EXAMPLE:": `For example:`,
+	"PROBLEM_LOADING_MAP": `Sorry, there was a problem loading your map!`,
+	"UNABLE_TO_FIND_TOKEN_S": `Unable to find token: #{0}`,
+	"UNABLE_TO_FIND_TERRAIN_S": `Unable to find terrain: #{0}`,
+	"NO_IMAGE_TO_MOVE": `You have no image to move!`,
+	"MOVE_S_S_?": `Move #{0} #{1} ?`,
+	"MOVING_S_S": `Moving #{0} #{1} ...`,
+	"ERROR_MOVING_IMAGE": `Error moving image!`,
+	//#endregion
 };
 
 export type LocalizedTextKey = keyof typeof enUS;

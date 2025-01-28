@@ -1,7 +1,6 @@
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { SageMessage } from "../../model/SageMessage.js";
-import { includeDeleteButton } from "../../model/utils/deleteButton.js";
 import { ensurePlayerCharacter } from "./ensurePlayerCharacter.js";
 import { GameMap, type TCompassDirection } from "./GameMap.js";
 import { LayerType, type TGameMapToken } from "./GameMapBase.js";
@@ -9,33 +8,63 @@ import { renderMap } from "./renderMap.js";
 
 function inputToCompassDirections(sageMessage: SageMessage): TCompassDirection[] {
 	const directions: TCompassDirection[] = [];
-	const matches = sageMessage.slicedContent.match(/\[\s*(\b(\s|nw|n|ne|w|e|sw|s|se)\b)+\s*\]/ig);
-	matches?.forEach(match => {
-		directions.push(...match.slice(1, -1).toLowerCase().split(/\s/).filter(s => s) as TCompassDirection[]);
+	// blocks array should be something like: [ '[ S S E ]', '[2N]', '[W3]' ]
+	const blocks = sageMessage.slicedContent.match(/\[\s*(?:\b(?:\s|\d+(?:nw|n|ne|w|e|sw|s|se)|(?:nw|n|ne|w|e|sw|s|se)\d*)\b)+\s*\]/gi);
+
+	// each block should be something like: '[ S S E ]' or '[2N]' or 'W3'
+	blocks?.forEach(block => {
+		// pairs array should be something like: ["s", "2n", "w3"]
+		const pairs = block.slice(1, -1).toLowerCase().split(/\s/).filter(s => s);
+
+		// each pair should be something like: "s" or "2n" or "w3"
+		pairs.forEach(pair => {
+			// test with required number prefix before testing witth optional number suffix
+			const distAndDir = /(?<distance>\d+)(?<direction>nw|n|ne|w|e|sw|s|se)/.exec(pair)
+				?? /(?<direction>nw|n|ne|w|e|sw|s|se)(?<distance>\d+)?/.exec(pair);
+
+			// direction is there, distance is optional
+			const { direction, distance } = distAndDir?.groups!; // NOSONAR
+
+			// default count to 1
+			const count = +(distance ?? 1);
+
+			// add the direction "distance" number of times
+			for (let i = 0; i < count; i++) {
+				directions.push(direction as TCompassDirection);
+			}
+		});
 	});
 	return directions;
 }
 
 async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
-	const mapUserId = sageMessage.sageUser.did;
+	const localize = sageMessage.getLocalizer();
+	const stack = sageMessage.replyStack;
 
 	const mapMessageId = sageMessage.message.reference?.messageId;
 	const mapExists = mapMessageId && GameMap.exists(mapMessageId);
 	if (!mapExists) {
-		return sageMessage.reply(includeDeleteButton({ content:`Please reply to the map you wish to move your token on.` }, mapUserId));
+		const content = localize("REPLY_TO_MAP_TO_MOVE");
+		return stack.whisper({ content });
 	}
 
 	const directions = inputToCompassDirections(sageMessage);
 	if (!directions.length) {
-		return sageMessage.reply(includeDeleteButton({ content:`Please include the directions you wish to move your token. For example:\n> sage! map move [NW N NE W E SW S SE]` }, mapUserId));
+		const content = [
+			localize("INCLUDE_MOVE_DIRECTIONS"),
+			localize("FOR_EXAMPLE:"),
+			`> sage! map move [NW N NE W E SW S SE]`,
+			`> sage! map move [N 2NW W]`,
+		].join("\n");
+		return stack.whisper({ content });
 	}
 
+	const mapUserId = sageMessage.sageUser.did;
 	const gameMap = mapExists ? await GameMap.forUser(mapMessageId, mapUserId, true) : null;
 	if (!gameMap) {
-		return sageMessage.reply(includeDeleteButton({ content:`Sorry, there was a problem loading your map!` }, mapUserId));
+		const content = localize("PROBLEM_LOADING_MAP");
+		return stack.whisper({ content });
 	}
-
-	const stack = sageMessage.replyStack;
 
 	ensurePlayerCharacter(sageMessage, gameMap);
 
@@ -72,7 +101,8 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 			}
 		}
 		if (!token) {
-			return stack.editReply(`Unable to find token: ${targetTokenArg?.value ?? targetNameArg?.value}`);
+			const content = localize("UNABLE_TO_FIND_TOKEN_S", targetTokenArg?.value ?? targetNameArg?.value!);
+			return stack.editReply(content);
 		}
 		gameMap.activeLayer = LayerType.Token;
 		gameMap.activeImage = token;
@@ -81,7 +111,8 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 	}else if (targetTerrainArg) {
 		const terrain = gameMap.userTerrain.find(t => t.name.toLowerCase() === targetTerrainArg.lower);
 		if (!terrain) {
-			return stack.editReply("Unable to find terrain: " + targetTerrainArg);
+			const content = localize("UNABLE_TO_FIND_TERRAIN_S", targetTerrainArg.value);
+			return stack.editReply(content);
 		}
 		gameMap.activeLayer = LayerType.Terrain;
 		gameMap.activeImage = terrain;
@@ -90,19 +121,23 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 	}
 
 	if (!activeImage) {
-		return stack.editReply(`You have no image to move!`);
+		const content = localize("NO_IMAGE_TO_MOVE");
+		return stack.editReply(content);
 	}
 
 	const moveEmoji = directions.map(dir => `[${dir}]`).join(" ");
-	const boolMove = await discordPromptYesNo(sageMessage, `Move ${activeImage.name} ${moveEmoji} ?`, true);
+	const promptContent = localize("MOVE_S_S_?", activeImage.name, moveEmoji);
+	const boolMove = await discordPromptYesNo(sageMessage, promptContent, true);
 	if (boolMove === true) {
-		stack.editReply(`Moving ${activeImage.name} ${moveEmoji} ...`, true);
+		const updateContent = localize("MOVING_S_S", activeImage.name, moveEmoji);
+		stack.editReply(updateContent, true);
 		const moved = gameMap.moveActiveToken(...directions);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 		const updated = (moved || shuffled)
 			&& await renderMap(await sageMessage.message.fetchReference(), gameMap);
 		if (!updated) {
-			return stack.editReply(`Error moving image!`);
+			const errorContent = localize("ERROR_MOVING_IMAGE");
+			return stack.editReply(errorContent);
 		}
 	}
 
