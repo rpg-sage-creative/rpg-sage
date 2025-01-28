@@ -2,7 +2,7 @@ import { EphemeralSet } from "@rsc-utils/cache-utils";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { debug, verbose } from "@rsc-utils/core-utils";
 import { DiscordApiError, isDiscordApiError } from "@rsc-utils/discord-utils";
-import type { Message, PartialMessage } from "discord.js";
+import type { Channel, Collection, Message, PartialMessage } from "discord.js";
 import { GameMapBase } from "../sage/commands/map/GameMapBase.js";
 
 /* We only really need to store deleted state for seconds due to races with Tupper. */
@@ -40,13 +40,79 @@ export enum MessageDeleteResults {
 
 /**
  * Tries to safely delete all the given messages.
+ * Bulk delete is attempted if possible.
  */
-export async function deleteMessages(messages: Optional<Message | PartialMessage>[]): Promise<MessageDeleteResults[]> {
-	const results = [];
-	for (const message of messages) {
-		results.push(await deleteMessage(message));
+export async function deleteMessages(messages: Optional<Message | PartialMessage>[] | Collection<string, Message>): Promise<MessageDeleteResults[]> {
+	// convert a collection into an array
+	if ("values" in messages) {
+		messages = [...messages.values()];
 	}
-	return results;
+
+	// let's check for length to avoid wasting time
+	if (!messages.length) return [];
+
+	// because we can delete messages out of order, we have to store the results for later
+	const resultMap = new Map<string, MessageDeleteResults>();
+
+	// the bulk delete channel counter
+	const channelMap: Record<string, number> = { };
+
+	// fetch any partials and track channels with bulkDeletable messages
+	for (let i = 0; i < messages.length; i++) {
+		let message = messages[i];
+		if (message?.partial) {
+			const fetched = await message.fetch().catch(messageCatcher) ?? undefined;
+			message = messages[i] = fetched !== MessageDeleteResults.UnknownMessage ? message : undefined;
+		}
+		if (message?.bulkDeletable) {
+			channelMap[message.channelId] = 1 + (channelMap[message.channelId] ?? 0);
+		}
+	}
+
+	// get the channel ids that have more than one bulkDeletable message
+	const bulkChannelIds = Object.keys(channelMap).filter(key => channelMap[key] > 1);
+	for (const channelId of bulkChannelIds) {
+		// grab the channel's messages
+		const channelMessages = messages.filter(message => message?.channelId === channelId) as Message[];
+
+		// grab a channel that isn't a partial
+		let channel: Channel | undefined = channelMessages.find(message => message.channel && !message.channel.partial)?.channel ?? channelMessages[0].channel;
+
+		// exit out if we don't have a channel
+		if (!channel) break;
+
+		// if partial, go fetch ...
+		if (channel?.partial) {
+			// ... unless we have fewer than 3 messages, because that would be a waste of api calls
+			if (channelMessages.length < 3) break;
+
+			// fetch the channel
+			channel = await channel.fetch().catch(DiscordApiError.process);
+		}
+
+		// if we have a channel that has bulkDelete, go do it
+		if (channel && "bulkDelete" in channel) {
+			// process bulk delete
+			const bulkResults = await channel.bulkDelete(channelMessages, true).catch(DiscordApiError.process);
+
+			// mark the deleted messages as deleted
+			if (bulkResults) {
+				for (const [id, message] of bulkResults) {
+					resultMap.set(id, message?.deletable ? MessageDeleteResults.NotDeleted : MessageDeleteResults.Deleted);
+				}
+			}
+		}
+	}
+
+	// manually delete the messages not yet deleted
+	for (const message of messages) {
+		if (message && resultMap.get(message.id) !== MessageDeleteResults.Deleted) {
+			resultMap.set(message.id, await deleteMessage(message));
+		}
+	}
+
+	// get the results in the same order we received the messages
+	return messages.map(message => resultMap.get(message?.id!) ?? MessageDeleteResults.InvalidMessage);
 }
 
 /**

@@ -1,9 +1,9 @@
-import type { MessageContextMenuCommandInteraction } from "discord.js";
-import { registerListeners } from "../../discord/handlers/registerListeners.js";
-import type { SageInteraction } from "../model/SageInteraction.js";
-import { discordPromptYesNo } from "../../discord/prompts.js";
 import { toMessageUrl } from "@rsc-utils/discord-utils";
+import type { MessageContextMenuCommandInteraction } from "discord.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
+import { registerListeners } from "../../discord/handlers/registerListeners.js";
+import { discordPromptYesNo } from "../../discord/prompts.js";
+import type { SageInteraction } from "../model/SageInteraction.js";
 
 export async function deleteAfter(sageInteraction: SageInteraction): Promise<void> {
 	if (sageInteraction.isSuperUser) {
@@ -14,12 +14,14 @@ export async function deleteAfter(sageInteraction: SageInteraction): Promise<voi
 		if (confirm) {
 			const channel = message.channel;
 			const messagesToDelete = await channel.messages.fetch({ after:message.id });
-			await sageInteraction.replyStack.startThinking();
-			if ("bulkDelete" in channel) {
-				await channel.bulkDelete(messagesToDelete);
-			}else {
-				await deleteMessages([...messagesToDelete.values()]);
+			if (!messagesToDelete.size) {
+				return sageInteraction.replyStack.whisper("Nothing to delete.");
 			}
+
+			await sageInteraction.replyStack.startThinking();
+
+			await deleteMessages(messagesToDelete);
+
 			await sageInteraction.replyStack.stopThinking();
 		}
 	}
