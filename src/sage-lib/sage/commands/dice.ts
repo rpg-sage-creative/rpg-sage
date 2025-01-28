@@ -14,6 +14,7 @@ import type { GameCharacter } from "../model/GameCharacter.js";
 import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { User } from "../model/User.js";
+import { getMacroArgRegex } from "./admin/macro/getMacroArgRegex.js";
 import { logPostCurrency } from "./admin/PostCurrency.js";
 import { registerDiceTest } from "./dice/diceTest.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
@@ -480,20 +481,20 @@ function macroToDice(macroTiers: DiceMacroBase[][], input: string): DiceMacroBas
 	let maxIndex = -1;
 	let dice = macro.dice
 		// indexed args
-		.replace(/\{(\d+)(:(?!:)[^}]+)?\}/g, match => {
+		.replace(getMacroArgRegex("indexed"), match => {
 			const [argIndex, defaultValue] = splitKeyValueFromBraces(match);
 			maxIndex = Math.max(maxIndex, +argIndex);
 			return nonEmptyStringOrDefaultValue(indexed[+argIndex], defaultValue);
 		})
 		// named args
-		.replace(/\{(\w+)(:(?!:)[^}]+)?\}/ig, match => {
+		.replace(getMacroArgRegex("named"), match => {
 			const [argName, defaultValue] = splitKeyValueFromBraces(match);
 			const argNameLower = argName.toLowerCase();
 			const namedArg = named.find(arg => arg.keyLower === argNameLower);
 			return namedArgValueOrDefaultValue(namedArg, defaultValue);
 		})
 		// remaining args
-		.replace(/\{\.{3}\}/g, indexed.slice(maxIndex + 1).join(" "))
+		.replace(getMacroArgRegex("remaining"), indexed.slice(maxIndex + 1).join(" "))
 		// fix adjacent plus/minus
 		.replace(/-\s*\+/g, "-")
 		.replace(/\+\s*-/g, "-")

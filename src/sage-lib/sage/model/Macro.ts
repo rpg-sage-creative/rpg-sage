@@ -2,6 +2,7 @@ import type { Optional } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { StringMatcher, stringOrUndefined, unwrap } from "@rsc-utils/string-utils";
 import { getBasicDiceRegex } from "../../../sage-dice/getBasicDiceRegex.js";
+import { getMacroArgRegex } from "../commands/admin/macro/getMacroArgRegex.js";
 import { parseDialogContent } from "../commands/dialog/parseDialogContent.js";
 import { isMath } from "../commands/dice/isMath.js";
 import { isRandomItem } from "../commands/dice/isRandomItem.js";
@@ -73,7 +74,9 @@ export class Macro<Category extends string = string> {
 
 	public get hasArgs(): boolean {
 		if (this.isDice()) {
-			return /\{(\w+)(?:\:(\w+))?\}/.test(this.base.dice!);
+			return getMacroArgRegex("indexed").test(this.base.dice!)
+				|| getMacroArgRegex("named").test(this.base.dice!)
+				|| getMacroArgRegex("remaining").test(this.base.dice!);
 		}
 		return false;
 	}
