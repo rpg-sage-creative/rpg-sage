@@ -13,10 +13,10 @@ export async function createMacroArgsModal(args: Args<true, true>): Promise<Moda
 	const macro = args.macro;
 	const pairs = macro.getArgPairs();
 
-	const namedPairs = pairs.filter(pair => isNaN(+pair.key));
+	const namedPairs = pairs.filter(pair => !pair.isIndexed);
 	const showNamed = namedPairs.length > 0;
 
-	const indexedPairs = pairs.filter(pair => !namedPairs.includes(pair));
+	const indexedPairs = pairs.filter(pair => !!pair.isIndexed);
 	const { hasRemainingArgs } = macro;
 	const showIndexed = indexedPairs.length || hasRemainingArgs;
 
@@ -34,7 +34,7 @@ export async function createMacroArgsModal(args: Args<true, true>): Promise<Moda
 	}
 
 	if (showIndexed) {
-		indexedPairs.sort((a, b) => +a.key - +b.key);
+		indexedPairs.sort((a, b) => a.keyIndex - b.keyIndex);
 		const value = indexedPairs.map(({ defaultValue }) => `${defaultValue ?? ""}`).join("\n");
 		const required = indexedPairs.some(({ defaultValue }) => defaultValue === undefined);
 		modal.addParagraph({ required }).setCustomId("indexedPairLines").setLabel("Type arguments on separate lines").setPlaceholder("Type arguments on separate lines").setValue(value);

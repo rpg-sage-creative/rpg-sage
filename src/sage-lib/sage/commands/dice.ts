@@ -14,7 +14,7 @@ import type { GameCharacter } from "../model/GameCharacter.js";
 import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { User } from "../model/User.js";
-import { getMacroArgRegex } from "./admin/macro/getMacroArgRegex.js";
+import { getMacroArgRegex, getMacroRemainingArgRegex, parseMacroArgMatch } from "./admin/macro/getMacroArgRegex.js";
 import { logPostCurrency } from "./admin/PostCurrency.js";
 import { registerDiceTest } from "./dice/diceTest.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
@@ -460,17 +460,6 @@ function namedArgValueOrDefaultValue(arg: Optional<KeyValueArg>, def: Optional<s
 	return def ?? "";
 }
 
-function splitKeyValueFromBraces(input: string): [string, string] {
-	const debraced = input.slice(1, -1);
-	const sliceIndex = debraced.indexOf(":");
-	if (sliceIndex < 0) {
-		return [debraced, ""];
-	}
-	const key = debraced.slice(0, sliceIndex);
-	const value = debraced.slice(sliceIndex + 1);
-	return [key, value];
-}
-
 type DiceMacroBaseAndOutput = { macro: DiceMacroBase; output: string; };
 function macroToDice(macroTiers: DiceMacroBase[][], input: string): DiceMacroBaseAndOutput | null {
 	const { prefix, macro, indexed, named } = parseMacroAndArgs(macroTiers, input);
@@ -480,21 +469,20 @@ function macroToDice(macroTiers: DiceMacroBase[][], input: string): DiceMacroBas
 
 	let maxIndex = -1;
 	let dice = macro.dice
-		// indexed args
-		.replace(getMacroArgRegex("indexed"), match => {
-			const [argIndex, defaultValue] = splitKeyValueFromBraces(match);
-			maxIndex = Math.max(maxIndex, +argIndex);
-			return nonEmptyStringOrDefaultValue(indexed[+argIndex], defaultValue);
-		})
-		// named args
-		.replace(getMacroArgRegex("named"), match => {
-			const [argName, defaultValue] = splitKeyValueFromBraces(match);
-			const argNameLower = argName.toLowerCase();
-			const namedArg = named.find(arg => arg.keyLower === argNameLower);
-			return namedArgValueOrDefaultValue(namedArg, defaultValue);
+		.replace(getMacroArgRegex(true), match => {
+			const { key, keyIndex, isIndexed, defaultValue } = parseMacroArgMatch(match);
+			if (isIndexed) {
+				maxIndex = Math.max(maxIndex, keyIndex);
+				return nonEmptyStringOrDefaultValue(indexed[keyIndex], defaultValue) ?? `{${keyIndex}}`;
+			}else {
+				const keyLower = key.toLowerCase();
+				const namedArg = named.find(arg => arg.keyLower === keyLower)
+					// ?? namedArgStack.find(arg => arg.keyLower === keyLower);
+				return namedArgValueOrDefaultValue(namedArg, defaultValue) ?? `{${key}}`;
+			}
 		})
 		// remaining args
-		.replace(getMacroArgRegex("remaining"), indexed.slice(maxIndex + 1).join(" "))
+		.replace(getMacroRemainingArgRegex(true), indexed.slice(maxIndex + 1).join(" "))
 		// fix adjacent plus/minus
 		.replace(/-\s*\+/g, "-")
 		.replace(/\+\s*-/g, "-")

@@ -2,7 +2,7 @@ import type { Optional } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { StringMatcher, stringOrUndefined, unwrap } from "@rsc-utils/string-utils";
 import { getBasicDiceRegex } from "../../../sage-dice/getBasicDiceRegex.js";
-import { getMacroArgRegex } from "../commands/admin/macro/getMacroArgRegex.js";
+import { matchAllMacroArgPairs, testMacroArgRegex, testMacroRemainingArgRegex, type MacroArgPair } from "../commands/admin/macro/getMacroArgRegex.js";
 import { parseDialogContent } from "../commands/dialog/parseDialogContent.js";
 import { isMath } from "../commands/dice/isMath.js";
 import { isRandomItem } from "../commands/dice/isRandomItem.js";
@@ -31,11 +31,6 @@ type TypedMacro<Category extends string = string, Type extends MacroType = Macro
 	dialog: Type extends "dialog" ? string : undefined;
 	dice: Type extends Exclude<MacroType, "dialog"> ? string : undefined;
 	type: Type;
-};
-
-type MacroArgPair = {
-	key: string;
-	defaultValue?: string;
 };
 
 export class Macro<Category extends string = string> {
@@ -79,14 +74,14 @@ export class Macro<Category extends string = string> {
 
 	public get hasArgs(): boolean {
 		if (this.isDice()) {
-			return getMacroArgRegex("named").test(this.base.dice!);
+			return testMacroArgRegex(this.base.dice);
 		}
 		return false;
 	}
 
 	public get hasRemainingArgs(): boolean {
 		if (this.isDice()) {
-			return getMacroArgRegex("remaining").test(this.base.dice!);
+			return testMacroRemainingArgRegex(this.base.dice);
 		}
 		return false;
 	}
@@ -143,9 +138,7 @@ export class Macro<Category extends string = string> {
 	/** parses dice for {key:defaultValue} pairs ... returns empty string for any other macro type. */
 	public getArgPairs(): MacroArgPair[] {
 		if (this.isDice()) {
-			const macroArgs = this.base.dice?.matchAll(getMacroArgRegex("named")) ?? [];
-			const argPairs = [...macroArgs].map(match => ({ key:match[1], defaultValue:match[2] }));
-			return argPairs;
+			return matchAllMacroArgPairs(this.base.dice);
 		}
 		return [];
 	}
