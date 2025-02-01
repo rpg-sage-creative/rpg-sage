@@ -11,6 +11,39 @@ import type { SageCommand } from "./SageCommand.js";
 import type { Server } from "./Server.js";
 import type { User } from "./User.js";
 
+export type FindMacrosAndMacroResult = { macros:Macros; macroMeta:MacroMeta; categoryMeta:CategoryMeta; };
+type FindMacrosAndCategoryResult = { macros:Macros; categoryMeta:CategoryMeta; };
+
+/** Navigates the macro tiers of the given SageCommand, looking for something via the given handler. */
+function navigateTiers<T>(sageCommand: SageCommand, handler: (hasMacros?: THasMacros) => T | undefined): T | undefined {
+	const pcs = sageCommand.game?.playerCharacters.filterByUser(sageCommand.actorId)
+		?? sageCommand.sageUser.playerCharacters;
+
+	for (const pc of pcs) {
+		const pcResult = handler(pc);
+		if (pcResult) return pcResult;
+
+		for (const comp of pc.companions) {
+			const compResult = handler(comp);
+			if (compResult) return compResult;
+		}
+	}
+
+	const userResult = handler(sageCommand.sageUser);
+	if (userResult) return userResult;
+
+	const gameResult = handler(sageCommand.game);
+	if (gameResult) return gameResult;
+
+	const serverResult = handler(sageCommand.server);
+	if (serverResult) return serverResult;
+
+	const botResult = handler(sageCommand.bot);
+	if (botResult) return botResult;
+
+	return undefined;
+}
+
 type HasMacros<Category extends string = string> = {
 	macros: MacroBase<Category>[];
 	save(): Promise<boolean>;
@@ -59,7 +92,7 @@ export class Macros<Category extends string = string> {
 	public get type() { return this.owner.type; }
 	public get typeKey() { return this.owner.typeKey; }
 
-	public constructor(private hasMacros: HasMacros<Category>, private owner: MacroOwner) {
+	public constructor(private hasMacros: HasMacros<Category>, public owner: MacroOwner) {
 		this.mapMacros();
 	}
 
@@ -107,8 +140,17 @@ export class Macros<Category extends string = string> {
 		this.tree = tree;
 	}
 
-	/** Users StringMatchers to find the Macro for the given macro name. Returns true if found. */
-	public hasMacro(name: string): boolean {
+	/** Uses StringMatcher to find the given macro category. Returns true if found. */
+	public hasCategory(category?: string): boolean {
+		const categoryMatcher = StringMatcher.from(category);
+		if (categoryMatcher.isNonNil) {
+			return this.categoryMap.has(categoryMatcher.matchValue);
+		}
+		return false;
+	}
+
+	/** Uses StringMatcher to find the Macro for the given macro name. Returns true if found. */
+	public hasMacro(name: string | undefined): boolean {
 		const nameMatcher = StringMatcher.from(name);
 		if (nameMatcher.isNonNil) {
 			return this.macroMap.has(nameMatcher.matchValue);
@@ -117,7 +159,7 @@ export class Macros<Category extends string = string> {
 	}
 
 	/** Users StringMatchers to find the Macro for the given macro name. */
-	public find(name: string): Macro<Category> | undefined {
+	public find(name: string | undefined): Macro<Category> | undefined {
 		const nameMatcher = StringMatcher.from(name);
 		if (nameMatcher.isNonNil) {
 			return this.macroMap.get(nameMatcher.matchValue)?.macro;
@@ -362,6 +404,52 @@ export class Macros<Category extends string = string> {
 
 	public toJSON(): MacroBase[] {
 		return this.hasMacros.macros;
+	}
+
+	/** Navigate up the macro tiers to find the Macros/owner and CategoryMeta/MacroMeta for the given macro name. */
+	public static findMacrosAndMacro(sageCommand: SageCommand, name?: string): FindMacrosAndMacroResult | undefined {
+		// early exit
+		if (!name) return undefined;
+
+		return navigateTiers(sageCommand, (hasMacros?: THasMacros) => {
+			const macros = Macros.from(hasMacros);
+
+			// save time if we have no macros to search
+			if (!macros) return undefined;
+
+			// look for macro
+			const macroMeta = macros?.findMacroMeta(name);
+
+			// no result if we have no macro
+			if (!macroMeta) return undefined;
+
+			// get macro's category if we find a macro.
+			const categoryMeta = macros.getCategoryMeta(macroMeta)!;
+
+			// return result
+			return { macros, macroMeta, categoryMeta };
+		});
+	}
+
+	/** Navigate up the macro tiers to find the Macros/owner and CategoryMeta for the given category. */
+	public static findMacrosAndCategory(sageCommand: SageCommand, category?: string): FindMacrosAndCategoryResult | undefined {
+		// early exit
+		if (!category) return undefined;
+
+		return navigateTiers(sageCommand, (hasMacros?: THasMacros) => {
+			const macros = Macros.from(hasMacros);
+
+			// save time if we have no macros to search
+			if (!macros) return undefined;
+
+			// look for category
+			const categoryMeta = macros.findCategoryMeta(category);
+
+			// no result if we have no category
+			if (!categoryMeta) return undefined;
+
+			return { macros, categoryMeta };
+		});
 	}
 
 	/** Creates a Macros instance from one of the objects that has a .macros array. */

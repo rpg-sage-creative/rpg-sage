@@ -11,7 +11,7 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import { parseDiceMatches, sendDice } from "../../dice.js";
 import { createMacroArgsModal, createMacroModal } from "./createMacroModal.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
-import { getArgPairs, getArgs, isInvalidActorError, type Args, type InteractionArgs, type MacroState } from "./getArgs.js";
+import { getArgs, getArgValues, isInvalidActorError, type Args, type InteractionArgs, type MacroState } from "./getArgs.js";
 import { macroToPrompt } from "./macroToPrompt.js";
 import { mCmdDetails } from "./mCmdDetails.js";
 import { mCmdList } from "./mCmdList.js";
@@ -437,12 +437,11 @@ function createYesNoComponents(args: YesNoArgs): ActionRowBuilder<ButtonBuilder>
 export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 	const localize = sageMessage.getLocalizer();
 
-	const pairs = getArgPairs(sageMessage);
+	const pairs = getArgValues(sageMessage);
 
-	const name = pairs.namePair?.value;
-	const category = pairs.categoryPair?.value;
-	const dialog = pairs.contentPair?.key === "dialog" ? pairs.contentPair.value : undefined;
-	const dice = pairs.contentPair?.key !== "dialog" ? pairs.contentPair?.value : undefined;
+	const { name, category, contentKey, content } = pairs;
+	const dialog = contentKey === "dialog" ? content : undefined;
+	const dice = contentKey !== "dialog" ? content : undefined;
 
 	if (!name || (!dialog && !dice)) {
 		return sageMessage.replyStack.whisper(`${localize("SORRY_WE_DONT_KNOW")} ${localize("MACROS_WIKI")}`);
