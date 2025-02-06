@@ -212,6 +212,14 @@ type Arg = Optional<string | number>;
 
 export type Localizer = (key: LocalizedTextKey, ...args: Arg[]) => string;
 
+/*
+Ideas from https://www.i18next.com/translation-function/plurals
+Allow options: { count:number; ordinal?:true; context:string; }
+if (count) then look up key_count; ex: USER_ONE:"User", USER_OTHER:"Users"
+if (count && ordinal) then use nth(count) as the first arg; ex: NTH_PLACE:"#{0} place"
+if (context) then use key_context; ex: CHAR:"Character", CHAR_PC:"Player Character"
+*/
+
 export function getLocalizedText(key: LocalizedTextKey, lang: Lang, ...args: Arg[]): string {
 	const text = all[lang]?.[key] ?? enUS[key];
 
