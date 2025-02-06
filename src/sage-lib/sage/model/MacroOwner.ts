@@ -12,11 +12,15 @@ export enum MacroOwnerType {
 }
 
 export type MacroOwnerTypeKey = keyof typeof MacroOwnerType;
+type TypeKey = LocalizedTextKey & `${Uppercase<MacroOwnerTypeKey>}_MACROS`;
+type SingularKey = LocalizedTextKey & Uppercase<MacroOwnerTypeKey>;
+type PluralKey = LocalizedTextKey & (`${SingularKey}S` | "GLOBAL");
 
 type MacroOwnerLabels = {
 	type: MacroOwnerTypeKey;
-	typeKey: LocalizedTextKey;
-	pluralKey: LocalizedTextKey;
+	typeKey: TypeKey;
+	pluralKey: PluralKey;
+	singularKey: SingularKey;
 };
 
 async function getCharacters(sageCommand: SageCommand): Promise<MacroOwner[]> {
@@ -83,12 +87,11 @@ export class MacroOwner {
 	}
 
 	public static getLabels(): MacroOwnerLabels[] {
-		return [
-			{ type:"character", typeKey:"CHARACTER_MACROS", pluralKey:"CHARACTERS" },
-			{ type:"user", typeKey:"USER_MACROS", pluralKey:"USERS" },
-			{ type:"game", typeKey:"GAME_MACROS", pluralKey:"GAMES" },
-			{ type:"server", typeKey:"SERVER_MACROS", pluralKey:"SERVERS" },
-			{ type:"global", typeKey:"GLOBAL_MACROS", pluralKey:"GLOBAL" },
-		];
+		const types: MacroOwnerTypeKey[] = ["character", "user", "game", "server", "global"];
+		return types.map(type => {
+			const singularKey = type.toUpperCase() as SingularKey;
+			const pluralKey = singularKey === "GLOBAL" ? singularKey : `${singularKey}S` as PluralKey;
+			return { type, typeKey:`${singularKey}_MACROS`, pluralKey, singularKey };
+		});
 	}
 }

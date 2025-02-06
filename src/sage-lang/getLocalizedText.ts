@@ -8,6 +8,7 @@ const enUS = {
 
 	"CATEGORY": `Category`,
 	"CATEGORIES": `Categories`,
+	"CHARACTER": `Character`,
 	"CHARACTERS": `Characters`,
 	"CLOSE": `Close`,
 	"COMPANION": "Companion",
@@ -20,6 +21,7 @@ const enUS = {
 	"EDIT": `Edit`,
 	"EMBED": `Embed`,
 	"FROM": `From`, // context: we are changing a value "from" something "to" something else
+	"GAME": `Game`,
 	"GAMES": `Games`,
 	"GLOBAL": `Global`,
 	"IMPORT": `Import`,
@@ -39,6 +41,7 @@ const enUS = {
 	"REIMPORT": `Reimport`,
 	"RESET": `Reset`,
 	"ROLL": `Roll`,
+	"SERVER": `Server`,
 	"SERVERS": `Servers`,
 	"SHARE": `Share`,
 	"TABLE": `Table`,
@@ -46,6 +49,7 @@ const enUS = {
 	"UNCATEGORIZED": `Uncategorized`,
 	"UPDATE": `Update`,
 	"USAGE": `Usage`,
+	"USER": `User`,
 	"USERS": `Users`,
 	"WARNING": `Warning`,
 	"YES": `Yes`, // context: for a "yes" or "no" confirmation prompt

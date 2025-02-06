@@ -67,6 +67,11 @@ function updateMacroState(state: MacroState, args: Partial<MacroState>): MacroSt
 
 	const { ownerType, ownerPageIndex = -1, ownerId } = args;
 
+	// if we are setting the owner type/id at the same time, we need to check em both first to ensure we get ownerId
+	if (ownerType !== state.ownerType && ownerId !== state.ownerId) {
+		return ret({ ownerType, ownerId });
+	}
+
 	if (ownerType !== state.ownerType) {
 		return ret({ ownerType });
 	}
@@ -186,6 +191,23 @@ export async function getArgs(sageCommand: SageCommand): Promise<Args> {
 	const selectOwnerTypeId = createCustomId("selectOwnerType");
 	if (sageCommand.customIdMatches(selectOwnerTypeId)) {
 		ownerType = getSelectedOrDefault(sageCommand, selectOwnerTypeId) as MacroOwnerTypeKey;
+		let ownerId: Snowflake | undefined;
+		if (ownerType === "user") {
+			ownerId = sageCommand.actorId;
+		}
+		if (ownerType === "game") {
+			ownerId = sageCommand.game?.id as Snowflake;
+		}
+		if (ownerType === "server") {
+			ownerId = sageCommand.server.did;
+		}
+		if (ownerType === "global") {
+			ownerId = sageCommand.bot.did;
+		}
+		if (ownerId) {
+			macros = await Macros.parse(sageCommand, { id:ownerId, type:ownerType });
+			return ret({ ownerType, ownerId });
+		}
 		macros = undefined;
 		return ret({ ownerType });
 	}

@@ -26,7 +26,7 @@ async function toRenderableContent(sageCommand: SageCommand, args: Args): Promis
 	const state = args.state.next;
 
 	if (!state.ownerType) {
-		const listItems = MacroOwner.getLabels().map(owner => `<li>${localize(owner.pluralKey)}</li>`);
+		const listItems = MacroOwner.getLabels().map(owner => `<li>${localize(owner.typeKey)}</li>`);
 
 		const content = sageCommand.createAdminRenderable("MACRO_TYPE_LIST");
 		content.append(`<ul>${listItems.join("")}</ul>`);
