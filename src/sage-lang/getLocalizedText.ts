@@ -31,6 +31,7 @@ const enUS = {
 	"CANNOT_IMPORT_S": `Cannot import "#{0}"`,
 	"SOMETHING_WRONG_IMPORT": `Sorry, something went wrong with the import.`,
 	"IMPORT_CHARACTERS_WIKI": `For information on importing characters, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Character-Management#importing-characters>)`,
+	"REIMPORT_CHARACTERS_WIKI": `For information on reimporting characters, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Character-Management#importing-characters>)`,
 
 	"CANNOT_EXPORT_CHARACTERS_HERE": `Sorry, you cannot export characters here.`,
 	"CANNOT_EXPORT_GM": `Sorry, you cannot export the GM.`,
