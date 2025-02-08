@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.8.4",
+"version":"1.8.5",
 "branch":"main",
-"commit":"b70ca755343b1af2a20c18c28b64f4aafc45aab4",
-"commitSubject":"P20 encounter builder (#126)",
-"commitTs":1735963183000,
-"commitDate":"2025-01-03-1959",
-"buildTs":1735963323000,
-"buildDate":"2025-01-03-2002",
+"commit":"c604d65dca6ab67a548e13e07712fdbaa6dd4a51",
+"commitSubject":"implement MoveDirection logic for maps and dialog",
+"commitTs":1738974470000,
+"commitDate":"2025-02-07-1627",
+"buildTs":1738974509000,
+"buildDate":"2025-02-07-1628",
 "author":"Randal"
 }
