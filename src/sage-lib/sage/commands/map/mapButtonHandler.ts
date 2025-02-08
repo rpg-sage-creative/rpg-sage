@@ -4,183 +4,201 @@ import { registerInteractionListener } from "../../../discord/handlers.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { SageInteraction } from "../../model/SageInteraction.js";
 import { ensurePlayerCharacter } from "./ensurePlayerCharacter.js";
-import { GameMap, type TMoveDirection } from "./GameMap.js";
+import { GameMap } from "./GameMap.js";
 import { LayerType } from "./GameMapBase.js";
 import { isMapAction, type MapAction } from "./MapActions.js";
+import { MoveDirection, type ArrowDirection } from "./MoveDirection.js";
 import { renderMap } from "./renderMap.js";
 
-/** get text for human readable direction */
-function toDirection(action: MapAction): string {
-	switch(action) {
-		case "MapUpLeft": return "up and left";
-		case "MapUp": return "up";
-		case "MapUpRight": return "up and right";
-		case "MapLeft": return "left";
-		case "MapRight": return "right";
-		case "MapDownLeft": return "down and left";
-		case "MapDown": return "down";
-		case "MapDownRight": return "down and right";
-		default: return "";
-	}
-}
-
 async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+	const localize = sageInteraction.getLocalizer();
 	const stack = sageInteraction.replyStack;
+
 	const toggled = gameMap.cycleActiveTerrain();
 	const activeTerrain = gameMap.activeTerrain;
-	stack.reply(`Setting ${activeTerrain?.name} as active ...`, true);
+
+	stack.reply(localize("SETTING_S_AS_ACTIVE", activeTerrain?.name ?? localize("UNKNOWN")), true);
+
 	const updated = toggled && await gameMap.save();
 	if (updated) {
-		return stack.editReply(`Your active terrain is: ${activeTerrain?.name ?? "Unknown"}`);
+		return stack.editReply(localize("YOUR_ACTIVE_TERRAIN_IS_S", activeTerrain?.name ?? localize("UNKNOWN")));
 	}
+
 	return stack.deleteReply();
 }
 
 async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+	const localize = sageInteraction.getLocalizer();
 	const stack = sageInteraction.replyStack;
+
 	const activeToken = gameMap.activeToken;
 	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveAura();
 	const toggledAura = gameMap.activeAura;
-	stack.editReply(`Setting active aura for ${activeToken?.name} to ${toggledAura?.name ?? "none"} ...`, true);
+
+	stack.editReply(localize("SETTING_ACTIVE_AURA_FOR_S_TO_S", activeToken?.name ?? localize("UNKNOWN"), toggledAura?.name ?? localize("NONE")), true);
+
 	updated = toggled
 		&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	if (updated) {
-		return stack.editReply(`Your active aura for ${activeToken?.name} is: ${toggledAura?.name ?? "none"}`);
+		return stack.editReply(localize("YOUR_ACTIVE_AURA_FOR_S_IS_S", activeToken?.name ?? localize("UNKNOWN"), toggledAura?.name ?? localize("NONE")));
 	}
+
 	return stack.deleteReply();
 }
 
 async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+	const localize = sageInteraction.getLocalizer();
 	const stack = sageInteraction.replyStack;
+
 	const added = ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveToken();
 	const activeToken = gameMap.activeToken;
-	stack.editReply(`Setting ${activeToken?.name} as active ...`, true);
+
+	stack.editReply(localize("SETTING_S_AS_ACTIVE", activeToken?.name ?? localize("UNKNOWN")), true);
+
 	let updated = false;
+
 	if (added) {
 		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	}else {
 		updated = toggled && await gameMap.save();
 	}
+
 	if (updated) {
-		return stack.editReply(`Your active token is: ${activeToken?.name ?? "Unknown"}`);
+		return stack.editReply(localize("YOUR_ACTIVE_TOKEN_IS_S", activeToken?.name ?? localize("UNKNOWN")));
 	}
-	return stack.deleteReply();
+
+	return stack.editReply(localize("ERROR_SETTING_ACTIVE_TOKEN"));
 }
 
 async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+	const localize = sageInteraction.getLocalizer();
+
 	if (!gameMap.isOwner) {
-		return sageInteraction.reply(`You can't edit somebody else's map!`, true);
+		return sageInteraction.reply(localize("YOU_CANT_EDIT_OTHERS_MAPS"), true);
 	}
+
 	const stack = sageInteraction.replyStack;
 	let updated = false;
-	let output = "";
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("up");
-			stack.editReply(`Increasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"} ...`, true);
-			output = `Aura Opacity Increased: ${gameMap.activeAura?.name ?? "Unknown"}`;
+			stack.editReply(localize("INCREASING_AURA_OPACITY_S", gameMap.activeAura?.name ?? localize("UNKNOWN")), true);
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("up");
-			stack.editReply(`Raising Terrain: ${gameMap.activeTerrain?.name ?? "Unknown"} ...`, true);
-			output = `Terrain Raised: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
+			stack.editReply(localize("RAISING_TERRAIN_S", gameMap.activeTerrain?.name ?? localize("UNKNOWN")), true);
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("up");
-			stack.editReply(`Raising Token: ${gameMap.activeToken?.name ?? "Unknown"} ...`, true);
-			output = `Token Raised: ${gameMap.activeToken?.name ?? "Unknown"}`;
+			stack.editReply(localize("RAISING_TOKEN_S", gameMap.activeToken?.name ?? localize("UNKNOWN")), true);
 			break;
 	}
+
 	if (updated) {
 		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	}
+
 	if (updated) {
-		return stack.editReply(output);
+		return stack.deleteReply();
 	}
-	return stack.deleteReply();
+
+	return stack.editReply(localize("ERROR_MANIPULATING_IMAGE"));
 }
 
 async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+	const localize = sageInteraction.getLocalizer();
+
 	if (!gameMap.isOwner) {
-		return sageInteraction.reply(`You can't edit somebody else's map!`, true);
+		return sageInteraction.reply(localize("YOU_CANT_EDIT_OTHERS_MAPS"), true);
 	}
+
 	const stack = sageInteraction.replyStack;
 	let updated = false;
-	let output = "";
 	switch(gameMap.activeLayer) {
 		case LayerType.Aura:
 			updated = gameMap.shiftOpacity("down");
-			stack.editReply(`Decreasing Aura Opacity: ${gameMap.activeAura?.name ?? "Unknown"} ...`, true);
-			output = `Aura Opacity Decreased: ${gameMap.activeAura?.name ?? "Unknown"}`;
+			stack.editReply(localize("DECREASING_AURA_OPACITY_S", gameMap.activeAura?.name ?? localize("UNKNOWN")), true);
 			break;
 		case LayerType.Terrain:
 			updated = gameMap.shuffleActiveTerrain("down");
-			stack.editReply(`Lowering Terain: ${gameMap.activeTerrain?.name ?? "Unknown"} ...`, true);
-			output = `Terrain Lowered: ${gameMap.activeTerrain?.name ?? "Unknown"}`;
+			stack.editReply(localize("LOWERING_TERRAIN_S", gameMap.activeTerrain?.name ?? localize("UNKNOWN")), true);
 			break;
 		case LayerType.Token:
 		default:
 			updated = gameMap.shuffleActiveToken("down");
-			stack.editReply(`Lowering Token: ${gameMap.activeToken?.name ?? "Unknown"} ...`, true);
-			output = `Token Lowered: ${gameMap.activeToken?.name ?? "Unknown"}`;
+			stack.editReply(localize("LOWERING_TOKEN_S", gameMap.activeToken?.name ?? localize("UNKNOWN")), true);
 			break;
 	}
+
 	if (updated) {
 		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	}
+
 	if (updated) {
-		return stack.editReply(output);
+		return stack.deleteReply();
 	}
-	return stack.deleteReply();
+
+	return stack.editReply(localize("ERROR_MANIPULATING_IMAGE"));
 }
 
 async function actionHandlerMapConfig(sageInteraction: SageInteraction, _: GameMap): Promise<void> {
-	return sageInteraction.reply(`Not Implemented ... Yet.`, true);
+	return sageInteraction.reply(sageInteraction.getLocalizer()("NOT_IMPLEMENTED_YET"), true);
 }
 
 async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+	const localize = sageInteraction.getLocalizer();
 	const activeImage = gameMap.activeImage;
 	if (activeImage) {
 		const stack = sageInteraction.replyStack;
 		stack.defer();
-		const boolDelete = await discordPromptYesNo(sageInteraction, `Delete image: ${activeImage.name}?`, true);
+		const boolDelete = await discordPromptYesNo(sageInteraction, localize("DELETE_IMAGE_S_?", activeImage.name), true);
 		if (boolDelete) {
-			stack.editReply(`Deleting image: ${activeImage.name} ...`, true);
+			stack.editReply(localize("DELETING_IMAGE_S", activeImage.name), true);
+
 			const deleted = gameMap.deleteImage(activeImage);
-			const updated = deleted
-				&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
+			const updated = deleted && await renderMap(sageInteraction.interaction.message as Message, gameMap);
 			if (updated) {
-				return stack.editReply(`Deleted image: ${activeImage.name}`);
+				return stack.editReply(localize("DELETED_IMAGE_S", activeImage.name));
 			}
-			return stack.editReply(`Error deleting image!`);
+
+			return stack.editReply(localize("ERROR_DELETING_IMAGE"));
 		}
 		return stack.deleteReply();
+
 	}else {
-		return sageInteraction.reply(`You have no image to delete!`, true);
+		return sageInteraction.reply(localize("NO_IMAGE_TO_MOVE"), true);
 	}
 }
 
 async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
+	const localize = sageInteraction.getLocalizer();
 	const stack = sageInteraction.replyStack;
+
 	const gameMap = actionData.gameMap;
 	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
 	const activeImage = gameMap.activeImage;
 	const mapAction = actionData.mapAction;
 	if (activeImage) {
-		stack.editReply(`Moving ${activeImage.name} ${toDirection(mapAction)} ...`, true);
-		const moved = gameMap.moveActiveToken(mapAction.slice(3).toLowerCase() as TMoveDirection);
+		const direction = MoveDirection.from(mapAction.slice(3).toLowerCase() as ArrowDirection);
+		const dirLabel = `${direction.compassEmoji} (${direction.ordinalText})`;
+		stack.editReply(localize("MOVING_S_S", activeImage.name, dirLabel), true);
+
+		const moved = gameMap.moveActiveToken(direction);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
+
 		updated = (moved || shuffled)
 			&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 		if (updated) {
 			return stack.deleteReply();
 		}
-		return stack.editReply(`Error moving image!`);
+
+		return stack.editReply(localize("ERROR_MOVING_IMAGE"));
 	}
-	return sageInteraction.reply(`You have no image to move!`, true);
+
+	return sageInteraction.reply(localize("NO_IMAGE_TO_MOVE"), true);
 }
 
 async function actionHandler(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {

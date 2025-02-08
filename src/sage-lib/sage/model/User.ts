@@ -1,5 +1,6 @@
 import { getSuperAdminId, getSuperUserId } from "@rsc-sage/env";
 import { applyChanges, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
 import type { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
@@ -23,20 +24,33 @@ export type TMacro = {
 export enum DialogDiceBehaviorType { Default = 0, Inline = 1 };
 
 export interface UserCore extends DidCore<"User"> {
+
 	aliases?: TAlias[];
+
 	defaultDialogType?: DialogType;
+
 	defaultSagePostType?: DialogType;
+
 	dialogDiceBehaviorType?: DialogDiceBehaviorType;
-	macros?: TMacro[];
-	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
-	notes?: TNote[];
-	/** @deprecated */
-	patronTier?: number;
-	playerCharacters?: (GameCharacter | GameCharacterCore)[];
+
 	/** undefined is false (the default logic doesn't send on delete) */
 	dmOnDelete?: boolean;
+
 	/** undefined is true (the default logic does send on delete) */
 	dmOnEdit?: boolean;
+
+	macros?: TMacro[];
+
+	moveDirectionOutputType?: MoveDirectionOutputType;
+
+	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
+
+	notes?: TNote[];
+
+	/** @deprecated */
+	patronTier?: number;
+
+	playerCharacters?: (GameCharacter | GameCharacterCore)[];
 }
 
 //#region Core Updates
@@ -66,10 +80,15 @@ type UpdateArgs = Args<{
 	dialogPostType: DialogType;
 	dmOnDelete: boolean;
 	dmOnEdit: boolean;
+	moveDirectionOutputType: MoveDirectionOutputType;
 	sagePostType: DialogType;
 }>;
 
 export class User extends HasDidCore<UserCore> {
+
+	public isSuperAdmin: boolean;
+	public isSuperUser: boolean;
+
 	public constructor(core: UserCore, sageCache: SageCache) {
 		super(updateCore(core), sageCache);
 
@@ -84,26 +103,38 @@ export class User extends HasDidCore<UserCore> {
 		this.isSuperAdmin = core.did === getSuperAdminId();
 		this.isSuperUser = core.did === getSuperUserId();
 	}
+
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
-	/** @deprecated */
-	public get defaultDialogType(): DialogType | undefined { return this.dialogPostType; }
-	public get dialogDiceBehaviorType() { return this.core.dialogDiceBehaviorType; }
-	public get dialogPostType(): DialogType | undefined { return this.core.defaultDialogType; }
-	/** @deprecated */
-	public get defaultSagePostType(): DialogType | undefined { return this.sagePostType; }
-	/** undefined is false (the default logic doesn't send on delete) */
-	public get dmOnDelete(): boolean { return this.core.dmOnDelete ?? false; }
-	/** undefined is true (the default logic does send on delete) */
-	public get dmOnEdit(): boolean { return this.core.dmOnEdit ?? true; }
-	public get sagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
 	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public notes: NoteManager;
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
+
+	//#region settings
+
+	/** @deprecated use .dialogPostType */
+	public get defaultDialogType(): DialogType | undefined { return this.dialogPostType; }
+
+	/** @deprecated use .sagePostType */
+	public get defaultSagePostType(): DialogType | undefined { return this.sagePostType; }
+
+	public get dialogDiceBehaviorType() { return this.core.dialogDiceBehaviorType; }
+
+	public get dialogPostType(): DialogType | undefined { return this.core.defaultDialogType; }
+
+	/** undefined is false (the default logic doesn't send on delete) */
+	public get dmOnDelete(): boolean { return this.core.dmOnDelete ?? false; }
+
+	/** undefined is true (the default logic does send on edit) */
+	public get dmOnEdit(): boolean { return this.core.dmOnEdit ?? true; }
+
 	public get preferredLang(): "en-US" { return "en-US"; }
 
-	public isSuperAdmin: boolean;
-	public isSuperUser: boolean;
+	public get moveDirectionOutputType(): MoveDirectionOutputType | undefined { return this.core.moveDirectionOutputType; }
+
+	public get sagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
+
+	//#endregion
 
 	public findCharacterOrCompanion(name: string): GameCharacter | undefined {
 		return this.playerCharacters.findByName(name)
@@ -123,13 +154,14 @@ export class User extends HasDidCore<UserCore> {
 		return undefined;
 	}
 
-	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType }: UpdateArgs): Promise<boolean> {
+	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType }: UpdateArgs): Promise<boolean> {
 		const changed = applyChanges(this.core, {
 			dialogDiceBehaviorType,
 			defaultDialogType:dialogPostType,
 			defaultSagePostType:sagePostType,
 			dmOnDelete,
-			dmOnEdit
+			dmOnEdit,
+			moveDirectionOutputType
 		});
 		return changed ? this.save() : false;
 	}

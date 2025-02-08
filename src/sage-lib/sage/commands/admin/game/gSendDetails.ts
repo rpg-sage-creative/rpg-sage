@@ -10,6 +10,7 @@ import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequ
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
+import { MoveDirectionOutputType } from "../../map/MoveDirection.js";
 import { renderPostCurrency } from "../PostCurrency.js";
 
 async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
@@ -217,7 +218,12 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 	}
 
 	await showGameRenderDialogType(renderableContent, sageCommand, game);
+
 	gameDetailsAppendDice(renderableContent, game);
+
+	const moveDirectionOutputType = MoveDirectionOutputType[game.moveDirectionOutputType!] ?? `<i>unset (Compact)</i>`;
+	renderableContent.append(`<b>Move Direction Output Type</b> ${moveDirectionOutputType}`);
+
 	await showGameRenderServer(renderableContent, sageCommand, game);
 
 	renderPostCurrency(game, renderableContent, players);

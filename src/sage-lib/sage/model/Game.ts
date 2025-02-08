@@ -5,6 +5,7 @@ import { applyChanges, isDefined, randomSnowflake, warn, type Args, type Optiona
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
 import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";
+import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";
 import type { PartyCore } from "../commands/trackers/party/Party.js";
@@ -194,6 +195,8 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
+	public get moveDirectionOutputType(): MoveDirectionOutputType | undefined { return this.core.moveDirectionOutputType; }
+
 	public get serverDid(): Snowflake { return this.core.serverDid; }
 	public get serverId(): UUID { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }

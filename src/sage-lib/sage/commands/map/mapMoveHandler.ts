@@ -1,41 +1,12 @@
+import { deleteMessage } from "../../../discord/deletedMessages.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { ensurePlayerCharacter } from "./ensurePlayerCharacter.js";
-import { GameMap, type TCompassDirection } from "./GameMap.js";
+import { GameMap } from "./GameMap.js";
 import { LayerType, type TGameMapToken } from "./GameMapBase.js";
+import { MoveDirection } from "./MoveDirection.js";
 import { renderMap } from "./renderMap.js";
-
-function inputToCompassDirections(sageMessage: SageMessage): TCompassDirection[] {
-	const directions: TCompassDirection[] = [];
-	// blocks array should be something like: [ '[ S S E ]', '[2N]', '[W3]' ]
-	const blocks = sageMessage.slicedContent.match(/\[\s*(?:\b(?:\s|\d+(?:nw|n|ne|w|e|sw|s|se)|(?:nw|n|ne|w|e|sw|s|se)\d*)\b)+\s*\]/gi);
-
-	// each block should be something like: '[ S S E ]' or '[2N]' or 'W3'
-	blocks?.forEach(block => {
-		// pairs array should be something like: ["s", "2n", "w3"]
-		const pairs = block.slice(1, -1).toLowerCase().split(/\s/).filter(s => s);
-
-		// each pair should be something like: "s" or "2n" or "w3"
-		pairs.forEach(pair => {
-			// test with required number prefix before testing witth optional number suffix
-			const distAndDir = /(?<distance>\d+)(?<direction>nw|n|ne|w|e|sw|s|se)/.exec(pair)
-				?? /(?<direction>nw|n|ne|w|e|sw|s|se)(?<distance>\d+)?/.exec(pair);
-
-			// direction is there, distance is optional
-			const { direction, distance } = distAndDir?.groups!; // NOSONAR
-
-			// default count to 1
-			const count = +(distance ?? 1);
-
-			// add the direction "distance" number of times
-			for (let i = 0; i < count; i++) {
-				directions.push(direction as TCompassDirection);
-			}
-		});
-	});
-	return directions;
-}
 
 async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 	const localize = sageMessage.getLocalizer();
@@ -48,7 +19,7 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 		return stack.whisper({ content });
 	}
 
-	const directions = inputToCompassDirections(sageMessage);
+	const directions = MoveDirection.collect(sageMessage.slicedContent);
 	if (!directions.length) {
 		const content = [
 			localize("INCLUDE_MOVE_DIRECTIONS"),
@@ -125,7 +96,7 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 		return stack.editReply(content);
 	}
 
-	const moveEmoji = directions.map(dir => `[${dir}]`).join(" ");
+	const moveEmoji = MoveDirection.toEmoji(directions, sageMessage.sageUser.moveDirectionOutputType);
 	const promptContent = localize("MOVE_S_S_?", activeImage.name, moveEmoji);
 	const boolMove = await discordPromptYesNo(sageMessage, promptContent, true);
 	if (boolMove === true) {
@@ -141,7 +112,8 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 		}
 	}
 
-	return stack.deleteReply();
+	await stack.deleteReply();
+	await deleteMessage(sageMessage.message);
 }
 
 export function registerMapMove(): void {

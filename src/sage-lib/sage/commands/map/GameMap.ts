@@ -1,5 +1,6 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { COL, GameMapBase, LayerType, ROW, type TGameMapAura, type TGameMapCore, type TGameMapImage, UserLayerType } from "./GameMapBase";
+import { COL, GameMapBase, LayerType, ROW, UserLayerType, type TGameMapAura, type TGameMapCore, type TGameMapImage } from "./GameMapBase.js";
+import { MoveDirection, type Direction } from "./MoveDirection.js";
 
 /** shuffles an image on a layer */
 export type TShuffleUpDown = "up" | "down";
@@ -34,47 +35,39 @@ const UP = -1;
 const DOWN = 1;
 const LEFT = -1;
 const RIGHT = 1;
+type PosDir = [0 | 1, -1 | 1];
 
-export type TCompassDirection = "nw" | "n" | "ne" | "w" | "e" | "sw" | "s" | "se";
-export type TMoveDirection = "upleft" | "up" | "upright" | "left" | "right" | "downleft" | "down" | "downright";
-export type TDirection = TCompassDirection | TMoveDirection;
-function ensureMoveDirections(directions: TDirection[]): TMoveDirection[] {
-	return directions.map(dir => {
-		switch(dir) {
-			case "nw": return "upleft";
-			case "n": return "up";
-			case "ne": return "upright";
-			case "w": return "left";
-			case "e": return "right";
-			case "sw": return "downleft";
-			case "s": return "down";
-			case "se": return "downright";
-			default: return dir;
-		}
-	});
-}
-function moveImage(image: TGameMapImage, ...directions: TMoveDirection[]): boolean {
+function moveImage(image: TGameMapImage, ...directions: Direction[]): boolean {
 	const [startCol, startRow] = image.pos;
-	directions.forEach(direction => {
-		switch(direction) {
-			case "upleft": return move(image, [ROW, UP], [COL, LEFT]);
-			case "up": return move(image, [ROW, UP]);
-			case "upright": return move(image, [ROW, UP], [COL, RIGHT]);
-			case "left": return move(image, [COL, LEFT]);
-			case "right": return move(image, [COL, RIGHT]);
-			case "downleft": return move(image, [ROW, DOWN], [COL, LEFT]);
-			case "down": return move(image, [ROW, DOWN]);
-			case "downright": return move(image, [ROW, DOWN], [COL, RIGHT]);
-			default: return false;
+
+	const moveImage = (distance: number, ...posDirs: PosDir[]) => {
+		while (distance--) {
+			move(image, ...posDirs);
+		}
+	};
+
+	directions.forEach(dir => {
+		const direction = MoveDirection.from(dir);
+		switch(direction.arrow) {
+			case "upleft": return moveImage(direction.distance, [ROW, UP], [COL, LEFT]);
+			case "up": return moveImage(direction.distance, [ROW, UP]);
+			case "upright": return moveImage(direction.distance, [ROW, UP], [COL, RIGHT]);
+			case "left": return moveImage(direction.distance, [COL, LEFT]);
+			case "right": return moveImage(direction.distance, [COL, RIGHT]);
+			case "downleft": return moveImage(direction.distance, [ROW, DOWN], [COL, LEFT]);
+			case "down": return moveImage(direction.distance, [ROW, DOWN]);
+			case "downright": return moveImage(direction.distance, [ROW, DOWN], [COL, RIGHT]);
+			default: return;
 		}
 	});
+
 	return image.pos[COL] !== startCol || image.pos[ROW] !== startRow;
 }
 
 const POS = 0;
 const DIR = 1;
 
-function move(image: TGameMapImage, ...posDirs: [0 | 1, -1 | 1][]): boolean {
+function move(image: TGameMapImage, ...posDirs: PosDir[]): boolean {
 	posDirs.forEach(posDir => {
 		image.pos[posDir[POS]] += posDir[DIR];
 		image.auras?.forEach(aura => aura.pos[posDir[POS]] += posDir[DIR]);
@@ -257,13 +250,12 @@ export class GameMap extends GameMapBase {
 	}
 
 	/** move the active token in the given direction */
-	public moveActiveToken(...directions: TDirection[]): boolean {
+	public moveActiveToken(...directions: Direction[]): boolean {
 		const activeImage = this.activeImage;
 		if (!activeImage) {
 			return false;
 		}
-		const moveDirections = ensureMoveDirections(directions);
-		return moveImage(activeImage, ...moveDirections);
+		return moveImage(activeImage, ...directions);
 	}
 
 	/** change the active aura's opacity */
