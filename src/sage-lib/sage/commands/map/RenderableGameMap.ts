@@ -1,7 +1,8 @@
-import { RenderableMap } from "../../../../sage-utils/utils/MapUtils";
-import type { IMapLayer, MapRenderResponse, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils";
-import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
-import { type TParsedGameMapCore } from "./gameMapImporter";
+import { getPort } from "@rsc-utils/core-utils";
+import type { IMapLayer, MapRenderResponse, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils/index.js";
+import { RenderableMap } from "../../../../sage-utils/utils/MapUtils/index.js";
+import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase.js";
+import { type TParsedGameMapCore } from "./gameMapImporter.js";
 
 class RenderableGameMapLayer implements IMapLayer {
 	public constructor(protected images: TGameMapImage[]) { }
@@ -30,7 +31,7 @@ class RenderableGameMapLayer implements IMapLayer {
 	}
 }
 
-RenderableMap.setEndpoint({port:3000});
+RenderableMap.setEndpoint({port:getPort("Map")});
 export class RenderableGameMap extends RenderableMap {
 	public constructor (protected core: TGameMapCore) {
 		super();
