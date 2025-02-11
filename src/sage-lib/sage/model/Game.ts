@@ -214,7 +214,6 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get gmCharacter(): GameCharacter { return this.core.gmCharacter as GameCharacter; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
-	public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
 	public findCharacterOrCompanion(name: string): GameCharacter | CharacterShell | undefined {
 		if (this.gmCharacter.matches(name)) return this.gmCharacter;
 		return this.playerCharacters.findByName(name)
@@ -274,18 +273,26 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		}
 		return pGuildMembers.filter(isDefined);
 	}
+
+	/** Returns all manually added channels as GuildTextBasedChannel objects. */
 	public async guildChannels(): Promise<GuildTextBasedChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
 		return all.filter(isDefined) as GuildTextBasedChannel[];
 	}
+
+	/** Returns all manually added channels that are not found on this Server. */
 	public async orphanChannels(): Promise<SageChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
 		return this.channels.filter((_, index) => !all[index]);
 	}
+
+	/** Returns all manually added users that are not found on this Server. */
 	public async orphanUsers(): Promise<GameUserData[]> {
 		const all = await Promise.all(this.users.map(user => this.discord.fetchGuildMember(user.did)));
 		return this.users.filter((_, index) => !all[index]);
 	}
+
+	/** Returns all game masters (manual and role) as GuildMember objects. */
 	public async gmGuildMembers(): Promise<GuildMember[]> {
 		const gmGuildMembers = await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)));
 		const gmRoleDid = this.gmRoleDid;
