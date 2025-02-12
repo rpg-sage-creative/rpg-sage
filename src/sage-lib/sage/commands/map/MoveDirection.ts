@@ -128,8 +128,9 @@ export class MoveDirection {
 	public static collect(content: string): MoveDirection[] {
 		const directions: MoveDirection[] = [];
 
-		// blocks array should be something like: [ '[ S S E ]', '[2N]', '[W3]' ]
 		const matches = content.match(getCompassDirectionsRegex());
+
+		// matches array should be something like: [ '[ S S E ]', '[2N]', '[W3]' ]
 		matches?.forEach(match => directions.push(...parseCompassPairs(match)));
 
 		return MoveDirection.compact(directions);
