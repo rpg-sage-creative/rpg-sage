@@ -1,27 +1,27 @@
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { SageMessage } from "../../model/SageMessage.js";
-import { includeDeleteButton } from "../../model/utils/deleteButton.js";
 import { ensurePlayerCharacter } from "./ensurePlayerCharacter.js";
 import { GameMap } from "./GameMap.js";
 import { LayerType, type TGameMapAura, type TGameMapToken } from "./GameMapBase.js";
 
 /** @deprecated Temporary solution to setting the active terrain, token, or aura. */
 async function mapActivateHandler(sageMessage: SageMessage): Promise<void> {
-	const mapUserId = sageMessage.sageUser.did;
+	const localize = sageMessage.getLocalizer();
+	const stack = sageMessage.replyStack;
 
 	const mapMessageId = sageMessage.message.reference?.messageId;
 	const mapExists = mapMessageId && GameMap.exists(mapMessageId);
 	if (!mapExists) {
-		return sageMessage.reply(includeDeleteButton({ content:`Please reply to the map you wish to set your active token for.` }, mapUserId));
+		const content = localize("REPLY_TO_MAP_TO_ACTIVATE");
+		return stack.whisper({ content });
 	}
 
-	const gameMap = mapExists ? await GameMap.forUser(mapMessageId, mapUserId, true) : null;
+	const gameMap = await GameMap.forActor(sageMessage);
 	if (!gameMap) {
-		return sageMessage.reply(includeDeleteButton({ content:`Sorry, there was a problem loading your map!` }, mapUserId));
+		const content = localize("PROBLEM_LOADING_MAP");
+		return stack.whisper({ content });
 	}
-
-	const stack = sageMessage.replyStack;
 
 	ensurePlayerCharacter(sageMessage, gameMap);
 
@@ -57,22 +57,25 @@ async function mapActivateHandler(sageMessage: SageMessage): Promise<void> {
 			}
 		}
 		if (!token) {
-			return stack.editReply(`Unable to find token: ${targetTokenArg?.value ?? targetNameArg?.value}`);
+			const content = localize("UNABLE_TO_FIND_TOKEN_S", targetTokenArg?.value ?? targetNameArg?.value!);
+			return stack.editReply(content);
 		}
 		gameMap.activeLayer = LayerType.Token;
 		gameMap.activeImage = token;
 
 	}else if (targetAuraArg) {
-		const testAura = (a: TGameMapAura) => a.name.toLowerCase() === targetAuraArg.lower
+		const testAura = (a: TGameMapAura) => a.name.toLowerCase() === targetAuraArg.lower;
 		let aura = gameMap.auras.find(testAura);
 		if (!aura) {
-			gameMap.tokens.concat(gameMap.terrain).find(t => t.auras.find(a => {
-				if (testAura(a)) { aura = a; return true; }
+			// the first token/terrain that has an aura that matches will set the aura and end this find in a find
+			gameMap.tokens.concat(gameMap.terrain).find(t => t.auras.find(a => { // NOSONAR
+				if (testAura(a)) { aura = a; return true; }                      // NOSONAR
 				return false;
 			}));
 		}
 		if (!aura) {
-			return stack.editReply("Unable to find aura: " + targetAuraArg.value);
+			const content = localize("UNABLE_TO_FIND_AURA_S", targetAuraArg.value);
+			return stack.editReply(content);
 		}
 		gameMap.activeLayer = LayerType.Aura;
 		gameMap.activeImage = aura;
@@ -80,20 +83,24 @@ async function mapActivateHandler(sageMessage: SageMessage): Promise<void> {
 	}else if (targetTerrainArg) {
 		const terrain = gameMap.userTerrain.find(t => t.name.toLowerCase() === targetTerrainArg.lower);
 		if (!terrain) {
-			return stack.editReply("Unable to find terrain: " + targetTerrainArg.value);
+			const content = localize("UNABLE_TO_FIND_TERRAIN_S", targetTerrainArg.value);
+			return stack.editReply(content);
 		}
 		gameMap.activeLayer = LayerType.Terrain;
 		gameMap.activeImage = terrain;
 
 	}else {
-		return stack.editReply(`Nothing to do!`);
+		const content = localize("NO_IMAGE_TO_ACTIVATE");
+		return stack.editReply(content);
 	}
 
-	const boolMove = await discordPromptYesNo(sageMessage, `Set ${gameMap.activeImage.name} as active?`, true);
+	const promptContent = localize("SET_S_AS_ACTIVE_?", gameMap.activeImage.name);
+	const boolMove = await discordPromptYesNo(sageMessage, promptContent, true);
 	if (boolMove === true) {
 		const updated = await gameMap.save();
 		if (!updated) {
-			return stack.editReply(`Error setting active item!`);
+			const content = localize("ERROR_SETTING_ACTIVE_IMAGE");
+			return stack.editReply(content);
 		}
 	}
 

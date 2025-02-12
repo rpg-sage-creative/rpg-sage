@@ -1,4 +1,3 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
 import { Message } from "discord.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
@@ -32,13 +31,13 @@ async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: G
 	const stack = sageInteraction.replyStack;
 
 	const activeToken = gameMap.activeToken;
-	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
+	const ensureResults = ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveAura();
 	const toggledAura = gameMap.activeAura;
 
 	stack.editReply(localize("SETTING_ACTIVE_AURA_FOR_S_TO_S", activeToken?.name ?? localize("UNKNOWN"), toggledAura?.name ?? localize("NONE")), true);
 
-	updated = toggled
+	const updated = (ensureResults.added.length || toggled)
 		&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	if (updated) {
 		return stack.editReply(localize("YOUR_ACTIVE_AURA_FOR_S_IS_S", activeToken?.name ?? localize("UNKNOWN"), toggledAura?.name ?? localize("NONE")));
@@ -51,7 +50,7 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 	const localize = sageInteraction.getLocalizer();
 	const stack = sageInteraction.replyStack;
 
-	const added = ensurePlayerCharacter(sageInteraction, gameMap);
+	const ensureResults = ensurePlayerCharacter(sageInteraction, gameMap);
 	const toggled = gameMap.cycleActiveToken();
 	const activeToken = gameMap.activeToken;
 
@@ -59,7 +58,7 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 
 	let updated = false;
 
-	if (added) {
+	if (ensureResults.added.length) {
 		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
 	}else {
 		updated = toggled && await gameMap.save();
@@ -75,8 +74,9 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 
-	if (!gameMap.isOwner) {
-		return sageInteraction.reply(localize("YOU_CANT_EDIT_OTHERS_MAPS"), true);
+	if (!gameMap.isGameMasterOrOwner) {
+		const content = localize(sageInteraction.game ? "ONLY_MAP_OWNERS_OR_GAMEMASTERS" : "ONLY_MAP_OWNERS");
+		return sageInteraction.reply(content, true);
 	}
 
 	const stack = sageInteraction.replyStack;
@@ -111,8 +111,9 @@ async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: 
 async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 
-	if (!gameMap.isOwner) {
-		return sageInteraction.reply(localize("YOU_CANT_EDIT_OTHERS_MAPS"), true);
+	if (!gameMap.isGameMasterOrOwner) {
+		const content = localize(sageInteraction.game ? "ONLY_MAP_OWNERS_OR_GAMEMASTERS" : "ONLY_MAP_OWNERS");
+		return sageInteraction.reply(content, true);
 	}
 
 	const stack = sageInteraction.replyStack;
@@ -178,7 +179,9 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 	const stack = sageInteraction.replyStack;
 
 	const gameMap = actionData.gameMap;
-	let updated = ensurePlayerCharacter(sageInteraction, gameMap);
+
+	const ensureResults = ensurePlayerCharacter(sageInteraction, gameMap);
+
 	const activeImage = gameMap.activeImage;
 	const mapAction = actionData.mapAction;
 	if (activeImage) {
@@ -189,7 +192,7 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 		const moved = gameMap.moveActiveToken(direction);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 
-		updated = (moved || shuffled)
+		const updated = (ensureResults.added.length || moved || shuffled)
 			&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
 		if (updated) {
 			return stack.deleteReply();
@@ -221,10 +224,8 @@ type TActionData = { gameMap:GameMap; mapAction:MapAction; };
 async function actionTester(sageInteraction: SageInteraction): Promise<TActionData | undefined> {
 	// const [mapId, mapAction] = (sageInteration.interaction.customId ?? "").split("|") as [Discord.Snowflake, TMapAction];
 	const mapAction = (sageInteraction.interaction.customId ?? "").split("|")[1];
-	const messageId = sageInteraction.interaction.message?.id;
-	if (isMapAction(mapAction) && messageId && GameMap.exists(messageId)) {
-		const userDid = sageInteraction.user?.id;
-		const gameMap = userDid ? await GameMap.forUser(messageId, sageInteraction.user.id as Snowflake, true) : null;
+	if (isMapAction(mapAction)) {
+		const gameMap = await GameMap.forActor(sageInteraction);
 		if (gameMap) {
 			return { gameMap, mapAction };
 		}

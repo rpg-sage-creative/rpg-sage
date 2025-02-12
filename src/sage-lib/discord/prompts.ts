@@ -1,5 +1,5 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
-import { error, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { error, errorReturnFalse, errorReturnNull, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { createActionRow } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Interaction, type Message } from "discord.js";
@@ -45,7 +45,7 @@ export async function confirm(sageCommand: SageCommand, options: ConfirmOptions)
 }
 
 export async function discordPromptYesNo(sageCommand: SageCommand, resolvable: RenderableContentResolvable, deleteAfter?: boolean): Promise<boolean | null> {
-	return confirm(sageCommand, { content:resolvable, confirmLabel:"Yes", cancelLabel:"No", deleteAfter });
+	return confirm(sageCommand, { content:resolvable, confirmLabel:"Yes", cancelLabel:"No", deleteAfter }).catch(errorReturnFalse);
 }
 
 type PromptArgs = {
@@ -95,7 +95,7 @@ async function sendPromptMessage(args: PromptArgs): Promise<PromptMessageSentDat
 	const components = [buttonRow];
 
 	// send message
-	const message = await dChannel.send({ content, embeds, components });
+	const message = await dChannel.send({ content, embeds, components }).catch(errorReturnNull);
 	if (message) {
 		// map button data only if successful
 		const buttons = args.buttons.map(({ label, data }, index) => {
