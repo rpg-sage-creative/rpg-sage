@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.8.5",
+"version":"1.8.6",
 "branch":"main",
-"commit":"c604d65dca6ab67a548e13e07712fdbaa6dd4a51",
-"commitSubject":"implement MoveDirection logic for maps and dialog",
-"commitTs":1738974470000,
-"commitDate":"2025-02-07-1627",
-"buildTs":1738974509000,
-"buildDate":"2025-02-07-1628",
+"commit":"67ca7c8ab68439d409af164c7608017e951cf603",
+"commitSubject":"bulk map move logic; game map gm logic",
+"commitTs":1739404759000,
+"commitDate":"2025-02-12-1559",
+"buildTs":1739408270000,
+"buildDate":"2025-02-12-1657",
 "author":"Randal"
 }
