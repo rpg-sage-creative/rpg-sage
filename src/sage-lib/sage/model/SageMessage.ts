@@ -198,10 +198,11 @@ export class SageMessage
 	/** Returns the channelDid this message (or its thread) is in. */
 	public get channelDid(): Snowflake | undefined {
 		return this.cache.getOrSet("channelDid", () => {
-			if (this.message.channel.isThread()) {
+			/** @todo investigate the notes found in threadDid below */
+			if (this.message.channel?.isThread()) {
 				return this.message.channel.parent?.id as Snowflake;
 			}
-			return this.message.channel.id as Snowflake;
+			return this.message.channel?.id as Snowflake;
 		});
 	}
 
@@ -209,7 +210,16 @@ export class SageMessage
 	/** Returns the threadDid this message is in. */
 	public get threadDid(): Snowflake | undefined {
 		return this.cache.getOrSet("threadDid", () => {
-			if (this.message.channel.isThread()) {
+			/**
+			 * original: this.message.channel.isThread()
+			 * updated: this.message.channel?.isThread()
+			 * we got an error here that .channel was null.
+			 * @todo investigate what can make the channel null.
+			 * is it possible Sage was used in a channel type we aren't expecting?
+			 * is it possible Sage was used in a channel type we aren't aware of?
+			 * is it possible a partial message?
+			 */
+			if (this.message.channel?.isThread()) {
 				return this.message.channel.id as Snowflake;
 			}
 			return undefined;
