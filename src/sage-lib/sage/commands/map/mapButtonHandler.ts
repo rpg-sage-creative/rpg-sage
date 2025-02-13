@@ -186,7 +186,7 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 	const mapAction = actionData.mapAction;
 	if (activeImage) {
 		const direction = MoveDirection.from(mapAction.slice(3).toLowerCase() as ArrowDirection);
-		const dirLabel = `${direction.compassEmoji} (${direction.ordinalText})`;
+		const dirLabel = `${direction.compassEmoji} (${direction.ordinalLabel})`;
 		stack.editReply(localize("MOVING_S_S", activeImage.name, dirLabel), true);
 
 		const moved = gameMap.moveActiveToken(direction);

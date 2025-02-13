@@ -1,117 +1,100 @@
 
-export type CompassDirection = "nw" | "n" | "ne" | "w" | "e" | "sw" | "s" | "se";
 export type ArrowDirection = "upleft" | "up" | "upright" | "left" | "right" | "downleft" | "down" | "downright";
-
-export type Direction = CompassDirection | ArrowDirection | MoveDirection;
+export type CompassDirection = "nw" | "n" | "ne" | "w" | "e" | "sw" | "s" | "se";
+export type Direction = ArrowDirection | CompassDirection | MoveDirection | OrdinalDirection;
+export type OrdinalDirection = "ul" | "u" | "ur" | "l" | "r" | "dl" | "d" | "dr";
 
 export enum MoveDirectionOutputType {
 	Compact = 0,
 	Verbose = 1
 }
 
-/** Converts compass directions to arrow directions, retains given arrow diretions. */
-function ensureCompassDirection(dir: CompassDirection | ArrowDirection): CompassDirection {
-	switch(dir) {
-		case "upleft": return "nw";
-		case "up": return "n";
-		case "upright": return "ne";
-		case "left": return "w";
-		case "right": return "e";
-		case "downleft": return "sw";
-		case "down": return "s";
-		case "downright": return "se";
-		default: return dir;
-	}
+type DirectionBase = {
+	arrow: ArrowDirection;
+	compass: CompassDirection;
+	/** north south east west etc */
+	compassLabel: string;
+	ordinal: OrdinalDirection;
+	/** up down left right etc */
+	ordinalLabel: string;
+};
+function getAllDirections(): DirectionBase[] {
+	return [
+		{ arrow:"upleft", compass:"nw", compassLabel:"northwest", ordinal:"ul", ordinalLabel:"up and left" },
+		{ arrow:"up", compass:"n", compassLabel:"north", ordinal:"u", ordinalLabel:"up" },
+		{ arrow:"upright", compass:"ne", compassLabel:"northeast", ordinal:"ur", ordinalLabel:"up and right" },
+		{ arrow:"left", compass:"w", compassLabel:"west", ordinal:"l", ordinalLabel:"left" },
+		{ arrow:"right", compass:"e", compassLabel:"east", ordinal:"r", ordinalLabel:"right" },
+		{ arrow:"downleft", compass:"sw", compassLabel:"southwest", ordinal:"dl", ordinalLabel:"down and left" },
+		{ arrow:"down", compass:"s", compassLabel:"south", ordinal:"d", ordinalLabel:"down" },
+		{ arrow:"downright", compass:"se", compassLabel:"southeast", ordinal:"dr", ordinalLabel:"down and right" },
+	];
 }
 
-/** Converts compass directions to arrow directions, retains given arrow diretions. */
-function ensureArrowDirection(dir: CompassDirection | ArrowDirection): ArrowDirection {
-	switch(dir) {
-		case "nw": return "upleft";
-		case "n": return "up";
-		case "ne": return "upright";
-		case "w": return "left";
-		case "e": return "right";
-		case "sw": return "downleft";
-		case "s": return "down";
-		case "se": return "downright";
-		default: return dir;
-	}
-}
-
-/** get text for human readable direction */
-function toOrdinalDirection(arrow: ArrowDirection): string {
-	switch(arrow) {
-		case "upleft": return "up and left";
-		case "up": return "up";
-		case "upright": return "up and right";
-		case "left": return "left";
-		case "right": return "right";
-		case "downleft": return "down and left";
-		case "down": return "down";
-		case "downright": return "down and right";
-		default: return "";
-	}
+type FindDirectionArg = ArrowDirection | CompassDirection | OrdinalDirection;
+function findBase(dir: FindDirectionArg): DirectionBase {
+	dir = dir.toLowerCase() as FindDirectionArg;
+	return getAllDirections().find(base => base.arrow === dir || base.compass === dir || base.ordinal === dir)!;
 }
 
 /** We always need a new regex when using "global" to avoid lastIndex issues of back-to-back identical strings. */
 function getCompassDirectionsRegex() {
 	// all compass regex needs to have this order to capture nw/ne/sw/se before capturing n/s: nw|ne|n|sw|se|s|w|e
-	return /\[\s*(?:\b(?:\s|\d+(?:nw|ne|n|sw|se|s|w|e)|(?:nw|ne|n|sw|se|s|w|e)\d*)\b)+\s*\]/gi;
+	// all ordinal regex needs to have this order to capture ul/ur/dl/dr before capturing u/d: ul|ur|u|dl|dr|d|l|r
+	return /\[\s*(?:\b(?:\s|\d+(?:nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)|(?:nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)\d*)\b)+\s*\]/gi;
 }
 
 /**
  * @param match expected to be regex.exec(string)[0] or string.replace(regexp, match => {}).
  */
-function parseCompassPairs(match: string): MoveDirection[] {
+function parseDirectionPairs(match: string): MoveDirection[] {
 	// pairs array should be something like: ["s", "2n", "w3"]
 	const pairs = match.slice(1, -1).split(/\s/).filter(s => s);
 	return pairs.map(pair => {
 		// test with required number prefix before testing witth optional number suffix
-		const match = /(?<count>\d+)(?<compass>nw|ne|n|sw|se|s|w|e)/i.exec(pair)
-			?? /(?<compass>nw|ne|n|sw|se|s|w|e)(?<count>\d+)?/i.exec(pair);
+		const match = /(?<distance>\d+)(?<direction>nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)/i.exec(pair)
+			?? /(?<direction>nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)(?<distance>\d+)?/i.exec(pair);
 
-		const groups = match?.groups as { compass:CompassDirection; count?:`${number}`; };
+		const groups = match?.groups as { direction:CompassDirection|OrdinalDirection; distance?:`${number}`; };
 
 		// direction is there, distance is optional
-		const { compass } = groups;
-		const count = +(groups.count ?? 1);
+		const { direction } = groups;
+		const distance = +(groups.distance ?? 1);
 
-		return new MoveDirection(compass, count);
+		return new MoveDirection(direction, distance);
 	});
 }
 
 export class MoveDirection {
 
-	public arrow: ArrowDirection;
-	public compass: CompassDirection;
+	private base: DirectionBase;
 	public distance: number;
 
 	public constructor(direction: Direction, distance?: number) {
 		if (typeof(direction) === "string") {
-			this.arrow = ensureArrowDirection(direction);
-			this.compass = ensureCompassDirection(direction);
+			this.base = findBase(direction);
 			this.distance = distance ?? 1;
 		}else {
-			this.arrow = direction.arrow;
-			this.compass = direction.compass;
+			this.base = direction.base;
 			this.distance = distance ?? direction.distance;
 		}
 	}
 
+	public get arrow() { return this.base.arrow; }
 	public get arrowEmoji(): string {
 		return `:${this.arrow}:`;
 	}
+	public get compass() { return this.base.compass; }
 	public get compassEmoji(): string {
 		return `[${this.compass}]`;
 	}
+	public get compassLabel() { return this.base.compassLabel; }
 	public get distanceEmoji(): string {
 		/** @todo add number emoji to Sage */
 		return this.distance === 1 ? "" : String(this.distance).split("").map(s => MoveDirection.NumberEmoji[+s]).join("");
 	}
-	public get ordinalText(): string {
-		return toOrdinalDirection(this.arrow);
-	}
+	public get ordinal() { return this.base.ordinal; }
+	public get ordinalLabel() { return this.base.ordinalLabel; }
 
 	/**
 	 * @param outputType defaults to Compact
@@ -131,7 +114,7 @@ export class MoveDirection {
 		const matches = content.match(getCompassDirectionsRegex());
 
 		// matches array should be something like: [ '[ S S E ]', '[2N]', '[W3]' ]
-		matches?.forEach(match => directions.push(...parseCompassPairs(match)));
+		matches?.forEach(match => directions.push(...parseDirectionPairs(match)));
 
 		return MoveDirection.compact(directions);
 	}
@@ -143,7 +126,7 @@ export class MoveDirection {
 	 */
 	public static replaceAll(content: string, style?: MoveDirectionOutputType): string {
 		return content.replace(getCompassDirectionsRegex(), match => {
-			return MoveDirection.toEmoji(parseCompassPairs(match), style);
+			return MoveDirection.toEmoji(parseDirectionPairs(match), style);
 		});
 	}
 
@@ -153,11 +136,11 @@ export class MoveDirection {
 		directions.forEach(dir => {
 			const last = compacted[compacted.length - 1];
 			const isString = typeof(dir) === "string";
-			const arrow = isString ? ensureArrowDirection(dir) : dir.arrow;
+			const arrow = isString ? findBase(dir).arrow : dir.arrow;
 			if (last?.arrow === arrow) {
 				last.distance += isString ? 1 : dir.distance;
 			}else {
-				compacted.push(MoveDirection.from(dir));
+				compacted.push(new MoveDirection(dir));
 			}
 		});
 		return compacted;

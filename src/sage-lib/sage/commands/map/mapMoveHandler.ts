@@ -334,12 +334,15 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 		const unshuffled = gameMap.tokens.slice();
 
 		// move all the tokens
-		const moved = emojiData.map(data => {
+		const moveResults = emojiData.map(data => {
 			gameMap.activeLayer = data.layer;
 			gameMap.activeImage = data.image;
 			gameMap.shuffleActiveToken("top");
 			return gameMap.moveActiveToken(...data.movement);
-		}).includes(true);
+		});
+
+		// see if any actually got moved
+		const moved = moveResults.includes(true);
 
 		// compare new order to original
 		const shuffled = gameMap.tokens.some((token, index) => unshuffled[index] !== token);
