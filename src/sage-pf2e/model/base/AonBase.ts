@@ -1,7 +1,8 @@
 import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
+import { error } from "@rsc-utils/core-utils";
 import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import { type TParsedSource, parseSources } from "../../data/Repository.js";
+import { parseSources, type TParsedSource } from "../../data/Repository.js";
 import type { Base } from "./Base.js";
 import type { SourcedCore, TSourceInfo } from "./HasSource.js";
 import { HasSource } from "./HasSource.js";
@@ -53,19 +54,34 @@ From https://elasticsearch.galdiuz.com/aon/_search
 
 export interface AonBaseCore extends SourcedCore<""> {
 	category: string;
+	/** ["spell-123"] */
+	legacy_id: string[];
 	level: number;
+	/** ["spell-123"] */
+	remaster_id: string[];
 	/** Core Rulebook pg. 565 2.0 */
 	source_raw: string | string[];
+	/** ["Cantrip", "Spell"] */
+	spell_type: string;
 	/** raw text */
 	text: string;
 	type: string;
-	/** aon target page (missing domain and slash): "Spells.aspx?ID=180" */
+	/** aon target page (missing domain and slash): "/Spells.aspx?ID=180" */
 	url: string;
 }
 
 function hackCore(core: AonBaseCore): AonBaseCore {
-	core.aonId = core.id as unknown as number;
-	core.id = `${core.category}-${core.id}`;
+	switch(typeof(core.id)) {
+		case "number":
+			core.aonId = core.id as unknown as number;
+			core.id = `${core.category}-${core.id}`;
+			break;
+		case "string":
+			core.aonId = +core.id.split("-")[0];
+			break;
+		default:
+			error("unexpected core.id", core);
+	}
 	return core;
 }
 
@@ -118,14 +134,40 @@ export class AonBase
 
 	public get aonTraitId(): number | undefined { return undefined; }
 
+	// public get hasRemasterId(): boolean { return this.remasterId !== undefined; }
+	public get remasterId(): string | undefined {
+		const ids = this.core.remaster_id ?? [];
+		const thisId = this.core.id;
+		return ids.find(id => id !== thisId);
+	}
+
+	// public get hasLegacyId(): boolean { return this.legacyId !== undefined; }
+	public get legacyId(): string | undefined {
+		const ids = this.core.legacy_id ?? [];
+		const thisId = this.core.id;
+		return ids.find(id => id !== thisId);
+	}
+
 	public toAonLink(): string;
 	public toAonLink(label: string): string;
 	public toAonLink(searchResult: true): string;
 	public toAonLink(label?: boolean | string): string {
+		const createLink = (url: string, label: string) => `<a href="https://2e.aonprd.com/${url}">${label}</a>`;
+		const thisUrl = this.core.url;
+
 		if (label === true) {
-			return `<a href="https://2e.aonprd.com/${this.core.url}">(link)</a>`;
+			const { legacyId, remasterId } = this;
+			if (remasterId) {
+				const remasterUrl = thisUrl.replace(/\d+/, remasterId.split("-").pop()!);
+				return `${createLink(remasterUrl, "(link)")} ${createLink(`${thisUrl}&NoRedirect=1`, "(legacy)")}`;
+			}
+			if (legacyId) {
+				const legacyUrl = thisUrl.replace(/\d+/, legacyId.split("-").pop()!);
+				return `${createLink(thisUrl, "(link)")} ${createLink(`${legacyUrl}&NoRedirect=1`, "(legacy)")}`;
+			}
+			return createLink(thisUrl, `(link)`);
 		}
-		return `<a href="https://2e.aonprd.com/${this.core.url}">View ${label} on Archives of Nethys</a>`;
+		return createLink(thisUrl, `View ${label} on Archives of Nethys`);
 	}
 
 	// #endregion IHasArchives
@@ -153,6 +195,9 @@ export class AonBase
 	// #region Searchable
 
 	public get searchResultCategory(): string {
+		if (this.core.spell_type === "Cantrip") {
+			return "Cantrip";
+		}
 		return this.core.level
 			? `${this.objectType} ${this.core.level}`
 			: this.objectType;
