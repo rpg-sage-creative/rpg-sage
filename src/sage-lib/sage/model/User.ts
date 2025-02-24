@@ -23,6 +23,9 @@ export type TMacro = {
 
 export enum DialogDiceBehaviorType { Default = 0, Inline = 1 };
 
+/**
+ * @todo consider flag for AoN Legacy vs Remaster
+ */
 export interface UserCore extends DidCore<"User"> {
 
 	aliases?: TAlias[];
