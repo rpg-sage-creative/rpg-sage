@@ -35,8 +35,8 @@ type InvalidUsername = {
  * @todo make this a text file or something that can be reloaded without a restart.
  */
 const invalidNames: InvalidUsername[] = [
-	{ name:"everyone", anchored:true, variants:true },
-	{ name:"here",     anchored:true, variants:true },
+	{ name:"everyone" },
+	{ name:"here" },
 
 	{ name:"discord",  variants:true },
 	{ name:"clyde"     },
