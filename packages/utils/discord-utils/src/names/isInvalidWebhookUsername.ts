@@ -5,7 +5,7 @@ import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 function letterToCharacterClass(letter: string): string {
 	switch(letter) {
 		// found as problematic for "everyone" and "here"
-		case "e": return "[e3]";
+		case "e": return "[eë3]";
 		// found as problematic for "discord"
 		case "i": return "[il1]";
 		// found as problematic for "discord"
