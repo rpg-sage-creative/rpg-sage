@@ -4,7 +4,7 @@ import { error } from "@rsc-utils/core-utils";
 import { processStatBlocks } from "@rsc-utils/dice-utils";
 import { xRegExp } from "@rsc-utils/dice-utils/build/internal/xRegExp.js";
 import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
-import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, redactCodeBlocks, tokenize, unwrap, wrap, type KeyValueArg } from '@rsc-utils/string-utils';
+import { createKeyValueArgRegex, isWrapped, redactCodeBlocks, tokenize, unwrap, wrap } from '@rsc-utils/string-utils';
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -14,13 +14,13 @@ import type { GameCharacter } from "../model/GameCharacter.js";
 import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { User } from "../model/User.js";
-import { getMacroArgRegex, getMacroRemainingArgRegex, parseMacroArgMatch } from "./admin/macro/getMacroArgRegex.js";
 import { logPostCurrency } from "./admin/PostCurrency.js";
 import { registerDiceTest } from "./dice/diceTest.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
 import { isMath } from "./dice/isMath.js";
 import { isRandomItem } from "./dice/isRandomItem.js";
+import { macroToDice } from "./dice/macroToDice.js";
 import { parseTable } from "./dice/parseTable.js";
 import { rollMath } from "./dice/rollMath.js";
 import { rollRandomItem } from "./dice/rollRandomItem.js";
@@ -157,7 +157,7 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
 			error(`Macro Recursion`, { macroString, macroStack });
-			const parsedDice = await parseDiscordDice(sageCommand, `[1d1 Recursion!]`);
+			const parsedDice = await parseDiscordDice(sageCommand, `[0d0 Recursion!]`);
 			return parsedDice?.roll().toStrings() ?? [];
 		}
 
@@ -355,158 +355,6 @@ async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolea
 
 //#region macro
 
-/** used in a .reduce to return the macro with the longest name */
-function reduceToLongestMacroName(longestMacro?: DiceMacroBase, currentMacro?: DiceMacroBase): DiceMacroBase | undefined {
-	if (!currentMacro) return longestMacro;
-	if (!longestMacro) return currentMacro;
-	return longestMacro.name.length < currentMacro.name.length
-		? currentMacro
-		: longestMacro;
-}
-/** Used to find all macros that start with the given macro name and then return the macro with the longest name. */
-function findLongestMacroName(macros: DiceMacroBase[], cleanMacroName: string): DiceMacroBase | undefined {
-	const matchingMacros = macros.filter(macro => cleanMacroName.startsWith(macro.name.toLowerCase()));
-	return matchingMacros.reduce(reduceToLongestMacroName, undefined);
-}
-
-type TPrefix = {
-	count: number;
-	keepRolls?: string;
-	/** "kh" | "kl" */
-	keep?: string;
-	keepCount?: string;
-	/** "-" | "+"; */
-	fortune?: string;
-};
-function parsePrefix(prefix: string): TPrefix {
-	const [_, count, keepDirty, fortune] = prefix.match(/^(?:(?:(\d*)#)|(?:(\d*k[hl]\d*)#)|([\+\-]))/i) ?? ["1"];
-	if (keepDirty) {
-		const [__, keepRolls, keep, keepCount] = keepDirty.match(/^(\d*)(k[hl])(\d*)$/)!;
-		return {
-			count: 1,
-			keepRolls: keepRolls ? keepRolls : undefined,
-			keep,
-			keepCount: keepCount ? keepCount : undefined
-		};
-	}else if (fortune) {
-		return { count: 1, fortune };
-	}else if (count) {
-		return { count: +count };
-	}
-	return { count:1 };
-}
-
-/** returns [cleanPrefix, DiceMacroBase, slicedArgs] */
-function findPrefixMacroArgs(macroTiers: DiceMacroBase[][], input: string): [string, DiceMacroBase | undefined, string] {
-	const lower = input.toLowerCase();
-	const [_, dirtyPrefix, dirtyMacro] = lower.match(/^((?:\d*#)|(?:\d*k[hl]\d*#)|(?:[\+\-]))?(.*?)$/) ?? [];
-	const cleanPrefix = (dirtyPrefix ?? "").trim();
-	const cleanMacro = (dirtyMacro ?? "").trim();
-	// find the longest macro of each tier
-	const longestMacros = macroTiers.map(macros => findLongestMacroName(macros, cleanMacro));
-	// grab the longest of the longest macros
-	const macro = longestMacros.reduce(reduceToLongestMacroName, undefined);
-	let sliceIndex = (dirtyPrefix ?? "").length;
-	if (macro) {
-		sliceIndex = lower.indexOf(macro.name.toLowerCase()) + macro.name.length;
-	}
-	const slicedArgs = input.slice(sliceIndex);
-	return [cleanPrefix, macro, slicedArgs];
-}
-
-type TArgs = { indexed:string[]; named:KeyValueArg[] };
-function parseMacroArgs(argString: string): TArgs {
-	const parsers = {
-		spaces: createWhitespaceRegex(),
-		named: createKeyValueArgRegex(),
-		quotes: createQuotedRegex({lengthQuantifier:"*"})
-	};
-	const tokens = tokenize(argString.trim(), parsers);
-	const named = tokens
-		.filter(token => token.key === "named")
-		.map(token => parseKeyValueArg(token.token)!);
-	const indexed = tokens
-		.filter(token => !["spaces", "named"].includes(token.key))
-		.map(token => dequote(token.token).trim());
-	return { indexed, named };
-}
-
-type DiceMacroBaseAndArgs = TArgs & { macro?: DiceMacroBase; prefix: TPrefix; };
-function parseMacroAndArgs(macroTiers: DiceMacroBase[][], input: string): DiceMacroBaseAndArgs {
-	const [prefix, macro, slicedArgs] = findPrefixMacroArgs(macroTiers, input);
-	const macroArgs = macro ? parseMacroArgs(slicedArgs) : null;
-	return {
-		indexed: macroArgs?.indexed ?? [],
-		macro: macro ?? undefined,
-		named: macroArgs?.named ?? [],
-		prefix: parsePrefix(prefix)
-	};
-}
-
-function nonEmptyStringOrDefaultValue(arg: Optional<string>, def: Optional<string>): string {
-	const argOrEmptyString = arg ?? "";
-	const defOrEmptyString = def ?? "";
-	return argOrEmptyString !== "" ? argOrEmptyString : defOrEmptyString;
-}
-
-function namedArgValueOrDefaultValue(arg: Optional<KeyValueArg>, def: Optional<string>): string {
-	if (arg) {
-		const value = nonEmptyStringOrDefaultValue(arg.value, def);
-		if (arg.keyLower.match(/^(ac|dc|vs)$/) && value) {
-			return arg.key + value;
-		}
-		return value;
-	}
-	return def ?? "";
-}
-
-type DiceMacroBaseAndOutput = { macro: DiceMacroBase; output: string; };
-function macroToDice(macroTiers: DiceMacroBase[][], input: string): DiceMacroBaseAndOutput | null {
-	const { prefix, macro, indexed, named } = parseMacroAndArgs(macroTiers, input);
-	if (!macro) {
-		return null;
-	}
-
-	let maxIndex = -1;
-	let dice = macro.dice
-		.replace(getMacroArgRegex(true), match => {
-			const { key, keyIndex, isIndexed, defaultValue } = parseMacroArgMatch(match);
-			if (isIndexed) {
-				maxIndex = Math.max(maxIndex, keyIndex);
-				return nonEmptyStringOrDefaultValue(indexed[keyIndex], defaultValue) ?? `{${keyIndex}}`;
-			}else {
-				const keyLower = key.toLowerCase();
-				const namedArg = named.find(arg => arg.keyLower === keyLower)
-					// ?? namedArgStack.find(arg => arg.keyLower === keyLower);
-				return namedArgValueOrDefaultValue(namedArg, defaultValue) ?? `{${key}}`;
-			}
-		})
-		// remaining args
-		.replace(getMacroRemainingArgRegex(true), indexed.slice(maxIndex + 1).join(" "))
-		// fix adjacent plus/minus
-		.replace(/-\s*\+/g, "-")
-		.replace(/\+\s*-/g, "-")
-		.replace(/\+\s*\+/g, "+")
-		;
-
-	if (prefix.keep) {
-		dice = dice.replace(/(\d*)([dD]\d+)/, (_, dCount, dSize) =>
-			`${prefix.keepRolls ?? dCount}${dSize}${prefix.keep}${prefix.keepCount ?? ""}`
-		);
-	}else if (prefix.fortune) {
-		dice = dice.replace("1d20", `${prefix.fortune}2d20`);
-	}
-
-	const output = [dice];
-	while (output.length < prefix.count) {
-		output.push(dice);
-	}
-
-	return {
-		macro: macro,
-		output: output.join("")
-	};
-}
 
 //#endregion
 
