@@ -37,7 +37,7 @@ import type {
 function getParsers(): TokenParsers {
 	const parsers = baseGetParsers();
 	// used to make sure we tokenize deadly as a description and not another die to roll
-	parsers["special"] = /(deadly|fatal)\s*d(\d+)/i;
+	parsers["special"] = /(deadly|fatal)\s*\d?d\d+/i;
 	parsers["target"] = /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+|\|\|\d+\|\|)/i;
 
 	// vs type
@@ -387,12 +387,12 @@ type DiceCore = baseDiceCore;
 export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	//#region calculated
 	public get deadlyDie(): OrNull<number> {
-		const DEADLY_REGEX = /deadly\s*d(\d+)/i;
+		const DEADLY_REGEX = /deadly\s*\d?d(\d+)/i;
 		const deadlyDieMatch = mapFirst(this.diceParts, dicePart => dicePart.description.match(DEADLY_REGEX)) ?? [];
 		return +deadlyDieMatch[1] || null;
 	}
 	public get fatalDie(): OrNull<number> {
-		const FATAL_REGEX = /fatal\s*d(\d+)/i;
+		const FATAL_REGEX = /fatal\s*\d?d(\d+)/i;
 		const fatalDieMatch = mapFirst(this.diceParts, dicePart => dicePart.description.match(FATAL_REGEX)) ?? [];
 		return +fatalDieMatch[1] || null;
 	}
