@@ -14,7 +14,7 @@ function reduceToLongestMacroName(longestMacro?: DiceMacroBase, currentMacro?: D
 
 /** Used to find all macros that start with the given macro name and then return the macro with the longest name. */
 function findLongestMacroName(macros: DiceMacroBase[], cleanMacroName: string): DiceMacroBase | undefined {
-	const matchingMacros = macros.filter(macro => cleanMacroName.startsWith(macro.name.toLowerCase()));
+	const matchingMacros = macros.filter(macro => cleanMacroName.match(new RegExp(`^${macro.name}\\b`, "i")));
 	return matchingMacros.reduce(reduceToLongestMacroName, undefined);
 }
 
