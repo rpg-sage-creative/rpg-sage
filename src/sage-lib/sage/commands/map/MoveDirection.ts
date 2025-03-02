@@ -37,11 +37,21 @@ function findBase(dir: FindDirectionArg): DirectionBase {
 	return getAllDirections().find(base => base.arrow === dir || base.compass === dir || base.ordinal === dir)!;
 }
 
-/** We always need a new regex when using "global" to avoid lastIndex issues of back-to-back identical strings. */
-function getCompassDirectionsRegex() {
+/**
+ * We always need a new regex when using "global" to avoid lastIndex issues of back-to-back identical strings.
+ * Finding ordinals in dialog is breaking emoji formatting, so we need to be able to restrict what we capture.
+ */
+function getCompassDirectionsRegex(type: "both" | "compass" | "ordinal") {
 	// all compass regex needs to have this order to capture nw/ne/sw/se before capturing n/s: nw|ne|n|sw|se|s|w|e
 	// all ordinal regex needs to have this order to capture ul/ur/dl/dr before capturing u/d: ul|ur|u|dl|dr|d|l|r
-	return /\[\s*(?:\b(?:\s|\d+(?:nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)|(?:nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)\d*)\b)+\s*\]/gi;
+	switch(type) {
+		case "compass":
+			return /\[\s*(?:\b(?:\s|\d+(?:nw|ne|n|sw|se|s|w|e)|(?:nw|ne|n|sw|se|s|w|e)\d*)\b)+\s*\]/gi;
+		case "ordinal":
+			return /\[\s*(?:\b(?:\s|\d+(?:ul|ur|u|dl|dr|d|l|r)|(?:ul|ur|u|dl|dr|d|l|r)\d*)\b)+\s*\]/gi;
+		default:
+			return /\[\s*(?:\b(?:\s|\d+(?:nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)|(?:nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)\d*)\b)+\s*\]/gi;
+	}
 }
 
 /**
@@ -111,7 +121,7 @@ export class MoveDirection {
 	public static collect(content: string): MoveDirection[] {
 		const directions: MoveDirection[] = [];
 
-		const matches = content.match(getCompassDirectionsRegex());
+		const matches = content.match(getCompassDirectionsRegex("both"));
 
 		// matches array should be something like: [ '[ S S E ]', '[2N]', '[W3]' ]
 		matches?.forEach(match => directions.push(...parseDirectionPairs(match)));
@@ -125,7 +135,7 @@ export class MoveDirection {
 	 * @param style defaults to Compact
 	 */
 	public static replaceAll(content: string, style?: MoveDirectionOutputType): string {
-		return content.replace(getCompassDirectionsRegex(), match => {
+		return content.replace(getCompassDirectionsRegex("compass"), match => {
 			return MoveDirection.toEmoji(parseDirectionPairs(match), style);
 		});
 	}
