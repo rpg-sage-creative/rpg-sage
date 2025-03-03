@@ -57,7 +57,7 @@ async function macroList(sageMessage: SageMessage): Promise<void> {
 	if (filtered.length) {
 		const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>macro-list (filtered)</b>`);
 		renderableContent.appendTitledSection(filtered[0].category!, toList(filtered));
-		renderableContent.appendTitledSection(`<b>To view a macro, use:</b>`, `${sageMessage.prefix ?? ""}!!macro details name="${filtered[0].name}"`);
+		renderableContent.appendTitledSection(`<b>To view a macro, use:</b>`, `${sageMessage.prefix ?? ""}! macro details name="${filtered[0].name}"`);
 		return <any>sageMessage.send(renderableContent);
 
 	} else {
