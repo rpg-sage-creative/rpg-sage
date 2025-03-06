@@ -37,7 +37,7 @@ export async function createMacroArgsModal(args: Args<true, true>): Promise<Moda
 		indexedPairs.sort((a, b) => a.keyIndex - b.keyIndex);
 		const value = indexedPairs.map(({ defaultValue }) => `${defaultValue ?? ""}`).join("\n");
 		const required = indexedPairs.some(({ defaultValue }) => defaultValue === undefined);
-		modal.addParagraph({ required }).setCustomId("indexedPairLines").setLabel("Type arguments on separate lines").setPlaceholder("Type arguments on separate lines").setValue(value);
+		modal.addParagraph({ required }).setCustomId("indexedPairLines").setLabel("Type indexed arguments on separate lines").setPlaceholder("Type indexed arguments on separate lines").setValue(value);
 	}
 
 	return modal;

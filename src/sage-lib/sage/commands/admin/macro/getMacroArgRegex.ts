@@ -39,5 +39,6 @@ export function parseMacroArgMatch(value: string): MacroArgPair {
 /** Matches all macro arg pairs in a string (typically a macro definition) and parses them all. */
 export function matchAllMacroArgPairs(value?: string): MacroArgPair[] {
 	const macroArgs = value?.matchAll(getMacroArgRegex(true)) ?? [];
-	return [...macroArgs].map(match => parseMacroArgMatch(match[0]));
+	const macroArgPairs = [...macroArgs].map(match => parseMacroArgMatch(match[0]));
+	return macroArgPairs.filter((pair, index, pairs) => index === pairs.findIndex(p => pair.key === p.key));
 }
