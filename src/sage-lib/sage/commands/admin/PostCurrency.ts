@@ -203,8 +203,8 @@ function cleanPlayerName(playerName: string): string {
 type PlayerInfo = { userId:Snowflake; name:string; };
 export function renderPostCurrency({ postCurrency }: HasPostCurrency, renderableContent: RenderableContent, players: PlayerInfo[]): void {
 	const postCurrencyData = Object.values(postCurrency);
+	renderableContent.append(`<b>Post Currency Settings</b>`);
 	if (postCurrencyData.length) {
-		renderableContent.append(`<b>Post Currency Settings</b>`);
 		postCurrencyData.forEach(data => {
 			if (data.disabled) {
 				renderableContent.append(`[spacer]${data.name ?? data.key}: *disabled*`);
@@ -214,20 +214,24 @@ export function renderPostCurrency({ postCurrency }: HasPostCurrency, renderable
 				});
 			}
 		});
-		renderableContent.append(`<b>Post Currency Values</b>`);
-		players.map(player => {
-			const values: string[] = [];
-			postCurrencyData.forEach(data => {
-				const userData = data.totals.find(t => t.userId === player.userId);
-				const types = ["dialog", "dice"].map(type => {
-					const count = userData?.[type as "dialog"] ?? 0;
-					return count ? `${count} ${type}` : undefined;
-				}).filter(s => s);
-				const value = userData?.value ?? 0;
-				const typesText = types.length ? `(${types.join(", ")})` : ``;
-				values.push(`${value} ${data.name ?? data.key} ${typesText}`.trim());
+		if (players.length) {
+			renderableContent.append(`<b>Post Currency Values</b>`);
+			players.map(player => {
+				const values: string[] = [];
+				postCurrencyData.forEach(data => {
+					const userData = data.totals.find(t => t.userId === player.userId);
+					const types = ["dialog", "dice"].map(type => {
+						const count = userData?.[type as "dialog"] ?? 0;
+						return count ? `${count} ${type}` : undefined;
+					}).filter(s => s);
+					const value = userData?.value ?? 0;
+					const typesText = types.length ? `(${types.join(", ")})` : ``;
+					values.push(`${value} ${data.name ?? data.key} ${typesText}`.trim());
+				});
+				renderableContent.append(`[spacer]${cleanPlayerName(player.name)}: ${values.join("; ")}`);
 			});
-			renderableContent.append(`[spacer]${cleanPlayerName(player.name)}: ${values.join("; ")}`);
-		});
+		}
+	}else {
+		renderableContent.append(`[spacer]<i>not setup</i>`);
 	}
 }
