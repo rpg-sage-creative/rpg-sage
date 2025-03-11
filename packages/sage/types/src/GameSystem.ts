@@ -14,6 +14,8 @@ export enum GameSystemType {
 	CnC = 31,
 	/** Essence 20 */
 	E20 = 41,
+	/** Generic d20 */
+	D20 = 50,
 	/** Dungeons and Dragons 5e */
 	DnD5e = 55,
 	/** Quest */
@@ -49,13 +51,14 @@ export type GameSystem = {
 const gameSystems: GameSystem[] = [
 	{ code:"None", description:"No Game System.", dice:"None", name:"None", type:GameSystemType.None },
 	{ code:"CnC", description:"", dice:"CnC", name:"Coyote & Crow", type:GameSystemType.CnC },
+	{ code:"D20", description:"", dice:"D20", name:"Generic d20", type:GameSystemType.D20, diceCritMethodType:DiceCritMethodType.TimesTwo },
 	{ code:"DnD5e", description:"", dice:"DnD5e", name:"Dungeons & Dragons 5e", type:GameSystemType.DnD5e, diceCritMethodType:DiceCritMethodType.TimesTwo },
 	{ code:"E20", description:"", dice:"E20", name:"Essence 20", type:GameSystemType.E20 },
-	{ code:"PF1e", description:"", dice:"PF1e", name:"Pathfinder 1e", type:GameSystemType.PF1e },
+	{ code:"PF1e", description:"", dice:"D20", name:"Pathfinder 1e", type:GameSystemType.PF1e },
 	{ code:"PF2e", description:"", dice:"PF2e", name:"Pathfinder 2e", type:GameSystemType.PF2e, diceCritMethodType:DiceCritMethodType.TimesTwo, isP20:true },
 	{ code:"Quest", description:"", dice:"Quest", name:"Quest RPG", type:GameSystemType.Quest },
 	{ code:"SF1e", description:"", dice:"SF1e", name:"Starfinder 1e", type:GameSystemType.SF1e, diceCritMethodType:DiceCritMethodType.RollTwice },
-	{ code:"SF2e", description:"", dice:"SF2e", name:"Starfinder 2e", type:GameSystemType.SF2e, diceCritMethodType:DiceCritMethodType.TimesTwo, isP20:true },
+	{ code:"SF2e", description:"", dice:"PF2e", name:"Starfinder 2e", type:GameSystemType.SF2e, diceCritMethodType:DiceCritMethodType.TimesTwo, isP20:true },
 	{ code:"VtM5e", description:"", dice:"VtM5e", name:"Vampire: the Masquerade 5e", type:GameSystemType.VtM5e },
 ];
 
@@ -90,7 +93,7 @@ export function getCritMethodText(gameSystemType?: GameSystemType, method?: Dice
 	}
 	const critSystems = gameSystems
 		.filter(system => system.diceCritMethodType)
-		.map(system => system.dice)
+		.map(system => system.code)
 		.join(", ");
 	return `<i>only ${critSystems}</i>`;
 }

@@ -3,7 +3,7 @@ import { errorReturnNull } from "@rsc-utils/core-utils";
 import { EmbedBuilder, type MessageTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
 import { readJsonFile, readJsonFileSync } from "@rsc-utils/io-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
-import { shiftDie } from "../../../sage-dice/dice/essence20/index.js";
+import { shiftDie } from "../../../sage-dice/dice/e20/index.js";
 import { PlayerCharacterE20, type TSkillE20, type TSkillSpecialization, type TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
 import { type PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
 import { type PlayerCharacterCorePR, PlayerCharacterPR, type TCharacterSectionType, type TCharacterViewType, type TSkillZord, type TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";

@@ -1,6 +1,6 @@
-import { GameType, parseGameSystem } from "@rsc-sage/types";
+import { GameType, getGameSystems, parseGameSystem, type GameSystem } from "@rsc-sage/types";
 import { HasCore, type IdCore } from "@rsc-utils/class-utils";
-import { type OrNull, type OrUndefined, parseEnum, randomSnowflake } from "@rsc-utils/core-utils";
+import { debug, parseEnum, randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -9,9 +9,10 @@ import {
 } from "../../common.js";
 import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
 import {
-	Dice as baseDice,
 	DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart
+	DiceGroupRoll as baseDiceGroupRoll,
+	type Dice as baseDice,
+	type DicePart as baseDicePart
 } from "../base/index.js";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
@@ -20,70 +21,39 @@ import type {
 	TDiceGroupRoll as baseTDiceGroupRoll,
 	TDicePart as baseTDicePart
 } from "../base/types.js";
-import {
-	DiceGroup as cncDiceGroup,
-	DiceGroupRoll as cndDiceGroupRoll
-} from "../cnc/index.js";
-import {
-	DiceGroup as dnd5eDiceGroup,
-	DiceGroupRoll as dnd5eDiceGroupRoll
-} from "../dnd5e/index.js";
-import {
-	DiceGroup as e20DiceGroup,
-	DiceGroupRoll as e20DiceGroupRoll
-} from "../essence20/index.js";
-import {
-	DiceGroup as pf2eDiceGroup,
-	DiceGroupRoll as pf2eDiceGroupRoll
-} from "../pf2e/index.js";
-import {
-	DiceGroup as questDiceGroup,
-	DiceGroupRoll as questDiceGroupRoll
-} from "../quest/index.js";
-import {
-	DiceGroup as sf1eDiceGroup,
-	DiceGroupRoll as sf1eDiceGroupRoll
-} from "../sf1e/index.js";
-import {
-	DiceGroup as vtm5eDiceGroup,
-	DiceGroupRoll as vtm5eDiceGroupRoll
-} from "../vtm5e/index.js";
 
-function getDiceGroupForGame(gameType: GameType): typeof baseDiceGroup {
-	switch (gameType) {
-		case GameType.CnC: return <typeof baseDiceGroup>cncDiceGroup;
-		case GameType.DnD5e: return <typeof baseDiceGroup>dnd5eDiceGroup;
-		case GameType.E20: return <typeof baseDiceGroup>e20DiceGroup;
-		case GameType.PF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
-		case GameType.SF1e: return <typeof baseDiceGroup>sf1eDiceGroup;
-		case GameType.SF2e: return <typeof baseDiceGroup>pf2eDiceGroup;
-		case GameType.Quest: return <typeof baseDiceGroup>questDiceGroup;
-		case GameType.VtM5e: return <typeof baseDiceGroup>vtm5eDiceGroup;
-		default: return baseDiceGroup;
+type DiceSystem = { DiceGroup:typeof baseDiceGroup; DiceGroupRoll:typeof baseDiceGroupRoll; };
+const diceSystems = new Map<GameType, DiceSystem>();
+
+let gameSystems: GameSystem[] | undefined = getGameSystems();
+for (const gameSystem of gameSystems) {
+	// we only have a dice for systems that have a their code and dice the same
+	if (gameSystem.dice === gameSystem.code) {
+		const diceCode = gameSystem.type ? gameSystem.dice.toLowerCase() : "base";
+		const { DiceGroup, DiceGroupRoll } = await import(`../${diceCode}/index.js`) as DiceSystem;
+		diceSystems.set(gameSystem.type, { DiceGroup, DiceGroupRoll });
 	}
 }
+gameSystems = undefined;
 
-function parseDice(diceString: string, gameType?: GameType, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): baseTDiceGroup {
-	switch (gameType) {
-		case GameType.CnC:
-			return cncDiceGroup.parse(diceString, diceOutputType);
-		case GameType.DnD5e:
-			return dnd5eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
-		case GameType.E20:
-			return e20DiceGroup.parse(diceString, diceOutputType);
-		case GameType.PF2e:
-			return pf2eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
-		case GameType.SF1e:
-			return sf1eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
-		case GameType.SF2e:
-			return pf2eDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType, critMethodType);
-		case GameType.Quest:
-			return questDiceGroup.parse(diceString, diceOutputType);
-		case GameType.VtM5e:
-			return vtm5eDiceGroup.parse(diceString, diceOutputType);
-		default:
-			return baseDiceGroup.parse(diceString, diceOutputType, diceSecretMethodType);
+type DiceGroupParser<T extends baseTDiceGroup = baseTDiceGroup> = (diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType) => T;
+
+function getDiceSystem(gameType?: GameType): DiceSystem {
+	let diceSystem = diceSystems.get(gameType ?? GameType.None);
+	if (!diceSystem) {
+		let gameSystem = parseGameSystem(gameType);
+		if (!gameSystem || gameSystem.dice !== gameSystem.code) {
+			gameSystem = parseGameSystem(gameSystem?.dice);
+		}
+		diceSystem = diceSystems.get(gameSystem?.type ?? GameType.None);
 	}
+	if (!diceSystem) {
+		diceSystem = diceSystems.get(GameType.None);
+	}
+	if (!diceSystem?.DiceGroup || !diceSystem.DiceGroupRoll) {
+		debug({gameType,diceSystem});
+	}
+	return diceSystem!;
 }
 
 function cloneDicePart<T extends baseDicePartCore, U extends baseTDicePart>(clss: typeof baseDicePart, core: T): U {
@@ -153,7 +123,8 @@ function cloneDice<T extends baseDiceCore, U extends baseTDice>(clss: typeof bas
 	});
 }
 
-function cloneDiceGroup<T extends baseDiceGroupCore, U extends baseTDiceGroup>(clss: typeof baseDiceGroup, core: T, map: number): U {
+function cloneDiceGroup<T extends baseDiceGroupCore, U extends baseTDiceGroup>(core: T, map: number): U {
+	const clss = getDiceSystem(core.gameType).DiceGroup;
 	return <U>clss.fromCore({
 		critMethodType: core.critMethodType,
 		dice: core.dice.map(diceCore => cloneDice(clss.Part, diceCore, map).toJSON()),
@@ -174,26 +145,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 	public get diceGroups(): baseTDiceGroup[] {
 		if (!this._diceGroups) {
 			this._diceGroups = this.core.diceGroups.map(core => {
-				switch (core.gameType) {
-					case GameType.CnC:
-						return cncDiceGroup.fromCore(core);
-					case GameType.DnD5e:
-						return dnd5eDiceGroup.fromCore(core);
-					case GameType.E20:
-						return e20DiceGroup.fromCore(core);
-					case GameType.PF2e:
-						return pf2eDiceGroup.fromCore(core);
-					case GameType.SF1e:
-						return sf1eDiceGroup.fromCore(core);
-					case GameType.SF2e:
-						return pf2eDiceGroup.fromCore(core);
-					case GameType.Quest:
-						return questDiceGroup.fromCore(core);
-					case GameType.VtM5e:
-						return vtm5eDiceGroup.fromCore(core);
-					default:
-						return baseDiceGroup.fromCore(core);
-				}
+				return getDiceSystem(core.gameType).DiceGroup.fromCore(core);
 			});
 		}
 		return this._diceGroups;
@@ -256,13 +208,15 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 				map = 0;
 			}
 
-			const diceGroup = parseDice(match, gameType, diceOutputType, defaultDiceSecretMethodType, critMethodType);
+
+			// const diceGroup = parseDice(match, gameType, diceOutputType, defaultDiceSecretMethodType, critMethodType);
+			const parser = getDiceSystem(gameType).DiceGroup.parse as DiceGroupParser;
+			const diceGroup = parser(match, diceOutputType, defaultDiceSecretMethodType, critMethodType);
 			diceGroups.push(diceGroup);
 			if (count > 1) {
-				const diceGroupClass = getDiceGroupForGame(diceGroup.gameType);
 				const diceGroupCore = diceGroup.toJSON();
 				for (let i = 1; i < count; i++) {
-					diceGroups.push(cloneDiceGroup(diceGroupClass, diceGroupCore, map * Math.min(i, 2)));
+					diceGroups.push(cloneDiceGroup(diceGroupCore, map * Math.min(i, 2)));
 				}
 			}
 
@@ -274,7 +228,8 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 
 /** Returns the GameType at the beginning of the match along with the rest of the match. */
 function matchGameType(match: string, defaultGameType: OrUndefined<GameType>): [string, OrUndefined<GameType>] {
-	const GAME_CHECK = /^(?:(cnc|dnd5e|e20|pf1e|pf2e|pf1|pf2|pf|sf1e|sf2e|sf1|sf2|sf|5e|quest|vtm5|vtm5e)\b)?/i;
+	const gameCodes = getGameSystems().filter(game => game.type).map(game => game.code).join("|");
+	const GAME_CHECK = new RegExp(`^(?:(${gameCodes})\b)?`, "i");
 	const gameMatch = match.match(GAME_CHECK);
 	if (gameMatch) {
 		const gameTypeString = gameMatch[0];
@@ -365,26 +320,7 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 	public get rolls(): baseTDiceGroupRoll[] {
 		if (!this._rolls) {
 			this._rolls = this.core.rolls.map(core => {
-				switch (core.gameType) {
-					case GameType.CnC:
-						return cndDiceGroupRoll.fromCore(core);
-					case GameType.DnD5e:
-						return dnd5eDiceGroupRoll.fromCore(core);
-					case GameType.E20:
-						return e20DiceGroupRoll.fromCore(core);
-					case GameType.PF2e:
-						return pf2eDiceGroupRoll.fromCore(core);
-					case GameType.SF1e:
-						return sf1eDiceGroupRoll.fromCore(core);
-					case GameType.SF2e:
-						return pf2eDiceGroupRoll.fromCore(core);
-					case GameType.Quest:
-						return questDiceGroupRoll.fromCore(core);
-					case GameType.VtM5e:
-						return vtm5eDiceGroupRoll.fromCore(core);
-					default:
-						return baseDiceGroupRoll.fromCore(core);
-				}
+				return getDiceSystem(core.gameType).DiceGroupRoll.fromCore(core);
 			});
 		}
 		return this._rolls;

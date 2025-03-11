@@ -12,18 +12,18 @@ import {
 	parseTestTargetValue,
 	type TDiceLiteral,
 	type TTestData
-} from "../../common";
+} from "../../common.js";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
 	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll, getParsers as baseGetParsers,
 	reduceTokenToDicePartCore as baseReduceTokenToDicePartCore
-} from "../base";
+} from "../base/index.js";
 import type {
 	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
-} from "../base/types";
+} from "../base/types.js";
 
 //#region test dice
 /*
