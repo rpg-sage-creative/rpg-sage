@@ -1,7 +1,7 @@
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
 import { errorReturnFalse, getDataRoot, type Optional } from "@rsc-utils/core-utils";
 import { fileExistsSync, writeFile } from "@rsc-utils/io-utils";
-import type { TSkillDie } from "../../sage-dice/dice/essence20";
+import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
 
 export type TArmorE20 = {
 	name?: string;

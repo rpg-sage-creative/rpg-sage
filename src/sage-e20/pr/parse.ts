@@ -1,8 +1,7 @@
 import type { PdfJsonManager } from "@rsc-utils/io-utils";
-import type { TSkillDie } from "../../sage-dice/dice/essence20/index.js";
+import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
 import { filterValuesWithKeys, PdfJsonParserE20, type SkillPairKey } from "../common/parse.js";
 import type { PlayerCharacterCorePR, TAttackZord, TSkillZord, TStatPR, TStatZord, TZord } from "./PlayerCharacterPR.js";
-import { debug } from "@rsc-utils/core-utils";
 
 const ZordSkills = {
 	Strength: [
@@ -119,7 +118,6 @@ export class PdfJsonParserPR extends PdfJsonParserE20 {
 	}
 
 	public static parseCharacter(pdfJsonManager: PdfJsonManager): PlayerCharacterCorePR {
-		debug("parsing PR")
 		return new PdfJsonParserPR(pdfJsonManager).parseCharacter();
 	}
 }

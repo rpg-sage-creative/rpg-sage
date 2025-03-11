@@ -1,7 +1,7 @@
 import { randomSnowflake } from "@rsc-utils/core-utils";
 import { PdfJsonManager } from "@rsc-utils/io-utils";
 import { isBlank, stringOrUndefined } from "@rsc-utils/string-utils";
-import type { TSkillDie } from "../../sage-dice/dice/essence20/index.js";
+import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
 import type { PlayerCharacterCoreE20, TArmorE20, TAttackE20, TSkillE20, TStatE20, TWeaponE20 } from "./PlayerCharacterE20.js";
 
 /** All the skills (name and abbreviation) for each ability. */

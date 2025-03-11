@@ -7,7 +7,7 @@ import { isStatsKey as isStatsKeySF1e, statsToHtml as statsToHtmlSF1e } from "./
 
 export function canProcessStats({ gameSystem }: GameCharacter): boolean {
 	if (gameSystem) {
-		return ["DnD5e", "PF1e", "PF2e", "SF1e", "SF2e"].includes(gameSystem.code);
+		return ["D20", "DnD5e", "PF1e", "PF2e", "SF1e", "SF2e"].includes(gameSystem.code);
 	}
 	return false;
 }
@@ -15,6 +15,7 @@ export function canProcessStats({ gameSystem }: GameCharacter): boolean {
 export function isStatsKey(key: string, gameSystem: Optional<GameSystem>): boolean {
 	if (!gameSystem) return false;
 	switch(gameSystem.code) {
+		case "D20": return isStatsKeyD20(key);
 		case "DnD5e": return isStatsKeyD20(key);
 		case "PF1e": return isStatsKeyD20(key);
 		case "PF2e": return isStatsKeyP20(key);
@@ -28,6 +29,7 @@ export function statsToHtml(character: GameCharacter): string[] {
 	const { gameSystem } = character;
 	if (!gameSystem) return [];
 	switch(gameSystem.code) {
+		case "D20": return statsToHtmlD20(character);
 		case "DnD5e": return statsToHtmlD20(character);
 		case "PF1e": return statsToHtmlD20(character);
 		case "PF2e": return statsToHtmlP20(character);
