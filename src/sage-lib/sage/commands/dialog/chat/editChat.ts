@@ -1,4 +1,4 @@
-import { error, errorReturnNull } from "@rsc-utils/core-utils";
+import { error } from "@rsc-utils/core-utils";
 import { DiscordKey, splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { AttachmentBuilder } from "discord.js";
@@ -15,7 +15,7 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 	if (!messageId) return sageMessage.replyStack.whisper("To edit dialog, you must reply to the message you wish to edit.");
 
 	const messageKey = new DiscordKey(sageMessage.server?.did, null, null, messageId);
-	const dialogMessage = await DialogMessageRepository.read(messageKey).catch(errorReturnNull);
+	const dialogMessage = await DialogMessageRepository.read(messageKey);
 	if (!dialogMessage) return sageMessage.replyStack.whisper("Sorry, dialog info not found!");
 
 	/** @todo allow GMs to edit other GM dialog, but send the edit info to both */

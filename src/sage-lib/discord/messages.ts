@@ -103,7 +103,7 @@ export async function replaceWebhook(originalMessage: MessageOrPartial, webhookO
 	let replyingTo: string | undefined;
 	if (originalMessage.reference?.messageId) {
 		const referenceMessage = await sageCache.fetchMessage(originalMessage.reference);
-		const dialogMessage = await DialogMessageRepository.read(originalMessage.reference);
+		const dialogMessage = await DialogMessageRepository.read(originalMessage.reference, { ignoreMissingFile:true });
 		const userMention = dialogMessage?.userDid ? toUserMention(dialogMessage.userDid) : ``;
 		const displayName = referenceMessage ? `*${referenceMessage.author.displayName}*` : ``;
 		replyingTo = `*replying to* ${displayName} ${userMention} ${toMessageUrl(originalMessage.reference)}`.replace(/\s+/g, " ");
