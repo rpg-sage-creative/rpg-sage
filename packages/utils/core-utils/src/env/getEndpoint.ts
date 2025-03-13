@@ -1,6 +1,6 @@
-import type { Optional } from "../types";
-import { getPort } from "./getPort";
-import { getFromProcess } from "./internal";
+import type { Optional } from "../types/generics.js";
+import { getPort } from "./getPort.js";
+import { getFromProcess } from "./internal/getFromProcess.js";
 
 export type AppServerEndpoint = {
 	secure: boolean;
@@ -42,5 +42,7 @@ export function getEndpoint(server: string): Partial<AppServerEndpoint> {
 	const secure = getSecure(server);
 	const hostname = getHostname(server);
 	const port = getPort(server);
-	return { secure, hostname, port };
+	const endpoint = { secure, hostname, port };
+	console.log("info::", { server, endpoint });
+	return endpoint;
 }
