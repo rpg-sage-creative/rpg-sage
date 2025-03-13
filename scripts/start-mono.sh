@@ -49,6 +49,12 @@ jsonDataRoot="$RETVAL"
 readJsonProperty "homeServerId"
 jsonHomeServerId="$RETVAL"
 
+readJsonProperty "mapSecure"
+mapSecure="$RETVAL"
+
+readJsonProperty "mapHostname"
+mapHostname="$RETVAL"
+
 readJsonProperty "mapPort"
 mapPort="$RETVAL"
 
@@ -82,6 +88,8 @@ else
 		"codeName=$codeName" \
 		"dataRoot=$jsonDataRoot" \
 		"homeServerId=$jsonHomeServerId" \
+		"mapSecure=$mapSecure" \
+		"mapHostname=$mapHostname" \
 		"mapPort=$mapPort" \
 		"rollemId=$jsonRollemId" \
 		"superAdminId=$jsonSuperAdminId" \

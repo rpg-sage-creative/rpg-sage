@@ -1,10 +1,9 @@
-import { error, errorReturnNull, verbose, warn } from "@rsc-utils/core-utils";
-import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/io-utils";
-import { stringify } from "@rsc-utils/core-utils";
 import type { Awaitable } from "@rsc-utils/core-utils";
+import { error, errorReturnNull, stringify, verbose, warn } from "@rsc-utils/core-utils";
+import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/io-utils";
 import { renderMap } from "./internal/renderMap.js";
 import { serverHandler } from "./internal/serverHandler.js";
-import type { GameMap, GameMapBackgroundImage, GameMapData, GameMapLayer, MapRenderPayload, MapRenderResponse, MimeType } from "./types";
+import type { GameMap, GameMapBackgroundImage, GameMapData, GameMapLayer, MapRenderPayload, MapRenderResponse, MimeType } from "./types.js";
 
 /**
  * Catches an error when using an internal server to creating image buffers.
