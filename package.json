@@ -73,8 +73,6 @@
 		}
 	},
 	"scripts": {
-		"daemon": "bash scripts/daemon.sh",
-		"deploy": "bash scripts/deploy.sh",
 		"start-mono": "bash scripts/start-mono.sh",
 		"build": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/build.sh --skipIndexTs",
 		"release": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/release.sh",
