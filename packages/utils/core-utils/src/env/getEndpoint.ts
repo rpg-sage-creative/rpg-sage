@@ -25,7 +25,8 @@ function getSecure(name: string): boolean | undefined {
 
 function isValidHostname(value: Optional<string | number>): value is string {
 	const stringValue = String(value);
-	return stringValue.includes(".lambda-url.us-west-2.on.aws")
+	return /^\d+(\.\d+){3}$/.test(stringValue)
+		|| stringValue.includes(".lambda-url.us-west-2.on.aws")
 		|| stringValue.includes(".us-west-2.compute.amazonaws.com")
 		|| stringValue.includes("localhost");
 }
