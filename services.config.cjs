@@ -8,18 +8,16 @@ function getJson(...args) {
 }
 
 const appNames = [
-	"bot",
 	"map",
 	// "pdf",
 	// "random",
 	// "search"
 ];
 const apps = appNames.map(app => {
-	const restartMB = app === "bot" ? 750 : 500;
 	return {
-		name: `sage-${app}`,
+		name: `sage-${app}-service`,
 		script: `./build/${app}.mjs`,
-		args: `--max-memory-restart ${restartMB}M`,
+		args: `--max-memory-restart 500M`,
 		node_args: "--experimental-modules --es-module-specifier-resolution=node",
 
 		append_env_to_name: true,
@@ -37,9 +35,9 @@ const apps = appNames.map(app => {
 });
 
 const deploy = {
-	"dev": { ...getJson("deploy"), ...getJson("deploy", "dev") },
-	"beta": { ...getJson("deploy"), ...getJson("deploy", "beta") },
-	"stable": { ...getJson("deploy"), ...getJson("deploy", "stable") },
-}
+	dev: { ...getJson("deploy"), ...getJson("deploy", "services"), ...getJson("deploy", "dev") },
+	beta: { ...getJson("deploy"), ...getJson("deploy", "services"), ...getJson("deploy", "beta") },
+	stable: { ...getJson("deploy"), ...getJson("deploy", "services"), ...getJson("deploy", "stable") },
+};
 
 module.exports = { apps, deploy };
