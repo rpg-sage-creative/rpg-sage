@@ -31,7 +31,6 @@ class RenderableGameMapLayer implements IMapLayer {
 	}
 }
 
-RenderableMap.setEndpoint(getEndpoint("Map"));
 export class RenderableGameMap extends RenderableMap {
 	public constructor (protected core: TGameMapCore) {
 		super();
@@ -70,3 +69,10 @@ export class RenderableGameMap extends RenderableMap {
 		return RenderableMap._testRender(map.toJSON());
 	}
 }
+
+/** @todo find a better place to do this */
+const mapEndpoint = getEndpoint("Map");
+RenderableMap.setEndpoint(mapEndpoint);
+
+// because this fires before we have enabled logging levels, manually log this
+console.log("info::", { server:"Map", ...mapEndpoint });

@@ -1,3 +1,4 @@
+import { info } from "../console/loggers/info.js";
 import type { Optional } from "../types/generics.js";
 import { getPort } from "./getPort.js";
 import { getFromProcess } from "./internal/getFromProcess.js";
@@ -38,11 +39,16 @@ function getHostname(name: string): string | undefined {
 	return undefined;
 }
 
+const _endpoints: { [key:string]: Partial<AppServerEndpoint>; } = { };
+
 export function getEndpoint(server: string): Partial<AppServerEndpoint> {
-	const secure = getSecure(server);
-	const hostname = getHostname(server);
-	const port = getPort(server);
-	const endpoint = { secure, hostname, port };
-	console.log("info::", { server, endpoint });
-	return endpoint;
+	if (!_endpoints[server]) {
+		const secure = getSecure(server);
+		const hostname = getHostname(server);
+		const port = getPort(server);
+		const endpoint = { secure, hostname, port };
+		_endpoints[server] = endpoint;
+		info({ server, ...endpoint });
+	}
+	return _endpoints[server];
 }
