@@ -5,6 +5,7 @@ import { applyChanges, isDefined, randomSnowflake, warn, type Args, type Optiona
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
 import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";
+import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";
 import type { PartyCore } from "../commands/trackers/party/Party.js";
@@ -197,6 +198,8 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
+	public get moveDirectionOutputType(): MoveDirectionOutputType | undefined { return this.core.moveDirectionOutputType; }
+
 	public get serverDid(): Snowflake { return this.core.serverDid; }
 	public get serverId(): UUID { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }
@@ -215,7 +218,6 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get gmCharacter(): GameCharacter { return this.core.gmCharacter as GameCharacter; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
-	public get orphanedPlayerCharacters() { return this.playerCharacters.filter(pc => !pc.userDid || !this.players.includes(pc.userDid)); }
 	public findCharacterOrCompanion(name: string): GameCharacter | CharacterShell | undefined {
 		if (this.gmCharacter.matches(name)) return this.gmCharacter;
 		return this.playerCharacters.findByName(name)
@@ -275,18 +277,26 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 		}
 		return pGuildMembers.filter(isDefined);
 	}
+
+	/** Returns all manually added channels as GuildTextBasedChannel objects. */
 	public async guildChannels(): Promise<GuildTextBasedChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
 		return all.filter(isDefined) as GuildTextBasedChannel[];
 	}
+
+	/** Returns all manually added channels that are not found on this Server. */
 	public async orphanChannels(): Promise<SageChannel[]> {
 		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
 		return this.channels.filter((_, index) => !all[index]);
 	}
+
+	/** Returns all manually added users that are not found on this Server. */
 	public async orphanUsers(): Promise<GameUserData[]> {
 		const all = await Promise.all(this.users.map(user => this.discord.fetchGuildMember(user.did)));
 		return this.users.filter((_, index) => !all[index]);
 	}
+
+	/** Returns all game masters (manual and role) as GuildMember objects. */
 	public async gmGuildMembers(): Promise<GuildMember[]> {
 		const gmGuildMembers = await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)));
 		const gmRoleDid = this.gmRoleDid;

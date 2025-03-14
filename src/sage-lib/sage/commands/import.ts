@@ -30,7 +30,7 @@ function findImportedCharacter(message: Message): ImportedCharacter | undefined 
 }
 
 async function reimportHelp(sageCommand: SageMessage): Promise<void> {
-	await sageCommand.whisper(`For information on reimporting characters, see our [wiki](<https://github.com/rpg-sage-creative/rpg-sage/wiki/Character-Management#importing-characters>)`);
+	await sageCommand.whisper(sageCommand.getLocalizer()("REIMPORT_CHARACTERS_WIKI"));
 }
 async function reimportHandler(sageCommand: SageMessage): Promise<void> {
 	// no reference means no reply, means no link back to the character to reimport

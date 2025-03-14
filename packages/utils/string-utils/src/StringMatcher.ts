@@ -1,4 +1,5 @@
 import { isDefined, type Matcher, type MatcherResolvable, type Optional } from "@rsc-utils/core-utils";
+import XRegExp from "xregexp";
 import { isBlank } from "./blank/isBlank.js";
 import { isNotBlank } from "./blank/isNotBlank.js";
 import { normalizeAscii } from "./normalize/normalizeAscii.js";
@@ -68,6 +69,26 @@ export class StringMatcher implements Matcher {
 
 	public matchesAny<T extends MatcherResolvable>(...args: T[]): boolean {
 		return args.flat(1).some(value => this.matches(value));
+	}
+
+	/** Converts the matchValue into a regular expression. */
+	public toRegex({ asterisk, whitespace }: { asterisk?:true, whitespace?:"optional" }): RegExp {
+		// reuse cached regex
+		const whitespaceRegex = /\s/;
+
+		// build the regex one char at a time
+		const regex = this.matchValue.split("").map(char => {
+			// don't be greedy
+			if (char === "*" && asterisk) return ".*?";
+
+			// make it optional
+			if (whitespaceRegex.test(char) && whitespace) return "\\s*";
+
+			// escape all other meta characters
+			return XRegExp.escape(char);
+		}).join("");
+
+		return new RegExp(`^${regex}$`, "i");
 	}
 
 	/** Returns the original value. */

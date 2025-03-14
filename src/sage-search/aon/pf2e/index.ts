@@ -27,6 +27,7 @@ export async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnl
 
 	const postDataShould = buildPostData(searchInfo.terms.map(term => oneToUS(term.term)), "should");
 	const responseShould = await getJson<TResponseData>(PF2E_SEARCH_URL, postDataShould).catch(e => error(e)! || null);
+	// writeFileSync(`${getDataRoot(`cache/json`, true)}/pf2e.aon.search.json`, responseShould, true, true);
 	const searchResults = new Pf2eSearchResults(searchInfo, responseShould);
 	/** @todo run a "must" search before running a "should" search and splice the results with "must" results at the top */
 
@@ -65,6 +66,8 @@ function buildPostData(terms: string[], shouldMust: "should" | "must"): TPostDat
 				minimum_should_match: 1
 			}
 		},
+		// because we are not showing both legacy and remaster, we need to ensure we have at least 10 items to show
+		size: 20,
 		sort: ["_score","_doc"]
 	};
 	postData.query.bool.should[1].bool[shouldMust] = terms.map(term => {
@@ -121,9 +124,13 @@ function sort(aValue: string, bValue: string, plusMinus: TPlusMinus, plus: boole
 		array = plusMinus[plus ? "plus" : "minus"],
 		aIndex = array.indexOf(aValue),
 		bIndex = array.indexOf(bValue);
+	// if neither item is on a plus/minus list then we need to return 0 to continue the proper sort chain
+	if (aIndex < 0 && bIndex < 0) {
+		return 0;
+	}
 	return plus
-		? sorter(aIndex, bIndex)
-		: sorter(bIndex, aIndex);
+		? sorter(bIndex, aIndex)
+		: sorter(aIndex, bIndex);
 }
 
 // function sortResults(a: TScore, b: TScore, types: TPlusMinus, rarities: TPlusMinus): TSortResult {

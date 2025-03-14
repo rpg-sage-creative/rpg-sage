@@ -2,15 +2,15 @@ import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { addZeroWidthSpaces, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
-import type { TextChannel } from "discord.js";
+import type { GuildMember, TextChannel } from "discord.js";
 import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
 import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
+import { MoveDirectionOutputType } from "../../map/MoveDirection.js";
 import { renderPostCurrency } from "../PostCurrency.js";
 
 async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
@@ -80,15 +80,14 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 			for (const meta of metas) {
 				const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(meta.sageChannel.id);
 				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
-				renderableContent.append(`[spacer][spacer]${guildChannelName}`);
+
 				const missingPerms = await checkForMissingPerms(sageCommand, guildChannel);
-				if (missingPerms.length) {
-					renderableContent.append(`[spacer][spacer][spacer]Missing Perms: ${missingPerms.join(", ")}`);
-				}
+				const sageEmoji = missingPerms.length ? "[sage-missing-permissions]" : "";
+
 				const otherBots = await checkForOtherBots(guildChannel);
-				if (otherBots.length) {
-					renderableContent.append(`[spacer][spacer][spacer]Other Bots: ${otherBots.join(", ")}`);
-				}
+				const otherBotsEmoji = otherBots.map(name => `[${name}]`).join("");
+
+				renderableContent.append(`[spacer][spacer]${guildChannelName} ${sageEmoji}${otherBotsEmoji}`.trim());
 			}
 		}
 	}
@@ -154,15 +153,6 @@ async function showGameRenderServer(renderableContent: RenderableContent, sageCo
 	}
 }
 
-function cleanCharacterName(charName: string): string {
-	return charName
-		// avoid @here and @everybody
-		.replace(/@(?!\u200B)/g, `@${ZERO_WIDTH_SPACE}`)
-		// fix spoilers
-		.replace(/(?<!\u200B)\|/g, `${ZERO_WIDTH_SPACE}|`)
-		;
-}
-
 async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<RenderableContent | undefined> {
 	const game = _game ?? await showGameGetGame(sageCommand);
 	if (!game) {
@@ -196,22 +186,27 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 		renderableContent.append(`<b>Roles</b> ${roles.length}; ${roles.join(", ")}`);
 	}
 
-	const gmGuildMembers = await game.gmGuildMembers();
-	const gameMasters = gmGuildMembers.map((gmGuildMember, index) => gmGuildMember ? toHumanReadable(gmGuildMember) : `<i>${game.gameMasters[index]}</i>`);
-	renderableContent.append(`<b>GM Character Name</b>`, `[spacer]${game.gmCharacter.name}`);
-	renderableContent.append(`<b>Game Masters</b> ${gameMasters.length}`);
-	gameMasters.forEach(gm => renderableContent.append(`[spacer]${gm}`));
+	renderableContent.append(`<b>GM Character Name</b>`, `[spacer]${addZeroWidthSpaces(game.gmCharacter.name)}`);
 
 	renderableContent.append(`<b>NonPlayer Characters</b> ${game.nonPlayerCharacters.length}`);
+	renderableContent.append(`<b>Player Characters</b> ${game.playerCharacters.length}`);
+
+	const mapGuildMember = (guildMember: GuildMember) => {
+		const userId = guildMember.id as Snowflake;
+		return {
+			userId,
+			name: toHumanReadable(guildMember),
+			characters: game.playerCharacters.filterByUser(userId).map(char => addZeroWidthSpaces(char.name)).join("; ")
+		};
+	};
+
+	const gmGuildMembers = await game.gmGuildMembers();
+	const gameMasters = gmGuildMembers.map(mapGuildMember);
+	renderableContent.append(`<b>Game Masters (Characters)</b> ${gameMasters.length}`);
+	gameMasters.forEach(gameMaster => renderableContent.append(`[spacer]${gameMaster.name}${gameMaster.characters ? ` (${gameMaster.characters})` : ``}`));
 
 	const playerGuildMembers = await game.pGuildMembers();
-	const players = playerGuildMembers.map(pGuildMember => {
-		return {
-			userId: pGuildMember.id as Snowflake,
-			name: toHumanReadable(pGuildMember),
-			characters: game.playerCharacters.filterByUser(pGuildMember.id as Snowflake).map(char => cleanCharacterName(char.name)).join("; ")
-		};
-	});
+	const players = playerGuildMembers.map(mapGuildMember);
 	renderableContent.append(`<b>Players (Characters)</b> ${players.length}`);
 	players.forEach(player => renderableContent.append(`[spacer]${player.name}${player.characters ? ` (${player.characters})` : ``}`));
 
@@ -221,14 +216,19 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 		renderableContent.append(`<b>Orphaned Users</b> ${orphanUserIds.length}; ${orphanUserIds.join(", ")}`);
 	}
 
-	const orphanPCs = game.orphanedPlayerCharacters;
+	const orphanPCs = game.playerCharacters.filter(( { userDid }) => !userDid || (!players.some(p => p.userId === userDid) && !gameMasters.some(gm => gm.userId === userDid)));
 	if (orphanPCs.length) {
 		renderableContent.append(`<b>Orphaned Player Characters</b> ${orphanPCs.length}`);
-		orphanPCs.forEach(pc => renderableContent.append(`[spacer]${cleanCharacterName(pc.name)}`));
+		orphanPCs.forEach(pc => renderableContent.append(`[spacer]${addZeroWidthSpaces(pc.name)}`));
 	}
 
 	await showGameRenderDialogType(renderableContent, sageCommand, game);
+
 	gameDetailsAppendDice(renderableContent, game);
+
+	const moveDirectionOutputType = MoveDirectionOutputType[game.moveDirectionOutputType!] ?? `<i>unset (Compact)</i>`;
+	renderableContent.append(`<b>Move Direction Output Type</b> ${moveDirectionOutputType}`);
+
 	await showGameRenderServer(renderableContent, sageCommand, game);
 
 	renderPostCurrency(game, renderableContent, players);

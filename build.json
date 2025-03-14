@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.8.4",
+"version":"1.8.7",
 "branch":"main",
-"commit":"b70ca755343b1af2a20c18c28b64f4aafc45aab4",
-"commitSubject":"P20 encounter builder (#126)",
-"commitTs":1735963183000,
-"commitDate":"2025-01-03-1959",
-"buildTs":1735963323000,
-"buildDate":"2025-01-03-2002",
+"commit":"6fb0dba5ff394f51057d141326fc7de0bc005740",
+"commitSubject":"use legacyId and remasterId to link to AoN PF2e; tweak search results sort",
+"commitTs":1740423321000,
+"commitDate":"2025-02-24-1055",
+"buildTs":1740423351000,
+"buildDate":"2025-02-24-1055",
 "author":"Randal"
 }

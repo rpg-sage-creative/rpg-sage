@@ -10,6 +10,7 @@ import type { DiceSortType } from "./DiceSortType.js";
 export type DialogOptions = {
 	dialogPostType: DialogPostType;
 	gmCharacterName: string;
+	moveDirectionOutputType?: number;
 	sendDialogTo: Snowflake;
 };
 

@@ -39,6 +39,7 @@ function createMapComponents(gameMap: GameMap): ActionRowBuilder<ButtonBuilder>[
 	];
 }
 
+/** Attempts to render the given map. If render was successful, GameMap.save() is returned. */
 export async function renderMap(messageOrChannel: Optional<Message | MessageTarget>, gameMap: GameMap): Promise<boolean> {
 	if (!messageOrChannel) {
 		return false;

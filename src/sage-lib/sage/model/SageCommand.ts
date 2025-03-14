@@ -9,6 +9,7 @@ import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
+import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { IChannel } from "../repo/base/IdRepository.js";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
@@ -491,6 +492,10 @@ export abstract class SageCommand<
 
 	public get diceSortType(): DiceSortType {
 		return this.cache.getOrSet("diceSortType", () => this.gameChannel?.diceSortType ?? this.game?.diceSortType ?? this.serverChannel?.diceSortType ?? this.server?.diceSortType ?? 0);
+	}
+
+	public get moveDirectionOutputType(): MoveDirectionOutputType {
+		return this.cache.getOrSet("moveDirectionOutputType", () => this.game?.moveDirectionOutputType ?? this.sageUser.moveDirectionOutputType ?? 0);
 	}
 
 	//#endregion

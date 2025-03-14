@@ -84,7 +84,10 @@ export enum EmojiType {
 	// Other = 9
 	AoN = 90,
 	Tupperbox = 900,
-	Rollem = 901
+	Rollem = 901,
+
+	SageMissingPerms = 998,
+	Sage = 999,
 }
 
 export type IEmoji = {

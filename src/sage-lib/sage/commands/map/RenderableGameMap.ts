@@ -1,7 +1,8 @@
-import { RenderableMap } from "../../../../sage-utils/utils/MapUtils";
-import type { IMapLayer, MapRenderResponse, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils";
-import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase";
-import { type TParsedGameMapCore } from "./gameMapImporter";
+import { getEndpoint } from "@rsc-utils/core-utils";
+import type { IMapLayer, MapRenderResponse, THasOffset, TMap, TMapBackgroundImage, TMapLayer, TMapLayerImage } from "../../../../sage-utils/utils/MapUtils/index.js";
+import { RenderableMap } from "../../../../sage-utils/utils/MapUtils/index.js";
+import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase.js";
+import { type TParsedGameMapCore } from "./gameMapImporter.js";
 
 class RenderableGameMapLayer implements IMapLayer {
 	public constructor(protected images: TGameMapImage[]) { }
@@ -30,7 +31,6 @@ class RenderableGameMapLayer implements IMapLayer {
 	}
 }
 
-RenderableMap.setEndpoint({port:3000});
 export class RenderableGameMap extends RenderableMap {
 	public constructor (protected core: TGameMapCore) {
 		super();
@@ -69,3 +69,10 @@ export class RenderableGameMap extends RenderableMap {
 		return RenderableMap._testRender(map.toJSON());
 	}
 }
+
+/** @todo find a better place to do this */
+const mapEndpoint = getEndpoint("Map");
+RenderableMap.setEndpoint(mapEndpoint);
+
+// because this fires before we have enabled logging levels, manually log this
+console.log("info::", { server:"Map", ...mapEndpoint });

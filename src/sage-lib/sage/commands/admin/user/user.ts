@@ -5,6 +5,7 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { DialogDiceBehaviorType } from "../../../model/User.js";
 import { createAdminRenderableContent } from "../../cmd.js";
+import { MoveDirectionOutputType } from "../../map/MoveDirection.js";
 
 /**
  * @todo include other organized play ids:
@@ -25,7 +26,7 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("User Update", "You cannot manage your settings here.");
 	}
 
-	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogDiceBehavior", "dialogPostType", "dmOnDelete", "dmOnEdit", "sagePostType", "orgPlayId"]);
+	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogDiceBehavior", "dialogPostType", "dmOnDelete", "dmOnEdit", "sagePostType", "orgPlayId", "moveDirectionOutputType"]);
 	if (!hasValidKeys || hasInvalidKeys) {
 		const details = [
 			"The command for updating your User settings is:",
@@ -54,13 +55,14 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		if (opUpdated) await sageUser.save();
 	}
 
-	if (validKeys.includes("dialogDiceBehavior") || validKeys.includes("dialogPostType") || validKeys.includes("sagePostType") || validKeys.includes("dmOnDelete") || validKeys.includes("dmOnEdit")) {
+	if (validKeys.includes("dialogDiceBehavior") || validKeys.includes("dialogPostType") || validKeys.includes("sagePostType") || validKeys.includes("dmOnDelete") || validKeys.includes("dmOnEdit") || validKeys.includes("moveDirectionOutputType")) {
 		const dialogDiceBehaviorType = sageMessage.args.getEnum(DialogDiceBehaviorType, "dialogDiceBehavior");
 		const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType");
 		const sagePostType = sageMessage.args.getEnum(DialogPostType, "sagePostType");
 		const dmOnDelete = sageMessage.args.getBoolean("dmOnDelete");
 		const dmOnEdit = sageMessage.args.getBoolean("dmOnEdit");
-		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType });
+		const moveDirectionOutputType = sageMessage.args.getEnum(MoveDirectionOutputType, "moveDirectionOutputType")
+		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType });
 	}
 
 	if (opUpdated || ptUpdated) {
@@ -94,8 +96,14 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 		renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
 	}
 
-	renderableContent.append();
 	renderableContent.append(`<b>RPG Sage Id</b> ${sageUser.id}`);
+
+	renderableContent.append(`### Other Ids`);
+
+	const orgPlayId = sageUser.notes.getCategorizedNote("Uncategorized", "orgPlayId")?.note ?? `<i>unset</i>`;
+	renderableContent.append(`<b>Paizo Organized Play #</b> ${orgPlayId}`);
+
+	renderableContent.append(`### Settings`);
 
 	const dialogDiceBehaviorType = DialogDiceBehaviorType[sageUser.dialogDiceBehaviorType!] ?? `<i>unset (Normal)</i>`;
 	renderableContent.append(`<b>Preferred Dialog Dice Behavior</b> ${dialogDiceBehaviorType}`);
@@ -103,11 +111,11 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 	const dialogPostType = DialogPostType[sageUser.dialogPostType!] ?? `<i>unset (Embed)</i>`;
 	renderableContent.append(`<b>Preferred Dialog Type</b> ${dialogPostType}`);
 
+	const moveDirectionOutputType = MoveDirectionOutputType[sageUser.moveDirectionOutputType!] ?? `<i>unset (Compact)</i>`;
+	renderableContent.append(`<b>Preferred Move Direction Output Type</b> ${moveDirectionOutputType}`);
+
 	const sagePostType = DialogPostType[sageUser.sagePostType!] ?? `<i>unset (Embed)</i>`;
 	renderableContent.append(`<b>Preferred Sage Post Type</b> ${sagePostType}`);
-
-	const orgPlayId = sageUser.notes.getCategorizedNote("Uncategorized", "orgPlayId")?.note ?? `<i>unset</i>`;
-	renderableContent.append(`<b>Paizo Organized Play #</b> ${orgPlayId}`);
 
 	const dmOnDelete = sageUser.dmOnDelete === true ? `Yes` : `No`;
 	renderableContent.append(`<b>Receive DMs on Dialog Delete</b> ${dmOnDelete}`);
@@ -117,7 +125,7 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 
 	// TODO: List any games, gameRoles, servers, serverRoles!
 
-	await sageMessage.reply(renderableContent, true);
+	await sageMessage.replyStack.reply(renderableContent);
 }
 
 export function registerUser(): void {

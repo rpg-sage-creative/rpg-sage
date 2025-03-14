@@ -1,16 +1,15 @@
+import { type OrUndefined } from "@rsc-utils/core-utils";
 import { addCommas, toSuperscript } from "@rsc-utils/number-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import type { SearchScore } from "@rsc-utils/search-utils";
-import type { OrUndefined } from "@rsc-utils/core-utils";
-import { createSearchUrl } from ".";
-import { findByAonBase } from "../../../sage-pf2e/data/Repository";
-import { AonBase } from "../../../sage-pf2e/model/base/AonBase";
-import type { Base } from "../../../sage-pf2e/model/base/Base";
-import type { HasSource } from "../../../sage-pf2e/model/base/HasSource";
-import type { Source } from "../../../sage-pf2e/model/base/Source";
-import type { GameSearchInfo } from "../../GameSearchInfo";
-import { SearchResults } from "../../SearchResults";
-import type { TResponseData } from "./types";
+import { AonBase } from "../../../sage-pf2e/model/base/AonBase.js";
+import type { Base } from "../../../sage-pf2e/model/base/Base.js";
+import type { HasSource } from "../../../sage-pf2e/model/base/HasSource.js";
+import type { Source } from "../../../sage-pf2e/model/base/Source.js";
+import type { GameSearchInfo } from "../../GameSearchInfo.js";
+import { SearchResults } from "../../SearchResults.js";
+import { createSearchUrl } from "./index.js";
+import type { TResponseData } from "./types.js";
 
 type TScore = SearchScore<Base>;
 
@@ -60,22 +59,51 @@ export class Pf2eSearchResults extends SearchResults<AonBase> {
 
 	public constructor(searchInfo: GameSearchInfo, responseData: TResponseData) {
 		super(searchInfo);
-		responseData?.hits?.hits?.forEach(hit => this.add(...AonBase.searchRecursive(hit._source, searchInfo)));
+		// this set tracks id/remasterId/legacyId so that we don't display the same item on two lines
+		const set = new Set<string>();
+		responseData?.hits?.hits?.forEach(hit => {
+			// this should always return 1 item
+			const scores = AonBase.searchRecursive(hit._source, searchInfo);
+			// just in case, require at least 1 item
+			if (scores.length) {
+				const hitId = hit._source.id;
+				// if this id is already in the set, we've added it already
+				if (!set.has(hitId)) {
+					// get legacyId
+					const legacyId = hit._source.legacy_id?.find(id => id !== hitId);
+					// make sure we haven't already added the legacyId
+					const legacySafe = !legacyId || !set.has(legacyId);
+					// get remasterId
+					const remasterId = hit._source.remaster_id?.find(id => id !== hitId);
+					// make sure we haven't already added the remasterId
+					const remasterSafe = !remasterId || !set.has(remasterId);
+					// if we haven't added it, do so now
+					if (legacySafe && remasterSafe) {
+						this.add(...scores);
+						// add all the ids to the set
+						set.add(hitId);
+						if (legacyId) set.add(legacyId);
+						if (remasterId) set.add(remasterId);
+					}
+				}
+			}
+		});
 		this._totalHits = responseData?.hits?.total?.value;
 	}
 
 	protected prepSearchables(): { sageSearchables:OrUndefined<AonBase>[], actionableSearchables:AonBase[] } {
-		const menuLength = this.getMenuLength();
+		// disable use of the old/outdated Sage data
+		// const menuLength = this.getMenuLength();
 		const sageSearchables: OrUndefined<AonBase>[] = [];
 		const actionableSearchables: AonBase[] = [];
-		this.searchables.forEach((searchable, index) => {
-			const aon = searchable instanceof AonBase ? searchable : undefined;
-			const sage = aon ? findByAonBase(aon) as AonBase: undefined;
-			sageSearchables.push(sage);
-			if (isActionable(sage) && index < menuLength) {
-				actionableSearchables.push(sage);
-			}
-		});
+		// this.searchables.forEach((searchable, index) => {
+		// 	const aon = searchable instanceof AonBase ? searchable : undefined;
+		// 	const sage = aon ? findByAonBase(aon) as AonBase: undefined;
+		// 	sageSearchables.push(sage);
+		// 	if (isActionable(sage) && index < menuLength) {
+		// 		actionableSearchables.push(sage);
+		// 	}
+		// });
 		return { sageSearchables, actionableSearchables };
 	}
 

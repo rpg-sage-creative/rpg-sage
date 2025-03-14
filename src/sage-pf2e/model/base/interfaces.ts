@@ -1,7 +1,7 @@
 import { type Core } from "@rsc-utils/class-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { TRarity } from "../../common";
-import type { Base, BaseCore } from "./Base";
+import type { TRarity } from "../../common.js";
+import type { Base, BaseCore } from "./Base.js";
 
 // #region DetailedCore core interface and HasDetails class interface
 
@@ -44,6 +44,8 @@ export interface ArchivedCore {
 export interface IHasArchives {
 	aonId?: number;
 	aonTraitId?: number;
+	legacyId?: string;
+	remasterId?: string;
 	toAonLink(): string;
 }
 

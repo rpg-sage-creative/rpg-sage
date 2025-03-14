@@ -1,5 +1,7 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { COL, GameMapBase, LayerType, ROW, type TGameMapAura, type TGameMapCore, type TGameMapImage, UserLayerType } from "./GameMapBase";
+import { error, type Snowflake } from "@rsc-utils/core-utils";
+import type { SageCommand } from "../../model/SageCommand.js";
+import { COL, GameMapBase, LayerType, ROW, UserLayerType, type TGameMapAura, type TGameMapCore, type TGameMapImage } from "./GameMapBase.js";
+import { MoveDirection, type Direction } from "./MoveDirection.js";
 
 /** shuffles an image on a layer */
 export type TShuffleUpDown = "up" | "down";
@@ -34,47 +36,39 @@ const UP = -1;
 const DOWN = 1;
 const LEFT = -1;
 const RIGHT = 1;
+type PosDir = [0 | 1, -1 | 1];
 
-export type TCompassDirection = "nw" | "n" | "ne" | "w" | "e" | "sw" | "s" | "se";
-export type TMoveDirection = "upleft" | "up" | "upright" | "left" | "right" | "downleft" | "down" | "downright";
-export type TDirection = TCompassDirection | TMoveDirection;
-function ensureMoveDirections(directions: TDirection[]): TMoveDirection[] {
-	return directions.map(dir => {
-		switch(dir) {
-			case "nw": return "upleft";
-			case "n": return "up";
-			case "ne": return "upright";
-			case "w": return "left";
-			case "e": return "right";
-			case "sw": return "downleft";
-			case "s": return "down";
-			case "se": return "downright";
-			default: return dir;
-		}
-	});
-}
-function moveImage(image: TGameMapImage, ...directions: TMoveDirection[]): boolean {
+function moveImage(image: TGameMapImage, ...directions: Direction[]): boolean {
 	const [startCol, startRow] = image.pos;
-	directions.forEach(direction => {
-		switch(direction) {
-			case "upleft": return move(image, [ROW, UP], [COL, LEFT]);
-			case "up": return move(image, [ROW, UP]);
-			case "upright": return move(image, [ROW, UP], [COL, RIGHT]);
-			case "left": return move(image, [COL, LEFT]);
-			case "right": return move(image, [COL, RIGHT]);
-			case "downleft": return move(image, [ROW, DOWN], [COL, LEFT]);
-			case "down": return move(image, [ROW, DOWN]);
-			case "downright": return move(image, [ROW, DOWN], [COL, RIGHT]);
-			default: return false;
+
+	const moveImage = (distance: number, ...posDirs: PosDir[]) => {
+		while (distance--) {
+			move(image, ...posDirs);
+		}
+	};
+
+	directions.forEach(dir => {
+		const direction = MoveDirection.from(dir);
+		switch(direction.arrow) {
+			case "upleft": return moveImage(direction.distance, [ROW, UP], [COL, LEFT]);
+			case "up": return moveImage(direction.distance, [ROW, UP]);
+			case "upright": return moveImage(direction.distance, [ROW, UP], [COL, RIGHT]);
+			case "left": return moveImage(direction.distance, [COL, LEFT]);
+			case "right": return moveImage(direction.distance, [COL, RIGHT]);
+			case "downleft": return moveImage(direction.distance, [ROW, DOWN], [COL, LEFT]);
+			case "down": return moveImage(direction.distance, [ROW, DOWN]);
+			case "downright": return moveImage(direction.distance, [ROW, DOWN], [COL, RIGHT]);
+			default: error({dir,direction}); return;
 		}
 	});
+
 	return image.pos[COL] !== startCol || image.pos[ROW] !== startRow;
 }
 
 const POS = 0;
 const DIR = 1;
 
-function move(image: TGameMapImage, ...posDirs: [0 | 1, -1 | 1][]): boolean {
+function move(image: TGameMapImage, ...posDirs: PosDir[]): boolean {
 	posDirs.forEach(posDir => {
 		image.pos[posDir[POS]] += posDir[DIR];
 		image.auras?.forEach(aura => aura.pos[posDir[POS]] += posDir[DIR]);
@@ -82,9 +76,11 @@ function move(image: TGameMapImage, ...posDirs: [0 | 1, -1 | 1][]): boolean {
 	return true;
 }
 
+type GameUsers = { gameMasters:Snowflake[]; players:Snowflake[]; };
+
 export class GameMap extends GameMapBase {
 	/** constructs a map for the given core and user */
-	public constructor(core: TGameMapCore, public userId: Snowflake) {
+	public constructor(core: TGameMapCore, public userId: Snowflake, public gameUsers?: GameUsers) {
 		super(core);
 	}
 
@@ -158,18 +154,21 @@ export class GameMap extends GameMapBase {
 
 	/** indicates the user is the owner of the map */
 	public get isOwner() { return this.userId === this.ownerId; }
+	public get isGameMaster() { return this.gameUsers?.gameMasters.includes(this.userId); }
+	public get isGameMasterOrOwner() { return this.isOwner || this.isGameMaster; }
+	public get isPlayer() { return this.gameUsers?.players.includes(this.userId); }
 
 	/** returns the user's previously active layer */
 	public get previousLayer() { return this.activeLayerValues[UserLayerType.PreviousLayer] ?? LayerType.Token; }
 
 	/** retuns all the auras on the map this user can access */
-	public get userAuras() { return this.isOwner ? this.auras : this.auras.filter(aura => aura.userId === this.userId); }
+	public get userAuras() { return this.isGameMasterOrOwner ? this.auras : this.auras.filter(aura => aura.userId === this.userId); }
 
 	/** returns all the terrain on the map this user can access */
-	public get userTerrain() { return this.isOwner ? this.terrain : this.terrain.filter(terrain => terrain.userId === this.userId); }
+	public get userTerrain() { return this.isGameMasterOrOwner ? this.terrain : this.terrain.filter(terrain => terrain.userId === this.userId); }
 
 	/** returns all the tokens on the map this user can access */
-	public get userTokens() { return this.isOwner ? this.tokens : this.tokens.filter(token => token.userId === this.userId); }
+	public get userTokens() { return this.isGameMasterOrOwner ? this.tokens : this.tokens.filter(token => token.userId === this.userId); }
 
 	//#endregion
 
@@ -257,13 +256,12 @@ export class GameMap extends GameMapBase {
 	}
 
 	/** move the active token in the given direction */
-	public moveActiveToken(...directions: TDirection[]): boolean {
+	public moveActiveToken(...directions: Direction[]): boolean {
 		const activeImage = this.activeImage;
 		if (!activeImage) {
 			return false;
 		}
-		const moveDirections = ensureMoveDirections(directions);
-		return moveImage(activeImage, ...moveDirections);
+		return moveImage(activeImage, ...directions);
 	}
 
 	/** change the active aura's opacity */
@@ -310,14 +308,49 @@ export class GameMap extends GameMapBase {
 
 	//#region static
 
-	/** loads the map for the given id for the given user */
-	public static async forUser(messageId: Snowflake, userId: Snowflake, existingOnly = false) {
+	/**
+	 * loads the map for the given id for the given user
+	 * @deprecated user GameMap.forActor()
+	 */
+	public static async forUser(messageId: Snowflake, userId: Snowflake): Promise<GameMap | undefined> {
 		const core = await GameMapBase.readCore(messageId);
-		const map = core ? new GameMap(core, userId) : null;
-		if (map) {
-			return !existingOnly || map.isValidUser(userId) ? map : null;
+		if (!core) return undefined;
+
+		const map = new GameMap(core, userId);
+		if (map.isValidUser(userId)) {
+			return map;
 		}
-		return null;
+
+		return undefined;
+	}
+
+	/**
+	 * Loads the map found in the message of the command for the given user.
+	 * If a Game is present, then the gms and players are added to the GameMap for permissions checking.
+	 */
+	public static async forActor(sageCommand: SageCommand): Promise<GameMap | undefined> {
+		const message = await sageCommand.fetchMessage();
+		if (!message) return undefined;
+
+		// when we add app commands they will be directly on the map ... also, if we call this from button events ... thus: ?? message.id
+		const messageId = message.reference?.messageId as Snowflake ?? message.id;
+
+		const core = await GameMapBase.readCore(messageId);
+		if (!core) return undefined;
+
+		const userId = sageCommand.sageUser.did;
+
+		const { game } = sageCommand;
+		if (!game) return new GameMap(core, userId);
+
+		const players = await game.pGuildMembers();
+		const gameMasters = await game.gmGuildMembers();
+		const gameUsers = {
+			gameMasters: gameMasters.map(gm => gm.id as Snowflake),
+			players: players.map(p => p.id as Snowflake)
+		};
+
+		return new GameMap(core, userId, gameUsers);
 	}
 
 	//#endregion

@@ -14,6 +14,7 @@ import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
 import { logPostCurrency } from "../admin/PostCurrency.js";
 import { parseDiceMatches, sendDice, type TDiceMatch } from "../dice.js";
+import { MoveDirection } from "../map/MoveDirection.js";
 import type { ChatOptions } from "./chat/ChatOptions.js";
 import { sendDialogRenderable } from "./sendDialogRenderable.js";
 
@@ -81,10 +82,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	//#endregion
 
 	//#region map/movement arrows
-	const regex = /\[(\b(\s|nw|n|ne|w|c|e|sw|s|se))+\]/ig;
-	content = content.replace(regex, match =>
-		match.slice(1, -1).split(/\s/).filter(s => s).map(s => `[${s}]`).join(" ")
-	);
+	content = MoveDirection.replaceAll(content, sageMessage.moveDirectionOutputType);
 	//#endregion
 
 	//#region sheet link

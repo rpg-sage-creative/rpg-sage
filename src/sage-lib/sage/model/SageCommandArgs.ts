@@ -5,6 +5,7 @@ import { type MessageChannel, parseIds } from "@rsc-utils/discord-utils";
 import { type VALID_URL } from "@rsc-utils/io-utils";
 import { createUrlRegex, unwrap } from "@rsc-utils/string-utils";
 import type { Attachment, Role, User } from "discord.js";
+import { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { SageCommand } from "./SageCommand.js";
 
 /** An object containing names. */
@@ -348,6 +349,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		const dialogOptions = {
 			dialogPostType: this.getEnum(DialogPostType, "dialogPost"),
 			gmCharacterName: this.getString("gmCharName") ?? this.getString("gmName"),
+			moveDirectionOutputType: this.getEnum(MoveDirectionOutputType, "moveDirectionOutputType"),
 			sendDialogTo: this.getChannelId("dialogTo"),
 		};
 		if (isEmpty(dialogOptions)) {

@@ -1,5 +1,5 @@
 import { error } from "@rsc-utils/core-utils";
-import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues, isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
@@ -7,6 +7,33 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import { getCharactersArgs } from "./getCharacterArgs.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
+
+type CharData = { name:string; type:string; action:string; };
+function createAttemptPromptContent(prompt: string, chars: CharData[]): string {
+	const maxLength = DiscordMaxValues.message.contentLength;
+	const promptLength = prompt.length;
+
+	// try the full info as intended
+	const full = chars.map(({ name, action, type }) => `\n> - ${action}: ${name} ${type}`).join("");
+	if (maxLength >= promptLength + full.length) {
+		return prompt + full;
+	}
+
+	// if types are same, don't include type
+	const firstType = chars[0]?.type;
+	const mixedTypes = chars.some(({ type }) => type !== firstType);
+	if (!mixedTypes) {
+		const withoutType = chars.map(({ name, action }) => `\n> - ${action}: ${name}`).join("");
+		if (maxLength >= promptLength + withoutType.length) {
+			return prompt + withoutType;
+		}
+	}
+
+	/** @todo generate a list until we run out of characters and then say "... and X others." */
+
+	// return just the prompt to at least let them import
+	return prompt;
+}
 
 export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 	const localize = sageMessage.getLocalizer();
@@ -31,20 +58,21 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 		if (missingNames) content += `\n- ` + localize("USERNAME_MISSING");
 		if (longNames) content += `\n- ` + localize("USERNAME_TOO_LONG");
 		bannedNames.forEach(bannedName => content += `\n- ` + localize("USERNAME_S_BANNED", bannedName));
-		return sageMessage.replyStack.whisper(content);
+		return await sageMessage.replyStack.whisper(content);
 	}
 
 	const hasCharacters = sageMessage.game ?? sageMessage.sageUser;
 
-	const allNames = allResults.map(({ names, type }) => {
+	const charData = allResults.map(({ names, type }) => {
 		const exists = hasCharacters.findCharacterOrCompanion(names.name!);
 		const action = localize(exists ? "UPDATE" : "CREATE");
 		const _type = type ? ` *(${localize(type.toUpperCase() as "PC").toLowerCase()})*` : ``;
-		return `\n> - ${action}: ${names.name} ${_type}`;
-	}).join("");
-
+		return { name:names.name!, action, type:_type };
+	});
 	const prompt = localize("ATTEMPT_IMPORT_OF_X_CHARACTERS", allResults.length);
-	const response = await discordPromptYesNo(sageMessage, prompt + allNames, true);
+	const promptContent = createAttemptPromptContent(prompt, charData);
+
+	const response = await discordPromptYesNo(sageMessage, promptContent, true);
 	if (!response) return sageMessage.replyStack.whisper(localize("NO_IMPORT_ATTEMPTED"));
 
 	const output: string[] = [];

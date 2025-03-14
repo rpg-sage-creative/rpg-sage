@@ -4,7 +4,7 @@ import type { APIUser, PartialRecipient, PartialUser, User } from "discord.js";
 
 type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
 
-function addZeroWidthSpaces(value: string): string {
+export function addZeroWidthSpaces(value: string): string {
 	return value
 		// avoid @here and @everybody
 		.replace(/@(?!\u200B)/g, `@${ZERO_WIDTH_SPACE}`)
