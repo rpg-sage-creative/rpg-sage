@@ -46,37 +46,60 @@ echoAndDo "ln -s ./$NOW-$ENV ./latest"
 deployDirRemote="$botDir/deploy"
 logDirRemote="$botDir/data/sage/logs"
 
+function zipAndCopy() {
+	objType="$1"
+
+	# zip data
+	sshCommands=(
+		# remove old backup.zip & create new one
+		"rm -f $deployDirRemote/$objType.zip"
+		"cd $botDir/data/sage/$objType"
+		"zip -rq9 $deployDirRemote/$objType.zip ./*"
+	)
+	sshRun "${sshCommands[@]}"
+
+	# copy data
+	scpFrom "$deployDirRemote/$objType.zip" "$backupDir/latest/$objType.zip"
+
+	# delete remote
+	sshCommands=(
+		"rm -f $deployDirRemote/$objType.zip"
+	)
+	sshRun "${sshCommands[@]}"
+}
+
+zipAndCopy "bots"
+zipAndCopy "dice"
+zipAndCopy "e20"
+zipAndCopy "games"
+zipAndCopy "logs"
+zipAndCopy "maps"
+zipAndCopy "messages"
+zipAndCopy "pb2e"
+zipAndCopy "servers"
+zipAndCopy "users"
+
 # execute the deploy script on the remote
 sshCommands=(
-	# remove old backup.zip & create new one
-	"rm -f $deployDirRemote/data.zip"
-	"cd $botDir/data"
-	"zip -rq9 $deployDirRemote/data.zip ./*"
-
 	# remove old stable-backup, create new stable-backup, then trim stable logs
 	"cd $botDir/stable"
 	"git rev-parse HEAD > $deployDirRemote/stable.txt"
 	"git show --oneline -s >> $deployDirRemote/stable.txt"
-	"find $logDirRemote/stable -mtime +30 -name '*.log' -delete"
+	"find ./logs -mtime +30 -name '*.log' -delete"
 
 	# remove old beta-backup, create new beta-backup, then trim beta logs
 	"cd $botDir/beta"
 	"git rev-parse HEAD > $deployDirRemote/beta.txt"
 	"git show --oneline -s >> $deployDirRemote/beta.txt"
-	"find $logDirRemote/beta -mtime +30 -name '*.log' -delete"
+	"find ./logs -mtime +30 -name '*.log' -delete"
 
 	# remove old dev-backup, create new dev-backup, then trim dev logs
 	"cd $botDir/dev"
 	"git rev-parse HEAD > $deployDirRemote/dev.txt"
 	"git show --oneline -s >> $deployDirRemote/dev.txt"
-	"find $logDirRemote/dev -mtime +30 -name '*.log' -delete"
+	"find ./logs -mtime +30 -name '*.log' -delete"
 
 	"find /home/ec2-user/.pm2/logs -mtime +30 -name '*.log*' -delete"
-
-	# remove old log-backup, create new log-backup
-	"rm -f $deployDirRemote/logs.zip"
-	"cd $logDirRemote"
-	"zip -rq9 $deployDirRemote/logs.zip ./*"
 )
 sshRun "${sshCommands[@]}"
 
@@ -84,22 +107,18 @@ sshRun "${sshCommands[@]}"
 
 #region copy to local
 
-scpFrom "$deployDirRemote/data.zip" "$backupDir/latest/data.zip"
 scpFrom "$deployDirRemote/stable.txt" "$backupDir/latest/stable.txt"
 scpFrom "$deployDirRemote/beta.txt" "$backupDir/latest/beta.txt"
 scpFrom "$deployDirRemote/dev.txt" "$backupDir/latest/dev.txt"
-scpFrom "$deployDirRemote/logs.zip" "$backupDir/latest/logs.zip"
 
 #endregion
 
 #region delete remote zips
 
 sshCommands=(
-	"rm -f $deployDirRemote/data.zip"
 	"rm -f $deployDirRemote/stable.txt"
 	"rm -f $deployDirRemote/beta.txt"
 	"rm -f $deployDirRemote/dev.txt"
-	"rm -f $deployDirRemote/logs.zip"
 )
 sshRun "${sshCommands[@]}"
 
