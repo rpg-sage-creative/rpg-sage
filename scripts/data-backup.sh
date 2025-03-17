@@ -51,19 +51,25 @@ function zipAndCopy() {
 
 	# zip data
 	sshCommands=(
-		# remove old backup.zip & create new one
-		"rm -f $deployDirRemote/$objType.zip"
+		# remove old data.tar.gz
+		"rm -f $deployDirRemote/$objType.tar.gz"
+		# move to data folder
 		"cd $botDir/data/sage/$objType"
-		"zip -rq9 $deployDirRemote/$objType.zip ./*"
+		# create manifest
+		"find . -name '*.json' -print >./$objType.manifest"
+		# tar files
+		"tar -czf $deployDirRemote/$objType.tar.gz --files-from ./$objType.manifest"
+		# remove manifest
+		"rm -rf ./$objType.manifest"
 	)
 	sshRun "${sshCommands[@]}"
 
 	# copy data
-	scpFrom "$deployDirRemote/$objType.zip" "$backupDir/latest/$objType.zip"
+	scpFrom "$deployDirRemote/$objType.tar.gz" "$backupDir/latest/$objType.tar.gz"
 
 	# delete remote
 	sshCommands=(
-		"rm -f $deployDirRemote/$objType.zip"
+		"rm -f $deployDirRemote/$objType.tar.gz"
 	)
 	sshRun "${sshCommands[@]}"
 }
