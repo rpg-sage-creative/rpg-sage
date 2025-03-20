@@ -1,11 +1,10 @@
 import type { HexColorString } from "@rsc-utils/color-utils";
 import { errorReturnEmptyArray, errorReturnNull, warnReturnNull, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey } from "@rsc-utils/discord-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import { AttachmentBuilder, type Message } from "discord.js";
 import type { TDiceOutput } from "../../../../sage-dice/common.js";
-import type { GameCharacter, TDialogMessage } from "../../model/GameCharacter.js";
+import type { GameCharacter } from "../../model/GameCharacter.js";
 import type { ColorType } from "../../model/HasColorsCore.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
 import type { SageMessage } from "../../model/SageMessage.js";
@@ -124,6 +123,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 		const last = messages[messages.length - 1];
 
 		//#region dice
+
 		if (diceOutputs.length) {
 			const diceResults = await sendDice(sageMessage, diceOutputs);
 			if (diceResults.allSecret && diceResults.hasGmChannel) {
@@ -133,22 +133,27 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 				}
 			}
 		}
+
 		//#endregion
 
-		const dialogMessage: Partial<TDialogMessage> = {
-			channelDid: last.channel.isThread() ? last.channel.parent?.id as Snowflake : last.channel.id as Snowflake,
+		//#region DialogMessageRepository / lastMessage
+
+		// save all the dialog messages, save last one
+		const lastMessage = await DialogMessageRepository.write({
 			characterId: character.id,
 			gameId: sageMessage.game?.id as Snowflake,
-			messageDid: last.id as Snowflake,
-			serverDid: last.guild?.id as Snowflake,
-			threadDid: last.channel.isThread() ? last.channel.id as Snowflake : undefined,
-			timestamp: last.createdTimestamp,
-			userDid: character.userDid ?? sageMessage.sageUser.did
-		};
-		await DialogMessageRepository.write(DiscordKey.from(last), dialogMessage as TDialogMessage);
+			messages,
+			userId: sageMessage.sageUser.did
+		});
 
-		character.setLastMessage(dialogMessage as TDialogMessage);
-		await character.save();
+		// if we have a lastMessage, save it to the character
+		if (lastMessage) {
+			character.setLastMessage(lastMessage);
+			await character.save();
+		}
+
+		//#endregion
+
 	}
 	return messages;
 }

@@ -108,6 +108,16 @@ const enUS = {
 	// "ADDING_TOKEN_FOR_S": `Adding token for #{0} ...`,
 	// "LINKING_TOKEN_FOR_S": `Linking token for #{0} ...`,
 	//#endregion
+
+	//#region editChat
+	"TO_EDIT_DIALOG": `To edit dialog, you must reply to the message you wish to edit.`,
+	"SORRY_DIALOG_NOT_FOUND": `Sorry, dialog info not found!`,
+	"YOU_CANNOT_EDIT_ANOTHER": `You cannot edit another user's dialog!`,
+	"SORRY_MESSAGE_NOT_FOUND": `Sorry, discord message not found!`,
+	"CANNOT_FIND_WEBHOOK": `Unable to find webhook; Sage may not have access to post in this channel/thread.`,
+	"YOU_EDITED_S_DIALOG": 'You edited: #{0}\nThe original content has been attached to this message.\nTo stop receiving these messages, reply to this message with:```sage! user update dmOnEdit=false```',
+	"INVALID_DIALOG_EDIT": `The content you were trying to post was invalid in some way, likely too long.`,
+	//#endregion
 };
 
 export type LocalizedTextKey = keyof typeof enUS;

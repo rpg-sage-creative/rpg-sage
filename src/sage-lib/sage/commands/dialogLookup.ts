@@ -1,6 +1,6 @@
 import { isSageId, isTupperBoxId } from "@rsc-sage/env";
 import { errorReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
+import { toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Guild, GuildMember, Message } from "discord.js";
 import { ReactionType } from "../../discord/enums.js";
@@ -98,17 +98,16 @@ function getServerName(guild: Optional<Guild>): string {
 }
 
 async function processSageDialog(sageCommand: SageCommand, message: Message): Promise<void> {
-	const discordKey = DiscordKey.from(message);
-	const messageInfo = await DialogMessageRepository.read(discordKey, { ignoreMissingFile:true });
+	const messageInfo = await DialogMessageRepository.read(message, { ignoreMissingFile:true });
 	if (!messageInfo) {
 		await whisper(sageCommand, `Sorry, we could't find any RPG Sage Dialog info for that message.`);
 		return;
 	}
 
-	const { characterId, gameId, userDid } = messageInfo;
+	const { characterId, gameId, userId } = messageInfo;
 
-	const sageUser = await sageCommand.sageCache.users.getByDid(userDid);
-	const guildMember = await sageCommand.discord.fetchGuildMember(userDid);
+	const sageUser = await sageCommand.sageCache.users.getByDid(userId);
+	const guildMember = await sageCommand.discord.fetchGuildMember(userId);
 
 	let { game } = sageCommand;
 	if (game && !game.equals(gameId)) {
@@ -134,7 +133,7 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 	renderable.setThumbnailUrl(character.tokenUrl ?? character.avatarUrl);
 	renderable.append(getMessageLink(message));
 	renderable.append(getCharacterName(character));
-	renderable.append(await getUserName(sageCommand, guildMember, userDid, game));
+	renderable.append(await getUserName(sageCommand, guildMember, userId, game));
 	renderable.append(getGameName(game));
 	if (game && !isGameChar) {
 		renderable.append(`> *NOTE: This character is a User Character, **NOT** a Game Character.*`);

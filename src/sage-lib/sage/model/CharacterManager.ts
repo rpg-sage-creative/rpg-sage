@@ -1,9 +1,9 @@
 import { Collection } from "@rsc-utils/array-utils";
 import { randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { resolveSnowflake, type CanBeSnowflakeResolvable, type DiscordKey } from "@rsc-utils/discord-utils";
+import { resolveSnowflake, type CanBeSnowflakeResolvable } from "@rsc-utils/discord-utils";
 import { CharactersMatch } from "./CharactersMatch.js";
 import type { Game } from "./Game.js";
-import { GameCharacter, type GameCharacterCore, type TDialogMessage, type TGameCharacterType } from "./GameCharacter.js";
+import { GameCharacter, type GameCharacterCore, type TGameCharacterType } from "./GameCharacter.js";
 import { NamedCollection, type IHasSave } from "./NamedCollection.js";
 import type { Server } from "./Server.js";
 import type { User } from "./User.js";
@@ -152,21 +152,21 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	//#endregion
 
 	/** Returns the newest dialog message from all characters and companions. (Helpful for NPCs) */
-	public getLastMessage(discordKey: DiscordKey): TDialogMessage | undefined {
-		return this.getLastMessages(discordKey).pop();
-	}
+	// public getLastMessage(channelId: Snowflake): DialogMessageData | undefined {
+	// 	return this.getLastMessages(channelId).pop();
+	// }
 
 	/** Returns all the dialog messages for all characters/companions, sorted oldest to newest. (.pop() gets the newest) */
-	public getLastMessages(discordKey: DiscordKey): TDialogMessage[] {
-		const lastMessages: TDialogMessage[] = [];
-		this.forEach(character => {
-			lastMessages.push(...character.getLastMessages(discordKey));
-		});
-		/*
-		// lastMessages.sort((a, b) => a.timestamp - b.timestamp);
-		*/
-		return lastMessages;
-	}
+	// public getLastMessages(channelId: Snowflake): DialogMessageData[] {
+	// 	const lastMessages: DialogMessageData[] = [];
+	// 	this.forEach(character => {
+	// 		lastMessages.push(...character.getLastMessages(channelId));
+	// 	});
+	// 	/*
+	// 	// lastMessages.sort((a, b) => a.timestamp - b.timestamp);
+	// 	*/
+	// 	return lastMessages;
+	// }
 
 	/** We likely don't want a CharacterManager if we map to a non-named value. */
 	public map<T>(callbackfn: (value: GameCharacter, index: number, collection: CharacterManager) => T, thisArg?: any): Collection<T> {
