@@ -1,5 +1,5 @@
 import { partition } from "@rsc-utils/array-utils";
-import { DiscordMaxValues } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues, toUserMention } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { StringSelectMenuInteraction } from "discord.js";
 import type { Macro } from "../../../model/Macro.js";
@@ -102,16 +102,17 @@ export async function mCmdList(sageCommand: SageCommand, args?: Args | boolean):
 		args = await getArgs(sageCommand);
 	}
 
-	const content = await toRenderableContent(sageCommand, args);
+	const content = toUserMention(sageCommand.actorId);
+	const embeds = await toRenderableContent(sageCommand, args);
 	const components = await createListComponents(sageCommand, args);
 
 	const message = sageCommand.isSageInteraction()
 		? await sageCommand.fetchMessage()
 		: undefined;
 	if (message) {
-		await message.edit(sageCommand.resolveToOptions({ embeds:content, components }));
+		await message.edit(sageCommand.resolveToOptions({ content, embeds, components }));
 	}else {
-		await sageCommand.replyStack.send({ embeds:content, components });
+		await sageCommand.replyStack.send({ content, embeds, components });
 	}
 }
 

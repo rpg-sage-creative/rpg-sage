@@ -1,3 +1,4 @@
+import { toUserMention } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createMacroComponents } from "./createMacroComponents.js";
@@ -32,14 +33,15 @@ export async function mCmdDetails(sageCommand: SageCommand, args?: Args | boolea
 		args = await getArgs(sageCommand);
 	}
 
-	const content = toRenderableContent(sageCommand, args);
+	const content = toUserMention(sageCommand.actorId);
+	const embeds = toRenderableContent(sageCommand, args);
 	const components = await createMacroComponents(sageCommand, args);
 
 	const message = await sageCommand.fetchMessage(args.customIdArgs?.messageId).catch(() => undefined);
 	if (message && message?.author.id !== sageCommand.authorDid) {
-		await message.edit(sageCommand.resolveToOptions({ embeds:content, components }));
+		await message.edit(sageCommand.resolveToOptions({ content, embeds, components }));
 	}else {
-		await sageCommand.replyStack.send({ embeds:content, components });
+		await sageCommand.replyStack.send({ content, embeds, components });
 	}
 
 }
