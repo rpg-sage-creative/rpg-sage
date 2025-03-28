@@ -1,4 +1,4 @@
-import { warn, type Optional } from "@rsc-utils/core-utils";
+import { debug, warn, type Optional } from "@rsc-utils/core-utils";
 import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, tokenize, type KeyValueArg } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import type { DiceMacroBase } from "../../model/Macro.js";
@@ -52,6 +52,12 @@ function findPrefixMacroArgs(macroTiers: DiceMacroBase[][], input: string): Find
 	const [_, dirtyPrefix, dirtyMacro] = lower.match(/^((?:\d*#)|(?:\d*k[hl]\d*#)|(?:[\+\-]))?(.*?)$/) ?? [];
 	const prefix = (dirtyPrefix ?? "").trim();
 	const cleanMacro = (dirtyMacro ?? "").trim();
+
+	const isValidMacroName = /^[\w\.-]+\b/.test(cleanMacro);
+	if (!isValidMacroName) {
+		return { prefix, macro:undefined, slicedArgs:input.slice(prefix.length) };
+	}
+
 	// find the longest macro of each tier
 	const longestMacros = macroTiers.map(macros => findLongestMacroName(macros, cleanMacro));
 	// grab the longest of the longest macros
@@ -84,7 +90,8 @@ function parseMacroArgs(argString: string): TArgs {
 type DiceMacroBaseAndArgs = TArgs & { macro?: DiceMacroBase; prefix: TPrefix; };
 function parseMacroAndArgs(macroTiers: DiceMacroBase[][], input: string): DiceMacroBaseAndArgs {
 	const { prefix, macro, slicedArgs } = findPrefixMacroArgs(macroTiers, input);
-	const macroArgs = macro ? parseMacroArgs(slicedArgs) : null;
+	const macroArgs = macro ? parseMacroArgs(slicedArgs) : undefined;
+	debug({slicedArgs,macroArgs});
 	return {
 		indexed: macroArgs?.indexed ?? [],
 		macro: macro ?? undefined,
@@ -114,7 +121,7 @@ function namedArgValueOrDefaultValue(vs: string, arg: Optional<KeyValueArg>, def
 	return ``;
 }
 
-function flattenMacro(macroTiers: DiceMacroBase[][], dice: string, stack: string[] = []): string[] {
+function flattenMacro(macroTiers: DiceMacroBase[][], dice: string, argsStack: TArgs[], stack: string[] = []): string[] {
 	// avoid a stack overflow
 	if (stack.some((s,i,a)=>a.indexOf(s)!==i)) {
 		warn({stack});
@@ -128,12 +135,17 @@ function flattenMacro(macroTiers: DiceMacroBase[][], dice: string, stack: string
 			// remove [ from first and ] from last and [] from an only item
 			.map((block, i, a) => a.length === 1 ? block.slice(1, -1) : i == 0 ? block.slice(1) : i === a.length - 1 ? block.slice(0, -1) : block)
 			// flatten each block
-			.map(block => flattenMacro(macroTiers, block, stack.concat(block)))
+			.map(block => flattenMacro(macroTiers, block, argsStack, stack.concat(block)))
 			// flatten all results into a single array
 			.flat();
 	}
 
-	const { macro } = parseMacroAndArgs(macroTiers, dice);
+	const includeUnusedArgs = !!parseMacroAndArgs(macroTiers, dice).macro;
+
+	// apply the args
+	dice = applyArgs(dice, argsStack, includeUnusedArgs);
+
+	const { macro, indexed, named } = parseMacroAndArgs(macroTiers, dice);
 
 	// no macro means we have dice we can work with
 	if (!macro) {
@@ -141,47 +153,74 @@ function flattenMacro(macroTiers: DiceMacroBase[][], dice: string, stack: string
 	}
 
 	// we have another macro so we need to flatten again
-	return flattenMacro(macroTiers, macro.dice, stack.concat(macro.dice));
+	return flattenMacro(macroTiers, macro.dice, [{ indexed, named }].concat(argsStack), stack.concat(macro.dice));
+}
+
+function applyArgs(unwrapped: string, argsStack: TArgs[], includeUnusedArgs: boolean): string {
+	// indexed args should still be operating correctly
+	// to fully and completely pass named args down, i need to:
+	// 1. pull all named arg keys
+	// 2. track keys not found below
+	// 3. add the most recent value of each not found key before the trailing ]
+	const namedArgsUsed = new Set<string>();
+	const findNamedArg = (keyLower: string) => argsStack
+		.find(({ named }) => named.find(arg => arg.keyLower === keyLower))
+		?.named.find(arg => arg.keyLower === keyLower);
+	const mapAllUnusedNamedArgs = () => {
+		const allNamedArgKeys = new Set(argsStack.map(({ named }) => named.map(arg => arg.keyLower)).flat());
+		const unusedArgs = [...allNamedArgKeys].map(findNamedArg).filter(arg => arg);
+		return unusedArgs.map(arg => `${arg?.key}="${arg?.value}"`).join(" ");
+	};
+
+	debug;
+	let maxIndex = -1;
+	return `[${unwrapped}]`
+
+	// indexed / named args
+	.replace(getMacroArgRegex(true), match => {
+		const { vs, key, keyIndex, isIndexed, defaultValue } = parseMacroArgMatch(match);
+		const ret = (out: string) => {
+			// debug({match,parsed:{ vs, key, keyIndex, isIndexed, defaultValue },out});
+			return out;
+		};
+		if (isIndexed) {
+			maxIndex = Math.max(maxIndex, keyIndex);
+			return ret(nonEmptyStringOrDefaultValue(vs, argsStack[0].indexed[keyIndex], defaultValue) ?? `${vs}{${keyIndex}}`);
+		}else {
+			const keyLower = key.toLowerCase();
+			const namedArg = findNamedArg(keyLower);
+			namedArgsUsed.add(keyLower);
+			return ret(namedArgValueOrDefaultValue(vs, namedArg, defaultValue) ?? `${vs}{${key}}`);
+		}
+	})
+
+	// remaining args
+	.replace(getMacroRemainingArgRegex(true), argsStack[0].indexed.slice(maxIndex + 1).join(" "))
+
+	// fix adjacent plus/minus
+	.replace(/-\s*\+/g, "-")
+	.replace(/\+\s*-/g, "-")
+	.replace(/\+\s*\+/g, "+")
+
+	.replace(/\]$/, includeUnusedArgs ? " " + mapAllUnusedNamedArgs() + "]" : "]")
+	;
 }
 
 type DiceMacroBaseAndOutput = { macro: DiceMacroBase; output: string; };
 export function macroToDice(macroTiers: DiceMacroBase[][], input: string): DiceMacroBaseAndOutput | undefined {
 	const { prefix, macro, indexed, named } = parseMacroAndArgs(macroTiers, input);
-	// debug({ input, prefix, macro, indexed, named });
 	if (!macro) {
 		return undefined;
 	}
 
 	const all: string[] = [];
 
-	const flattened = flattenMacro(macroTiers, macro.dice);
+	const flattened = flattenMacro(macroTiers, macro.dice, [{ indexed, named }]);
+
 	flattened.forEach(unwrapped => {
-		let maxIndex = -1;
 		let dice = `[${unwrapped}]`;
 		// debug({dice});
-		dice = dice.replace(getMacroArgRegex(true), match => {
-				const { vs, key, keyIndex, isIndexed, defaultValue } = parseMacroArgMatch(match);
-				const ret = (out: string) => {
-					// debug({match,parsed:{ vs, key, keyIndex, isIndexed, defaultValue },out});
-					return out;
-				};
-				if (isIndexed) {
-					maxIndex = Math.max(maxIndex, keyIndex);
-					return ret(nonEmptyStringOrDefaultValue(vs, indexed[keyIndex], defaultValue) ?? `${vs}{${keyIndex}}`);
-				}else {
-					const keyLower = key.toLowerCase();
-					const namedArg = named.find(arg => arg.keyLower === keyLower)
-						// ?? namedArgStack.find(arg => arg.keyLower === keyLower);
-					return ret(namedArgValueOrDefaultValue(vs, namedArg, defaultValue) ?? `${vs}{${key}}`);
-				}
-			})
-			// remaining args
-			.replace(getMacroRemainingArgRegex(true), indexed.slice(maxIndex + 1).join(" "))
-			// fix adjacent plus/minus
-			.replace(/-\s*\+/g, "-")
-			.replace(/\+\s*-/g, "-")
-			.replace(/\+\s*\+/g, "+")
-			;
+		// dice = applyArgs(dice, { indexed, named });
 
 		if (prefix.keep) {
 			dice = dice.replace(/(\d*)([dD]\d+)/, (_, dCount, dSize) =>
@@ -204,3 +243,12 @@ export function macroToDice(macroTiers: DiceMacroBase[][], input: string): DiceM
 		output: all.join("")
 	};
 }
+
+/*
+
+{ "name":"first",  "dice":"[1d20 + {atkBonus} {ac} {atkDesc:atk}; 1d{dmgDie:6} + {dmgBonus:0} {dmgDesc:dmg}]" },
+{ "name":"second", "dice":"[first atkBonus='{0}'][first atkBonus='{0}-4' atkDesc='agile atk']" },
+{ "name":"third",  "dice":"[second {atkBonus} dmgBonus='{b}']" },
+{ "name":"fourth", "dice":"[third atkBonus='{a:0}+{a:0}' b='{bonus}', ac='{1}'][1d20 + {0}]" },
+
+*/
