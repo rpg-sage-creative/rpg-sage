@@ -157,19 +157,18 @@ function flattenMacro(macroTiers: DiceMacroBase[][], dice: string, argsStack: TA
 }
 
 function applyArgs(unwrapped: string, argsStack: TArgs[], includeUnusedArgs: boolean): string {
-	// indexed args should still be operating correctly
-	// to fully and completely pass named args down, i need to:
-	// 1. pull all named arg keys
-	// 2. track keys not found below
-	// 3. add the most recent value of each not found key before the trailing ]
 	const namedArgsUsed = new Set<string>();
+
 	const findNamedArg = (keyLower: string) => argsStack
 		.find(({ named }) => named.find(arg => arg.keyLower === keyLower))
 		?.named.find(arg => arg.keyLower === keyLower);
+
 	const mapAllUnusedNamedArgs = () => {
 		const allNamedArgKeys = new Set(argsStack.map(({ named }) => named.map(arg => arg.keyLower)).flat());
-		const unusedArgs = [...allNamedArgKeys].map(findNamedArg).filter(arg => arg);
-		return unusedArgs.map(arg => `${arg?.key}="${arg?.value}"`).join(" ");
+		const unusedKeys = [...allNamedArgKeys].filter(key => !namedArgsUsed.has(key));
+		const unusedArgs = unusedKeys.map(findNamedArg) as KeyValueArg[];
+		const mappedArgs = unusedArgs.map(arg => `${arg?.key}="${arg?.value}"`).join(" ");
+		return includeUnusedArgs ? ` ${mappedArgs}]` : `]`;
 	};
 
 	debug;
@@ -202,7 +201,7 @@ function applyArgs(unwrapped: string, argsStack: TArgs[], includeUnusedArgs: boo
 	.replace(/\+\s*-/g, "-")
 	.replace(/\+\s*\+/g, "+")
 
-	.replace(/\]$/, includeUnusedArgs ? " " + mapAllUnusedNamedArgs() + "]" : "]")
+	.replace(/\]$/, mapAllUnusedNamedArgs())
 	;
 }
 
