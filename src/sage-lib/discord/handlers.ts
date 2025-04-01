@@ -208,16 +208,19 @@ export function getRegisteredPartials() {
 export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isButton = interaction.isButton();
-		const isCommand = interaction.isCommand();
-		const isComponent = interaction.isMessageComponent();
-		const isContext = interaction.isContextMenuCommand();
-		const isSelectMenu = interaction.isAnySelectMenu();
-		const isModal = interaction.isModalSubmit();
-		if (isButton || isCommand || isComponent || isContext || isSelectMenu || isModal) {
-			const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
-			await handleInteractions(sageInteraction, output);
-			sageInteraction.clear();
+		const canIgnore = isChannelWeCanIgnore(interaction.channel);
+		if (!canIgnore) {
+			const isButton = interaction.isButton();
+			const isCommand = interaction.isCommand();
+			const isComponent = interaction.isMessageComponent();
+			const isContext = interaction.isContextMenuCommand();
+			const isSelectMenu = interaction.isAnySelectMenu();
+			const isModal = interaction.isModalSubmit();
+			if (isButton || isCommand || isComponent || isContext || isSelectMenu || isModal) {
+				const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
+				await handleInteractions(sageInteraction, output);
+				sageInteraction.clear();
+			}
 		}
 	}catch(ex) {
 		error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
