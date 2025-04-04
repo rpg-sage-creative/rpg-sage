@@ -2,7 +2,7 @@ import { hasSageId } from "@rsc-sage/env";
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { error, isNullOrUndefined, verbose, warn } from "@rsc-utils/core-utils";
 import { fetchIfPartial, toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
-import { MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Interaction } from "discord.js";
+import { ChannelType, MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
 import { SageReaction } from "../sage/model/SageReaction.js";
@@ -208,16 +208,19 @@ export function getRegisteredPartials() {
 export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 	try {
-		const isButton = interaction.isButton();
-		const isCommand = interaction.isCommand();
-		const isComponent = interaction.isMessageComponent();
-		const isContext = interaction.isContextMenuCommand();
-		const isSelectMenu = interaction.isAnySelectMenu();
-		const isModal = interaction.isModalSubmit();
-		if (isButton || isCommand || isComponent || isContext || isSelectMenu || isModal) {
-			const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
-			await handleInteractions(sageInteraction, output);
-			sageInteraction.clear();
+		const canIgnore = isChannelWeCanIgnore(interaction.channel);
+		if (!canIgnore) {
+			const isButton = interaction.isButton();
+			const isCommand = interaction.isCommand();
+			const isComponent = interaction.isMessageComponent();
+			const isContext = interaction.isContextMenuCommand();
+			const isSelectMenu = interaction.isAnySelectMenu();
+			const isModal = interaction.isModalSubmit();
+			if (isButton || isCommand || isComponent || isContext || isSelectMenu || isModal) {
+				const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
+				await handleInteractions(sageInteraction, output);
+				sageInteraction.clear();
+			}
 		}
 	}catch(ex) {
 		error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
@@ -296,30 +299,67 @@ function isEditWeCanIgnore(message: MessageOrPartial, originalMessage: Optional<
 	return matchingContent && moreEmbedLengths && contentIncludesUrls;
 }
 
-/** Discord has a lot of message types. We only want to respond to default messages and replies. */
-function isMessageWeCanIgnore(message: MessageOrPartial, _originalMessage: Optional<MessageOrPartial>): boolean {
-	const { author, id, system, type, webhookId } = message;
+/** We don't want to process actions in announcement channels/threads nor in categories (not sure that is even possible, though). */
+function isChannelWeCanIgnore(channel: Optional<Channel>): boolean {
+	return [ChannelType.AnnouncementThread, ChannelType.GuildAnnouncement, ChannelType.GuildCategory].includes(channel?.type!);
+}
+
+/** We don't want to process actions by bots or system messages. */
+function isUserWeCanIgnore(user: Optional<UserOrPartial>): boolean {
+	return user?.bot || user?.system ? true : false;
+}
+
+/**
+ * Discord has a lot of message types.
+ * We only want to respond to default messages and replies.
+ * We also want to exclude:
+ * - system messages (system, author.system)
+ * - messages from other bots (webhookId, author.bot).
+ * - deleted messages (isDeleted)
+ */
+function isMessageWeCanIgnore(message: MessageOrPartial): boolean {
+// function isMessageWeCanIgnore(message: MessageOrPartial, _originalMessage: Optional<MessageOrPartial>): boolean {
+	const { id, system, type, webhookId } = message;
 	return system || !!webhookId
-		|| author?.bot || author?.system
 		|| isDeleted(id as Snowflake)
 		|| (type !== null ? ![DMessageType.Default, DMessageType.Reply].includes(type) : false);
+}
+
+/** Combines all the is_X_WeCanIgnore methods for reuse. */
+function canIgnoreMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): boolean {
+	return isUserWeCanIgnore(message.author)
+	|| isChannelWeCanIgnore(message.channel)
+	|| isMessageWeCanIgnore(message)
+	|| isEditWeCanIgnore(message, originalMessage);
 }
 
 export async function handleMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>, messageType: MessageType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 
 	try {
-		const canIgnore = isMessageWeCanIgnore(message, originalMessage)
-			|| isEditWeCanIgnore(message, originalMessage);
-		const fetchedMessage = canIgnore ? undefined : await fetchIfPartial(message);
-		if (!canIgnore && fetchedMessage) {
-			const sageMessage = await SageMessage.fromMessage(fetchedMessage);
-			await handleMessages(sageMessage, messageType, output);
-			sageMessage.clear();
+		// can we ignore it without fetching?
+		let canIgnore = canIgnoreMessage(message, originalMessage);
+		if (!canIgnore) {
+			// save partial so we know to recheck canIgnoreMessage after a fetch
+			const wasPartial = message.partial;
+
+			// fetch it just in case
+			const fetchedMessage = await fetchIfPartial(message);
+
+			// recheck a previously partial message
+			canIgnore = wasPartial && fetchedMessage ? canIgnoreMessage(fetchedMessage, originalMessage) : false;
+
+			// process the message
+			if (!canIgnore && fetchedMessage) {
+				const sageMessage = await SageMessage.fromMessage(fetchedMessage);
+				await handleMessages(sageMessage, messageType, output);
+				sageMessage.clear();
+			}
 		}
 	} catch (ex) {
 		error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
 	}
+
 	return output;
 }
 
@@ -350,7 +390,13 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 /** Returns the number of handlers executed. */
 export async function handleReaction(messageReaction: ReactionOrPartial, user: UserOrPartial, reactionType: ReactionType): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
-	if (user.bot) return output;
+
+	const canIgnore = isUserWeCanIgnore(user)
+		|| isChannelWeCanIgnore(messageReaction.message.channel);
+
+	if (canIgnore) {
+		return output;
+	}
 
 	try {
 		let sageReaction: SageReaction | undefined;

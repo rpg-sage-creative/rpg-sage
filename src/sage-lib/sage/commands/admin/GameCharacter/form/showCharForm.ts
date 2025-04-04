@@ -2,16 +2,17 @@ import { debug, isNilSnowflake, NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 import { EmbedBuilder } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type MessagePayloadOption } from "discord.js";
+import { createMessageEmbed } from "../../../../../discord/createMessageEmbed.js";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";
-import { showCharNamesModal } from "./showCharNamesModal.js";
 import { createCustomId, parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
-import type { CharId, CharModalAction, CustomIdParts } from "./types.js";
 import { showCharImagesModal } from "./showCharImagesModal.js";
+import { showCharNamesModal } from "./showCharNamesModal.js";
 import { showCharStatsModal } from "./showCharStatsModal.js";
+import type { CharId, CharModalAction, CustomIdParts } from "./types.js";
 
 type SageButtonInteraction = SageInteraction<ButtonInteraction>;
 type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
@@ -68,9 +69,7 @@ function buildCharForm(sageCommand: SageCommand, charId?: CharId, compId?: CharI
 }
 
 function buildFormEmbed(char: GameCharacter): EmbedBuilder {
-	const embed = new EmbedBuilder();
-	embed.setTitle(char.name);
-	if (char.avatarUrl) embed.setThumbnail(char.avatarUrl);
+	const embed = createMessageEmbed({ title:char.name, thumbnailUrl:char.avatarUrl });
 	embed.appendDescription(`**Nickname (aka)** ${char.aka ?? "*none*"}`, "\n");
 	embed.appendDescription(`**Alias** ${char.alias ?? "*none*"}`, "\n");
 	const { displayNameTemplate } = char;

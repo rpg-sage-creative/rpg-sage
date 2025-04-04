@@ -112,11 +112,8 @@ sageRootDir="$(dirname -- "$scriptsDir")"
 # Dir where we are running this file from
 currentDir="$(pwd)"
 
-# local sage data dir
-cloudSageDataDir="/Users/randaltmeyer/Library/Mobile\ Documents/com~apple~CloudDocs/code/sage-data"
-
 # local sage data backup dir
-backupDir="$cloudSageDataDir/backup"
+backupDir="/Users/randaltmeyer/SynologyDrive/sage-backups"
 
 #endregion
 

@@ -254,7 +254,7 @@ export class ReplyStack {
 		}else if (this.sageCommand.isSageReaction()) {
 			const replyArgs = this.resolveArgs(_args);
 			const user = await this.sageCommand.sageCache.discord.fetchUser(this.sageCommand.sageUser.did);
-			await user?.send(replyArgs);
+			this.replyMessage = await user?.send(replyArgs);
 
 		}else {
 			warn(`ReplyStack._reply ELSE!?`);
