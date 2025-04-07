@@ -70,13 +70,13 @@ function replaceSpoiler(value: string): string {
 // dice parser parts
 // sign:  ([\-\+\*\/])?
 // rolls: (?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?
-// count: (?:\s*(\d+)\s*|\b)
+// count: (?:\s*(\d+)\s*|\s+|\b)
 // sides: d\s*(\d+)
 
 /** Returns a new object with the default dice parsers for use with Tokenizer */
 export function getParsers(): TokenParsers {
 	return {
-		dice: /([-+*/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
+		dice: /([-+*/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\s+|\b)d\s*(\d+)/i,
 		dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
 		noSort: /(ns)/i,
 		mod: /([-+*/])\s*(\d+)(?!d\d)/i,

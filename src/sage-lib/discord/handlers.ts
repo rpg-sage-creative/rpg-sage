@@ -225,6 +225,13 @@ export async function handleInteraction(interaction: Interaction): Promise<THand
 	}catch(ex) {
 		error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
 	}
+	if (!output.handled) {
+		error({
+			ev: "Unhandled Interaction",
+			customId: "customId" in interaction ? interaction.customId : undefined,
+			json: "customId" in interaction ? undefined : interaction.toJSON(),
+		});
+	}
 	return output;
 }
 

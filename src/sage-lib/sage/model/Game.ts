@@ -18,6 +18,7 @@ import { Emoji } from "./Emoji.js";
 import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
+import type { MacroBase } from "./Macro.js";
 import type { SageCache } from "./SageCache.js";
 import type { Server } from "./Server.js";
 
@@ -48,6 +49,8 @@ export interface GameCore extends IdCore, IHasColors, IHasEmoji, Partial<GameOpt
 
 	parties?: PartyCore[] | PartyManager;
 	encounters?: EncounterCore[] | EncounterManager;
+
+	macros?: MacroBase[];
 }
 
 type MappedChannelNameTags = {
@@ -200,6 +203,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	public get serverDid(): Snowflake { return this.core.serverDid; }
 	public get serverId(): UUID { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }
+	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 
 	public get gmRole(): GameRoleData | undefined { return this.roles.find(role => role.type === GameRoleType.GameMaster); }
 	public get gmRoleDid(): Snowflake | undefined { return this.gmRole?.did; }

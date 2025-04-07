@@ -130,7 +130,7 @@ export class ReplyStack {
 		if (this.thinkingMessage) return; //NOSONAR
 
 		// create the send/reply args
-		const content = `RPG Sage is thinking ... ${this.spinnerEmoji}`;
+		const content = `${this.sageCommand.getLocalizer()("RPG_SAGE_THINKING")} ${this.spinnerEmoji}`;
 		const replyArgs = this.deletable
 			 ? includeDeleteButton({ content }, this.deletableBy)
 			 : { content };
@@ -356,7 +356,7 @@ export class ReplyStack {
 	}
 
 	public whisperWikiHelp(...pages: { isHelp?:boolean; message?:string; page:string; label?:string; }[]): Promise<void> {
-		const notValidText = `The command you attempted isn't valid.`;
+		const notValidText = this.sageCommand.getLocalizer()("COMMAND_NOT_VALID");
 		const urlRoot = `https://github.com/rpg-sage-creative/rpg-sage/wiki/`;
 		const content = pages.filter(p => p).map(({ isHelp, message, page, label }) => {
 			const notValidMessage = isHelp === false ? notValidText : ``;

@@ -75,8 +75,14 @@ export class SageMessage
 		return clone as this;
 	}
 
-	public async fetchMessage(): Promise<Message> {
-		return this.message.fetch();
+	public async fetchMessage(messageId?: Snowflake): Promise<Message> {
+		const message = this.core.message.partial
+			? await this.core.message.fetch()
+			: this.core.message;
+		if (messageId && messageId !== message.id) {
+			return message.channel.messages.fetch(messageId);
+		}
+		return message;
 	}
 
 	public clear(): void {

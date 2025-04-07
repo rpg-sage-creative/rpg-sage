@@ -12,7 +12,7 @@ import type { IChannel } from "../repo/base/IdRepository.js";
 import { GameRoleType } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
 import { SageCache } from "./SageCache.js";
-import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
+import { SageCommand, type IdPartsBase, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
 import type { HasChannels, HasGame } from "./index.js";
 
@@ -22,18 +22,14 @@ interface SageInteractionCore extends SageCommandCore {
 }
 
 /** Parses a string of type `{indicator}|{userId}|{action}|...` */
-type IdParts = {
-	/** Generally the tool or feature of Sage */
-	indicator: string;
+export type IdParts = IdPartsBase & {
 	/** Generally the user doing the action. */
 	userId: Snowflake;
-	/** The action being performed. */
-	action: string;
 	/** any remaining values */
 	args?: string[];
 };
 
-type CustomIdParser<T extends IdParts> = (customId: string) => T | undefined;
+export type CustomIdParser<T extends IdPartsBase = IdParts> = (customId: string) => T | undefined;
 
 function defaultCustomIdParser<T extends IdParts>(customId: string): T | undefined {
 	const args = customId.split("|");
@@ -54,7 +50,15 @@ export class SageInteraction<T extends DInteraction = any>
 		this.args = new SageInteractionArgs(this);
 	}
 
-	public async fetchMessage(): Promise<Message | undefined> {
+	public async fetchMessage(messageId?: Snowflake): Promise<Message | undefined> {
+		if (messageId) {
+			let channel = this.interaction.channel;
+			if (channel?.partial) {
+				channel = await channel.fetch();
+			}
+			return channel?.messages.fetch(messageId);
+		}
+
 		let message: Message | undefined;
 		if (this.isSageInteraction("MESSAGE")) {
 			message = this.interaction.message;
@@ -156,9 +160,9 @@ export class SageInteraction<T extends DInteraction = any>
 		return false;
 	}
 
-	public parseCustomId<T extends IdParts>(parser?: CustomIdParser<T>): T | undefined {
+	public parseCustomId<T extends IdPartsBase = IdParts>(parser?: CustomIdParser<T>): T | undefined {
 		if ("customId" in this.interaction) {
-			return (parser ?? defaultCustomIdParser)(this.interaction.customId);
+			return (parser ?? defaultCustomIdParser)(this.interaction.customId) as T;
 		}
 		return undefined;
 	}
