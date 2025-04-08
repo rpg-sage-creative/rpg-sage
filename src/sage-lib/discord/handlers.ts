@@ -205,33 +205,72 @@ export function getRegisteredPartials() {
 
 //#region interactions
 
-export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
-	const output = { tested: 0, handled: 0 };
+type InteractionFlags = {
+	canHandle?: boolean;
+	canIgnore?: boolean;
+	invalidInteraction?: boolean;
+	isAnySelectMenu?: boolean;
+	isButton?: boolean;
+	isCommand?: boolean;
+	isMessageComponent?: boolean;
+	isMessageContextMenuCommand?: boolean;
+	isModalSubmit?: boolean;
+	isUserContextMenuCommand?: boolean;
+}
+function getInteractionFlags(interaction: Optional<Interaction>): InteractionFlags {
+	if (!interaction) {
+		return { canIgnore:true, invalidInteraction:true };
+	}
+
+	if (isChannelWeCanIgnore(interaction?.channel)) {
+		return { canIgnore:true };
+	}
+
+	const ret = (key: keyof InteractionFlags) => {
+		const flags: InteractionFlags = { canIgnore:false, canHandle:true };
+		flags[key] = true;
+		return flags;
+	};
+
 	try {
-		const canIgnore = isChannelWeCanIgnore(interaction.channel);
-		if (!canIgnore) {
-			const isButton = interaction.isButton();
-			const isCommand = interaction.isCommand();
-			const isComponent = interaction.isMessageComponent();
-			const isContext = interaction.isContextMenuCommand();
-			const isSelectMenu = interaction.isAnySelectMenu();
-			const isModal = interaction.isModalSubmit();
-			if (isButton || isCommand || isComponent || isContext || isSelectMenu || isModal) {
-				const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
-				await handleInteractions(sageInteraction, output);
-				sageInteraction.clear();
+		const keys = ["isAnySelectMenu", "isButton", "isCommand", "isMessageComponent", "isMessageContextMenuCommand", "isModalSubmit"] as (keyof Interaction & ("isAnySelectMenu" | "isButton" | "isCommand" | "isMessageComponent" | "isMessageContextMenuCommand" | "isModalSubmit" | "isMessageContextMenuCommand"))[];
+		//, "isUserContextMenuCommand"
+		for (const key of keys) {
+			if (interaction[key]()) {
+				return ret(key);
 			}
 		}
 	}catch(ex) {
-		error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
+		error(toHumanReadable(interaction.user) ?? "@UnknownInteractionUser", interaction.toJSON(), ex);
 	}
-	if (!output.handled) {
-		error({
-			ev: "Unhandled Interaction",
-			customId: "customId" in interaction ? interaction.customId : undefined,
-			json: "customId" in interaction ? undefined : interaction.toJSON(),
-		});
+
+	return { canIgnore:false, canHandle:false };
+}
+
+export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
+	const output = { tested: 0, handled: 0 };
+
+	const flags = getInteractionFlags(interaction);
+	if (flags.canHandle) {
+		try {
+			const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
+			await handleInteractions(sageInteraction, output);
+			sageInteraction.clear();
+		}catch(ex) {
+			error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
+		}
+		if (!output.handled) {
+			error({
+				ev: "Unhandled Interaction",
+				guild: interaction.guild?.name,
+				customId: "customId" in interaction ? interaction.customId : undefined,
+				user: toHumanReadable(interaction.member?.user ?? interaction.user),
+				json: "customId" in interaction ? undefined : interaction.toJSON(),
+				...flags
+			});
+		}
 	}
+
 	return output;
 }
 
