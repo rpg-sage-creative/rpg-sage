@@ -4,7 +4,7 @@ import { quote, ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalSubmitInteraction, type ButtonInteraction } from "discord.js";
 import type { LocalizedTextKey, Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { Macro, type MacroBase } from "../../../model/Macro.js";
-import { Macros } from "../../../model/Macros.js";
+import { findCharacterOrCompanion, Macros } from "../../../model/Macros.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -359,8 +359,8 @@ async function promptEditMacro(sageCommand: SageCommand, args: Args<true, true>,
 		const cacheKey = createCustomId({ action:"handleEditMacroModal", actorId, messageId, state });
 		editCache.set(cacheKey, { oldMacro, newMacro });
 
-		const existingPrompt = macroToPrompt(sageCommand, oldMacro);
-		const updatedPrompt = macroToPrompt(sageCommand, newMacro, { usage:true });
+		const existingPrompt = await macroToPrompt(sageCommand, oldMacro);
+		const updatedPrompt = await macroToPrompt(sageCommand, newMacro, { usage:true });
 
 		const content = sageCommand.createAdminRenderable("UPDATE_MACRO_?");
 		content.append(`${localize("FROM")}:${existingPrompt}\n${localize("TO")}:${updatedPrompt}`);
@@ -447,8 +447,19 @@ export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisper(`${localize("SORRY_WE_DONT_KNOW")} ${localize("MACROS_WIKI")}`);
 	}
 
-	const ownerType = "user";
-	const ownerId = sageMessage.actorId;
+	let ownerId: Snowflake | undefined;
+	let { ownerType, charName } = pairs;
+	switch(ownerType) {
+		case "character": ownerId = findCharacterOrCompanion(sageMessage, charName)?.id; break;
+		case "game": ownerId = sageMessage.game?.id as Snowflake; break;
+		case "user": ownerId = sageMessage.actorId; break;
+		case "server": ownerId = sageMessage.server.did; break;
+		case "global": ownerId = sageMessage.bot.did; break;
+	}
+	if (!ownerId) {
+		ownerType = "user";
+		ownerId = sageMessage.actorId;
+	}
 
 	const newMacro = new Macro({ name, category, dialog, dice }, { type:ownerType, id:ownerId });
 
@@ -523,7 +534,7 @@ async function promptNewMacro(sageCommand: SageCommand, args: Args<true, true>, 
 		editCache.set(cacheKey, { newMacro });
 
 		const content = sageCommand.createAdminRenderable("CREATE_MACRO_?");
-		content.append(macroToPrompt(sageCommand, newMacro, { usage:true }));
+		content.append(await macroToPrompt(sageCommand, newMacro, { usage:true }));
 
 		const components = createYesNoComponents({ actorId, localize, messageId, noAction:"cancelNewMacro", state, yesAction:"confirmNewMacro" });
 

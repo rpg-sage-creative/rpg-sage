@@ -1,6 +1,7 @@
 import { sortPrimitive } from "@rsc-utils/array-utils";
 import type { Snowflake } from "@rsc-utils/core-utils";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
+import type { Macro } from "./Macro.js";
 import type { SageCommand } from "./SageCommand.js";
 
 export enum MacroOwnerType {
@@ -67,6 +68,16 @@ export class MacroOwner {
 		this.typeKey = typeKey;
 	}
 
+	public static async findOwner(sageCommand: SageCommand, macro: Macro): Promise<MacroOwner | undefined> {
+		const owners = await MacroOwner.getByType(sageCommand, macro.owner.type);
+		for (const owner of owners) {
+			if (owner.id === macro.owner.id) {
+				return owner;
+			}
+		}
+		return undefined;
+	}
+
 	public static async getByType(sageCommand: SageCommand, type: MacroOwnerTypeKey): Promise<MacroOwner[]> {
 		const { actorId } = sageCommand;
 		let owners: MacroOwner[];
@@ -74,8 +85,8 @@ export class MacroOwner {
 			case "character": owners = await getCharacters(sageCommand); break;
 			case "user": owners = [new MacroOwner(actorId, "@Me", type)]; break;
 			case "game": owners = await getGames(sageCommand); break;
-			case "server":owners = [new MacroOwner(sageCommand.server.did, sageCommand.server.name, type)]; break;
-			case "global":owners = [new MacroOwner(sageCommand.bot.did, "RPG Sage", type)]; break;
+			case "server": owners = [new MacroOwner(sageCommand.server.did, sageCommand.server.name, type)]; break;
+			case "global": owners = [new MacroOwner(sageCommand.bot.did, "RPG Sage", type)]; break;
 			default: owners = []; break;
 		}
 		owners.sort((a, b) => sortPrimitive(a.name, b.name));

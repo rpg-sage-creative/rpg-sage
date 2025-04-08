@@ -1,5 +1,6 @@
 import { quote, unwrap } from "@rsc-utils/string-utils";
 import type { Macro } from "../../../model/Macro.js";
+import { MacroOwner } from "../../../model/MacroOwner.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
 type PromptOptions = {
@@ -7,7 +8,7 @@ type PromptOptions = {
 	usage?: boolean;
 };
 
-export function macroToPrompt(sageCommand: SageCommand, macro: Macro, opts?: PromptOptions): string {
+export async function macroToPrompt(sageCommand: SageCommand, macro: Macro, opts?: PromptOptions): Promise<string> {
 	const localize = sageCommand.getLocalizer();
 
 	const category = macro.isUncategorized ? `*${localize("UNCATEGORIZED")}*` : macro.category;
@@ -33,6 +34,13 @@ export function macroToPrompt(sageCommand: SageCommand, macro: Macro, opts?: Pro
 
 	}else if (macro.isDialog()) {
 		parts.push(`\n> **${localize("DIALOG")}:** \`\`${macro.dialog.replace(/\n/g, "\n> ")}\`\``);
+	}
+
+	const owner = await MacroOwner.findOwner(sageCommand, macro);
+	if (owner) {
+		parts.push(`\n> **${localize(owner.typeKey)}:** ${owner.name}`);
+	}else {
+		// parts.push(`\n> **${localize("USER")}:** @Me`);
 	}
 
 	if (opts?.usage) {

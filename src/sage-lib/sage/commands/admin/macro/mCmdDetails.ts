@@ -5,13 +5,13 @@ import { createMacroComponents } from "./createMacroComponents.js";
 import { getArgs, type Args } from "./getArgs.js";
 import { macroToPrompt } from "./macroToPrompt.js";
 
-function toRenderableContent(sageCommand: SageCommand, { macro }: Args): RenderableContent {
+async function toRenderableContent(sageCommand: SageCommand, { macro }: Args): Promise<RenderableContent> {
 	const localize = sageCommand.getLocalizer();
 
 	const renderableContent = sageCommand.createAdminRenderable("MACRO_DETAILS");
 
 	if (macro) {
-		renderableContent.append(macroToPrompt(sageCommand, macro, { share:true, usage:true }));
+		renderableContent.append(await macroToPrompt(sageCommand, macro, { share:true, usage:true }));
 	} else {
 		renderableContent.append(localize("MACRO_S_NOT_FOUND", sageCommand.args.getString("name")));
 	}
@@ -34,7 +34,7 @@ export async function mCmdDetails(sageCommand: SageCommand, args?: Args | boolea
 	}
 
 	const content = toUserMention(sageCommand.actorId);
-	const embeds = toRenderableContent(sageCommand, args);
+	const embeds = await toRenderableContent(sageCommand, args);
 	const components = await createMacroComponents(sageCommand, args);
 
 	const message = await sageCommand.fetchMessage(args.customIdArgs?.messageId).catch(() => undefined);

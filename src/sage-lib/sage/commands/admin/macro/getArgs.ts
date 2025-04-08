@@ -1,26 +1,37 @@
-import { type Snowflake } from "@rsc-utils/core-utils";
+import { parseEnum, type Snowflake } from "@rsc-utils/core-utils";
 import { getSelectedOrDefault, getSelectedOrDefaultNumber } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
 import { Macro } from "../../../model/Macro.js";
-import type { MacroOwnerTypeKey } from "../../../model/MacroOwner.js";
+import { MacroOwnerType, type MacroOwnerTypeKey } from "../../../model/MacroOwner.js";
 import { Macros, type FindMacrosAndMacroResult, type MacroIndex } from "../../../model/Macros.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
 import { createCustomId as _createCustomId, parseCustomId, type CustomIdArgs, type MacroActionKey } from "./customId.js";
 
 /** Contains values from message/slash commands: name="", cat="", dice="" */
-type ArgValues = { name?:string; category?:string; contentKey?:string; content?:string; };
+type ArgValues = {
+	name?: string;
+	category?: string;
+	contentKey?: string;
+	content?: string;
+	ownerType: MacroOwnerTypeKey;
+	charName?: string;
+};
 
 /** Checks the SageCommand for ArgValues, using multiple keys (ex: cat *AND* category) for user convenience. */
 export function getArgValues(sageComand: SageCommand): ArgValues {
 	const pair = (...keys: string[]) => {
 		const key = keys.find(key => sageComand.args.hasString(key));
 		return key ? { key, value:sageComand.args.getString(key)! } : undefined;
-	}
+	};
+
 	const name = pair("name")?.value;
 	const category = pair("cat", "category")?.value;
 	const content = pair("dialog", "dice", "items", "math", "table", "tableUrl");
+	const macroOwnerType = parseEnum<MacroOwnerType>(MacroOwnerType, pair("tier", "type")?.value) ?? MacroOwnerType.user;
+	const ownerType = MacroOwnerType[macroOwnerType] as MacroOwnerTypeKey;
+	const charName = pair("charName")?.value;
 
-	return { name, category, contentKey:content?.key, content:content?.value };
+	return { name, category, contentKey:content?.key, content:content?.value, ownerType, charName };
 }
 
 /** State of the control representing currently selected values from the form; passed as part of customId values. */

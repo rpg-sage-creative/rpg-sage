@@ -1,5 +1,5 @@
 import { partition, sortByKey, sortPrimitive, toUniqueDefined } from "@rsc-utils/array-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Bot } from "./Bot.js";
@@ -80,6 +80,17 @@ type MacroPageMeta<Category extends string = string> = Omit<CategoryMeta<Categor
 
 export type MacroMeta<Category extends string = string> = Omit<CategoryMeta<Category>, "macroPages"> & MacroIndex & {
 	macro: Macro<Category>;
+}
+
+export function findCharacterOrCompanion(sageCommand: SageCommand, charAliasOrIdOrName: Optional<string>): GameCharacter | undefined {
+	if (charAliasOrIdOrName) {
+		const shell = sageCommand.game?.findCharacterOrCompanion(charAliasOrIdOrName)
+			?? sageCommand.sageUser.findCharacterOrCompanion(charAliasOrIdOrName);
+		if (shell) {
+			return "game" in shell ? shell.game : shell;
+		}
+	}
+	return undefined;
 }
 
 export class Macros<Category extends string = string> {
@@ -480,13 +491,9 @@ export class Macros<Category extends string = string> {
 		switch(ownerType) {
 			case "character": {
 				if (ownerId) {
-					const shell = sageCommand.game?.findCharacterOrCompanion(ownerId)
-						?? sageCommand.sageUser.findCharacterOrCompanion(ownerId);
-					if (shell) {
-						const character = "game" in shell ? shell.game : shell;
-						if (character) {
-							return Macros.from(character);
-						}
+					const character = findCharacterOrCompanion(sageCommand, ownerId);
+					if (character) {
+						return Macros.from(character);
 					}
 				}
 				break;
