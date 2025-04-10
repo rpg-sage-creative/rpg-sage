@@ -36,9 +36,9 @@ export async function macroToPrompt(sageCommand: SageCommand, macro: Macro, opts
 		parts.push(`\n> **${localize("DIALOG")}:** \`\`${macro.dialog.replace(/\n/g, "\n> ")}\`\``);
 	}
 
-	const owner = await MacroOwner.findOwner(sageCommand, macro);
+	const owner = await MacroOwner.findByMacro(sageCommand, macro);
 	if (owner) {
-		parts.push(`\n> **${localize(owner.typeKey)}:** ${owner.name}`);
+		parts.push(`\n> **${localize(owner.singularKey)}:** ${owner.name}`);
 	}else {
 		// parts.push(`\n> **${localize("USER")}:** @Me`);
 	}

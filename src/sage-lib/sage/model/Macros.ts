@@ -417,6 +417,18 @@ export class Macros<Category extends string = string> {
 		return this.hasMacros.macros;
 	}
 
+	public getCharSheetMacros(): MacroBase[] {
+		const macros: MacroBase[] = [];
+		const matcher = StringMatcher.from("CharSheet");
+		const macroMetas = this.macroMap.values();
+		for (const meta of macroMetas) {
+			if (matcher.matches(meta.category)) {
+				macros.push(meta.macro.toJSON());
+			}
+		}
+		return macros;
+	}
+
 	/** Navigate up the macro tiers to find the Macros/owner and CategoryMeta/MacroMeta for the given macro name. */
 	public static findMacrosAndMacro(sageCommand: SageCommand, name?: string): FindMacrosAndMacroResult | undefined {
 		// early exit

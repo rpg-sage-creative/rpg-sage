@@ -660,6 +660,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 	}
 
 	public getAttackMacros(): DiceMacroBase[] { return this.core.weapons?.map(weapon => weaponToMacro(this, weapon)) ?? []; }
+	public getSpellMacros(): DiceMacroBase[] { return []; }
 
 	//#region flags/has
 	public hasFeat(value: string): boolean {

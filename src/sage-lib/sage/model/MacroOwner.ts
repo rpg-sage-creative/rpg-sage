@@ -1,6 +1,7 @@
 import { sortPrimitive } from "@rsc-utils/array-utils";
 import type { Snowflake } from "@rsc-utils/core-utils";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
+import type { GameCharacter } from "./GameCharacter.js";
 import type { Macro } from "./Macro.js";
 import type { SageCommand } from "./SageCommand.js";
 
@@ -60,19 +61,34 @@ export type TMacroOwner = {
 export class MacroOwner {
 
 	public pluralKey: LocalizedTextKey;
+	public singularKey: LocalizedTextKey;
 	public typeKey: LocalizedTextKey;
 
 	public constructor(public id: Snowflake, public name: string, public type: MacroOwnerTypeKey) {
-		const { pluralKey, typeKey } = MacroOwner.getLabel(type);
+		const { pluralKey, singularKey, typeKey } = MacroOwner.getLabel(type);
 		this.pluralKey = pluralKey;
+		this.singularKey = singularKey;
 		this.typeKey = typeKey;
 	}
 
-	public static async findOwner(sageCommand: SageCommand, macro: Macro): Promise<MacroOwner | undefined> {
-		const owners = await MacroOwner.getByType(sageCommand, macro.owner.type);
-		for (const owner of owners) {
-			if (owner.id === macro.owner.id) {
-				return owner;
+	public static async findByCharacter(sageCommand: SageCommand, gameCharacter?: GameCharacter): Promise<MacroOwner | undefined> {
+		if (gameCharacter) {
+			const { id } = gameCharacter;
+			const owners = await MacroOwner.getByType(sageCommand, "character");
+			for (const owner of owners) {
+				if (owner.id === id) {
+					return owner;
+				}
+			}
+		}
+		return undefined;
+	}
+
+	public static async findByMacro(sageCommand: SageCommand, { owner }: Macro): Promise<MacroOwner | undefined> {
+		const owners = await MacroOwner.getByType(sageCommand, owner.type);
+		for (const _owner of owners) {
+			if (_owner.id === owner.id) {
+				return _owner;
 			}
 		}
 		return undefined;

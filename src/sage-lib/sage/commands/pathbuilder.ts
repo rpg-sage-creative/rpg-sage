@@ -8,8 +8,10 @@ import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-p
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
+import type { GameCharacter } from "../model/GameCharacter.js";
 import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
-import type { SageCache } from "../model/SageCache.js";
+import { MacroOwner } from "../model/MacroOwner.js";
+import { Macros } from "../model/Macros.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import type { User } from "../model/User.js";
@@ -39,6 +41,24 @@ function getAttackMacros(character: PathbuilderCharacter): TLabeledMacro[] {
 		.map((macro, index) => ({ id:`atk-${index}`, prefix:"Attack Roll", ...macro }));
 }
 
+/** @todo you know what this is for ... */
+function getSpellMacros(character: PathbuilderCharacter): TLabeledMacro[] {
+	return character.getSpellMacros()
+		.map((macro, index) => ({ id:`spl-${index}`, prefix:"Spell Roll", ...macro }));
+}
+
+async function getCharMacros(sageCommand: SageCommand, character: PathbuilderCharacter): Promise<TLabeledMacro[]> {
+	const char = findLinkedGameCharacter(sageCommand, character);
+	const macroOwner = await MacroOwner.findByCharacter(sageCommand, char);
+	const macros = await Macros.parse(sageCommand, macroOwner);
+	if (macros) {
+		return (macros.getCharSheetMacros() as DiceMacroBase[])
+			.filter(macro => macro.dice)
+			.map((macro, index) => ({ id:`chr-${index}`, prefix:"Macro Roll", ...macro }));
+	}
+	return [];
+}
+
 function getUserMacros(character: PathbuilderCharacter, macroUser: Optional<User>): TLabeledMacro[] {
 	if (macroUser) {
 		const matcher = new StringMatcher(character.name);
@@ -49,29 +69,52 @@ function getUserMacros(character: PathbuilderCharacter, macroUser: Optional<User
 	return [];
 }
 
-function getMacros(character: PathbuilderCharacter, macroUser: Optional<User>): TLabeledMacro[] {
+async function getMacros(sageCommand: SageCommand, character: PathbuilderCharacter): Promise<TLabeledMacro[]> {
 	// create attack rolls
 	const attackMacros = getAttackMacros(character);
+
+	// create spell rolls
+	const spellMacros = getSpellMacros(character);
+
+	// get user macros with character name as category (old logic)
+	const macroUser = await sageCommand.sageCache.users.getById(character.getSheetValue("macroUserId"));
 	const userMacros = getUserMacros(character, macroUser);
+
+	// get character macros (new logic)
+	const charMacros = await getCharMacros(sageCommand, character);
+
+	const isTooMany = () => attackMacros.length + spellMacros.length + userMacros.length + charMacros.length > 24;
+
 	const slicedMacros: TLabeledMacro[] = [];
 
-	// Remove attacks first
-	while (attackMacros.length && tooMany(attackMacros, userMacros)) {
+	// Remove dynamically made attacks first
+	while (attackMacros.length && isTooMany()) {
 		slicedMacros.push(attackMacros.pop()!);
 	}
 
-	// Remove their macros last
-	while (tooMany(attackMacros, userMacros)) {
+	// Remove dynamically made spells second
+	while (spellMacros.length && isTooMany()) {
+		slicedMacros.push(spellMacros.pop()!);
+	}
+
+	// Remove their user macros next
+	while (userMacros.length && isTooMany()) {
 		slicedMacros.push(userMacros.pop()!);
+	}
+
+	// Remove their char macros last
+	while (isTooMany()) {
+		slicedMacros.push(charMacros.pop()!);
 	}
 
 	character.setSheetValue("slicedMacros", slicedMacros.map(macro => macro.name));
 
-	return attackMacros.concat(userMacros);
-
-	function tooMany(arrOne: TLabeledMacro[], arrTwo: TLabeledMacro[]): boolean {
-		return arrOne.length + arrTwo.length > 24;
-	}
+	return [
+		...attackMacros,
+		...spellMacros,
+		...charMacros,
+		...userMacros,
+	];
 }
 
 function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
@@ -82,7 +125,7 @@ function setMacroUser(character: PathbuilderCharacter, macroUser: User): void {
 	}
 }
 
-async function notifyOfSlicedMacros(sageCache: SageCache, character: PathbuilderCharacter): Promise<void> {
+async function notifyOfSlicedMacros({ sageCache }: SageCommand, character: PathbuilderCharacter): Promise<void> {
 	const slicedMacros = character.getSheetValue<string[]>("slicedMacros") ?? [];
 	if (slicedMacros.length) {
 		const user = await sageCache.discord.fetchUser(sageCache.user.did);
@@ -146,7 +189,8 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 	setMacroUser(character, sageCache.user);
 	const saved = await character.save();
 	if (saved) {
-		const output = prepareOutput(sageCache, character, sageCache.user);
+		const macros = await getMacros(sageCommand, character)
+		const output = prepareOutput(sageCommand, character, macros);
 		const message = await channel?.send(output).catch(errorReturnNull);
 		if (message) {
 			await addOrUpdateCharacter(sageCommand, character, message);
@@ -163,7 +207,7 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 	}
 }
 
-export async function updateSheet({ sageCache }: SageCommand, character: PathbuilderCharacter, message?: Message) {
+export async function updateSheet(sageCommand: SageCommand, character: PathbuilderCharacter, message?: Message) {
 	if (message) {
 		// we have a message, update the sheet reference just in case
 		if (character.setSheetRef(parseReference(message))) {
@@ -177,15 +221,15 @@ export async function updateSheet({ sageCache }: SageCommand, character: Pathbui
 			const messageReference = character.sheetRef;
 			// handle old data before we stored the full MessageReference
 			if (messageReference?.channelId) {
-				message = await sageCache.fetchMessage(messageReference);
+				message = await sageCommand.sageCache.fetchMessage(messageReference);
 			}
 		}
 	}
 	if (message) {
-		const macroUser = await sageCache.users.getById(character.getSheetValue("macroUserId"));
-		const output = prepareOutput(sageCache, character, macroUser);
+		const macros = await getMacros(sageCommand, character)
+		const output = prepareOutput(sageCommand, character, macros);
 		await message.edit(output);
-		await notifyOfSlicedMacros(sageCache, character);
+		await notifyOfSlicedMacros(sageCommand, character);
 	}
 }
 
@@ -303,13 +347,16 @@ function createMacroLabel(macro: TLabeledMacro): string {
 	const name = macro.name;
 	if (`${prefix}: ${name}`.length > labelLength) {
 		if (macro.prefix === "Attack Roll") prefix = "Atk Roll"; //NOSONAR
+		if (macro.prefix === "Spell Roll") prefix = "Spl Roll"; //NOSONAR
 	}
 	if (`${prefix}: ${name}`.length > labelLength) {
 		if (macro.prefix === "Attack Roll") prefix = "Attack"; //NOSONAR
 		if (macro.prefix === "Macro Roll") prefix = "Macro"; //NOSONAR
+		if (macro.prefix === "Spell Roll") prefix = "Spell"; //NOSONAR
 	}
 	if (`${prefix}: ${name}`.length > labelLength) {
 		if (macro.prefix === "Attack Roll") prefix = "Atk"; //NOSONAR
+		if (macro.prefix === "Spell Roll") prefix = "Spl"; //NOSONAR
 	}
 	if (`${prefix}: ${name}`.length > labelLength) {
 		return `${prefix}: ${name}`.slice(0, labelLength - 1) + "\u2026";
@@ -362,8 +409,7 @@ function createRollButtonRow(character: PathbuilderCharacter, macros: MacroBase[
 	return new ActionRowBuilder<ButtonBuilder>().setComponents(rollButton, rollSecretButton, rollInitButton, macroButton, linkButton);
 }
 
-function createComponents(character: PathbuilderCharacter, macroUser: Optional<User>): ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] {
-	const macros = getMacros(character, macroUser);
+function createComponents(character: PathbuilderCharacter, macros: TLabeledMacro[]): ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] {
 	return [
 		createViewSelectRow(character),
 		createExplorationSelectRow(character),
@@ -374,9 +420,9 @@ function createComponents(character: PathbuilderCharacter, macroUser: Optional<U
 }
 
 type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
-function prepareOutput(sageCache: SageCache, character: PathbuilderCharacter, macroUser: Optional<User>): TOutput {
+function prepareOutput({ sageCache }: SageCommand, character: PathbuilderCharacter, macros: TLabeledMacro[]): TOutput {
 	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character)));
-	const components = createComponents(character, macroUser);
+	const components = createComponents(character, macros);
 	return { embeds, components };
 }
 
@@ -495,15 +541,20 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 }
 
 async function macroRollHandler(sageInteraction: SageButtonInteraction, character: PathbuilderCharacter): Promise<void> {
-	const macroUser = await sageInteraction.sageCache.users.getById(character.getSheetValue("macroUserId"));
+	// get selectable macro list
+	const macros = await getMacros(sageInteraction, character);
+
+	// get selected macro
 	const activeMacro = character.getSheetValue("activeMacro");
-	const macros = getMacros(character, macroUser);
+
 	// check by id first (proper) then by name second (fallback to old renders)
 	const macro = macros.find(m => m.id === activeMacro) ?? macros.find(m => m.name === activeMacro);
+
 	if (macro) {
 		const matches = await parseDiceMatches(sageInteraction, macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? ""));
 		const output = matches.map(match => match.output).flat();
 		await sendDice(sageInteraction, output);
+
 	}else {
 		setMacroUser(character, sageInteraction.sageUser);
 		await character.save();
@@ -520,11 +571,7 @@ async function linkHandler(sageInteraction: SageButtonInteraction, character: Pa
 		return sageInteraction.reply("You aren't part of this game.", true);
 	}
 
-	const name = character.name;
-	const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
-	const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
-	const char = pcs.findByName(name) ?? pcs.findCompanionByName(name)
-		?? npcs.findByName(name) ?? npcs.findCompanionByName(name);
+	const char = findUnlinkedGameCharacter(sageInteraction, character);
 
 	if (char) {
 		character.characterId = char.id;
@@ -544,6 +591,22 @@ async function linkHandler(sageInteraction: SageButtonInteraction, character: Pa
 	}
 }
 
+function findUnlinkedGameCharacter({ game, sageUser }: SageCommand, { name }: PathbuilderCharacter): GameCharacter | undefined {
+	const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
+	const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
+	return pcs.findByName(name)
+		?? pcs.findCompanionByName(name)
+		?? npcs.findByName(name)
+		?? npcs.findCompanionByName(name);
+}
+
+function findLinkedGameCharacter({ game, sageUser }: SageCommand, { characterId }: PathbuilderCharacter): GameCharacter | undefined {
+	const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
+	const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
+	return pcs.findById(characterId)
+		?? npcs.findById(characterId);
+}
+
 async function unlinkHandler(sageInteraction: SageButtonInteraction, character: PathbuilderCharacter): Promise<void> {
 	const { game, isGameMaster, sageUser } = sageInteraction;
 	const isUser = character.userId === sageInteraction.sageUser.did;
@@ -552,9 +615,7 @@ async function unlinkHandler(sageInteraction: SageButtonInteraction, character: 
 		return sageInteraction.reply("You aren't part of this game.", true);
 	}
 
-	const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
-	const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
-	const char = pcs.findById(character.characterId) ?? npcs.findById(character.characterId);
+	const char = findLinkedGameCharacter(sageInteraction, character);
 
 	if (char) {
 		character.characterId = null;
