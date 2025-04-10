@@ -103,7 +103,7 @@ export class User extends HasDidCore<UserCore> {
 	}
 
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
-	public get macros(): NamedCollection<MacroBase> { return this.core.macros as NamedCollection<MacroBase>; }
+	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public notes: NoteManager;
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
