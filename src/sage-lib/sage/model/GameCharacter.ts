@@ -67,6 +67,7 @@ export type GameCharacterCore = {
 	id: Snowflake;
 	/** A list of the character's last messages by channel. */
 	lastMessages?: (DialogMessageData | DialogMessageDataCore)[];
+	/** Character tier macros */
 	macros?: MacroBase[];
 	/** The character's name */
 	name: string;
@@ -414,7 +415,7 @@ export class GameCharacter implements IHasSave {
 	 * Last dialog messages are stored for each channel, so we filter out messages for the channel before adding the given message.
 	 */
 	public setLastMessage(dialogMessage: DialogMessageData): void {
-		this.core.lastMessages = this.lastMessages.filter(({ channelId }) => !dialogMessage.matchesChannel(channelId));
+		this.core.lastMessages = this.lastMessages.filter(messageInfo => !dialogMessage.matchesChannel(messageInfo));
 		this.core.lastMessages.push(dialogMessage);
 	}
 

@@ -1,5 +1,5 @@
-import { errorReturnFalse, errorReturnNull, getDataRoot, isNonNilSnowflake, orNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
-import { readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { error, errorReturnFalse, errorReturnNull, getDataRoot, isNonNilSnowflake, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { deleteFileSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import type { Message, MessageReference, PartialMessage } from "discord.js";
 
 /** @deprecated Moving to DialogMessageData */
@@ -38,7 +38,7 @@ type CoreResolvable = DialogMessageDataCore | TDialogMessage;
 function updateCore(core: CoreResolvable): DialogMessageDataCore {
 	if ("messageDid" in core) {
 		return {
-			channelId: isNonNilSnowflake(core.threadDid) ? core.channelDid : core.threadDid,
+			channelId: isNonNilSnowflake(core.threadDid) ? core.threadDid : core.channelDid,
 			characterId: core.characterId,
 			gameId: core.gameId,
 			guildId: core.serverDid,
@@ -71,8 +71,23 @@ export class DialogMessageData {
 	public get timestamp(): number { return this.core.timestamp; }
 	public get userId(): Snowflake { return this.core.userId; }
 
-	public matchesChannel(resolvable: MessageResolvable | string): boolean {
-		return this.channelId === (typeof(resolvable) === "string" ? resolvable : resolvable.channelId);
+	public matchesChannel(resolvable: Optional<CoreResolvable | MessageResolvable | string>): boolean {
+		// we got an undefined somehow, somewhere, so handle it
+		if (!resolvable) {
+			return false;
+		}
+
+		// handle string
+		if (typeof(resolvable) === "string") {
+			return this.channelId === resolvable;
+		}
+
+		// old cores might still exist, so lets update them
+		if ("messageDid" in resolvable) {
+			resolvable = updateCore(resolvable);
+		}
+
+		return this.channelId === resolvable.channelId;
 	}
 
 	// public matchesMessage(resolvable: MessageResolvable): boolean {
@@ -104,19 +119,36 @@ type WriteArgs = {
 	userId: Snowflake
 };
 
+function createFilePath(messageId: string, guildId?: string): string {
+	const root = getDataRoot("sage/messages");
+	if (guildId) {
+		// old format
+		return `${root}/${orNilSnowflake(guildId)}-${messageId}.json`;
+	}else {
+		// new format
+		return `${root}/${messageId}.json`;
+	}
+}
+
 export class DialogMessageRepository {
 
 	public static async read(resolvable: MessageResolvable, options?: { ignoreMissingFile?: boolean }): Promise<DialogMessageData | undefined> {
-		const root = getDataRoot("sage/messages");
 		const returnUndefined = () => undefined;
+
+		let core: DialogMessageDataCore | undefined;
 
 		// we might need to fetch a partial later, so let's not make this a const
 		let messageReference = toMessageReference(resolvable);
 		const { messageId } = messageReference;
 
+		if (!messageId) {
+			error(`DialogMessageRepository.read(): resolvable doesn't have message id`);
+			return undefined;
+		}
+
 		// try reading the new file format that is just messageId
-		let fileName = `${messageId}.json`;
-		let core = await readJsonFile<DialogMessageDataCore>(`${root}/${fileName}`).catch(returnUndefined);
+		const filePath = createFilePath(messageId);
+		core = await readJsonFile<DialogMessageDataCore>(filePath).catch(returnUndefined) ?? undefined;
 
 		// we didn't get one from the new file format, so let's fallback on the old
 		if (!core) {
@@ -129,9 +161,27 @@ export class DialogMessageRepository {
 			// get guildId now that we are sure we have a valid result
 			const { guildId } = messageReference;
 
+			if (!guildId) {
+				error(`DialogMessageRepository.read(): resolvable doesn't have guildId`);
+				return undefined;
+			}
+
 			// try reading the old file format using guildId-messageId
-			fileName = `${orNilSnowflake(guildId)}-${messageId}.json`;
-			core = await readJsonFile<DialogMessageDataCore>(`${root}/${fileName}`).catch(options?.ignoreMissingFile ? returnUndefined : errorReturnNull);
+			const oldFilePath = createFilePath(messageId, guildId);
+			core = await readJsonFile<DialogMessageDataCore>(oldFilePath).catch(options?.ignoreMissingFile ? returnUndefined : errorReturnNull) ?? undefined;
+
+			if (core) {
+				// update the old core
+				core = updateCore(core);
+
+				// write the updated core to the new file
+				const success = await writeFile(filePath, core).catch(errorReturnFalse);
+
+				// delete the old file
+				if (success) {
+					deleteFileSync(oldFilePath);
+				}
+			}
 		}
 
 		// we have found the data, return the instance
@@ -143,8 +193,6 @@ export class DialogMessageRepository {
 	}
 
 	public static async write({ characterId, gameId, messages, userId }: WriteArgs): Promise<DialogMessageData | undefined> {
-		const root = getDataRoot("sage/messages");
-
 		let lastCore: DialogMessageDataCore | undefined;
 
 		// grab all teh message ids first
@@ -170,7 +218,7 @@ export class DialogMessageRepository {
 			};
 
 			// attempt to save and track the last core
-			const success = await writeFile(`${root}/${message.id}.json`, core).catch(errorReturnFalse);
+			const success = await writeFile(createFilePath(message.id), core).catch(errorReturnFalse);
 			if (success) {
 				lastCore = core;
 			}
