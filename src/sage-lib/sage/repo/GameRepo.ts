@@ -1,6 +1,6 @@
-import { type Optional, type UUID } from "@rsc-utils/core-utils";
+import { type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { isThread, type DInteraction, type MessageOrPartial } from "@rsc-utils/discord-utils";
-import { findJsonFile } from "@rsc-utils/io-utils";
+import { findJsonFile, readJsonFiles } from "@rsc-utils/io-utils";
 import type { Channel, MessageReference } from "discord.js";
 import { Game, type GameCore } from "../model/Game.js";
 import type { SageCache } from "../model/SageCache.js";
@@ -12,6 +12,29 @@ export class GameRepo extends IdRepository<GameCore, Game> {
 
 	/** Cache of active channel keys */
 	private channelKeyToIdMap = new Map<string, UUID>();
+
+	public async fetch({ archived, serverId, userId }: { archived?:boolean; serverId:Snowflake; userId?:Snowflake; }): Promise<Game[]> {
+		const { sageCache } = this;
+
+		const server = await sageCache.servers.getById(serverId);
+		if (!server) return [];
+
+		const contentFilter = (core: GameCore) => {
+			// match server first
+			if (core.serverDid !== serverId) return false;
+			// match archived or not
+			if (!archived === !core.archivedTs) return false;
+			// if we have a user, make sure they are in the game
+			if (userId && !core.users?.some(user => user.did === userId)) return false;
+			// we passed the tests
+			return true;
+		};
+
+		const filtered = await readJsonFiles(`${IdRepository.DataPath}/${GameRepo.objectTypePlural}`, { contentFilter });
+		if (!filtered.length) return [];
+
+		return filtered.map(core => new Game(core, server, sageCache));
+	}
 
 	public async findActive(reference: Optional<Channel | DInteraction | MessageOrPartial | MessageReference>): Promise<Game | undefined> {
 		if (reference) {

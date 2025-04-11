@@ -1,10 +1,10 @@
 import { getTupperBoxId } from "@rsc-sage/env";
 import { uncache } from "@rsc-utils/cache-utils";
-import { debug, errorReturnFalse, orNilSnowflake, parseUuid, silly, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordKey, fetchIfPartial, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { debug, errorReturnFalse, errorReturnNull, orNilSnowflake, parseUuid, silly, warn, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { canSendMessageTo, DiscordKey, fetchIfPartial, isDiscordApiError, toHumanReadable, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Channel, Client, User as DUser, Guild, GuildMember, Interaction, Message, MessageReference } from "discord.js";
-import { getLocalizedText, type LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
+import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { DiscordCache } from "../../discord/DiscordCache.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
@@ -126,7 +126,11 @@ export class SageCache {
 			const sage = await this.core.users.getByDid(discord?.id as Snowflake) ?? undefined;
 			const uuid = parseUuid(sage?.id);
 			const guild = await this.ensureGuild() ? this.core._server?.discord : undefined;
-			const member = discord ? await guild?.members.fetch(discord.id) : undefined;
+			const member = discord?.id && !discord.bot && !discord.system ? await guild?.members.fetch(discord.id).catch(err => {
+				return isDiscordApiError(err, 10007, 10013)
+					? errorReturnNull(`guild.id = ${guild.id} (${guild.name}); guildMember.id = ${discord.id} (${toHumanReadable(discord)})`) ?? undefined
+					: errorReturnNull(err) ?? undefined
+				}) : undefined;
 			// NOTE: hasUser checks users and roles so is preferred
 			const isGameMaster = discord ? await this.core.game?.hasUser(discord?.id, GameRoleType.GameMaster) ?? false : false;
 			const isGamePlayer = discord ? await this.core.game?.hasUser(discord?.id, GameRoleType.Player) ?? false : false;
@@ -277,9 +281,14 @@ export class SageCache {
 	private clone(core: SageCacheCore): SageCache {
 		return new SageCache(core);
 	}
-	public cloneForChannel(channel: MessageTarget): SageCache {
+	
+	public cloneForChannel(channel: Optional<MessageTarget>): SageCache {
 		const core = { ...this.core };
-		core.discordKey = DiscordKey.from(channel);
+		if (channel) {
+			core.discordKey = DiscordKey.from(channel);
+		}else {
+			warn(`Invalid Channel in cloneForChannel`);
+		}
 		return this.clone(core);
 	}
 
@@ -308,9 +317,9 @@ export class SageCache {
 		return this.server?.getPrefixOrDefault() ?? "";
 	}
 
-	public getLocalizer() {
+	public getLocalizer(): Localizer {
 		const lang = this.user.preferredLang ?? "en-US";
-		return (key: LocalizedTextKey, ...args: (string | number)[]) => getLocalizedText(key, lang, ...args);
+		return (key: any, ...args: any[]) => getLocalizedText(key, lang, ...args);
 	}
 
 	public async fetchChannel<T extends Channel = Channel>(channelId: Optional<Snowflake>): Promise<T | undefined> {

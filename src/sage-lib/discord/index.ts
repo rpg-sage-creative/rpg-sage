@@ -1,16 +1,9 @@
-// import registerPrompts from "./prompts";
+import { registerPromptHandler } from "./prompts.js";
 
-/*
-// export {  ArgsManager } from "./ArgsManager";
-*/
-export { DiscordCache } from "./DiscordCache";
-// export * as embeds from "./embeds";
-export * from "./enums";
-// export * as handlers from "./handlers";
-// export * as messages from "./messages";
-// export * as prompts from "./prompts";
-export * from "./types";
+export { DiscordCache } from "./DiscordCache.js";
+export * from "./enums.js";
+export * from "./types.js";
 
 export function registerPrompts(): void {
-	// registerPrompts();
+	registerPromptHandler();
 }

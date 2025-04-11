@@ -5,6 +5,7 @@ import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
 import type { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
+import type { MacroBase } from "./Macro.js";
 import { NamedCollection } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { SageCache } from "./SageCache.js";
@@ -13,11 +14,7 @@ export type TAlias = {
 	name: string;
 	target: string;
 };
-export type TMacro = {
-	category?: string;
-	name: string;
-	dice: string;
-};
+
 // export enum PatronTierType { None = 0, Friend = 1, Informant = 2, Trusted = 3 }
 // export const PatronTierSnowflakes: Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
 
@@ -35,14 +32,13 @@ export interface UserCore extends DidCore<"User"> {
 	defaultSagePostType?: DialogType;
 
 	dialogDiceBehaviorType?: DialogDiceBehaviorType;
-
 	/** undefined is false (the default logic doesn't send on delete) */
 	dmOnDelete?: boolean;
 
 	/** undefined is true (the default logic does send on delete) */
 	dmOnEdit?: boolean;
 
-	macros?: TMacro[];
+	macros?: MacroBase[];
 
 	moveDirectionOutputType?: MoveDirectionOutputType;
 
@@ -96,7 +92,6 @@ export class User extends HasDidCore<UserCore> {
 		super(updateCore(core), sageCache);
 
 		this.core.aliases = NamedCollection.from(this.core.aliases ?? [], this);
-		this.core.macros = NamedCollection.from(this.core.macros ?? [], this);
 
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
@@ -108,7 +103,7 @@ export class User extends HasDidCore<UserCore> {
 	}
 
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
-	public get macros(): NamedCollection<TMacro> { return this.core.macros as NamedCollection<TMacro>; }
+	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public notes: NoteManager;
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }

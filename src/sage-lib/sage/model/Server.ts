@@ -13,6 +13,7 @@ import type { Game } from "./Game.js";
 import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
+import type { MacroBase } from "./Macro.js";
 import type { SageCache } from "./SageCache.js";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
@@ -28,6 +29,7 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Pa
 	gmCharacter?: GameCharacter | GameCharacterCore;
 	name: string;
 	roles: IAdminRole[];
+	macros?: MacroBase[];
 }
 
 // export abstract class HasDiceOptions<Core extends Partial<DiceOptions>> {
@@ -71,6 +73,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	public get discord() { return this.sageCache.discord; }
 	public get name(): string { return this.core.name; }
 	public get roles(): IAdminRole[] { return this.core.roles ?? []; }
+	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 	// #endregion
 
 	// #region has/is flags

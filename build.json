@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.8.7",
+"version":"1.9.0",
 "branch":"main",
-"commit":"6fb0dba5ff394f51057d141326fc7de0bc005740",
-"commitSubject":"use legacyId and remasterId to link to AoN PF2e; tweak search results sort",
-"commitTs":1740423321000,
-"commitDate":"2025-02-24-1055",
-"buildTs":1740423351000,
-"buildDate":"2025-02-24-1055",
+"commit":"495f2814ab7ad816519a1943143e432297424b5e",
+"commitSubject":"Merge branch 'macro-forms'",
+"commitTs":1744043724000,
+"commitDate":"2025-04-07-0935",
+"buildTs":1744043835000,
+"buildDate":"2025-04-07-0937",
 "author":"Randal"
 }

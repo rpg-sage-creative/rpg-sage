@@ -2,9 +2,10 @@ import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceS
 import { Cache, HasCache } from "@rsc-utils/cache-utils";
 import { debug, isDefined, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { DInteraction, DiscordKey, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
-import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
+import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
+import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
 import type { DiscordCache } from "../../discord/DiscordCache.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -13,7 +14,7 @@ import type { IChannel } from "../repo/base/IdRepository.js";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
-import type { ColorType, IHasColorsCore } from "./HasColorsCore.js";
+import { ColorType, type IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType } from "./HasEmojiCore.js";
 import { ReplyStack } from "./ReplyStack.js";
 import type { SageCache } from "./SageCache.js";
@@ -46,6 +47,15 @@ export type TSendOptions<HasEphemeral extends boolean = boolean> = {
 	ephemeral?: If<HasEphemeral, boolean | null, never>;
 	files?: AttachmentBuilder[];
 };
+
+export type IdPartsBase = {
+	/** Generally the tool or feature of Sage */
+	indicator: string;
+	/** The action being performed. */
+	action: string;
+};
+
+type CustomIdParser<T extends IdPartsBase> = (customId: string) => T | undefined;
 
 export abstract class SageCommand<
 			T extends SageCommandCore = any,
@@ -149,7 +159,7 @@ export abstract class SageCommand<
 	/** @todo: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
 	public clone(): this { return this; }
 
-	public abstract fetchMessage(): Promise<Message | undefined>;
+	public abstract fetchMessage(messageId?: Snowflake): Promise<Message | undefined>;
 
 	/** @todo what is the reason for both reply /AND/ whisper? */
 	public abstract reply(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void>;
@@ -187,7 +197,11 @@ export abstract class SageCommand<
 
 	// #region User flags
 
-	/** Author of the message */
+	/** The user interacting with Sage. */
+	public get actorId(): Snowflake {
+		return this.cache.getOrSet("actorId", () => orNilSnowflake(this.sageCache.actor?.id ?? this.sageCache.user.did));
+	}
+	/** @deprecated use .actorId or .sageCache.actor or .sageCache.author */
 	public get authorDid(): Snowflake {
 		return this.cache.getOrSet("authorDid", () => orNilSnowflake(this.sageCache.user.did));
 	}
@@ -549,4 +563,26 @@ export abstract class SageCommand<
 	public getLocalizer() {
 		return this.sageCache.getLocalizer();
 	}
+
+	public createRenderable(colorType: ColorType, title?: string): RenderableContent {
+		const renderableContent = new RenderableContent(title);
+		renderableContent.setColor(this.getHasColors().toHexColorString(colorType));
+		return renderableContent;
+	}
+	public createAdminRenderable(title?: LocalizedTextKey, ...args: any[]): RenderableContent {
+		const localized = title ? this.getLocalizer()(title, ...args) : undefined;
+		return this.createRenderable(ColorType.AdminCommand, localized);
+	}
+
+	//#region customId
+
+	public customIdMatches(_valueOrRegex: string | RegExp): boolean {
+		return false;
+	}
+
+	public parseCustomId<T extends IdPartsBase>(_parser?: CustomIdParser<T>): T | undefined {
+		return undefined;
+	}
+
+	//#endregion
 }

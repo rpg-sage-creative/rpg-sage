@@ -1,6 +1,6 @@
 {
 	"name": "rpg-sage",
-	"version": "1.8.7",
+	"version": "1.9.0",
 	"description": "RPG Sage Bot",
 	"type": "module",
 	"main": "./build/app.mjs",
@@ -58,7 +58,7 @@
 		"emoji-regex": "10.3.0",
 		"exifreader": "4.23.3",
 		"follow-redirects": "1.15.6",
-		"image-size": "1.1.1",
+		"image-size": "1.2.1",
 		"pdf2json": "3.0.5",
 		"xregexp": "5.1.1"
 	},

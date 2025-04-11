@@ -2,10 +2,11 @@ import { EphemeralMap } from "@rsc-utils/cache-utils";
 import { error, errorReturnFalse, errorReturnNull, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { createActionRow } from "@rsc-utils/discord-utils";
 import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
-import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Interaction, type Message } from "discord.js";
-import { ActiveBot } from "../sage/model/ActiveBot.js";
+import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Message } from "discord.js";
 import type { SageCommand } from "../sage/model/SageCommand.js";
+import type { SageInteraction } from "../sage/model/SageInteraction.js";
 import { deleteMessage } from "./deletedMessages.js";
+import { registerInteractionListener } from "./handlers.js";
 import { resolveToContent } from "./resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "./resolvers/resolveToEmbeds.js";
 
@@ -137,33 +138,41 @@ async function resolvePrompt(messageId: Snowflake, customId?: Snowflake): Promis
 	promptMap.delete(messageId);
 }
 
-/** Tests the interactions to see if they are for a valid prompt's button. */
-async function handlePrompt(interaction: Interaction): Promise<void> {
+type IsPromptButtonResults = { messageId:Snowflake; customId:Snowflake; };
+
+export function isPromptButton(sageInteraction: SageInteraction): IsPromptButtonResults | undefined {
 	// we know we are only dealing with buttons
-	if (!interaction.isButton()) return; //NOSONAR
+	if (!sageInteraction.isSageInteraction("BUTTON")) return undefined; //NOSONAR
 
 	// we know we store the prompt by messageId
-	const messageId = interaction.message.id as Snowflake;
+	const messageId = sageInteraction.interaction.message.id as Snowflake;
 	const promptMap = getPromptMap();
-	if (!promptMap.has(messageId)) return; //NOSONAR
+	if (!promptMap.has(messageId)) return undefined; //NOSONAR
 
 	const promptData = promptMap.get(messageId);
 
 	// we know we link the prompt to a user
-	if (promptData?.userId !== interaction.user.id) return; //NOSONAR
+	if (promptData?.userId !== sageInteraction.actorId) return undefined; //NOSONAR
 
-	const { customId } = interaction;
+	const customId = sageInteraction.interaction.customId as Snowflake;
 	const btnData = promptData.buttons.find(btn => btn.customId === customId);
 
 	// make sure this is a valid button
-	if (!btnData) return; //NOSONAR
+	if (!btnData) return undefined; //NOSONAR
 
-	await interaction.deferUpdate();
+	return { messageId, customId };
+}
 
+/** Tests the interactions to see if they are for a valid prompt's button. */
+async function handlePrompt(sageInteraction: SageInteraction, results: IsPromptButtonResults): Promise<void> {
+	const { messageId, customId } = results;
+	await sageInteraction.interaction.deferUpdate();
 	await resolvePrompt(messageId, customId as Snowflake);
 }
 
-let _handling = false;
+export function registerPromptHandler(): void {
+	registerInteractionListener(isPromptButton, handlePrompt)
+}
 
 type PromptMapData = {
 	buttons: PromptButtonData[];
@@ -180,11 +189,6 @@ function getPromptMap() {
 }
 
 export async function prompt(args: PromptArgs): Promise<PromptResults | null> {
-	if (!_handling) {
-		ActiveBot.client.on("interactionCreate", handlePrompt);
-		_handling = true;
-	}
-
 	return new Promise<PromptResults | null>(async resolve => {
 		const { message, buttons = [] } = await sendPromptMessage(args) ?? { };
 

@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { AnySelectMenuInteraction, AnyThreadChannel, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DiscordAPIError, DMChannel, ForumChannel, GuildBasedChannel, Interaction, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
+import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DiscordAPIError, DMChannel, ForumChannel, GuildBasedChannel, Interaction, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
 import type { DiscordApiError } from "../DiscordApiError";
 
 //#region types
@@ -41,6 +41,8 @@ export type ReactionOrPartial = MessageReaction | PartialMessageReaction;
 
 /** User or PartialUser */
 export type UserOrPartial = User | PartialUser;
+
+export type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
 
 /** Channels that can have webhooks. */
 export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel>;

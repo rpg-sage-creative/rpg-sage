@@ -16,10 +16,10 @@ import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterAr
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMessageRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
+import type { MacroBase } from "./Macro.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
-import type { TMacro } from "./types.js";
 import { hpToGauge } from "./utils/hpToGauge.js";
 
 /*
@@ -67,6 +67,7 @@ export type GameCharacterCore = {
 	id: Snowflake;
 	/** A list of the character's last messages by channel. */
 	lastMessages?: (DialogMessageData | DialogMessageDataCore)[];
+	macros?: MacroBase[];
 	/** The character's name */
 	name: string;
 	/** The character's notes (stats & journal too) */
@@ -89,12 +90,12 @@ export type GameCharacterCore = {
 
 function parseFetchedStats(raw: string, alias?: string) {
 	const stats = new Map<string, string>();
-	const macros: TMacro[] = [];
+	const macros: MacroBase[] = [];
 	const lines = raw.split(/[\n\r]+/).map(line => line.split(/\t/).map(val => val.trim()));
 	lines.forEach(line => {
 		const results = parseFetchedStatsLine(line, alias);
 		if (results) {
-			if ("dice" in results) macros.push(results);
+			if ("dialog" in results || "dice" in results) macros.push(results); // || "items" in results || "math" in results || "table" in results || "tableUrl" in results
 			if ("value" in results) stats.set(results.key, results.value);
 		}
 	});
@@ -110,15 +111,14 @@ function parseFetchedStatsLine(values: string[], alias?: string) {
 	if (key === "macro") {
 		const three = shift(), four = shift();
 		if (four && isWrapped(four, "[]")) {
-			return { name:value, category:three, dice:four } as TMacro;
+			return { name:value, category:three, dice:four } as MacroBase;
 		}
 		if (three && isWrapped(three, "[]")) {
-			return { name:value, dice:three } as TMacro;
+			return { name:value, dice:three } as MacroBase;
 		}
 
 	}
 	return { key, value };
-
 }
 
 /** Temp convenience function to get a DiscordKey from varying input */
@@ -258,6 +258,8 @@ export class GameCharacter implements IHasSave {
 
 	/** A list of the character's last messages by channel. */
 	public get lastMessages(): DialogMessageData[] { return this.core.lastMessages as DialogMessageData[]; }
+
+	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 
 	/** The character's name */
 	public get name(): string {
@@ -454,7 +456,7 @@ export class GameCharacter implements IHasSave {
 	}
 
 	private fetchedStats: Map<string, string> | undefined;
-	private fetchedMacros: TMacro[] | undefined;
+	private fetchedMacros: MacroBase[] | undefined;
 	public async fetchStats(): Promise<void> {
 		if (!this.fetchedStats) {
 			const url = this.notes.getStat("stats.tsv.url")?.note;
@@ -471,7 +473,7 @@ export class GameCharacter implements IHasSave {
 			this.fetchedMacros = [];
 		}
 	}
-	public async fetchMacros(): Promise<TMacro[]> {
+	public async fetchMacros(): Promise<MacroBase[]> {
 		await this.fetchStats();
 		return this.fetchedMacros ?? [];
 	}
