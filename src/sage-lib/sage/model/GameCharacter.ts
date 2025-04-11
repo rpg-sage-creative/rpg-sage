@@ -1,6 +1,6 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { NIL_SNOWFLAKE, applyChanges, errorReturnNull, getDataRoot, isNonNilSnowflake, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, errorReturnNull, getDataRoot, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -14,6 +14,7 @@ import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
+import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMessageRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import type { IHasSave } from "./NamedCollection.js";
@@ -41,17 +42,6 @@ EncounterCharacter will save snapshots as .snapshots[... { ts, core }]
 EncounterCharacter snapshots will be created at the start of every round.
 */
 
-export type TDialogMessage = {
-	channelDid: Snowflake;
-	characterId: Snowflake;
-	gameId: Snowflake;
-	messageDid: Snowflake;
-	serverDid: Snowflake;
-	threadDid: Snowflake;
-	timestamp: number;
-	userDid: Snowflake;
-};
-
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
 
 export type AutoChannelData = {
@@ -76,7 +66,8 @@ export type GameCharacterCore = {
 	/** Unique ID of this character */
 	id: Snowflake;
 	/** A list of the character's last messages by channel. */
-	lastMessages?: TDialogMessage[];
+	lastMessages?: (DialogMessageData | DialogMessageDataCore)[];
+	/** Character tier macros */
 	macros?: MacroBase[];
 	/** The character's name */
 	name: string;
@@ -97,11 +88,6 @@ export type GameCharacterCore = {
 // 												| "Token" | "TokenBloody" | "TokenDying"
 // 												| "Profile" | "ProfileBloody" | "ProfileDying"
 // 												| "Full" | "FullBloody" | "FullDying";
-
-/** Determine if the snowflakes are different. */
-function diff(a?: Snowflake, b?: Snowflake) {
-	return (a ?? NIL_SNOWFLAKE) !== (b ?? NIL_SNOWFLAKE);
-}
 
 function parseFetchedStats(raw: string, alias?: string) {
 	const stats = new Map<string, string>();
@@ -142,19 +128,6 @@ export function toDiscordKey(channelDidOrDiscordKey: DiscordKey | Snowflake, thr
 		return channelDidOrDiscordKey;
 	}
 	return new DiscordKey(null, channelDidOrDiscordKey, threadDid);
-}
-
-function keyMatchesMessage(discordKey: DiscordKey, dialogMessage: TDialogMessage): boolean {
-	const { channel, thread } = discordKey.channelAndThread;
-	const hasThread = isNonNilSnowflake(dialogMessage.threadDid);
-	if (hasThread) {
-		return dialogMessage.channelDid === channel
-			&& dialogMessage.threadDid === thread;
-	}
-	if (thread) {
-		return dialogMessage.channelDid === thread;
-	}
-	return dialogMessage.channelDid === channel;
 }
 
 //#region temp files
@@ -225,6 +198,7 @@ export class GameCharacter implements IHasSave {
 
 		const companionType = this.isPcOrCompanion ? "companion" : "minion";
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
+		this.core.lastMessages = this.core.lastMessages?.map(DialogMessageData.fromCore) ?? [];
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
 	}
@@ -284,9 +258,7 @@ export class GameCharacter implements IHasSave {
 	public get isCompanionOrMinion(): boolean { return this.isCompanion || this.isMinion; }
 
 	/** A list of the character's last messages by channel. */
-	public get lastMessages(): TDialogMessage[] {
-		return this.core.lastMessages ?? (this.core.lastMessages = []);
-	}
+	public get lastMessages(): DialogMessageData[] { return this.core.lastMessages as DialogMessageData[]; }
 
 	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 
@@ -414,44 +386,37 @@ export class GameCharacter implements IHasSave {
 
 	//#region LastMessage(s)
 
-	public getLastMessage(discordKey: DiscordKey): TDialogMessage | undefined {
-		return this.lastMessages.find(dm => keyMatchesMessage(discordKey, dm));
-	}
+	/** Returns the last dialog message for this character in the given channel. */
+	// public getLastMessage(channelId: Snowflake): DialogMessageData | undefined {
+	// 	return this.lastMessages.find(dm => dm.matchesChannel(channelId));
+	// }
 
-	public getLastMessages(discordKey: DiscordKey): TDialogMessage[] {
-		const dialogMessages: TDialogMessage[] = [];
-		const lastMessage = this.getLastMessage(discordKey);
-		if (lastMessage) {
-			dialogMessages.push(lastMessage);
-		}
-		this.companions.forEach(companion => {
-			dialogMessages.push(...companion.getLastMessages(discordKey));
-		});
-		// lastMessages.sort((a, b) => a.timestamp - b.timestamp);
-		return dialogMessages;
-	}
+	/** Returns the last dialog messages for this character and all its companions in the given channel. */
+	// public getLastMessages(channelId: Snowflake): DialogMessageData[] {
+	// 	const dialogMessages: DialogMessageData[] = [];
 
-	public setLastMessage(dialogMessage: TDialogMessage): void {
-		const newHasThread = diff(dialogMessage.threadDid);
-		const lastMessages = this.lastMessages;
-		const filtered = lastMessages.filter(dMessage => {
-			if (diff(dMessage.serverDid, dialogMessage.serverDid)) {
-				return true;
-			}
-			const thisHasThread = diff(dMessage.threadDid);
-			if (newHasThread && thisHasThread) {
-				return diff(dialogMessage.threadDid, dMessage.threadDid);
-			}else if (thisHasThread) {
-				return true;
-			}else if (newHasThread) {
-				return diff(dialogMessage.threadDid, dMessage.channelDid);
-			}
-			return diff(dialogMessage.channelDid, dMessage.channelDid);
-		});
+	// 	// grab this character's last message
+	// 	const lastMessage = this.getLastMessage(channelId);
+	// 	if (lastMessage) {
+	// 		dialogMessages.push(lastMessage);
+	// 	}
 
-		lastMessages.length = 0;
-		lastMessages.push(...filtered);
-		lastMessages.push(dialogMessage);
+	// 	// include all companion last messages
+	// 	this.companions.forEach(companion => {
+	// 		dialogMessages.push(...companion.getLastMessages(channelId));
+	// 	});
+
+	// 	// lastMessages.sort((a, b) => a.timestamp - b.timestamp);
+	// 	return dialogMessages;
+	// }
+
+	/**
+	 * Sets the last dialog message for this character.
+	 * Last dialog messages are stored for each channel, so we filter out messages for the channel before adding the given message.
+	 */
+	public setLastMessage(dialogMessage: DialogMessageData): void {
+		this.core.lastMessages = this.lastMessages.filter(messageInfo => !dialogMessage.matchesChannel(messageInfo));
+		this.core.lastMessages.push(dialogMessage);
 	}
 
 	//#endregion

@@ -1,5 +1,5 @@
 import { error } from "@rsc-utils/core-utils";
-import { DiscordKey, splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
+import { splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { AttachmentBuilder } from "discord.js";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
@@ -11,23 +11,32 @@ import type { DialogContent } from "../DialogContent.js";
 import { updateEmbed } from "../updateEmbed.js";
 
 export async function editChat(sageMessage: SageMessage, dialogContent: DialogContent): Promise<void> {
-	const messageId = sageMessage.message.reference?.messageId;
-	if (!messageId) return sageMessage.replyStack.whisper("To edit dialog, you must reply to the message you wish to edit.");
+	const localize = sageMessage.getLocalizer();
 
-	const messageKey = new DiscordKey(sageMessage.server?.did, null, null, messageId);
-	const dialogMessage = await DialogMessageRepository.read(messageKey);
-	if (!dialogMessage) return sageMessage.replyStack.whisper("Sorry, dialog info not found!");
+	if (!sageMessage.message.reference) {
+		return sageMessage.replyStack.whisper(localize("TO_EDIT_DIALOG"));
+	}
+
+	const dialogMessage = await DialogMessageRepository.read(sageMessage.message.reference);
+	if (!dialogMessage) {
+		return sageMessage.replyStack.whisper(localize("SORRY_DIALOG_NOT_FOUND"));
+	}
 
 	/** @todo allow GMs to edit other GM dialog, but send the edit info to both */
-	if (dialogMessage.userDid !== sageMessage.authorDid) return sageMessage.replyStack.whisper("You cannot edit another user's dialog!");
+	if (dialogMessage.userId !== sageMessage.authorDid) {
+		return sageMessage.replyStack.whisper(localize("YOU_CANNOT_EDIT_ANOTHER"));
+	}
 
-	const discordKey = new DiscordKey(dialogMessage.serverDid, dialogMessage.channelDid, dialogMessage.threadDid, dialogMessage.messageDid);
-	const message = await sageMessage.sageCache.fetchMessage(discordKey);
-	if (!message) return sageMessage.replyStack.whisper("Sorry, discord message not found!");
+	const message = await sageMessage.sageCache.fetchMessage(dialogMessage.toMessageReference());
+	if (!message) {
+		return sageMessage.replyStack.whisper(localize("SORRY_MESSAGE_NOT_FOUND"));
+	}
 
 	const webhookChannelReference = { guildId:sageMessage.server.did, channelId:sageMessage.threadOrChannelDid };
 	const webhook = await sageMessage.discord.fetchWebhook(webhookChannelReference);
-	if (!webhook) return sageMessage.replyStack.whisper("Unable to find webhook; Sage may not have access to post in this channel/thread.");
+	if (!webhook) {
+		return sageMessage.replyStack.whisper(localize("CANNOT_FIND_WEBHOOK"));
+	}
 
 	const embed = message.embeds[0];
 	const originalContent = embed?.description ?? message.content;
@@ -53,11 +62,7 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		if (sageMessage.sageUser.dmOnEdit) {
 			const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
 			if (user) {
-				const content = [
-					`You edited: ${toMessageUrl(message)}`,
-					`The original content has been attached to this message.`,
-					"To stop receiving these messages, reply to this message with:```sage! user update dmOnEdit=false```"
-				].join("\n");
+				const content = localize("YOU_EDITED_S_DIALOG", toMessageUrl(message)!);
 				const files = [new AttachmentBuilder(Buffer.from(originalContent, "utf-8"), { name:`original-content.md` })];
 				await user.send(includeDeleteButton({ content, files }, sageMessage.authorDid));
 			}
@@ -66,6 +71,6 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 
 	/** @todo handle content/embed lengths that are too long and alert the user */
 	if (payloads.length > 1 || !isValid) {
-		await sageMessage.replyStack.whisper("The content you were trying to post was invalid in some way, likely too long.");
+		await sageMessage.replyStack.whisper(localize("INVALID_DIALOG_EDIT"));
 	}
 }

@@ -53,11 +53,13 @@ function getBasicBracketRegex(): RegExp {
 	return /\[{2}[^\]]+\]{2}|\[[^\]]+\]/ig;
 }
 
+/** Used to prefetch stats and macros for characters so that the dice/macro logic can run synchronously */
 async function prepStatsAndMacros(sageCommand: SageCommand) {
 	const { game, isGameMaster, isPlayer, sageUser } = sageCommand;
 	if (!game || isGameMaster || isPlayer) {
 		const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
 		const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
+		/** @todo replace pc with "active character" */
 		const pc = isPlayer && game ? sageCommand.playerCharacter : undefined;
 		const encounters = game?.encounters;
 		const macros = await fetchAllStatsAndMacros(npcs, pcs, pc, sageUser);
@@ -65,22 +67,37 @@ async function prepStatsAndMacros(sageCommand: SageCommand) {
 	}
 	return undefined;
 }
+
+/** Iterates all the given characters to fetch their stats (dynamic tsv) and macros (dynamic tsv or dynamic pathbuilder); used only by prepStatsAndMacros() */
 async function fetchAllStatsAndMacros(npcs: CharacterManager, pcs: CharacterManager, pc: Optional<GameCharacter>, sageUser: User): Promise<DiceMacroBase[]> {
 	const out: DiceMacroBase[] = [];
-	for (const npc of npcs) {
-		out.push(...await fetchStatsAndMacros(npc, sageUser));
+
+	// active character first
+	out.push(...await fetchStatsAndMacros(pc, sageUser));
+
+	// other pcs next
+	for (const _pc of pcs) {
+		out.push(...await fetchStatsAndMacros(_pc, sageUser));
 	}
-	for (const pc of pcs) {
-		out.push(...await fetchStatsAndMacros(pc, sageUser));
+
+	// npcs last
+	for (const _npc of npcs) {
+		out.push(...await fetchStatsAndMacros(_npc, sageUser));
 	}
-	await fetchStatsAndMacros(pc, sageUser);
+
 	return out;
 }
+
+/** Reusable logic used only by fetchAllStatsAndMacros() */
 async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User): Promise<DiceMacroBase[]> {
 	const out: DiceMacroBase[] = [];
 	if (!char) return out;
 
-	const macros = await char.fetchMacros();
+	const macros = [
+		...await char.fetchMacros(),
+		...(char.pathbuilder?.getAttackMacros() ?? []),
+		...(char.pathbuilder?.getSpellMacros() ?? []),
+	];
 
 	// if the char belongs to the active user
 	if (char.userDid === sageUser.did) {
@@ -145,12 +162,15 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 
 	// get tiered macros
 	const tieredMacros = getTieredMacros(sageCommand);
+
 	// prep stats and fetch dynamic macros
 	const statsAndMacros = await prepStatsAndMacros(sageCommand);
+
 	// if we have more macros, unshift them to give them first priority
 	if (statsAndMacros?.macros.length) {
 		tieredMacros.unshift(statsAndMacros?.macros);
 	}
+
 	// find the macro
 	const macroAndOutput = macroToDice(tieredMacros, unwrap(macroString, "[]"));
 	if (macroAndOutput) {
