@@ -483,36 +483,49 @@ function weaponToHtml(char: PathbuilderCharacter, weapon: TPathbuilderCharacterW
 	}
 }
 
+type WeaponMacroDiceArgs = { name:string; atkDice?:string; atkMod:number; dmg:string; dmgNote?:string; };
+
+/** Reusable logic for weaponToMacro() */
+function buildWeaponMacroDice({ name, atkDice, atkMod, dmg, dmgNote }: WeaponMacroDiceArgs): DiceMacroBase {
+	const attack = `${atkDice ?? "1d20"} ${atkMod ? toModifier(atkMod) : ""} "${name}" {atkBonus:+0} {ac}`;
+	const damage = `${dmg} {dmgBonus:+0} ${dmgNote ?? ""}`;
+	const dice = `[${attack}; ${damage}]`.replace(/\s+/, " ").trim();
+	return { name, dice };
+}
+
 function weaponToMacro(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon): DiceMacroBase {
 	if (weapon.dice) {
 		return { name:weapon.name, dice:weapon.dice };
 	}
+
+	const name = weapon.display;
+
 	if (typeof(weapon.attack) === "number" && typeof(weapon.damageBonus) === "number") {
-		const atkDice = "1d20";
-		const atkMod = weapon.attack ? toModifier(weapon.attack) : "";
-		const atkLabel = `"${weapon.display}"`;
-		const attack = `${atkDice} ${atkMod} ${atkLabel}`.replace(/\s+/, " ").trim();
-		const damage = getWeaponDamageDicePart(weapon);
-		return { name:weapon.display, dice:`[${attack}; ${damage}]` };
+		const atkMod = weapon.attack;
+		const dmg = getWeaponDamageDicePart(weapon);
+		return buildWeaponMacroDice({ name, atkMod, dmg });
 	}
+
 	const wpnItem = findWeapon(weapon);
 	if (wpnItem) {
 		const profMod = char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey, weapon.name);
 		const levelMod = char.getLevelMod(profMod);
-		const mod = levelMod
+		const atkMod = levelMod
 			+ weaponToAttackStatMod(wpnItem, char.abilities.strMod, char.abilities.dexMod)
 			+ profMod
 			+ getWeaponAttackItemBonus(weapon);
 		const dmg = weaponToDamage(char, weapon, wpnItem);
-		return { name:weapon.display, dice:`[1d20${mod ? toModifier(mod) : ""} "${weapon.display}"; ${dmg}]` };
+		return buildWeaponMacroDice({ name, atkMod, dmg });
+
 	}else {
 		const profMod = char.getProficiencyMod(weapon.prof as TPathbuilderCharacterProficienciesKey);
 		const levelMod = char.getLevelMod(profMod);
-		const mod = levelMod
+		const atkMod = levelMod
 			+ profMod
 			+ getWeaponAttackItemBonus(weapon);
 		const dmg = getWeaponDamageDice(weapon);
-		return { name:weapon.display, dice:`[1d20${mod ? toModifier(mod) : ""} "${weapon.display}"; ${dmg} <i>Dex/Str/Spec mods not included</i>]` };
+		const dmgNote = "<i>Dex/Str/Spec mods may not be included</i>";
+		return buildWeaponMacroDice({ name, atkMod, dmg, dmgNote });
 	}
 }
 
