@@ -172,6 +172,9 @@ async function isDialogLookup(sageReaction: SageReaction): Promise<TCommand | nu
 	}
 
 	const message = await sageReaction.fetchMessage();
+	if (!message.guild) {
+		return null;
+	}
 
 	const authorId = await getAuthorId(message);
 	if (isSageId(authorId)) {
@@ -186,6 +189,11 @@ async function isDialogLookup(sageReaction: SageReaction): Promise<TCommand | nu
 
 async function dialogLookup(sageCommand: SageCommand): Promise<void> {
 	const message = await sageCommand.fetchMessage();
+
+	if (!message?.guild) {
+		return whisper(sageCommand, `RPG Sage doesn't do Dialog in DMs.`);
+	}
+
 	if (message) {
 		const authorId = await getAuthorId(message);
 
