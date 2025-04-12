@@ -18,8 +18,9 @@ type NavigateResults<ValueType = any, ObjectType = any, IsFull extends boolean =
 	value?: IsFull extends true ? ValueType : never;
 };
 
-export function navigateObject<ValueType = any, ObjectType = any>(object: unknown, path: string): NavigateResults<ValueType, ObjectType>;
-export function navigateObject(object: any, path: string): NavigateResults {
+export function navigateJson<ValueType = any, ObjectType = any>(object: unknown, path: string): NavigateResults<ValueType, ObjectType>;
+
+export function navigateJson(object: any, path: string): NavigateResults {
 	const inObject = (key: string) => object && key && key in object;
 
 	// store navigated keys
