@@ -1,10 +1,11 @@
 import { getSuperUserId } from "@rsc-sage/env";
-import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, getCodeName, getDataRoot, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
+import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, getCodeName, getDataRoot, info, verbose, warn, type Snowflake } from "@rsc-utils/core-utils";
 import { wrapUrl } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { ClientOptions, Guild, Interaction, Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { ActivityType, Client } from "discord.js";
+import { sendEmail } from "../../../sage-utils/sendEmail.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { getRegisteredIntents, getRegisteredPartials, handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
@@ -136,9 +137,17 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 			this.sageCache = sageCache;
 			ActiveBot.active = this;
 
-			addLogHandler("error", (...args: any[]) => {
-				ActiveBot.sendToSuperUser(...chunk(`# error\n${args.map(formatArg).join("\n")}`, 2000));
-			});
+			if (ActiveBot.isDev) {
+				addLogHandler("error", (...args: any[]) => {
+					ActiveBot.sendToSuperUser(...chunk(`# error\n${args.map(formatArg).join("\n")}`, 2000));
+				});
+			}else {
+				addLogHandler("error", async (...args: any[]) => {
+					const subject = `RPG Sage Error - ${getCodeName()}`;
+					const content = args.map(formatArg).join("\n\n");
+					await sendEmail(subject, content).catch(ex => warn(`Unable to send error email!`, ex));
+				});
+			}
 
 			info(`Discord.Client.on("ready") [success]`);
 			ActiveBot.sendToSuperUser(`Discord.Client.on("ready") [success]`);
