@@ -8,3 +8,4 @@ export * from "./getEnvironmentName.js";
 export * from "./getId.js";
 export * from "./getPort.js";
 export * from "./getSesInfo.js";
+export * from "./getSnsInfo.js";

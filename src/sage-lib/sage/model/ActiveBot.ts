@@ -5,7 +5,7 @@ import { findJsonFile } from "@rsc-utils/io-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { ClientOptions, Guild, Interaction, Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { ActivityType, Client } from "discord.js";
-import { sendEmail } from "../../../sage-utils/sendEmail.js";
+import { notifyOfError } from "../../../sage-utils/notifyOfError.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { getRegisteredIntents, getRegisteredPartials, handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
@@ -145,7 +145,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 				addLogHandler("error", async (...args: any[]) => {
 					const subject = `RPG Sage Error - ${getCodeName()}`;
 					const content = args.map(formatArg).join("\n\n");
-					await sendEmail(subject, content).catch(ex => warn(`Unable to send error email!`, ex));
+					await notifyOfError(subject, content).catch(ex => warn(`Unable to notifyOfError!`, ex));
 				});
 			}
 
