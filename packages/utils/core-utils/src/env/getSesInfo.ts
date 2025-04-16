@@ -1,4 +1,4 @@
-import type { Optional } from "../types/index.js";
+import type { Optional } from "../types/generics.js";
 import { getFromProcess } from "./internal/getFromProcess.js";
 
 function isValidEmailAddress(value: Optional<string | number>): value is string {

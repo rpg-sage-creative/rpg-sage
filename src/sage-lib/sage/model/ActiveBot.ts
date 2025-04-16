@@ -1,5 +1,5 @@
 import { getSuperUserId } from "@rsc-sage/env";
-import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, getCodeName, getDataRoot, info, verbose, warn, type Snowflake } from "@rsc-utils/core-utils";
+import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, getCodeName, getDataRoot, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { wrapUrl } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
 import { chunk } from "@rsc-utils/string-utils";
@@ -34,15 +34,39 @@ function createDiscordClientOptions(): ClientOptions {
 }
 
 export class ActiveBot extends Bot implements IClientEventHandler {
+	public static sns: boolean | undefined;
 	public static active: ActiveBot;
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
-	public static async sendToSuperUser(...contents: string[]): Promise<void> {
-		const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
-		if (user) {
-			for (const content of contents) {
-				user.send(wrapUrl(content, true));
+	public static async sendToSuperUser(...args: unknown[]): Promise<void> {
+		const send = async (contentToSend: string) => {
+			const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
+			if (user) {
+				const contents = chunk(`# error\n${contentToSend}`, 2000);
+				for (const content of contents) {
+					await user.send(wrapUrl(content, true));
+				}
+			}
+		};
+
+		if (ActiveBot.sns === undefined) {
+			ActiveBot.sns = getCodeName() === "beta";
+		}
+
+		const notifyContent = args.map(formatArg).join("\n");
+
+		if (ActiveBot.sns) {
+			const notifySubject = `RPG Sage Error - ${getCodeName()}`;
+			const notifyResults = await notifyOfError(notifySubject, notifyContent).catch(ex => {
+				ActiveBot.sns = false;
+				send(`# notifyOfError failed!\n${formatArg(ex)}`);
+				return null;
+			});
+			if (notifyResults !== null) {
+				return;
 			}
 		}
+
+		send(notifyContent);
 	}
 
 	// public client: Client;
@@ -137,17 +161,9 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 			this.sageCache = sageCache;
 			ActiveBot.active = this;
 
-			if (ActiveBot.isDev) {
-				addLogHandler("error", (...args: any[]) => {
-					ActiveBot.sendToSuperUser(...chunk(`# error\n${args.map(formatArg).join("\n")}`, 2000));
-				});
-			}else {
-				addLogHandler("error", async (...args: any[]) => {
-					const subject = `RPG Sage Error - ${getCodeName()}`;
-					const content = args.map(formatArg).join("\n\n");
-					await notifyOfError(subject, content).catch(ex => warn(`Unable to notifyOfError!`, ex));
-				});
-			}
+			addLogHandler("error", (...args: unknown[]) => {
+				ActiveBot.sendToSuperUser(...args);
+			});
 
 			info(`Discord.Client.on("ready") [success]`);
 			ActiveBot.sendToSuperUser(`Discord.Client.on("ready") [success]`);
