@@ -20,13 +20,13 @@ import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
 import { getSnsInfo } from "@rsc-utils/core-utils";
 
 export function notifyOfError(subject: string, content: string) {
-	const { snsTopicArn } = getSnsInfo();
+	const { topicArn, region } = getSnsInfo();
 	const email = new PublishCommand({
 		Subject: subject,
 		Message: content,
-		TopicArn: snsTopicArn
+		TopicArn: topicArn
 	});
 
-	const sesClient = new SNSClient({ });
+	const sesClient = new SNSClient({ region });
 	return sesClient.send(email);
 }
