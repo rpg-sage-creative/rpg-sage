@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.9.0",
+"version":"1.9.1",
 "branch":"main",
-"commit":"495f2814ab7ad816519a1943143e432297424b5e",
-"commitSubject":"Merge branch 'macro-forms'",
-"commitTs":1744043724000,
-"commitDate":"2025-04-07-0935",
-"buildTs":1744043835000,
-"buildDate":"2025-04-07-0937",
+"commit":"d2d9dca1b67619c23863387dd76a13471c1ed4c6",
+"commitSubject":"Merge pull request #131 from rpg-sage-creative/error-ses",
+"commitTs":1744870375000,
+"commitDate":"2025-04-16-2312",
+"buildTs":1744870549000,
+"buildDate":"2025-04-16-2315",
 "author":"Randal"
 }
