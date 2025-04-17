@@ -1,4 +1,4 @@
-import { type LogLevelName } from "../logLevels/LogLevel.js";
+import type { LogLevelName } from "../logLevels/LogLevel.js";
 import { isColorLevelEnabled } from "./isColorLevelEnabled.js";
 
 /** Returns the color code for the log level only if enabled. */

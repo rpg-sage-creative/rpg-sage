@@ -1,5 +1,5 @@
-import { info } from "../../console/loggers/info.js";
-import { stringify } from "../../json/bigint/stringify.js";
+import { verbose } from "../../console/loggers/verbose.js";
+import { stringifyJson } from "../../json/stringifyJson.js";
 
 /**
  * @internal
@@ -9,6 +9,6 @@ import { stringify } from "../../json/bigint/stringify.js";
  * @returns
  */
 export function logAndReturn<T>(key: string, value: string | number): T {
-	info(`Environment Variable: ${key}=${stringify(value)}`);
+	verbose(`Environment Variable: ${key}=${stringifyJson(value)}`);
 	return value as T;
 }

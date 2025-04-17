@@ -38,36 +38,28 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	public static active: ActiveBot;
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
 	public static async sendToSuperUser(...args: unknown[]): Promise<void> {
-		const send = async (contentToSend: string) => {
-			const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
-			if (user) {
-				const contents = chunk(`# error\n${contentToSend}`, 2000);
-				for (const content of contents) {
-					await user.send(wrapUrl(content, true));
-				}
-			}
-		};
-
 		if (ActiveBot.sns === undefined) {
-			ActiveBot.sns = getCodeName() === "beta";
+			ActiveBot.sns = true;//getCodeName() === "beta";
 		}
 
-		const notifyContent = args.map(formatArg).join("\n");
+		const contentToSend = args.map(formatArg).join("\n");
 
 		if (ActiveBot.sns) {
 			const notifySubject = `RPG Sage Error - ${getCodeName()}`;
-			const notifyResults = await notifyOfError(notifySubject, notifyContent).catch(ex => {
-				ActiveBot.sns = false;
-				send(`# notifyOfError failed!\n${formatArg(ex)}`);
-				return null;
-			});
-			if (notifyResults !== null) {
-				return;
-			}
+			const notifyResults = await notifyOfError(notifySubject, contentToSend);
+			if (notifyResults) return;
+
+			ActiveBot.sns = false;
 		}
 
-		send(notifyContent);
-	}
+		const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
+		if (user) {
+			const contents = chunk(`# error\n${contentToSend}`, 2000);
+			for (const content of contents) {
+				await user.send(wrapUrl(content, true));
+			}
+		}
+}
 
 	// public client: Client;
 

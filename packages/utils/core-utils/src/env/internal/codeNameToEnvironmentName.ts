@@ -1,5 +1,4 @@
-import type { CodeName } from "../CodeName.js";
-import type { EnvironmentName } from "../EnvironmentName.js";
+import type { CodeName, EnvironmentName } from "../types.js";
 
 /** @internal */
 export function codeNameToEnvironmentName(codeName: CodeName): EnvironmentName {

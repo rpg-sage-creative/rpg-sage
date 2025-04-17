@@ -52,7 +52,7 @@
 		"@types/node": "18.19.42"
 	},
 	"dependencies": {
-		"@aws-sdk/client-sns": "^3.787.0",
+		"@aws-sdk/client-sns": "3.787.0",
 		"@discordjs/rest": "2.3.0",
 		"@napi-rs/canvas": "0.1.53",
 		"discord.js": "14.15.3",

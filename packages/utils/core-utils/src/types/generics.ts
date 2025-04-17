@@ -6,7 +6,7 @@ export type Args<T> = { [P in keyof T]?: Optional<T[P]>; };
 export type Awaitable<T> = T | PromiseLike<T>;
 
 /** Represents an unknown class constructor. */
-export type Constructable<T> = new (...args: any[]) => T;
+export type Constructable<T extends {} = {}> = new (...args: any[]) => T;
 
 /** Represents an enum with string key and number value. */
 export type EnumLike<K extends string = string, V extends number = number> = Record<K, V>;

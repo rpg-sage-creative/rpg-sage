@@ -1,0 +1,48 @@
+
+//#region (Single Quotes, Double Quotes, Dequote)
+
+/** `'` */
+const SINGLE = "\u0027";
+/** `‘` */
+const SINGLE_LEFT = "\u2018";
+/** `’` */
+const SINGLE_RIGHT = "\u2019";
+/** `‚` */
+const SINGLE_LEFT_LOW = "\u201A";
+/** `‹` */
+const SINGLE_ARROW_LEFT = "\u2039";
+/** `›` */
+const SINGLE_ARROW_RIGHT = "\u203A";
+
+/** `''` */
+const SINGLE_UNIVERSAL = SINGLE + SINGLE;
+/** `‘’` */
+const SINGLE_ENGLISH = SINGLE_LEFT + SINGLE_RIGHT;
+
+/** `"` */
+const DOUBLE = "\u0022";
+/** `“` */
+const DOUBLE_LEFT = "\u201C";
+/** `”` */
+const DOUBLE_RIGHT = "\u201D";
+/** `„` */
+const DOUBLE_LEFT_LOW = "\u201E";
+/** `«` */
+const DOUBLE_ARROW_LEFT = "\u00AB";
+/** `»` */
+const DOUBLE_ARROW_RIGHT = "\u00BB";
+
+/** `""` */
+const DOUBLE_UNIVERSAL = DOUBLE + DOUBLE;
+/** `“”` */
+const DOUBLE_ENGLISH = DOUBLE_LEFT + DOUBLE_RIGHT;
+/** `„“` */
+const DOUBLE_GERMAN = DOUBLE_LEFT_LOW + DOUBLE_LEFT;
+/** `„”` */
+const DOUBLE_POLISH = DOUBLE_LEFT_LOW + DOUBLE_RIGHT;
+/** `«»` */
+const DOUBLE_FRENCH = DOUBLE_ARROW_LEFT + DOUBLE_ARROW_RIGHT;
+/** `»«` */
+const DOUBLE_SWEDISH = DOUBLE_ARROW_RIGHT + DOUBLE_ARROW_LEFT;
+
+//#endregion
