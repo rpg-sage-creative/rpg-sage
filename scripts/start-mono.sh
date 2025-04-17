@@ -70,6 +70,18 @@ jsonSuperUserId="$RETVAL"
 readJsonProperty "tupperBoxId"
 jsonTupperBoxId="$RETVAL"
 
+readJsonProperty "snsTopicArn"
+jsonSnsTopicArn="$RETVAL"
+
+readJsonProperty "snsRegion"
+jsonSnsRegion="$RETVAL"
+
+readJsonProperty "snsAccessKeyId"
+jsonSnsAccessKeyId="$RETVAL"
+
+readJsonProperty "snsSecretAccessKey"
+jsonSnsSecretAccessKey="$RETVAL"
+
 if [ ! "$1" = "-noBuild" ]; then
 	npm run test
 	if [ "$?" != "0" ]; then echo "Unable to Start 'mono'!"; exit 1; fi
@@ -94,6 +106,10 @@ else
 		"rollemId=$jsonRollemId" \
 		"superAdminId=$jsonSuperAdminId" \
 		"superUserId=$jsonSuperUserId" \
-		"tupperBoxId=$jsonTupperBoxId"
+		"tupperBoxId=$jsonTupperBoxId" \
+		"snsTopicArn=$jsonSnsTopicArn" \
+		"snsRegion=$jsonSnsRegion" \
+		"snsAccessKeyId=$jsonSnsAccessKeyId" \
+		"snsSecretAccessKey=$jsonSnsSecretAccessKey"
 
 fi
