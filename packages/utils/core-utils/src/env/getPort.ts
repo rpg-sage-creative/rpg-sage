@@ -1,15 +1,15 @@
 import type { Optional } from "../types/generics.js";
 import { getCodeName } from "./getCodeName.js";
-import { getFromProcess } from "./internal/getFromProcess.js";
+import { getFromProcess } from "./getFromProcess.js";
 import { logAndReturn } from "./internal/logAndReturn.js";
 
-function isValid(value: Optional<string | number>): value is string {
-	return /^\d+$/.test(String(value));
-}
-
 function getByName(name: string): number {
+	const numberValidator = (value: Optional<string | number>): value is `${number}` => {
+		return /^\d+$/.test(String(value));
+	};
+
 	const key = `${name.toLowerCase()}Port`;
-	const value = getFromProcess<string>(isValid, key);
+	const value = getFromProcess<string>(numberValidator, key);
 	return +value;
 }
 

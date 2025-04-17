@@ -1,6 +1,7 @@
 import { indexTs } from "./indexTs.mjs";
-import { version } from "./version.mjs";
+import { testJs } from "./testJs.mjs";
 import { parseArgs, parseFlags, parsePairs } from "./util/index.mjs";
+import { version } from "./version.mjs";
 
 async function runCommand() {
 	/** @type {string} */
@@ -16,6 +17,8 @@ async function runCommand() {
 		switch(command) {
 			case "indexTs":
 				return indexTs(args, options);
+			case "testJs":
+				return testJs(args, options);
 			case "version":
 				return version(args, options);
 			default:

@@ -8,54 +8,35 @@ if [ ! -d "./.git" ]; then
 	echo "cd $(pwd)"
 fi
 
-# always do a new build
-npm run build
-if [ "$?" != "0" ]; then echo "Unable to Test!"; exit 1; fi
+# check if we were passed a specific test file
+specificFile=
+case $1 in *.test.js) specificFile="$1";; esac
+
+# we don't need to build if we are passed a specific test file
+if [ -z "$specificFile" ]; then
+	npm run build
+	if [ "$?" != "0" ]; then echo "Unable to Test!"; exit 1; fi
+fi
+
+# if we are testing from a specific .ts file with a related test, just run that test
+if [ -z "$specificFile" ]; then
+	found=
+	case $1 in *.ts) found="$1";; esac
+	if [ ! -z "$found" ]; then
+		found="${found/src/test}"
+		found="${found/.ts/.test.js}"
+		if [ -f "$found" ]; then
+			specificFile="$found"
+		fi
+	fi
+fi
 
 echo ""
 repoName="$(basename -- "$(pwd)")"
 echo "Testing: $repoName ..."
 
-function checkForTests() {
-	local found=false
-	for file in ./test/*.mjs; do
-		[ -f "$file" ] && found=true
-	done
-	for file in ./test/*/*.mjs; do
-		[ -f "$file" ] && found=true
-	done
-	echo ${found}
-}
-
-# make sure we have tests
-hasTests=$(checkForTests);
-if [ "$hasTests" = "false" ]; then
-	echo "Nothing to Test."
-	exit 0
-fi
-
-function runTest() {
-	echo ""
-	echo "Testing: $1 ..."
-	node $1 $2 $3 $4 $5 $6 $7 $8 $9
-	if [ "$?" != "0" ]; then echo "Test Failed!"; exit 1; fi
-	echo "Testing: $1 ... done."
-}
-
-# run explicitly given test file
-if [ -f "$1" ]; then
-	runTest $1 $2 $3 $4 $5 $6 $7 $8
-
-# iterate all test files
-else
-	# run the tests
-	for file in ./test/*.*js; do
-		[ -f "$file" ] && runTest $file $1 $2 $3 $4 $5 $6 $7 $8
-	done
-	for file in ./test/*/*.*js; do
-		[ -f "$file" ] && runTest $file $1 $2 $3 $4 $5 $6 $7 $8
-	done
-fi
+node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js "$specificFile"
+if [ "$?" != "0" ]; then echo "Test Failed!"; exit 1; fi
 
 echo ""
 echo "Testing: $repoName ... done."

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync } from "fs";
-import { parse } from "../json/bigint/parse.js";
+import { parseJson } from "../json/parseJson.js";
 
 type BuildInfo = {
 	name: string;
@@ -28,7 +28,7 @@ function getRootPath(): string {
 
 function readBuildInfo(repoPath: string, utilName?: string): BuildInfo | undefined {
 	try {
-		const buildInfo = parse(readFileSync(`${repoPath}/build.json`).toString());
+		const buildInfo = parseJson<BuildInfo>(readFileSync(`${repoPath}/build.json`).toString());
 		if (!buildInfo.name && utilName) {
 			buildInfo.name = utilName;
 		}

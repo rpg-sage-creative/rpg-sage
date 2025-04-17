@@ -5,6 +5,7 @@ import { findJsonFile } from "@rsc-utils/io-utils";
 import { chunk } from "@rsc-utils/string-utils";
 import type { ClientOptions, Guild, Interaction, Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { ActivityType, Client } from "discord.js";
+import { notifyOfError } from "../../../sage-utils/notifyOfError.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { getRegisteredIntents, getRegisteredPartials, handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
@@ -33,13 +34,26 @@ function createDiscordClientOptions(): ClientOptions {
 }
 
 export class ActiveBot extends Bot implements IClientEventHandler {
+	public static sns = true;
 	public static active: ActiveBot;
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
-	public static async sendToSuperUser(...contents: string[]): Promise<void> {
+	public static async notifyOfError(...args: unknown[]): Promise<void> {
+		if (ActiveBot.sns) {
+			const notifySubject = `RPG Sage Error - ${getCodeName()}`;
+			const contentToSend = args.map(formatArg).join("\n");
+			const notifyResults = await notifyOfError(notifySubject, contentToSend);
+			if (notifyResults) return;
+
+			ActiveBot.sns = false;
+		}
+		ActiveBot.sendToSuperUser(...args);
+	}
+	public static async sendToSuperUser(...args: unknown[]): Promise<void> {
 		const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
 		if (user) {
+			const contents = chunk(`# error\n${args.map(formatArg).join("\n")}`, 2000);
 			for (const content of contents) {
-				user.send(wrapUrl(content, true));
+				await user.send(wrapUrl(content, true));
 			}
 		}
 	}
@@ -136,9 +150,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 			this.sageCache = sageCache;
 			ActiveBot.active = this;
 
-			addLogHandler("error", (...args: any[]) => {
-				ActiveBot.sendToSuperUser(...chunk(`# error\n${args.map(formatArg).join("\n")}`, 2000));
-			});
+			addLogHandler("error", ActiveBot.notifyOfError);
 
 			info(`Discord.Client.on("ready") [success]`);
 			ActiveBot.sendToSuperUser(`Discord.Client.on("ready") [success]`);

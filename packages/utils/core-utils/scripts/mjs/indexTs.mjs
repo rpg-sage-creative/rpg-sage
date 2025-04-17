@@ -1,32 +1,17 @@
 import { existsSync, readdirSync, statSync, writeFileSync } from "fs";
 
 /**
- * @returns {RegExp}
- */
-function getValidDirectoryRegex() {
-	return /^(?<!\.)\w/;
-}
-
-/**
  * @param {string} path
  * @returns {boolean}
  */
 function isValidDirectory(path) {
 	try {
 		const name = path.split("/").pop();
-		return getValidDirectoryRegex().test(name) && statSync(path).isDirectory();
+		return /^(?<!\.)\w/.test(name) && statSync(path).isDirectory();
 	}catch(ex) {
 		// ignore
 	}
 	return false;
-}
-
-/**
- *
- * @returns {RegExp}
- */
-function getValidFileRegex() {
-	return /(?<!index)\.([mc])?ts$/;
 }
 
 /**
@@ -36,7 +21,7 @@ function getValidFileRegex() {
 function isValidFile(path) {
 	try {
 		const name = path.split("/").pop();
-		return getValidFileRegex().test(name) && statSync(path).isFile();
+		return /(?<!index)\.[mc]?ts$/.test(name) && statSync(path).isFile();
 	}catch(ex) {
 		// ignore
 	}
@@ -117,13 +102,15 @@ function process(folderPath, recursive) {
 	const subNames = getSubFolders(folderPath);
 	const fileNames = getTsFiles(folderPath);
 
+	const fileFilterRegex = /index\.[cm]?ts/;
+	const exportFileRegex = /\.([mc])?ts/;
+
 	/** @type {(name: string) => boolean} */
 	const subFilter = name => name !== "internal";
+	/** @type {(name: string) => string} */
 	const exportSubMap = name => `export * from "./${name}/index.js";`;
-	const fileFilterRegex = /index\.[cm]ts/;
 	/** @type {(name: string) => boolean} */
 	const fileFilter = name => !fileFilterRegex.test(name);
-	const exportFileRegex = /\.([mc])?ts/;
 	/** @type {(match: string, prefix: string) => string} */
 	const exportFileReplacer = (_, prefix) => `.${prefix ?? ""}js`;
 	/** @type {(name: string) => string} */
