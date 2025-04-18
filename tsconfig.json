@@ -34,7 +34,6 @@
 
 		// number-utils
 		{ "path": "./packages/utils/color-utils" },
-		{ "path": "./packages/utils/temperature-utils" },
 
 		// cache-utils
 		{ "path": "./packages/utils/class-utils" },

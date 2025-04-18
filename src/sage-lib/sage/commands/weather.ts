@@ -1,8 +1,7 @@
-import { isDefined, parseEnum, type Args, type EnumLike } from "@rsc-utils/core-utils";
+import { fahrenheitToCelsius, isDefined, parseEnum, type Args, type EnumLike } from "@rsc-utils/core-utils";
 import { Season, TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "@rsc-utils/date-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { AttachmentBuilder } from "discord.js";
 import { GDate } from "../../../sage-cal/pf2e/GDate.js";
 import { ClimateType, CloudCoverType, ElevationType, WeatherGenerator, WindType, type IWeatherDayResult } from "../../../sage-pf2e/index.js";

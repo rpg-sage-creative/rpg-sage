@@ -1,7 +1,6 @@
-import { isDefined, parse, stringify } from "@rsc-utils/core-utils";
+import { cloneJson, fahrenheitToCelsius, isDefined } from "@rsc-utils/core-utils";
 import { Season } from "@rsc-utils/date-utils";
 import { randomBoolean, randomInt, rollDiceString, rollDie, type SimpleDice } from "@rsc-utils/dice-utils";
-import { fahrenheitToCelsius } from "@rsc-utils/temperature-utils";
 import { GDate } from "../../sage-cal/pf2e/GDate.js";
 import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "../index.js";
 import {
@@ -381,7 +380,7 @@ function getWind(precip?: PrecipitationTableItem): WindTableItem {
 	if (precip) {
 		const lower = precip.precipitation.toLowerCase();
 		if (lower.includes("fog")) {
-			return parse(stringify(WindStrength[0]));
+			return cloneJson(WindStrength[0]);
 		}
 		if (lower.includes("thunderstorm")) {
 			return rollOnTable("ThunderstormWinds");
