@@ -1,12 +1,6 @@
-import { TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "@rsc-utils/date-utils";
+import { TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "@rsc-utils/core-utils";
 import { SageDate } from "../SageDate.js";
-import {
-	DayType,
-	Days,
-	MonthType,
-	Months,
-	type TDayType, type TMonthType
-} from "./cal.js";
+import { DayType, Days, MonthType, Months, type TDayType, type TMonthType } from "./cal.js";
 
 export class GDate extends SageDate<GDate, DayType, TDayType, MonthType, TMonthType> {
 

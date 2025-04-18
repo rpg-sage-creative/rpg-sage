@@ -1,4 +1,4 @@
-import { type DateLike, Day, type DayName, Month, type MonthName, getDateStrings, getDayNames, getMonthNames } from "@rsc-utils/date-utils";
+import { type DateLike, Day, type DayName, Month, type MonthName, getDateStrings, getDayNames, getMonthNames } from "@rsc-utils/core-utils";
 
 const DayMS = 1000 * 60 * 60 * 24;
 

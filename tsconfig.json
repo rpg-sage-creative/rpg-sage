@@ -22,7 +22,6 @@
 		// core-utils
 		{ "path": "./packages/utils/array-utils" },
 		{ "path": "./packages/utils/cache-utils" },
-		{ "path": "./packages/utils/date-utils" },
 		{ "path": "./packages/utils/dice-utils" },
 		{ "path": "./packages/utils/language-utils" },
 		{ "path": "./packages/utils/progress-utils" },
