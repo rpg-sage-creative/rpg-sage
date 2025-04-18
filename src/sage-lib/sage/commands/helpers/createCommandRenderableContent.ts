@@ -1,7 +1,7 @@
-import { RenderableContent } from "@rsc-utils/render-utils";
-import { ActiveBot } from "../../model/ActiveBot";
-import { ColorType } from "../../model/HasColorsCore";
-import { createRenderableContent } from "./createRenderableContent";
+import type { RenderableContent } from "@rsc-utils/core-utils";
+import { ActiveBot } from "../../model/ActiveBot.js";
+import { ColorType } from "../../model/HasColorsCore.js";
+import { createRenderableContent } from "./createRenderableContent.js";
 
 
 export function createCommandRenderableContent(title?: string): RenderableContent {

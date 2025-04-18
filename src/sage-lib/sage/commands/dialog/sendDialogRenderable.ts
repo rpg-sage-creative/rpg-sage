@@ -1,6 +1,5 @@
-import { errorReturnEmptyArray } from "@rsc-utils/core-utils";
+import { errorReturnEmptyArray, type RenderableContent } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { Message } from "discord.js";
 import { getLocalizedText } from "../../../../sage-lang/getLocalizedText.js";
 import { replaceWebhook, sendWebhook, type AuthorOptions } from "../../../discord/messages.js";

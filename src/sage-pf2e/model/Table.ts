@@ -1,9 +1,8 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import { RenderableContent } from "../data/RenderableContent";
-import { find } from "../data/Repository";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
-
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { find } from "../data/Repository.js";
+import type { SourcedCore } from "./base/HasSource.js";
+import { HasSource } from "./base/HasSource.js";
 
 // #region Core Interface
 export interface TableCore extends SourcedCore<"Table"> {

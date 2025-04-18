@@ -1,5 +1,4 @@
-import { addCommas, toSuperscript, type OrUndefined } from "@rsc-utils/core-utils";
-import { RenderableContent } from "@rsc-utils/render-utils";
+import { addCommas, RenderableContent, toSuperscript, type OrUndefined } from "@rsc-utils/core-utils";
 import type { SearchScore } from "@rsc-utils/search-utils";
 import { AonBase } from "../../../sage-pf2e/model/base/AonBase.js";
 import type { Base } from "../../../sage-pf2e/model/base/Base.js";

@@ -26,7 +26,6 @@ COPY node_modules/@rsc-utils/discord-utils/ ./discord-utils
 COPY node_modules/@rsc-utils/io-utils/ ./io-utils
 COPY node_modules/@rsc-utils/language-utils/ ./language-utils
 COPY node_modules/@rsc-utils/progress-utils/ ./progress-utils
-COPY node_modules/@rsc-utils/render-utils/ ./render-utils
 COPY node_modules/@rsc-utils/search-utils/ ./search-utils
 COPY node_modules/@rsc-utils/string-utils/ ./string-utils
 

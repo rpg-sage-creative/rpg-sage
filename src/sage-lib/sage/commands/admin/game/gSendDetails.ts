@@ -1,8 +1,7 @@
 import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
-import { getDateStrings, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { getDateStrings, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { addZeroWidthSpaces, toHumanReadable } from "@rsc-utils/discord-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { GuildMember, TextChannel } from "discord.js";
 import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
 import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";

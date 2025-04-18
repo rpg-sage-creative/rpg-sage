@@ -1,9 +1,8 @@
-import type { Renderable, RenderableContent } from "@rsc-utils/render-utils";
-import type { Awaitable, Optional } from "@rsc-utils/core-utils";
-import type { SageInteraction } from "../sage/model/SageInteraction";
-import type { SageMessage } from "../sage/model/SageMessage";
-import type { SageReaction } from "../sage/model/SageReaction";
-import type { ArgsManager } from "./ArgsManager";
+import type { Awaitable, Optional, Renderable, RenderableContent } from "@rsc-utils/core-utils";
+import type { SageInteraction } from "../sage/model/SageInteraction.js";
+import type { SageMessage } from "../sage/model/SageMessage.js";
+import type { SageReaction } from "../sage/model/SageReaction.js";
+import type { ArgsManager } from "./ArgsManager.js";
 
 export interface IMenuRenderable extends Renderable {
 	getMenuLength(): number;

@@ -1,4 +1,4 @@
-import type { RenderableContent } from "@rsc-utils/render-utils";
+import type { RenderableContent } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import { send } from "../../discord/messages.js";
 import type { SageCache } from "../model/SageCache.js";

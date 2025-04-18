@@ -1,12 +1,11 @@
-import type { OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { TRarity } from "../../common";
-import { COMMON, RARITIES } from "../../common";
-import { RenderableContent } from "../../data/RenderableContent";
-import { find, findByValue } from "../../data/Repository";
-import { Base, type BaseCore } from "./Base";
-import type { Source } from "./Source";
-import type { IHasRarity, IHasTraits, RarityCore, TraitsCore } from "./interfaces";
+import type { OrNull, OrUndefined, RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { TRarity } from "../../common.js";
+import { COMMON, RARITIES } from "../../common.js";
+import { RenderableContent } from "../../data/RenderableContent.js";
+import { find, findByValue } from "../../data/Repository.js";
+import { Base, type BaseCore } from "./Base.js";
+import type { Source } from "./Source.js";
+import type { IHasRarity, IHasTraits, RarityCore, TraitsCore } from "./interfaces.js";
 
 export type TSourceInfoRaw = {
 	page?: number;

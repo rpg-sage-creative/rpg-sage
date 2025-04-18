@@ -1,9 +1,9 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import { StringMatcher } from "@rsc-utils/string-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import { RenderableContent } from "../../data/RenderableContent";
-import { findByValue, type IFile } from "../../data/Repository";
-import { Base, type BaseCore } from "./Base";
+import { StringMatcher } from "@rsc-utils/string-utils";
+import { RenderableContent } from "../../data/RenderableContent.js";
+import { findByValue, type IFile } from "../../data/Repository.js";
+import { Base, type BaseCore } from "./Base.js";
 
 export interface SourceCore extends BaseCore<"Source"> {
 	apName?: string;

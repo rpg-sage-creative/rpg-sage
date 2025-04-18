@@ -1,5 +1,4 @@
-import { error, warn } from "@rsc-utils/core-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
+import { error, warn, type RenderableContent } from "@rsc-utils/core-utils";
 import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { registerCommandRegex } from "../cmd.js";

@@ -1,6 +1,5 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { sortPrimitive, warn, type Comparable, type SortResult } from "@rsc-utils/core-utils";
-import type { Renderable, RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
+import { sortPrimitive, warn, type Comparable, type Renderable, type SortResult, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import { SearchInfo, SearchScore, type Searchable } from "@rsc-utils/search-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import { NEWLINE, TAB } from "../../common.js";

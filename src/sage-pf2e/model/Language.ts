@@ -1,9 +1,9 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import { RenderableContent } from "../data/RenderableContent";
-import { Feature } from "./Feature";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { Feature } from "./Feature.js";
+import type { SourcedCore } from "./base/HasSource.js";
+import { HasSource } from "./base/HasSource.js";
 
 export interface LanguageCore extends SourcedCore<"Language"> {
 	speakers: string[];

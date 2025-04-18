@@ -24,7 +24,6 @@
 		{ "path": "./packages/utils/dice-utils" },
 		{ "path": "./packages/utils/language-utils" },
 		{ "path": "./packages/utils/progress-utils" },
-		{ "path": "./packages/utils/render-utils" },
 		{ "path": "./packages/utils/string-utils" },
 
 		// progress-utils

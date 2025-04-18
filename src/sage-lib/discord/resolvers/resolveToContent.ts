@@ -1,5 +1,5 @@
+import type { RenderableContentResolvable } from "@rsc-utils/core-utils";
 import { resolveEmbed, type EmbedResolvable } from "@rsc-utils/discord-utils";
-import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { SageCache } from "../../sage/model/SageCache.js";
 import { getValueToAppend } from "./getValueToAppend.js";
 import { resolveToEmbeds } from "./resolveToEmbeds.js";

@@ -1,7 +1,6 @@
 import { EphemeralMap } from "@rsc-utils/cache-utils";
-import { error, errorReturnFalse, errorReturnNull, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { error, errorReturnFalse, errorReturnNull, randomSnowflake, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { createActionRow } from "@rsc-utils/discord-utils";
-import type { RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Message } from "discord.js";
 import type { SageCommand } from "../sage/model/SageCommand.js";
 import type { SageInteraction } from "../sage/model/SageInteraction.js";

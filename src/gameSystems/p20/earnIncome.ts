@@ -1,6 +1,5 @@
 import { GameSystemType, parseGameSystem } from "@rsc-sage/types";
-import { addCommas, nth, type Snowflake } from "@rsc-utils/core-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
+import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type MessageActionRowComponent } from "discord.js";
 import { Dice } from "../../sage-dice/dice/pf2e/index.js";
 import { DieRollGrade } from "../../sage-dice/index.js";

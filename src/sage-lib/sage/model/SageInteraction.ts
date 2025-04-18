@@ -1,7 +1,6 @@
 import type { Cache } from "@rsc-utils/cache-utils";
-import { debug, isDefined, type Snowflake } from "@rsc-utils/core-utils";
+import { debug, isDefined, RenderableContent, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, type DInteraction, type MessageTarget } from "@rsc-utils/discord-utils";
-import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { isString } from "@rsc-utils/string-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";

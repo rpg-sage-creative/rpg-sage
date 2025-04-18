@@ -1,16 +1,15 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import type { TObjectQuantity } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import { findByValue } from "../data/Repository";
-import type { Ammunition } from "./Ammunition";
-import type { Armor } from "./Armor";
-import { Bulk } from "./Bulk";
-import { Coins } from "./Coins";
-import type { Gear } from "./Gear";
-import { getQuantity, toObjectQuantities } from "./HasBulk";
-import type { Weapon } from "./Weapon";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { TObjectQuantity } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { findByValue } from "../data/Repository.js";
+import type { Ammunition } from "./Ammunition.js";
+import type { Armor } from "./Armor.js";
+import { Bulk } from "./Bulk.js";
+import { Coins } from "./Coins.js";
+import type { Gear } from "./Gear.js";
+import { getQuantity, toObjectQuantities } from "./HasBulk.js";
+import type { Weapon } from "./Weapon.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 type TClassKitItem = Weapon | Ammunition | Armor | Gear;
 

@@ -1,11 +1,10 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import { MDASH, NEWLINE, TAB } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import { filter } from "../data/Repository";
-import type { BulkCore } from "./HasBulk";
-import { HasBulk } from "./HasBulk";
-import type { Weapon } from "./Weapon";
+import { MDASH, NEWLINE, TAB } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { filter } from "../data/Repository.js";
+import { HasBulk, type BulkCore } from "./HasBulk.js";
+import type { Weapon } from "./Weapon.js";
 
 export interface AmmunitionCore extends BulkCore<"Ammunition"> {
 	quantity: number;

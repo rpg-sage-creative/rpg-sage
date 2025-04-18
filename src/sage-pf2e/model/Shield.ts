@@ -1,8 +1,8 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import { MDASH, NEWLINE, TAB, toModifier } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import type { BulkCore } from "./HasBulk";
-import { HasBulk } from "./HasBulk";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { MDASH, NEWLINE, TAB, toModifier } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import type { BulkCore } from "./HasBulk.js";
+import { HasBulk } from "./HasBulk.js";
 
 /**************************************************************************************************************************/
 // Interface and Class

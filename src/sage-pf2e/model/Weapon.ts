@@ -1,14 +1,14 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import type { TWeaponCategory, TWeaponGroup, TWeaponHands, TWeaponType } from "../common";
-import { MDASH, NEWLINE, TAB } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import { filter, findByValue } from "../data/Repository";
-import type { Ammunition } from "./Ammunition";
-import type { BulkCore } from "./HasBulk";
-import { HasBulk } from "./HasBulk";
-import type { Trait } from "./Trait";
-import type { WeaponGroup } from "./WeaponGroup";
+import type { TWeaponCategory, TWeaponGroup, TWeaponHands, TWeaponType } from "../common.js";
+import { MDASH, NEWLINE, TAB } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { filter, findByValue } from "../data/Repository.js";
+import type { Ammunition } from "./Ammunition.js";
+import type { BulkCore } from "./HasBulk.js";
+import { HasBulk } from "./HasBulk.js";
+import type { Trait } from "./Trait.js";
+import type { WeaponGroup } from "./WeaponGroup.js";
 
 export interface WeaponCore extends BulkCore<"Weapon"> {
 	ammunition?: string;

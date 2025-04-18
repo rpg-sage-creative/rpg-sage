@@ -1,6 +1,5 @@
-import { error, omit, type Optional, warn } from "@rsc-utils/core-utils";
+import { error, omit, type Optional, type RenderableContentResolvable, warn } from "@rsc-utils/core-utils";
 import { splitMessageOptions } from "@rsc-utils/discord-utils";
-import { type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { BaseMessageOptions, InteractionReplyOptions, Message, MessageEditOptions } from "discord.js";
 import { deleteMessage, isDeletable } from "../../discord/deletedMessages.js";
 import type { SageCommand, TSendArgs } from "./SageCommand.js";

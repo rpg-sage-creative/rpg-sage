@@ -1,6 +1,5 @@
-import { partition } from "@rsc-utils/core-utils";
+import { partition, type RenderableContent } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, toUserMention } from "@rsc-utils/discord-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { StringSelectMenuInteraction } from "discord.js";
 import type { Macro } from "../../../model/Macro.js";
 import { MacroOwner } from "../../../model/MacroOwner.js";

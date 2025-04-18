@@ -1,6 +1,5 @@
-import { error, warn, warnReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { error, RenderableContent, warn, warnReturnNull, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { addInvalidWebhookUsername, DiscordKey, isDMBased, isGuildBased, isMessage, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget } from "@rsc-utils/discord-utils";
-import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";

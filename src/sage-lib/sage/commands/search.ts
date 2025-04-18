@@ -1,5 +1,4 @@
-import { Collection } from "@rsc-utils/core-utils";
-import { RenderableContent } from "@rsc-utils/render-utils";
+import { Collection, RenderableContent } from "@rsc-utils/core-utils";
 import { type Base, RARITIES } from "../../../sage-pf2e/index.js";
 import type { SearchResults } from "../../../sage-search/SearchResults.js";
 import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common.js";

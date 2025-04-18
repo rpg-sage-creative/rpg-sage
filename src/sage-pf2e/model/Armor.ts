@@ -1,12 +1,11 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import { MDASH, NEWLINE, TAB, toModifier } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import { filter, findByValue } from "../data/Repository";
-import type { ArmorGroup } from "./ArmorGroup";
-import type { BulkCore } from "./HasBulk";
-import { HasBulk } from "./HasBulk";
-import type { Trait } from "./Trait";
+import { MDASH, NEWLINE, TAB, toModifier } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { filter, findByValue } from "../data/Repository.js";
+import type { ArmorGroup } from "./ArmorGroup.js";
+import { HasBulk, type BulkCore } from "./HasBulk.js";
+import type { Trait } from "./Trait.js";
 
 /*
 // function sortGear(a: Gear, b: Gear): number {

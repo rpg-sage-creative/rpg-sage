@@ -1,10 +1,10 @@
 import { HasCore } from "@rsc-utils/class-utils";
-import { RenderableContent, type Renderable } from "@rsc-utils/render-utils";
+import { RenderableContent, type Renderable } from "@rsc-utils/core-utils";
 import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import { createSearchResultUrl } from ".";
-import type { TResultsLink } from "../";
-import type { IHasName } from "../../../sage-pf2e";
+import type { IHasName } from "../../../sage-pf2e/index.js";
+import type { TResultsLink } from "../index.js";
+import { createSearchResultUrl } from "./index.js";
 
 /**
  * temp solution for Sf1 search results using the existing search output mechanism

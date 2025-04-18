@@ -1,5 +1,4 @@
-import { remove } from "@rsc-utils/core-utils";
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
+import { remove, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { findByValue } from "../data/Repository.js";
 import { Ancestry } from "./Ancestry.js";

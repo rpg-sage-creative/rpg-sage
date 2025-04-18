@@ -1,7 +1,6 @@
-import { error, filterAndMap, info, isDefined, sortComparable, toUnique, toUniqueDefined, verbose } from "@rsc-utils/core-utils";
+import { error, filterAndMap, info, isDefined, sortComparable, toUnique, toUniqueDefined, verbose, type RenderableContent } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e/index.js";
 import { ArgsManager } from "../../discord/ArgsManager.js";

@@ -1,6 +1,5 @@
-import { errorReturnEmptyArray, errorReturnNull, warnReturnNull, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnEmptyArray, errorReturnNull, RenderableContent, warnReturnNull, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
-import { RenderableContent } from "@rsc-utils/render-utils";
 import { AttachmentBuilder, type Message } from "discord.js";
 import type { TDiceOutput } from "../../../../sage-dice/common.js";
 import type { GameCharacter } from "../../model/GameCharacter.js";

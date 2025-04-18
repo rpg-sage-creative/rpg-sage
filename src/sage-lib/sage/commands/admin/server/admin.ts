@@ -1,6 +1,5 @@
-import { forEachAsync, isDefined, mapAsync, type Snowflake } from "@rsc-utils/core-utils";
+import { forEachAsync, isDefined, mapAsync, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { User } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { SageCommand } from "../../../model/SageCommand.js";

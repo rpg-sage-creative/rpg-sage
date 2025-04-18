@@ -1,5 +1,5 @@
+import type { RenderableContent } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createMacroComponents } from "./createMacroComponents.js";
 import { getArgs, type Args } from "./getArgs.js";

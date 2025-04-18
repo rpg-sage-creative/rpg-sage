@@ -1,9 +1,8 @@
-import { rollDie } from "@rsc-utils/dice-utils";
-import { shuffle } from "@rsc-utils/dice-utils";
-import type { RenderableContent } from "@rsc-utils/render-utils";
+import type { RenderableContent } from "@rsc-utils/core-utils";
+import { rollDie, shuffle } from "@rsc-utils/dice-utils";
 import { BULLET } from "@rsc-utils/string-utils";
-import type { SageMessage } from "../../model/SageMessage";
-import { addScenario, createPfsRenderableContent, type TPfsFaction, type TTierInfo } from "./pfs";
+import type { SageMessage } from "../../model/SageMessage.js";
+import { addScenario, createPfsRenderableContent, type TPfsFaction, type TTierInfo } from "./pfs.js";
 
 type TMission = "Flotsam Graveyard" | "Petals District" | "Precipice Quarter" | "Westgate";
 type TFactionLeader = {
