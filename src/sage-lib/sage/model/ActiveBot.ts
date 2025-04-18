@@ -46,12 +46,12 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 			ActiveBot.sns = false;
 		}
-		ActiveBot.sendToSuperUser(...args);
+		ActiveBot.sendToSuperUser(`# error`, ...args);
 	}
 	public static async sendToSuperUser(...args: unknown[]): Promise<void> {
 		const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
 		if (user) {
-			const contents = chunk(`# error\n${args.map(formatArg).join("\n")}`, 2000);
+			const contents = chunk(args.map(formatArg).join("\n"), 2000);
 			for (const content of contents) {
 				await user.send(wrapUrl(content, true));
 			}
