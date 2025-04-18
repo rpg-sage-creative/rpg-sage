@@ -1,26 +1,9 @@
 import { GameType, getGameSystems, parseGameSystem, type GameSystem } from "@rsc-sage/types";
-import { HasCore, type IdCore } from "@rsc-utils/class-utils";
-import { debug, parseEnum, randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import {
-	CritMethodType,
-	DiceOutputType,
-	DiceSecretMethodType,
-	type TDiceOutput
-} from "../../common.js";
+import { debug, HasCore, parseEnum, randomSnowflake, type IdCore, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { CritMethodType, DiceOutputType, DiceSecretMethodType, type TDiceOutput } from "../../common.js";
 import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
-import {
-	DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll,
-	type Dice as baseDice,
-	type DicePart as baseDicePart
-} from "../base/index.js";
-import type {
-	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
-	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice,
-	TDiceGroup as baseTDiceGroup,
-	TDiceGroupRoll as baseTDiceGroupRoll,
-	TDicePart as baseTDicePart
-} from "../base/types.js";
+import { DiceGroup as baseDiceGroup, DiceGroupRoll as baseDiceGroupRoll, type Dice as baseDice, type DicePart as baseDicePart } from "../base/index.js";
+import type { DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore, DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice, TDiceGroup as baseTDiceGroup, TDiceGroupRoll as baseTDiceGroupRoll, TDicePart as baseTDicePart } from "../base/types.js";
 
 type DiceSystem = { DiceGroup:typeof baseDiceGroup; DiceGroupRoll:typeof baseDiceGroupRoll; };
 const diceSystems = new Map<GameType, DiceSystem>();

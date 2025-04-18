@@ -1,5 +1,4 @@
-import { HasCore, type Core } from "@rsc-utils/class-utils";
-import { sortComparable, sortPrimitive, toUniqueDefined, type Optional, type Sorter, type UUID } from "@rsc-utils/core-utils";
+import { HasCore, sortComparable, sortPrimitive, toUniqueDefined, type Core, type Optional, type Sorter, type UUID } from "@rsc-utils/core-utils";
 import { randomItem } from "@rsc-utils/dice-utils";
 import type { TMagicTradition } from "../common.js";
 import type { ArcaneSchool } from "./ArcaneSchool.js";

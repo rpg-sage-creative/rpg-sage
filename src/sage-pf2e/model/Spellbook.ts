@@ -1,12 +1,10 @@
-import { HasCore, type Core } from "@rsc-utils/class-utils";
-import { randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { HasCore, randomSnowflake, type Core, type Snowflake } from "@rsc-utils/core-utils";
 import { randomItem, rollDie } from "@rsc-utils/dice-utils";
-import type { TMagicTradition } from "../common";
-import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL } from "../common";
-import { filter, findByValue } from "../data/Repository";
-import type { ArcaneSchool } from "./ArcaneSchool";
-import { SpellCollection } from "./SpellCollection";
-import { Source } from "./base/Source";
+import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL, type TMagicTradition } from "../common.js";
+import { filter, findByValue } from "../data/Repository.js";
+import type { ArcaneSchool } from "./ArcaneSchool.js";
+import { SpellCollection } from "./SpellCollection.js";
+import { Source } from "./base/Source.js";
 
 /*
 // function valueOfSpell(spellLevel: number): number {

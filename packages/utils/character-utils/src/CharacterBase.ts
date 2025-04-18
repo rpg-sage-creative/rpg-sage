@@ -1,5 +1,4 @@
-import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import type { Optional } from "@rsc-utils/core-utils";
+import { HasIdCore, type IdCore, type Optional } from "@rsc-utils/core-utils";
 
 type MessageReference = { channelId:string; guildId:string|undefined; messageId:string|undefined; };
 

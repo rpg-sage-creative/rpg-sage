@@ -1,5 +1,4 @@
-import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { partition } from "@rsc-utils/core-utils";
+import { HasIdCore, partition, type IdCore } from "@rsc-utils/core-utils";
 import type { IMapLocation } from "../map/map.js";
 import type { IWeatherDayResult } from "./WeatherGenerator.js";
 

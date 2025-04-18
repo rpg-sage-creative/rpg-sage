@@ -1,7 +1,7 @@
-import { HasCore, type Core } from "@rsc-utils/class-utils";
 import type { UUID } from "@rsc-utils/core-utils";
-import { DASH } from '../common';
-import { Spell } from "./Spell";
+import { HasCore, type Core } from "@rsc-utils/core-utils";
+import { DASH } from "../common.js";
+import { Spell } from "./Spell.js";
 
 export interface HeightenedSpellCore extends Core<"HeightenedSpell"> {
 	bumps: number;

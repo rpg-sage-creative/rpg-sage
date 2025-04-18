@@ -1,4 +1,4 @@
-import { type Core } from "@rsc-utils/class-utils";
+import type { Core } from "@rsc-utils/core-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { TRarity } from "../../common.js";
 import type { Base, BaseCore } from "./Base.js";
