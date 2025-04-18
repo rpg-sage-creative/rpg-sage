@@ -20,16 +20,13 @@
 		{ "path": "./packages/utils/core-utils" },
 
 		// core-utils
-		{ "path": "./packages/utils/cache-utils" },
+		{ "path": "./packages/utils/class-utils" },
 		{ "path": "./packages/utils/dice-utils" },
 		{ "path": "./packages/utils/progress-utils" },
 		{ "path": "./packages/utils/string-utils" },
 
 		// progress-utils
 		{ "path": "./packages/utils/io-utils" },
-
-		// cache-utils
-		{ "path": "./packages/utils/class-utils" },
 
 		// class-utils
 		{ "path": "./packages/utils/character-utils" },

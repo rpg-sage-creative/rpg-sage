@@ -1,6 +1,5 @@
 import { getTupperBoxId } from "@rsc-sage/env";
-import { uncache } from "@rsc-utils/cache-utils";
-import { debug, errorReturnFalse, errorReturnNull, orNilSnowflake, parseUuid, silly, warn, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { debug, errorReturnFalse, errorReturnNull, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordKey, fetchIfPartial, isDiscordApiError, toHumanReadable, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Channel, Client, User as DUser, Guild, GuildMember, Interaction, Message, MessageReference } from "discord.js";
@@ -281,7 +280,7 @@ export class SageCache {
 	private clone(core: SageCacheCore): SageCache {
 		return new SageCache(core);
 	}
-	
+
 	public cloneForChannel(channel: Optional<MessageTarget>): SageCache {
 		const core = { ...this.core };
 		if (channel) {

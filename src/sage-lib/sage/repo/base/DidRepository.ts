@@ -1,9 +1,8 @@
-import { EphemeralMap } from "@rsc-utils/cache-utils";
-import { type IdCore } from "@rsc-utils/class-utils";
-import { errorReturnNull, randomSnowflake, verbose, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import type { IdCore } from "@rsc-utils/class-utils";
+import { EphemeralMap, errorReturnNull, randomSnowflake, verbose, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { readJsonFile, symLinkSync } from "@rsc-utils/io-utils";
 import { existsSync } from "fs";
-import { HasIdCoreAndSageCache, IdRepository } from "./IdRepository";
+import { HasIdCoreAndSageCache, IdRepository } from "./IdRepository.js";
 
 export interface DidCore<T extends string = string> extends IdCore<T> {
 	/** @deprecated */
