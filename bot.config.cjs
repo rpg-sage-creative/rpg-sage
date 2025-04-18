@@ -11,11 +11,11 @@ const appNames = [
 	"bot",
 ];
 const apps = appNames.map(app => {
-	const restartMB = app === "bot" ? 750 : 500;
+	// const restartMB = app === "bot" ? 750 : 500;
 	return {
 		name: `sage-${app}`,
 		script: `./build/${app}.mjs`,
-		args: `--max-memory-restart ${restartMB}M`,
+		// args: `--max-memory-restart ${restartMB}M`,
 		node_args: "--experimental-modules --es-module-specifier-resolution=node",
 
 		append_env_to_name: true,
