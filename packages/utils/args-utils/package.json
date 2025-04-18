@@ -1,6 +1,5 @@
 {"name":"@rsc-utils/args-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
   "@rsc-utils/core-utils": "^0.0.0",
   "@rsc-utils/array-utils": "^0.0.0",
-  "@rsc-utils/color-utils": "^0.0.0",
   "@rsc-utils/string-utils": "^0.0.0"
 }}

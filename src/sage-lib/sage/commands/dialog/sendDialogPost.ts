@@ -1,5 +1,4 @@
-import type { HexColorString } from "@rsc-utils/color-utils";
-import { errorReturnEmptyArray, errorReturnNull, warnReturnNull, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnEmptyArray, errorReturnNull, warnReturnNull, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import { AttachmentBuilder, type Message } from "discord.js";

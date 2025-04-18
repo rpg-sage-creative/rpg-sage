@@ -1,7 +1,4 @@
-import { Color } from "@rsc-utils/color-utils";
-import type { Optional } from "@rsc-utils/core-utils";
-import { warn } from "@rsc-utils/core-utils";
-import type { HexColorString } from "discord.js";
+import { Color, warn, type HexColorString, type Optional } from "@rsc-utils/core-utils";
 import { ColorType, type IColor } from "./HasColorsCore.js";
 
 export type TColorAndType = { type: ColorType; color: Color; };

@@ -31,9 +31,6 @@
 		// progress-utils
 		{ "path": "./packages/utils/io-utils" },
 
-		// number-utils
-		{ "path": "./packages/utils/color-utils" },
-
 		// cache-utils
 		{ "path": "./packages/utils/class-utils" },
 

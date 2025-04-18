@@ -1,4 +1,4 @@
-import type { HexColorString } from "@rsc-utils/color-utils";
+import type { HexColorString } from "@rsc-utils/core-utils";
 import type { DialogType } from "../../repo/base/IdRepository.js";
 import type { TDialogType } from "./TDialogType.js";
 

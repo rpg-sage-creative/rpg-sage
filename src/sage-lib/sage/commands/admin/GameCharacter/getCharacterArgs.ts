@@ -1,5 +1,4 @@
-import { Color } from "@rsc-utils/color-utils";
-import { debug, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Color, debug, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { VALID_URL } from "@rsc-utils/io-utils";
 import { dequote, getQuotedRegexSource, getWordCharacterRegexSource, isBlank } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";

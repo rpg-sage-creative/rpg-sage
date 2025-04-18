@@ -1,6 +1,5 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
-import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { applyChanges, errorReturnNull, getDataRoot, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Color, errorReturnNull, getDataRoot, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";

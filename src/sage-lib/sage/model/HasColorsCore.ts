@@ -1,4 +1,4 @@
-import type { HexColorString } from "@rsc-utils/color-utils";
+import type { HexColorString } from "@rsc-utils/core-utils";
 import type { Colors } from "./Colors.js";
 
 export enum ColorType {
