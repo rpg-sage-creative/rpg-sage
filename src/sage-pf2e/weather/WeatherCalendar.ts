@@ -1,7 +1,7 @@
-import { partition } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import type { IMapLocation } from "../map/map";
-import type { IWeatherDayResult } from "./WeatherGenerator";
+import { partition } from "@rsc-utils/core-utils";
+import type { IMapLocation } from "../map/map.js";
+import type { IWeatherDayResult } from "./WeatherGenerator.js";
 
 export interface WeatherCalendarCore extends IdCore<"WeatherCalendar"> {
 	data: IWeatherDayResult[];

@@ -1,12 +1,9 @@
-import { remove } from "@rsc-utils/array-utils";
-import type { TProficiency } from "../common";
-import type { FeatureCore } from "./Feature";
-import { Feature } from './Feature';
-import type { FeatureLevelCore } from "./Features";
-import { Features } from './Features';
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from './base/HasSource';
-import { Source } from './base/Source';
+import { remove } from "@rsc-utils/core-utils";
+import type { TProficiency } from "../common.js";
+import { Feature, type FeatureCore } from "./Feature.js";
+import { Features, type FeatureLevelCore } from "./Features.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
+import { Source } from "./base/Source.js";
 
 /** Returns the highest Skill Proficiency you can have at the given level. */
 function levelToSkillIncreaseMaxProficiency(level: number): TProficiency {

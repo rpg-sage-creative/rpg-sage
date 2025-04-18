@@ -1,9 +1,7 @@
 import { GameType } from "@rsc-sage/types";
-import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
-import type { Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { randomSnowflake, warn } from "@rsc-utils/core-utils";
+import { randomSnowflake, sortPrimitive, warn, type Optional, type OrNull, type OrUndefined, type SortResult } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
-import { type TokenParsers, ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData } from "@rsc-utils/string-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import {
 	CritMethodType,
@@ -11,12 +9,8 @@ import {
 	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
-	HasDieCore, type IDiceBase,
-	type IRollBase,
-	type TDiceLiteral,
-	type TDropKeepData,
-	type TSign,
-	type TTestData, UNICODE_LEFT_ARROW,
+	HasDieCore,
+	UNICODE_LEFT_ARROW,
 	cleanDescription,
 	dropKeepToString,
 	gradeRoll, gradeToEmoji,
@@ -25,7 +19,13 @@ import {
 	parseValueTestData,
 	sum,
 	sumDicePartRolls,
-	sumDropKeep
+	sumDropKeep,
+	type IDiceBase,
+	type IRollBase,
+	type TDiceLiteral,
+	type TDropKeepData,
+	type TSign,
+	type TTestData
 } from "../../common.js";
 import { correctEscapeForEmoji } from "../index.js";
 import type {

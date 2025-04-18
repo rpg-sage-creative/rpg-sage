@@ -1,6 +1,5 @@
-import { Collection, sortPrimitive } from "@rsc-utils/array-utils";
 import { CharacterBase } from "@rsc-utils/character-utils";
-import { addCommas, debug, errorReturnFalse, errorReturnNull, getDataRoot, nth, randomSnowflake, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, Collection, debug, errorReturnFalse, errorReturnNull, getDataRoot, nth, randomSnowflake, sortPrimitive, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { capitalize, StringMatcher } from "@rsc-utils/string-utils";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";

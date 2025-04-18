@@ -1,11 +1,9 @@
-import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
-import { error } from "@rsc-utils/core-utils";
+import { error, sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/core-utils";
 import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { parseSources, type TParsedSource } from "../../data/Repository.js";
 import type { Base } from "./Base.js";
-import type { SourcedCore, TSourceInfo } from "./HasSource.js";
-import { HasSource } from "./HasSource.js";
+import { HasSource, type SourcedCore, type TSourceInfo } from "./HasSource.js";
 import type { Source } from "./Source.js";
 import type { IHasArchives, IHasLink, IHasName } from "./interfaces.js";
 

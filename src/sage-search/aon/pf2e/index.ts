@@ -1,6 +1,5 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { sortPrimitive, type SortResult } from "@rsc-utils/array-utils";
-import { error } from "@rsc-utils/core-utils";
+import { error, sortPrimitive, type SortResult } from "@rsc-utils/core-utils";
 import { getJson } from "@rsc-utils/io-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import type { SearchScore } from "@rsc-utils/search-utils";

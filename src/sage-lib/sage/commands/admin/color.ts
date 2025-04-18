@@ -1,5 +1,4 @@
-import { partition } from "@rsc-utils/array-utils";
-import { Color, errorReturnNull, getEnumValues, isDefined, parseEnum } from "@rsc-utils/core-utils";
+import { Color, errorReturnNull, getEnumValues, isDefined, parseEnum, partition } from "@rsc-utils/core-utils";
 import { EmbedBuilder } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";

@@ -1,6 +1,5 @@
 import { GameSystemType, parseGameSystem } from "@rsc-sage/types";
-import { type SortResult } from "@rsc-utils/array-utils";
-import { warn, type Snowflake } from "@rsc-utils/core-utils";
+import { warn, type Snowflake, type SortResult } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";

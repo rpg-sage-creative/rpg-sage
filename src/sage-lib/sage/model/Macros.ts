@@ -1,5 +1,4 @@
-import { partition, sortByKey, sortPrimitive, toUniqueDefined } from "@rsc-utils/array-utils";
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { partition, sortByKey, sortPrimitive, toUniqueDefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Bot } from "./Bot.js";

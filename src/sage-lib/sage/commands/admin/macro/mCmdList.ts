@@ -1,4 +1,4 @@
-import { partition } from "@rsc-utils/array-utils";
+import { partition } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, toUserMention } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { StringSelectMenuInteraction } from "discord.js";

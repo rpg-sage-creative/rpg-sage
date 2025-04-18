@@ -1,5 +1,4 @@
-import { Collection } from "@rsc-utils/array-utils";
-import { randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Collection, randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { resolveSnowflake, type CanBeSnowflakeResolvable } from "@rsc-utils/discord-utils";
 import { CharactersMatch } from "./CharactersMatch.js";
 import type { Game } from "./Game.js";

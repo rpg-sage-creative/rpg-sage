@@ -1,15 +1,13 @@
-import { sortPrimitive } from "@rsc-utils/array-utils";
+import { sortPrimitive } from "@rsc-utils/core-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import type { IHasContents, TObjectQuantity } from "../common";
-import { COMMON, MDASH } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import { findByValue } from "../data/Repository";
-import { Coins } from "./Coins";
-import type { GearCategory } from "./GearCategory";
-import type { BulkCore } from "./HasBulk";
-import { HasBulk } from "./HasBulk";
-import type { TDetail } from "./base/interfaces";
+import { COMMON, MDASH, type IHasContents, type TObjectQuantity } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { findByValue } from "../data/Repository.js";
+import { Coins } from "./Coins.js";
+import type { GearCategory } from "./GearCategory.js";
+import { HasBulk, type BulkCore } from "./HasBulk.js";
+import type { TDetail } from "./base/interfaces.js";
 
 //#region Helpers
 

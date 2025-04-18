@@ -1,18 +1,15 @@
-import { toUnique } from "@rsc-utils/array-utils";
 import { type Core } from "@rsc-utils/class-utils";
-import { debug, nth, type UUID } from "@rsc-utils/core-utils";
+import { debug, nth, toUnique, type UUID } from "@rsc-utils/core-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import type { TMagicComponent, TMagicTradition } from "../common.js";
-import { ABILITIES, NEWLINE, toModifier } from "../common.js";
+import { ABILITIES, NEWLINE, toModifier, type TMagicComponent, type TMagicTradition } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { find, findByValue } from "../data/Repository.js";
 import type { ArcaneSchool } from "./ArcaneSchool.js";
 import type { Domain } from "./Domain.js";
 import { HeightenedSpell } from "./HeightenedSpell.js";
-import type { SourcedCore } from "./base/HasSource.js";
-import { HasSource } from "./base/HasSource.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 //#region types
 

@@ -1,8 +1,7 @@
-import { toUniqueDefined } from "@rsc-utils/array-utils";
+import { toUniqueDefined, type Optional, type OrNull } from "@rsc-utils/core-utils";
 import { rollDie } from "@rsc-utils/dice-utils";
-import type { Optional, OrNull } from "@rsc-utils/core-utils";
-import { Dice } from "../dice/base";
-import type { TDice } from "../dice/base/types";
+import { Dice } from "../dice/base/index.js";
+import type { TDice } from "../dice/base/types.js";
 
 const allTables: { [key: string]: Table<TableItem> } = {};
 

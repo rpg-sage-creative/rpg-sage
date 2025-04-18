@@ -1,11 +1,9 @@
-import { remove } from "@rsc-utils/array-utils";
-import { findByValue } from "../data/Repository";
-import type { Ancestry } from "./Ancestry";
-import type { FeatureCore } from "./Feature";
-import type { FeatureLevelCore } from "./Features";
-import { Features } from "./Features";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import { remove } from "@rsc-utils/core-utils";
+import { findByValue } from "../data/Repository.js";
+import type { Ancestry } from "./Ancestry.js";
+import type { FeatureCore } from "./Feature.js";
+import { Features, type FeatureLevelCore } from "./Features.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface BackgroundCore extends SourcedCore<"Background"> {
 	ancestry?: string;

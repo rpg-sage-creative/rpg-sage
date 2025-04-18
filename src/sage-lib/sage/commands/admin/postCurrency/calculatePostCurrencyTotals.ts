@@ -1,6 +1,5 @@
-import { type Snowflake } from "@rsc-utils/core-utils";
+import { sortByKey, type Snowflake } from "@rsc-utils/core-utils";
 import type { PostCurrencyData, PostCurrencyDataEvent, PostCurrencyDataTotal, PostCurrencyIncrement, PostCurrencyUserCount } from "./types.js";
-import { sortByKey } from "@rsc-utils/array-utils";
 
 /** returns the user counts that match the given increment. */
 function getUserCountsForIncrement(userCounts: PostCurrencyUserCount[], increment: PostCurrencyIncrement): PostCurrencyUserCount[] {

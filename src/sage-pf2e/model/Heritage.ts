@@ -1,13 +1,11 @@
-import { remove } from "@rsc-utils/array-utils";
+import { remove } from "@rsc-utils/core-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import { RenderableContent } from "../data/RenderableContent";
-import { findByValue } from "../data/Repository";
-import { Ancestry } from "./Ancestry";
-import type { FeatureCore } from "./Feature";
-import type { FeatureLevelCore } from "./Features";
-import { Features } from "./Features";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { findByValue } from "../data/Repository.js";
+import { Ancestry } from "./Ancestry.js";
+import type { FeatureCore } from "./Feature.js";
+import { Features, type FeatureLevelCore } from "./Features.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface HeritageCore extends SourcedCore<"Heritage"> {
 	ancestry: string;

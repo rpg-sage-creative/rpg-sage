@@ -31,7 +31,6 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types.js";
-// import { partition } from "@rsc-utils/array-utils";
 
 //#region Tokenizer
 function getParsers(): TokenParsers {

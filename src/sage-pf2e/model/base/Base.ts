@@ -1,23 +1,11 @@
-import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { warn } from "@rsc-utils/core-utils";
+import { sortPrimitive, warn, type Comparable, type SortResult } from "@rsc-utils/core-utils";
 import type { Renderable, RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { SearchInfo, SearchScore, type Searchable } from "@rsc-utils/search-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import { NEWLINE, TAB } from "../../common.js";
 import { RenderableContent } from "../../data/RenderableContent.js";
-import type {
-	ArchivedCore,
-	DetailedCore,
-	IHasArchives,
-	IHasDetails,
-	IHasLink,
-	IHasName,
-	LinkedCore,
-	NamedCore,
-	TDetail,
-	THasSuccessOrFailure
-} from "./interfaces.js";
+import type { ArchivedCore, DetailedCore, IHasArchives, IHasDetails, IHasLink, IHasName, LinkedCore, NamedCore, TDetail, THasSuccessOrFailure } from "./interfaces.js";
 
 function isSuccessFailureDetail(detail: TDetail | THasSuccessOrFailure): detail is THasSuccessOrFailure {
 	return ((<THasSuccessOrFailure>detail).success?.length ?? 0) > 0

@@ -1,4 +1,4 @@
-import { toUniqueDefined } from "@rsc-utils/array-utils";
+import { toUniqueDefined } from "@rsc-utils/core-utils";
 import { oneToUS, reduceNoiseUS } from "@rsc-utils/language-utils";
 import { dequote, tokenize } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";

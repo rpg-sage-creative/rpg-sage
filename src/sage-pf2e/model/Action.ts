@@ -1,11 +1,9 @@
-import type { SortResult } from "@rsc-utils/array-utils";
+import type { SortResult } from "@rsc-utils/core-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import type { TAction, TSkill } from "../common";
-import { NEWLINE, TAB } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import { NEWLINE, TAB, type TAction, type TSkill } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface ActionCore<T extends string = "Action"> extends SourcedCore<T> {
 	actionType?: TAction;

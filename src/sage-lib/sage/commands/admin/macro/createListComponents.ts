@@ -1,5 +1,4 @@
-import { partition } from "@rsc-utils/array-utils";
-import type { Snowflake } from "@rsc-utils/core-utils";
+import { partition, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { ELLIPSIS } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";

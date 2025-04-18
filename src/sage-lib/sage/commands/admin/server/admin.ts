@@ -1,5 +1,4 @@
-import { forEachAsync, mapAsync } from "@rsc-utils/array-utils";
-import { isDefined, type Snowflake } from "@rsc-utils/core-utils";
+import { forEachAsync, isDefined, mapAsync, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { User } from "discord.js";

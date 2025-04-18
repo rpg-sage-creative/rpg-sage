@@ -1,7 +1,6 @@
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
-import { sortPrimitive, type Comparable } from "@rsc-utils/array-utils";
 import { type IdCore } from "@rsc-utils/class-utils";
-import { applyChanges, isDefined, randomSnowflake, warn, type Args, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { applyChanges, isDefined, randomSnowflake, sortPrimitive, warn, type Args, type Comparable, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
 import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";

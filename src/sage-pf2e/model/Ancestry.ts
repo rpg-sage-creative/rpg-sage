@@ -1,13 +1,11 @@
-import { remove } from "@rsc-utils/array-utils";
+import { remove } from "@rsc-utils/core-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
-import { RenderableContent } from "../data/RenderableContent";
-import { filter } from "../data/Repository";
-import type { FeatureCore } from "./Feature";
-import { Feature } from "./Feature";
-import { Features } from "./Features";
-import type { Heritage } from "./Heritage";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import { RenderableContent } from "../data/RenderableContent.js";
+import { filter } from "../data/Repository.js";
+import { Feature, type FeatureCore } from "./Feature.js";
+import { Features } from "./Features.js";
+import type { Heritage } from "./Heritage.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface AncestryCore extends SourcedCore<"Ancestry"> {
 	// adventurers: string[];

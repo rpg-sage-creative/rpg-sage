@@ -20,7 +20,6 @@
 		{ "path": "./packages/utils/core-utils" },
 
 		// core-utils
-		{ "path": "./packages/utils/array-utils" },
 		{ "path": "./packages/utils/cache-utils" },
 		{ "path": "./packages/utils/dice-utils" },
 		{ "path": "./packages/utils/language-utils" },
@@ -38,13 +37,11 @@
 		{ "path": "./packages/utils/character-utils" },
 
 		// string-utils
+		{ "path": "./packages/utils/args-utils" },
 		{ "path": "./packages/utils/discord-utils" },
 
-		// array-utils, language-utils, string-utils
+		// language-utils, string-utils
 		{ "path": "./packages/utils/search-utils" },
-
-		// array-utils, color-utils, string-utils
-		{ "path": "./packages/utils/args-utils" },
 
 		{ "path": "./packages/sage/types" },
 		{ "path": "./packages/sage/env" },

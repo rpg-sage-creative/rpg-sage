@@ -1,12 +1,9 @@
-import { sortPrimitive } from "@rsc-utils/array-utils";
-import { isDefined } from "@rsc-utils/core-utils";
-import type { TProficiency } from "../common";
-import { ARMOR_UNARMORED, profToMod, TRAINED, UNTRAINED } from "../common";
-import { findById, findByValue } from "../data/Repository";
-import type { Feat } from "./Feat";
-import type { FeatureCore } from "./Feature";
-import { Feature } from "./Feature";
-import type { IHasMetadata } from "./Metadata";
+import { isDefined, sortPrimitive } from "@rsc-utils/core-utils";
+import { ARMOR_UNARMORED, profToMod, TRAINED, UNTRAINED, type TProficiency } from "../common.js";
+import { findById, findByValue } from "../data/Repository.js";
+import type { Feat } from "./Feat.js";
+import { Feature, type FeatureCore } from "./Feature.js";
+import type { IHasMetadata } from "./Metadata.js";
 
 export type TFeatureFilter = (feature: Feature, level: number) => boolean;
 export type TFeatureIterator = (feature: Feature, level: number) => void;

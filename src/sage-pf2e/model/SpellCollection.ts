@@ -1,13 +1,11 @@
-import { sortComparable, sortPrimitive, toUniqueDefined, type Sorter } from "@rsc-utils/array-utils";
 import { HasCore, type Core } from "@rsc-utils/class-utils";
+import { sortComparable, sortPrimitive, toUniqueDefined, type Optional, type Sorter, type UUID } from "@rsc-utils/core-utils";
 import { randomItem } from "@rsc-utils/dice-utils";
-import type { Optional } from "@rsc-utils/core-utils";
-import type { UUID } from "@rsc-utils/core-utils";
-import type { TMagicTradition } from "../common";
-import type { ArcaneSchool } from "./ArcaneSchool";
-import { HeightenedSpell } from "./HeightenedSpell";
-import { Spell } from "./Spell";
-import type { Source } from "./base/Source";
+import type { TMagicTradition } from "../common.js";
+import type { ArcaneSchool } from "./ArcaneSchool.js";
+import { HeightenedSpell } from "./HeightenedSpell.js";
+import { Spell } from "./Spell.js";
+import type { Source } from "./base/Source.js";
 
 
 function uniqueClean<T>(array: Optional<T>[], sorter: Sorter<any> = sortPrimitive): T[] {

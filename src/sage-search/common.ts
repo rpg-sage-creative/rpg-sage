@@ -1,5 +1,5 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { remove } from "@rsc-utils/array-utils";
+import { remove } from "@rsc-utils/core-utils";
 import { createWhitespaceRegex } from "@rsc-utils/string-utils";
 import type { SearchResults } from "./SearchResults.js";
 import { searchAonPf1e } from "./aon/pf1e/index.js";
