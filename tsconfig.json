@@ -22,7 +22,6 @@
 		// core-utils
 		{ "path": "./packages/utils/cache-utils" },
 		{ "path": "./packages/utils/dice-utils" },
-		{ "path": "./packages/utils/language-utils" },
 		{ "path": "./packages/utils/progress-utils" },
 		{ "path": "./packages/utils/string-utils" },
 
@@ -39,7 +38,7 @@
 		{ "path": "./packages/utils/args-utils" },
 		{ "path": "./packages/utils/discord-utils" },
 
-		// language-utils, string-utils
+		// core-utils, string-utils
 		{ "path": "./packages/utils/search-utils" },
 
 		{ "path": "./packages/sage/types" },

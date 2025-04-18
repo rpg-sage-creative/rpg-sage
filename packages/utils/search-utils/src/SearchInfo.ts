@@ -1,5 +1,4 @@
-import { toUniqueDefined } from "@rsc-utils/core-utils";
-import { oneToUS, reduceNoiseUS } from "@rsc-utils/language-utils";
+import { oneToUS, reduceNoiseUS, toUniqueDefined } from "@rsc-utils/core-utils";
 import { dequote, tokenize } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import { SearchScore, type SearchTermData } from "./SearchScore.js";
