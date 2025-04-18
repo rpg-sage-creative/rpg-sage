@@ -32,9 +32,6 @@
 		{ "path": "./packages/utils/args-utils" },
 		{ "path": "./packages/utils/discord-utils" },
 
-		// core-utils, string-utils
-		{ "path": "./packages/utils/search-utils" },
-
 		{ "path": "./packages/sage/types" },
 		{ "path": "./packages/sage/env" },
 

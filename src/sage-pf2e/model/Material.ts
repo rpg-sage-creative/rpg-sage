@@ -1,7 +1,6 @@
-import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import type { TQuality } from "../common";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import type { SearchInfo, SearchScore } from "@rsc-utils/core-utils";
+import type { TQuality } from "../common.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 /**************************************************************************************************************************/
 // Interfaces and Class

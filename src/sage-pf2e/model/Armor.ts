@@ -1,5 +1,5 @@
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
-import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/core-utils";
 import { MDASH, NEWLINE, TAB, toModifier } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { filter, findByValue } from "../data/Repository.js";

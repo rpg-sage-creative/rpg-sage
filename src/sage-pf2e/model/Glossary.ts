@@ -1,6 +1,5 @@
-import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from './base/HasSource';
+import type { SearchInfo, SearchScore } from "@rsc-utils/core-utils";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface GlossaryCore extends SourcedCore<"Glossary"> {
 	abbrev: string;

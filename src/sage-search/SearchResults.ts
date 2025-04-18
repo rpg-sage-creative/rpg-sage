@@ -1,5 +1,4 @@
-import { addCommas, RenderableContent, type OrUndefined, type Renderable } from "@rsc-utils/core-utils";
-import { HasScoredSearchables, SearchInfo, SearchScore, type Searchable } from "@rsc-utils/search-utils";
+import { addCommas, HasScoredSearchables, RenderableContent, SearchInfo, SearchScore, type OrUndefined, type Renderable, type Searchable } from "@rsc-utils/core-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { IMenuRenderable } from "../sage-lib/discord/index.js";
 import type { IHasName } from "../sage-pf2e/index.js";
@@ -38,10 +37,10 @@ export class SearchResults<T extends TSearchable = TSearchable> extends HasScore
 		return this.searchInfo.searchText;
 	}
 
-	public get theMatch(): T | null {
+	public get theMatch(): T | undefined {
 		const stringMatcher = StringMatcher.from(this.searchInfo.searchText),
 			matches = this.searchables.filter(obj => obj.matches(stringMatcher));
-		return matches.length === 1 && matches[0] || null;
+		return matches.length === 1 && matches[0] || undefined;
 	}
 
 

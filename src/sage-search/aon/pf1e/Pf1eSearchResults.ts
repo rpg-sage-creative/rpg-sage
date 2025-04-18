@@ -25,8 +25,8 @@ export class Pf1eSearchResults extends SearchResults<AonPf1SearchBase> {
 		return content;
 	}
 
-	public get theOne(): AonPf1SearchBase | null { return null; }
-	public get theMatch(): AonPf1SearchBase | null { return null; }
+	public get theOne(): AonPf1SearchBase | undefined { return undefined; }
+	public get theMatch(): AonPf1SearchBase | undefined { return undefined; }
 
 
 	// #region IMenuRenderable

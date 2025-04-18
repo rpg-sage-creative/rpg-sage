@@ -1,6 +1,5 @@
-import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import type { BulkCore } from "./HasBulk";
-import { HasBulk } from "./HasBulk";
+import type { SearchInfo, SearchScore } from "@rsc-utils/core-utils";
+import { HasBulk, type BulkCore } from "./HasBulk.js";
 
 /**************************************************************************************************************************/
 // Interface and Class

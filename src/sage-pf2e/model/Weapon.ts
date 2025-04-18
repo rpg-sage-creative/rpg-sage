@@ -1,12 +1,9 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
-import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import type { TWeaponCategory, TWeaponGroup, TWeaponHands, TWeaponType } from "../common.js";
-import { MDASH, NEWLINE, TAB } from "../common.js";
+import type { SearchInfo, SearchScore, RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { MDASH, NEWLINE, TAB, type TWeaponCategory, type TWeaponGroup, type TWeaponHands, type TWeaponType } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { filter, findByValue } from "../data/Repository.js";
 import type { Ammunition } from "./Ammunition.js";
-import type { BulkCore } from "./HasBulk.js";
-import { HasBulk } from "./HasBulk.js";
+import { HasBulk, type BulkCore } from "./HasBulk.js";
 import type { Trait } from "./Trait.js";
 import type { WeaponGroup } from "./WeaponGroup.js";
 

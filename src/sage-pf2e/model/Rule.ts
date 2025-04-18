@@ -1,9 +1,7 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
-import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
+import type { SearchInfo, SearchScore, RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import { RenderableContent } from "../data/RenderableContent.js";
 import type { ActionCore } from "./Action.js";
-import type { SourcedCore } from "./base/HasSource.js";
-import { HasSource } from "./base/HasSource.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 type TRuleChildArray = (RuleCore | ActionCore)[];
 

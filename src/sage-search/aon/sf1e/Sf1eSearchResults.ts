@@ -25,8 +25,8 @@ export class Sf1eSearchResults extends SearchResults<AonSf1SearchBase> {
 		return content;
 	}
 
-	public get theOne(): AonSf1SearchBase | null { return null; }
-	public get theMatch(): AonSf1SearchBase | null { return null; }
+	public get theOne(): AonSf1SearchBase | undefined { return undefined; }
+	public get theMatch(): AonSf1SearchBase | undefined { return undefined; }
 
 	// #region IMenuRenderable
 

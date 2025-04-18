@@ -1,5 +1,5 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { SearchScore } from "@rsc-utils/search-utils";
+import { SearchScore } from "@rsc-utils/core-utils";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
 import type { TParsedSearchInfo } from "../../common.js";
 import { type TResultsLink, getSearchResultsLinks, sortSearchResults } from "../index.js";

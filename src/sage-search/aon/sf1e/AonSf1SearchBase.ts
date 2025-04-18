@@ -1,5 +1,4 @@
-import { HasCore, RenderableContent, type Renderable } from "@rsc-utils/core-utils";
-import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
+import { HasCore, RenderableContent, type Renderable, type SearchInfo, type SearchScore, type Searchable } from "@rsc-utils/core-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { IHasName } from "../../../sage-pf2e/index.js";
 import type { TResultsLink } from "../index.js";
