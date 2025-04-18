@@ -1,11 +1,11 @@
-import { nth } from "@rsc-utils/number-utils";
+import { nth } from "@rsc-utils/core-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
-import { NEWLINE } from "../common";
-import { RenderableContent } from "../data/RenderableContent";
-import type { TSpellHeighten } from "./Spell";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import { NEWLINE } from "../common.js";
+import { RenderableContent } from "../data/RenderableContent.js";
+import type { TSpellHeighten } from "./Spell.js";
+import type { SourcedCore } from "./base/HasSource.js";
+import { HasSource } from "./base/HasSource.js";
 
 export interface RitualCore extends SourcedCore<"Ritual"> {
 	level: number;

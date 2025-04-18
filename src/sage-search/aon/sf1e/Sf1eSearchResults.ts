@@ -1,8 +1,8 @@
-import { addCommas } from "@rsc-utils/number-utils";
+import { addCommas } from "@rsc-utils/core-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
-import { createSearchUrl } from ".";
 import { SearchResults } from "../../SearchResults.js";
 import type { AonSf1SearchBase } from "./AonSf1SearchBase.js";
+import { createSearchUrl } from "./index.js";
 
 function createClickableSearchLink(searchResults: Sf1eSearchResults, label: string): string {
 	const url = createSearchUrl(searchResults.searchInfo.searchText);

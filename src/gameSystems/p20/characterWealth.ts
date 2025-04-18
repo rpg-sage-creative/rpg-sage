@@ -1,6 +1,5 @@
 import { GameSystemType, parseEnum } from "@rsc-sage/types";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { addCommas, nth } from "@rsc-utils/number-utils";
+import { addCommas, nth, type Snowflake } from "@rsc-utils/core-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
@@ -8,9 +7,9 @@ import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
+import { boundNumber } from "../utils/boundNumber.js";
 import { getPaizoGameSystems, isStarfinder } from "./lib/PaizoGameSystem.js";
 import { getSelectedOrDefault } from "./lib/getSelectedOrDefault.js";
-import { boundNumber } from "../utils/boundNumber.js";
 
 type RawWealthItem = { level:number; items:string; currency:number; lump:number; };
 

@@ -1,5 +1,5 @@
 import { sortByKey } from "@rsc-utils/array-utils";
-import { nth } from "@rsc-utils/number-utils";
+import { nth } from "@rsc-utils/core-utils";
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { rarityToSuper } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";

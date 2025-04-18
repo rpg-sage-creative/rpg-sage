@@ -1,4 +1,4 @@
-import { round } from "@rsc-utils/number-utils";
+import { round } from "@rsc-utils/core-utils";
 
 /** Returns the temperature in celsius, rounded to the nearest whole number. */
 export function fahrenheitToCelsius(degreesF: number): number;

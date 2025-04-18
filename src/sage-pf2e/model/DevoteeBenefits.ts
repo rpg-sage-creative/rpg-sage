@@ -1,10 +1,9 @@
 
-import { warn } from "@rsc-utils/core-utils";
-import { nth } from "@rsc-utils/number-utils";
-import { findByValue } from "../data/Repository";
-import type { Domain } from "./Domain";
-import type { Skill } from './Skill';
-import type { Spell } from './Spell';
+import { nth, warn } from "@rsc-utils/core-utils";
+import { findByValue } from "../data/Repository.js";
+import type { Domain } from "./Domain.js";
+import type { Skill } from "./Skill.js";
+import type { Spell } from "./Spell.js";
 
 export type TDevoteeBenefitsCore = {
 	divineFont: string[];

@@ -1,6 +1,4 @@
-import type { UUID } from "@rsc-utils/core-utils";
-import { warn } from "@rsc-utils/core-utils";
-import { toSuperscript } from "@rsc-utils/number-utils";
+import { toSuperscript, warn, type UUID } from "@rsc-utils/core-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import type { HasSource } from "./HasSource.js";
 import { Source } from "./Source.js";

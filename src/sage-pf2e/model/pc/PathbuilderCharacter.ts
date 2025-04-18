@@ -1,8 +1,7 @@
 import { Collection, sortPrimitive } from "@rsc-utils/array-utils";
 import { CharacterBase } from "@rsc-utils/character-utils";
-import { debug, errorReturnFalse, errorReturnNull, getDataRoot, randomSnowflake, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, debug, errorReturnFalse, errorReturnNull, getDataRoot, nth, randomSnowflake, stringify, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
-import { addCommas, nth } from "@rsc-utils/number-utils";
 import { capitalize, StringMatcher } from "@rsc-utils/string-utils";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";

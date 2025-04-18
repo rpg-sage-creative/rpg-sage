@@ -1,11 +1,10 @@
-import { addCommas } from "@rsc-utils/number-utils";
+import { addCommas, type OrUndefined } from "@rsc-utils/core-utils";
 import { RenderableContent, type Renderable } from "@rsc-utils/render-utils";
 import { HasScoredSearchables, SearchInfo, SearchScore, type Searchable } from "@rsc-utils/search-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import type { OrUndefined } from "@rsc-utils/core-utils";
-import type { IMenuRenderable } from "../sage-lib/discord";
-import type { IHasName } from "../sage-pf2e";
-import type { Source } from "../sage-pf2e/model/base/Source";
+import type { IMenuRenderable } from "../sage-lib/discord/index.js";
+import type { IHasName } from "../sage-pf2e/index.js";
+import type { Source } from "../sage-pf2e/model/base/Source.js";
 
 export const UNICODE_ZERO_TO_TEN = ["\u0030\u20E3", "\u0031\u20E3", "\u0032\u20E3", "\u0033\u20E3", "\u0034\u20E3", "\u0035\u20E3", "\u0036\u20E3", "\u0037\u20E3", "\u0038\u20E3", "\u0039\u20E3", "\ud83d\udd1f"];
 

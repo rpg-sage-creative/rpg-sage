@@ -1,8 +1,7 @@
 import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/array-utils";
 import { HasCore, type Core } from "@rsc-utils/class-utils";
-import { warn } from "@rsc-utils/core-utils";
-import { addCommas, round } from "@rsc-utils/number-utils";
-import { Bulk } from "./Bulk";
+import { addCommas, round, warn } from "@rsc-utils/core-utils";
+import { Bulk } from "./Bulk.js";
 
 type TMoney = number | string | Coins;
 
