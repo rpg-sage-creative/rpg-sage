@@ -20,19 +20,15 @@ COPY node_modules/@rsc-utils/array-utils/ ./array-utils
 COPY node_modules/@rsc-utils/cache-utils/ ./cache-utils
 COPY node_modules/@rsc-utils/character-utils/ ./character-utils
 COPY node_modules/@rsc-utils/class-utils/ ./class-utils
-COPY node_modules/@rsc-utils/color-utils/ ./color-utils
 COPY node_modules/@rsc-utils/core-utils/ ./core-utils
-COPY node_modules/@rsc-utils/date-utils/ ./date-utils
 COPY node_modules/@rsc-utils/dice-utils/ ./dice-utils
 COPY node_modules/@rsc-utils/discord-utils/ ./discord-utils
 COPY node_modules/@rsc-utils/io-utils/ ./io-utils
 COPY node_modules/@rsc-utils/language-utils/ ./language-utils
-COPY node_modules/@rsc-utils/number-utils/ ./number-utils
 COPY node_modules/@rsc-utils/progress-utils/ ./progress-utils
 COPY node_modules/@rsc-utils/render-utils/ ./render-utils
 COPY node_modules/@rsc-utils/search-utils/ ./search-utils
 COPY node_modules/@rsc-utils/string-utils/ ./string-utils
-COPY node_modules/@rsc-utils/temperature-utils/ ./temperature-utils
 
 RUN mkdir -p /rpg-sage/data/sage/bots
 RUN mkdir -p /rpg-sage/data/sage/cache
