@@ -43,21 +43,6 @@ export abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> 
 
 	//#endregion
 
-	//#region Dids
-
-	/** Reads all of the cores (by iterating all uuid.json files) and returns all the "Did" values. */
-	public async getDids(): Promise<Snowflake[]> {
-		const dids = Array.from(this.didToIdMap.keys()),
-			cores = await this.readUncachedCores();
-		cores.forEach(core => {
-			this.cacheDid(core.did, core.id);
-			dids.push(core.did);
-		});
-		return dids;
-	}
-
-	//#endregion
-
 	//#region Entities
 
 	/** Gets the entity by did, checking cache first, then .readByDid(), then .readFromUncached(). */
