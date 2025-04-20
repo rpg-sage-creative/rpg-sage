@@ -6,11 +6,6 @@ export function getTupperBoxId(): Snowflake {
 	return getId("tupperBox");
 }
 
-/** Returns true if we have a valid Tupperbox id. */
-export function hasTupperBoxId(): boolean {
-	return !!getTupperBoxId();
-}
-
 /** Convenient test and type guard for: id === getTupperBoxId() */
 export function isTupperBoxId(id: Optional<CanBeSnowflakeResolvable>): id is Snowflake {
 	const tupperId = getTupperBoxId();
