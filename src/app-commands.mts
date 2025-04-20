@@ -1,5 +1,5 @@
 import { error, getCodeName, getDataRoot, info, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
-import { listFilesSync, readJsonFileSync, writeFileSync } from "@rsc-utils/io-utils";
+import { findJsonFile, writeFileSync } from "@rsc-utils/io-utils";
 import { buildCommands } from "./app-commands/builders/buildCommands.js";
 import { countCharacters } from "./app-commands/builders/countCharacters.js";
 import { updateSlashCommands } from "./app-commands/rest/updateSlashCommands.js";
@@ -17,33 +17,28 @@ initializeConsoleUtilsByEnvironment();
 // }
 
 async function main() {
-	const botCodeName = getCodeName();
-	const dataPathSage = getDataRoot("sage");
+	const codeName = getCodeName();
+	const botCore = await findJsonFile(getDataRoot("sage/bots"), { contentFilter:(core: BotCore) => core.codeName === codeName });
 
-	const botsPath = `${dataPathSage}/bots`;
-	const botJson = listFilesSync(botsPath, "json")
-		.map(file => readJsonFileSync<BotCore>(`${botsPath}/${file}`))
-		.find(json => json?.codeName === botCodeName);
-
-	if (!botJson) {
-		error(`Unable to find Bot: ${botCodeName}`);
+	if (!botCore) {
+		error(`Unable to find Bot: ${codeName}`);
 
 	}else {
 		if (process.argv.includes("update")) {
 			// build and update all slash commands for the bot
-			updateSlashCommands(botJson);
+			updateSlashCommands(botCore);
 
 		}else if (process.argv.includes("wipe")) {
 			// remove all slash commands for the bot
-			wipeSlashCommands(botJson);
+			wipeSlashCommands(botCore);
 
 		}else {
 			// build all slash commands for the bot and save the json
 			try {
 				const built = await buildCommands();
-				writeFileSync(`../data/slash/${botCodeName}.json`, built, true, true);
+				writeFileSync(`../data/slash/${codeName}.json`, built, true, true);
 				const characterCount = await countCharacters();
-				info(`Slash Commands built for ${botCodeName}: ${built.length} commands; ${characterCount} characters`);
+				info(`Slash Commands built for ${codeName}: ${built.length} commands; ${characterCount} characters`);
 			}catch(ex) {
 				error(ex);
 			}
