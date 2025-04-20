@@ -1,12 +1,9 @@
 import { getHomeServerId } from "@rsc-sage/env";
 import { info, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { Guild } from "discord.js";
-import { ActiveBot } from "../model/ActiveBot.js";
 import type { SageCache } from "../model/SageCache.js";
 import { Server, type ServerCore } from "../model/Server.js";
 import { DidRepository } from "./base/DidRepository.js";
-
-const UnkownBotCodeName = "<UnknownBot>";
 
 export class ServerRepo extends DidRepository<ServerCore, Server> {
 
@@ -35,14 +32,14 @@ export class ServerRepo extends DidRepository<ServerCore, Server> {
 		const existingServer = await this.getByDid(guild.id as Snowflake);
 		if (existingServer) {
 			guild = existingServer.discord.guild;
-			info(`${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} rejoined ${guild?.name} (${guild?.id}) as ${existingServer.id}`);
+			info(`${this.sageCache.bot.codeName} rejoined ${guild?.name} (${guild?.id}) as ${existingServer.id}`);
 			return false;
 		}
 
 		const server = new Server(Server.createCore(guild), this.sageCache),
 			saved = await this.write(server);
 		if (saved) {
-			info(`${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} joined ${guild.name} (${guild.id}) as ${server.id}`);
+			info(`${this.sageCache.bot.codeName} joined ${guild.name} (${guild.id}) as ${server.id}`);
 		}
 		return saved;
 	}
