@@ -43,6 +43,9 @@ function readJsonProperty() {
 	echo "$jsonKey=\"$RETVAL\""
 }
 
+readJsonProperty "sageId"
+jsonSageId="$RETVAL"
+
 readJsonProperty "dataRoot"
 jsonDataRoot="$RETVAL"
 
@@ -97,6 +100,7 @@ else
 	node --experimental-modules \
 		--es-module-specifier-resolution=node \
 		mono.mjs \
+		"sageId=$jsonSageId" \
 		"codeName=$codeName" \
 		"dataRoot=$jsonDataRoot" \
 		"homeServerId=$jsonHomeServerId" \
