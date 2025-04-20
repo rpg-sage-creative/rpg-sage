@@ -164,9 +164,9 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public getBoolean(name: string): Optional<boolean> {
 		const string = this.getString(name);
 		if (isDefined(string)) {
-			if (/^(1|yes|y|true|t)$/i.test(string)) {
+			if (/^(1|yes|y|true|t|on)$/i.test(string)) {
 				return true;
-			}else if (/^(0|no|n|false|f)$/i.test(string)) {
+			}else if (/^(0|no|n|false|f|off)$/i.test(string)) {
 				return false;
 			}
 			return null;
