@@ -1,15 +1,13 @@
-import { getSuperUserId } from "@rsc-sage/env";
-import { addLogHandler, captureProcessExit, error, errorReturnNull, formatArg, getCodeName, getDataRoot, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
+import { getSageId, getSuperUserId } from "@rsc-sage/env";
+import { addLogHandler, captureProcessExit, chunk, error, errorReturnNull, formatArg, getCodeName, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { wrapUrl } from "@rsc-utils/discord-utils";
-import { findJsonFile } from "@rsc-utils/io-utils";
-import { chunk } from "@rsc-utils/string-utils";
 import type { ClientOptions, Guild, Interaction, Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
 import { ActivityType, Client } from "discord.js";
 import { notifyOfError } from "../../../sage-utils/notifyOfError.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { getRegisteredIntents, getRegisteredPartials, handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
-import { Bot, type IBotCore } from "./Bot.js";
+import { Bot, type BotCore } from "./Bot.js";
 import { SageCache } from "./SageCache.js";
 
 interface IClientEventHandler {
@@ -60,7 +58,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 	// public client: Client;
 
-	private constructor(core: IBotCore) {
+	private constructor(core: BotCore) {
 		super(core, null!);
 
 		const client = new Client(createDiscordClientOptions());
@@ -242,17 +240,15 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 	public static client: Client;
 
-	public static from(bot: Bot): ActiveBot {
+	public static load(bot: Bot): ActiveBot {
 		return new ActiveBot(bot.toJSON());
 	}
 
 	public static async prepBot(): Promise<Bot> {
-		const codeName = getCodeName();
-		const contentFilter = (core: IBotCore) => core.codeName === codeName;
-		const botsPath = `${getDataRoot("sage")}/bots`;
-		const botCore = await findJsonFile(botsPath, { contentFilter });
-		if (!botCore) throw new Error(`Cannot find bot: ${codeName}`);
-		return new Bot(botCore!, null!);
+		const id = getSageId();
+		const bot = await Bot.read(id);
+		if (!bot) throw new Error(`Cannot find bot: ${id}`);
+		return bot;
 	}
 
 }

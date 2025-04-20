@@ -1,6 +1,4 @@
-import { hasSageId } from "@rsc-sage/env";
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { error, isNullOrUndefined, verbose, warn } from "@rsc-utils/core-utils";
+import { error, isNullOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { fetchIfPartial, toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { ChannelType, MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
@@ -83,10 +81,6 @@ function getListeners<T extends TListenerType>(which: TListenerTypeName): T[] {
 
 type TListenerTypeName = "InteractionListener" | "MessageListener" | "ReactionListener";
 function registerListener<T extends TListenerType>(listener: T): void {
-	if (!hasSageId()) {
-		error(`Please call setSageId()`);
-	}
-
 	const listeners: T[] = getListeners(listener.which);
 
 	if (isNullOrUndefined(listener.priorityIndex)) {

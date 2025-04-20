@@ -1,7 +1,6 @@
 import { GameSystemType } from "@rsc-sage/types";
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { warn } from "@rsc-utils/core-utils";
-import type { HexColorString } from "discord.js";
+import { errorReturnFalse, getDataRoot, warn, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
+import { readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
@@ -25,7 +24,7 @@ export type TDev = { did: Snowflake; };
  */
 type TSearchStatus = { [key: number]: undefined | boolean | string; };
 
-export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
+export interface BotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	codeName: TBotCodeName;
 	commandPrefix?: string;
 	// devs?: TDev[];
@@ -42,8 +41,8 @@ export interface IBotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	macros?: MacroBase[];
 }
 
-export class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmojiCore {
-	public constructor(core: IBotCore, sageCache: SageCache) { super(core, sageCache); }
+export class Bot extends HasDidCore<BotCore> implements IHasColorsCore, IHasEmojiCore {
+	public constructor(core: BotCore, sageCache: SageCache) { super(core, sageCache); }
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
 	// public get devs(): TDev[] { return this.core.devs ?? []; }
@@ -61,7 +60,7 @@ export class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmo
 	public setSearchStatus(gameType: GameSystemType, status: boolean | string): Promise<boolean> {
 		const searchStatus = this.core.searchStatus ?? (this.core.searchStatus = {});
 		searchStatus[gameType] = status;
-		return this.sageCache.bots.write(this);
+		return this.save();
 	}
 
 	// #region IHasColorsCore
@@ -106,4 +105,19 @@ export class Bot extends HasDidCore<IBotCore> implements IHasColorsCore, IHasEmo
 
 	// #endregion
 
+	public async save(): Promise<boolean> {
+		return Bot.write(this);
+	}
+
+	public static async read(id: Snowflake): Promise<Bot | undefined> {
+		const botPath = `${getDataRoot("sage")}/bots/${id}.json`;
+		const botCore = await readJsonFile<BotCore>(botPath);
+		return botCore ? new Bot(botCore!, null!) : undefined;
+	}
+
+	public static async write(bot: Bot): Promise<boolean> {
+		const botPath = `${getDataRoot("sage")}/bots/${bot.id}.json`;
+		const formatted = bot.codeName === "dev";
+		return writeFile(botPath, bot.toJSON(), true, formatted).catch(errorReturnFalse);
+	}
 }

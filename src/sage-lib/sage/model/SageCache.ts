@@ -8,7 +8,6 @@ import { DiscordCache } from "../../discord/DiscordCache.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
 import { ActiveBot } from "../model/ActiveBot.js";
-import { BotRepo } from "../repo/BotRepo.js";
 import { GameRepo } from "../repo/GameRepo.js";
 import { ServerRepo } from "../repo/ServerRepo.js";
 import { UserRepo } from "../repo/UserRepo.js";
@@ -22,7 +21,6 @@ export type SageCacheCore = {
 	discordKey: DiscordKey;
 	discordUser: UserOrPartial;
 
-	bots: BotRepo;
 	servers: ServerRepo;
 	games: GameRepo;
 	users: UserRepo;
@@ -72,7 +70,6 @@ async function createCoreAndCache(): Promise<[SageCacheCore, SageCache]> {
 	const core: SageCacheCore = <SageCacheCore><Partial<SageCacheCore>>{ };
 	const sageCache = new SageCache(core);
 
-	core.bots = new BotRepo(sageCache);
 	core.servers = new ServerRepo(sageCache);
 	core.games = new GameRepo(sageCache);
 	core.users = new UserRepo(sageCache);
@@ -266,12 +263,11 @@ export class SageCache {
 
 	// public meta: TMeta[] = [];
 
-	public get bots(): BotRepo { return this.core.bots; }
 	public get servers(): ServerRepo { return this.core.servers; }
 	public get games(): GameRepo { return this.core.games; }
 	public get users(): UserRepo { return this.core.users; }
 
-	public get bot(): Bot { return this.core.bot; }
+	public get bot(): Bot { return ActiveBot.active; }
 	public get home(): Server { return this.core.home; }
 	public get server(): Server { return this.core.server; }
 	public get game(): Game | undefined { return this.core.game; }

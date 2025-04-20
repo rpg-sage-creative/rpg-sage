@@ -37,7 +37,6 @@ async function sendBot(sageMessage: SageMessage): Promise<void> {
 	const { bot } = sageMessage;
 	const renderableContent = createAdminRenderableContent(bot);
 	renderableContent.setTitle(`<b>${bot.codeName}</b>`);
-	renderableContent.append(bot.id);
 	const botUser = await sageMessage.discord.fetchUser(bot.did);
 	if (botUser) {
 		renderableContent.setThumbnailUrl(botUser.displayAvatarURL());
