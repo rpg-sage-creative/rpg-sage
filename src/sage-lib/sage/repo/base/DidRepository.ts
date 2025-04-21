@@ -1,6 +1,5 @@
-import { EphemeralMap, errorReturnNull, randomSnowflake, verbose, type IdCore, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { readJsonFile, symLinkSync } from "@rsc-utils/io-utils";
-import { existsSync } from "fs";
+import { EphemeralMap, errorReturnUndefined, randomSnowflake, verbose, type IdCore, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { fileExists, readJsonFile, symLink } from "@rsc-utils/io-utils";
 import { HasIdCoreAndSageCache, IdRepository } from "./IdRepository.js";
 
 export interface DidCore<T extends string = string> extends IdCore<T> {
@@ -65,8 +64,8 @@ export abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> 
 	private async readFromUncached(did: Snowflake): Promise<U | null> {
 		// Check for did.json
 		const didPath = `${IdRepository.DataPath}/${this.objectTypePlural}/did/${did}.json`;
-		if (existsSync(didPath)) {
-			const core = await readJsonFile<T>(didPath).catch(errorReturnNull);
+		if (await fileExists(didPath)) {
+			const core = await readJsonFile<T>(didPath).catch(errorReturnUndefined);
 			if (core) {
 				this.cacheDid(did, core.id);
 				const entity = <U>await (<typeof IdRepository>this.constructor).fromCore(core, this.sageCache);
@@ -93,7 +92,7 @@ export abstract class DidRepository<T extends DidCore, U extends HasDidCore<T>> 
 		if (saved) {
 			const idPath = `../${entity.id}.json`;
 			const didPath = `${IdRepository.DataPath}/${this.objectTypePlural}/did/${entity.did}.json`;
-			const linked = symLinkSync(idPath, didPath, { mkdir:true, overwrite:true });
+			const linked = await symLink(idPath, didPath, { mkdir:true, overwrite:true });
 			if (linked) {
 				this.cacheDid(entity.did, entity.id);
 			}

@@ -1,5 +1,6 @@
 export * from "./appendJsonDb.js";
 export * from "./deleteFileSync.js";
+export * from "./fileExists.js";
 export * from "./fileExistsSync.js";
 export * from "./filterFiles.js";
 export * from "./filterFilesSync.js";
@@ -17,6 +18,7 @@ export * from "./readJsonFiles.js";
 export * from "./readJsonFileSync.js";
 export * from "./readText.js";
 export * from "./readTextSync.js";
+export * from "./symLink.js";
 export * from "./symLinkSync.js";
 export * from "./writeFile.js";
 export * from "./writeFileSync.js";
