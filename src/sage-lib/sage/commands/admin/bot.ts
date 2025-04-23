@@ -80,7 +80,7 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 
 async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.isSuperUser) {
-		const buildInfo = getBuildInfo();
+		const buildInfo = await getBuildInfo();
 		const lines: string[] = [];
 		lines.push(`### ${buildInfo.name}`);
 		lines.push(`**version** \`${buildInfo.version}\``);
