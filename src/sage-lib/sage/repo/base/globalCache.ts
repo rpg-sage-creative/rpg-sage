@@ -52,7 +52,7 @@ export function globalCacheGet<T extends GlobalCacheItem>(key: string, id: strin
 
 export async function globalCacheRead<T extends GlobalCacheItem>(key: string, id: string): Promise<T | undefined> {
 	const path = `${getDataRoot(`sage/${key}`)}/${id}.json`;
-	const json = await readJsonFile<T>(path).catch(errorReturnUndefined);
+	const json = await readJsonFile<T>(path).catch(() => undefined);
 	return json ?? undefined;
 }
 
