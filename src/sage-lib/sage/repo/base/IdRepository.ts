@@ -1,6 +1,6 @@
-import { EphemeralMap, errorReturnEmptyArray, errorReturnFalse, errorReturnNull, getCodeName, getDataRoot, HasIdCore, isDefined, isNonNilSnowflake, isNonNilUuid, randomSnowflake, verbose, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { EphemeralMap, getDataRoot, HasIdCore, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import type { SageCache } from "../../model/SageCache.js";
+import { globalCacheGet, globalCachePut, globalCacheRead } from "./globalCache.js";
 
 export { DialogPostType as DialogType, type SageChannel as IChannel } from "@rsc-sage/types";
 
@@ -14,14 +14,17 @@ type TParser<T extends IdCore, U extends HasIdCore<T>> = (core: T, sageCache: Sa
 
 export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
-	//#region CacheÒ
+	//#region Cache
 
-	private idToEntityMap = new EphemeralMap<IdType, U>(15000);
+	private idToEntityMap = new EphemeralMap<string, U>(15000);
 
 	/** Caches the given id/entity pair. */
-	protected cacheId(id: IdType, entity: U): void {
-		if (id && entity) {
-			this.idToEntityMap.set(id, entity);
+	protected cacheId(entity: U): void {
+		if (entity) {
+			const { id, did, uuid } = entity.toJSON();
+			if (id) this.idToEntityMap.set(id, entity);
+			if (did) this.idToEntityMap.set(did, entity);
+			if (uuid) this.idToEntityMap.set(uuid, entity);
 		}
 	}
 
@@ -42,47 +45,6 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 	public constructor(protected sageCache: SageCache) {
 		this.objectTypePlural = (<typeof IdRepository>this.constructor).objectTypePlural.toLowerCase();
 	}
-
-	//#region Ids
-
-	/** Reads all the uuid.json files and returns all the "Id" values. */
-	protected async getIds(): Promise<IdType[]> {
-		const files = await listFiles(`${IdRepository.DataPath}/${this.objectTypePlural}`)
-			.catch<string[]>(errorReturnEmptyArray);
-		return files
-			.filter(file => file.endsWith(".json"))
-			.map(file => file.slice(0, -5))
-			.filter(id => isNonNilUuid(id) || isNonNilSnowflake(id)) as IdType[];
-	}
-
-	//#endregion
-
-	//#region Cores
-
-	/** Reads all uncached cores by iterating all uuid.json files and checking cache. */
-	protected async readUncachedCores(): Promise<T[]> {
-		const ids = await this.getIds(),
-			uncachedIds = ids.filter(id => !this.idToEntityMap.has(id)),
-			cores = await this.readCoresByIds(...uncachedIds);
-		return cores.filter(isDefined);
-	}
-
-	/** Reads the uuid.json for the given "Id". */
-	protected readCoreById(id: IdType): Promise<OrNull<T>> {
-		return readJsonFile<T>(`${IdRepository.DataPath}/${this.objectTypePlural}/${id}.json`)
-			.catch(errorReturnNull);
-	}
-
-	/** Reads the uuid.json for each given "Id". */
-	protected async readCoresByIds(...ids: IdType[]): Promise<OrNull<T>[]> {
-		const cores: OrNull<T>[] = [];
-		for (const id of ids) {
-			cores.push(await this.readCoreById(id));
-		}
-		return cores;
-	}
-
-	//#endregion
 
 	//#region Entities
 
@@ -108,10 +70,12 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	/** Gets the entity using .readCoreById(), caching the value before returning it. */
 	protected async readById(id: IdType): Promise<OrNull<U>> {
-		const core = await this.readCoreById(id);
+		const cached = globalCacheGet<T>(this.objectTypePlural, id);
+		const core = await globalCacheRead<T>(this.objectTypePlural, cached?.id ?? id);
 		if (core) {
-			const entity = <U>await (<typeof IdRepository>this.constructor).fromCore(core, this.sageCache);
-			this.cacheId(id, entity);
+			const repo = this.constructor as typeof IdRepository;
+			const entity = await repo.fromCore(core, this.sageCache) as U;
+			this.cacheId(entity);
 			return entity;
 		}
 		return null;
@@ -119,16 +83,9 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	/** Writes the entity's core to uuid.json using (or creating if needed) the "Id". */
 	public async write(entity: U): Promise<boolean> {
-		if (!entity.id) {
-			entity.toJSON().id = randomSnowflake();
-			verbose(`Missing ${(<typeof IdRepository>this.constructor).objectType}.id:`, entity.toJSON());
-		}
-
-		const path = `${IdRepository.DataPath}/${this.objectTypePlural}/${entity.id}.json`;
-		const formatted = getCodeName() === "dev";
-		const saved = await writeFile(path, entity.toJSON(), true, formatted).catch(errorReturnFalse);
+		const saved = await globalCachePut(entity.toJSON());
 		if (saved) {
-			this.cacheId(entity.id as IdType, entity);
+			this.cacheId(entity);
 		}
 		return saved;
 	}

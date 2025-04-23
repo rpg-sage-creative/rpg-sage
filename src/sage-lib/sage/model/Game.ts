@@ -155,7 +155,7 @@ function fixDupeUsers(game: GameCore): void {
 }
 
 export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore, HasPostCurrency {
-	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {
+	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {if(!server)console.trace("no server");
 		super(updateGame(core), sageCache);
 		fixDupeUsers(core);
 
@@ -166,7 +166,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 
 		if (!this.core.gmCharacter) {
 			let gmCharacterCore: GameCharacterCore | undefined;
-			const gmCharacterName = this.core.gmCharacterName ?? this.server.gmCharacterName ?? DEFAULT_GM_CHARACTER_NAME;
+			const gmCharacterName = this.core.gmCharacterName ?? this.server?.gmCharacterName ?? DEFAULT_GM_CHARACTER_NAME;
 			const gmCharacter = this.nonPlayerCharacters.findByName(gmCharacterName);
 			if (gmCharacter) {
 				this.nonPlayerCharacters.removeAt(this.nonPlayerCharacters.indexOf(gmCharacter));
