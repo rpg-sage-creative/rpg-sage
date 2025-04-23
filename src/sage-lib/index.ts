@@ -1,9 +1,10 @@
 import { getSageId } from "@rsc-sage/env";
 import { error } from "@rsc-utils/core-utils";
-import { registerAndLoad } from "../sage-pf2e";
+import { registerAndLoad } from "../sage-pf2e/index.js";
 import { DiscordCache, registerPrompts } from "./discord/index.js";
 import { registerCommandHandlers } from "./sage/commands/index.js";
 import { ActiveBot } from "./sage/model/ActiveBot.js";
+import { globalCachePopulate } from "./sage/repo/base/globalCache.js";
 
 export async function activate(): Promise<void> {
 	DiscordCache.setSageId(getSageId());
@@ -20,6 +21,10 @@ export async function activate(): Promise<void> {
 	registerPrompts();
 
 	await registerAndLoad();
+
+	globalCachePopulate("servers");
+	globalCachePopulate("users");
+	globalCachePopulate("games");
 
 	ActiveBot.load(bot);
 }
