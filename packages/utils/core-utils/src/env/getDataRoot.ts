@@ -2,44 +2,47 @@ import { existsSync, mkdirSync } from "fs";
 import type { Optional } from "../types/generics.js";
 import { getFromProcess } from "./getFromProcess.js";
 
-let _dataRoot: string;
+const pathMap = new Map<string, string>();
 
-export function getDataRoot(childPath?: string, ensureExists?: boolean): string {
-	// get dataroot
-	if (!_dataRoot) {
-		const dirValidator = (value: Optional<string | number>): value is string => {
-			return !!value && existsSync(String(value));
-		};
+/**
+ * Uses getFromProcess to get "dataRoot".
+ * If not found or the path is invalid, an error is thrown.
+ * If childPath is given the returned path will be `${dataRoot}/${childPath}`.
+ * If childPath is given and is invalid, an error is thrown.
+ */
+export function getDataRoot(childPath?: string, ensureChildExists?: boolean): string {
+	// get cached dataroot
+	let dataRoot = pathMap.get("");
 
-		_dataRoot = getFromProcess(dirValidator, "dataRoot");
+	// initialize it
+	if (!dataRoot) {
+		const dirValidator = (value: Optional<string | number>): value is string => value ? existsSync(String(value)) : false;
+
+		// get from settings
+		dataRoot = getFromProcess<string>(dirValidator, "dataRoot");
+
+		// save to map
+		pathMap.set("", dataRoot);
 	}
 
-	// return it if not childPath requested
+	// return it if no childPath requested
 	if (!childPath) {
-		return _dataRoot;
+		return dataRoot;
 	}
 
-	const dataPath = `${_dataRoot}/${childPath}`;
+	// get cached dataPath
+	let dataPath = pathMap.get(childPath);
 
-	// if child path exists, return it
-	if (existsSync(dataPath)) {
-		return dataPath;
-	}
+	if (!dataPath) {
+		// concat child path
+		dataPath = `${dataRoot}/${childPath}`;
 
-	// if we are to ensure it exists, try to make it
-	if (ensureExists) {
-		try {
+		if (ensureChildExists) {
 			mkdirSync(dataPath, { recursive:true });
-		}catch {
-			// ignore, we throw below
 		}
+
+		pathMap.set(childPath, dataPath);
 	}
 
-	// if child path exists, return it
-	if (existsSync(dataPath)) {
-		return dataPath;
-	}
-
-	// throw error
-	throw new Error(`Unable to create dataRoot child: ${dataPath}`);
+	return dataPath;
 }
