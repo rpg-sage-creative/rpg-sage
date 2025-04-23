@@ -1,5 +1,6 @@
-import { existsSync, readFileSync, readdirSync } from "fs";
+import { exists, readFile, readdir } from "fs";
 import { parseJson } from "../json/parseJson.js";
+import type { OrUndefined } from "../types/generics.js";
 
 type BuildInfo = {
 	name: string;
@@ -15,45 +16,58 @@ type BuildInfo = {
 	rscLibs: BuildInfo[];
 };
 
-let _rootPath: string;
-function getRootPath(): string {
-	if (!_rootPath) {
-		_rootPath = ".";
-		if (!existsSync(_rootPath + "/node_modules")) {
-			_rootPath = "..";
-		}
+async function readBuildInfo(repoPath: string, utilName?: string): Promise<OrUndefined<BuildInfo>> {
+	// read the build info
+	const raw = await new Promise<OrUndefined<string>>(resolve =>
+		readFile(`${repoPath}/build.json`, null, (error, buffer) => resolve(error ? undefined : String(buffer)))
+	).catch(() => undefined);
+
+	// return now if we got an error
+	if (!raw) return undefined;
+
+	// parse the build info
+	const buildInfo = parseJson<BuildInfo>(raw);
+
+	// set name as utilName if name is missing (why?)
+	if (!buildInfo.name && utilName) {
+		buildInfo.name = utilName;
 	}
-	return _rootPath;
+
+	return buildInfo;
 }
 
-function readBuildInfo(repoPath: string, utilName?: string): BuildInfo | undefined {
-	try {
-		const buildInfo = parseJson<BuildInfo>(readFileSync(`${repoPath}/build.json`).toString());
-		if (!buildInfo.name && utilName) {
-			buildInfo.name = utilName;
-		}
-		return buildInfo;
-	}catch(ex) {
-		// ignore
-	}
-	return undefined;
-}
+async function getRscLibsBuildInfo(rootPath: string): Promise<BuildInfo[]> {
+	const buildInfos: BuildInfo[] = [];
 
-function getRscLibsBuildInfo(): BuildInfo[] {
-	const rootPath = getRootPath();
 	const utilPath = `${rootPath}/node_modules/@rsc-utils`;
-	const allNames = readdirSync(utilPath);
+
+	const allNames = await new Promise<string[]>(resolve =>
+		readdir(utilPath, (err, files) => resolve(err ? [] : files))
+	).catch(() => []);
+
 	const utilNames = allNames.filter(dirName => dirName.endsWith("-utils"));
-	const buildInfos = utilNames.map(utilName => readBuildInfo(`${utilPath}/${utilName}`, `@rsc-utils/${utilName}`));
-	return buildInfos.filter(info => !!info) as BuildInfo[];
+	for (const utilName of utilNames) {
+		const buildInfo = await readBuildInfo(`${utilPath}/${utilName}`, `@rsc-utils/${utilName}`).catch(() => undefined);;
+		if (buildInfo) {
+			buildInfos.push(buildInfo);
+		}
+	}
+	return buildInfos;
 }
 
-let buildInfo: BuildInfo | undefined;
+export async function getBuildInfo(): Promise<BuildInfo> {
+	// check current folder for node_modules
+	const useCurrent = await new Promise<boolean>(resolve =>
+		exists(`./node_modules`, resolve)
+	).catch(() => false);
 
-export function getBuildInfo(): BuildInfo {
-	if (!buildInfo) {
-		buildInfo = readBuildInfo(getRootPath());
-	}
+	// set rootPath based on presence of node_modules
+	const rootPath = useCurrent ? "." : "..";
+
+	// read active repo's build info
+	let buildInfo = await readBuildInfo(rootPath).catch(() => undefined);
+
+	// provide dummy info if something went wrong
 	if (!buildInfo) {
 		buildInfo = {
 			name: "no-name",
@@ -62,13 +76,16 @@ export function getBuildInfo(): BuildInfo {
 			commit: "",
 			commitSubject: "unknown",
 			commitTs: 0,
-			commitDate: "1978-12-24-1945",
+			commitDate: "2022-08-22-0000",
 			buildTs: 0,
-			buildDate: "1978-12-24-1945",
-			author: "Randal T Meyer",
+			buildDate: "2022-08-22-0000",
+			author: "RPG Sage Creative, LLC",
 			rscLibs: []
 		};
 	}
-	buildInfo.rscLibs = getRscLibsBuildInfo();
+
+	// include build info for rsc libraries
+	buildInfo.rscLibs = await getRscLibsBuildInfo(rootPath);
+
 	return buildInfo;
 }
