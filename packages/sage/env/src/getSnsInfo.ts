@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils/src/types/generics.js";
-import { getCodeName, getFromProcessSafely } from "@rsc-utils/core-utils";
+import { getCodeName, getFromProcessSafely, type Optional } from "@rsc-utils/core-utils";
 
 type Region = "us-west-1" | "us-west-2" | "us-east-1" | "us-east-2";
 
@@ -15,6 +14,7 @@ let _snsInfo: InvalidSnsInfo | ValidSnsInfo;
  */
 export function getSnsInfo(): SnsInfo | undefined {
 	if (!_snsInfo) {
+		/** @todo stop checking dev and simply ensure that not having the values in the config/env.json behaves correctly */
 		if (getCodeName() === "dev") {
 			_snsInfo = { valid:false };
 		}else {
