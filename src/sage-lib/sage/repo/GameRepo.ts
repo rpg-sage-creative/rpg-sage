@@ -1,4 +1,4 @@
-import { isDefined, mapAsync, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { debug, isDefined, mapAsync, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { isThread, type DInteraction, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, MessageReference } from "discord.js";
 import { Game, type GameCore } from "../model/Game.js";
@@ -93,8 +93,8 @@ export class GameRepo extends IdRepository<GameCore, Game> {
 
 	public static async fromCore<T = GameCore, U = Game>(core: T, sageCache: SageCache): Promise<U>;
 	public static async fromCore(core: GameCore, sageCache: SageCache): Promise<Game> {
-		const serverId = core.serverDid ?? core.serverId;
-		const server = await sageCache.servers.getById(serverId);
+		const server = await sageCache.servers.getById(core.serverId, core.serverDid);
+		if (!server) debug({serverId:core.serverId,serverDid:core.serverDid});
 		return new Game(core, server!, sageCache);
 	}
 
