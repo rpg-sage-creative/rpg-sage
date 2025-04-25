@@ -1,5 +1,5 @@
 import { getDataRoot, randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { deleteFileSync } from "../fs/deleteFileSync.js";
+import { deleteFile } from "../fs/deleteFile.js";
 import { readFile } from "../fs/readFile.js";
 import { writeFile } from "../fs/writeFile.js";
 import { getBuffer } from "../https/getBuffer.js";
@@ -9,20 +9,20 @@ import { bufferToMetadata, type ImageMetadata } from "./bufferToMetadata.js";
 export class ImageCacher {
 
 	/** The local file id. */
-	private id: Snowflake;
+	private readonly id: Snowflake;
 
 	/** The path to the local file. */
-	private cachedImagePath: string;
+	private readonly cachedImagePath: string;
 
 	/** Creates a new ImageCacher for the given url. */
-	public constructor(private url: string) {
+	public constructor(private readonly url: string) {
 		this.id = randomSnowflake();
 		this.cachedImagePath = `${getDataRoot("cache/image", true)}/${this.id}.img`;
 	}
 
 	/** Reads from the url and writes the local file. */
 	private async setCache(): Promise<boolean> {
-		const buffer = await getBuffer(this.url).catch(() => null);
+		const buffer = await getBuffer(this.url).catch(() => undefined);
 		if (buffer) {
 			return writeFile(this.cachedImagePath, buffer, true).catch(() => false);
 		}
@@ -36,21 +36,21 @@ export class ImageCacher {
 			return Promise.reject(new Error(`No Cache to read: ${this.id}`));
 		}
 
-		return new Promise((resolve, reject) => {
-			readFile(this.cachedImagePath).then(buffer => {
-				this.removeCache();
-				resolve(buffer);
-			}, err => {
-				this.removeCache();
-				reject(err);
-			});
+		return new Promise(async (resolve, reject) => {
+			const bufferOrError = await readFile(this.cachedImagePath).catch(err => err);
+			await this.removeCache();
+			if (Buffer.isBuffer(bufferOrError)) {
+				resolve(bufferOrError);
+			}else {
+				reject(bufferOrError);
+			}
 		});
 
 	}
 
 	/** Deletes the local file. */
-	private removeCache(): boolean {
-		return deleteFileSync(this.cachedImagePath);
+	private async removeCache(): Promise<boolean> {
+		return deleteFile(this.cachedImagePath).catch(() => false);
 	}
 
 	/** Convenience for new PdfCacher(url).read(); */

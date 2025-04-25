@@ -1,4 +1,5 @@
 export * from "./appendJsonDb.js";
+export * from "./deleteFile.js";
 export * from "./deleteFileSync.js";
 export * from "./fileExists.js";
 export * from "./fileExistsSync.js";
