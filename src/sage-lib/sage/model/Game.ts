@@ -1,5 +1,5 @@
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
-import { applyChanges, isDefined, randomSnowflake, sortPrimitive, warn, type Args, type Comparable, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, warn, type Args, type Comparable, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
 import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";
@@ -682,9 +682,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	private _colors?: Colors;
 
 	public get colors(): Colors {
-		if (!this._colors) {
-			this._colors = new Colors(this.core.colors ?? (this.core.colors = []));
-		}
+		this._colors ??= new Colors(this.core.colors ?? (this.core.colors = []));
 		return this._colors;
 	}
 
@@ -704,14 +702,18 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	private _emoji?: Emoji;
 
 	public get emoji(): Emoji {
-		if (!this._emoji) {
-			this._emoji = new Emoji(this.core.emoji ?? (this.core.emoji = []));
-		}
+		this._emoji ??= new Emoji(this.core.emoji ?? (this.core.emoji = []));
 		return this._emoji;
 	}
 
 	public emojify(text: string): string {
-		return this.server.emojify(this.emoji.emojify(text));
+		try {
+			text = this.emoji.emojify(text);
+			text = this.server.emojify(text);
+		}catch(ex) {
+			error(ex);
+		}
+		return text;
 	}
 
 	public getEmoji(emojiType: EmojiType): string | null {

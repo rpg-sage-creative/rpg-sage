@@ -417,7 +417,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 			// diceSecretMethodType: DiceSecretMethodType.Ignore,
 			// gameSystemType: GameSystemType.None,
 			gmCharacterName: GameCharacter.defaultGmCharacterName,
-			id: null!,
+			id: guild.id,
 			name: guild.name,
 			objectType: "Server",
 			commandPrefix: activeBot.commandPrefix,
