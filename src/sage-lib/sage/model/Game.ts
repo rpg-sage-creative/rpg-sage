@@ -155,7 +155,7 @@ function fixDupeUsers(game: GameCore): void {
 }
 
 export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore, HasPostCurrency {
-	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {if(!server)console.trace("no server");
+	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {
 		super(updateGame(core), sageCache);
 		fixDupeUsers(core);
 
