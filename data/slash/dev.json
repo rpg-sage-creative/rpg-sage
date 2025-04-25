@@ -1,5 +1,9 @@
 [
-	{ "options": [], "name": "sage-dev-dm", "description": "Establish direct message channel with RPG Sage." },
+	{
+		"options": [],
+		"name": "sage-dev-dm",
+		"description": "Establish direct message channel with RPG Sage."
+	},
 	{
 		"options": [
 			{
@@ -18,6 +22,7 @@
 							{ "name": "SF2e", "value": "SF2e" },
 							{ "name": "CnC", "value": "CnC" },
 							{ "name": "E20", "value": "E20" },
+							{ "name": "D20", "value": "D20" },
 							{ "name": "DnD5e", "value": "DnD5e" },
 							{ "name": "Quest", "value": "Quest" },
 							{ "name": "VtM5e", "value": "VtM5e" }
@@ -95,7 +100,12 @@
 					}
 				]
 			},
-			{ "type": 1, "name": "details", "description": "View an RPG Sage Game", "options": [] },
+			{
+				"type": 1,
+				"name": "details",
+				"description": "View an RPG Sage Game",
+				"options": []
+			},
 			{
 				"type": 1,
 				"name": "update",
@@ -112,6 +122,7 @@
 							{ "name": "SF2e", "value": "SF2e" },
 							{ "name": "CnC", "value": "CnC" },
 							{ "name": "E20", "value": "E20" },
+							{ "name": "D20", "value": "D20" },
 							{ "name": "DnD5e", "value": "DnD5e" },
 							{ "name": "Quest", "value": "Quest" },
 							{ "name": "VtM5e", "value": "VtM5e" }
@@ -190,12 +201,21 @@
 					{ "type": 3, "name": "remove", "description": "Channels or Users to Remove from the Game", "required": false }
 				]
 			},
-			{ "type": 1, "name": "archive", "description": "Archive an RPG Sage Game", "options": [] }
+			{
+				"type": 1,
+				"name": "archive",
+				"description": "Archive an RPG Sage Game",
+				"options": []
+			}
 		],
 		"name": "sage-dev-game",
 		"description": "sage-dev-Game"
 	},
-	{ "options": [], "name": "sage-dev-help", "description": "Get basic Help for RPG Sage." },
+	{
+		"options": [],
+		"name": "sage-dev-help",
+		"description": "Get basic Help for RPG Sage."
+	},
 	{
 		"options": [
 			{
@@ -276,7 +296,12 @@
 	},
 	{
 		"options": [
-			{ "type": 1, "name": "calendar", "description": "Calendar days/months for PF/SF Games", "options": [] },
+			{
+				"type": 1,
+				"name": "calendar",
+				"description": "Calendar days/months for PF/SF Games",
+				"options": []
+			},
 			{
 				"type": 1,
 				"name": "date",
