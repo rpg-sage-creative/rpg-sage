@@ -70,8 +70,9 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	/** Gets the entity using .readCoreById(), caching the value before returning it. */
 	protected async readById(id: IdType): Promise<OrNull<U>> {
-		const cached = globalCacheGet<T>(this.objectTypePlural, id);
-		const core = await globalCacheRead<T>(this.objectTypePlural, cached?.id ?? id);
+		const cached = globalCacheGet<T>(this.objectTypePlural, id)
+			?? { id, objectType:(this.constructor as typeof IdRepository).objectType };
+		const core = await globalCacheRead<T>(cached);
 		if (core) {
 			const repo = this.constructor as typeof IdRepository;
 			const entity = await repo.fromCore(core, this.sageCache) as U;

@@ -30,7 +30,7 @@ export class GameRepo extends IdRepository<GameCore, Game> {
 		};
 
 		const cacheItems = globalCacheFilter(this.objectTypePlural, contentFilter) as GlobalCacheItem[];
-		const cores = await mapAsync(cacheItems, item => globalCacheRead("games", item.id)) as GameCore[];
+		const cores = await mapAsync(cacheItems, item => globalCacheRead(item)) as GameCore[];
 		return cores.filter(isDefined).map(core => new Game(core, server, sageCache));
 	}
 
@@ -81,7 +81,7 @@ export class GameRepo extends IdRepository<GameCore, Game> {
 		if (cachedGame) return cachedGame;
 
 		const uncachedItem = globalCacheFind(this.objectTypePlural, contentFilter);
-		const uncachedCore = uncachedItem ? await globalCacheRead("games", uncachedItem.id) : uncachedItem;
+		const uncachedCore = uncachedItem ? await globalCacheRead(uncachedItem) : uncachedItem;
 		if (uncachedCore) {
 			const game = await GameRepo.fromCore(uncachedCore, this.sageCache);
 			this.cacheId(game);

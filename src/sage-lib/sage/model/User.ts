@@ -168,8 +168,8 @@ export class User extends HasDidCore<UserCore> {
 		return this.sageCache.users.write(this);
 	}
 
-	public static createCore(userDid: Snowflake): UserCore {
-		return { objectType: "User", did: userDid, id: null! };
+	public static createCore(userId: Snowflake): UserCore {
+		return { objectType: "User", did: userId, id: userId };
 	}
 
 }
