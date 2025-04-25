@@ -189,6 +189,7 @@ function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
 	return core as GameCharacterCore;
 }
 
+/** @deprecated An initial attempt at the global in memory cache caused character lastMessages cores to become crazily nested! */
 function fixLastMessages(core: GameCharacterCore): void {
 	core.lastMessages = core.lastMessages?.map((lm: DialogMessageDataCore | { core:DialogMessageDataCore }) => {
 		while("core" in lm) {
