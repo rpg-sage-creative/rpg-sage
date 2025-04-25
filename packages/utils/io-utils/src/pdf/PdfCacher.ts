@@ -1,6 +1,6 @@
 import { getDataRoot, randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import PDFParser from "pdf2json";
-import { deleteFileSync } from "../fs/deleteFileSync.js";
+import { deleteFile } from "../fs/deleteFile.js";
 import { writeFile } from "../fs/writeFile.js";
 import { getBuffer } from "../https/getBuffer.js";
 import { PdfJsonManager } from "./PdfJsonManager.js";
@@ -10,20 +10,20 @@ import type { PdfJson } from "./types.js";
 export class PdfCacher {
 
 	/** The local file id. */
-	private id: Snowflake;
+	private readonly id: Snowflake;
 
 	/** The path to the local file. */
-	private cachedPdfPath: string;
+	private readonly cachedPdfPath: string;
 
 	/** Creates a new PdfCacher for the given url. */
-	public constructor(private url: string) {
+	public constructor(private readonly url: string) {
 		this.id = randomSnowflake();
 		this.cachedPdfPath = `${getDataRoot("cache/pdf", true)}/${this.id}.pdf`;
 	}
 
 	/** Reads from the url and writes the local file. */
 	private async setCache(): Promise<boolean> {
-		const buffer = await getBuffer(this.url).catch(() => null);
+		const buffer = await getBuffer(this.url).catch(() => undefined);
 		if (buffer) {
 			return writeFile(this.cachedPdfPath, buffer, true).catch(() => false);
 		}
@@ -65,13 +65,13 @@ export class PdfCacher {
 
 			pdfParser.once("pdfParser_dataError", async (errData: any) => {
 				clearTimer();
-				this.removeCache();
+				await this.removeCache();
 				reject(errData?.parserError);
 			});
 
 			pdfParser.once("pdfParser_dataReady", async (json: any) => {
 				clearTimer();
-				this.removeCache();
+				await this.removeCache();
 				resolve(json);
 			});
 
@@ -98,8 +98,8 @@ export class PdfCacher {
 	}
 
 	/** Deletes the local file. */
-	private removeCache(): boolean {
-		return deleteFileSync(this.cachedPdfPath);
+	private async removeCache(): Promise<boolean> {
+		return deleteFile(this.cachedPdfPath).catch(() => false);
 	}
 
 	/** Convenience for new PdfCacher(url).read(); */

@@ -1,5 +1,5 @@
 import { error, errorReturnFalse, errorReturnNull, getDataRoot, isNonNilSnowflake, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { deleteFileSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { deleteFile, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import type { Message, MessageReference, PartialMessage } from "discord.js";
 
 /** @deprecated Moving to DialogMessageData */
@@ -179,7 +179,7 @@ export class DialogMessageRepository {
 
 				// delete the old file
 				if (success) {
-					deleteFileSync(oldFilePath);
+					await deleteFile(oldFilePath);
 				}
 			}
 		}
