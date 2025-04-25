@@ -711,7 +711,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 			text = this.emoji.emojify(text);
 			text = this.server.emojify(text);
 		}catch(ex) {
-			error(ex);
+			error({ gameId:this.id, serverId:this.serverId, serverDid:this.serverDid }, ex);
 		}
 		return text;
 	}
