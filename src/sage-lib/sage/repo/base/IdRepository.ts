@@ -1,4 +1,4 @@
-import { EphemeralMap, getDataRoot, HasIdCore, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { debug, EphemeralMap, getDataRoot, HasIdCore, toLiteral, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import type { SageCache } from "../../model/SageCache.js";
 import { globalCacheGet, globalCachePut, globalCacheRead } from "./globalCache.js";
 
@@ -48,15 +48,25 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 
 	//#region Entities
 
-	/** Gets the entity by id, checking cache first. */
-	public async getById(id: Optional<IdType>): Promise<OrNull<U>> {
-		if (!id) {
-			return null;
+	/**
+	 * Gets the entity by id, checking cache first.
+	 * Multiple ids are accepted so that we can more efficiently find things we have multiple ids for (id, did, uuid).
+	 * Example: ServerRepo.getById(game.serverId, game.serverDid)
+	 * @todo when we consolidate our ids we can remove this multi id option
+	 */
+	public async getById(...ids: Optional<IdType>[]): Promise<OrNull<U>> {
+		/** @todo proper filter on snowflake/uuid ? */
+		const validIds = ids.filter(s => s) as IdType[];
+
+		// if we have it mapped, use it
+		for (const id of validIds) {
+			if (this.idToEntityMap.has(id)) {
+				return this.idToEntityMap.get(id) ?? null;
+			}
 		}
-		if (this.idToEntityMap.has(id)) {
-			return this.idToEntityMap.get(id) ?? null;
-		}
-		return this.readById(id);
+
+		// we have to get it from cache or file
+		return this.readById(...validIds);
 	}
 
 	/** Gets the entities by id, checking cache first. */
@@ -68,17 +78,39 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 		return entities;
 	}
 
-	/** Gets the entity using .readCoreById(), caching the value before returning it. */
-	protected async readById(id: IdType): Promise<OrNull<U>> {
-		const cached = globalCacheGet<T>(this.objectTypePlural, id)
-			?? { id, objectType:(this.constructor as typeof IdRepository).objectType };
-		const core = await globalCacheRead<T>(cached);
-		if (core) {
-			const repo = this.constructor as typeof IdRepository;
+	/**
+	 * Gets the entity using .readCoreById(), caching the value before returning it.
+	 * Multiple ids are accepted so that we can more efficiently find things we have multiple ids for (id, did, uuid).
+	 * Example: readById(serverId, serverDid)
+	 * @todo when we consolidate our ids we can remove this multi id option
+	 */
+	protected async readById(...ids: IdType[]): Promise<OrNull<U>> {
+		const repo = this.constructor as typeof IdRepository;
+
+		const ret = async (core: T) => {
 			const entity = await repo.fromCore(core, this.sageCache) as U;
 			this.cacheId(entity);
 			return entity;
 		}
+
+		// check the existing in memory cache first
+		for (const id of ids) {
+			const cached = globalCacheGet<T>(this.objectTypePlural, id);
+			if (cached) {
+				const core = await globalCacheRead<T>(cached);
+				if (core) return ret(core);
+			}
+		}
+
+		// check the file system next
+		for (const id of ids) {
+			const item = { id, objectType:repo.objectType };
+			const core = await globalCacheRead<T>(item);
+			if (core) return ret(core);
+		}
+
+		debug({ ev:`${repo.name}.readById(${toLiteral(ids)}): Item Not Found!`, objectType:repo.objectType, ids });
+
 		return null;
 	}
 
