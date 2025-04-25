@@ -169,18 +169,33 @@ function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
 		});
 	}
 	//#endregion
+
 	//#region update embedColor
 	if (core.embedColor) {
 		core.embedColor = Color.from(core.embedColor)?.hex;
 	}
 	//#endregion
+
 	//#region move .iconUrl to .avatarUrl
 	if (core.iconUrl) {
 		core.avatarUrl = core.iconUrl;
 	}
 	delete core.iconUrl;
 	//#endregion
+
+	/** @todo remove this when the cores have all been fixed! */
+	fixLastMessages(core as GameCharacterCore);
+
 	return core as GameCharacterCore;
+}
+
+function fixLastMessages(core: GameCharacterCore): void {
+	core.lastMessages = core.lastMessages?.map((lm: DialogMessageDataCore | { core:DialogMessageDataCore }) => {
+		while("core" in lm) {
+			lm = lm.core;
+		}
+		return lm;
+	});
 }
 
 //#endregion
