@@ -13,11 +13,16 @@ type Commands = {
 
 export async function registerCommands(): Promise<Commands> {
 	const commands: Commands = { message:[], slash:[], user:[] };
+	const pathRoot = `./build/app-commands/commands`;
+	const filterFileOptions = {
+		fileFilter: (fileName: string) => fileName.endsWith(".js") && fileName !== "registerCommands.js",
+		recursive: true
+	};
 	try {
 		const botCodeName = getCodeName();
-		const commandPaths = await filterFiles("./app-commands/commands", fileName => fileName.endsWith(".js") && fileName !== "registerCommands.js", true);
+		const commandPaths = await filterFiles(pathRoot, filterFileOptions);
 		for (const commandPath of commandPaths) {
-			const { registerCommand } = await import(commandPath.replace("./app-commands/commands", ".")) as CommandImport<any>;
+			const { registerCommand } = await import(commandPath.replace(pathRoot, ".")) as CommandImport<any>;
 
 			let commandArray = commands.slash;
 			if (commandPath.includes("/message/")) {
