@@ -1,14 +1,11 @@
 {
 	"objectType": "Bot",
-	"id": "00000000-0000-4000-0000-000000000000",
-	"did": "0000000000000000",
-	"token": "000000000000000000000000000000000000000000000000",
+	"id": "0000000000000000",
 	"codeName": "dev",
-	"logLevel": "Silly",
+
 	"commandPrefix": "sage",
-	"acceptableBots": [
-		{ "did": "431544605209788416", "desc": "Tupperbox" }
-	],
+	"searchStatus": { "11": true, "12": true, "21": true },
+
 	"colors": [
 		{ "type": 1, "hex": "0x737CA1", "label": "Command" },
 		{ "type": 2, "hex": "0x98AFC7", "label": "AdminCommand" },
@@ -85,13 +82,16 @@
 		{ "type": 8108, "matches": [ "SE" ], "replacement": ":arrow_lower_right:" },
 		{ "type": 90, "matches": [ "aon" ], "replacement": "<:AoN:948328874712920095>" }
 	],
-	"searchStatus": { "11": true, "12": true, "21": true },
 	"macros": [
 		{
-			"category": "653643416311169044",
+			"category": "Fate",
 			"name": "dF",
 			"dice": "[xs 4d3 -8 {...}]"
 		},
-		{ "category": "653643416311169044", "name": "d66", "dice": "[xs d6 tens; d6 ones]" }
+		{
+			"category": "Two d6",
+			"name": "d66",
+			"dice": "[xs d6 tens; d6 ones]"
+		}
 	]
 }
