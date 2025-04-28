@@ -1,7 +1,10 @@
+import { getFromEnvJson } from "./internal/getFromEnvJson.js";
 import { getFromProcessArgv } from "./internal/getFromProcessArgv.js";
 import { getFromProcessEnv } from "./internal/getFromProcessEnv.js";
 import { logAndReturn } from "./internal/logAndReturn.js";
 import type { Validator } from "./types.js";
+
+let _getFromEnvJson: boolean | undefined;
 
 /**
  * Attempts to get the environment variable by checking process and then args.
@@ -12,15 +15,27 @@ import type { Validator } from "./types.js";
  * @returns
  */
 export function getFromProcessSafely<T>(test: Validator, ...keys: string[]): T | undefined {
-	for (const key of keys) {
-		const envValue = getFromProcessEnv(key);
-		if (test(envValue)) {
-			return logAndReturn(key, envValue);
-		}
+	_getFromEnvJson ??= process.argv.includes("--getFromEnvJson");
 
+	for (const key of keys) {
+		// command line args should take precendent
 		const argValue = getFromProcessArgv(key);
 		if (test(argValue)) {
-			return logAndReturn(key, argValue);
+			return logAndReturn("argv", key, argValue);
+		}
+
+		// follow up with ENV args
+		const envValue = getFromProcessEnv(key);
+		if (test(envValue)) {
+			return logAndReturn("env", key, envValue);
+		}
+
+		if (_getFromEnvJson) {
+			// check the config/env.json
+			const jsonValue = getFromEnvJson(key);
+			if (test(jsonValue)) {
+				return logAndReturn("json", key, jsonValue);
+			}
 		}
 	}
 	return undefined;

@@ -8,7 +8,8 @@ import { stringifyJson } from "../../json/stringifyJson.js";
  * @param value
  * @returns
  */
-export function logAndReturn<T>(key: string, value: string | number): T {
-	verbose(`Environment Variable: ${key}=${stringifyJson(value)}`);
+export function logAndReturn<T>(from: "argv" | "env" | "json", key: string, value: string | number): T {
+	const outValue = key === "sageToken" ? (value as string).split("").map(() => "*").join("") : value;
+	verbose(`Environment Variable (${from}): ${key}=${stringifyJson(outValue)}`);
 	return value as T;
 }
