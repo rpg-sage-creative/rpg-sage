@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.9.1",
+"version":"1.10.0",
 "branch":"main",
-"commit":"d2d9dca1b67619c23863387dd76a13471c1ed4c6",
-"commitSubject":"Merge pull request #131 from rpg-sage-creative/error-ses",
-"commitTs":1744870375000,
-"commitDate":"2025-04-16-2312",
-"buildTs":1744870549000,
-"buildDate":"2025-04-16-2315",
+"commit":"816f4fe16861c119b44756826b19d4a0bbb29835",
+"commitSubject":"Repo simplification (#134)",
+"commitTs":1745884347000,
+"commitDate":"2025-04-28-1652",
+"buildTs":1745884482000,
+"buildDate":"2025-04-28-1654",
 "author":"Randal"
 }
