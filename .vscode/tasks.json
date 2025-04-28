@@ -16,9 +16,9 @@
 			}
 		},
 		{
-			"label": "start-mono",
+			"label": "start-dev",
 			"command": "npm",
-			"args": ["run", "start-mono"],
+			"args": ["run", "start-dev"],
 			"group": {
 				"kind": "test",
 				"isDefault": true

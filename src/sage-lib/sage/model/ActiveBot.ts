@@ -1,4 +1,4 @@
-import { getSageId, getSuperUserId } from "@rsc-sage/env";
+import { getSageId, getSuperUserId, getToken } from "@rsc-sage/env";
 import { addLogHandler, captureProcessExit, chunk, error, errorReturnNull, formatArg, getCodeName, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { wrapUrl } from "@rsc-utils/discord-utils";
 import type { ClientOptions, Guild, Interaction, Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
@@ -124,7 +124,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		// TODO: I create webhook(s) as needed, so likely not needed.
 		// webhookUpdate: [channel: TextChannel | NewsChannel];
 
-		client.login(this.token);
+		client.login(getToken());
 	}
 
 	onInteractionCreate(interaction: Interaction): void {
@@ -246,8 +246,8 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 	public static async prepBot(): Promise<Bot> {
 		const id = getSageId();
-		const bot = await Bot.read(id);
-		if (!bot) throw new Error(`Cannot find bot: ${id}`);
+		const bot = await Bot.readOrCreate(id);
+		if (!bot) throw new Error(`Cannot find or create bot: ${id}`);
 		return bot;
 	}
 

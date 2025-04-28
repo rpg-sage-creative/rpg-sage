@@ -1,4 +1,3 @@
-import { info } from "../console/loggers/info.js";
 import type { Optional } from "../types/generics.js";
 import { getAwsRegion } from "./getAwsRegion.js";
 import { getFromProcessSafely } from "./getFromProcessSafely.js";
@@ -33,14 +32,12 @@ export function getEndpoint(server: string): Partial<AppServerEndpoint> {
 		const region = getAwsRegion(`${server.toLowerCase()}Region`);
 		const secure = getFromProcessSafely<string>(booleanValidator, `${server.toLowerCase()}Secure`) === "true";
 		const hostname = getFromProcessSafely<string>(value => hostnameValidator(value, region), `${server.toLowerCase()}Hostname`);
-		const port = getPort(server);
+		const port = getPort(server, true);
 
 		const valid = hostname && port ? true : false;
 
 		const endpoint = { secure, hostname, port, region, valid };
 		_endpoints[server] = endpoint;
-
-		info({ server, ...endpoint });
 	}
 	return _endpoints[server];
 }

@@ -17,10 +17,10 @@
 	https://json-schema.org/draft/2020-12/json-schema-validation
 	*/
 	"json.schemas": [
-		{
-			"fileMatch": ["**/bots/*.json"],
-			"url": "./schemas/bot.json"
+		// {
+			// "fileMatch": ["**/bots/*.json"],
+			// "url": "./schemas/bot.json"
 			// "url": "tsschema:///#IBotCore"
-		}
+		// }
 	]
 }
