@@ -1,5 +1,5 @@
 import type { Awaitable } from "@rsc-utils/core-utils";
-import { error, errorReturnNull, stringify, verbose, warn } from "@rsc-utils/core-utils";
+import { error, errorReturnUndefined, toLiteral, verbose, warn } from "@rsc-utils/core-utils";
 import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/io-utils";
 import { renderMap } from "./internal/renderMap.js";
 import { serverHandler } from "./internal/serverHandler.js";
@@ -75,7 +75,7 @@ export abstract class RenderableMap implements GameMap {
 	abstract getGrid(): Awaitable<[number, number, string | undefined]>;
 	abstract getLayers(): Awaitable<GameMapLayer[]>;
 	public async render(mimeType?: MimeType): Promise<Buffer | null> {
-		const mapData = await Promise.resolve(this.toJSON()).catch(errorReturnNull);
+		const mapData = await Promise.resolve(this.toJSON()).catch(errorReturnUndefined);
 		const response = mapData ? await renderMapData(mapData, mimeType) : null;
 		return response?.base64 ? Buffer.from(response.base64, "base64") : null;
 	}
@@ -97,13 +97,13 @@ export abstract class RenderableMap implements GameMap {
 	public static setEndpoint(endpointOrUrl: string | Partial<AppServerEndpoint>): void {
 		if (typeof(endpointOrUrl) === "string") {
 			RenderableMap.endpointUrl = endpointOrUrl;
-		}else {
+		}else if (endpointOrUrl.port) {
 			const protocol = endpointOrUrl.secure ? "https" : "http";
 			const hostname = endpointOrUrl.hostname ?? "localhost";
 			const port = endpointOrUrl.port ?? 0;
 			RenderableMap.endpointUrl = `${protocol}://${hostname}:${port}`;
 		}
-		verbose(`RenderableMap.setEndpoint(${stringify(endpointOrUrl)}) = ${RenderableMap.endpointUrl}`);
+		verbose(`RenderableMap.setEndpoint(${toLiteral(endpointOrUrl)}) = ${RenderableMap.endpointUrl}`);
 	}
 
 	public static setEndpoints(data: { aws:string; port:number; }): void {
