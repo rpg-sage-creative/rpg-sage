@@ -14,8 +14,6 @@ export type TBotCodeName = "dev" | "beta" | "stable";
 export type TCoreAuthor = { iconUrl?: string; name?: string; url?: string; };
 export type TCorePrefixes = { command?: string; search?: string; };
 
-export type TDev = { did: Snowflake; };
-
 /**
  * key = GameType
  * undefined | false = no search for this game
@@ -27,10 +25,6 @@ type TSearchStatus = { [key: number]: undefined | boolean | string; };
 export interface BotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	codeName: TBotCodeName;
 	commandPrefix?: string;
-	// devs?: TDev[];
-
-	/** Discord API bot token */
-	token: string;
 
 	/** Url to the Sage avatar/token. */
 	tokenUrl: string;
@@ -45,8 +39,6 @@ export class Bot extends HasDidCore<BotCore> implements IHasColorsCore, IHasEmoj
 	public constructor(core: BotCore, sageCache: SageCache) { super(core, sageCache); }
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
-	// public get devs(): TDev[] { return this.core.devs ?? []; }
-	public get token(): string { return this.core.token; }
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
 	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 
