@@ -32,7 +32,7 @@ export function getEndpoint(server: string): Partial<AppServerEndpoint> {
 		const region = getAwsRegion(`${server.toLowerCase()}Region`);
 		const secure = getFromProcessSafely<string>(booleanValidator, `${server.toLowerCase()}Secure`) === "true";
 		const hostname = getFromProcessSafely<string>(value => hostnameValidator(value, region), `${server.toLowerCase()}Hostname`);
-		const port = getPort(server);
+		const port = getPort(server, true);
 
 		const valid = hostname && port ? true : false;
 
