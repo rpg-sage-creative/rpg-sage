@@ -1,6 +1,6 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { errorReturnFalse, getDataRoot, warn, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
-import { readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { errorReturnFalse, getCodeName, getDataRoot, warn, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
+import { fileExists, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
@@ -101,15 +101,26 @@ export class Bot extends HasDidCore<BotCore> implements IHasColorsCore, IHasEmoj
 		return Bot.write(this);
 	}
 
-	public static async read(id: Snowflake): Promise<Bot | undefined> {
+	public static async readOrCreate(id: Snowflake): Promise<Bot | undefined> {
 		const botPath = `${getDataRoot("sage")}/bots/${id}.json`;
+		const exists = await fileExists(botPath);
+		if (!exists) {
+			const botTemplatePath = `${getDataRoot("sage")}/bots/bot.template.json`;
+			const templateCore = await readJsonFile<BotCore>(botTemplatePath);
+			if (templateCore) {
+				templateCore.id = id;
+				templateCore.codeName = getCodeName();
+				await Bot.write(templateCore);
+			}
+		}
 		const botCore = await readJsonFile<BotCore>(botPath);
 		return botCore ? new Bot(botCore!, null!) : undefined;
 	}
 
-	public static async write(bot: Bot): Promise<boolean> {
+	public static async write(bot: BotCore | Bot): Promise<boolean> {
 		const botPath = `${getDataRoot("sage")}/bots/${bot.id}.json`;
 		const formatted = bot.codeName === "dev";
-		return writeFile(botPath, bot.toJSON(), true, formatted).catch(errorReturnFalse);
+		const core = "toJSON" in bot ? bot.toJSON() : bot;
+		return writeFile(botPath, core, true, formatted).catch(errorReturnFalse);
 	}
 }

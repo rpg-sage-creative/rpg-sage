@@ -246,8 +246,8 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 	public static async prepBot(): Promise<Bot> {
 		const id = getSageId();
-		const bot = await Bot.read(id);
-		if (!bot) throw new Error(`Cannot find bot: ${id}`);
+		const bot = await Bot.readOrCreate(id);
+		if (!bot) throw new Error(`Cannot find or create bot: ${id}`);
 		return bot;
 	}
 
