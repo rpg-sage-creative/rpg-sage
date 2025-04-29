@@ -1,6 +1,6 @@
 import { error } from "@rsc-utils/core-utils";
+import { getPermsFor } from "@rsc-utils/discord-utils";
 import type { GuildMember, NonThreadGuildBasedChannel } from "discord.js";
-import { getPermsFor } from "./getPermsFor.js";
 
 /*
 https://discord.com/developers/docs/topics/permissions

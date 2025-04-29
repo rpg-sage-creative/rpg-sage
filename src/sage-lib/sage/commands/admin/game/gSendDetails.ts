@@ -1,9 +1,8 @@
 import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
 import { getDateStrings, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { addZeroWidthSpaces, toHumanReadable } from "@rsc-utils/discord-utils";
+import { addZeroWidthSpaces, getPermsFor, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { GuildMember, TextChannel } from "discord.js";
-import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
 import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";

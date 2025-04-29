@@ -1,12 +1,11 @@
 import { getTupperBoxId } from "@rsc-sage/env";
 import { debug, errorReturnFalse, errorReturnNull, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordKey, fetchIfPartial, isDiscordApiError, toHumanReadable, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, toHumanReadable, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageTarget, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Channel, Client, User as DUser, Guild, GuildMember, Interaction, Message, MessageReference } from "discord.js";
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { DiscordCache } from "../../discord/DiscordCache.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
-import { getPermsFor } from "../../discord/permissions/getPermsFor.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { GameRepo } from "../repo/GameRepo.js";
 import { ServerRepo } from "../repo/ServerRepo.js";

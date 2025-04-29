@@ -1,1 +1,0 @@
-export { getPermsFor } from "@rsc-utils/discord-utils";

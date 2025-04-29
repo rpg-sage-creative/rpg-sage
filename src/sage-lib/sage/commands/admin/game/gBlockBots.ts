@@ -1,9 +1,8 @@
 import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { isDefined } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { getPermsFor, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { TextChannel } from "discord.js";
 import { blockFromChannel } from "../../../../discord/permissions/blockFromChannel.js";
-import { getPermsFor } from "../../../../discord/permissions/getPermsFor.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
