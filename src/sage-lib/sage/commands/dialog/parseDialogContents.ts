@@ -1,8 +1,8 @@
 import { getCodeBlockSafeSplitter } from "@rsc-utils/string-utils";
-import { SageMessage } from "../../model/SageMessage";
-import type { DialogContent } from "./DialogContent";
-import { isStartOfDialog } from "./isStartOfDialog";
-import { parseUsableDialogContent } from "./parseUsableDialogContent";
+import { SageMessage } from "../../model/SageMessage.js";
+import type { DialogContent } from "./DialogContent.js";
+import { isStartOfDialog } from "./isStartOfDialog.js";
+import { parseUsableDialogContent } from "./parseUsableDialogContent.js";
 
 export function parseDialogContents(sageMessage: SageMessage, content: string): DialogContent[] {
 	// let's require the post to start with dialog before we check for multi dialog

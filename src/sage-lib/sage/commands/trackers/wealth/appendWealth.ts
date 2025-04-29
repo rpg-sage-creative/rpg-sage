@@ -1,5 +1,5 @@
-import type { Wealth } from "./Wealth";
-import { summarizeWealth } from "./summarizeWealth";
+import type { Wealth } from "./Wealth.js";
+import { summarizeWealth } from "./summarizeWealth.js";
 
 type WealthWithoutSummary = Omit<Wealth, "summary"> & { summary?:string; };
 

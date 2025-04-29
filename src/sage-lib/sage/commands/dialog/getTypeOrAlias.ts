@@ -1,5 +1,5 @@
-import { matchDialogType } from "./matchDialogType";
-import { getDialogTypeOrAliasRegex } from "./regex";
+import { matchDialogType } from "./matchDialogType.js";
+import { getDialogTypeOrAliasRegex } from "./regex.js";
 
 export function getTypeOrAlias(content: string) {
 	// make sure we have a valid start

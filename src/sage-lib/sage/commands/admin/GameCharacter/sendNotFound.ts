@@ -1,5 +1,5 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { createAdminRenderableContent } from "../../cmd";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { createAdminRenderableContent } from "../../cmd.js";
 
 export async function sendNotFound(sageMessage: SageMessage, command: string, entityNamePlural: string, nameFilter?: string): Promise<void> {
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>${command}</b>`);

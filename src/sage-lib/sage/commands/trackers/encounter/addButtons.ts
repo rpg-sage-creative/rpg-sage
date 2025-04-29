@@ -1,6 +1,6 @@
 import { debug } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ComponentEmojiResolvable } from "discord.js";
-import type { Encounter } from "./Encounter";
+import type { Encounter } from "./Encounter.js";
 
 type EncounterStatusActionType = "start" | "stop" | "charSelect";
 

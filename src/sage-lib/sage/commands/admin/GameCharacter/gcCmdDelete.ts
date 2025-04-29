@@ -1,9 +1,9 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { getCharacterTypeMeta } from "./getCharacterTypeMeta";
-import { getUserDid } from "./getUserDid";
-import { promptCharConfirm } from "./promptCharConfirm";
-import { sendNotFound } from "./sendNotFound";
-import { testCanAdminCharacter } from "./testCanAdminCharacter";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
+import { getUserDid } from "./getUserDid.js";
+import { promptCharConfirm } from "./promptCharConfirm.js";
+import { sendNotFound } from "./sendNotFound.js";
+import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdDelete(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);

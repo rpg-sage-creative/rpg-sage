@@ -1,4 +1,4 @@
-import type { TDialogType } from "./TDialogType";
+import type { TDialogType } from "./TDialogType.js";
 
 export function matchDialogType(typeOrAlias: string): TDialogType | undefined {
 	const types: TDialogType[] = ["edit","gm","npc","ally","enemy","boss","minion","pc","alt","companion","familiar","hireling"];

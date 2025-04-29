@@ -1,6 +1,6 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { getCharArgs } from "../common/getCharArgs";
-import { shareLeaves } from "../common/shareLeaves";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { getCharArgs } from "../common/getCharArgs.js";
+import { shareLeaves } from "../common/shareLeaves.js";
 
 export async function eCmdRemove(sageMessage: SageMessage): Promise<void> {
 	const cmdLabel = "Encounter: Remove Character";

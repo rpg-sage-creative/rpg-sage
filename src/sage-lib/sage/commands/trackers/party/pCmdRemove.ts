@@ -1,5 +1,5 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { shareLeaves } from "../common/shareLeaves";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { shareLeaves } from "../common/shareLeaves.js";
 
 export async function pCmdRemove(sageMessage: SageMessage): Promise<void> {
 	const game = sageMessage.game;
