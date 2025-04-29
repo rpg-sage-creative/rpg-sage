@@ -18,7 +18,7 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 		return false;
 	}
 
-	const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.did);
+	const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.id);
 	if (!bot) {
 		return false;
 	}

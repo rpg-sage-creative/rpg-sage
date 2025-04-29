@@ -40,7 +40,7 @@ function showGameRenderGameType(renderableContent: RenderableContent, game: Game
 }
 
 async function checkForMissingPerms(sageCommand: SageCommand, guildChannel?: TextChannel | null): Promise<string[]> {
-	const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.did);
+	const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.id);
 	if (bot && guildChannel) {
 		return getPermsFor(guildChannel, bot, ...getRequiredChannelPerms()).missing;
 	}

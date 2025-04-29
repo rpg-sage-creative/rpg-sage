@@ -101,7 +101,7 @@ export class MacroOwner {
 			case "user": owners = [new MacroOwner(actorId, "@Me", type)]; break;
 			case "game": owners = await getGames(sageCommand); break;
 			case "server": owners = [new MacroOwner(sageCommand.server.did, sageCommand.server.name, type)]; break;
-			case "global": owners = [new MacroOwner(sageCommand.bot.did, "RPG Sage", type)]; break;
+			case "global": owners = [new MacroOwner(sageCommand.bot.id as Snowflake, "RPG Sage", type)]; break;
 			default: owners = []; break;
 		}
 		owners.sort((a, b) => sortPrimitive(a.name, b.name));

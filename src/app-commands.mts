@@ -4,7 +4,7 @@ import { buildCommands } from "./app-commands/builders/buildCommands.js";
 import { countCharacters } from "./app-commands/builders/countCharacters.js";
 import { updateSlashCommands } from "./app-commands/rest/updateSlashCommands.js";
 import { wipeSlashCommands } from "./app-commands/rest/wipeSlashCommands.js";
-import type { BotCore } from "./app-commands/types.js";
+import type { BotCore } from "./sage-lib/sage/model/Bot.js";
 
 initializeConsoleUtilsByEnvironment();
 

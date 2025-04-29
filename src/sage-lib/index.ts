@@ -36,11 +36,11 @@ export async function activate(): Promise<void> {
 // }
 
 // function globalCommands(bot: Bot): void {
-// 	const url = `https://discord.com/api/v8/applications/${bot.did}/commands`;
+// 	const url = `https://discord.com/api/v8/applications/${bot.id}/commands`;
 // }
 
 // function guildCommands(bot: Bot): void {
 // 	const serverDid = Server.HomeServerDid;
-// 	const url = `https://discord.com/api/v8/applications/${bot.did}/guilds/${serverDid}/commands/permissions`;
+// 	const url = `https://discord.com/api/v8/applications/${bot.id}/guilds/${serverDid}/commands/permissions`;
 // }
 */

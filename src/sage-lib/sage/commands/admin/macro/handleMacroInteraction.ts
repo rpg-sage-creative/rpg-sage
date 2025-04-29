@@ -453,7 +453,7 @@ export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 		case "game": ownerId = sageMessage.game?.id as Snowflake; break;
 		case "user": ownerId = sageMessage.actorId; break;
 		case "server": ownerId = sageMessage.server.did; break;
-		case "global": ownerId = sageMessage.bot.did; break;
+		case "global": ownerId = sageMessage.bot.id as Snowflake; break;
 	}
 	if (!ownerId) {
 		ownerType = "user";

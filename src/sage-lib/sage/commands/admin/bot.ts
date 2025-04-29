@@ -37,7 +37,7 @@ async function sendBot(sageMessage: SageMessage): Promise<void> {
 	const { bot } = sageMessage;
 	const renderableContent = createAdminRenderableContent(bot);
 	renderableContent.setTitle(`<b>${bot.codeName}</b>`);
-	const botUser = await sageMessage.discord.fetchUser(bot.did);
+	const botUser = await sageMessage.discord.fetchUser(bot.id);
 	if (botUser) {
 		renderableContent.setThumbnailUrl(botUser.displayAvatarURL());
 		renderableContent.append(`<b>Username</b> ${toHumanReadable(botUser)}`);
@@ -51,7 +51,7 @@ async function sendBot(sageMessage: SageMessage): Promise<void> {
 		// }
 	} else {
 		renderableContent.append(`<b>Username</b> ${"<i>UNKNOWN</i>"}`);
-		renderableContent.append(`<b>User Id</b> ${bot.did || "<i>NOT SET</i>"}`);
+		renderableContent.append(`<b>User Id</b> ${bot.id || "<i>NOT SET</i>"}`);
 		renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
 	}
 	renderableContent.appendTitledSection("Search Engine Status by Game", ...getBotSearchStatus(bot));

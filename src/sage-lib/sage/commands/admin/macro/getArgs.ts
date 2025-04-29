@@ -213,7 +213,7 @@ export async function getArgs(sageCommand: SageCommand): Promise<Args> {
 			ownerId = sageCommand.server.did;
 		}
 		if (ownerType === "global") {
-			ownerId = sageCommand.bot.did;
+			ownerId = sageCommand.bot.id as Snowflake;
 		}
 		if (ownerId) {
 			macros = await Macros.parse(sageCommand, { id:ownerId, type:ownerType });

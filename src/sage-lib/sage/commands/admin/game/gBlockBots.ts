@@ -20,7 +20,7 @@ export async function gBlockBots(sageCommand: SageCommand, _game?: Game): Promis
 	}
 
 
-	const sageGuildMember = await sageCommand.discord.fetchGuildMember(sageCommand.bot.did);
+	const sageGuildMember = await sageCommand.discord.fetchGuildMember(sageCommand.bot.id);
 	if (!sageGuildMember) {
 		return false;
 	}

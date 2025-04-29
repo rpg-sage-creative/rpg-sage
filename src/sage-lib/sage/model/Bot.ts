@@ -1,7 +1,7 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { errorReturnFalse, getCodeName, getDataRoot, warn, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnFalse, getCodeName, getDataRoot, warn, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
 import { fileExists, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
+import { HasIdCoreAndSageCache } from "../repo/base/IdRepository.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
@@ -22,7 +22,7 @@ export type TCorePrefixes = { command?: string; search?: string; };
  */
 type TSearchStatus = { [key: number]: undefined | boolean | string; };
 
-export interface BotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
+export interface BotCore extends IdCore<"Bot">, IHasColors, IHasEmoji {
 	codeName: TBotCodeName;
 	commandPrefix?: string;
 
@@ -35,7 +35,7 @@ export interface BotCore extends DidCore<"Bot">, IHasColors, IHasEmoji {
 	macros?: MacroBase[];
 }
 
-export class Bot extends HasDidCore<BotCore> implements IHasColorsCore, IHasEmojiCore {
+export class Bot extends HasIdCoreAndSageCache<BotCore> implements IHasColorsCore, IHasEmojiCore {
 	public constructor(core: BotCore, sageCache: SageCache) { super(core, sageCache); }
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }

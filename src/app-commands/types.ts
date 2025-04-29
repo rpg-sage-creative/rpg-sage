@@ -12,7 +12,6 @@ import type {
 	SlashCommandSubcommandGroupBuilder,
 	SlashCommandUserOption
 } from "@discordjs/builders";
-import type { CodeName } from "@rsc-utils/core-utils";
 
 export type SlashCommandGameType = "PF1E" | "PF2E" | "SF1E" | "SF2E" | "Finder";
 
@@ -59,14 +58,3 @@ export type Builder = SlashCommandBuilder | SlashCommandSubcommandBuilder | Slas
 export type BuilderCommand = SlashCommandBuilder | SlashCommandSubcommandBuilder;
 export type BuilderOption = SlashCommandAttachmentOption | SlashCommandBooleanOption | SlashCommandChannelOption | SlashCommandIntegerOption | SlashCommandMentionableOption | SlashCommandNumberOption | SlashCommandRoleOption | SlashCommandStringOption | SlashCommandUserOption;
 export type BuilderOrOption = Builder | BuilderOption;
-
-export type BotCore = {
-	/** bot codename: dev, beta, stable */
-	codeName: CodeName;
-
-	/** bot id / snowflake */
-	did: string;
-
-	/** Discord API bot token */
-	token: string;
-};
