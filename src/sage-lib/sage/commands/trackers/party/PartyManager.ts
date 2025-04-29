@@ -1,8 +1,8 @@
 import { randomSnowflake, type Optional } from "@rsc-utils/core-utils";
-import type { CharacterShellCore } from "../../../model/CharacterShell";
-import type { Game } from "../../../model/Game";
-import { Manager } from "../common/Manager";
-import { Party, type PartyCore } from "./Party";
+import type { CharacterShellCore } from "../../../model/CharacterShell.js";
+import type { Game } from "../../../model/Game.js";
+import { Manager } from "../common/Manager.js";
+import { Party, type PartyCore } from "./Party.js";
 
 export class PartyManager extends Manager<PartyCore, Party> {
 

@@ -1,7 +1,7 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { getCharArgs } from "../common/getCharArgs";
-import { getPartyArgs } from "../common/getPartyArgs";
-import { shareJoins } from "../common/shareJoins";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { getCharArgs } from "../common/getCharArgs.js";
+import { getPartyArgs } from "../common/getPartyArgs.js";
+import { shareJoins } from "../common/shareJoins.js";
 
 export async function eCmdCreate(sageMessage: SageMessage): Promise<void> {
 	const game = sageMessage.game;

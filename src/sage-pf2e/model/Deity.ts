@@ -3,8 +3,7 @@ import { RenderableContent } from "../data/RenderableContent.js";
 import type { TDevoteeBenefitsCore } from "./DevoteeBenefits.js";
 import { DevoteeBenefits } from "./DevoteeBenefits.js";
 import type { Domain } from "./Domain.js";
-import type { FaithCoreBase } from "./Faith.js";
-import { Faith } from "./Faith.js";
+import { Faith, type FaithCoreBase } from "./Faith.js";
 
 export type TDeitySpell = {
 	level: number;

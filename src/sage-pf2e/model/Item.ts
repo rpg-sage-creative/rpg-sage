@@ -1,6 +1,5 @@
-import type { IPoison, TAction } from "./../common";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import type { IPoison, TAction } from "./../common.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface ItemCore extends SourcedCore<"Item"> {
 	level: number;

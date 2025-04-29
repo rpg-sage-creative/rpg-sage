@@ -1,5 +1,5 @@
-import { ColorType } from "../../model/HasColorsCore";
-import type { TDialogType } from "./TDialogType";
+import { ColorType } from "../../model/HasColorsCore.js";
+import type { TDialogType } from "./TDialogType.js";
 
 export function getColorType(dialogType?: TDialogType): ColorType | null {
 	switch (dialogType) {

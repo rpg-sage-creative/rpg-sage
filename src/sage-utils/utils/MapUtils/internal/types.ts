@@ -1,5 +1,5 @@
 import type { Image, SKRSContext2D } from "@napi-rs/canvas";
-import type { GameMapData, MimeType } from "../types";
+import type { GameMapData, MimeType } from "../types.js";
 
 export type MapMeta = {
 	pxPerCol: number;

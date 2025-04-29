@@ -2,8 +2,7 @@ import { warn, type RenderableContent as UtilsRenderableContent } from "@rsc-uti
 import { RenderableContent } from "../data/RenderableContent.js";
 import { findByValue } from "../data/Repository.js";
 import type { FocusSpell } from "./FocusSpell.js";
-import type { SourcedCore } from "./base/HasSource.js";
-import { HasSource } from "./base/HasSource.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface DomainCore extends SourcedCore<"Domain"> {
 	spells: string[];

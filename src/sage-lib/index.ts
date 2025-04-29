@@ -1,7 +1,8 @@
 import { getSageId } from "@rsc-sage/env";
 import { error } from "@rsc-utils/core-utils";
+import { DiscordCache } from "@rsc-utils/discord-utils";
 import { registerAndLoad } from "../sage-pf2e/index.js";
-import { DiscordCache, registerPrompts } from "./discord/index.js";
+import { registerPrompts } from "./discord/index.js";
 import { registerCommandHandlers } from "./sage/commands/index.js";
 import { ActiveBot } from "./sage/model/ActiveBot.js";
 import { globalCachePopulate } from "./sage/repo/base/globalCache.js";

@@ -1,12 +1,10 @@
-import type { ISourceReference } from "../../common";
-import { findByValue } from "../../data/Repository";
-import type { BaseCore } from "../base/Base";
-import type { SourcedCore } from "../base/HasSource";
-import { HasSource } from "../base/HasSource";
-import type { Item } from "../Item";
-import type { ItemCore } from "../Item";
-import type { Creature } from "./Creature";
-import type { ICreature } from "./ICreature";
+import type { ISourceReference } from "../../common.js";
+import { findByValue } from "../../data/Repository.js";
+import type { BaseCore } from "../base/Base.js";
+import { HasSource, type SourcedCore } from "../base/HasSource.js";
+import type { Item, ItemCore } from "../Item.js";
+import type { Creature } from "./Creature.js";
+import type { ICreature } from "./ICreature.js";
 
 export interface IHasLevelAndName { level: number; name: string; }
 export function sortByLevelThenName(a: IHasLevelAndName, b: IHasLevelAndName): number {

@@ -1,4 +1,4 @@
-import { Ability, type AbilityName } from "./Ability";
+import { Ability, type AbilityName } from "./Ability.js";
 
 export interface IHasAbilities { abilities: Abilities; }
 

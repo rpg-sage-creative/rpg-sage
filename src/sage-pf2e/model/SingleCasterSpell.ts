@@ -1,8 +1,7 @@
 import { StringMatcher } from "@rsc-utils/string-utils";
-import { findByValue } from "../data/Repository";
-import type { ArcaneSchool } from "./ArcaneSchool";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import { findByValue } from "../data/Repository.js";
+import type { ArcaneSchool } from "./ArcaneSchool.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface SingleCasterSpellCore extends SourcedCore<"SingleCasterSpell"> {
 	caster: string;

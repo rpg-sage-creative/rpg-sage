@@ -1,7 +1,7 @@
-import { mapSageChannelNameTags } from "../../../model/Game";
-import type { SageMessage } from "../../../model/SageMessage";
-import { Encounter } from "./Encounter";
-import { addButtons } from "./addButtons";
+import { mapSageChannelNameTags } from "../../../model/Game.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { Encounter } from "./Encounter.js";
+import { addButtons } from "./addButtons.js";
 
 async function unpinChannel(sageMessage: SageMessage, channelId: string) {
 	const game = sageMessage.game;

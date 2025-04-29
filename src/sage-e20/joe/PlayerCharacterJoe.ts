@@ -1,6 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { PlayerCharacterCoreE20, TArmorE20, TWeaponE20 } from "../common/PlayerCharacterE20";
-import { PlayerCharacterE20 } from "../common/PlayerCharacterE20";
+import { PlayerCharacterE20, type PlayerCharacterCoreE20, type TArmorE20, type TWeaponE20 } from "../common/PlayerCharacterE20.js";
 
 export type TArmorJoe = TArmorE20 & {
 	upgrades?: string;

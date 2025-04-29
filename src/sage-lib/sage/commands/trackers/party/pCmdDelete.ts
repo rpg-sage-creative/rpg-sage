@@ -1,4 +1,4 @@
-import type { SageMessage } from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage.js";
 
 export async function pCmdDelete(sageMessage: SageMessage): Promise<void> {
 	const game = sageMessage.game;

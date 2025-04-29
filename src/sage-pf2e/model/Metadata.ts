@@ -1,4 +1,4 @@
-import type { TAbility, TBonusType, TProficiency, TSpeedType, TMagicTradition, TCasterType, TSize } from "../common";
+import type { TAbility, TBonusType, TProficiency, TSpeedType, TMagicTradition, TCasterType, TSize } from "../common.js";
 
 /**************************************************************************************************************************/
 // Interfaces and Class

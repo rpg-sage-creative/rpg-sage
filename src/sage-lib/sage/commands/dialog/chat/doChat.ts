@@ -1,11 +1,11 @@
 import { error } from "@rsc-utils/core-utils";
-import type { GameCharacter } from "../../../model/GameCharacter";
-import type { ColorType } from "../../../model/HasColorsCore";
-import type { SageMessage } from "../../../model/SageMessage";
-import type { DialogContent } from "../DialogContent";
-import { sendDialogPost } from "../sendDialogPost";
-import type { ChatOptions } from "./ChatOptions";
-import { replaceCharacterMention } from "./replaceCharacterMention";
+import type { GameCharacter } from "../../../model/GameCharacter.js";
+import type { ColorType } from "../../../model/HasColorsCore.js";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import type { DialogContent } from "../DialogContent.js";
+import { sendDialogPost } from "../sendDialogPost.js";
+import type { ChatOptions } from "./ChatOptions.js";
+import { replaceCharacterMention } from "./replaceCharacterMention.js";
 
 type ChatContent = {
 	character?: GameCharacter | null;

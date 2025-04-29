@@ -1,6 +1,6 @@
 import { errorReturnFalse, errorReturnNull, getDataRoot, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
-import { RenderableGameMap } from "./RenderableGameMap";
+import { RenderableGameMap } from "./RenderableGameMap.js";
 
 //#region types
 

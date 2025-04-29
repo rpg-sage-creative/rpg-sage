@@ -1,6 +1,6 @@
 import type { GuildMember, PermissionFlagsBits, TextChannel } from "discord.js";
-import { getPermsFor } from "./getPermsFor.js";
 import { getRequiredChannelPerms } from "./getRequiredChannelPerms.js";
+import { getPermsFor } from "@rsc-utils/discord-utils";
 
 /*
 https://discord.com/developers/docs/topics/permissions

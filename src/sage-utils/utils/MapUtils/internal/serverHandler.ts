@@ -1,6 +1,6 @@
 import type { BufferHandlerJsonError, BufferHandlerResponse } from "@rsc-utils/io-utils";
 import { parse } from "@rsc-utils/core-utils";
-import type { MapRenderPayload, MapRenderResponse } from "../types";
+import type { MapRenderPayload, MapRenderResponse } from "../types.js";
 import { renderMap } from "./renderMap.js";
 
 /**

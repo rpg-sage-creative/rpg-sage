@@ -3,7 +3,7 @@ import { error, verbose } from "@rsc-utils/core-utils";
 import { stringify } from "@rsc-utils/core-utils";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { loadImage } from "./loadImage.js";
-import type { MapCache } from "./types";
+import type { MapCache } from "./types.js";
 
 function drawLine(context: SKRSContext2D, x1: number, y1: number, x2: number, y2: number): void {
 	context.beginPath();

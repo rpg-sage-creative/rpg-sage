@@ -1,12 +1,10 @@
 import { warn } from "@rsc-utils/core-utils";
-import type { HasContents, HasParent, HasQuantity, IHasContents, IHasParent, IHasQuantity, TContentItem, TContentItemArray, TObjectQuantity } from "../common";
-import { MDASH } from "../common";
-import { filter, findByValue } from "../data/Repository";
-import type { TDetail } from "../model/base/interfaces";
-import { Bulk } from "./Bulk";
-import type { Base } from "./base/Base";
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import { MDASH, type HasContents, type HasParent, type HasQuantity, type IHasContents, type IHasParent, type IHasQuantity, type TContentItem, type TContentItemArray, type TObjectQuantity } from "../common.js";
+import { filter, findByValue } from "../data/Repository.js";
+import type { TDetail } from "../model/base/interfaces.js";
+import { Bulk } from "./Bulk.js";
+import type { Base } from "./base/Base.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export function toObjectQuantities<T extends HasBulk>(contentItems: TContentItemArray, defaultObjectType: string): TObjectQuantity<T>[] {
 	return (contentItems ?? []).map(contentItem => toObjectQuantity(contentItem, defaultObjectType));

@@ -1,6 +1,5 @@
 import type { OrNull, OrUndefined, RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
-import type { TRarity } from "../../common.js";
-import { COMMON, RARITIES } from "../../common.js";
+import { COMMON, RARITIES, type TRarity } from "../../common.js";
 import { RenderableContent } from "../../data/RenderableContent.js";
 import { find, findByValue } from "../../data/Repository.js";
 import { Base, type BaseCore } from "./Base.js";

@@ -1,4 +1,4 @@
-import type { SageCommand } from "../../model/SageCommand";
+import type { SageCommand } from "../../model/SageCommand.js";
 import { createAuthorMention } from "./createAuthorMention.js";
 import { createGmMention } from "./createGmMention.js";
 

@@ -1,11 +1,9 @@
 import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
-import type { TAbility } from "../common.js";
-import { CONSTITUTION, DEXTERITY, STRENGTH } from "../common.js";
+import { CONSTITUTION, DEXTERITY, STRENGTH, type TAbility } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { filter, findByValue } from "../data/Repository.js";
 import type { Action } from "./Action.js";
-import type { SourcedCore } from "./base/HasSource.js";
-import { HasSource } from "./base/HasSource.js";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 /**************************************************************************************************************************/
 // Interface and Class

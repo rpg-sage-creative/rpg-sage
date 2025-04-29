@@ -1,5 +1,5 @@
-import type { MapRenderResponse } from "../types";
-import type { MapCache } from "./types";
+import type { MapRenderResponse } from "../types.js";
+import type { MapCache } from "./types.js";
 
 /**
  * @private

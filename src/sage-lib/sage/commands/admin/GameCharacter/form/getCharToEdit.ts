@@ -1,6 +1,6 @@
 import type { Snowflake, UUID } from "@rsc-utils/core-utils";
-import { GameCharacter } from "../../../../model/GameCharacter";
-import type { SageCommand } from "../../../../model/SageCommand";
+import { GameCharacter } from "../../../../model/GameCharacter.js";
+import type { SageCommand } from "../../../../model/SageCommand.js";
 
 type CharId = Snowflake | UUID | string;
 

@@ -1,5 +1,5 @@
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import type { SageMessage } from "../../../model/SageMessage";
+import type { SageMessage } from "../../../model/SageMessage.js";
 
 export async function pCmdList(sageMessage: SageMessage): Promise<void> {
 	const game = sageMessage.game;

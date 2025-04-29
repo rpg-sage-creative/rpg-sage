@@ -1,6 +1,6 @@
-import type { SageMessage } from "../../../model/SageMessage";
-import { getCharArgs } from "../common/getCharArgs";
-import { shareJoins } from "../common/shareJoins";
+import type { SageMessage } from "../../../model/SageMessage.js";
+import { getCharArgs } from "../common/getCharArgs.js";
+import { shareJoins } from "../common/shareJoins.js";
 
 export async function pCmdCreate(sageMessage: SageMessage): Promise<void> {
 	const game = sageMessage.game;
