@@ -1,4 +1,4 @@
-import { DASH, LIGHT_BULK, MDASH } from "../common";
+import { DASH, LIGHT_BULK, MDASH } from "../common.js";
 
 export class Bulk {
 	public constructor();

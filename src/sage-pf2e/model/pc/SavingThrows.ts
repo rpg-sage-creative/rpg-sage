@@ -1,5 +1,4 @@
-import type { TAbility, TSavingThrow } from "../../common.js";
-import { CONSTITUTION, DEXTERITY, FORTITUDE, getSavingThrows, REFLEX, toModifier, WILL, WISDOM } from "../../common.js";
+import { CONSTITUTION, DEXTERITY, FORTITUDE, getSavingThrows, REFLEX, toModifier, WILL, WISDOM, type TAbility, type TSavingThrow } from "../../common.js";
 import { Check } from "./Check.js";
 import { PathbuilderCharacter } from "./PathbuilderCharacter.js";
 

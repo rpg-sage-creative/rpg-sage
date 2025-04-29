@@ -1,5 +1,5 @@
-import type { HasClip, HasNatural } from "../types";
-import type { ValidClip } from "./types";
+import type { HasClip, HasNatural } from "../types.js";
+import type { ValidClip } from "./types.js";
 
 /**
  * @private

@@ -1,4 +1,4 @@
-import { Dice } from "./dice/base";
+import { Dice } from "./dice/base/index.js";
 export const roll = Dice.roll;
 
-export * from "./common";
+export * from "./common.js";

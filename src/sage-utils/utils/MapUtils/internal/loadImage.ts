@@ -1,7 +1,7 @@
 import { Image, loadImage as _loadImage } from "@napi-rs/canvas";
 import { error, warn } from "@rsc-utils/core-utils";
-import type { ImageMeta } from "../types";
-import type { MapCache } from "./types";
+import type { ImageMeta } from "../types.js";
+import type { MapCache } from "./types.js";
 
 /**
  * @private

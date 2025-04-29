@@ -1,4 +1,4 @@
-import type { Proficiency } from "./Proficiency.ts";
+import type { Proficiency } from "./Proficiency.js";
 
 export interface IHasProficiencies {
 	getProficiency(subject: string): Proficiency;

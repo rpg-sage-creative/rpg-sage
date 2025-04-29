@@ -1,6 +1,6 @@
-import { find } from "../data/Repository";
-import type { Archetype } from "./Archetype";
-import { Feat } from "./Feat";
+import { find } from "../data/Repository.js";
+import type { Archetype } from "./Archetype.js";
+import { Feat } from "./Feat.js";
 
 export class DedicationFeat extends Feat<"DedicationFeat"> {
 

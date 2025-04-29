@@ -1,6 +1,6 @@
 //#region PostData
 
-import type { AonBaseCore } from "../../../sage-pf2e/model/base/AonBase";
+import type { AonBaseCore } from "../../../sage-pf2e/model/base/AonBase.js";
 
 /*
 {

@@ -1,8 +1,8 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { GameMapLayerData } from "../types";
+import type { GameMapLayerData } from "../types.js";
 import { drawMapImage } from "./drawMapImage.js";
 import { gridOffsetToZeroZero } from "./gridOffsetToZeroZero.js";
-import type { MapCache } from "./types";
+import type { MapCache } from "./types.js";
 
 /**
  * @private

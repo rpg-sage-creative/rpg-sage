@@ -1,6 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { PlayerCharacterCoreE20, TWeaponE20 } from "../common/PlayerCharacterE20";
-import { PlayerCharacterE20 } from "../common/PlayerCharacterE20";
+import { PlayerCharacterE20, type PlayerCharacterCoreE20, type TWeaponE20 } from "../common/PlayerCharacterE20.js";
 
 export type TAltMode = {
 	name?: string;

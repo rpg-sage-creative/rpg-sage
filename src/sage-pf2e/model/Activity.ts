@@ -1,5 +1,4 @@
-import type { ActionCore } from "./Action";
-import { Action } from "./Action";
+import { Action, type ActionCore } from "./Action.js";
 
 export type ActivityCore = ActionCore<"Activity">;
 

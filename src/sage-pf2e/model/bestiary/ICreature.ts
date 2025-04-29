@@ -1,9 +1,9 @@
 import type {
 	IAbilityModifiers, IAttack, IAura, IGenericBlock, IPoison, ISourceReference,
 	TCasterType, TMagicTradition, TSpeedType
-} from "../../common";
-import type { ActionCore } from "../Action";
-import type { SourcedCore } from "../base/HasSource";
+} from "../../common.js";
+import type { ActionCore } from "../Action.js";
+import type { SourcedCore } from "../base/HasSource.js";
 
 export interface ICreaturePerception {
 	value: number;

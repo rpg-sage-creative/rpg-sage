@@ -1,8 +1,6 @@
-import { parse, stringify } from "@rsc-utils/core-utils";
-import type { SourcedCore } from "../model/base/HasSource";
-import { HasSource } from "../model/base/HasSource";
-import type { IHasMetadata, IMetadata } from "./Metadata";
-import { Metadata } from "./Metadata";
+import { cloneJson } from "@rsc-utils/core-utils";
+import { HasSource, type SourcedCore } from "../model/base/HasSource.js";
+import { Metadata, type IHasMetadata, type IMetadata } from "./Metadata.js";
 
 export interface FeatureCore extends SourcedCore<"Feature"> {
 	level: number;
@@ -22,6 +20,6 @@ export class Feature extends HasSource<FeatureCore, "Feature"> implements IHasMe
 	public get level(): number { return this.core.level ?? 0; }
 	public metadata: Metadata;
 
-	public clone(): Feature { return new Feature(parse(stringify(this.core))); }
+	public clone(): Feature { return new Feature(cloneJson(this.core)); }
 
 }

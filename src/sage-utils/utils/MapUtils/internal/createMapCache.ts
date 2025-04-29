@@ -1,5 +1,5 @@
-import type { GameMapData, MimeType } from "../types";
-import type { MapCache } from "./types";
+import type { GameMapData, MimeType } from "../types.js";
+import type { MapCache } from "./types.js";
 
 /**
  * @private

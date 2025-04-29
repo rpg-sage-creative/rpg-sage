@@ -1,5 +1,4 @@
-import type { SourcedCore } from "./base/HasSource";
-import { HasSource } from "./base/HasSource";
+import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export class GearCategory extends HasSource<SourcedCore<"GearCategory">> {
 	// public toRenderableContent(): RenderableContent {

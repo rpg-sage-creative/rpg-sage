@@ -1,8 +1,8 @@
-import type { IAbilityModifiers, IAttack, ISourceReference } from "../../common";
-import { HasSource } from "../base/HasSource";
-import type { CreatureCategory } from "./CreatureCategory";
-import { CreatureLanguages } from "./CreatureLanguages";
-import type { ICreature, ICreatureAcTac, ICreatureHp, ICreaturePerception, ICreatureSavingThrows, ICreatureSkills, ICreatureSpeed, ICreatureSpells, IOtherBlock } from "./ICreature";
+import type { IAbilityModifiers, IAttack, ISourceReference } from "../../common.js";
+import { HasSource } from "../base/HasSource.js";
+import type { CreatureCategory } from "./CreatureCategory.js";
+import { CreatureLanguages } from "./CreatureLanguages.js";
+import type { ICreature, ICreatureAcTac, ICreatureHp, ICreaturePerception, ICreatureSavingThrows, ICreatureSkills, ICreatureSpeed, ICreatureSpells, IOtherBlock } from "./ICreature.js";
 
 
 export class Creature extends HasSource<ICreature> {

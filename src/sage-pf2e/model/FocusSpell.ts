@@ -1,7 +1,6 @@
-import { all, find, findByValue } from '../data/Repository';
-import type { Domain } from './Domain';
-import type { SpellCoreBase } from './Spell';
-import { Spell } from './Spell';
+import { all, find, findByValue } from "../data/Repository.js";
+import type { Domain } from "./Domain.js";
+import { Spell, type SpellCoreBase } from "./Spell.js";
 
 export type FocusSpellCore = SpellCoreBase<"FocusSpell">;
 /*// export interface FocusSpellCore extends SpellCoreBase<"FocusSpell"> { }*/

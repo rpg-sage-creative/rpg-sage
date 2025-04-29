@@ -1,4 +1,4 @@
-import type { ICreatureLanguages } from "./ICreature";
+import type { ICreatureLanguages } from "./ICreature.js";
 
 export class CreatureLanguages {
 	public constructor(private core: ICreatureLanguages) { }
