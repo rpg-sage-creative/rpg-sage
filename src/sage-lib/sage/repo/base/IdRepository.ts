@@ -1,4 +1,4 @@
-import { debug, EphemeralMap, getDataRoot, HasIdCore, toLiteral, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { debug, EphemeralMap, getDataRoot, HasIdCore, isNonNilSnowflake, isNonNilUuid, toLiteral, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import type { SageCache } from "../../model/SageCache.js";
 import { globalCacheGet, globalCachePut, globalCacheRead } from "./globalCache.js";
 
@@ -91,10 +91,12 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 			const entity = await repo.fromCore(core, this.sageCache) as U;
 			this.cacheId(entity);
 			return entity;
-		}
+		};
+
+		const validIds = ids.filter(id => isNonNilSnowflake(id) || isNonNilUuid(id));
 
 		// check the existing in memory cache first
-		for (const id of ids) {
+		for (const id of validIds) {
 			const cached = globalCacheGet<T>(this.objectTypePlural, id);
 			if (cached) {
 				const core = await globalCacheRead<T>(cached);
@@ -103,13 +105,13 @@ export abstract class IdRepository<T extends IdCore, U extends HasIdCore<T>> {
 		}
 
 		// check the file system next
-		for (const id of ids) {
+		for (const id of validIds) {
 			const item = { id, objectType:repo.objectType };
 			const core = await globalCacheRead<T>(item);
 			if (core) return ret(core);
 		}
 
-		debug({ ev:`${repo.name}.readById(${toLiteral(ids)}): Item Not Found!`, objectType:repo.objectType, ids });
+		debug({ ev:`${repo.name}.readById(${toLiteral(ids)}): Item Not Found!`, objectType:repo.objectType, ids, validIds });
 
 		return null;
 	}

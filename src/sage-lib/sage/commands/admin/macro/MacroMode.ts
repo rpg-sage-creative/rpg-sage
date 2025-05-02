@@ -1,4 +1,5 @@
-import type { MessageActionRowComponent } from "discord.js";
+import { getActionRows } from "@rsc-utils/discord-utils";
+import { type MessageActionRowComponent } from "discord.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { parseCustomId, type MacroActionKey } from "./customId.js";
 
@@ -71,8 +72,8 @@ export class MacroMode {
 
 	public static async from(sageCommand: SageCommand): Promise<MacroMode> {
 		const message = await sageCommand.fetchMessage();
-		const { components } = message ?? {};
-		if (components?.length) {
+		const actionRows = getActionRows(message);
+		if (actionRows?.length) {
 			const modeActions: ModeActionKey[] = ["showRollButtons", "showEditButtons", "showOtherButtons"];
 			const checkAction = (component: MessageActionRowComponent) => {
 				const customIdArgs = component.customId ? parseCustomId(component.customId) : undefined;
@@ -80,7 +81,7 @@ export class MacroMode {
 				const isToggleAction = action && sageCommand.isSageInteraction("BUTTON") ? sageCommand.interaction.customId === component.customId : false;
 				return { action, isToggleAction };
 			};
-			for (const row of components) {
+			for (const row of actionRows) {
 				for (const component of row.components) {
 					const { action, isToggleAction } = checkAction(component);
 					if (action) {

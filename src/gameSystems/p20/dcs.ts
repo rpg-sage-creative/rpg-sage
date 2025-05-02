@@ -1,5 +1,6 @@
 import { GameSystemType, parseEnum } from "@rsc-sage/types";
 import { nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { findComponent } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { toMod } from "../../sage-dice/common.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
@@ -267,14 +268,11 @@ function getSelected(sageInteraction: SageInteraction<StringSelectMenuInteractio
 	if (sageInteraction.customIdMatches(customId)) {
 		return ret(sageInteraction.interaction.values[0]);
 	}
-	for (const row of sageInteraction.interaction.message.components) {
-		for (const component of row.components) {
-			if (component.customId === customId) {
-				for (const option of (component as StringSelectMenuComponent).options) {
-					if (option.default) {
-						return ret(option.value);
-					}
-				}
+	const component = findComponent(sageInteraction.interaction.message, customId);
+	if (component) {
+		for (const option of (component as StringSelectMenuComponent).options) {
+			if (option.default) {
+				return ret(option.value);
 			}
 		}
 	}

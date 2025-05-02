@@ -26,7 +26,7 @@ function getValidUrl(attachment: Attachment): string | null {
 
 async function mapImportTester(sageMessage: SageMessage): Promise<TCommandAndArgsAndData<TParsedGameMapCore> | null> {
 	// not doing maps in DMs
-	if (!sageMessage.caches.discord.guild) return null;
+	if (!sageMessage.sageCache.discord.guild) return null;
 
 	const attachments = sageMessage.message.attachments;
 	if (!attachments.size) {

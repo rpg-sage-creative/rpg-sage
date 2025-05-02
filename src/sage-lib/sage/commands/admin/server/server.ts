@@ -81,7 +81,7 @@ async function serverUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const updated = await sageMessage.server.update(serverOptions);
+	const updated = await server.update(serverOptions);
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 

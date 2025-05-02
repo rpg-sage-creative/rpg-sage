@@ -32,8 +32,13 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		return sageMessage.replyStack.whisper(localize("SORRY_MESSAGE_NOT_FOUND"));
 	}
 
-	const webhookChannelReference = { guildId:sageMessage.server.did, channelId:sageMessage.threadOrChannelDid };
-	const webhook = await sageMessage.discord.fetchWebhook(webhookChannelReference);
+	const guildId = sageMessage.server?.did;
+	const channelId = sageMessage.threadOrChannelDid;
+	if (!guildId || !channelId) {
+		return sageMessage.replyStack.whisper(localize("CANNOT_FIND_WEBHOOK"));
+	}
+
+	const webhook = await sageMessage.discord.fetchWebhook({ guildId, channelId });
 	if (!webhook) {
 		return sageMessage.replyStack.whisper(localize("CANNOT_FIND_WEBHOOK"));
 	}

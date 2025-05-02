@@ -1,3 +1,4 @@
+import { getActionRows } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
 import { handleImport as handleImportE20 } from "../../../gameSystems/e20/import/handleImport.js";
 import { handleReimport as handleReimportE20 } from "../../../gameSystems/e20/import/handleReimport.js";
@@ -13,7 +14,8 @@ import { getValidPathbuilderCharacterId } from "./pathbuilder.js";
 
 type ImportedCharacter = { id:string; type:"E20"|"PB2E"; };
 function findImportedCharacter(message: Message): ImportedCharacter | undefined {
-	for (const componentRow of message.components) {
+	const actionRows = getActionRows(message);
+	for (const componentRow of actionRows) {
 		for (const component of componentRow.components) {
 			const customId = component.customId;
 			const pathbuilderCharacterId = getValidPathbuilderCharacterId(customId);

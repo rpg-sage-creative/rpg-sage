@@ -8,12 +8,17 @@ async function prefixSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
+	const server = sageMessage.server;
+	if (!server) {
+		return sageMessage.reactBlock();
+	}
+
 	const args = sageMessage.args?.toArray();
 	if (args?.length > 1) {
 		return sageMessage.reactFailure();
 	}
 
-	const saved = await sageMessage.server.setCommandPrefix(args[0]!);
+	const saved = await server.setCommandPrefix(args[0]!);
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 
@@ -22,9 +27,14 @@ async function prefixGet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const renderableContent = createAdminRenderableContent(sageMessage.server, "<b>Server Command Prefix</b>");
+	const server = sageMessage.server;
+	if (!server) {
+		return sageMessage.reactBlock();
+	}
+
+	const renderableContent = createAdminRenderableContent(server, "<b>Server Command Prefix</b>");
 	const commandPrefix =
-		(sageMessage.server.commandPrefix ?? `<i>inherited (${sageMessage.bot.commandPrefix})</i>`)
+		(server.commandPrefix ?? `<i>inherited (${sageMessage.bot.commandPrefix})</i>`)
 		|| `<i>unset (no prefix)</i>`;
 
 	renderableContent.append(commandPrefix);
@@ -36,9 +46,14 @@ async function prefixSync(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
+	const server = sageMessage.server;
+	if (!server) {
+		return sageMessage.reactBlock();
+	}
+
 	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync command prefix with Sage?");
 	if (booleanResponse) {
-		const saved = await sageMessage.server.syncCommandPrefix();
+		const saved = await server.syncCommandPrefix();
 		sageMessage.reactSuccessOrFailure(saved);
 	}
 	return Promise.resolve();
@@ -49,7 +64,12 @@ async function prefixUnset(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const saved = await sageMessage.server.unsetCommandPrefix();
+	const server = sageMessage.server;
+	if (!server) {
+		return sageMessage.reactBlock();
+	}
+
+	const saved = await server.unsetCommandPrefix();
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 

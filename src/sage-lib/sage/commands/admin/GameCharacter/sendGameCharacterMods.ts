@@ -51,7 +51,7 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 	const targetChannel = sageMessage.message.channel;
 	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
 
-	const sageCache = sageMessage.caches;
+	const { sageCache } = sageMessage;
 	const authorOptions = { avatarURL: avatarUrl, username: character.toDisplayName() };
 	const dialogType = sageMessage.dialogPostType;
 	const messages = await sendWebhook(targetChannel, { authorOptions, dialogType, renderableContent, sageCache });

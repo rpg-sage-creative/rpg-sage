@@ -1,6 +1,6 @@
 import type { Awaitable, Optional, Snowflake } from "@rsc-utils/core-utils";
 import { NIL_SNOWFLAKE, errorReturnFalse, isNonNilSnowflake } from "@rsc-utils/core-utils";
-import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel, type MessageReference } from "discord.js";
+import { Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type AnyThreadChannel, type Channel } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";
 import { DiscordKey } from "./DiscordKey.js";
 import { getPermsFor } from "./permissions/getPermsFor.js";
@@ -8,7 +8,7 @@ import { resolveChannelReference, type CanBeChannelReferenceResolvable, type Cha
 import { resolveGuildId, type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
 import { resolveRoleId, type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
 import { resolveUserId, type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
-import { isMessageTarget, isNonThread, isThread, isWebhookChannel, type MessageChannel, type NonThreadChannel, type WebhookChannel } from "./types/types.js";
+import { isMessageTarget, isNonThread, isThread, isWebhookChannel, type MessageChannel, type MessageReferenceOrPartial, type NonThreadChannel, type WebhookChannel } from "./types/types.js";
 
 //#region Helpers
 
@@ -159,13 +159,13 @@ export class DiscordCache {
 
 	//#region message
 
-	public async fetchMessage(keyOrReference: DiscordKey | MessageReference, userId: Snowflake): Promise<Message | undefined> {
+	public async fetchMessage(keyOrReference: DiscordKey | MessageReferenceOrPartial, userId?: Snowflake): Promise<Message | undefined> {
 		const discordKey = keyOrReference instanceof DiscordKey ? keyOrReference : DiscordKey.from(keyOrReference);
 		const { messageId } = discordKey;
 		if (!isNonNilSnowflake(messageId)) return undefined; //NOSONAR
 
 		const cache = this.#cached.has(messageId);
-		const channel = discordKey.isDm
+		const channel = discordKey.isDm && userId
 			? await this.fetchDmChannel({ userId, channelId:discordKey.channelId })
 			: await this.fetchChannel(discordKey);
 		const message = isMessageTarget(channel)

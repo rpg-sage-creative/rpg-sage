@@ -1,13 +1,11 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { errorReturnFalse, getCodeName, getDataRoot, warn, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnFalse, getCodeName, getDataRoot, HasIdCore, warn, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
 import { fileExists, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { HasIdCoreAndSageCache } from "../repo/base/IdRepository.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
 import type { MacroBase } from "./Macro.js";
-import type { SageCache } from "./SageCache.js";
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 
@@ -22,6 +20,7 @@ export type TCorePrefixes = { command?: string; search?: string; };
  */
 type TSearchStatus = { [key: number]: undefined | boolean | string; };
 
+/** @todo can safely stop using did and uuid and set id as discord snowflake */
 export interface BotCore extends IdCore<"Bot">, IHasColors, IHasEmoji {
 	codeName: TBotCodeName;
 	commandPrefix?: string;
@@ -35,8 +34,8 @@ export interface BotCore extends IdCore<"Bot">, IHasColors, IHasEmoji {
 	macros?: MacroBase[];
 }
 
-export class Bot extends HasIdCoreAndSageCache<BotCore> implements IHasColorsCore, IHasEmojiCore {
-	public constructor(core: BotCore, sageCache: SageCache) { super(core, sageCache); }
+export class Bot extends HasIdCore<BotCore> implements IHasColorsCore, IHasEmojiCore {
+	public constructor(core: BotCore) { super(core); }
 	public get codeName(): TBotCodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
@@ -114,7 +113,7 @@ export class Bot extends HasIdCoreAndSageCache<BotCore> implements IHasColorsCor
 			}
 		}
 		const botCore = await readJsonFile<BotCore>(botPath);
-		return botCore ? new Bot(botCore!, null!) : undefined;
+		return botCore ? new Bot(botCore) : undefined;
 	}
 
 	public static async write(bot: BotCore | Bot): Promise<boolean> {

@@ -1,18 +1,15 @@
 import { debug, isDefined, RenderableContent, type Cache, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, type DInteraction, type MessageTarget } from "@rsc-utils/discord-utils";
+import { DiscordKey, type DInteraction, type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isString } from "@rsc-utils/string-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
-import { send } from "../../discord/messages.js";
-import type { IChannel } from "../repo/base/IdRepository.js";
 import { GameRoleType } from "./Game.js";
-import type { GameCharacter } from "./GameCharacter.js";
 import { SageCache } from "./SageCache.js";
 import { SageCommand, type IdPartsBase, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
-import type { HasChannels, HasGame } from "./index.js";
+import type { HasGame } from "./index.js";
 
 interface SageInteractionCore extends SageCommandCore {
 	interaction: DInteraction;
@@ -41,7 +38,7 @@ function defaultCustomIdParser<T extends IdParts>(customId: string): T | undefin
 
 export class SageInteraction<T extends DInteraction = any>
 	extends SageCommand<SageInteractionCore, SageInteractionArgs>
-	implements HasGame, HasChannels {
+	implements HasGame {
 
 	private constructor(protected core: SageInteractionCore, cache?: Cache) {
 		super(core, cache);
@@ -172,6 +169,10 @@ export class SageInteraction<T extends DInteraction = any>
 		return this.core.interaction as T;
 	}
 
+	public get interactionChannel(): MessageChannel | undefined {
+		return this.interaction.channel as unknown as MessageChannel ?? undefined;
+	}
+
 	/** Returns the user */
 	public get user(): User {
 		return this.core.interaction.user;
@@ -229,7 +230,7 @@ export class SageInteraction<T extends DInteraction = any>
 		// check to see if we have channel send message permissions
 		const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 		if (renderableContent) {
-			return send(this.sageCache, targetChannel, renderableContent, originalAuthor);
+			return this.sageCache.send(targetChannel, renderableContent, originalAuthor);
 		}
 		return [];
 	}
@@ -244,66 +245,6 @@ export class SageInteraction<T extends DInteraction = any>
 		args.ephemeral = false;
 		// args.ephemeral = !!this.sageCache.server;
 		return this.reply(args);
-	}
-
-	//#endregion
-
-	// #region HasChannels
-
-	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
-	public get channel(): IChannel | undefined {
-		return this.cache.getOrSet("channel", () => this.gameChannel ?? this.serverChannel);
-	}
-
-	/** Returns the channelDid this message (or its thread) is in. */
-	public get channelDid(): Snowflake | undefined {
-		return this.cache.getOrSet("channelDid", () => {
-			if (this.interaction.channel?.isThread()) {
-				return this.interaction.channel.parentId as Snowflake ?? undefined;
-			}
-			return this.interaction.channelId as Snowflake ?? undefined;
-		});
-	}
-
-	/** Returns the gameChannel meta for the message, checking the thread before checking its channel. */
-	public get gameChannel(): IChannel | undefined {
-		return this.cache.getOrSet("gameChannel", () => this.game?.getChannel(this.discordKey));
-	}
-
-	/** Returns the serverChannel meta for the message, checking the thread before checking its channel. */
-	public get serverChannel(): IChannel | undefined {
-		return this.cache.getOrSet("serverChannel", () => this.server?.getChannel(this.discordKey));
-	}
-
-	/** Returns the threadDid this message is in. */
-	public get threadDid(): Snowflake | undefined {
-		return this.cache.getOrSet("threadDid", () => {
-			if (this.interaction.channel?.isThread()) {
-				return this.interaction.channelId as Snowflake ?? undefined;
-			}
-			return undefined;
-		});
-	}
-
-	/** Returns either the message's threadDid or channelDid if there is no thread. */
-	public get threadOrChannelDid(): Snowflake {
-		return this.cache.getOrSet("channelDid", () => this.threadDid ?? this.channelDid ?? this.interaction.channelId as Snowflake);
-	}
-
-	// #endregion
-
-	//#region HasGame
-
-	/** Get the PlayerCharacter if there a game and the actor has a PlayerCharacter OR the actor has a PlayerCharacter set to use this channel with AutoChannel */
-	public get playerCharacter(): GameCharacter | undefined {
-		return this.cache.getOrSet("playerCharacter", () => {
-			const channelDid = this.channel?.id as Snowflake;
-			const userDid = this.sageUser.did;
-			const autoChannelData = { channelDid, userDid };
-			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
-				?? this.game?.playerCharacters.findByUser(userDid)
-				?? this.sageUser.playerCharacters.getAutoCharacter(autoChannelData);
-		});
 	}
 
 	//#endregion

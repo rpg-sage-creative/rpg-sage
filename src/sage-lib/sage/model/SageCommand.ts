@@ -2,7 +2,7 @@ import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceS
 import { Cache, debug, HasCache, isDefined, orNilSnowflake, RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import type { DInteraction, DiscordCache, DiscordKey, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
-import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
+import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, PartialGroupDMChannel, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
@@ -179,15 +179,13 @@ export abstract class SageCommand<
 
 	//#region caches
 
-	/** @deprecated use .sageCache */
-	public get caches(): SageCache { return this.core.sageCache; }
 	public get bot(): Bot { return this.sageCache.bot; }
 	public get discord(): DiscordCache { return this.sageCache.discord; }
 	public get discordKey(): DiscordKey { return this.sageCache.discordKey; }
 	public get game(): Game | undefined { return this.sageCache.game; }
 	public get sageCache(): SageCache { return this.core.sageCache; }
-	public get sageUser(): User { return this.sageCache.user; }
-	public get server(): Server { return this.sageCache.server; }
+	public get sageUser(): User { return this.sageCache.actor.sage; }
+	public get server(): Server | undefined { return this.sageCache.server?.sage; }
 
 	//#endregion
 
@@ -196,11 +194,11 @@ export abstract class SageCommand<
 
 	/** The user interacting with Sage. */
 	public get actorId(): Snowflake {
-		return this.cache.getOrSet("actorId", () => orNilSnowflake(this.sageCache.actor?.id ?? this.sageCache.user.did));
+		return this.cache.getOrSet("actorId", () => orNilSnowflake(this.sageCache.actor?.id ?? this.sageCache.user?.did));
 	}
 	/** @deprecated use .actorId or .sageCache.actor or .sageCache.author */
 	public get authorDid(): Snowflake {
-		return this.cache.getOrSet("authorDid", () => orNilSnowflake(this.sageCache.user.did));
+		return this.cache.getOrSet("authorDid", () => orNilSnowflake(this.sageCache.user?.did));
 	}
 
 	/** @deprecated Is the author the owner of the message's server */
@@ -216,12 +214,16 @@ export abstract class SageCommand<
 	}
 
 	public get canManageServer(): boolean {
+		const { cache } = this;
+
 		// check that it is cached
-		if (this.cache.get("canManageServer")) return true;
+		if (cache.get("canManageServer")) return true;
+
 		// if we have an actor, we can cache the results
-		if (this.sageCache.actor) {
-			return this.cache.getOrSet("canManageServer", () => {
-				return this.sageCache.actor!.canManageServer;
+		const { actor } = this.sageCache;
+		if (actor.known) {
+			return cache.getOrSet("canManageServer", () => {
+				return actor.canManageServer;
 			});
 		}
 		// revert to isOwner
@@ -231,8 +233,9 @@ export abstract class SageCommand<
 	/** Returns true if the acting user is the server owner, a server administrator, or has the manage server permission. */
 	public checkCanManageServer(): Promise<boolean> {
 		return this.cache.getOrFetch("canManageServer", async () => {
-			if (await this.sageCache.ensureActor()) {
-				return this.sageCache.actor?.canManageServer ?? false;
+			const { sageCache } = this;
+			if (await sageCache.validate("actor")) {
+				return sageCache.actor.canManageServer ?? false;
 			}
 			return false;
 		});
@@ -281,11 +284,6 @@ export abstract class SageCommand<
 
 	// #region Function flags
 
-	/** @deprecated Use .allowCommand */
-	public get allowAdmin(): boolean {
-		return this.allowCommand;
-	}
-
 	public get allowCommand(): boolean {
 		return this.cache.getOrSet("allowCommand", () => {
 			const channel = this.channel;
@@ -321,23 +319,18 @@ export abstract class SageCommand<
 		return this.cache.getOrSet("allowDice", () => !this.channel || this.channel.type !== SageChannelType.None);
 	}
 
-	/** @deprecated Use .allowCommand */
-	public get allowSearch(): boolean {
-		return this.allowCommand;
-	}
-
 	public get dialogPostType(): DialogPostType {
-		return this.cache.getOrSet("dialogPostType", () => this.sageUser.dialogPostType ?? this.gameChannel?.dialogPostType ?? this.game?.dialogPostType ?? this.serverChannel?.dialogPostType ?? this.server?.dialogPostType ?? 0);
+		return this.cache.getOrSet("dialogPostType", () => this.sageUser?.dialogPostType ?? this.gameChannel?.dialogPostType ?? this.game?.dialogPostType ?? this.serverChannel?.dialogPostType ?? this.server?.dialogPostType ?? 0);
 	}
 
 	// #endregion
 
 	//#region channels
 
-	public get dChannel(): TextBasedChannel | undefined {
+	public get dChannel(): Exclude<TextBasedChannel, PartialGroupDMChannel> | undefined {
 		return this.isSageInteraction<CommandInteraction>()
-			? this.interaction.channel ?? undefined
-			: (this as unknown as SageMessage).message.channel;
+			? this.interaction.channel as Exclude<TextBasedChannel, PartialGroupDMChannel> ?? undefined
+			: (this as unknown as SageMessage).message?.channel;
 	}
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
@@ -350,16 +343,45 @@ export abstract class SageCommand<
 
 	/** Returns the gameChannel meta for the message, checking the thread before checking its channel. */
 	public get gameChannel(): IChannel | undefined {
-		return this.cache.getOrSet("gameChannel", () => this.game?.getChannel(this.discordKey));
+		return this.cache.getOrSet("gameChannel", () =>
+			this.game?.getChannel(this.threadDid)
+			?? this.game?.getChannel(this.channelDid)
+		);
 	}
 
 	/** Returns the serverChannel meta for the message, checking the thread before checking its channel. */
 	public get serverChannel(): IChannel | undefined {
-		return this.cache.getOrSet("serverChannel", () => this.server?.getChannel(this.discordKey));
+		return this.cache.getOrSet("serverChannel", () =>
+			this.server?.getChannel(this.threadDid)
+			?? this.server?.getChannel(this.channelDid)
+		);
 	}
 
-	/** Returns the channelDid this message (or its thread) is in. */
-	public abstract channelDid: Snowflake | undefined;
+	/** @deprecated Returns the channel id this message (or interaction) is in. */
+	public get channelDid(): Snowflake | undefined {
+		return this.cache.getOrSet("channelDid", () => {
+			/** @todo investigate the notes found in threadDid below */
+			if (this.dChannel?.isThread()) {
+				return this.dChannel.parentId as Snowflake;
+			}
+			return this.dChannel?.id as Snowflake;
+		});
+	}
+
+	/** @deprecated Returns the thread id this message (or interaction) is in. */
+	public get threadDid(): Snowflake | undefined {
+		return this.cache.getOrSet("threadDid", () => {
+			if (this.dChannel?.isThread()) {
+				return this.dChannel.id as Snowflake;
+			}
+			return undefined;
+		});
+	}
+
+	/** @deprecated Returns the thread id (if exists) or channel id (if no thread) this message (or interaction) is in. */
+	public get threadOrChannelDid(): Snowflake | undefined {
+		return this.cache.getOrSet("threadOrChannelDid", () => this.threadDid ?? this.channelDid ?? this.dChannel?.id as Snowflake);
+	}
 
 	//#endregion
 
@@ -374,7 +396,8 @@ export abstract class SageCommand<
 	public get playerCharacter(): GameCharacter | undefined {
 		return this.cache.getOrSet("playerCharacter", () => {
 			const channelDid = this.channel?.id as Snowflake;
-			const userDid = this.sageUser.did;
+			const userDid = this.sageUser?.did;
+			if (!userDid) return undefined;
 			const autoChannelData = { channelDid, userDid };
 			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
 				?? this.game?.playerCharacters.findByUser(userDid)
@@ -382,9 +405,9 @@ export abstract class SageCommand<
 		});
 	}
 
-	public get gmCharacter(): GameCharacter {
+	public get gmCharacter(): GameCharacter | undefined {
 		return this.cache.getOrSet("gmCharacter", () =>
-			this.game?.gmCharacter ?? this.server.gmCharacter
+			this.game?.gmCharacter ?? this.server?.gmCharacter
 		);
 	}
 
@@ -413,7 +436,7 @@ export abstract class SageCommand<
 				return server.gmCharacter;
 			}
 		}
-		return find(this.sageUser);
+		return this.sageUser ? find(this.sageUser) : undefined;
 	}
 
 	//#endregion
@@ -454,7 +477,6 @@ export abstract class SageCommand<
 
 	//#endregion
 
-
 	//#region dice settings
 
 	public get gameSystemType(): GameSystemType {
@@ -492,7 +514,7 @@ export abstract class SageCommand<
 	}
 
 	public get moveDirectionOutputType(): MoveDirectionOutputType {
-		return this.cache.getOrSet("moveDirectionOutputType", () => this.game?.moveDirectionOutputType ?? this.sageUser.moveDirectionOutputType ?? 0);
+		return this.cache.getOrSet("moveDirectionOutputType", () => this.game?.moveDirectionOutputType ?? this.sageUser?.moveDirectionOutputType ?? 0);
 	}
 
 	//#endregion
@@ -506,11 +528,11 @@ export abstract class SageCommand<
 
 	/** Is the author SuperUser */
 	public get isSuperUser(): boolean {
-		return this.sageUser.isSuperUser === true;
+		return this.sageUser?.isSuperUser === true;
 	}
 	/** Is the author SuperAdmin or SuperUser */
 	public get canSuperAdmin(): boolean {
-		return this.sageUser.isSuperAdmin || this.sageUser.isSuperUser;
+		return this.sageUser?.isSuperAdmin === true || this.isSuperUser;
 	}
 
 	//#endregion

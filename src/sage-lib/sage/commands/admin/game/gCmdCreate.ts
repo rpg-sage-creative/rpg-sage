@@ -1,5 +1,5 @@
 import { type GameOptions, type SageChannel } from "@rsc-sage/types";
-import { applyChanges, randomSnowflake, type UUID } from "@rsc-utils/core-utils";
+import { applyChanges, randomSnowflake, type UUID, type Snowflake } from "@rsc-utils/core-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { Game, type GameUserData } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -13,20 +13,20 @@ function createGame(sageCommand: SageCommand, gameOptions: Partial<GameOptions>,
 	return new Game({
 		objectType: "Game",
 		id: randomSnowflake(),
-		serverDid: sageCommand.server.did,
-		serverId: sageCommand.server.id as UUID,
+		serverDid: sageCommand.server?.did as Snowflake,
+		serverId: sageCommand.server?.id as UUID,
 		createdTs: new Date().getTime(),
 		channels: channels,
-		colors: sageCommand.server.colors.toArray(),
+		colors: sageCommand.server?.colors.toArray() ?? [],
 		users,
 		...gameOptions,
 		name: gameOptions.name!,
-	}, sageCommand.server, sageCommand.sageCache);
+	}, sageCommand.server!, sageCommand.sageCache);
 }
 
 function getGameOptions(sageCommand: SageCommand): GameOptions {
 	// get default gameOptions from server
-	const { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, gameSystemType, gmCharacterName } = sageCommand.server;
+	const { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, gameSystemType, gmCharacterName } = sageCommand.server ?? {};
 	const gameOptions = { dialogPostType, diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, gameSystemType, gmCharacterName } as GameOptions;
 
 	// get gameOptions from args applied to server defaults
@@ -64,7 +64,7 @@ async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined
 
 	if (create) {
 		const gameSaved = game ? await game.save() : false;
-		const serverSaved = gameSaved ? await sageCommand.server.save() : false;
+		const serverSaved = gameSaved ? await sageCommand.server?.save() ?? false : false;
 		if (gameSaved && serverSaved) {
 			const fixed = await gFixPerms(sageCommand, game);
 			const blocked = await gBlockBots(sageCommand, game);

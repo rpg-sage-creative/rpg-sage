@@ -1,4 +1,4 @@
-import { error, errorReturnFalse, errorReturnUndefined, getCodeName, getDataRoot, randomSnowflake, toLiteral, verbose } from "@rsc-utils/core-utils";
+import { error, errorReturnFalse, errorReturnUndefined, getCodeName, getDataRoot, isNonNilSnowflake, isNonNilUuid, randomSnowflake, toLiteral, verbose, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 
 /** The most basic form of global in memory cache items. */
@@ -164,6 +164,15 @@ export async function globalCachePopulate(key: string): Promise<boolean> {
 	return true;
 }
 
+// makes sure we don't have an invalid value for the id
+function ensureNonNilId({ id, did, uuid }: GlobalCacheItem): Snowflake | UUID | undefined {
+	if (isNonNilUuid(id)) return id;
+	if (isNonNilSnowflake(id)) return id;
+	if (isNonNilSnowflake(did)) return did;
+	if (isNonNilUuid(uuid)) return uuid;
+	return undefined;
+}
+
 /** Writes the updated item to disk *AND THEN* updates the in memory cache. */
 export async function globalCachePut<T extends GlobalCacheItem>(item: T): Promise<boolean> {
 	// ensure we have a valid type and cache map
@@ -175,12 +184,12 @@ export async function globalCachePut<T extends GlobalCacheItem>(item: T): Promis
 	}
 
 	// ensure this item has an id
-	let itemId = item.id ?? item.did ?? item.uuid;
+	let itemId = ensureNonNilId(item);
 	if (!itemId) {
 		/** @todo when can i ensure this will never be called !? */
 		error(`globalCachePut(${toLiteral(key)}, ${toLiteral(toGlobalCacheItem(item))})`);
-		item.id = randomSnowflake();
-		itemId = item.id;
+		itemId = randomSnowflake();
+		item.id = itemId;
 	}
 
 	// write to file using the first id found (should be .id)

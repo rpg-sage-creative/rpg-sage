@@ -1,5 +1,5 @@
 import { debug, isNilSnowflake, NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
-import { EmbedBuilder } from "@rsc-utils/discord-utils";
+import { EmbedBuilder, getActionRows } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type MessagePayloadOption } from "discord.js";
 import { createMessageEmbed } from "../../../../../discord/createMessageEmbed.js";
@@ -106,8 +106,10 @@ export async function showCharForm(sageCommand: SageCommand, charId?: CharId): P
 		if (char.tokenUrl) options = { avatarURL:char.tokenUrl };
 		embeds.push(buildFormEmbed(char));
 	}
-	if (message?.components?.find(row => row.components.find(comp => parseCustomId(comp.customId)))) {
-		await message.edit({ components, content, embeds, options });
+
+	const exists = getActionRows(message).find(row => row.components.find(comp => parseCustomId(comp.customId)))
+	if (exists) {
+		await message!.edit({ components, content, embeds, options });
 		// await sageCommand.replyStack.deferAndDelete();
 	}else {
 		await sageCommand.dChannel?.send({ components, content, embeds });

@@ -202,7 +202,7 @@ function findTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	return null;
 }
 async function findHandler(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowSearch) {
+	if (!sageMessage.allowCommand) {
 		return sageMessage.reactBlock();
 	}
 

@@ -151,7 +151,7 @@ async function getAutoCharacter(sageCommand: SageCommand, characterTypeMeta: TCh
 
 type Char = { id:Snowflake; char:GameCharacter; game?:GameCharacter; user?:GameCharacter; };
 function getCharacterById(sageCommand: SageCommand, id: Snowflake): Char | undefined {
-	if (sageCommand.gmCharacter.equals(id)) {
+	if (sageCommand.gmCharacter?.equals(id)) {
 		return { id, char:sageCommand.gmCharacter, game:sageCommand.gmCharacter };
 	}
 
@@ -170,7 +170,7 @@ function getCharacterById(sageCommand: SageCommand, id: Snowflake): Char | undef
 }
 
 function getGameCharacterByName(sageCommand: SageCommand, name: string): GameCharacter | undefined {
-	if (sageCommand.gmCharacter.matches(name)) {
+	if (sageCommand.gmCharacter?.matches(name)) {
 		return sageCommand.gmCharacter;
 	}
 	return sageCommand.game?.playerCharacters.findByName(name)
@@ -210,7 +210,7 @@ function getCharsById(sageCommand: SageCommand, id?: Snowflake): Chars | undefin
 
 async function createChannelList(sageCommand: SageCommand, chars: Chars, selectedValue?: ChannelData): Promise<ActionRowBuilder<StringSelectMenuBuilder>> {
 	const userId = sageCommand.sageUser.did;
-	const serverId = sageCommand.server.did;
+	const serverId = sageCommand.server?.did;
 
 	const select = new StringSelectMenuBuilder();
 	select.setCustomId(createCustomId(userId, "channel", chars.id));

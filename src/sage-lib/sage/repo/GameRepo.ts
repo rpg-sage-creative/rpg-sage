@@ -1,6 +1,6 @@
 import { debug, isDefined, mapAsync, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { isThread, type DInteraction, type MessageOrPartial } from "@rsc-utils/discord-utils";
-import type { Channel, MessageReference } from "discord.js";
+import { isThread, type DInteraction, type MessageOrPartial, type MessageReferenceOrPartial } from "@rsc-utils/discord-utils";
+import type { Channel } from "discord.js";
 import { Game, type GameCore } from "../model/Game.js";
 import type { SageCache } from "../model/SageCache.js";
 import { IdRepository } from "./base/IdRepository.js";
@@ -34,7 +34,7 @@ export class GameRepo extends IdRepository<GameCore, Game> {
 		return cores.filter(isDefined).map(core => new Game(core, server, sageCache));
 	}
 
-	public async findActive(reference: Optional<Channel | DInteraction | MessageOrPartial | MessageReference>): Promise<Game | undefined> {
+	public async findActive(reference: Optional<Channel | DInteraction | MessageOrPartial | MessageReferenceOrPartial>): Promise<Game | undefined> {
 		if (reference) {
 			if ("messageId" in reference) {
 				return this.findActiveByReference(reference);
@@ -71,7 +71,7 @@ export class GameRepo extends IdRepository<GameCore, Game> {
 	}
 
 	/** Gets the active/current Game for the MessageReference */
-	private async findActiveByReference(messageRef: Omit<MessageReference, "messageId">): Promise<Game | undefined> {
+	private async findActiveByReference(messageRef: Omit<MessageReferenceOrPartial, "messageId">): Promise<Game | undefined> {
 		const { guildId, channelId } = messageRef;
 		const contentFilter = (core: GameCacheItem) => !core.archivedTs
 			&& core.serverDid === guildId

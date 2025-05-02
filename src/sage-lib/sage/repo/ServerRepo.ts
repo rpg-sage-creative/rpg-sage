@@ -1,5 +1,5 @@
 import { getHomeServerId } from "@rsc-sage/env";
-import { info, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { type Snowflake } from "@rsc-utils/core-utils";
 import type { Guild } from "discord.js";
 import type { SageCache } from "../model/SageCache.js";
 import { Server, type ServerCore } from "../model/Server.js";
@@ -22,26 +22,6 @@ export class ServerRepo extends DidRepository<ServerCore, Server> {
 			await server.save();
 		}
 		return server;
-	}
-
-	public async initializeServer(guild: Optional<Guild>): Promise<boolean> {
-		if (!guild) {
-			return false;
-		}
-
-		const existingServer = await this.getByDid(guild.id as Snowflake);
-		if (existingServer) {
-			guild = existingServer.discord.guild;
-			info(`${this.sageCache.bot.codeName} rejoined ${guild?.name} (${guild?.id}) as ${existingServer.id}`);
-			return false;
-		}
-
-		const server = new Server(Server.createCore(guild), this.sageCache),
-			saved = await this.write(server);
-		if (saved) {
-			info(`${this.sageCache.bot.codeName} joined ${guild.name} (${guild.id}) as ${server.id}`);
-		}
-		return saved;
 	}
 
 	// public async retireServer(guild: Guild, kicked = false, banned = false): Promise<boolean> {

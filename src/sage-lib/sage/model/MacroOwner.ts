@@ -42,7 +42,7 @@ async function getGames(sageCommand: SageCommand): Promise<MacroOwner[]> {
 	/** @todo sort out this id cast */
 	const gameToOwner = ({ id, name }: { id:unknown; name:string; }) => new MacroOwner(id as Snowflake, name, "game");
 	if (sageCommand.canAdminGames) {
-		const serverId = sageCommand.server.did;
+		const serverId = sageCommand.server?.did!;
 		const userId = sageCommand.canAdminGames ? undefined : sageCommand.actorId;
 		const games = await sageCommand.sageCache.games.fetch({ serverId, userId });
 		return games.map(gameToOwner);
@@ -100,7 +100,7 @@ export class MacroOwner {
 			case "character": owners = await getCharacters(sageCommand); break;
 			case "user": owners = [new MacroOwner(actorId, "@Me", type)]; break;
 			case "game": owners = await getGames(sageCommand); break;
-			case "server": owners = [new MacroOwner(sageCommand.server.did, sageCommand.server.name, type)]; break;
+			case "server": owners = sageCommand.server?.did ? [new MacroOwner(sageCommand.server.did, sageCommand.server?.name, type)] : []; break;
 			case "global": owners = [new MacroOwner(sageCommand.bot.id as Snowflake, "RPG Sage", type)]; break;
 			default: owners = []; break;
 		}

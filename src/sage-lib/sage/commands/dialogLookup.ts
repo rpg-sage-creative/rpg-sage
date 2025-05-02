@@ -117,7 +117,7 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 	const character = game?.playerCharacters.findById(characterId)
 		?? game?.nonPlayerCharacters.findById(characterId)
 		?? (game?.gmCharacter.equals(characterId) ? game.gmCharacter : undefined)
-		?? (sageCommand.server.gmCharacter.equals(characterId) ? sageCommand.server.gmCharacter : undefined)
+		?? (sageCommand.server?.gmCharacter.equals(characterId) ? sageCommand.server.gmCharacter : undefined)
 		?? sageUser?.playerCharacters.findById(characterId)
 		?? sageUser?.nonPlayerCharacters.findById(characterId);
 

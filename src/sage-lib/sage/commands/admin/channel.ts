@@ -73,7 +73,7 @@ function channelDetailsAppendGame(renderableContent: RenderableContent, server: 
 	}
 }
 
-async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Snowflake): Promise<[string, Game | undefined]> {
+async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Optional<Snowflake>): Promise<[string, Game | undefined]> {
 	const channel = await sageCache.fetchChannel(channelId);
 	if (!isMessageTarget(channel) || isDMBased(channel)) {
 		return ["DM", undefined];
@@ -82,7 +82,7 @@ async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Snow
 }
 
 export async function channelDetails(sageMessage: SageMessage, channel?: SageChannel): Promise<void> {
-	if (!sageMessage.canAdminServer && !sageMessage.canAdminGame) {
+	if (!sageMessage.server || (!sageMessage.canAdminServer && !sageMessage.canAdminGame)) {
 		return sageMessage.reactBlock();
 	}
 
@@ -178,16 +178,16 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 	if (game) {
 		const saved = await game.addOrUpdateChannels({ id, ...channelOptions } as SageChannel);
 		if (saved) {
-			await sageMessage.server.removeChannels(id);
-			return channelDetails(sageMessage, game.getChannel(new DiscordKey(sageMessage.server.did, id)));
+			await sageMessage.server?.removeChannels(id);
+			return channelDetails(sageMessage, game.getChannel(new DiscordKey(sageMessage.server?.did, id)));
 		}
 		return sageMessage.reactFailure();
 	}
 
 	const which = game ?? sageMessage.server,
-		updated = await which.addOrUpdateChannels({ id, ...channelOptions });
+		updated = await which?.addOrUpdateChannels({ id, ...channelOptions }) ?? false;
 	if (updated) {
-		return channelDetails(sageMessage, which.getChannel(id));
+		return channelDetails(sageMessage, which!.getChannel(id));
 	}
 	return sageMessage.reactSuccessOrFailure(updated);
 }

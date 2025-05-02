@@ -1,8 +1,10 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DiscordAPIError, DMChannel, ForumChannel, GuildBasedChannel, Interaction, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
+import type { MessageReference, AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DiscordAPIError, DMChannel, ForumChannel, GuildBasedChannel, Interaction, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User, Partialize } from "discord.js";
 import type { DiscordApiError } from "../DiscordApiError";
 
 //#region types
+
+export type MessageReferenceOrPartial = MessageReference | Omit<MessageReference, "type">;
 
 export type DInteraction<Cached extends CacheType = CacheType>
 	= ButtonInteraction<Cached> // button
@@ -30,6 +32,10 @@ export type DMBasedChannel = PartialGroupDMChannel | DMChannel | PartialDMChanne
 /** Channel you can send a message to. */
 export type MessageChannel = Exclude<Channel, CategoryChannel | ForumChannel | MediaChannel | PartialGroupDMChannel>;
 
+export type SMessage = Message & { channel:MessageChannel; };
+export type SPartialMessage = Partialize<SMessage, 'type' | 'system' | 'pinned' | 'tts', 'content' | 'cleanContent' | 'author'>;
+
+export type SMessageOrPartial = SMessage | SPartialMessage;
 export type MessageOrPartial = Message | PartialMessage;
 
 /** User or Channel you can send a message to. */
@@ -45,7 +51,7 @@ export type UserOrPartial = User | PartialUser;
 export type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
 
 /** Channels that can have webhooks. */
-export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel>;
+export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel | ForumChannel | MediaChannel>;
 
 //#endregion
 

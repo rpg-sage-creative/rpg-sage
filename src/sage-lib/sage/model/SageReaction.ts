@@ -1,6 +1,6 @@
 import { isSageId } from "@rsc-sage/env";
 import { Cache, debug, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { DiscordApiError, type ReactionOrPartial, type SMessageOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Message, MessageReaction } from "discord.js";
 import { ReactionType } from "../../discord/index.js";
 import { GameRoleType } from "./Game.js";
@@ -89,16 +89,8 @@ export class SageReaction
 	}
 
 	/** @deprecated use fetchMessage() */
-	public get message(): MessageOrPartial {
-		return this.core.messageReaction.message;
-	}
-
-	/** Returns the channelDid this message (or its thread) is in. */
-	public get channelDid(): Snowflake | undefined {
-		if (this.message.channel.isThread()) {
-			return this.message.channel.parentId as Snowflake | undefined;
-		}
-		return this.message.channelId as Snowflake | undefined;
+	public get message(): SMessageOrPartial {
+		return this.core.messageReaction.message as SMessageOrPartial;
 	}
 
 	public clear(): void {
