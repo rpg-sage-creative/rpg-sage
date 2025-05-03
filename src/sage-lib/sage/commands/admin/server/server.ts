@@ -1,5 +1,5 @@
 import { DicePostType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
-import { isSnowflake, mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
+import { mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
 import type { Role } from "discord.js";
 import { DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
@@ -28,9 +28,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	if (!server && sageMessage.isSuperUser) {
 		const serverId = sageMessage.args.getIdType("server");
 		if (serverId) {
-			server = isSnowflake(serverId)
-				? await sageMessage.sageCache.servers.getByDid(serverId)
-				: await sageMessage.sageCache.servers.getById(serverId)
+			server = await sageMessage.sageCache.servers.getById(serverId);
 		}
 	}
 	if (!server) {

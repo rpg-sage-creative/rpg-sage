@@ -8,12 +8,12 @@ import { DidRepository } from "./base/DidRepository.js";
 export class ServerRepo extends DidRepository<ServerCore, Server> {
 
 	public async getHome(): Promise<Server> {
-		return this.getByDid(getHomeServerId()) as Promise<Server>;
+		return this.getById(getHomeServerId()) as Promise<Server>;
 	}
 
 	/** This finds or creates the server object. It also updates the server name if changed. */
 	public async getOrCreateByGuild(guild: Guild): Promise<Server> {
-		let server = await this.getByDid(guild.id as Snowflake);
+		let server = await this.getById(guild.id as Snowflake);
 		if (!server) {
 			server = new Server(Server.createCore(guild), this.sageCache);
 		}
@@ -25,7 +25,7 @@ export class ServerRepo extends DidRepository<ServerCore, Server> {
 	}
 
 	// public async retireServer(guild: Guild, kicked = false, banned = false): Promise<boolean> {
-	// 	const server = await this.getByDid(guild.id as Snowflake);
+	// 	const server = await this.getById(guild.id as Snowflake);
 	// 	if (server) {
 	// 		info(`NOT IMPLEMENTED: ${this.sageCache.bot?.codeName ?? ActiveBot.active?.codeName ?? UnkownBotCodeName} ${banned && "banned" || kicked && "kicked" || "left"} ${guild.name} (${guild.id})`);
 	// 		//TODO: IMPLEMENT THIS

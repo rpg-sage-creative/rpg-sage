@@ -7,7 +7,7 @@ import { DidRepository } from "./base/DidRepository.js";
 export class UserRepo extends DidRepository<UserCore, User> {
 
 	public async getOrCreateByDid(userDid: Snowflake): Promise<User> {
-		return await this.getByDid(userDid) ?? new User(User.createCore(userDid), this.sageCache);
+		return await this.getById(userDid) ?? new User(User.createCore(userDid), this.sageCache);
 	}
 
 	public static fromCore<T = UserCore, U = User>(core: T, sageCache: SageCache): Promise<U>;

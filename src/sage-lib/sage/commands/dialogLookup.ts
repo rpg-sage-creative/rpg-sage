@@ -105,7 +105,7 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 
 	const { characterId, gameId, userId } = messageInfo;
 
-	const sageUser = await sageCommand.sageCache.users.getByDid(userId);
+	const sageUser = await sageCommand.sageCache.users.getById(userId);
 	const guildMember = await sageCommand.discord.fetchGuildMember(userId);
 
 	let { game } = sageCommand;

@@ -100,7 +100,7 @@ async function showGameRenderDialogType(renderableContent: RenderableContent, sa
 	if (inheritedDialogType !== DialogPostType.Post) {
 		let showAlert = false;
 		for (const gameUser of game.users) {
-			const user = await sageCommand.sageCache.users.getByDid(gameUser.did);
+			const user = await sageCommand.sageCache.users.getById(gameUser.did);
 			if (user?.dialogPostType === DialogPostType.Post) {
 				showAlert = true;
 				break;
