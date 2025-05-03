@@ -1,4 +1,4 @@
-import { getTupperBoxId } from "@rsc-sage/env";
+import { getHomeServerId, getTupperBoxId } from "@rsc-sage/env";
 import { debug, errorReturnFalse, errorReturnUndefined, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, toHumanReadable, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
@@ -12,35 +12,23 @@ import { ServerRepo } from "../repo/ServerRepo.js";
 import { UserRepo } from "../repo/UserRepo.js";
 import type { Bot } from "./Bot.js";
 import { GameRoleType, type Game } from "./Game.js";
-import type { Server } from "./Server.js";
-import type { User } from "./User.js";
+import { Server } from "./Server.js";
+import { User } from "./User.js";
 
-export type SageCacheCore = {
-	actor: SageCacheUser;
-	/** actor of an event */
-	actorOrPartial: UserOrPartial;
-	author: SageCacheUser;
-	/** author of the message being acted upon */
-	authorOrPartial?: UserOrPartial;
-	discord: DiscordCache;
-	discordKey: DiscordKey;
-	game?: Game;
-	games: GameRepo;
-	home: Server;
-	/** message of a post or interaction */
-	messageOrPartial?: MessageOrPartial;
-	/** reaction of a reaction */
-	reactionOrPartial?: ReactionOrPartial;
-	server: SageCacheServer;
-	servers: ServerRepo;
-	users: UserRepo;
-};
+async function getOrCreateUser(sageCache: SageCache, id: Optional<string>): Promise<User> {
+	const userId = orNilSnowflake(id);
+	let user = await sageCache.users.getById(userId);
+	user ??= new User(User.createCore(userId), sageCache);
+	return user;
+}
 
 /**
  * @todo have ensureActor(), ensureGame(), ensureGuild()
  * Move isGameX to EnsuredGame
  * Move canManageServer, member to EnsuredGuild
  */
+
+//#region SageCacheUser
 
 type KnownUser = {
 	canManageServer: boolean;
@@ -53,6 +41,7 @@ type KnownUser = {
 	sage: User;
 	uuid?: UUID;
 };
+
 type UnknownUser = {
 	canManageServer: false;
 	discord?: DUser;
@@ -64,6 +53,7 @@ type UnknownUser = {
 	sage: User;
 	uuid?: never;
 };
+
 type UnvalidatedUser = {
 	canManageServer?: never;
 	discord?: never;
@@ -75,7 +65,12 @@ type UnvalidatedUser = {
 	sage: User;
 	uuid?: never;
 };
+
 type SageCacheUser = UnvalidatedUser | UnknownUser | KnownUser;
+
+//#endregion
+
+//#region ValidateUser
 
 type ValidateActorArgs = {
 	which: "actor";
@@ -84,6 +79,7 @@ type ValidateActorArgs = {
 	messageOrPartial?: MessageOrPartial;
 	reactionOrPartial?: ReactionOrPartial;
 };
+
 type ValidateAuthorArgs = {
 	which: "author";
 	actorOrPartial?: never;
@@ -91,7 +87,9 @@ type ValidateAuthorArgs = {
 	messageOrPartial?: MessageOrPartial;
 	reactionOrPartial?: ReactionOrPartial;
 };
+
 type ValidateUserArgs = ValidateActorArgs | ValidateAuthorArgs;
+
 async function validateUser(sageCache: SageCache, { which, actorOrPartial, authorOrPartial, messageOrPartial, reactionOrPartial }: ValidateUserArgs): Promise<SageCacheUser> {
 
 	// try fetching the discord user object
@@ -117,7 +115,7 @@ async function validateUser(sageCache: SageCache, { which, actorOrPartial, autho
 	}
 
 	// we want to always have a sage user object, so pass in nil if we don't have an id
-	const sage = await sageCache.users.getOrCreateByDid(orNilSnowflake(discord?.id));
+	const sage = await getOrCreateUser(sageCache, discord?.id);
 
 	// set flags as false by default
 	let canManageServer = false;
@@ -182,6 +180,10 @@ async function validateUser(sageCache: SageCache, { which, actorOrPartial, autho
 	return knownUser;
 }
 
+//#endregion
+
+//#region SageCacheServer
+
 type KnownServer = {
 	discord: Guild;
 	id: Snowflake;
@@ -190,6 +192,7 @@ type KnownServer = {
 	known: true;
 	sage: Server;
 };
+
 type UnknownServer = {
 	discord?: Guild;
 	id?: Snowflake;
@@ -198,6 +201,7 @@ type UnknownServer = {
 	known: false;
 	sage?: Server;
 };
+
 type DmServer = {
 	discord?: never;
 	id?: never;
@@ -206,6 +210,7 @@ type DmServer = {
 	known: false;
 	sage?: never;
 };
+
 type UnvalidatedServer = {
 	discord?: Guild;
 	id?: never;
@@ -214,7 +219,10 @@ type UnvalidatedServer = {
 	known?: never;
 	sage?: never;
 };
+
 type SageCacheServer = UnvalidatedServer | DmServer | UnknownServer | KnownServer;
+
+//#endregion
 
 async function validateServer(sageCache: SageCache, discord: Optional<Guild>): Promise<SageCacheServer> {
 	// no guild means dm
@@ -231,7 +239,19 @@ async function validateServer(sageCache: SageCache, discord: Optional<Guild>): P
 	// return unknownServer;
 
 	// fetch sage object
-	const sage = await sageCache.servers.getOrCreateByGuild(discord);
+	let sage = await sageCache.servers.getById(discord.id as Snowflake);
+
+	// we didn't find one, so create one
+	if (!sage) {
+		sage = new Server(Server.createCore(discord), sageCache);
+	}
+
+	// if the names don't match (new server or a change) then update and save
+	if (sage.name !== discord.name) {
+		sage.toJSON().name = discord.name;
+		/** @todo we don't need the result of this save so we could fire it and not wait */
+		await sage.save();
+	}
 
 	const knownServer: KnownServer = {
 		discord,
@@ -243,6 +263,29 @@ async function validateServer(sageCache: SageCache, discord: Optional<Guild>): P
 	}
 	return knownServer;
 }
+
+//#region createSageCache
+
+type SageCacheCore = {
+	actor: SageCacheUser;
+	/** actor of an event */
+	actorOrPartial: UserOrPartial;
+	author: SageCacheUser;
+	/** author of the message being acted upon */
+	authorOrPartial?: UserOrPartial;
+	discord: DiscordCache;
+	discordKey: DiscordKey;
+	game?: Game;
+	games: GameRepo;
+	home: Server;
+	/** message of a post or interaction */
+	messageOrPartial?: MessageOrPartial;
+	/** reaction of a reaction */
+	reactionOrPartial?: ReactionOrPartial;
+	server: SageCacheServer;
+	servers: ServerRepo;
+	users: UserRepo;
+};
 
 type SageCacheCreateOptions = {
 	actorOrPartial: UserOrPartial;
@@ -281,13 +324,13 @@ async function createSageCache(options: SageCacheCreateOptions): Promise<SageCac
 	core.games = new GameRepo(sageCache);
 	core.users = new UserRepo(sageCache);
 
-	core.home = await core.servers.getHome();
+	core.home = await core.servers.getById(getHomeServerId()) as Server;
 
 	// set unvalidated actor
-	core.actor = { sage:await core.users.getOrCreateByDid(actorOrPartial.id as Snowflake) };
+	core.actor = { sage:await getOrCreateUser(sageCache, actorOrPartial.id) };
 
 	// set unvalidated author
-	core.author = { sage:await core.users.getOrCreateByDid(orNilSnowflake(authorOrPartial?.id)) };
+	core.author = { sage:await getOrCreateUser(sageCache, authorOrPartial?.id) };
 
 	// set unvalidated server
 	core.server = { discord:guild };
@@ -319,6 +362,8 @@ async function createSageCache(options: SageCacheCreateOptions): Promise<SageCac
 	return sageCache;
 }
 
+//#endregion
+
 export class SageCache {
 	constructor(protected core: SageCacheCore) { }
 
@@ -347,25 +392,26 @@ export class SageCache {
 	public get server(): SageCacheServer { return this.core.server; }
 
 	public async validate(which?: "actor" | "author" | "server"): Promise<boolean> {
+		const { core } = this;
 		if (which === "actor") {
-			if (this.core.actor.known === undefined) {
-				const { actorOrPartial, messageOrPartial, reactionOrPartial } = this.core;
-				this.core.actor = await validateUser(this, { which:"actor", actorOrPartial, messageOrPartial, reactionOrPartial });
+			if (core.actor.known === undefined) {
+				const { actorOrPartial, messageOrPartial, reactionOrPartial } = core;
+				core.actor = await validateUser(this, { which:"actor", actorOrPartial, messageOrPartial, reactionOrPartial });
 			}
-			return this.core.actor.known === true;
+			return core.actor.known === true;
 
 		}else if (which === "author") {
-			if (this.core.author.known === undefined) {
-				const { authorOrPartial, messageOrPartial, reactionOrPartial } = this.core;
-				this.core.author = await validateUser(this, { which:"author", authorOrPartial, messageOrPartial, reactionOrPartial });
+			if (core.author.known === undefined) {
+				const { authorOrPartial, messageOrPartial, reactionOrPartial } = core;
+				core.author = await validateUser(this, { which:"author", authorOrPartial, messageOrPartial, reactionOrPartial });
 			}
-			return this.core.author.known === true;
+			return core.author.known === true;
 
 		}else {
-			if (this.core.server.known === undefined) {
-				this.core.server = await validateServer(this, this.core.server.discord);
+			if (core.server.known === undefined) {
+				core.server = await validateServer(this, core.server.discord);
 			}
-			return this.core.server.known === true;
+			return core.server.known === true;
 		}
 	}
 
@@ -545,18 +591,9 @@ export class SageCache {
 		return this.discord.fetchMessage(keyOrReference, this.user?.did);
 	}
 
-	// protected static create<T extends IHandlerCachesCore>(core: T): HandlerCaches<T> {
-	// 	return new HandlerCaches(core);
-	// }
 	protected static create(core: SageCacheCore): SageCache {
 		return new SageCache(core);
 	}
-
-	// public static async fromClient(client: Client): Promise<SageCache> {
-	// 	return createSageCache({
-	// 		discord: DiscordCache.from({ client, guild:null }),
-	// 	} as SageCacheCreateOptions);
-	// }
 
 	private static async _fromMessage(messageOrPartial: MessageOrPartial, actorOrPartial: UserOrPartial, reactionOrPartial?: ReactionOrPartial): Promise<SageCache> {
 		const sageCache = await createSageCache({
