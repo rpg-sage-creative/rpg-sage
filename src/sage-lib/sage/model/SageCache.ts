@@ -16,20 +16,20 @@ import { User } from "./User.js";
 
 let _userForSage: User | undefined;
 
-async function getOrCreateUser(sageCache: SageCache, id: Optional<string>): Promise<User> {
+async function getOrCreateUser(evCache: SageEventCache, id: Optional<string>): Promise<User> {
 	const userId = orNilSnowflake(id);
 
 	let user: User | undefined;
 	if (isSageId(userId)) {
-		_userForSage ??= new User(User.createCore(userId), sageCache);
+		_userForSage ??= new User(User.createCore(userId), evCache);
 		user = _userForSage;
 
 	}else {
 		// check cache first
-		user = await sageCache.getOrFetchUser(userId);
+		user = await evCache.getOrFetchUser(userId);
 
 		// create a new one
-		user ??= new User(User.createCore(userId), sageCache);
+		user ??= new User(User.createCore(userId), evCache);
 	}
 
 	return user;
@@ -41,7 +41,7 @@ async function getOrCreateUser(sageCache: SageCache, id: Optional<string>): Prom
  * Move canManageServer, member to EnsuredGuild
  */
 
-//#region SageCacheUser
+//#region SageEventCacheUser
 
 type KnownUser = {
 	canManageServer: boolean;
@@ -79,7 +79,7 @@ type UnvalidatedUser = {
 	uuid?: never;
 };
 
-type SageCacheUser = UnvalidatedUser | UnknownUser | KnownUser;
+type SageEventCacheUser = UnvalidatedUser | UnknownUser | KnownUser;
 
 //#endregion
 
@@ -103,7 +103,7 @@ type ValidateAuthorArgs = {
 
 type ValidateUserArgs = ValidateActorArgs | ValidateAuthorArgs;
 
-async function validateUser(sageCache: SageCache, { which, actorOrPartial, authorOrPartial, messageOrPartial, reactionOrPartial }: ValidateUserArgs): Promise<SageCacheUser> {
+async function validateUser(evCache: SageEventCache, { which, actorOrPartial, authorOrPartial, messageOrPartial, reactionOrPartial }: ValidateUserArgs): Promise<SageEventCacheUser> {
 
 	// try fetching the discord user object
 	let discord = await fetchIfPartial(actorOrPartial ?? authorOrPartial);
@@ -128,7 +128,7 @@ async function validateUser(sageCache: SageCache, { which, actorOrPartial, autho
 	}
 
 	// we want to always have a sage user object, so pass in nil if we don't have an id
-	const sage = await getOrCreateUser(sageCache, discord?.id);
+	const sage = await getOrCreateUser(evCache, discord?.id);
 
 	// set flags as false by default
 	let canManageServer = false;
@@ -153,7 +153,7 @@ async function validateUser(sageCache: SageCache, { which, actorOrPartial, autho
 
 	// we need a guildmember to check server perms
 	let member: GuildMember | undefined;
-	const guild = sageCache.server?.discord;
+	const guild = evCache.server?.discord;
 	if (guild) {
 		// fetch the guild member if it isn't a bot and isn't a system user
 		if (!discord.bot && !discord.system) {
@@ -169,7 +169,7 @@ async function validateUser(sageCache: SageCache, { which, actorOrPartial, autho
 	}
 
 	// now let's check for game access
-	const { game } = sageCache;
+	const { game } = evCache;
 	if (game) {
 		// NOTE: hasUser checks users and roles so is preferred
 		isGameMaster = await game.hasUser(id, GameRoleType.GameMaster) ?? false;
@@ -195,7 +195,7 @@ async function validateUser(sageCache: SageCache, { which, actorOrPartial, autho
 
 //#endregion
 
-//#region SageCacheServer
+//#region SageEventCacheServer
 
 type KnownServer = {
 	discord: Guild;
@@ -233,11 +233,11 @@ type UnvalidatedServer = {
 	sage?: never;
 };
 
-type SageCacheServer = UnvalidatedServer | DmServer | UnknownServer | KnownServer;
+type SageEventCacheServer = UnvalidatedServer | DmServer | UnknownServer | KnownServer;
 
 //#endregion
 
-async function validateServer(sageCache: SageCache, discord: Optional<Guild>): Promise<SageCacheServer> {
+async function validateServer(evCache: SageEventCache, discord: Optional<Guild>): Promise<SageEventCacheServer> {
 	// no guild means dm
 	if (!discord) {
 		const dmServer: DmServer = { isDm: true, isServer:false, known:false };
@@ -252,11 +252,11 @@ async function validateServer(sageCache: SageCache, discord: Optional<Guild>): P
 	// return unknownServer;
 
 	// fetch sage object
-	let sage = await sageCache.getOrFetchServer(discord.id);
+	let sage = await evCache.getOrFetchServer(discord.id);
 
 	// we didn't find one, so create one
 	if (!sage) {
-		sage = new Server(Server.createCore(discord), sageCache);
+		sage = new Server(Server.createCore(discord), evCache);
 	}
 
 	// if the names don't match (new server or a change) then update and save
@@ -277,13 +277,13 @@ async function validateServer(sageCache: SageCache, discord: Optional<Guild>): P
 	return knownServer;
 }
 
-//#region createSageCache
+//#region createSageEventCache
 
-type SageCacheCore = {
-	actor: SageCacheUser;
+type SageEventCacheCore = {
+	actor: SageEventCacheUser;
 	/** actor of an event */
 	actorOrPartial: UserOrPartial;
-	author: SageCacheUser;
+	author: SageEventCacheUser;
 	/** author of the message being acted upon */
 	authorOrPartial?: UserOrPartial;
 	discord: DiscordCache;
@@ -295,10 +295,10 @@ type SageCacheCore = {
 	/** reaction of a reaction */
 	reactionOrPartial?: ReactionOrPartial;
 	repo: JsonRepo;
-	server: SageCacheServer;
+	server: SageEventCacheServer;
 };
 
-type SageCacheCreateOptions = {
+type SageEventCacheCreateOptions = {
 	actorOrPartial: UserOrPartial;
 	authorOrPartial: UserOrPartial | undefined;
 	channel: Channel | undefined;
@@ -309,10 +309,10 @@ type SageCacheCreateOptions = {
 	reactionOrPartial?: ReactionOrPartial;
 };
 
-async function createSageCache(options: SageCacheCreateOptions): Promise<SageCache> {
+async function createSageEventCache(options: SageEventCacheCreateOptions): Promise<SageEventCache> {
 	const { actorOrPartial, authorOrPartial, channel, discord, discordKey, guild, messageOrPartial, reactionOrPartial } = options;
 
-	const core: SageCacheCore = {
+	const core: SageEventCacheCore = {
 		actor: undefined!, // below
 		actorOrPartial,
 		author: undefined!,
@@ -327,17 +327,17 @@ async function createSageCache(options: SageCacheCreateOptions): Promise<SageCac
 		server: undefined!, // below
 	};
 
-	const sageCache = new SageCache(core);
+	const evCache = new SageEventCache(core);
 
-	core.repo = new JsonRepo(sageCache);
+	core.repo = new JsonRepo(evCache);
 
-	core.home = await sageCache.getOrFetchServer(getHomeServerId()) as Server;
+	core.home = await evCache.getOrFetchServer(getHomeServerId()) as Server;
 
 	// set unvalidated actor
-	core.actor = { sage:await getOrCreateUser(sageCache, actorOrPartial.id) };
+	core.actor = { sage:await getOrCreateUser(evCache, actorOrPartial.id) };
 
 	// set unvalidated author
-	core.author = { sage:await getOrCreateUser(sageCache, authorOrPartial?.id) };
+	core.author = { sage:await getOrCreateUser(evCache, authorOrPartial?.id) };
 
 	// set unvalidated server
 	core.server = { discord:guild };
@@ -346,13 +346,13 @@ async function createSageCache(options: SageCacheCreateOptions): Promise<SageCac
 	if (guild) {
 
 		// validate the server to look for the game
-		await sageCache.validate("server");
+		await evCache.validate("server");
 
-		const { server } = sageCache;
+		const { server } = evCache;
 		if (server.known) {
 			// check to see if we have a server-wide game
 			if (server.sage.gameId) {
-				const game = await sageCache.getOrFetchGame(server.sage.gameId);
+				const game = await evCache.getOrFetchGame(server.sage.gameId);
 				if (game && !game.isArchived) {
 					core.game = game;
 				}
@@ -360,23 +360,24 @@ async function createSageCache(options: SageCacheCreateOptions): Promise<SageCac
 
 			// fall back to the active game for the channel
 			if (!core.game && channel) {
-				core.game = await sageCache.findActiveGame(channel);
+				core.game = await evCache.findActiveGame(channel);
 			}
 		}
 
 	}
 
-	return sageCache;
+	return evCache;
 }
 
 //#endregion
 
-export class SageCache {
-	constructor(protected core: SageCacheCore) { }
+/** This is Sage's per event caching mechanism. */
+export class SageEventCache {
+	constructor(protected core: SageEventCacheCore) { }
 
 	/** Clears the cache/maps in an attempt to avoid memory leaks. */
 	public clear(): void {
-		debug("Clearing SageCache");
+		debug("Clearing SageEventCache");
 		this.canSendMessageToMap.clear();
 		this.hasTupperMap.clear();
 		this.canReactToMap.clear();
@@ -384,19 +385,19 @@ export class SageCache {
 		uncache(this.core);
 	}
 
-	/** Convenience method for send(SageCache, MessageTarget, RenderableContentResolvable, Optional<DUser>) */
+	/** Convenience method for send(SageEventCache, MessageTarget, RenderableContentResolvable, Optional<DUser>) */
 	public send(targetChannel: MessageTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<DUser>): Promise<SMessage[]> {
 		return send(this, targetChannel, renderableContent, originalAuthor);
 	}
 
 	/** User that created the message. */
-	public get author(): SageCacheUser { return this.core.author; }
+	public get author(): SageEventCacheUser { return this.core.author; }
 
 	/** User doing the action. */
-	public get actor(): SageCacheUser { return this.core.actor; }
+	public get actor(): SageEventCacheUser { return this.core.actor; }
 
 	/** Guild/Server the event happens in. */
-	public get server(): SageCacheServer { return this.core.server; }
+	public get server(): SageEventCacheServer { return this.core.server; }
 
 	public async validate(which?: "actor" | "author" | "server"): Promise<boolean> {
 		const { core } = this;
@@ -488,11 +489,11 @@ export class SageCache {
 		return !isDeleted(discordKey.message) // check deleted messages just in case
 			&& this.canReactToMap.get(key)!;
 
-		async function _canReactTo(sageCache: SageCache, discordKey: DiscordKey): Promise<boolean> {
+		async function _canReactTo(evCache: SageEventCache, discordKey: DiscordKey): Promise<boolean> {
 			if (discordKey.isDm) {
 				return true;
 			}else {
-				const { thread, channel } = await sageCache.discord.fetchChannelAndThread(discordKey);
+				const { thread, channel } = await evCache.discord.fetchChannelAndThread(discordKey);
 				if (isDeleted(discordKey.message)) return false; // check deleted messages just in case
 				if (channel) {
 					return getPermsFor(thread ?? channel, DiscordCache.getSageId()).canAddReactions;
@@ -532,11 +533,11 @@ export class SageCache {
 	public get game(): Game | undefined { return this.core.game; }
 	public get user(): User { return this.core.actor.sage; }
 
-	private clone(core: SageCacheCore): SageCache {
-		return new SageCache(core);
+	private clone(core: SageEventCacheCore): SageEventCache {
+		return new SageEventCache(core);
 	}
 
-	public cloneForChannel(channel: Optional<MessageTarget>): SageCache {
+	public cloneForChannel(channel: Optional<MessageTarget>): SageEventCache {
 		const core = { ...this.core };
 		if (channel) {
 			core.discordKey = DiscordKey.from(channel);
@@ -546,7 +547,7 @@ export class SageCache {
 		return this.clone(core);
 	}
 
-	public cloneForMessage(message: MessageOrPartial): SageCache {
+	public cloneForMessage(message: MessageOrPartial): SageEventCache {
 		const core = { ...this.core };
 		core.discordKey = DiscordKey.from(message);
 		return this.clone(core);
@@ -685,12 +686,12 @@ export class SageCache {
 
 	//#region static
 
-	protected static create(core: SageCacheCore): SageCache {
-		return new SageCache(core);
+	protected static create(core: SageEventCacheCore): SageEventCache {
+		return new SageEventCache(core);
 	}
 
-	private static async _fromMessage(messageOrPartial: MessageOrPartial, actorOrPartial: UserOrPartial, reactionOrPartial?: ReactionOrPartial): Promise<SageCache> {
-		const sageCache = await createSageCache({
+	private static async _fromMessage(messageOrPartial: MessageOrPartial, actorOrPartial: UserOrPartial, reactionOrPartial?: ReactionOrPartial): Promise<SageEventCache> {
+		const evCache = await createSageEventCache({
 			actorOrPartial,
 			authorOrPartial: messageOrPartial.author ?? undefined,
 			channel: messageOrPartial.channel,
@@ -700,23 +701,23 @@ export class SageCache {
 			messageOrPartial,
 			reactionOrPartial,
 		});
-		return sageCache;
+		return evCache;
 	}
 
-	public static async fromMessage(messageOrPartial: MessageOrPartial): Promise<SageCache> {
+	public static async fromMessage(messageOrPartial: MessageOrPartial): Promise<SageEventCache> {
 		const message = await fetchIfPartial(messageOrPartial) as Message;
-		const sageCache = await SageCache._fromMessage(message, message.author);
-		await sageCache.validate("actor");
-		return sageCache;
+		const evCache = await SageEventCache._fromMessage(message, message.author);
+		await evCache.validate("actor");
+		return evCache;
 	}
 
-	public static fromMessageReaction(reactionOrPartial: ReactionOrPartial, actorOrPartial: UserOrPartial): Promise<SageCache> {
-		return SageCache._fromMessage(reactionOrPartial.message, actorOrPartial, reactionOrPartial);
+	public static fromMessageReaction(reactionOrPartial: ReactionOrPartial, actorOrPartial: UserOrPartial): Promise<SageEventCache> {
+		return SageEventCache._fromMessage(reactionOrPartial.message, actorOrPartial, reactionOrPartial);
 	}
 
-	public static async fromInteraction(interaction: DInteraction): Promise<SageCache> {
+	public static async fromInteraction(interaction: DInteraction): Promise<SageEventCache> {
 		const messageOrPartial = "message" in interaction ? interaction.message ?? undefined : undefined;
-		const sageCache = await createSageCache({
+		const evCache = await createSageEventCache({
 			actorOrPartial: interaction.user,
 			authorOrPartial: messageOrPartial?.author ?? undefined,
 			channel: interaction.channel ?? undefined,
@@ -725,8 +726,11 @@ export class SageCache {
 			guild: interaction.guild ?? undefined,
 			messageOrPartial,
 		});
-		return sageCache;
+		return evCache;
 	}
 
 	//#endregion
 }
+
+/** @deprecated renamed to SageEventCache */
+export { SageEventCache as SageCache };
