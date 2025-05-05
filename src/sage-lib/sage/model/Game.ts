@@ -667,7 +667,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	// #endregion
 
 	public async save(): Promise<boolean> {
-		return this.sageCache.games.write(this);
+		return this.sageCache.saveGame(this);
 	}
 
 	// #region IComparable

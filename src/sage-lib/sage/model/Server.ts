@@ -317,7 +317,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 	// #endregion
 
 	public async save(): Promise<boolean> {
-		return this.sageCache.servers.write(this);
+		return this.sageCache.saveServer(this);
 	}
 
 	// #region command Prefix override

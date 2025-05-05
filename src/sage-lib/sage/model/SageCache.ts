@@ -524,15 +524,8 @@ export class SageCache {
 
 	public get discord(): DiscordCache { return this.core.discord; }
 	public get discordKey(): DiscordKey { return this.core.discordKey; }
-	/** @deprecated start setting this.core.discordUser or remove it! */
+	/** @deprecated start using actor.id! */
 	public get userDid(): Snowflake { return this.core.actor.sage.did; }
-
-	// public meta: TMeta[] = [];
-
-	public get servers(): JsonRepo { return this.core.repo; }
-	public get games(): JsonRepo { return this.core.repo; }
-	public get repo(): JsonRepo { return this.core.repo; }
-	public get users(): JsonRepo { return this.core.repo; }
 
 	public get bot(): Bot { return ActiveBot.active; }
 	public get home(): Server { return this.core.home; }
@@ -662,7 +655,7 @@ export class SageCache {
 		const gameFilter = (core: GameCacheItem) => !core.archivedTs
 			&& core.serverDid === guildId
 			&& core.channels?.some(channel => channel.id === channelId || channel.did === channelId);
-		const game = await this.repo.find("Game", gameFilter);
+		const game = await this.core.repo.find("Game", gameFilter);
 		return game as Game;
 	}
 
@@ -676,6 +669,18 @@ export class SageCache {
 
 	public async getOrFetchUser(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<User | undefined> {
 		return await this.core.repo.getById("User", id as Snowflake, did, uuid) as User ?? undefined;
+	}
+
+	public async saveGame(game: Game): Promise<boolean> {
+		return this.core.repo.write(game);
+	}
+
+	public async saveServer(server: Server): Promise<boolean> {
+		return this.core.repo.write(server);
+	}
+
+	public async saveUser(user: User): Promise<boolean> {
+		return this.core.repo.write(user);
 	}
 
 	//#region static

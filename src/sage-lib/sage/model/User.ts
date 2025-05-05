@@ -165,7 +165,7 @@ export class User extends HasSageCacheCore<UserCore> {
 	}
 
 	public async save(): Promise<boolean> {
-		return this.sageCache.users.write(this);
+		return this.sageCache.saveUser(this);
 	}
 
 	public static createCore(userId: Snowflake): UserCore {
