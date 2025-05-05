@@ -1,4 +1,4 @@
-import { getHomeServerId, getTupperBoxId } from "@rsc-sage/env";
+import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, isThread, toHumanReadable, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
@@ -14,10 +14,24 @@ import { Game, GameRoleType, type GameCore } from "./Game.js";
 import { Server } from "./Server.js";
 import { User } from "./User.js";
 
+let _userForSage: User | undefined;
+
 async function getOrCreateUser(sageCache: SageCache, id: Optional<string>): Promise<User> {
 	const userId = orNilSnowflake(id);
-	let user = await sageCache.getOrFetchUser(userId);
-	user ??= new User(User.createCore(userId), sageCache);
+
+	let user: User | undefined;
+	if (isSageId(userId)) {
+		_userForSage ??= new User(User.createCore(userId), sageCache);
+		user = _userForSage;
+
+	}else {
+		// check cache first
+		user = await sageCache.getOrFetchUser(userId);
+
+		// create a new one
+		user ??= new User(User.createCore(userId), sageCache);
+	}
+
 	return user;
 }
 
