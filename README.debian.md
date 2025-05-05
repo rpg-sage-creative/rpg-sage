@@ -1,4 +1,4 @@
-# Dev Setup (macOS)
+# Dev Setup (Debian GNU Linux 12.6 ARM64)
 
 For transparency, and to ensure compatibility, the following versions are used:
 - The Dev Lab: NVM 0.39.7, Node 18.20.2, and Typescript 5.4.5; VSCode for development
@@ -8,17 +8,18 @@ The tasks.json file's build task includes a dependency that creates an index.d.t
 
 # From Scratch
 
-1. run `git -v` to ensure you have "git" installed
-  - if "git" is not installed, it should open Xcode's installer to install git
-  - if not, you may need to run `xcode-select --install`
+1. a few of these commands will likely need things up to date
+  - check for the latest packages `sudo apt update`
+  - you may want to also run `sudo apt upgrade` (especially on a clean install)
+
+2. run `git -v` to ensure you have "git" installed
+  - if not, install with `sudo apt install git -y`
   - also best to `git config --global user.name "NAME HERE"`
   - and also to `git config --global user.email "EMAIL@DOMAIN.EXT"`
 
-2. ensure you have a bash/terminal profile setup
-  - if not, you may simply run `echo '' > ~/.zshrc`
-
 3. run `nvm -v` to ensure you have "Node Version Manager" installed
   - if "nvm" is not installed, get the latest install url from `https://github.com/nvm-sh/nvm`
+  - if you haven't installed these yet, they are required: `sudo apt install build-essential libssl-dev curl`
   - as of this guide, the latest is `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash`
 
 4. run `nvm ls` to ensure you have the version of Node used by RPG Sage
@@ -49,6 +50,7 @@ The tasks.json file's build task includes a dependency that creates an index.d.t
   - replace all the zeroed out ids with the correct and valid ids for your bot and environment (as needed)
   - as of this guide: rollemId was `240732567744151553`
   - as of this guide: tupperBoxId was `431544605209788416`
+  - for a simple editor you can use `vim config/env.json` but you might have to install it with `sudo apt install vim`
 
 11. start your bot with `npm run start-dev`
   - if you are using vscode you should be able to use the hot key for "test"
