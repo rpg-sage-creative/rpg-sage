@@ -13,6 +13,7 @@ For transparency, and to ensure compatibility, the following versions are used:
 
 The tasks.json file's build task includes a dependency that creates an index.d.ts for pdf2json ... mind it!
 
+[Dev Setup (debian)](<./README.debian.md>)
 [Dev Setup (macOS)](<./README.macOS.md>)
 
 ## Discord Bot Permissions and Scope
