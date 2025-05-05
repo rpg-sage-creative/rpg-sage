@@ -78,7 +78,7 @@ async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Opti
 	if (!isMessageTarget(channel) || isDMBased(channel)) {
 		return ["DM", undefined];
 	}
-	return [channel.name, await sageCache.games.findActive(channel)];
+	return [channel.name, await sageCache.findActiveGame(channel)];
 }
 
 export async function channelDetails(sageMessage: SageMessage, channel?: SageChannel): Promise<void> {

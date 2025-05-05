@@ -28,7 +28,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	if (!server && sageMessage.isSuperUser) {
 		const serverId = sageMessage.args.getIdType("server");
 		if (serverId) {
-			server = await sageMessage.sageCache.servers.getById(serverId);
+			server = await sageMessage.sageCache.getOrFetchServer(serverId);
 		}
 	}
 	if (!server) {

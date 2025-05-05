@@ -514,7 +514,7 @@ export class Macros<Category extends string = string> {
 				const ensuredOwnerId = ownerId ?? actorId;
 				const user = ensuredOwnerId === actorId
 					? sageCommand.sageUser
-					: await sageCommand.sageCache.users.getById(ensuredOwnerId);
+					: await sageCommand.sageCache.getOrFetchUser(ensuredOwnerId);
 				if (user) {
 					return Macros.from(user);
 				}

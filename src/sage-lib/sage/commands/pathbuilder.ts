@@ -75,7 +75,7 @@ async function getMacros(sageCommand: SageCommand, character: PathbuilderCharact
 	const spellMacros = getSpellMacros(character);
 
 	// get user macros with character name as category (old logic)
-	const macroUser = await sageCommand.sageCache.users.getById(character.getSheetValue("macroUserId"));
+	const macroUser = await sageCommand.sageCache.getOrFetchUser(character.getSheetValue("macroUserId"));
 	const userMacros = getUserMacros(character, macroUser);
 
 	// get character macros (new logic)

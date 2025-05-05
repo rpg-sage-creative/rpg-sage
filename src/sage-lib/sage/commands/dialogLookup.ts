@@ -105,12 +105,12 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 
 	const { characterId, gameId, userId } = messageInfo;
 
-	const sageUser = await sageCommand.sageCache.users.getById(userId);
+	const sageUser = await sageCommand.sageCache.getOrFetchUser(userId);
 	const guildMember = await sageCommand.discord.fetchGuildMember(userId);
 
 	let { game } = sageCommand;
-	if (game && !game.equals(gameId)) {
-		game = await sageCommand.sageCache.games.getById(gameId) ?? undefined;
+	if (game && gameId && !game.equals(gameId)) {
+		game = await sageCommand.sageCache.getOrFetchGame(gameId);
 	}
 
 	/** we can't use sageCommand.findCharacter because the game and user aren't linked to the command */

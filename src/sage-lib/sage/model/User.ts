@@ -1,7 +1,7 @@
 import { getSuperAdminId, getSuperUserId } from "@rsc-sage/env";
-import { applyChanges, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
-import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
+import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import type { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
@@ -23,7 +23,7 @@ export enum DialogDiceBehaviorType { Default = 0, Inline = 1 };
 /**
  * @todo consider flag for AoN Legacy vs Remaster
  */
-export interface UserCore extends DidCore<"User"> {
+export interface UserCore extends IdCore<"User"> {
 
 	aliases?: TAlias[];
 
@@ -83,7 +83,7 @@ type UpdateArgs = Args<{
 	sagePostType: DialogType;
 }>;
 
-export class User extends HasDidCore<UserCore> {
+export class User extends HasSageCacheCore<UserCore> {
 
 	public isSuperAdmin: boolean;
 	public isSuperUser: boolean;

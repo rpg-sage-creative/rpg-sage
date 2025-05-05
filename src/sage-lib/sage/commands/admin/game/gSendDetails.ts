@@ -15,7 +15,7 @@ async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 	if (!game) {
 		const gameId = sageCommand.args.getIdType("id");
 		if (gameId) {
-			game = await sageCommand.sageCache.games.getById(gameId);
+			game = await sageCommand.sageCache.getOrFetchGame(gameId);
 		}
 		if (!game) {
 			await sageCommand.replyStack.whisper("No Game Found!");
@@ -100,7 +100,7 @@ async function showGameRenderDialogType(renderableContent: RenderableContent, sa
 	if (inheritedDialogType !== DialogPostType.Post) {
 		let showAlert = false;
 		for (const gameUser of game.users) {
-			const user = await sageCommand.sageCache.users.getById(gameUser.did);
+			const user = await sageCommand.sageCache.getOrFetchUser(gameUser.did);
 			if (user?.dialogPostType === DialogPostType.Post) {
 				showAlert = true;
 				break;

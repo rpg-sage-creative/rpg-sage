@@ -1,23 +1,22 @@
 import { getHomeServerId, getTupperBoxId } from "@rsc-sage/env";
-import { debug, errorReturnFalse, errorReturnUndefined, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, toHumanReadable, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, isThread, toHumanReadable, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
 import { ActiveBot } from "../model/ActiveBot.js";
-import { GameRepo } from "../repo/GameRepo.js";
-import { ServerRepo } from "../repo/ServerRepo.js";
-import { UserRepo } from "../repo/UserRepo.js";
+import { globalCacheFilter, globalCacheRead, type GameCacheItem, type GlobalCacheItem } from "../repo/base/globalCache.js";
+import { JsonRepo } from "../repo/base/JsonRepo.js";
 import type { Bot } from "./Bot.js";
-import { GameRoleType, type Game } from "./Game.js";
+import { Game, GameRoleType, type GameCore } from "./Game.js";
 import { Server } from "./Server.js";
 import { User } from "./User.js";
 
 async function getOrCreateUser(sageCache: SageCache, id: Optional<string>): Promise<User> {
 	const userId = orNilSnowflake(id);
-	let user = await sageCache.users.getById(userId);
+	let user = await sageCache.getOrFetchUser(userId);
 	user ??= new User(User.createCore(userId), sageCache);
 	return user;
 }
@@ -239,7 +238,7 @@ async function validateServer(sageCache: SageCache, discord: Optional<Guild>): P
 	// return unknownServer;
 
 	// fetch sage object
-	let sage = await sageCache.servers.getById(discord.id as Snowflake);
+	let sage = await sageCache.getOrFetchServer(discord.id);
 
 	// we didn't find one, so create one
 	if (!sage) {
@@ -276,15 +275,13 @@ type SageCacheCore = {
 	discord: DiscordCache;
 	discordKey: DiscordKey;
 	game?: Game;
-	games: GameRepo;
 	home: Server;
 	/** message of a post or interaction */
 	messageOrPartial?: MessageOrPartial;
 	/** reaction of a reaction */
 	reactionOrPartial?: ReactionOrPartial;
+	repo: JsonRepo;
 	server: SageCacheServer;
-	servers: ServerRepo;
-	users: UserRepo;
 };
 
 type SageCacheCreateOptions = {
@@ -309,22 +306,18 @@ async function createSageCache(options: SageCacheCreateOptions): Promise<SageCac
 		discord,
 		discordKey,
 		game: undefined,
-		games: undefined!, // below
 		home: undefined!, // below
 		messageOrPartial,
 		reactionOrPartial,
+		repo: undefined!, // below
 		server: undefined!, // below
-		servers: undefined!, // below
-		users: undefined!, // below
 	};
 
 	const sageCache = new SageCache(core);
 
-	core.servers = new ServerRepo(sageCache);
-	core.games = new GameRepo(sageCache);
-	core.users = new UserRepo(sageCache);
+	core.repo = new JsonRepo(sageCache);
 
-	core.home = await core.servers.getById(getHomeServerId()) as Server;
+	core.home = await sageCache.getOrFetchServer(getHomeServerId()) as Server;
 
 	// set unvalidated actor
 	core.actor = { sage:await getOrCreateUser(sageCache, actorOrPartial.id) };
@@ -345,7 +338,7 @@ async function createSageCache(options: SageCacheCreateOptions): Promise<SageCac
 		if (server.known) {
 			// check to see if we have a server-wide game
 			if (server.sage.gameId) {
-				const game = await core.games.getById(server.sage.gameId as Snowflake);
+				const game = await sageCache.getOrFetchGame(server.sage.gameId);
 				if (game && !game.isArchived) {
 					core.game = game;
 				}
@@ -353,7 +346,7 @@ async function createSageCache(options: SageCacheCreateOptions): Promise<SageCac
 
 			// fall back to the active game for the channel
 			if (!core.game && channel) {
-				core.game = await core.games.findActive(channel);
+				core.game = await sageCache.findActiveGame(channel);
 			}
 		}
 
@@ -522,9 +515,10 @@ export class SageCache {
 
 	// public meta: TMeta[] = [];
 
-	public get servers(): ServerRepo { return this.core.servers; }
-	public get games(): GameRepo { return this.core.games; }
-	public get users(): UserRepo { return this.core.users; }
+	public get servers(): JsonRepo { return this.core.repo; }
+	public get games(): JsonRepo { return this.core.repo; }
+	public get repo(): JsonRepo { return this.core.repo; }
+	public get users(): JsonRepo { return this.core.repo; }
 
 	public get bot(): Bot { return ActiveBot.active; }
 	public get home(): Server { return this.core.home; }
@@ -587,9 +581,90 @@ export class SageCache {
 		return undefined;
 	}
 
+	public async fetchGames({ archived, serverId, userId }: { archived?:boolean; serverId:Snowflake; userId?:Snowflake; }): Promise<Game[]> {
+
+		const server = await this.getOrFetchServer(serverId);
+		if (!server) return [];
+
+		const contentFilter = (core: GameCacheItem) => {
+			// match server first
+			if (core.serverDid !== serverId) return false;
+			// match archived or not
+			if (!archived === !core.archivedTs) return false;
+			// if we have a user, make sure they are in the game
+			if (userId && !core.users?.some(user => user.did === userId)) return false;
+			// we passed the tests
+			return true;
+		};
+
+		const cacheItems = globalCacheFilter("games", contentFilter) as GlobalCacheItem[];
+		const cores = await mapAsync(cacheItems, item => globalCacheRead(item)) as GameCore[];
+		return cores.filter(isDefined).map(core => new Game(core, server, this));
+	}
+
 	public async fetchMessage(keyOrReference: DiscordKey | MessageReferenceOrPartial): Promise<Message | undefined> {
 		return this.discord.fetchMessage(keyOrReference, this.user?.did);
 	}
+
+	public async findActiveGame(reference: Optional<Channel | DInteraction | MessageOrPartial | MessageReferenceOrPartial>): Promise<Game | undefined> {
+		if (reference) {
+			if ("messageId" in reference) {
+				return this.findActiveGameByReference(reference);
+			}
+			if ("isThread" in reference) {
+				return this.findActiveGameByChannel(reference);
+			}
+			if (reference.channel) {
+				return this.findActiveGameByChannel(reference.channel);
+			}
+		}
+		return undefined;
+	}
+
+	/** Gets the active/current Game for the MessageReference */
+	private async findActiveGameByChannel(channel: Channel): Promise<Game | undefined> {
+		const guildId = "guildId" in channel ? channel.guildId ?? undefined : undefined;
+
+		const gameByChannel = await this.findActiveGameByReference({
+			guildId,
+			channelId: channel.id
+		});
+		if (gameByChannel) return gameByChannel;
+
+		if (isThread(channel)) {
+			const gameByParent = await this.findActiveGameByReference({
+				guildId,
+				channelId: channel.parentId!
+			});
+			if (gameByParent) return gameByParent;
+		}
+
+		return undefined;
+	}
+
+	/** Gets the active/current Game for the MessageReference */
+	private async findActiveGameByReference(messageRef: Omit<MessageReferenceOrPartial, "messageId">): Promise<Game | undefined> {
+		const { guildId, channelId } = messageRef;
+		const gameFilter = (core: GameCacheItem) => !core.archivedTs
+			&& core.serverDid === guildId
+			&& core.channels?.some(channel => channel.id === channelId || channel.did === channelId);
+		const game = await this.repo.find("Game", gameFilter);
+		return game as Game;
+	}
+
+	public async getOrFetchGame(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<Game | undefined> {
+		return await this.core.repo.getById("Game", id as Snowflake, did, uuid) as Game ?? undefined;
+	}
+
+	public async getOrFetchServer(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<Server | undefined> {
+		return await this.core.repo.getById("Server", id as Snowflake, did, uuid) as Server ?? undefined;
+	}
+
+	public async getOrFetchUser(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<User | undefined> {
+		return await this.core.repo.getById("User", id as Snowflake, did, uuid) as User ?? undefined;
+	}
+
+	//#region static
 
 	protected static create(core: SageCacheCore): SageCache {
 		return new SageCache(core);
@@ -634,4 +709,5 @@ export class SageCache {
 		return sageCache;
 	}
 
+	//#endregion
 }

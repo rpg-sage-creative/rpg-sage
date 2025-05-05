@@ -44,7 +44,7 @@ async function getGames(sageCommand: SageCommand): Promise<MacroOwner[]> {
 	if (sageCommand.canAdminGames) {
 		const serverId = sageCommand.server?.did!;
 		const userId = sageCommand.canAdminGames ? undefined : sageCommand.actorId;
-		const games = await sageCommand.sageCache.games.fetch({ serverId, userId });
+		const games = await sageCommand.sageCache.fetchGames({ serverId, userId });
 		return games.map(gameToOwner);
 	}else if (sageCommand.game && (sageCommand.isGameMaster || sageCommand.isPlayer)) {
 		return [gameToOwner(sageCommand.game)];
