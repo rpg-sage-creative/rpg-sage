@@ -206,9 +206,7 @@ export abstract class SageCommand<
 		// if we have an actor, we can cache the results
 		const { actor } = this.eventCache;
 		if (actor.known) {
-			return cache.getOrSet("canManageServer", () => {
-				return actor.canManageServer;
-			});
+			return cache.getOrSet("canManageServer", () => actor.canManageServer);
 		}
 
 		// revert to isOwner
@@ -225,17 +223,17 @@ export abstract class SageCommand<
 
 	/** Can admin Sage settings, Server channels, Games, and Game channels */
 	public get isSageAdmin(): boolean {
-		return this.cache.getOrSet("isSageAdmin", () => (this.actorId && this.server?.hasSageAdmin(this.actorId)) === true);
+		return this.actor.isSageAdmin === true;
 	}
 
 	/** Can admin Server channels and Game channels */
 	public get isServerAdmin(): boolean {
-		return this.cache.getOrSet("isServerAdmin", () => (this.actorId && this.server?.hasServerAdmin(this.actorId)) === true);
+		return this.actor.isServerAdmin === true;
 	}
 
 	/** Can admin Games and Game channels */
 	public get isGameAdmin(): boolean {
-		return this.cache.getOrSet("isGameAdmin", () => (this.actorId && this.server?.hasGameAdmin(this.actorId)) === true);
+		return this.actor.isGameAdmin === true;
 	}
 
 	// #endregion

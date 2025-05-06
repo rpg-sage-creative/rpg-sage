@@ -47,8 +47,11 @@ type KnownUser = {
 	canManageServer: boolean;
 	discord: DUser;
 	id: Snowflake;
+	isGameAdmin: boolean;
 	isGameMaster: boolean;
 	isGamePlayer: boolean;
+	isSageAdmin: boolean;
+	isServerAdmin: boolean;
 	isOwner: boolean;
 	known: true;
 	member?: GuildMember;
@@ -60,8 +63,11 @@ type UnknownUser = {
 	canManageServer: false;
 	discord?: DUser;
 	id?: Snowflake;
+	isGameAdmin: false;
 	isGameMaster: false;
 	isGamePlayer: false;
+	isSageAdmin: false;
+	isServerAdmin: false;
 	isOwner: false;
 	known: false;
 	member?: GuildMember;
@@ -73,8 +79,11 @@ type UnvalidatedUser = {
 	canManageServer?: never;
 	discord?: never;
 	id?: never;
+	isGameAdmin?: never;
 	isGameMaster?: never;
 	isGamePlayer?: never;
+	isSageAdmin?: never;
+	isServerAdmin?: never;
 	isOwner?: boolean;
 	known?: never;
 	member?: never;
@@ -135,8 +144,11 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 
 	// set flags as false by default
 	let canManageServer = false;
+	let isGameAdmin = false;
 	let isGameMaster = false;
 	let isGamePlayer = false;
+	let isSageAdmin = false;
+	let isServerAdmin = false;
 	let isOwner = false;
 
 	// we don't have a valid discord user (or we couldn't fetch it for some reason)
@@ -144,8 +156,11 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 		const unknownUser: UnknownUser = {
 			canManageServer,
 			id: undefined,
+			isGameAdmin,
 			isGameMaster,
 			isGamePlayer,
+			isSageAdmin,
+			isServerAdmin,
 			isOwner,
 			known: false,
 			sage,
@@ -154,24 +169,31 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 	}
 
 	// type cast id now
-	const id = discord.id as Snowflake
+	const id = discord.id as Snowflake;
 
 	// we need a guildmember to check server perms
 	let member: GuildMember | undefined;
-	const guild = evCache.server?.discord;
+	const guild = evCache.server.discord;
 	if (guild) {
 		// fetch the guild member if it isn't a bot and isn't a system user
 		if (!discord.bot && !discord.system) {
 			member = await guild.members.fetch(id).catch(err => {
 				return isDiscordApiError(err, 10007, 10013)
 					? errorReturnUndefined(`guild.id = ${guild.id} (${guild.name}); guildMember.id = ${id} (${toHumanReadable(discord)})`)
-					: errorReturnUndefined(err)
+					: errorReturnUndefined(err);
 			});
 		}
 
 		// check the guild member for perms
 		isOwner = guild.ownerId === id;
-		canManageServer = isOwner || member?.permissions.has("Administrator") === true || member?.permissions.has("ManageGuild") === true
+		canManageServer = isOwner || member?.permissions.has("Administrator") === true || member?.permissions.has("ManageGuild") === true;
+	}
+
+	const server = evCache.server.sage;
+	if (server) {
+		isGameAdmin = server.hasGameAdmin(id);
+		isSageAdmin = server.hasSageAdmin(id);
+		isServerAdmin = server.hasServerAdmin(id);
 	}
 
 	// now let's check for game access
@@ -189,8 +211,11 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 		canManageServer,
 		discord,
 		id,
+		isGameAdmin,
 		isGameMaster,
 		isGamePlayer,
+		isSageAdmin,
+		isServerAdmin,
 		isOwner,
 		known: true,
 		member,
@@ -247,7 +272,11 @@ type SageEventCacheServer = UnvalidatedServer | DmServer | UnknownServer | Known
 async function validateServer(evCache: SageEventCache, discord: Optional<Guild>): Promise<SageEventCacheServer> {
 	// no guild means dm
 	if (!discord) {
-		const dmServer: DmServer = { isDm: true, isServer:false, known:false };
+		const dmServer: DmServer = {
+			isDm: true,
+			isServer: false,
+			known: false
+		};
 		return dmServer;
 	}
 
