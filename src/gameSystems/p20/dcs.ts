@@ -254,7 +254,7 @@ async function showDCs(sageCommand: SageCommand): Promise<void> {
 	const rarity = getAdjustmentTable().find(row => row.rarity === sageCommand.args.getString("rarity"))?.rarity;
 	const options = { gameSystemType, table, level, rank, difficulty, rarity };
 	const content = getContent(options);
-	const components = buildForm(sageCommand.authorDid, options);
+	const components = buildForm(sageCommand.actorId, options);
 	await sageCommand.replyStack.reply({ content, components });
 }
 
@@ -291,7 +291,7 @@ async function changeDCs(sageInteraction: SageInteraction<StringSelectMenuIntera
 	const rarity = isReset ? undefined : getSelected<Rarity>(sageInteraction, "p20-dcs-rarity");
 	const options = { gameSystemType, table, level, rank, difficulty, rarity };
 	const content = getContent(options);
-	const components = buildForm(sageInteraction.authorDid, options);
+	const components = buildForm(sageInteraction.actorId, options);
 	await sageInteraction.interaction.message.edit(sageInteraction.resolveToOptions({ content, components }));
 }
 

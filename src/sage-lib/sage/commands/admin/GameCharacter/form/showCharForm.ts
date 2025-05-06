@@ -33,7 +33,7 @@ function createButton(customId: string, label: string, style: keyof typeof Butto
 }
 
 function buildCharForm(sageCommand: SageCommand, charId?: CharId, compId?: CharId): ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] {
-	const userId = sageCommand.authorDid;
+	const userId = sageCommand.actorId;
 	const customId = (action: CharModalAction) => createCustomId(userId, charId ?? NIL_SNOWFLAKE, compId ?? NIL_SNOWFLAKE, action);
 
 	const characterSelect = new StringSelectMenuBuilder().setCustomId(customId(SelectChar)).setPlaceholder("Select a Character");

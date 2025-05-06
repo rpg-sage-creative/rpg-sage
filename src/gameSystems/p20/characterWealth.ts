@@ -183,7 +183,7 @@ async function showWealth(sageCommand: SageCommand): Promise<void> {
 	const level = boundNumber(levelArg, { min:1, max:20, default:1 });
 	const gameSystemType = sageCommand.gameSystemType ?? sageCommand.args.getEnum(GameSystemType, "game") ?? GameSystemType.PF2e;
 	const content = getWealthByLevel({ gameSystemType, level });
-	const components = buildForm(sageCommand.authorDid, { gameSystemType, level });
+	const components = buildForm(sageCommand.actorId, { gameSystemType, level });
 	await sageCommand.replyStack.reply({ content, components });
 }
 
@@ -194,7 +194,7 @@ async function changeWealth(sageInteraction: SageInteraction<StringSelectMenuInt
 	const level = Math.min(20, Math.max(1, levelArg));
 	const gameSystemType = parseEnum(GameSystemType, getSelectedOrDefault(sageInteraction, "p20-wealth-game") ?? "PF2e");
 	const content = getWealthByLevel({ gameSystemType, level });
-	const components = buildForm(sageInteraction.authorDid, { gameSystemType, level });
+	const components = buildForm(sageInteraction.actorId, { gameSystemType, level });
 	const options = sageInteraction.resolveToOptions({ content, components });
 	await sageInteraction.interaction.message.edit(options);
 }

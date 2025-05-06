@@ -202,7 +202,7 @@ export async function prompt(args: PromptArgs): Promise<PromptResults | null> {
 			message,
 			resolve,
 			timeout: setTimeout(resolvePrompt, TIMEOUT_MILLI, message.id as Snowflake),
-			userId: args.sageCommand.authorDid
+			userId: args.sageCommand.actorId
 		});
 	})
 	.catch(reason => {

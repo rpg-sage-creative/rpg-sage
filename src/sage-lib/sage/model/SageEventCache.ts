@@ -356,9 +356,7 @@ async function createSageEventCache(options: SageEventCacheCreateOptions): Promi
 		core.actor.isOwner = guild.ownerId === actorOrPartial.id;
 
 		// validate the server to look for the game
-		await evCache.validate("server");
-
-		const { server } = evCache;
+		const server = await evCache.validateServer();
 		if (server.known) {
 			// check to see if we have a server-wide game
 			if (server.sage.gameId) {
@@ -373,9 +371,9 @@ async function createSageEventCache(options: SageEventCacheCreateOptions): Promi
 				core.game = await evCache.findActiveGame(channel);
 			}
 
-			// if we have a game, we are going to want to want isGameMaster and isGamePlayer
+			// if we have a game, we are going to probably want to want isGameMaster and isGamePlayer
 			if (core.game) {
-				await evCache.validate("actor");
+				await evCache.validateActor();
 			}
 
 		}
@@ -415,28 +413,28 @@ export class SageEventCache {
 	/** Guild/Server the event happens in. */
 	public get server(): SageEventCacheServer { return this.core.server; }
 
-	public async validate(which?: "actor" | "author" | "server"): Promise<boolean> {
+	public async validateActor(): Promise<SageEventCacheUser> {
 		const { core } = this;
-		if (which === "actor") {
-			if (core.actor.known === undefined) {
-				const { actorOrPartial, messageOrPartial, reactionOrPartial } = core;
-				core.actor = await validateUser(this, { which:"actor", actorOrPartial, messageOrPartial, reactionOrPartial });
-			}
-			return core.actor.known === true;
-
-		}else if (which === "author") {
-			if (core.author.known === undefined) {
-				const { authorOrPartial, messageOrPartial, reactionOrPartial } = core;
-				core.author = await validateUser(this, { which:"author", authorOrPartial, messageOrPartial, reactionOrPartial });
-			}
-			return core.author.known === true;
-
-		}else {
-			if (core.server.known === undefined) {
-				core.server = await validateServer(this, core.server.discord);
-			}
-			return core.server.known === true;
+		if (core.actor.known === undefined) {
+			const { actorOrPartial, messageOrPartial, reactionOrPartial } = core;
+			core.actor = await validateUser(this, { which:"actor", actorOrPartial, messageOrPartial, reactionOrPartial });
 		}
+		return core.actor;
+	}
+	public async validateAuthor(): Promise<SageEventCacheUser> {
+		const { core } = this;
+		if (core.author.known === undefined) {
+			const { authorOrPartial, messageOrPartial, reactionOrPartial } = core;
+			core.author = await validateUser(this, { which:"author", authorOrPartial, messageOrPartial, reactionOrPartial });
+		}
+		return core.author;
+	}
+	public async validateServer(): Promise<SageEventCacheServer> {
+		const { core } = this;
+		if (core.server.known === undefined) {
+			core.server = await validateServer(this, core.server.discord);
+		}
+		return core.server;
 	}
 
 	private canSendMessageToMap = new Map<string, boolean>();
@@ -723,7 +721,7 @@ export class SageEventCache {
 	public static async fromMessage(messageOrPartial: MessageOrPartial): Promise<SageEventCache> {
 		const message = await fetchIfPartial(messageOrPartial) as Message;
 		const evCache = await SageEventCache._fromMessage(message, message.author);
-		await evCache.validate("actor");
+		await evCache.validateActor();
 		return evCache;
 	}
 

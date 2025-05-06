@@ -11,6 +11,11 @@ import { MoveDirectionOutputType } from "../../map/MoveDirection.js";
 import { renderPostCurrency } from "../PostCurrency.js";
 
 async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
+	if (!sageCommand.server) {
+		await sageCommand.replyStack.whisper("No Server Found!");
+		return null;
+	}
+
 	let game: Optional<Game> = sageCommand.game;
 	if (!game) {
 		const gameId = sageCommand.args.getIdType("id");
@@ -19,9 +24,10 @@ async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 		}
 		if (!game) {
 			await sageCommand.replyStack.whisper("No Game Found!");
+			return null;
 		}
 	}
-	if (!sageCommand.canAdminGames && !game?.hasGameMaster(sageCommand.authorDid)) {
+	if (!sageCommand.canAdminGames && !sageCommand.actor.isGameMaster) {
 		await sageCommand.replyStack.whisper("*Server Admin, Game Admin, or Game Master privilege required!*");
 		return null;
 	}

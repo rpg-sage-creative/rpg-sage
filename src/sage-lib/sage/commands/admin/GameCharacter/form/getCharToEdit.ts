@@ -7,7 +7,7 @@ type CharId = Snowflake | UUID | string;
 export async function getCharToEdit(sageCommand: SageCommand, charId: CharId): Promise<GameCharacter | undefined> {
 	const game = sageCommand.game;
 	const gameId = game?.id;
-	const userId = sageCommand.authorDid;
+	const userId = sageCommand.actorId;
 
 	const char = await GameCharacter.fromTemp({ charId, gameId, userId });
 	if (char) {

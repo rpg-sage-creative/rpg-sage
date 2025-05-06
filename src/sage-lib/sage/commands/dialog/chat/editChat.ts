@@ -23,7 +23,7 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 	}
 
 	/** @todo allow GMs to edit other GM dialog, but send the edit info to both */
-	if (dialogMessage.userId !== sageMessage.authorDid) {
+	if (dialogMessage.userId !== sageMessage.actorId) {
 		return sageMessage.replyStack.whisper(localize("YOU_CANNOT_EDIT_ANOTHER"));
 	}
 
@@ -65,11 +65,12 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		await webhook.editMessage(message.id, payloads[0]).then(() => deleteMessage(sageMessage.message), error);
 
 		if (sageMessage.sageUser.dmOnEdit) {
-			const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
+			// because this is a SageMessage we already validated the actor
+			const user = sageMessage.actor.discord;
 			if (user) {
 				const content = localize("YOU_EDITED_S_DIALOG", toMessageUrl(message)!);
 				const files = [new AttachmentBuilder(Buffer.from(originalContent, "utf-8"), { name:`original-content.md` })];
-				await user.send(includeDeleteButton({ content, files }, sageMessage.authorDid));
+				await user.send(includeDeleteButton({ content, files }, sageMessage.actorId));
 			}
 		}
 	}

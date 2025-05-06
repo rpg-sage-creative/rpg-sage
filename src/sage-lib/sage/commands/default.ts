@@ -246,8 +246,7 @@ export function registerDefault(): void {
 	registerCommandRegex(/shutdown/, async (sageMessage: SageMessage) => {
 		if (sageMessage.canSuperAdmin) {
 			await sageMessage.reactSuccess();
-			const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
-			info(`Shutdown command given by: ${toHumanReadable(user)}`);
+			info(`Shutdown command given by: ${toHumanReadable(sageMessage.actor.discord)}`);
 			process.exit(0);
 		}
 	});

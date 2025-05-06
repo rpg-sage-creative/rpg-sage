@@ -1,5 +1,5 @@
 import { isSageId, isTupperBoxId } from "@rsc-sage/env";
-import { errorReturnNull, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
 import type { Guild, GuildMember, Message } from "discord.js";
 import { ReactionType } from "../../discord/enums.js";
@@ -29,8 +29,8 @@ async function whisper(sageCommand: SageCommand, content: string | RenderableCon
 	if (!sent) {
 		// renderable.append(`*Note: We tried to DM this alert to you, but were unable to.*`);
 		const opts = sageCommand.resolveToOptions(renderable);
-		const user = await sageCommand.discord.fetchUser(sageCommand.authorDid);
-		const dm = await user?.send(opts).catch(errorReturnNull);
+		const actor = await sageCommand.eventCache.validateActor();
+		const dm = await actor.discord?.send(opts).catch(errorReturnUndefined);
 		if (dm) {
 			sent = true;
 		}

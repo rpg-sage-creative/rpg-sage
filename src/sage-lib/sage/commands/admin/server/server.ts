@@ -32,7 +32,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 		}
 	}
 	if (!server) {
-		return sageMessage.reactFailure();
+		return sageMessage.replyStack.whisper("No Server Found!");
 	}
 
 	const roles = <TRole[]>await mapAsync(server.roles, async role => {
@@ -62,7 +62,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	} else {
 		renderableContent.append(`<blockquote>Server Not Found!</blockquote>`);
 	}
-	return <any>sageMessage.send(renderableContent);
+	await sageMessage.replyStack.reply(renderableContent);
 }
 
 async function serverUpdate(sageMessage: SageMessage): Promise<void> {

@@ -10,7 +10,7 @@ async function gameToggleDicePing(sageMessage: SageMessage): Promise<void> {
 			: "Do you want to get a ping when you roll dice in this game?";
 		const yesNo = await discordPromptYesNo(sageMessage, message);
 		if (yesNo === true || yesNo === false) {
-			const updated = await sageMessage.game?.updateDicePing(sageMessage.authorDid, yesNo);
+			const updated = await sageMessage.game?.updateDicePing(sageMessage.actorId, yesNo);
 			sageMessage.reactSuccessOrFailure(updated === true);
 		}
 	}

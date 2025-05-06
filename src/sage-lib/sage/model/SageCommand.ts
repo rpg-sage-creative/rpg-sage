@@ -1,5 +1,5 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType } from "@rsc-sage/types";
-import { Cache, debug, HasCache, isDefined, orNilSnowflake, RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { Cache, debug, HasCache, isDefined, RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import type { DInteraction, DiscordCache, DiscordKey, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, PartialGroupDMChannel, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
@@ -176,6 +176,7 @@ export abstract class SageCommand<
 
 	//#region caches
 
+	public get actor() { return this.eventCache.actor; }
 	public get bot(): Bot { return this.eventCache.bot; }
 	public get discord(): DiscordCache { return this.eventCache.discord; }
 	public get discordKey(): DiscordKey { return this.eventCache.discordKey; }
@@ -194,11 +195,6 @@ export abstract class SageCommand<
 	/** The user interacting with Sage. */
 	public get actorId(): Snowflake {
 		return this.eventCache.actor.sage.did;
-	}
-
-	/** @deprecated use .actorId or .eventCache.actor or .eventCache.author */
-	public get authorDid(): Snowflake {
-		return this.cache.getOrSet("authorDid", () => orNilSnowflake(this.eventCache.user?.did));
 	}
 
 	public get canManageServer(): boolean {
@@ -222,11 +218,8 @@ export abstract class SageCommand<
 	/** Returns true if the acting user is the server owner, a server administrator, or has the manage server permission. */
 	public checkCanManageServer(): Promise<boolean> {
 		return this.cache.getOrFetch("canManageServer", async () => {
-			const { eventCache } = this;
-			if (await eventCache.validate("actor")) {
-				return eventCache.actor.canManageServer ?? false;
-			}
-			return false;
+			const actor = await this.eventCache.validateActor();
+			return actor.canManageServer ?? false;
 		});
 	}
 

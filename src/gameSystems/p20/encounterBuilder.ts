@@ -261,7 +261,7 @@ type Args = {
 	verbose: boolean;
 };
 async function getArgs(sageCommand: SageCommand, messages?: Message[]): Promise<Args | undefined> {
-	const customId = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.customId : `||${sageCommand.authorDid}||NoControl`;
+	const customId = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.customId : `||${sageCommand.actorId}||NoControl`;
 	const customIdArgs = parseCustomId(customId);
 
 	// fetch the messages

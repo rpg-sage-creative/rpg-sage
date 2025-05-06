@@ -38,7 +38,7 @@ export async function mCmdDetails(sageCommand: SageCommand, args?: Args | boolea
 	const components = await createMacroComponents(sageCommand, args);
 
 	const message = await sageCommand.fetchMessage(args.customIdArgs?.messageId).catch(() => undefined);
-	if (message && message?.author.id !== sageCommand.authorDid) {
+	if (message && message?.author.id !== sageCommand.actorId) {
 		await message.edit(sageCommand.resolveToOptions({ content, embeds, components }));
 	}else {
 		await sageCommand.replyStack.send({ content, embeds, components });

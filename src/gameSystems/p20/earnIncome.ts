@@ -347,7 +347,7 @@ function getVerbose(sageCommand: SageCommand, userId: Snowflake): boolean | unde
 }
 
 function getArgs(sageCommand: SageCommand): Args {
-	const userId = sageCommand.isSageInteraction("MESSAGE") ? getUserId(sageCommand.interaction.customId) : sageCommand.authorDid;
+	const userId = sageCommand.isSageInteraction("MESSAGE") ? getUserId(sageCommand.interaction.customId) : sageCommand.actorId;
 	const taskLevelArg = getSelectedOrDefaultNumber(sageCommand, createCustomId("taskLevel", userId), "taskLevel");
 	const charLevelArg = getSelectedOrDefaultNumber(sageCommand, createCustomId("charLevel", userId), "charLevel");
 	const modifier = getSelectedOrDefaultNumber(sageCommand, createCustomId("modifier", userId), "modifier");

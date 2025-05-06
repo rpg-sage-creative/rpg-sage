@@ -239,7 +239,7 @@ async function gCmdAuditCurrency(sageCommand: SageCommand): Promise<void> {
 		renderableContent.append(...lines);
 	});
 
-	const gmUser = await sageCommand.discord.fetchUser(sageCommand.authorDid);
+	const gmUser = await sageCommand.discord.fetchUser(sageCommand.actorId);
 	if (gmUser) {
 		const sendArgs = sageCommand.resolveToOptions(renderableContent);
 		const payloads = splitMessageOptions(sendArgs);
