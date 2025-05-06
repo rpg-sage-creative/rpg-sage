@@ -51,9 +51,9 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 	const { authorOptions, renderableContent, dialogType, files, sageCache } = webhookOptions;
 
 	if (isDMBased(targetChannel)) {
-		const user = await sageCache.discord.fetchUser(sageCache.userDid);
-		if (user) {
-			return send(sageCache, targetChannel as MessageTarget, renderableContent, user);
+		const actor = await sageCache.validateActor();
+		if (actor.discord) {
+			return send(sageCache, targetChannel as MessageTarget, renderableContent, actor.discord);
 		}
 		return [];
 	}

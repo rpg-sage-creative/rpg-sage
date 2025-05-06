@@ -421,6 +421,7 @@ export class SageEventCache {
 		}
 		return core.actor;
 	}
+
 	public async validateAuthor(): Promise<SageEventCacheUser> {
 		const { core } = this;
 		if (core.author.known === undefined) {
@@ -429,6 +430,7 @@ export class SageEventCache {
 		}
 		return core.author;
 	}
+
 	public async validateServer(): Promise<SageEventCacheServer> {
 		const { core } = this;
 		if (core.server.known === undefined) {
@@ -539,8 +541,6 @@ export class SageEventCache {
 
 	public get discord(): DiscordCache { return this.core.discord; }
 	public get discordKey(): DiscordKey { return this.core.discordKey; }
-	/** @deprecated start using actor.id! */
-	public get userDid(): Snowflake { return this.core.actor.sage.did; }
 
 	public get bot(): Bot { return ActiveBot.active; }
 	public get home(): Server { return this.core.home; }
