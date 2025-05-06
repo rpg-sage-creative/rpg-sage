@@ -14,8 +14,8 @@ import type { GameCharacter } from "./GameCharacter.js";
 import { ColorType, type IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType } from "./HasEmojiCore.js";
 import { ReplyStack } from "./ReplyStack.js";
-import type { SageCache } from "./SageCache.js";
 import type { SageCommandArgs } from "./SageCommandArgs.js";
+import type { SageEventCache } from "./SageEventCache.js";
 import type { SageInteraction } from "./SageInteraction.js";
 import type { SageMessage } from "./SageMessage.js";
 import type { SageReaction } from "./SageReaction.js";
@@ -23,10 +23,7 @@ import type { Server } from "./Server.js";
 import type { User } from "./User.js";
 
 export interface SageCommandCore {
-	sageCache: SageCache;
-
-	isGameMaster?: boolean;
-	isPlayer?: boolean;
+	eventCache: SageEventCache;
 }
 
 export type TSendArgs<HasEphemeral extends boolean = boolean> = {
@@ -179,13 +176,15 @@ export abstract class SageCommand<
 
 	//#region caches
 
-	public get bot(): Bot { return this.sageCache.bot; }
-	public get discord(): DiscordCache { return this.sageCache.discord; }
-	public get discordKey(): DiscordKey { return this.sageCache.discordKey; }
-	public get game(): Game | undefined { return this.sageCache.game; }
-	public get sageCache(): SageCache { return this.core.sageCache; }
-	public get sageUser(): User { return this.sageCache.actor.sage; }
-	public get server(): Server | undefined { return this.sageCache.server?.sage; }
+	public get bot(): Bot { return this.eventCache.bot; }
+	public get discord(): DiscordCache { return this.eventCache.discord; }
+	public get discordKey(): DiscordKey { return this.eventCache.discordKey; }
+	public get eventCache(): SageEventCache { return this.core.eventCache; }
+	public get game(): Game | undefined { return this.eventCache.game; }
+	/** @deprecated SageCache has been renamed SageEventCache and .sageCache is now .eventCache */
+	public get sageCache(): SageEventCache { return this.core.eventCache; }
+	public get sageUser(): User { return this.eventCache.actor.sage; }
+	public get server(): Server | undefined { return this.eventCache.server?.sage; }
 
 	//#endregion
 
@@ -194,23 +193,12 @@ export abstract class SageCommand<
 
 	/** The user interacting with Sage. */
 	public get actorId(): Snowflake {
-		return this.cache.getOrSet("actorId", () => orNilSnowflake(this.sageCache.actor?.id ?? this.sageCache.user?.did));
-	}
-	/** @deprecated use .actorId or .sageCache.actor or .sageCache.author */
-	public get authorDid(): Snowflake {
-		return this.cache.getOrSet("authorDid", () => orNilSnowflake(this.sageCache.user?.did));
+		return this.eventCache.actor.sage.did;
 	}
 
-	/** @deprecated Is the author the owner of the message's server */
-	public get isOwner(): boolean {
-		return this.cache.getOrSet("isOwner", () => {
-			if (this.isSageInteraction()) {
-				return this.interaction.guild?.ownerId === this.authorDid;
-			}else if (this.isSageMessage() || this.isSageReaction()) {
-				return this.message.guild?.ownerId === this.authorDid;
-			}
-			return false;
-		});
+	/** @deprecated use .actorId or .eventCache.actor or .eventCache.author */
+	public get authorDid(): Snowflake {
+		return this.cache.getOrSet("authorDid", () => orNilSnowflake(this.eventCache.user?.did));
 	}
 
 	public get canManageServer(): boolean {
@@ -220,22 +208,23 @@ export abstract class SageCommand<
 		if (cache.get("canManageServer")) return true;
 
 		// if we have an actor, we can cache the results
-		const { actor } = this.sageCache;
+		const { actor } = this.eventCache;
 		if (actor.known) {
 			return cache.getOrSet("canManageServer", () => {
 				return actor.canManageServer;
 			});
 		}
+
 		// revert to isOwner
-		return this.isOwner;
+		return this.eventCache.actor.isOwner === true;
 	}
 
 	/** Returns true if the acting user is the server owner, a server administrator, or has the manage server permission. */
 	public checkCanManageServer(): Promise<boolean> {
 		return this.cache.getOrFetch("canManageServer", async () => {
-			const { sageCache } = this;
-			if (await sageCache.validate("actor")) {
-				return sageCache.actor.canManageServer ?? false;
+			const { eventCache } = this;
+			if (await eventCache.validate("actor")) {
+				return eventCache.actor.canManageServer ?? false;
 			}
 			return false;
 		});
@@ -243,17 +232,17 @@ export abstract class SageCommand<
 
 	/** Can admin Sage settings, Server channels, Games, and Game channels */
 	public get isSageAdmin(): boolean {
-		return this.cache.getOrSet("isSageAdmin", () => (this.authorDid && this.server?.hasSageAdmin(this.authorDid)) === true);
+		return this.cache.getOrSet("isSageAdmin", () => (this.actorId && this.server?.hasSageAdmin(this.actorId)) === true);
 	}
 
 	/** Can admin Server channels and Game channels */
 	public get isServerAdmin(): boolean {
-		return this.cache.getOrSet("isServerAdmin", () => (this.authorDid && this.server?.hasServerAdmin(this.authorDid)) === true);
+		return this.cache.getOrSet("isServerAdmin", () => (this.actorId && this.server?.hasServerAdmin(this.actorId)) === true);
 	}
 
 	/** Can admin Games and Game channels */
 	public get isGameAdmin(): boolean {
-		return this.cache.getOrSet("isGameAdmin", () => (this.authorDid && this.server?.hasGameAdmin(this.authorDid)) === true);
+		return this.cache.getOrSet("isGameAdmin", () => (this.actorId && this.server?.hasGameAdmin(this.actorId)) === true);
 	}
 
 	// #endregion
@@ -539,11 +528,8 @@ export abstract class SageCommand<
 
 	//#region games
 
-	public get isGameMaster() { return this.core.isGameMaster === true; }
-	public set isGameMaster(bool: boolean) { this.core.isGameMaster = bool === true; }
-
-	public get isPlayer() { return this.core.isPlayer === true; }
-	public set isPlayer(bool: boolean) { this.core.isPlayer = bool === true; }
+	public get isGameMaster() { return this.eventCache.actor.isGameMaster === true; }
+	public get isPlayer() { return this.eventCache.actor.isGamePlayer === true; }
 
 	//#endregion
 
@@ -551,7 +537,7 @@ export abstract class SageCommand<
 	public resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, _ephemeral?: boolean): T {
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
-				embeds: resolveToEmbeds(this.sageCache, renderableOrArgs),
+				embeds: resolveToEmbeds(this.eventCache, renderableOrArgs),
 				ephemeral: false
 				// ephemeral: ephemeral
 			} as T;
@@ -561,12 +547,12 @@ export abstract class SageCommand<
 		if (renderableOrArgs.content) {
 			options.content = typeof(renderableOrArgs.content) === "string"
 				? renderableOrArgs.content
-				: resolveToContent(this.sageCache, renderableOrArgs.content).join("\n");
+				: resolveToContent(this.eventCache, renderableOrArgs.content).join("\n");
 		}
 		if (renderableOrArgs.embeds) {
 			options.embeds = Array.isArray(renderableOrArgs.embeds)
 				? renderableOrArgs.embeds
-				: resolveToEmbeds(this.sageCache, renderableOrArgs.embeds);
+				: resolveToEmbeds(this.eventCache, renderableOrArgs.embeds);
 		}
 		if (renderableOrArgs.components) {
 			options.components = renderableOrArgs.components;
@@ -580,7 +566,7 @@ export abstract class SageCommand<
 	}
 
 	public getLocalizer() {
-		return this.sageCache.getLocalizer();
+		return this.eventCache.getLocalizer();
 	}
 
 	public createRenderable(colorType: ColorType, title?: string): RenderableContent {

@@ -5,11 +5,10 @@ import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User }
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
-import { GameRoleType } from "./Game.js";
-import { SageCache } from "./SageCache.js";
-import { SageCommand, type IdPartsBase, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
-import { SageInteractionArgs } from "./SageInteractionArgs.js";
 import type { HasGame } from "./index.js";
+import { SageCommand, type IdPartsBase, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
+import { SageEventCache } from "./SageEventCache.js";
+import { SageInteractionArgs } from "./SageInteractionArgs.js";
 
 interface SageInteractionCore extends SageCommandCore {
 	interaction: DInteraction;
@@ -81,7 +80,7 @@ export class SageInteraction<T extends DInteraction = any>
 		debug("Clearing SageInteraction");
 		this.args.clear();
 		this.cache.clear();
-		this.sageCache.clear();
+		this.eventCache.clear();
 	}
 
 	//#endregion
@@ -230,12 +229,12 @@ export class SageInteraction<T extends DInteraction = any>
 		// check to see if we have channel send message permissions
 		const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 		if (renderableContent) {
-			return this.sageCache.send(targetChannel, renderableContent, originalAuthor);
+			return this.eventCache.send(targetChannel, renderableContent, originalAuthor);
 		}
 		return [];
 	}
 	public async canSend(targetChannel = this.interaction.channel as MessageTarget): Promise<boolean> {
-		return this.sageCache.canSendMessageTo(DiscordKey.from(targetChannel));
+		return this.eventCache.canSendMessageTo(DiscordKey.from(targetChannel));
 	}
 
 	public async whisper(args: TSendArgs): Promise<void>;
@@ -243,23 +242,18 @@ export class SageInteraction<T extends DInteraction = any>
 	public async whisper(contentOrArgs: string | TSendArgs): Promise<void> {
 		const args = isString(contentOrArgs) ? { content:contentOrArgs } : { ...contentOrArgs };
 		args.ephemeral = false;
-		// args.ephemeral = !!this.sageCache.server;
+		// args.ephemeral = !!this.eventCache.server;
 		return this.reply(args);
 	}
 
 	//#endregion
 
 	public static async fromInteraction<T extends DInteraction>(interaction: T): Promise<SageInteraction<T>> {
-		const sageCache = await SageCache.fromInteraction(interaction);
-		const type = InteractionType.Unknown;
-		const sageInteraction = new SageInteraction({
-			sageCache,
+		return new SageInteraction({
+			eventCache: await SageEventCache.fromInteraction(interaction),
 			interaction,
-			type
+			type: InteractionType.Unknown
 		});
-		sageInteraction.isGameMaster = await sageInteraction.game?.hasUser(interaction.user.id as Snowflake, GameRoleType.GameMaster) ?? false;
-		sageInteraction.isPlayer = await sageInteraction.game?.hasUser(interaction.user.id as Snowflake, GameRoleType.Player) ?? false;
-		return sageInteraction;
 	}
 
 }

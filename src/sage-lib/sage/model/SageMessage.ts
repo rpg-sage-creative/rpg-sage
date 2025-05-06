@@ -1,5 +1,5 @@
 import { SageChannelType } from "@rsc-sage/types";
-import { Cache, debug, error, errorReturnNull, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
 import XRegExp from "xregexp";
@@ -10,10 +10,9 @@ import { sendTo } from "../../discord/sendTo.js";
 import { type TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
 import type { Game } from "../model/Game.js";
-import { GameRoleType } from "../model/Game.js";
 import { EmojiType } from "./HasEmojiCore.js";
-import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
+import { SageEventCache } from "./SageEventCache.js";
 import { SageMessageArgs } from "./SageMessageArgs.js";
 import type { HasGame } from "./index.js";
 import { addMessageDeleteButton } from "./utils/deleteButton.js";
@@ -62,7 +61,7 @@ export class SageMessage
 	public clear(): void {
 		debug("Clearing SageMessage");
 		this.cache.clear();
-		this.sageCache.clear();
+		this.eventCache.clear();
 	}
 
 	//#region core
@@ -116,7 +115,7 @@ export class SageMessage
 		// check to see if we have channel send message permissions
 		const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 		if (renderableContent) {
-			const sent = await this.sageCache.send(targetChannel, renderableContent, originalAuthor);
+			const sent = await this.eventCache.send(targetChannel, renderableContent, originalAuthor);
 			if (sent.length) {
 				this._.set("Sent", sent[sent.length - 1]);
 			}
@@ -127,9 +126,9 @@ export class SageMessage
 	public async sendPost(renderableContentResolvable: RenderableContentResolvable): Promise<SMessage[]> {
 		const target = this.message.channel;
 		const sendArgs = {
-			sageCache: this.sageCache,
+			sageCache: this.eventCache,
 			target,
-			content: resolveToContent(this.sageCache, renderableContentResolvable).join("\n")
+			content: resolveToContent(this.eventCache, renderableContentResolvable).join("\n")
 		};
 		const catchHandler = (err: unknown) => {
 			error(`${toHumanReadable(target)}: SageMessage.sendPost`, err);
@@ -138,7 +137,7 @@ export class SageMessage
 		return messages as SMessage[] ?? [];
 	}
 	public async canSend(targetChannel = this.message.channel): Promise<boolean> {
-		return this.sageCache.canSendMessageTo(DiscordKey.from(targetChannel));
+		return this.eventCache.canSendMessageTo(DiscordKey.from(targetChannel));
 	}
 
 	public async reply(args: TSendArgs): Promise<void>;
@@ -202,7 +201,7 @@ export class SageMessage
 			return false;
 		}
 
-		await this.sageCache.pauseForTupper(DiscordKey.from(message));
+		await this.eventCache.pauseForTupper(DiscordKey.from(message));
 
 		if (!(await this.canReact(message))) {
 			return false;
@@ -213,13 +212,13 @@ export class SageMessage
 			return false;
 		}
 
-		const reaction = await message?.react(emoji).catch(errorReturnNull);
+		const reaction = await message?.react(emoji).catch(errorReturnUndefined);
 		return !!reaction;
 	}
 
 	public async canReact(message: MessageOrPartial = this.message): Promise<boolean> {
 		if (!message) return false;
-		return this.sageCache.canReactTo(DiscordKey.from(message));
+		return this.eventCache.canReactTo(DiscordKey.from(message));
 	}
 
 	public reactBlock(reason?: string): Promise<void> { return this.react(EmojiType.PermissionDenied, reason); }
@@ -287,7 +286,7 @@ export class SageMessage
 
 	/** Ensures we have a game and can admin games or are the GM. */
 	public testGameAdmin(game: Optional<Game>): game is Game {
-		return !!game && (this.canAdminGames || game.hasGameMaster(this.authorDid));
+		return !!game && (this.canAdminGames || game.hasGameMaster(this.actorId));
 	}
 
 	/** Ensures we are either in an admin channel or are the server owner or SuperUser. */
@@ -298,8 +297,8 @@ export class SageMessage
 	// #endregion
 
 	public static async fromMessage(message: SMessage): Promise<SageMessage> {
-		const sageCache = await SageCache.fromMessage(message);
-		const prefixOrDefault = sageCache.getPrefixOrDefault();
+		const eventCache = await SageEventCache.fromMessage(message);
+		const prefixOrDefault = eventCache.getPrefixOrDefault();
 		const regexOr = prefixOrDefault ? XRegExp.escape(prefixOrDefault) : `sage`;
 		const prefixRegex = XRegExp(`^\\s*(${regexOr})?[!?][!]?`, "i");
 		const prefixMatch = prefixRegex.exec(message.content ?? "");
@@ -308,16 +307,13 @@ export class SageMessage
 		const prefix = hasPrefix ? prefixFound : prefixOrDefault;
 		const safeContent = safeMentions(message.content ?? "").trim();
 		const slicedContent = hasPrefix ? safeContent.slice(prefix.length).trim() : safeContent;
-		const sageMessage = new SageMessage({
+		return new SageMessage({
 			message,
 			prefix,
 			hasPrefix,
 			slicedContent,
-			sageCache
+			eventCache
 		});
-		sageMessage.isGameMaster = await sageMessage.game?.hasUser(message.author?.id as Snowflake, GameRoleType.GameMaster) ?? false;
-		sageMessage.isPlayer = await sageMessage.game?.hasUser(message.author?.id as Snowflake, GameRoleType.Player) ?? false;
-		return sageMessage;
 	}
 
 }
