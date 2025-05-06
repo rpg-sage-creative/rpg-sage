@@ -2,6 +2,7 @@ import { registerGameSystems } from "../../../gameSystems/registerGameSystems.js
 import { registerDeleteButtonHandler } from "../model/utils/deleteButton.js";
 import { registerAdmin } from "./admin/index.js";
 import { registerCal } from "./cal.js";
+import { registerDeckCommands } from "./deck.js";
 import { registerDefault } from "./default.js";
 import { registerDeleteAfter } from "./deleteAfter.js";
 import { registerDialog } from "./dialog.js";
@@ -24,6 +25,7 @@ import { registerCommandHandlers as registerWeather } from "./weather.js";
 export function registerCommandHandlers(): void {
 	registerAdmin();
 	registerCal();
+	registerDeckCommands();
 	registerDefault();
 	registerDeleteReaction();
 	registerDialog();

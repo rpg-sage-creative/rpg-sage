@@ -20,6 +20,7 @@ import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { hpToGauge } from "./utils/hpToGauge.js";
+import { Deck, type DeckCore } from "../../../sage-utils/utils/GameUtils/Deck.js";
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -60,6 +61,8 @@ export type GameCharacterCore = {
 	avatarUrl?: string;
 	/** The character's companion characters */
 	companions?: (GameCharacter | GameCharacterCore)[];
+	/** experimental deck logic */
+	decks?: (Deck | DeckCore)[];
 	/** Discord compatible color: #001122 */
 	embedColor?: HexColorString;
 	/** Unique ID of this character */
@@ -216,6 +219,15 @@ export class GameCharacter implements IHasSave {
 		this.core.lastMessages = this.core.lastMessages?.map(DialogMessageData.fromCore) ?? [];
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
+
+		this.core.decks = this.core.decks?.map(deckCore => new Deck(deckCore as DeckCore)) ?? [];
+	}
+
+	public getOrCreateDeck() {
+		if (!this.core.decks?.length) {
+			this.core.decks = [Deck.createDeck()];
+		}
+		return this.core.decks[0] as Deck;
 	}
 
 	/** nickname (aka) */
