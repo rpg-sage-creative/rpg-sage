@@ -221,38 +221,23 @@ export abstract class SageCommand<
 		});
 	}
 
-	/** Can admin Sage settings, Server channels, Games, and Game channels */
-	public get isSageAdmin(): boolean {
-		return this.actor.isSageAdmin === true;
-	}
-
-	/** Can admin Server channels and Game channels */
-	public get isServerAdmin(): boolean {
-		return this.actor.isServerAdmin === true;
-	}
-
-	/** Can admin Games and Game channels */
-	public get isGameAdmin(): boolean {
-		return this.actor.isGameAdmin === true;
-	}
-
 	// #endregion
 
 	// #region Permission Flags
 
 	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
 	public get canAdminSage(): boolean {
-		return this.cache.getOrSet("canAdminSage", () => !!this.server && (this.isSuperUser || this.canManageServer || this.isSageAdmin));
+		return this.cache.getOrSet("canAdminSage", () => !!this.server && (this.isSuperUser || this.canManageServer || !!this.actor.isSageAdmin));
 	}
 
 	/** Quick flag for Server admins (canAdminSage || isServerAdmin) */
 	public get canAdminServer(): boolean {
-		return this.cache.getOrSet("canAdminServer", () => this.canAdminSage || (!!this.server && this.isServerAdmin));
+		return this.cache.getOrSet("canAdminServer", () => this.canAdminSage || (!!this.server && !!this.actor.isServerAdmin));
 	}
 
 	/** Quick flag for Game admins (canAdminServer || isGameAdmin) */
 	public get canAdminGames(): boolean {
-		return this.cache.getOrSet("canAdminGames", () => this.canAdminServer || this.isGameAdmin);
+		return this.cache.getOrSet("canAdminGames", () => this.canAdminServer || !!this.actor.isGameAdmin);
 	}
 
 	/** Quick flag for "this" Game (game && (canAdminGames || isGameMaster)) */
