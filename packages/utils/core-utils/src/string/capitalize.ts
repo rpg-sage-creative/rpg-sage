@@ -1,18 +1,20 @@
-import type { Optional } from "../types/generics.js";
+import type { Optional, OrNull, OrUndefined } from "../types/generics.js";
 import { isBlank } from "./blank/isBlank.js";
 
 /**
  * Capitalizes the first letter of the given string.
  * @param {T} value The string to be capitalized.
  */
-export function capitalize<T extends string = string>(value: T): string;
+export function capitalize<T extends string = string>(value: T): Capitalize<T>;
 
+export function capitalize<T extends string = string>(value: OrUndefined<T>): OrUndefined<Capitalize<T>>;
+export function capitalize<T extends string = string>(value: OrNull<T>): OrNull<Capitalize<T>>;
 /**
  * Capitalizes the first letter of the given string.
  * If null or undefined are passed, they are returned instead.
  * @param {Optional<T>} value The string to be capitalized or returned.
  */
-export function capitalize<T extends string = string>(value: Optional<T>): Optional<string>;
+export function capitalize<T extends string = string>(value: Optional<T>): Optional<Capitalize<T>>;
 
 /**
  * Capitalizes each substring (based on the given splitter).

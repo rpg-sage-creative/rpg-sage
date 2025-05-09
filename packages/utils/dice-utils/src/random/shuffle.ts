@@ -1,20 +1,42 @@
+import { toUnique } from "@rsc-utils/core-utils";
 import { randomInt } from "./randomInt.js";
 
 /**
  * Creates a new array by randomly reordering the contents of the given array.
- * Will never return an unshuffled array.
+ * To ensure duplicate values don't alter the shuffle logic, arrays will be shuffled by index, not by value.
+ * Arrays without at least two unique values will be returned unshuffled.
+ * @todo implement args { count:number; style:"clean" (perfect deck shuffle; 8x shuffles resets deck) | "unclean" (like clean but randomly shift index by 1 or 2) | "randmize" (what we do below)}
 */
 export function shuffle<T>(array: T[]): T[] {
-	const shuffled = array.slice();
+	// we cannot shuffle with less than 2 items
+	const itemCount = array.length;
+	if (itemCount < 2) {
+		return array.slice();
+	}
+
+	// we cannot shuffle with fewer than 2 unique items
+	const unique = array.filter(toUnique);
+	if (unique.length < 2) {
+		return array.slice();
+	}
+
+	// we shuffle by index to account for the possibility that some values are equal
+	const shuffled = array.map((_,index) => index);
+
 	do {
-		let currentIndex = shuffled.length;
-		while (0 !== currentIndex) {
-			const randomIndex = randomInt(1, currentIndex) - 1;
-			currentIndex -= 1;
-			const temporaryValue = shuffled[currentIndex];
+		// for each index, let's generate a new index to put that value in
+		for (let currentIndex = 0; currentIndex < itemCount; currentIndex++) {
+			// get a new random index
+			const randomIndex = randomInt(0, itemCount - 1);
+
+			// switch index values
+			const value = shuffled[currentIndex];
 			shuffled[currentIndex] = shuffled[randomIndex];
-			shuffled[randomIndex] = temporaryValue;
+			shuffled[randomIndex] = value;
 		}
-	}while (!shuffled.find((value, index) => value !== array[index]));
-	return shuffled;
+	// ensure that we have index values that differ from their original index
+	}while (!shuffled.some((value, index) => value !== index));
+
+	// map the indexes back to their values
+	return shuffled.map(index => array[index]);
 }

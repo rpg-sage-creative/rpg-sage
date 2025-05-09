@@ -1,5 +1,5 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
-import { applyChanges, Color, errorReturnNull, getDataRoot, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Color, errorReturnUndefined, getDataRoot, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -11,6 +11,7 @@ import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { isStatsKey } from "../../../gameSystems/sheets.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
 import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMessageRepository.js";
@@ -20,7 +21,6 @@ import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { hpToGauge } from "./utils/hpToGauge.js";
-import { Deck, type DeckCore } from "../../../sage-utils/utils/GameUtils/Deck.js";
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -220,15 +220,20 @@ export class GameCharacter implements IHasSave {
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
 
-		this.core.decks = this.core.decks?.map(deckCore => new Deck(deckCore as DeckCore)) ?? [];
+		this.core.decks = this.core.decks?.map(Deck.from) ?? [];
 	}
 
-	public getOrCreateDeck() {
-		if (!this.core.decks?.length) {
-			this.core.decks = [Deck.createDeck()];
+	public getOrCreateDeck(deckId?: string, deckType?: DeckType): Deck {
+		const decks = this.core.decks as Deck[] ?? (this.core.decks = []);
+		let deck = deckId ? decks.find(d => d.id === deckId) : decks[0];
+		if (!deck) {
+			deck = Deck.createDeck(deckType);
+			decks.push(deck);
 		}
-		return this.core.decks[0] as Deck;
+		return deck;
 	}
+	public hasDeck(deckId: string) { return this.core.decks?.some(d => d.id === deckId) ?? false; }
+	public get hasDecks() { return (this.core.decks?.length ?? 0) > 0; }
 
 	/** nickname (aka) */
 	public get aka(): string | undefined { return this.core.aka ?? this.notes.getStat("nickname")?.note.trim(); }
@@ -489,7 +494,7 @@ export class GameCharacter implements IHasSave {
 		if (!this.fetchedStats) {
 			const url = this.notes.getStat("stats.tsv.url")?.note;
 			if (isUrl(url)) {
-				const raw = await getText(unwrap(url, "<>")).catch(errorReturnNull);
+				const raw = await getText(unwrap(url, "<>")).catch(errorReturnUndefined);
 				if (raw) {
 					const { stats, macros } = parseFetchedStats(raw, this.alias);
 					this.fetchedStats = stats;

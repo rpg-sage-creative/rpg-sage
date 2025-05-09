@@ -339,9 +339,9 @@ export class ReplyStack {
 
 	//#region whisper
 
-	private async _whisper(contentOrArgs: TSendArgs | RenderableContentResolvable, opts?: { forceEphemeral:true }): Promise<void> {
+	private async _whisper(contentOrArgs: TSendArgs | RenderableContentResolvable, opts?: { noDelete?:true; forceEphemeral:true; }): Promise<void> {
 		const updated = await this._reply(contentOrArgs, opts);
-		if (updated) {
+		if (updated && !opts?.noDelete) {
 			// whisper is intended to be the only response, so we clear out all the others
 			this.thinkingMessage = await deleteIfNotThenReturnNull(this.thinkingMessage, updated.id);
 			this.deferMessage = await deleteIfNotThenReturnNull(this.deferMessage, updated.id);
@@ -350,7 +350,7 @@ export class ReplyStack {
 		}
 	}
 
-	public whisper(contentOrArgs: TSendArgs | RenderableContentResolvable, opts?: { forceEphemeral:true }): Promise<void> {
+	public whisper(contentOrArgs: TSendArgs | RenderableContentResolvable, opts?: { noDelete?:true; forceEphemeral:true }): Promise<void> {
 		return this.pushToReplyStack(async () => this._whisper(contentOrArgs, opts));
 	}
 
