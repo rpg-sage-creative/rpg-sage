@@ -1,6 +1,6 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType } from "@rsc-sage/types";
 import { Cache, debug, HasCache, isDefined, RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import type { DInteraction, DiscordCache, DiscordKey, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
+import type { DInteraction, DiscordCache, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, PartialGroupDMChannel, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
@@ -179,7 +179,6 @@ export abstract class SageCommand<
 	public get actor() { return this.eventCache.actor; }
 	public get bot(): Bot { return this.eventCache.bot; }
 	public get discord(): DiscordCache { return this.eventCache.discord; }
-	public get discordKey(): DiscordKey { return this.eventCache.discordKey; }
 	public get eventCache(): SageEventCache { return this.core.eventCache; }
 	public get game(): Game | undefined { return this.eventCache.game; }
 	/** @deprecated SageCache has been renamed SageEventCache and .sageCache is now .eventCache */
@@ -227,7 +226,7 @@ export abstract class SageCommand<
 
 	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
 	public get canAdminSage(): boolean {
-		return this.cache.getOrSet("canAdminSage", () => !!this.server && (this.isSuperUser || this.canManageServer || !!this.actor.isSageAdmin));
+		return this.cache.getOrSet("canAdminSage", () => !!this.server && (this.actor.sage.isSuperUser || this.canManageServer || !!this.actor.isSageAdmin));
 	}
 
 	/** Quick flag for Server admins (canAdminSage || isServerAdmin) */
@@ -243,6 +242,22 @@ export abstract class SageCommand<
 	/** Quick flag for "this" Game (game && (canAdminGames || isGameMaster)) */
 	public get canAdminGame(): boolean {
 		return this.cache.getOrSet("canAdminGame", () => !!this.game && (this.canAdminGames || this.isGameMaster));
+	}
+
+		/** Ensures we are either in the channel being targeted or we are in an admin channel. */
+	public testChannelAdmin(channelDid: Optional<Snowflake>): boolean {
+		/** @todo: figure out if i even need this or if there is a better way */
+		return channelDid === this.channelDid || ![SageChannelType.None, SageChannelType.Dice].includes(this.channel?.type!);
+	}
+
+	/** Ensures we have a game and can admin games or are the GM. */
+	public testGameAdmin(game: Optional<Game>): game is Game {
+		return !!game && (this.canAdminGames || game.hasGameMaster(this.actorId));
+	}
+
+	/** Ensures we are either in an admin channel or are the server owner or SuperUser. */
+	public testServerAdmin(): boolean {
+		return this.canManageServer || this.actor.sage.isSuperUser || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
 	}
 
 	// #endregion
@@ -301,7 +316,7 @@ export abstract class SageCommand<
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
 	public get channel(): IChannel | undefined {
 		return this.cache.getOrSet("channel", () => {
-			debug(`caching sageCommand.channel ${this.discordKey.channelId}`);
+			debug(`caching sageCommand.channel ${this.dChannel?.id}`);
 			return this.gameChannel ?? this.serverChannel;
 		});
 	}
@@ -480,24 +495,6 @@ export abstract class SageCommand<
 
 	public get moveDirectionOutputType(): MoveDirectionOutputType {
 		return this.cache.getOrSet("moveDirectionOutputType", () => this.game?.moveDirectionOutputType ?? this.sageUser?.moveDirectionOutputType ?? 0);
-	}
-
-	//#endregion
-
-	//#region flags
-
-	/** Is the server HomeServer */
-	public get isHomeServer(): boolean {
-		return this.server?.isHome === true;
-	}
-
-	/** Is the author SuperUser */
-	public get isSuperUser(): boolean {
-		return this.sageUser?.isSuperUser === true;
-	}
-	/** Is the author SuperAdmin or SuperUser */
-	public get canSuperAdmin(): boolean {
-		return this.sageUser?.isSuperAdmin === true || this.isSuperUser;
 	}
 
 	//#endregion

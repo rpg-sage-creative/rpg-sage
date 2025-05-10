@@ -25,7 +25,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	if (server && !sageMessage.canAdminServer) {
 		return sageMessage.reactBlock();
 	}
-	if (!server && sageMessage.isSuperUser) {
+	if (!server && sageMessage.actor.sage.isSuperUser) {
 		const serverId = sageMessage.args.getIdType("server");
 		if (serverId) {
 			server = await sageMessage.sageCache.getOrFetchServer(serverId);

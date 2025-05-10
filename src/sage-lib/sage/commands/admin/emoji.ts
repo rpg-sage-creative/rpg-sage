@@ -143,7 +143,7 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType, ca
 }
 
 async function emojiListBot(sageMessage: SageMessage): Promise<void> {
-	await _emojiList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser);
+	await _emojiList(sageMessage, BotServerGameType.Bot, sageMessage.actor.sage.isSuperUser);
 }
 
 async function emojiListServer(sageMessage: SageMessage): Promise<void> {
@@ -182,7 +182,7 @@ async function emojiGetBot(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
 	}
 
-	await _emojiList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser, ...types);
+	await _emojiList(sageMessage, BotServerGameType.Bot, sageMessage.actor.sage.isSuperUser, ...types);
 }
 
 async function emojiGetServer(sageMessage: SageMessage): Promise<void> {

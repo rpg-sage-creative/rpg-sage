@@ -1,6 +1,6 @@
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, isThread, toHumanReadable, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, isThread, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
@@ -491,31 +491,32 @@ export class SageEventCache {
 	}
 
 	private hasTupperMap = new Map<string, boolean>();
-	public async hasTupper(discordKey: DiscordKey): Promise<boolean> {
-		if (!discordKey.hasServer) {
+	public async hasTupper(discordKey: DiscordKey | ChannelReference): Promise<boolean> {
+		const guildId = discordKey.guildId;
+		if (!guildId) {
 			return false;
 		}
 
 		// check the server before checking/fetching channels
-		if (!this.hasTupperMap.has(discordKey.server)) {
-			const guild = await this.discord.fetchGuild(discordKey.server);
+		if (!this.hasTupperMap.has(guildId)) {
+			const guild = await this.discord.fetchGuild(guildId);
 			const isInGuild = guild?.members.cache.has(getTupperBoxId()) === true;
-			this.hasTupperMap.set(discordKey.server, isInGuild);
+			this.hasTupperMap.set(guildId, isInGuild);
 		}
-		if (this.hasTupperMap.get(discordKey.server) === false) {
+		if (this.hasTupperMap.get(guildId) === false) {
 			return false;
 		}
 
-		const key = discordKey.key;
-		if (!this.hasTupperMap.has(key)) {
+		const channelId = discordKey.channelId;
+		if (!this.hasTupperMap.has(channelId)) {
 			const { thread, channel } = await this.discord.fetchChannelAndThread(discordKey);
 			const isInChannel = channel ? getPermsFor(thread ?? channel, getTupperBoxId()).isInChannel : false;
-			this.hasTupperMap.set(key, isInChannel);
+			this.hasTupperMap.set(channelId, isInChannel);
 		}
-		return this.hasTupperMap.get(key) ?? false;
+		return this.hasTupperMap.get(channelId) ?? false;
 	}
 
-	public async pauseForTupper(discordKey: DiscordKey): Promise<void> {
+	public async pauseForTupper(discordKey: DiscordKey | ChannelReference): Promise<void> {
 		const hasTupper = await this.hasTupper(discordKey);
 		if (hasTupper) {
 			// let's pause for a second in case Tupper is involved ...

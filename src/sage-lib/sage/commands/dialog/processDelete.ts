@@ -32,7 +32,11 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	}
 
 	// pause to see if Tupper is handling this one
-	await sageReaction.sageCache.pauseForTupper(sageReaction.discordKey);
+	const channelReference = {
+		guildId: message.guildId as Snowflake ?? undefined,
+		channelId: message.channelId as Snowflake
+	};
+	await sageReaction.eventCache.pauseForTupper(channelReference);
 	if (isDeleted(message.id as Snowflake)) {
 		return null;
 	}

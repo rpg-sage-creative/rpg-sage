@@ -143,7 +143,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType, ca
 }
 
 async function colorListBot(sageMessage: SageMessage): Promise<void> {
-	await _colorList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser);
+	await _colorList(sageMessage, BotServerGameType.Bot, sageMessage.actor.sage.isSuperUser);
 }
 
 async function colorListServer(sageMessage: SageMessage): Promise<void> {
@@ -182,7 +182,7 @@ async function colorGetBot(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
 	}
 
-	await _colorList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser, ...types);
+	await _colorList(sageMessage, BotServerGameType.Bot, sageMessage.actor.sage.isSuperUser, ...types);
 }
 
 async function colorGetServer(sageMessage: SageMessage): Promise<void> {

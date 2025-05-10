@@ -1,4 +1,3 @@
-import { SageChannelType } from "@rsc-sage/types";
 import { Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
@@ -9,7 +8,6 @@ import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { sendTo } from "../../discord/sendTo.js";
 import { type TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
-import type { Game } from "../model/Game.js";
 import { EmojiType } from "./HasEmojiCore.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageEventCache } from "./SageEventCache.js";
@@ -275,26 +273,6 @@ export class SageMessage
 	}
 
 	//#endregion
-
-	// #region Permission
-
-	/** Ensures we are either in the channel being targeted or we are in an admin channel. */
-	public testChannelAdmin(channelDid: Optional<Snowflake>): boolean {
-		/** @todo: figure out if i even need this or if there is a better way */
-		return channelDid === this.channelDid || ![SageChannelType.None, SageChannelType.Dice].includes(this.channel?.type!);
-	}
-
-	/** Ensures we have a game and can admin games or are the GM. */
-	public testGameAdmin(game: Optional<Game>): game is Game {
-		return !!game && (this.canAdminGames || game.hasGameMaster(this.actorId));
-	}
-
-	/** Ensures we are either in an admin channel or are the server owner or SuperUser. */
-	public testServerAdmin(): boolean {
-		return this.canManageServer || this.isSuperUser || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
-	}
-
-	// #endregion
 
 	public static async fromMessage(message: SMessage): Promise<SageMessage> {
 		const eventCache = await SageEventCache.fromMessage(message);
