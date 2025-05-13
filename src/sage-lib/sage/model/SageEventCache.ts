@@ -770,6 +770,7 @@ export class SageEventCache {
 			guild: interaction.guild ?? undefined,
 			messageOrPartial,
 		});
+		await evCache.validateActor();
 		return evCache;
 	}
 
