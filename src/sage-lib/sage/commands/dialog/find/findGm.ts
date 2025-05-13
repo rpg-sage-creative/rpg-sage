@@ -7,5 +7,5 @@ export async function findGm(sageCommand: SageCommand): Promise<GameCharacter | 
 	if (game) {
 		return isGameMaster ? game.gmCharacter : undefined;
 	}
-	return server.gmCharacter;
+	return server?.gmCharacter;
 }

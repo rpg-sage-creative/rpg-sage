@@ -210,7 +210,7 @@ export async function getArgs(sageCommand: SageCommand): Promise<Args> {
 			ownerId = sageCommand.game?.id as Snowflake;
 		}
 		if (ownerType === "server") {
-			ownerId = sageCommand.server.did;
+			ownerId = sageCommand.server?.did;
 		}
 		if (ownerType === "global") {
 			ownerId = sageCommand.bot.id as Snowflake;

@@ -38,7 +38,7 @@ export async function getGameChannels(sageCommand: SageCommand, includeThisChann
 	const free: SageChannel[] = [];
 	const used: SageChannel[] = [];
 	for (const channel of channels) {
-		const otherGame = await sageCommand.server.findActiveGame(channel.id);
+		const otherGame = await sageCommand.server?.findActiveGame(channel.id);
 		if (otherGame) {
 			used.push(channel);
 		}else {

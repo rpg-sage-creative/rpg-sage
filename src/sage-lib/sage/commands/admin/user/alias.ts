@@ -86,7 +86,7 @@ function dialogContentToTarget(dialogContent: DialogContent, separator = "::"): 
 }
 
 async function aliasList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
+	if (!sageMessage.allowCommand && !sageMessage.allowDialog) {
 		return sageMessage.denyByProv("Alias List", "You cannot manage your aliases here.");
 	}
 
@@ -162,7 +162,7 @@ async function aliasUpdate(sageMessage: SageMessage, existing: TAlias, updated: 
 }
 
 async function aliasSet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
+	if (!sageMessage.allowCommand && !sageMessage.allowDialog) {
 		return sageMessage.denyByProv("Set Alias", "You cannot manage your aliases here.");
 	}
 
@@ -216,7 +216,7 @@ async function deleteAlias(sageMessage: SageMessage, alias: TAlias): Promise<voi
 }
 
 async function aliasDelete(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDialog) {
+	if (!sageMessage.allowCommand && !sageMessage.allowDialog) {
 		return sageMessage.denyByProv("Delete Alias", "You cannot manage your aliases here.");
 	}
 
@@ -239,7 +239,7 @@ async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 }
 
 async function aliasDetails(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
+	if (!sageMessage.allowCommand && !sageMessage.allowDice) {
 		return sageMessage.denyByProv("Alias Details", "You cannot manage your aliases here.");
 	}
 
@@ -264,7 +264,7 @@ async function aliasDetails(sageMessage: SageMessage): Promise<void> {
 }
 
 async function aliasHelp(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowAdmin && !sageMessage.allowDice) {
+	if (!sageMessage.allowCommand && !sageMessage.allowDice) {
 		return sageMessage.denyByProv("Alias Details", "You cannot manage your aliases here.");
 	}
 	const details = [

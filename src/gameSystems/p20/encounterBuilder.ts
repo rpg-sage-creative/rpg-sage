@@ -9,7 +9,8 @@ import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { getPaizoGameSystems } from "./lib/PaizoGameSystem.js";
-import { fetchSelectedOrDefault, fetchSelectedOrDefaultEnum, fetchSelectedOrDefaultNumber, findComponent } from "./lib/fetchSelectedOrDefault.js";
+import { fetchSelectedOrDefault, fetchSelectedOrDefaultEnum, fetchSelectedOrDefaultNumber } from "./lib/fetchSelectedOrDefault.js";
+import { findComponent } from "./lib/findComponent.js";
 
 type CustomIdArgsBase<GameSystem extends string, FormId extends string, Control extends string> = {
 	/** What gameSystem is selected? */
@@ -260,7 +261,7 @@ type Args = {
 	verbose: boolean;
 };
 async function getArgs(sageCommand: SageCommand, messages?: Message[]): Promise<Args | undefined> {
-	const customId = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.customId : `||${sageCommand.authorDid}||NoControl`;
+	const customId = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.customId : `||${sageCommand.actorId}||NoControl`;
 	const customIdArgs = parseCustomId(customId);
 
 	// fetch the messages

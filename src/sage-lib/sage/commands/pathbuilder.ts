@@ -75,7 +75,7 @@ async function getMacros(sageCommand: SageCommand, character: PathbuilderCharact
 	const spellMacros = getSpellMacros(character);
 
 	// get user macros with character name as category (old logic)
-	const macroUser = await sageCommand.sageCache.users.getById(character.getSheetValue("macroUserId"));
+	const macroUser = await sageCommand.sageCache.getOrFetchUser(character.getSheetValue("macroUserId"));
 	const userMacros = getUserMacros(character, macroUser);
 
 	// get character macros (new logic)
@@ -531,7 +531,7 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
-		await sageInteraction.interaction.channel?.send({
+		await sageInteraction.interactionChannel?.send({
 			content: `${toUserMention(sageInteraction.user.id as Snowflake)} *Secret Dice sent to the GM* 🎲`,
 			components: createMessageDeleteButtonComponents(sageInteraction.user.id as Snowflake)
 		});

@@ -1,14 +1,13 @@
 import { getSageId, getSuperUserId, getToken } from "@rsc-sage/env";
-import { addLogHandler, captureProcessExit, chunk, error, errorReturnNull, formatArg, getCodeName, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
-import { wrapUrl } from "@rsc-utils/discord-utils";
-import type { ClientOptions, Guild, Interaction, Message, MessageReaction, PartialMessage, PartialMessageReaction, PartialUser, User } from "discord.js";
-import { ActivityType, Client } from "discord.js";
+import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordApiError, wrapUrl } from "@rsc-utils/discord-utils";
+import { ActivityType, Client, type ClientOptions, type Guild, type Interaction, type Message, type MessageReaction, type PartialMessage, type PartialMessageReaction, type PartialUser, type User } from "discord.js";
 import { notifyOfError } from "../../../sage-utils/notifyOfError.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { getRegisteredIntents, getRegisteredPartials, handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
+import { initializeServer } from "../repo/base/initializeServer.js";
 import { Bot, type BotCore } from "./Bot.js";
-import { SageCache } from "./SageCache.js";
 
 interface IClientEventHandler {
 	onClientReady(client: Client): void;
@@ -47,7 +46,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		ActiveBot.sendToSuperUser(`# error`, ...args);
 	}
 	public static async sendToSuperUser(...args: unknown[]): Promise<void> {
-		const user = await ActiveBot.active.sageCache.discord.fetchUser(getSuperUserId()).catch(errorReturnNull);
+		const user = await ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false }).catch(DiscordApiError.process);
 		if (user) {
 			const contents = chunk(args.map(formatArg).join("\n"), 2000);
 			for (const content of contents) {
@@ -59,7 +58,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	// public client: Client;
 
 	private constructor(core: BotCore) {
-		super(core, null!);
+		super(core);
 
 		const client = new Client(createDiscordClientOptions());
 
@@ -144,23 +143,16 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 			type: ActivityType.Playing
 		});
 
-		SageCache.fromClient(client).then(sageCache => {
-			this.sageCache = sageCache;
-			ActiveBot.active = this;
+		ActiveBot.active = this;
 
-			addLogHandler("error", ActiveBot.notifyOfError);
+		addLogHandler("error", ActiveBot.notifyOfError);
 
-			info(`Discord.Client.on("ready") [success]`);
-			ActiveBot.sendToSuperUser(`Discord.Client.on("ready") [success]`);
-
-		}, err => {
-			error(`Discord.Client.on("ready") [error]`, err);
-			process.exit(1);
-		});
+		info(`Discord.Client.on("ready") [success]`);
+		ActiveBot.sendToSuperUser(`Discord.Client.on("ready") [success]`);
 	}
 
 	onClientGuildCreate(guild: Guild): void {
-		this.sageCache.servers.initializeServer(guild).then(initialized => {
+		initializeServer(guild).then(initialized => {
 			verbose(`Discord.Client.on("guildCreate", "${guild.id}::${guild.name}") => ${initialized}`);
 		});
 	}

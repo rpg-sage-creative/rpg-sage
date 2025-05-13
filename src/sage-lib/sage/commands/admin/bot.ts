@@ -7,7 +7,7 @@ import type { SageMessage } from "../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../cmd.js";
 
 async function botDetails(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
+	if (!sageMessage.actor.sage.isSuperUser) {
 		return sageMessage.reactBlock();
 	}
 	return sendBot(sageMessage);
@@ -59,7 +59,7 @@ async function sendBot(sageMessage: SageMessage): Promise<void> {
 }
 
 async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.isSuperUser) {
+	if (!sageMessage.actor.sage.isSuperUser) {
 		return sageMessage.reactBlock();
 	}
 	const gameSystem = sageMessage.args.getEnum(GameSystemType, "gameSystem");
@@ -79,7 +79,7 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 }
 
 async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
-	if (sageMessage.isSuperUser) {
+	if (sageMessage.actor.sage.isSuperUser) {
 		const buildInfo = await getBuildInfo();
 		const lines: string[] = [];
 		lines.push(`### ${buildInfo.name}`);

@@ -6,7 +6,7 @@ import { discordPromptYesNo } from "../../discord/prompts.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 
 export async function deleteAfter(sageInteraction: SageInteraction): Promise<void> {
-	if (sageInteraction.isSuperUser) {
+	if (sageInteraction.actor.sage.isSuperUser) {
 		sageInteraction.replyStack.deferAndDelete();
 		const interaction = sageInteraction.interaction as MessageContextMenuCommandInteraction;
 		const message = interaction.targetMessage;

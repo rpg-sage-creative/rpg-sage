@@ -30,7 +30,7 @@ function updateGame(sageCommand: SageCommand, options: UpdateGameOptions): Game 
 		&& !options.usersToAdd.some(u => user.did === u.did) // remove users being readded
 	).concat(options.usersToAdd);
 
-	return new Game(json, sageCommand.server, sageCommand.sageCache);
+	return new Game(json, sageCommand.server!, sageCommand.sageCache);
 }
 
 async function gameUpdate(sageCommand: SageCommand): Promise<boolean | undefined | null> {
@@ -71,7 +71,7 @@ async function gameUpdate(sageCommand: SageCommand): Promise<boolean | undefined
 
 	if (update) {
 		const gameSaved = game ? await game.save() : false;
-		const serverSaved = gameSaved ? await sageCommand.server.save() : false;
+		const serverSaved = gameSaved ? await sageCommand.server?.save() ?? false : false;
 		return gameSaved && serverSaved;
 	}else {
 		await sageCommand.replyStack.editLast("Game ***NOT*** Updated.");

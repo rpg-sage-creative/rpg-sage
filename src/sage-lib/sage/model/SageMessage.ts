@@ -1,26 +1,22 @@
-import { SageChannelType } from "@rsc-sage/types";
-import { Cache, debug, error, errorReturnNull, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial } from "@rsc-utils/discord-utils";
-import type { Message, User } from "discord.js";
+import { Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
+import type { User } from "discord.js";
 import XRegExp from "xregexp";
 import { ArgsManager } from "../../discord/ArgsManager.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
-import { send } from "../../discord/messages.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { sendTo } from "../../discord/sendTo.js";
 import { type TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
-import type { Game } from "../model/Game.js";
-import { GameRoleType } from "../model/Game.js";
 import { EmojiType } from "./HasEmojiCore.js";
-import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
+import { SageEventCache } from "./SageEventCache.js";
 import { SageMessageArgs } from "./SageMessageArgs.js";
-import type { HasChannels, HasGame } from "./index.js";
+import type { HasGame } from "./index.js";
 import { addMessageDeleteButton } from "./utils/deleteButton.js";
 
 interface SageMessageCore extends SageCommandCore {
-	message: MessageOrPartial;
+	message: SMessageOrPartial;
 	prefix: string;
 	hasPrefix: boolean;
 	slicedContent: string;
@@ -28,7 +24,7 @@ interface SageMessageCore extends SageCommandCore {
 
 export class SageMessage
 	extends SageCommand<SageMessageCore, SageMessageArgs>
-	implements HasGame, HasChannels {
+	implements HasGame {
 
 	private constructor(protected core: SageMessageCore, cache?: Cache) {
 		super(core, cache);
@@ -43,29 +39,6 @@ export class SageMessage
 		return this.commandAndArgs?.command?.toLowerCase().split("|") ?? [];
 	}
 
-	public static async fromMessage(message: Message): Promise<SageMessage> {
-		const sageCache = await SageCache.fromMessage(message);
-		const prefixOrDefault = sageCache.getPrefixOrDefault();
-		const regexOr = prefixOrDefault ? XRegExp.escape(prefixOrDefault) : `sage`;
-		const prefixRegex = XRegExp(`^\\s*(${regexOr})?[!?][!]?`, "i");
-		const prefixMatch = prefixRegex.exec(message.content ?? "");
-		const prefixFound = prefixMatch?.[1] ?? "";
-		const hasPrefix = [prefixOrDefault.toLowerCase(), "sage"].includes(prefixFound.toLowerCase());
-		const prefix = hasPrefix ? prefixFound : prefixOrDefault;
-		const safeContent = safeMentions(message.content ?? "").trim();
-		const slicedContent = hasPrefix ? safeContent.slice(prefix.length).trim() : safeContent;
-		const sageMessage = new SageMessage({
-			message,
-			prefix,
-			hasPrefix,
-			slicedContent,
-			sageCache
-		});
-		sageMessage.isGameMaster = await sageMessage.game?.hasUser(message.author?.id as Snowflake, GameRoleType.GameMaster) ?? false;
-		sageMessage.isPlayer = await sageMessage.game?.hasUser(message.author?.id as Snowflake, GameRoleType.Player) ?? false;
-		return sageMessage;
-	}
-
 	/** @todo: THIS IS NOT A PERMANENT SOLUTION; REPLACE THIS WHEN WE START PROPERLY TRACKING MESSAGES/DICE! */
 	public clone(): this {
 		const clone = new SageMessage(this.core, this.cache);
@@ -73,25 +46,25 @@ export class SageMessage
 		return clone as this;
 	}
 
-	public async fetchMessage(messageId?: Snowflake): Promise<Message> {
+	public async fetchMessage(messageId?: Snowflake): Promise<SMessage> {
 		const message = this.core.message.partial
 			? await this.core.message.fetch()
 			: this.core.message;
 		if (messageId && messageId !== message.id) {
-			return message.channel.messages.fetch(messageId);
+			return message.channel.messages.fetch(messageId) as Promise<SMessage>;
 		}
-		return message;
+		return message as SMessage;
 	}
 
 	public clear(): void {
 		debug("Clearing SageMessage");
 		this.cache.clear();
-		this.sageCache.clear();
+		this.eventCache.clear();
 	}
 
 	//#region core
 
-	public get message(): MessageOrPartial { return this.core.message; }
+	public get message(): SMessageOrPartial { return this.core.message; }
 	public get prefix(): string { return this.core.prefix; }
 	public get hasPrefix(): boolean { return this.core.hasPrefix; }
 	public get slicedContent(): string { return this.core.slicedContent; }
@@ -126,10 +99,10 @@ export class SageMessage
 	//#region Send / Replace
 
 	public _ = new Map<"Dialog" | "Dice" | "Replacement" | "Sent", MessageOrPartial>();
-	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageChannel): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageChannel, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.message.channel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<Message[]> {
+	public send(renderableContentResolvable: RenderableContentResolvable): Promise<SMessage[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageChannel): Promise<SMessage[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageChannel, originalAuthor: User): Promise<SMessage[]>;
+	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.message.channel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<SMessage[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			if (notifyIfBlocked) {
@@ -140,7 +113,7 @@ export class SageMessage
 		// check to see if we have channel send message permissions
 		const renderableContent = RenderableContent.resolve(renderableContentResolvable);
 		if (renderableContent) {
-			const sent = await send(this.sageCache, targetChannel, renderableContent, originalAuthor);
+			const sent = await this.eventCache.send(targetChannel, renderableContent, originalAuthor);
 			if (sent.length) {
 				this._.set("Sent", sent[sent.length - 1]);
 			}
@@ -148,21 +121,21 @@ export class SageMessage
 		}
 		return [];
 	}
-	public async sendPost(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]> {
+	public async sendPost(renderableContentResolvable: RenderableContentResolvable): Promise<SMessage[]> {
 		const target = this.message.channel;
 		const sendArgs = {
-			sageCache: this.sageCache,
+			sageCache: this.eventCache,
 			target,
-			content: resolveToContent(this.sageCache, renderableContentResolvable).join("\n")
+			content: resolveToContent(this.eventCache, renderableContentResolvable).join("\n")
 		};
 		const catchHandler = (err: unknown) => {
 			error(`${toHumanReadable(target)}: SageMessage.sendPost`, err);
 		};
 		const messages = await sendTo(sendArgs, { }, catchHandler);
-		return messages ?? [];
+		return messages as SMessage[] ?? [];
 	}
 	public async canSend(targetChannel = this.message.channel): Promise<boolean> {
-		return this.sageCache.canSendMessageTo(DiscordKey.from(targetChannel));
+		return this.eventCache.canSendMessageTo(DiscordKey.from(targetChannel));
 	}
 
 	public async reply(args: TSendArgs): Promise<void>;
@@ -183,59 +156,19 @@ export class SageMessage
 		const sendOptions = this.resolveToOptions(args);
 		const canSend = await this.canSend(this.message.channel);
 		const deleted = isDeleted(this.message.id as Snowflake);
-		let message = canSend && !deleted ? await this.message.reply(sendOptions).catch(DiscordApiError.process) : null;
+		let message = canSend && !deleted ? await this.message.reply(sendOptions).catch(DiscordApiError.process) as SMessage : null;
 		if (!message) {
 			// include a link to the original message!
 			const replyingTo = `*replying to* ${deleted ? "~~deleted message~~" : toMessageUrl(this.message)}`;
 			const newLine = sendOptions.content ? "\n" : "";
 			const originalContent = sendOptions.content ?? "";
 			sendOptions.content = replyingTo + newLine + originalContent;
-			message = await this.message.author?.send(sendOptions) ?? null;
+			message = await this.message.author?.send(sendOptions) as SMessage ?? null;
 		}
 		await addMessageDeleteButton(message, this.sageUser.did);
 	}
 
 	//#endregion
-
-	// #region HasChannels
-
-	/** Returns the channelDid this message (or its thread) is in. */
-	public get channelDid(): Snowflake | undefined {
-		return this.cache.getOrSet("channelDid", () => {
-			/** @todo investigate the notes found in threadDid below */
-			if (this.message.channel?.isThread()) {
-				return this.message.channel.parent?.id as Snowflake;
-			}
-			return this.message.channel?.id as Snowflake;
-		});
-	}
-
-
-	/** Returns the threadDid this message is in. */
-	public get threadDid(): Snowflake | undefined {
-		return this.cache.getOrSet("threadDid", () => {
-			/**
-			 * original: this.message.channel.isThread()
-			 * updated: this.message.channel?.isThread()
-			 * we got an error here that .channel was null.
-			 * @todo investigate what can make the channel null.
-			 * is it possible Sage was used in a channel type we aren't expecting?
-			 * is it possible Sage was used in a channel type we aren't aware of?
-			 * is it possible a partial message?
-			 */
-			if (this.message.channel?.isThread()) {
-				return this.message.channel.id as Snowflake;
-			}
-			return undefined;
-		});
-	}
-
-	/** Returns either the message's threadDid or channelDid if there is no thread. */
-	public get threadOrChannelDid(): Snowflake {
-		return this.cache.getOrSet("channelDid", () => this.threadDid ?? this.channelDid ?? this.message.channel.id as Snowflake);
-	}
-
-	// #endregion
 
 	// #region Reactions
 
@@ -266,7 +199,7 @@ export class SageMessage
 			return false;
 		}
 
-		await this.sageCache.pauseForTupper(DiscordKey.from(message));
+		await this.eventCache.pauseForTupper(DiscordKey.from(message));
 
 		if (!(await this.canReact(message))) {
 			return false;
@@ -277,13 +210,13 @@ export class SageMessage
 			return false;
 		}
 
-		const reaction = await message?.react(emoji).catch(errorReturnNull);
+		const reaction = await message?.react(emoji).catch(errorReturnUndefined);
 		return !!reaction;
 	}
 
 	public async canReact(message: MessageOrPartial = this.message): Promise<boolean> {
 		if (!message) return false;
-		return this.sageCache.canReactTo(DiscordKey.from(message));
+		return this.eventCache.canReactTo(DiscordKey.from(message));
 	}
 
 	public reactBlock(reason?: string): Promise<void> { return this.react(EmojiType.PermissionDenied, reason); }
@@ -341,23 +274,24 @@ export class SageMessage
 
 	//#endregion
 
-	// #region Permission
-
-	/** Ensures we are either in the channel being targeted or we are in an admin channel. */
-	public testChannelAdmin(channelDid: Optional<Snowflake>): boolean {
-		/** @todo: figure out if i even need this or if there is a better way */
-		return channelDid === this.channelDid || ![SageChannelType.None, SageChannelType.Dice].includes(this.channel?.type!);
+	public static async fromMessage(message: SMessage): Promise<SageMessage> {
+		const eventCache = await SageEventCache.fromMessage(message);
+		const prefixOrDefault = eventCache.getPrefixOrDefault();
+		const regexOr = prefixOrDefault ? XRegExp.escape(prefixOrDefault) : `sage`;
+		const prefixRegex = XRegExp(`^\\s*(${regexOr})?[!?][!]?`, "i");
+		const prefixMatch = prefixRegex.exec(message.content ?? "");
+		const prefixFound = prefixMatch?.[1] ?? "";
+		const hasPrefix = [prefixOrDefault.toLowerCase(), "sage"].includes(prefixFound.toLowerCase());
+		const prefix = hasPrefix ? prefixFound : prefixOrDefault;
+		const safeContent = safeMentions(message.content ?? "").trim();
+		const slicedContent = hasPrefix ? safeContent.slice(prefix.length).trim() : safeContent;
+		return new SageMessage({
+			message,
+			prefix,
+			hasPrefix,
+			slicedContent,
+			eventCache
+		});
 	}
 
-	/** Ensures we have a game and can admin games or are the GM. */
-	public testGameAdmin(game: Optional<Game>): game is Game {
-		return !!game && (this.canAdminGames || game.hasGameMaster(this.authorDid));
-	}
-
-	/** Ensures we are either in an admin channel or are the server owner or SuperUser. */
-	public testServerAdmin(): boolean {
-		return this.canManageServer || this.isSuperUser || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
-	}
-
-	// #endregion
 }

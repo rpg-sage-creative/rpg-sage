@@ -19,7 +19,7 @@ export type CharNamesForm = {
 export function showCharNamesModal(sageInteraction: SageInteraction, char: GameCharacter): Promise<void> {
 	const { maxLength } = DiscordMaxValues.webhook.username;
 	const modal = createCharModal({
-		userId: sageInteraction.authorDid,
+		userId: sageInteraction.actorId,
 		charId: char.isCompanionOrMinion ? char.parentId ?? NIL_SNOWFLAKE : char.id,
 		compId: char.isCompanionOrMinion ? char.id : NIL_SNOWFLAKE,
 		action: "SubmitNames",

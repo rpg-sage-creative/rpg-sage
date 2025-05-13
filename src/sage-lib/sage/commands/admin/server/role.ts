@@ -16,6 +16,9 @@ async function serverRoleList(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const server = sageMessage.server;
+	if (!server) {
+		return sageMessage.reactBlock();
+	}
 
 	const renderableContent = createAdminRenderableContent(server, `<b>server-role-list</b>`);
 	if (server.roles.length) {
@@ -40,6 +43,11 @@ async function serverRoleSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
+	const server = sageMessage.server;
+	if (!server) {
+		return sageMessage.reactBlock();
+	}
+
 	const roleDid = await sageMessage.args.getRoleId("role");
 	const roleType = sageMessage.args.getEnum(AdminRoleType, "type");
 	if (!roleDid || !roleType) {
@@ -52,12 +60,12 @@ async function serverRoleSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const role = sageMessage.server.getRole(roleType);
+	const role = server.getRole(roleType);
 	if (!role) {
-		const added = await sageMessage.server.addRole(roleType, roleDid);
+		const added = await server.addRole(roleType, roleDid);
 		return sageMessage.reactSuccessOrFailure(added);
 	}
-	const updated = await sageMessage.server.updateRole(roleType, roleDid);
+	const updated = await server.updateRole(roleType, roleDid);
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 
@@ -69,12 +77,17 @@ async function serverRoleRemove(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
+	const server = sageMessage.server;
+	if (!server) {
+		return sageMessage.reactBlock();
+	}
+
 	const roleType = sageMessage.args.getEnum(AdminRoleType, "type");
 	if (!roleType) {
 		return sageMessage.reactFailure();
 	}
 
-	const removed = await sageMessage.server.removeRole(roleType);
+	const removed = await server.removeRole(roleType) ?? false;
 	return sageMessage.reactSuccessOrFailure(removed);
 }
 

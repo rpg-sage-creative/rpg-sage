@@ -18,7 +18,7 @@ function parseString(url: string, type: ReferenceType): MessageReference | undef
 			guildId = undefined;
 		}
 
-		return { guildId, channelId, messageId };
+		return { guildId, channelId, messageId, type:0 };
 	}
 	return undefined;
 }
@@ -27,7 +27,8 @@ function parseMessage(message: MessageOrPartial): MessageReference | undefined {
 	return {
 		guildId: message.guildId ?? undefined,
 		channelId: message.channelId,
-		messageId: message.id
+		messageId: message.id,
+		type: 0
 	};
 }
 
@@ -35,7 +36,8 @@ function parseChannel(channel: Channel): MessageReference | undefined {
 	return {
 		guildId: "guildId" in channel ? channel.guildId ?? undefined : undefined,
 		channelId: channel.id,
-		messageId: undefined
+		messageId: undefined,
+		type: 0
 	};
 }
 

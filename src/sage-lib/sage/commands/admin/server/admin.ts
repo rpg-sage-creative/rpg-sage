@@ -17,7 +17,7 @@ async function renderUser(renderableContent: RenderableContent, user: TAdminUser
 }
 
 async function adminList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminSage) {
+	if (!sageMessage.canAdminSage || !sageMessage.server) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
@@ -61,7 +61,7 @@ async function canAdminRoleType(sageMessage: SageMessage, action: "add" | "updat
 	const hasRoleType = isDefined(roleType);
 
 	const userId = sageMessage.message.mentions.users.first()?.id as Snowflake;
-	const userRoleType = isDefined(userId) ? sageMessage.server.admins.find(admin => admin.did === userId)?.role : undefined;
+	const userRoleType = isDefined(userId) ? sageMessage.server!.admins.find(admin => admin.did === userId)?.role : undefined;
 
 	let canAdminThis = false;
 
@@ -101,7 +101,7 @@ async function canAdminRoleType(sageMessage: SageMessage, action: "add" | "updat
 }
 
 async function adminAdd(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!sageMessage.canAdminServer || !sageMessage.server) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
@@ -139,7 +139,7 @@ async function adminAdd(sageMessage: SageMessage): Promise<void> {
 }
 
 async function adminUpdate(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!sageMessage.canAdminServer || !sageMessage.server) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
@@ -174,7 +174,7 @@ async function adminUpdate(sageMessage: SageMessage): Promise<void> {
 }
 
 async function adminRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!sageMessage.canAdminServer || !sageMessage.server) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 

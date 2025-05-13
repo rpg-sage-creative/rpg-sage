@@ -1,5 +1,5 @@
 import { EphemeralMap, error, errorReturnFalse, errorReturnNull, randomSnowflake, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { createActionRow } from "@rsc-utils/discord-utils";
+import { createActionRow, getActionRows } from "@rsc-utils/discord-utils";
 import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Message } from "discord.js";
 import type { SageCommand } from "../sage/model/SageCommand.js";
 import type { SageInteraction } from "../sage/model/SageInteraction.js";
@@ -112,7 +112,7 @@ async function disablePromptMessage(message: Message, deleteInstead: boolean | u
 	if (deleteInstead) {
 		await deleteMessage(message);
 	}else {
-		message.components.forEach(row => {
+		getActionRows(message).forEach(row => {
 			row.components.forEach(comp => {
 				if (comp.type === ComponentType.Button) {
 					ButtonBuilder.from(comp).setDisabled(true);
@@ -202,7 +202,7 @@ export async function prompt(args: PromptArgs): Promise<PromptResults | null> {
 			message,
 			resolve,
 			timeout: setTimeout(resolvePrompt, TIMEOUT_MILLI, message.id as Snowflake),
-			userId: args.sageCommand.authorDid
+			userId: args.sageCommand.actorId
 		});
 	})
 	.catch(reason => {

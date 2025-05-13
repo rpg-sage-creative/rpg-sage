@@ -8,7 +8,7 @@ import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js"
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";
 import type { PartyCore } from "../commands/trackers/party/Party.js";
 import { PartyManager } from "../commands/trackers/party/PartyManager.js";
-import { HasIdCoreAndSageCache } from "../repo/base/IdRepository.js";
+import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { CharacterShell } from "./CharacterShell.js";
 import { Colors } from "./Colors.js";
@@ -26,8 +26,7 @@ export type GameRoleData = { did: Snowflake; type: GameRoleType; dicePing: boole
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
 export type GameUserData = { did: Snowflake; type: GameUserType; dicePing: boolean; };
 
-export interface GameCore extends IdCore, IHasColors, IHasEmoji, Partial<GameOptions>, CoreWithPostCurrency {
-	objectType: "Game";
+export interface GameCore extends IdCore<"Game">, IHasColors, IHasEmoji, Partial<GameOptions>, CoreWithPostCurrency {
 	createdTs: number;
 	archivedTs?: number;
 
@@ -154,7 +153,7 @@ function fixDupeUsers(game: GameCore): void {
 	game.users = filtered;
 }
 
-export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore, HasPostCurrency {
+export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore, HasPostCurrency {
 	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {
 		super(updateGame(core), sageCache);
 		fixDupeUsers(core);
@@ -668,7 +667,7 @@ export class Game extends HasIdCoreAndSageCache<GameCore> implements Comparable<
 	// #endregion
 
 	public async save(): Promise<boolean> {
-		return this.sageCache.games.write(this);
+		return this.sageCache.saveGame(this);
 	}
 
 	// #region IComparable

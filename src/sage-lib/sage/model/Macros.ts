@@ -351,8 +351,8 @@ export class Macros<Category extends string = string> {
 
 	public canActorEdit(sageCommand: SageCommand): boolean {
 		switch(this.type) {
-			case "global": return sageCommand.isSuperUser;
-			case "server": return this.owner.id === sageCommand.server.did && sageCommand.canManageServer;
+			case "global": return sageCommand.actor.sage.isSuperUser;
+			case "server": return this.owner.id === sageCommand.server?.id && sageCommand.canManageServer;
 			case "game": return this.owner.id === sageCommand.game?.id && sageCommand.canAdminGame;
 			case "user": return this.owner.id === sageCommand.actorId;
 			case "character": return sageCommand.findCharacter(this.owner.id)?.userDid === sageCommand.actorId;
@@ -514,7 +514,7 @@ export class Macros<Category extends string = string> {
 				const ensuredOwnerId = ownerId ?? actorId;
 				const user = ensuredOwnerId === actorId
 					? sageCommand.sageUser
-					: await sageCommand.sageCache.users.getByDid(ensuredOwnerId);
+					: await sageCommand.sageCache.getOrFetchUser(ensuredOwnerId);
 				if (user) {
 					return Macros.from(user);
 				}

@@ -74,7 +74,7 @@ function getOtherName(which: BotServerGameType): string {
 }
 
 function getOtherColors(sageMessage: SageMessage, which: BotServerGameType): Colors {
-	return which === BotServerGameType.Server ? sageMessage.bot.colors : sageMessage.server.colors;
+	return which === BotServerGameType.Server ? sageMessage.bot.colors : sageMessage.server?.colors!;
 }
 
 function getWhichEntity(sageMessage: SageMessage, which: BotServerGameType): Server | Game | undefined {
@@ -143,7 +143,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType, ca
 }
 
 async function colorListBot(sageMessage: SageMessage): Promise<void> {
-	await _colorList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser);
+	await _colorList(sageMessage, BotServerGameType.Bot, sageMessage.actor.sage.isSuperUser);
 }
 
 async function colorListServer(sageMessage: SageMessage): Promise<void> {
@@ -182,7 +182,7 @@ async function colorGetBot(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
 	}
 
-	await _colorList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser, ...types);
+	await _colorList(sageMessage, BotServerGameType.Bot, sageMessage.actor.sage.isSuperUser, ...types);
 }
 
 async function colorGetServer(sageMessage: SageMessage): Promise<void> {
@@ -246,11 +246,11 @@ async function colorSetServer(sageMessage: SageMessage): Promise<void> {
 
 	let changes = 0;
 	for (const colorAndType of colorAndTypes) {
-		const set = sageMessage.server.colors.set(colorAndType);
+		const set = sageMessage.server?.colors.set(colorAndType);
 		if (set) changes++;
 	}
 
-	const saved = changes ? await sageMessage.server.save() : false;
+	const saved = changes ? await sageMessage.server?.save() ?? false : false;
 	const updated = saved ? changes : 0;
 	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 
@@ -306,6 +306,9 @@ async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const { server } = sageMessage;
+	if (!server) {
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors in this channel.`);
+	}
 
 	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync colors with Sage?");
 	if (booleanResponse) {
@@ -353,7 +356,7 @@ async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors.`);
 	}
-	if (!sageMessage.testServerAdmin()) {
+	if (!sageMessage.testServerAdmin() || !sageMessage.server) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors in this channel.`);
 	}
 

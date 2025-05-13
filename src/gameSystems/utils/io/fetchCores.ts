@@ -118,7 +118,7 @@ async function _fetchByUrl<T extends CharacterBaseCore>(sageCommand: SageCommand
 		// if the url points to a message that has the json attached, let's fetch the message and check
 		const messageReference = parseReference(url, "message");
 		if (messageReference) {
-			const message = await sageCommand.discord.fetchMessage(messageReference, sageCommand.authorDid);
+			const message = await sageCommand.discord.fetchMessage(messageReference, sageCommand.actorId);
 			if (message) {
 				results.push(...await args.messageHandler(message, handlers, { firstOnly:args.firstOnly }));
 			}else {

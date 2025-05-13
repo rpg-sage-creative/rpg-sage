@@ -56,7 +56,8 @@ type MessageResolvable = Message | PartialMessage | MessageReference;
 function toMessageReference(resolvable: MessageResolvable): MessageReference {
 	const { channelId, guildId } = resolvable;
 	const messageId = "id" in resolvable ? resolvable.id : resolvable.messageId;
-	return { channelId, guildId: guildId ?? undefined, messageId };
+	const type: number = resolvable.type ?? 0;
+	return { channelId, guildId: guildId ?? undefined, messageId, type };
 }
 
 export class DialogMessageData {
@@ -98,7 +99,8 @@ export class DialogMessageData {
 		return {
 			channelId: this.channelId,
 			guildId: this.guildId,
-			messageId: this.id
+			messageId: this.id,
+			type: 0
 		};
 	}
 

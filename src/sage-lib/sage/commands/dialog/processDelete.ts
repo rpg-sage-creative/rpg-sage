@@ -32,7 +32,11 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	}
 
 	// pause to see if Tupper is handling this one
-	await sageReaction.sageCache.pauseForTupper(sageReaction.discordKey);
+	const channelReference = {
+		guildId: message.guildId as Snowflake ?? undefined,
+		channelId: message.channelId as Snowflake
+	};
+	await sageReaction.eventCache.pauseForTupper(channelReference);
 	if (isDeleted(message.id as Snowflake)) {
 		return null;
 	}
@@ -108,7 +112,7 @@ async function doDelete(sageReaction: SageReaction): Promise<void> {
 
 	const dialogMessage = await DialogMessageRepository.read(message, { ignoreMissingFile:true });
 	if (dialogMessage && !actor.equals(dialogMessage.userId)) {
-		const poster = await sageReaction.sageCache.users.getByDid(dialogMessage.userId);
+		const poster = await sageReaction.sageCache.getOrFetchUser(dialogMessage.userId);
 		if (poster?.dmOnDelete) {
 			const user = await sageReaction.discord.fetchUser(poster.did);
 			if (user) await sendDm(user, toHumanReadable(actorUser))

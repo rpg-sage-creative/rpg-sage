@@ -30,7 +30,7 @@ export function findNpc(sageCommand: SageCommand, name: Optional<string>, opts: 
 
 	// try grabbing auto character
 	if (opts.auto) {
-		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:sageCommand.authorDid };
+		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:sageCommand.actorId };
 		const autoChar = gameNpcs?.getAutoCharacter(autoChannel)
 			?? userNpcs.getAutoCharacter(autoChannel);
 		if (autoChar) return autoChar;

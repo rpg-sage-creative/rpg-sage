@@ -67,7 +67,7 @@ export class ReplyStack {
 		return ReplyStack.SpinnerEmojiStable;
 	}
 
-	public constructor(public sageCommand: SageCommand, private deletableBy = sageCommand.authorDid) { }
+	public constructor(public sageCommand: SageCommand, private deletableBy = sageCommand.actorId) { }
 
 	//#region flags
 

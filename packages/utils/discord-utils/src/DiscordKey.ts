@@ -3,7 +3,7 @@ import { type Interaction, type MessageReference } from "discord.js";
 import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
 import type { ChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveSnowflake, type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolve/resolveSnowflake.js";
-import { isGuildBased, isMessage, isThread, type MessageOrPartial, type MessageTarget, type ReactionOrPartial } from "./types/types.js";
+import { isGuildBased, isMessage, isThread, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial } from "./types/types.js";
 import { toChannelUrl } from "./url/toChannelUrl.js";
 import { toMessageUrl } from "./url/toMessageUrl.js";
 
@@ -17,6 +17,9 @@ export class DiscordKey implements MessageReference, ChannelReference {
 	}
 	public get messageId(): Snowflake | undefined {
 		return this.hasMessage ? this.message : undefined;
+	}
+	public get type(): number {
+		return 0;
 	}
 	//#endregion
 
@@ -107,7 +110,7 @@ export class DiscordKey implements MessageReference, ChannelReference {
 		return resolvables.map(resolvable => resolveSnowflake(resolvable, true)).join("-");
 	}
 
-	public static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial | MessageReference): DiscordKey {
+	public static from(resolvable: MessageTarget | Interaction | MessageOrPartial | ReactionOrPartial | MessageReferenceOrPartial): DiscordKey {
 		if ("messageId" in resolvable) {
 			return new DiscordKey(resolvable.guildId, resolvable.channelId, undefined, resolvable.messageId);
 		}

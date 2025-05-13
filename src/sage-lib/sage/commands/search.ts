@@ -3,7 +3,6 @@ import { type Base, RARITIES } from "../../../sage-pf2e/index.js";
 import type { SearchResults } from "../../../sage-search/SearchResults.js";
 import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
-import { send } from "../../discord/messages.js";
 import type { SageMessage } from "../model/SageMessage.js";
 
 function theOneOrMatchToSage(searchResults: SearchResults<any>, match = false): Base | null {
@@ -26,7 +25,7 @@ async function invalidGame(sageMessage: SageMessage): Promise<void> {
 	unableSearchResults.append(`<code>sage! server update gameSystem="PF2E"</code>`);
 	unableSearchResults.append(`<br/>Acceptable gameSystem values are:<ul><li>"PF" (Pathfinder)</li><li>"PF2E" (Pathfinder 2e)</li><li>"SF" (Starfinder)</li></ul>`);
 	unableSearchResults.append(`<br/>For more information, see <https://rpgsage.io>`);
-	await send(sageMessage.caches, sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
+	await sageMessage.sageCache.send(sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();
 }
 
@@ -35,12 +34,12 @@ async function currentlyDisabled(sageMessage: SageMessage): Promise<void> {
 	unableSearchResults.append(`We are sorry, we have disabled the search engine for this game system for the following reason:`);
 	unableSearchResults.append(`<br/>${sageMessage.bot.getSearchStatus(sageMessage.gameSystemType)}`);
 	unableSearchResults.append(`<br/>For more information, join us at <https://discord.com/invite/pfAcUMN>`);
-	await send(sageMessage.caches, sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
+	await sageMessage.sageCache.send(sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();
 }
 
 export async function searchHandler(sageMessage: SageMessage, nameOnly = false): Promise<void> {
-	if (!sageMessage.allowSearch) {
+	if (!sageMessage.allowCommand) {
 		return;
 	}
 
@@ -57,7 +56,7 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	}
 
 	// Let em know we are busy ...
-	const promise = send(sageMessage.caches, sageMessage.message.channel, `> Searching ${searchEngine.name}, please wait ...`, sageMessage.message.author);
+	const promise = sageMessage.sageCache.send(sageMessage.message.channel, `> Searching ${searchEngine.name}, please wait ...`, sageMessage.message.author);
 
 	// Parse the query
 	const parsedSearchInfo = parseSearchInfo(Collection.from(sageMessage.args.toArray()), RARITIES);
@@ -73,7 +72,7 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	deleteMessages(messages);
 
 	// Send the proper results
-	await send(sageMessage.caches, sageMessage.message.channel, renderableToSend, sageMessage.message.author);
+	await sageMessage.sageCache.send(sageMessage.message.channel, renderableToSend, sageMessage.message.author);
 
 	return Promise.resolve();
 }

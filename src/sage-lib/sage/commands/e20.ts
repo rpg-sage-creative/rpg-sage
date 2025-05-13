@@ -476,7 +476,7 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
-		await sageInteraction.interaction.channel?.send({
+		await sageInteraction.interactionChannel?.send({
 			content: `${toUserMention(sageInteraction.user.id as Snowflake)} *Secret Dice sent to the GM* 🎲`,
 			components: createMessageDeleteButtonComponents(sageInteraction.user.id as Snowflake)
 		});

@@ -1,5 +1,5 @@
 import { DicePostType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
-import { isSnowflake, mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
+import { mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
 import type { Role } from "discord.js";
 import { DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
@@ -25,16 +25,14 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	if (server && !sageMessage.canAdminServer) {
 		return sageMessage.reactBlock();
 	}
-	if (!server && sageMessage.isSuperUser) {
+	if (!server && sageMessage.actor.sage.isSuperUser) {
 		const serverId = sageMessage.args.getIdType("server");
 		if (serverId) {
-			server = isSnowflake(serverId)
-				? await sageMessage.sageCache.servers.getByDid(serverId)
-				: await sageMessage.sageCache.servers.getById(serverId)
+			server = await sageMessage.sageCache.getOrFetchServer(serverId);
 		}
 	}
 	if (!server) {
-		return sageMessage.reactFailure();
+		return sageMessage.replyStack.whisper("No Server Found!");
 	}
 
 	const roles = <TRole[]>await mapAsync(server.roles, async role => {
@@ -64,7 +62,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	} else {
 		renderableContent.append(`<blockquote>Server Not Found!</blockquote>`);
 	}
-	return <any>sageMessage.send(renderableContent);
+	await sageMessage.replyStack.reply(renderableContent);
 }
 
 async function serverUpdate(sageMessage: SageMessage): Promise<void> {
@@ -81,7 +79,7 @@ async function serverUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const updated = await sageMessage.server.update(serverOptions);
+	const updated = await server.update(serverOptions);
 	return sageMessage.reactSuccessOrFailure(updated);
 }
 

@@ -1,11 +1,10 @@
 import { isSageId } from "@rsc-sage/env";
 import { Cache, debug, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { DiscordApiError, type ReactionOrPartial, type SMessageOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Message, MessageReaction } from "discord.js";
 import { ReactionType } from "../../discord/index.js";
-import { GameRoleType } from "./Game.js";
-import { SageCache } from "./SageCache.js";
 import { SageCommand, type SageCommandCore } from "./SageCommand.js";
+import { SageEventCache } from "./SageEventCache.js";
 import { SageReactionArgs } from "./SageReactionArgs.js";
 
 interface SageReactionCore extends SageCommandCore {
@@ -75,7 +74,7 @@ export class SageReaction
 
 		if (!message.guild) return false;
 
-		const webhook = await this.sageCache.discord.fetchWebhook(message);
+		const webhook = await this.eventCache.discord.fetchWebhook(message);
 		return webhook?.id === messageAuthorId;
 	}
 
@@ -89,22 +88,14 @@ export class SageReaction
 	}
 
 	/** @deprecated use fetchMessage() */
-	public get message(): MessageOrPartial {
-		return this.core.messageReaction.message;
-	}
-
-	/** Returns the channelDid this message (or its thread) is in. */
-	public get channelDid(): Snowflake | undefined {
-		if (this.message.channel.isThread()) {
-			return this.message.channel.parentId as Snowflake | undefined;
-		}
-		return this.message.channelId as Snowflake | undefined;
+	public get message(): SMessageOrPartial {
+		return this.core.messageReaction.message as SMessageOrPartial;
 	}
 
 	public clear(): void {
 		debug("Clearing SageReaction");
 		this.cache.clear();
-		this.sageCache.clear();
+		this.eventCache.clear();
 	}
 
 	public async reply(): Promise<void> { }
@@ -112,16 +103,12 @@ export class SageReaction
 	public async whisper(): Promise<void> { }
 
 	public static async fromMessageReaction(messageReaction: ReactionOrPartial, user: UserOrPartial, reactionType: ReactionType): Promise<SageReaction> {
-		const sageCache = await SageCache.fromMessageReaction(messageReaction, user);
-		const sageReaction = new SageReaction({
-			sageCache,
+		return new SageReaction({
+			eventCache: await SageEventCache.fromMessageReaction(messageReaction, user),
 			messageReaction,
 			reactionType,
 			user
 		});
-		sageReaction.isGameMaster = await sageReaction.game?.hasUser(user.id as Snowflake, GameRoleType.GameMaster) ?? false;
-		sageReaction.isPlayer = await sageReaction.game?.hasUser(user.id as Snowflake, GameRoleType.Player) ?? false;
-		return sageReaction;
 	}
 
 }

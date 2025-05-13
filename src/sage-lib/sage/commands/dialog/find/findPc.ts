@@ -11,7 +11,7 @@ type Options = {
 export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: Options): GameCharacter | undefined {
 	// if (!sageCommand.allowDialog) return undefined;
 
-	const { authorDid, game, isGameMaster, isPlayer, sageUser } = sageCommand;
+	const { actorId, game, isGameMaster, isPlayer, sageUser } = sageCommand;
 	if (game && !isPlayer && !isGameMaster) return undefined;
 
 	const gamePcs = game?.playerCharacters;
@@ -21,14 +21,14 @@ export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: O
 
 	// try by given name/index first
 	if (!isNameBlank) {
-		const namedChar = (isGameMaster ? gamePcs : gamePcs?.filterByUser(authorDid))?.findByName(name)
+		const namedChar = (isGameMaster ? gamePcs : gamePcs?.filterByUser(actorId))?.findByName(name)
 			?? userPcs.findByName(name);
 		if (namedChar) return namedChar;
 	}
 
 	// try grabbing auto character
 	if (opts.auto) {
-		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:authorDid };
+		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:actorId };
 		const autoChar = gamePcs?.getAutoCharacter(autoChannel)
 			?? userPcs.getAutoCharacter(autoChannel);
 		if (autoChar) return autoChar;
@@ -37,7 +37,7 @@ export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: O
 	// else grab their first
 	if (isNameBlank && opts.first) {
 		const firstChar = gamePcs
-			? gamePcs.findByUser(authorDid)
+			? gamePcs.findByUser(actorId)
 			: userPcs.first();
 		if (firstChar) return firstChar;
 	}

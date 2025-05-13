@@ -74,7 +74,7 @@ function getOtherName(which: BotServerGameType): string {
 }
 
 function getOtherEmoji(sageMessage: SageMessage, which: BotServerGameType): Emoji {
-	return which === BotServerGameType.Server ? sageMessage.bot.emoji : sageMessage.server.emoji;
+	return which === BotServerGameType.Server ? sageMessage.bot.emoji : sageMessage.server?.emoji!;
 }
 
 function getWhichEntity(sageMessage: SageMessage, which: BotServerGameType): Server | Game | undefined {
@@ -143,7 +143,7 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType, ca
 }
 
 async function emojiListBot(sageMessage: SageMessage): Promise<void> {
-	await _emojiList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser);
+	await _emojiList(sageMessage, BotServerGameType.Bot, sageMessage.actor.sage.isSuperUser);
 }
 
 async function emojiListServer(sageMessage: SageMessage): Promise<void> {
@@ -182,7 +182,7 @@ async function emojiGetBot(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
 	}
 
-	await _emojiList(sageMessage, BotServerGameType.Bot, sageMessage.isSuperUser, ...types);
+	await _emojiList(sageMessage, BotServerGameType.Bot, sageMessage.actor.sage.isSuperUser, ...types);
 }
 
 async function emojiGetServer(sageMessage: SageMessage): Promise<void> {
@@ -235,7 +235,7 @@ async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.canAdminServer) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji.`);
 	}
-	if (!sageMessage.testServerAdmin()) {
+	if (!sageMessage.testServerAdmin() || !sageMessage.server) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji in this channel.`);
 	}
 
@@ -310,7 +310,9 @@ async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const { server } = sageMessage;
-
+	if (!server) {
+		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji in this channel.`);
+	}
 	const booleanResponse = await discordPromptYesNo(sageMessage, "> Sync emoji with Sage?", true);
 	if (booleanResponse) {
 		server.emoji.sync(sageMessage.bot.emoji);
@@ -368,11 +370,11 @@ async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
 
 	let changes = 0;
 	for (const type of types) {
-		const unset = sageMessage.server.emoji.unset(type);
+		const unset = sageMessage.server?.emoji.unset(type);
 		if (unset) changes++;
 	}
 
-	const saved = changes ? await sageMessage.server.save() : false;
+	const saved = changes ? await sageMessage.server?.save() ?? false : false;
 	const updated = saved ? changes : 0;
 	const saveError = changes && !saved ? `\nSorry, we were unable to save your changes!` : ``;
 

@@ -11,17 +11,23 @@ import { MoveDirectionOutputType } from "../../map/MoveDirection.js";
 import { renderPostCurrency } from "../PostCurrency.js";
 
 async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
+	if (!sageCommand.server) {
+		await sageCommand.replyStack.whisper("No Server Found!");
+		return null;
+	}
+
 	let game: Optional<Game> = sageCommand.game;
 	if (!game) {
 		const gameId = sageCommand.args.getIdType("id");
 		if (gameId) {
-			game = await sageCommand.sageCache.games.getById(gameId);
+			game = await sageCommand.sageCache.getOrFetchGame(gameId);
 		}
 		if (!game) {
 			await sageCommand.replyStack.whisper("No Game Found!");
+			return null;
 		}
 	}
-	if (!sageCommand.canAdminGames && !game?.hasGameMaster(sageCommand.authorDid)) {
+	if (!sageCommand.canAdminGames && !sageCommand.actor.isGameMaster) {
 		await sageCommand.replyStack.whisper("*Server Admin, Game Admin, or Game Master privilege required!*");
 		return null;
 	}
@@ -100,7 +106,7 @@ async function showGameRenderDialogType(renderableContent: RenderableContent, sa
 	if (inheritedDialogType !== DialogPostType.Post) {
 		let showAlert = false;
 		for (const gameUser of game.users) {
-			const user = await sageCommand.sageCache.users.getByDid(gameUser.did);
+			const user = await sageCommand.sageCache.getOrFetchUser(gameUser.did);
 			if (user?.dialogPostType === DialogPostType.Post) {
 				showAlert = true;
 				break;
@@ -138,7 +144,7 @@ function gameDetailsAppendDice(renderableContent: RenderableContent, game: Game)
 }
 
 async function showGameRenderServer(renderableContent: RenderableContent, sageCommand: SageCommand, game: Game): Promise<void> {
-	if (sageCommand.isSuperUser && game.serverDid !== sageCommand.server.did) {
+	if (sageCommand.actor.sage.isSuperUser && game.serverDid !== sageCommand.server?.did) {
 		renderableContent.appendTitledSection("<b>Server</b>", game.serverDid, game.serverId);
 		const guild = await sageCommand.discord.fetchGuild(game.serverDid);
 		if (guild) {

@@ -1,5 +1,4 @@
-import type { DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType, SageChannel } from "@rsc-sage/types";
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/types";
 import { GameCharacter } from "./GameCharacter.js";
 
 export interface HasGame {
@@ -13,12 +12,3 @@ export interface HasGame {
 	diceOutputType: DiceOutputType;
 	diceSecretMethodType: DiceSecretMethodType;
 }
-
-export type HasChannels = {
-	channel: SageChannel | undefined;
-	channelDid: Snowflake | undefined;
-	gameChannel: SageChannel | undefined;
-	serverChannel: SageChannel | undefined;
-	threadDid: Snowflake | undefined;
-	threadOrChannelDid: Snowflake;
-};

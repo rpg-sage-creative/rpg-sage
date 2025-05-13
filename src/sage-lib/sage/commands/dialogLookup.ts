@@ -1,5 +1,5 @@
 import { isSageId, isTupperBoxId } from "@rsc-sage/env";
-import { errorReturnNull, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
 import type { Guild, GuildMember, Message } from "discord.js";
 import { ReactionType } from "../../discord/enums.js";
@@ -29,8 +29,8 @@ async function whisper(sageCommand: SageCommand, content: string | RenderableCon
 	if (!sent) {
 		// renderable.append(`*Note: We tried to DM this alert to you, but were unable to.*`);
 		const opts = sageCommand.resolveToOptions(renderable);
-		const user = await sageCommand.discord.fetchUser(sageCommand.authorDid);
-		const dm = await user?.send(opts).catch(errorReturnNull);
+		const actor = await sageCommand.eventCache.validateActor();
+		const dm = await actor.discord?.send(opts).catch(errorReturnUndefined);
 		if (dm) {
 			sent = true;
 		}
@@ -105,19 +105,19 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 
 	const { characterId, gameId, userId } = messageInfo;
 
-	const sageUser = await sageCommand.sageCache.users.getByDid(userId);
+	const sageUser = await sageCommand.sageCache.getOrFetchUser(userId);
 	const guildMember = await sageCommand.discord.fetchGuildMember(userId);
 
 	let { game } = sageCommand;
-	if (game && !game.equals(gameId)) {
-		game = await sageCommand.sageCache.games.getById(gameId) ?? undefined;
+	if (game && gameId && !game.equals(gameId)) {
+		game = await sageCommand.sageCache.getOrFetchGame(gameId);
 	}
 
 	/** we can't use sageCommand.findCharacter because the game and user aren't linked to the command */
 	const character = game?.playerCharacters.findById(characterId)
 		?? game?.nonPlayerCharacters.findById(characterId)
 		?? (game?.gmCharacter.equals(characterId) ? game.gmCharacter : undefined)
-		?? (sageCommand.server.gmCharacter.equals(characterId) ? sageCommand.server.gmCharacter : undefined)
+		?? (sageCommand.server?.gmCharacter.equals(characterId) ? sageCommand.server.gmCharacter : undefined)
 		?? sageUser?.playerCharacters.findById(characterId)
 		?? sageUser?.nonPlayerCharacters.findById(characterId);
 

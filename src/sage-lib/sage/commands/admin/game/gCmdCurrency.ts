@@ -204,7 +204,7 @@ async function gCmdAuditCurrency(sageCommand: SageCommand): Promise<void> {
 		return sageCommand.replyStack.whisper(`The given user (${readableUser}) has no currency.`);
 	}
 
-	const guildId = sageCommand.server.did;
+	const guildId = sageCommand.server?.did;
 
 	const renderableContent = createAdminRenderableContent(sageCommand.game);
 	renderableContent.append(`<h2>Post Currency Audit</h2>`);
@@ -239,7 +239,7 @@ async function gCmdAuditCurrency(sageCommand: SageCommand): Promise<void> {
 		renderableContent.append(...lines);
 	});
 
-	const gmUser = await sageCommand.discord.fetchUser(sageCommand.authorDid);
+	const gmUser = await sageCommand.discord.fetchUser(sageCommand.actorId);
 	if (gmUser) {
 		const sendArgs = sageCommand.resolveToOptions(renderableContent);
 		const payloads = splitMessageOptions(sendArgs);

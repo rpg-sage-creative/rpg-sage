@@ -202,7 +202,7 @@ function findTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	return null;
 }
 async function findHandler(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.allowSearch) {
+	if (!sageMessage.allowCommand) {
 		return sageMessage.reactBlock();
 	}
 
@@ -244,10 +244,9 @@ export function registerDefault(): void {
 	registerMessageListener(findTester, findHandler);
 
 	registerCommandRegex(/shutdown/, async (sageMessage: SageMessage) => {
-		if (sageMessage.canSuperAdmin) {
+		if (sageMessage.actor.sage.isSuperAdmin || sageMessage.actor.sage.isSuperUser) {
 			await sageMessage.reactSuccess();
-			const user = await sageMessage.discord.fetchUser(sageMessage.authorDid);
-			info(`Shutdown command given by: ${toHumanReadable(user)}`);
+			info(`Shutdown command given by: ${toHumanReadable(sageMessage.actor.discord)}`);
 			process.exit(0);
 		}
 	});

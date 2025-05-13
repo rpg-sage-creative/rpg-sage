@@ -1,6 +1,7 @@
 import { GameSystemType, parseGameSystem } from "@rsc-sage/types";
 import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type MessageActionRowComponent } from "discord.js";
+import { findComponent } from "@rsc-utils/discord-utils";
+import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { Dice } from "../../sage-dice/dice/pf2e/index.js";
 import { DieRollGrade } from "../../sage-dice/index.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
@@ -333,26 +334,20 @@ type Args = {
 };
 
 function getVerbose(sageCommand: SageCommand, userId: Snowflake): boolean | undefined {
-	const components = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.message.components
-		: sageCommand.isSageMessage() ? sageCommand.message.components
+	const message = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.message
+		: sageCommand.isSageMessage() ? sageCommand.message
 		: undefined;
-	if (components?.length) {
-		const customId = createCustomId("verboseToggle", userId);
-		const isVerboseButton = (component: MessageActionRowComponent): component is ButtonComponent => component.customId === customId;
-		const isToggleAction = sageCommand.isSageInteraction("BUTTON") ? sageCommand.interaction.customId === customId : false;
-		for (const row of components) {
-			for (const component of row.components) {
-				if (isVerboseButton(component)) {
-					return isToggleAction ? component.label === "Verbose" : component.label !== "Verbose";
-				}
-			}
-		}
+	const customId = createCustomId("verboseToggle", userId);
+	const component = findComponent<ButtonComponent>(message, customId);
+	if (component) {
+		const isToggleAction = sageCommand.isSageInteraction("BUTTON") ? sageCommand.customIdMatches(customId) : false;
+		return isToggleAction ? component.label === "Verbose" : component.label !== "Verbose";
 	}
 	return sageCommand.args.getBoolean("verbose") ?? undefined;
 }
 
 function getArgs(sageCommand: SageCommand): Args {
-	const userId = sageCommand.isSageInteraction("MESSAGE") ? getUserId(sageCommand.interaction.customId) : sageCommand.authorDid;
+	const userId = sageCommand.isSageInteraction("MESSAGE") ? getUserId(sageCommand.interaction.customId) : sageCommand.actorId;
 	const taskLevelArg = getSelectedOrDefaultNumber(sageCommand, createCustomId("taskLevel", userId), "taskLevel");
 	const charLevelArg = getSelectedOrDefaultNumber(sageCommand, createCustomId("charLevel", userId), "charLevel");
 	const modifier = getSelectedOrDefaultNumber(sageCommand, createCustomId("modifier", userId), "modifier");

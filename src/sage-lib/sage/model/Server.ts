@@ -1,11 +1,11 @@
 import { getHomeServerId } from "@rsc-sage/env";
 import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
 import { DiceSortType, parseGameSystem, updateServer } from "@rsc-sage/types";
-import { applyChanges, randomSnowflake, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, randomSnowflake, warn, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
-import { HasDidCore, type DidCore } from "../repo/base/DidRepository.js";
+import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import { CharacterManager } from "./CharacterManager.js";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
@@ -21,7 +21,7 @@ export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdm
 export interface IAdminRole { did: Snowflake; type: AdminRoleType; }
 export interface IAdminUser { did: Snowflake; role: AdminRoleType; }
 
-export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Partial<ServerOptions> {
+export interface ServerCore extends IdCore<"Server">, IHasColors, IHasEmoji, Partial<ServerOptions> {
 	admins: IAdminUser[];
 	channels: SageChannel[];
 	commandPrefix?: string;
@@ -40,7 +40,7 @@ export interface ServerCore extends DidCore<"Server">, IHasColors, IHasEmoji, Pa
 // 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 // }
 
-export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
+export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
 	public constructor(core: ServerCore, sageCache: SageCache) {
 		super(updateServer(core), sageCache);
 
@@ -90,12 +90,12 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	public async findActiveGame(channelId: Snowflake): Promise<Game | undefined> {
 		// check to see if we have a server-wide game
 		if (this.core.gameId) {
-			const game = await this.sageCache.games.getById(this.core.gameId as Snowflake);
+			const game = await this.sageCache.getOrFetchGame(this.core.gameId);
 			if (game && !game.isArchived) {
 				return game;
 			}
 		}
-		return this.sageCache.games.findActive({ guildId:this.did, channelId, messageId:undefined });
+		return this.sageCache.findActiveGame({ guildId:this.did, channelId, messageId:undefined });
 	}
 	// public async addGame(channelDid: Snowflake, name: string, _gameType: Optional<GameType>, _dialogType: Optional<DialogType>, _critMethodType: Optional<CritMethodType>, _diceOutputType: Optional<DiceOutputType>, _dicePostType: Optional<DicePostType>, _diceSecretMethodType: Optional<DiceSecretMethodType>): Promise<boolean> {
 	// 	const found = await this.findActiveGameByChannelDid(channelDid);
@@ -317,7 +317,7 @@ export class Server extends HasDidCore<ServerCore> implements IHasColorsCore, IH
 	// #endregion
 
 	public async save(): Promise<boolean> {
-		return this.sageCache.servers.write(this);
+		return this.sageCache.saveServer(this);
 	}
 
 	// #region command Prefix override
