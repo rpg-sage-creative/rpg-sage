@@ -1,5 +1,5 @@
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
-import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, isThread, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
@@ -16,20 +16,20 @@ import { User } from "./User.js";
 
 let _userForSage: User | undefined;
 
-async function getOrCreateUser(evCache: SageEventCache, id: Optional<string>): Promise<User> {
+async function getOrCreateUser(eventCache: SageEventCache, id: Optional<string>): Promise<User> {
 	const userId = orNilSnowflake(id);
 
 	let user: User | undefined;
 	if (isSageId(userId)) {
-		_userForSage ??= new User(User.createCore(userId), evCache);
+		_userForSage ??= new User(User.createCore(userId), eventCache);
 		user = _userForSage;
 
 	}else {
 		// check cache first
-		user = await evCache.getOrFetchUser(userId);
+		user = await eventCache.getOrFetchUser(userId);
 
 		// create a new one
-		user ??= new User(User.createCore(userId), evCache);
+		user ??= new User(User.createCore(userId), eventCache);
 	}
 
 	return user;
@@ -373,7 +373,9 @@ async function createSageEventCache(options: SageEventCacheCreateOptions): Promi
 	core.actor = { sage:await getOrCreateUser(evCache, actorOrPartial.id) };
 
 	// set unvalidated author
-	core.author = { sage:await getOrCreateUser(evCache, authorOrPartial?.id) };
+	core.author = authorOrPartial?.id
+		? { sage:await getOrCreateUser(evCache, authorOrPartial.id) }
+		: { sage:new User(User.createCore(NIL_SNOWFLAKE), evCache) };
 
 	// set unvalidated server
 	core.server = { discord:guild };
