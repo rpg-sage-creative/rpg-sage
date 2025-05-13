@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.10.1",
+"version":"1.11.0",
 "branch":"main",
-"commit":"3c9619ad190cb527c1c2cbabeda14a09b77871f5",
-"commitSubject":"Import cleanup (#135)",
-"commitTs":1745955409000,
-"commitDate":"2025-04-29-1236",
-"buildTs":1745955704000,
-"buildDate":"2025-04-29-1241",
+"commit":"c2e606faa5b20f68bafbd13b67ab4a5f2c195307",
+"commitSubject":"Api updates (#136)",
+"commitTs":1747113147000,
+"commitDate":"2025-05-12-2212",
+"buildTs":1747113212000,
+"buildDate":"2025-05-12-2213",
 "author":"Randal"
 }
