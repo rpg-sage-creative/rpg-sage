@@ -696,5 +696,5 @@ export function registerDeckCommands() {
 	registerListeners({ commands:[/(deck\s*play)/i], message:deckPlay });
 	registerListeners({ commands:[/(deck\s*show)/i], message:deckShow });
 	registerListeners({ commands:[/(decks\s*(show|reveal\s*(hand|spread)))/i], message:decksShowReveal });
-	registerListeners({ commands:[/^deck\|\d+\|(shuffleDeck|drawCard|seeHand|revealHand|seeSpread|revealSpread|discardSpread)\|[\w-]+|\d+$/], interaction:handleCardsButton });
+	registerListeners({ commands:[/^(deck\|\d+\|(shuffleDeck|drawCard|seeHand|revealHand|seeSpread|revealSpread|discardSpread)\|[\w-]+|\d+)$/], interaction:handleCardsButton });
 }
