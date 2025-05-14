@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.11.0",
+"version":"1.11.1",
 "branch":"main",
-"commit":"c2e606faa5b20f68bafbd13b67ab4a5f2c195307",
-"commitSubject":"Api updates (#136)",
-"commitTs":1747113147000,
-"commitDate":"2025-05-12-2212",
-"buildTs":1747113212000,
-"buildDate":"2025-05-12-2213",
+"commit":"b49e5fb7306496253da3fae675f23971cfe50aff",
+"commitSubject":"fix deck button regex",
+"commitTs":1747238845000,
+"commitDate":"2025-05-14-0907",
+"buildTs":1747238876000,
+"buildDate":"2025-05-14-0907",
 "author":"Randal"
 }
