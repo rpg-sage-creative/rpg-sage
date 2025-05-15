@@ -1,8 +1,7 @@
 # Dev Setup (macOS)
 
 For transparency, and to ensure compatibility, the following versions are used:
-- The Dev Lab: NVM 0.39.7, Node 18.20.2, and Typescript 5.4.5; VSCode for development
-- The Server: NVM 0.39.7, Node 18.15.0, and Typescript 5.1.6
+- NVM 0.40.3, NPM 11.3.0, Node 22.15.0, and Typescript 5.8.3; VSCode for development
 
 The tasks.json file's build task includes a dependency that creates an index.d.ts for pdf2json ... mind it!
 
@@ -22,7 +21,7 @@ The tasks.json file's build task includes a dependency that creates an index.d.t
   - as of this guide, the latest is `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash`
 
 4. run `nvm ls` to ensure you have the version of Node used by RPG Sage
-  - as of this guide, the version is `nvm install 18`
+  - as of this guide, the version is `nvm install 22`
 
 5. run `npm -v` to ensure you have "Node Package Manager" installed
   - if "npm" is not installed, run `nvm install-latest-npm`
