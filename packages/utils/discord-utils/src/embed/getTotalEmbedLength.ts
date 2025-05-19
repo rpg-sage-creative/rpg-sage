@@ -1,4 +1,4 @@
-import { type EmbedResolvable } from "./EmbedResolvable.js";
+import type { EmbedResolvable } from "./EmbedResolvable.js";
 import { getEmbedLength } from "./getEmbedLength.js";
 
 export function getTotalEmbedLength(embeds?: EmbedResolvable[]): number {

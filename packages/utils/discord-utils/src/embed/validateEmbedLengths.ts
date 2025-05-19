@@ -1,6 +1,6 @@
-import { embedLength } from "discord.js";
 import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
-import { type EmbedResolvable } from "./EmbedResolvable.js";
+import type { EmbedResolvable } from "./EmbedResolvable.js";
+import { getEmbedLength } from "./getEmbedLength.js";
 import { resolveEmbed } from "./resolveEmbed.js";
 
 export function validateEmbedLengths(resolvable: EmbedResolvable): boolean {
@@ -40,7 +40,7 @@ export function validateEmbedLengths(resolvable: EmbedResolvable): boolean {
 		}
 	}
 
-	if (embedLength(embed) > max.totalLength) {
+	if (getEmbedLength(embed) > max.totalLength) {
 		return false;
 	}
 

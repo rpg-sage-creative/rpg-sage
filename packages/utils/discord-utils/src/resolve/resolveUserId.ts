@@ -1,4 +1,4 @@
-import { type Optional, type OrUndefined, type Snowflake } from "@rsc-utils/core-utils";
+import type { Optional, OrUndefined, Snowflake } from "@rsc-utils/core-utils";
 import type { GuildMember, PartialUser, User } from "discord.js";
 import type { DiscordKey } from "../DiscordKey.js";
 import { resolveSnowflake, type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolveSnowflake.js";

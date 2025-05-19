@@ -1,4 +1,4 @@
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 
 /** Replaces @here and @everyone using ZERO_WIDTH_SPACE so that reposts don't ping channels/servers. */
 export function safeMentions(content: string): string {

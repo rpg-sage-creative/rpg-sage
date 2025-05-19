@@ -1,7 +1,7 @@
-import { type APIEmbed, type MessageCreateOptions, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
-import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
+import type { APIEmbed, MessageCreateOptions, WebhookMessageCreateOptions, WebhookMessageEditOptions } from "discord.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 import { validateEmbedLengths } from "../embed/validateEmbedLengths.js";
+import { DiscordMaxValues } from "../types/DiscordMaxValues.js";
 
 type Options = WebhookMessageCreateOptions | WebhookMessageEditOptions | MessageCreateOptions;
 
