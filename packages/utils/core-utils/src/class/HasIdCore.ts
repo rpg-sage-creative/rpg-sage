@@ -46,10 +46,10 @@ export abstract class HasIdCore<
 		return this._idMatcher ?? (this._idMatcher = getIdMatcher(this.core.id));
 	}
 
-	/** @deprecated Used to cache the UuidMatcher used for .equals(). */
+	/** @deprecated Used to cache the SnowflakeMatcher used for .equals(). */
 	private _didMatcher?: Matcher;
 
-	/** @deprecated Used to cache the UuidMatcher used for .equals(). */
+	/** @deprecated Used to cache the SnowflakeMatcher used for .equals(). */
 	protected get didMatcher(): Matcher {
 		return this._didMatcher ?? (this._didMatcher = getIdMatcher(this.core.did));
 	}

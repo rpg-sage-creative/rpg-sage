@@ -5,4 +5,5 @@ export * from "./orNilSnowflake.js";
 export * from "./parseSnowflake.js";
 export * from "./randomSnowflake.js";
 export * from "./SnowflakeMatcher.js";
+export * from "./snowflakeToDate.js";
 export * from "./types.js";

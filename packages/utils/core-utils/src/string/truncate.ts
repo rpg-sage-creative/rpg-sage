@@ -53,7 +53,10 @@ export function truncate<T extends string = string, U extends string = string>(v
 export function truncate<T extends string = string, U extends string = string>(value: Optional<T>, maxLength: number, suffix: U): Optional<T>;
 
 export function truncate(value: Optional<string>, maxLength: number, ellipsis?: true | string): Optional<string> {
-	if (value && value.length > maxLength) {
+	if (value === null || value === undefined) {
+		return value;
+	}
+	if (value.length > maxLength) {
 		const suffix = ellipsis === true ? ELLIPSIS : ellipsis ?? "";
 		const sliced = value.slice(0, maxLength - suffix.length);
 		return sliced + suffix;

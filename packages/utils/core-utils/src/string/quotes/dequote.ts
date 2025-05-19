@@ -7,7 +7,10 @@ type Options = {
 	contents?: RegExpQuantifier;
 };
 
-/** Removes first and last character if they are both quotes. */
+/**
+ * Removes first and last character if they are both quotes.
+ * @todo make unescaping quoted characters optional ...
+ */
 export function dequote(value: string, options?: Options): string {
 	if (isQuoted(value, options)) {
 		// get the quote chars
