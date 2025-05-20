@@ -1,8 +1,10 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { MessageReference, AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DiscordAPIError, DMChannel, ForumChannel, GuildBasedChannel, Interaction, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User, Partialize } from "discord.js";
-import type { DiscordApiError } from "../DiscordApiError";
-
-//#region types
+import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, MediaChannel, Message, MessageComponentInteraction, MessageReaction, MessageReference, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
+import { isDMBasedChannel } from "./typeGuards/isDMBasedChannel.js";
+import { isGroupDMBasedChannel } from "./typeGuards/isGroupDMBasedChannel.js";
+import { isGuildBasedChannel } from "./typeGuards/isGuildBasedChannel.js";
+import { isNonThreadChannel } from "./typeGuards/isNonThreadChannel.js";
+import { isThreadChannel } from "./typeGuards/isThreadChannel.js";
 
 export type MessageReferenceOrPartial = MessageReference | Omit<MessageReference, "type">;
 
@@ -57,44 +59,29 @@ export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel
 
 //#region type checks
 
-export function isChannel(value: Optional<ChannelOrUser>): value is Channel {
-	return value ? "isThread" in value : false;
+/** @deprecated */
+export function isDMBased(value: Optional<ChannelOrUser>) {
+	return isDMBasedChannel(value);
 }
 
-export function isDMBased(value: Optional<ChannelOrUser>): value is DMBasedChannel {
-	return isChannel(value) && value.isDMBased();
+/** @deprecated */
+export function isGroupDMBased(value: Optional<ChannelOrUser>) {
+	return isGroupDMBasedChannel(value);
 }
 
-export function isGroupDMBased(value: Optional<ChannelOrUser>): value is PartialGroupDMChannel {
-	return isDMBased(value) && "recipients" in value;
+/** @deprecated */
+export function isGuildBased(value: Optional<ChannelOrUser>) {
+	return isGuildBasedChannel(value);
 }
 
-export function isGuildBased(value: Optional<ChannelOrUser>): value is GuildBasedChannel {
-	return isChannel(value) && "guild" in value;
+/** @deprecated */
+export function isNonThread(value: Optional<ChannelOrUser>) {
+	return isNonThreadChannel(value);
 }
 
-export function isMessage<T extends MessageOrPartial>(value: Optional<Channel | Interaction | T | User | DiscordAPIError | DiscordApiError>): value is T {
-	return value ? "author" in value : false;
-}
-
-export function isMessageTarget(value: Optional<ChannelOrUser>): value is MessageTarget {
-	return value ? "send" in value : false;
-}
-
-export function isNonThread(value: Optional<ChannelOrUser>): value is NonThreadChannel {
-	return isChannel(value) && !value.isThread();
-}
-
-export function isThread(value: Optional<ChannelOrUser>): value is AnyThreadChannel {
-	return isChannel(value) && value.isThread();
-}
-
-export function isUser(value: Optional<ChannelOrUser>): value is UserOrPartial {
-	return value ? "createDM" in value : false;
-}
-
-export function isWebhookChannel(value: Optional<ChannelOrUser>): value is WebhookChannel {
-	return isChannel(value) && "fetchWebhooks" in value;
+/** @deprecated */
+export function isThread(value: Optional<ChannelOrUser>) {
+	return isThreadChannel(value);
 }
 
 //#endregion

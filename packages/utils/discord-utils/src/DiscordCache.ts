@@ -8,7 +8,11 @@ import { resolveChannelReference, type CanBeChannelReferenceResolvable, type Cha
 import { resolveGuildId, type CanBeGuildIdResolvable, type GuildIdResolvable } from "./resolve/resolveGuildId.js";
 import { resolveRoleId, type CanBeRoleIdResolvable } from "./resolve/resolveRoleId.js";
 import { resolveUserId, type CanBeUserIdResolvable } from "./resolve/resolveUserId.js";
-import { isMessageTarget, isNonThread, isThread, isWebhookChannel, type MessageChannel, type MessageReferenceOrPartial, type NonThreadChannel, type WebhookChannel } from "./types/types.js";
+import { isMessageTarget } from "./types/typeGuards/isMessageTarget.js";
+import { isNonThreadChannel } from "./types/typeGuards/isNonThreadChannel.js";
+import { isThreadChannel } from "./types/typeGuards/isThreadChannel.js";
+import { isWebhookChannel } from "./types/typeGuards/isWebhookChannel.js";
+import type { MessageChannel, MessageReferenceOrPartial, NonThreadChannel, WebhookChannel } from "./types/types.js";
 
 //#region Helpers
 
@@ -83,11 +87,11 @@ export class DiscordCache {
 
 	public async fetchChannelAndThread(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<ChannelAndThread> {
 		const threadOrChannel = await this.fetchChannel(resolvable);
-		if (isThread(threadOrChannel)) {
+		if (isThreadChannel(threadOrChannel)) {
 			const parentChannel = await this.fetchChannel<NonThreadChannel>(threadOrChannel.parent);
 			return { channel:parentChannel, thread:threadOrChannel };
 		}
-		if (isNonThread(threadOrChannel)) {
+		if (isNonThreadChannel(threadOrChannel)) {
 			return { channel:threadOrChannel };
 		}
 		return { };
@@ -264,7 +268,7 @@ export class DiscordCache {
 		const channel = await this.fetchWebhookChannel(channelReferenceResolvable);
 		if (!this.hasManageWebhooksPerm(channel)) return undefined; // NOSONAR
 
-		if (!isThread(channel)) {
+		if (!isThreadChannel(channel)) {
 			const webhookName = options?.name ?? SageDialogWebhookName;
 			const webhookArgs = { ...options, name:webhookName };
 			const webhook = await channel.createWebhook(webhookArgs).catch(DiscordApiError.process);
