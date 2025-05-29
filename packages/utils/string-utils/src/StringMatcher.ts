@@ -1,7 +1,5 @@
-import { isDefined, type Matcher, type MatcherResolvable, type Optional } from "@rsc-utils/core-utils";
+import { isBlank, isDefined, isNotBlank, type Matcher, type MatcherResolvable, type Optional } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
-import { isBlank } from "./blank/isBlank.js";
-import { isNotBlank } from "./blank/isNotBlank.js";
 import { normalizeAscii } from "./normalize/normalizeAscii.js";
 import { removeAccents } from "./normalize/removeAccents.js";
 import { cleanWhitespace } from "./whitespace/cleanWhitespace.js";

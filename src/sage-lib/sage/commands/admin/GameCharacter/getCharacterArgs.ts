@@ -1,5 +1,4 @@
 import { Color, debug, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { VALID_URL } from "@rsc-utils/io-utils";
 import { dequote, getQuotedRegexSource, getWordCharacterRegexSource, isBlank } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import { GameUserType } from "../../../model/Game.js";
@@ -7,7 +6,7 @@ import type { GameCharacterCore } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { TKeyValuePair } from "../../../model/SageMessageArgs.js";
-import { fetchTsv } from "../../../model/utils/tsv.js";
+import { fetchAndParseAllDsv } from "../../../model/utils/dsv.js";
 import { getUserDid } from "./getUserDid.js";
 
 export type StatModPair = TKeyValuePair<string> & { modifier?:"+"|"-" };
@@ -160,23 +159,15 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpda
 }
 
 export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean, isUpdate: boolean): Promise<Results[]> {
-	// const tsvUrl = sageMessage.args.getUrl("tsv");
-	// const tsvAttachment = sageMessage.message.attachments.find(att => att.contentType?.includes("text") && att.url.includes(".tsv"));
-	// if (!tsvUrl && !tsvAttachment) return sageMessage.replyStack.whisper(`Sorry, this command is still being developed and only imports from tsv urls.`);
+	const dsvResults = await fetchAndParseAllDsv(sageMessage);
 
-	const tsvUrl = sageMessage.args.getUrl("tsv");
-	let tsvResults = tsvUrl ? await fetchTsv(tsvUrl) : undefined;
-
-	if (!tsvResults) {
-		const tsvAttachment = sageMessage.message.attachments.find(att => att.contentType?.includes("text") && att.url.includes(".tsv"));
-		if (tsvAttachment) tsvResults = await fetchTsv(tsvAttachment.url as VALID_URL);
-	}
-
-	if (!tsvResults) return [getCharacterArgs(sageMessage, isGm, isUpdate)];
+	if (!dsvResults.length) return [getCharacterArgs(sageMessage, isGm, isUpdate)];
 
 	const results: Results[] = [];
 
-	if (tsvResults?.items.length) {
+	const dsvItems = dsvResults.map(res => res.items).flat(1);
+
+	if (dsvItems.length) {
 		const playerMap = new Map<string, Snowflake>();
 		if (sageMessage.game) {
 			for (const user of sageMessage.game?.users) {
@@ -186,7 +177,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 				}
 			}
 		}
-		tsvResults.items.forEach(item => {
+		dsvItems.forEach(item => {
 			let core: GameCharacterCore | undefined;
 			const getCore = () => (core ?? (core = {} as GameCharacterCore));
 			let names: Names | undefined;
