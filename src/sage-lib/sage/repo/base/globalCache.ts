@@ -225,7 +225,7 @@ export async function globalCachePut<T extends GlobalCacheItem>(item: T): Promis
 
 	// write to file using the first id found (should be .id)
 	const path = getJsonPath(key, itemId);
-	const saved = await writeFile(path, item, true, getCodeName() === "dev").catch(errorReturnFalse);
+	const saved = await writeFile(path, item, { makeDir:true, formatted:getCodeName() === "dev" }).catch(errorReturnFalse);
 	if (!saved) {
 		return false;
 	}

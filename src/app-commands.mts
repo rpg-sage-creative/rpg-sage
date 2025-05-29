@@ -36,7 +36,7 @@ async function main() {
 			// build all slash commands for the bot and save the json
 			try {
 				const built = await buildCommands();
-				writeFileSync(`./data/slash/${codeName}.json`, built, true, true);
+				writeFileSync(`./data/slash/${codeName}.json`, built, { makeDir:true, formatted:true });
 				const characterCount = await countCharacters();
 				info(`Slash Commands built for ${codeName}: ${built.length} commands; ${characterCount} characters`);
 			}catch(ex) {

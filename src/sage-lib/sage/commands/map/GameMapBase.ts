@@ -153,7 +153,7 @@ export abstract class GameMapBase {
 
 	/** saves the maps core to file */
 	public save() {
-		return writeFile(getMapFilePath(this.messageId), this.core, true)
+		return writeFile(getMapFilePath(this.messageId), this.core, { makeDir:true })
 			.catch(errorReturnFalse);
 	}
 

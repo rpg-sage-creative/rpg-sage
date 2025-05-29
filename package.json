@@ -56,6 +56,7 @@
 	},
 	"dependencies": {
 		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.4.0",
+		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.2.2",
 		"@aws-sdk/client-sns": "3.787.0",
 		"@discordjs/rest": "2.5.0",
 		"@napi-rs/canvas": "0.1.53",

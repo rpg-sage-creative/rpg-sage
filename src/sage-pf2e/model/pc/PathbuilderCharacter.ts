@@ -1072,7 +1072,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 	}
 	public static async saveCharacter(character: TPathbuilderCharacter | PathbuilderCharacter): Promise<boolean> {
 		const json = "toJSON" in character ? character.toJSON() : character;
-		return writeFile(PathbuilderCharacter.createFilePath(character.id), json, true).catch(errorReturnFalse);
+		return writeFile(PathbuilderCharacter.createFilePath(character.id), json, { makeDir:true }).catch(errorReturnFalse);
 	}
 	public async save(): Promise<boolean> {
 		return PathbuilderCharacter.saveCharacter(this);
