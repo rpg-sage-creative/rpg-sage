@@ -1,4 +1,4 @@
-import { ArgsManager as _ArgsManager } from "@rsc-utils/args-utils";
+import { ArgsManager as _ArgsManager } from "@rsc-utils/core-utils";
 import { type OrUndefined, isNullOrUndefined } from "@rsc-utils/core-utils";
 import { type KeyValueArg, type TokenParsers, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, parseKeyValueArg, tokenize } from "@rsc-utils/string-utils";
 

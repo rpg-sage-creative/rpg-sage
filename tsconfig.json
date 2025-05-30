@@ -23,7 +23,6 @@
 		{ "path": "./packages/utils/string-utils" },
 
 		// string-utils
-		{ "path": "./packages/utils/args-utils" },
 		{ "path": "./packages/utils/discord-utils" },
 
 		{ "path": "./packages/sage/types" },
