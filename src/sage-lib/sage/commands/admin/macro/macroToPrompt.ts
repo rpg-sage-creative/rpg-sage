@@ -1,4 +1,5 @@
-import { quote, unwrap } from "@rsc-utils/string-utils";
+import { unwrap } from "@rsc-utils/core-utils";
+import { quote } from "@rsc-utils/string-utils";
 import type { Macro } from "../../../model/Macro.js";
 import { MacroOwner } from "../../../model/MacroOwner.js";
 import type { SageCommand } from "../../../model/SageCommand.js";

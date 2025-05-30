@@ -1,6 +1,5 @@
-import { stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import { StringMatcher, stringOrUndefined, unwrap, type Optional } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
-import { StringMatcher, unwrap } from "@rsc-utils/string-utils";
 import { getBasicDiceRegex } from "../../../sage-dice/getBasicDiceRegex.js";
 import { matchAllMacroArgPairs, testMacroArgRegex, testMacroRemainingArgRegex, type MacroArgPair } from "../commands/admin/macro/getMacroArgRegex.js";
 import { parseDialogContent } from "../commands/dialog/parseDialogContent.js";

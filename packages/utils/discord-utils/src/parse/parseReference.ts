@@ -1,8 +1,7 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { unwrap } from "@rsc-utils/string-utils";
+import { unwrap, type Optional } from "@rsc-utils/core-utils";
 import type { Channel, MessageReference } from "discord.js";
-import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 import type { MessageOrPartial } from "../types/types.js";
+import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
 
 type ReferenceType = "channel" | "message";
 

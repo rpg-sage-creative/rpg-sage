@@ -1,5 +1,5 @@
+import { wrap } from "@rsc-utils/core-utils";
 import { type RegExpCreateOptions } from "../regex/RegExpCreateOptions.js";
-import { wrap } from "../wrap/wrap.js";
 
 type Options = Omit<RegExpCreateOptions, "quantifier"> & {
 	/** use ^ and $ to anchor the url to the start/end of the string */

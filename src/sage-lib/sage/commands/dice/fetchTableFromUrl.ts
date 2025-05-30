@@ -1,6 +1,5 @@
-import { warnReturnNull } from "@rsc-utils/core-utils";
+import { unwrap, warnReturnUndefined } from "@rsc-utils/core-utils";
 import { getText, isUrl } from "@rsc-utils/io-utils";
-import { unwrap } from "@rsc-utils/string-utils";
 import type { SimpleRollableTable } from "./SimpleRollableTable.js";
 import { parseTable } from "./parseTable.js";
 
@@ -12,7 +11,7 @@ export async function fetchTableFromUrl(value?: string | null): Promise<SimpleRo
 	if (value) {
 		const unwrapped = unwrap(value, "[]");
 		if (isUrl(unwrapped)) {
-			const tsv = await getText(unwrapped).catch(warnReturnNull);
+			const tsv = await getText(unwrapped).catch(warnReturnUndefined);
 			return parseTable(tsv);
 		}
 	}

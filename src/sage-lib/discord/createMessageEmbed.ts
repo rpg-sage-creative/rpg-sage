@@ -1,7 +1,6 @@
-import { warn } from "@rsc-utils/core-utils";
+import { isWrapped, unwrap, warn } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder } from "@rsc-utils/discord-utils";
 import { isUrl } from "@rsc-utils/io-utils";
-import { isWrapped, unwrap } from "@rsc-utils/string-utils";
 import type { HexColorString } from "discord.js";
 
 type Options = {
