@@ -7,6 +7,5 @@ export * from "./whitespace/index.js";
 export * from "./consts.js";
 export * from "./isString.js";
 export * from "./stringFormat.js";
-export * from "./StringMatcher.js";
 export * from "./tokenize.js";
 export * from "./truncate.js";

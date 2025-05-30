@@ -1,5 +1,4 @@
-import { HasIdCore, SearchInfo, SearchScore, sortPrimitive, warn, type Comparable, type IdCore, type Renderable, type Searchable, type SortResult, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
-import { StringMatcher } from "@rsc-utils/string-utils";
+import { HasIdCore, SearchInfo, SearchScore, sortPrimitive, StringMatcher, warn, type Comparable, type IdCore, type Renderable, type Searchable, type SortResult, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import { NEWLINE, TAB } from "../../common.js";
 import { RenderableContent } from "../../data/RenderableContent.js";
 import type { ArchivedCore, DetailedCore, IHasArchives, IHasDetails, IHasLink, IHasName, LinkedCore, NamedCore, TDetail, THasSuccessOrFailure } from "./interfaces.js";

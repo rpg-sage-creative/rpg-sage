@@ -1,6 +1,5 @@
+import { stringifyJson, StringMatcher } from "@rsc-utils/core-utils";
 import { getText } from "@rsc-utils/io-utils";
-import { stringify } from "@rsc-utils/core-utils";
-import { StringMatcher } from "@rsc-utils/string-utils";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import XRegExp from "xregexp";
 import type { SearchResults } from "../SearchResults.js";
@@ -96,7 +95,7 @@ function parseResultsHtml(html: string, writeDevCache: boolean): TResultsLink[] 
 		});
 	});
 	if (writeDevCache) {
-		writeFileSync("../aon-results.json", stringify(results));
+		writeFileSync("../aon-results.json", stringifyJson(results));
 	}
 	return results;
 }

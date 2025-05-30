@@ -1,6 +1,5 @@
-import { errorReturnUndefined, isDefined, isNotBlank, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, isDefined, isNotBlank, StringMatcher, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
-import { StringMatcher } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
