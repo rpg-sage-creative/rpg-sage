@@ -1,5 +1,4 @@
-import { normalizeDashes } from "@rsc-utils/string-utils";
-import { unwrap } from "@rsc-utils/core-utils";
+import { normalizeDashes, unwrap } from "@rsc-utils/core-utils";
 import type { SimpleRollableTable, SimpleRollableTableItem } from "./SimpleRollableTable.js";
 
 /** Parse the number cell for min/max. */

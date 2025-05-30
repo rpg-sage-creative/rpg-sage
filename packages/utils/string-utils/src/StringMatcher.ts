@@ -1,7 +1,5 @@
-import { isBlank, isDefined, isNotBlank, type Matcher, type MatcherResolvable, type Optional } from "@rsc-utils/core-utils";
+import { isBlank, isDefined, isNotBlank, normalizeAscii, removeAccents, type Matcher, type MatcherResolvable, type Optional } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
-import { normalizeAscii } from "./normalize/normalizeAscii.js";
-import { removeAccents } from "./normalize/removeAccents.js";
 import { cleanWhitespace } from "./whitespace/cleanWhitespace.js";
 
 /** A reusable object for comparing a string without the need to repeatedly manipulate the value. */
