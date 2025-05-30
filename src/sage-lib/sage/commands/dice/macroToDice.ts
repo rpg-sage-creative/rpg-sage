@@ -1,5 +1,5 @@
-import { debug, isWrapped, tokenize, warn, type Optional } from "@rsc-utils/core-utils";
-import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, parseKeyValueArg, type KeyValueArg } from "@rsc-utils/string-utils";
+import { debug, getWhitespaceRegex, isWrapped, tokenize, warn, type Optional } from "@rsc-utils/core-utils";
+import { createKeyValueArgRegex, createQuotedRegex, dequote, parseKeyValueArg, type KeyValueArg } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import type { DiceMacroBase } from "../../model/Macro.js";
 import { getMacroArgRegex, getMacroRemainingArgRegex, parseMacroArgMatch } from "../admin/macro/getMacroArgRegex.js";
@@ -73,7 +73,7 @@ function findPrefixMacroArgs(macroTiers: DiceMacroBase[][], input: string): Find
 type TArgs = { indexed:string[]; named:KeyValueArg[] };
 function parseMacroArgs(argString: string): TArgs {
 	const parsers = {
-		spaces: createWhitespaceRegex(),
+		spaces: getWhitespaceRegex(),
 		named: createKeyValueArgRegex(),
 		quotes: createQuotedRegex({lengthQuantifier:"*"})
 	};

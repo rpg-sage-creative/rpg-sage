@@ -1,8 +1,9 @@
+import { getWhitespaceRegex } from "@rsc-utils/core-utils";
+import { createUrlRegex } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
-import { createUrlRegex, createWhitespaceRegex } from "@rsc-utils/string-utils";
 
 function getHWS() {
-	return createWhitespaceRegex({ horizontalOnly:true, quantifier:"*" }).source;
+	return getWhitespaceRegex({ horizontalOnly:true, quantifier:"*" }).source;
 }
 export function getDialogTypeOrAliasRegex(): RegExp {
 	const HWS = getHWS();
@@ -33,7 +34,7 @@ export function getDialogEmbedColorRegex(): RegExp {
 }
 
 export function getDialogUrlRegex(): RegExp {
-	const WS = createWhitespaceRegex({ quantifier:"*" }).source;
+	const WS = getWhitespaceRegex({ quantifier:"*" }).source;
 	const url = createUrlRegex({ wrapChars:"<>", wrapOptional:true }).source;
 	return XRegExp(`^::${WS}(${url})${WS}::`, "i");
 }

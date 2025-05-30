@@ -1,6 +1,5 @@
 import { GameSystemType } from "@rsc-sage/types";
-import { remove } from "@rsc-utils/core-utils";
-import { createWhitespaceRegex } from "@rsc-utils/string-utils";
+import { getWhitespaceRegex, remove } from "@rsc-utils/core-utils";
 import type { SearchResults } from "./SearchResults.js";
 import { searchAonPf1e } from "./aon/pf1e/index.js";
 import { searchAonPf2e } from "./aon/pf2e/index.js";
@@ -21,7 +20,7 @@ export function parseSearchInfo(searchTerms: string[], rarities: string[] = []):
 	const plusRarities = remove(plusTypes, term => findRarity(term));
 	const minusTypes = remove(searchTerms, term => term.startsWith("-")).map(term => term.slice(1));
 	const minusRarities = remove(minusTypes, term => findRarity(term));
-	const spaceRegex = createWhitespaceRegex();
+	const spaceRegex = getWhitespaceRegex();
 	const searchText = searchTerms.map(term => spaceRegex.test(term) ? `"${term}"` : term).join(" ");
 	return { searchText, searchTerms, plusTypes, minusTypes, plusRarities, minusRarities };
 

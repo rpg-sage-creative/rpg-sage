@@ -1,5 +1,5 @@
-import { type OrUndefined, type TokenParsers, ArgsManager as _ArgsManager, isNullOrUndefined, tokenize } from "@rsc-utils/core-utils";
-import { type KeyValueArg, createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, parseKeyValueArg } from "@rsc-utils/string-utils";
+import { type OrUndefined, type TokenParsers, ArgsManager as _ArgsManager, getWhitespaceRegex, isNullOrUndefined, tokenize } from "@rsc-utils/core-utils";
+import { type KeyValueArg, createKeyValueArgRegex, createQuotedRegex, dequote, parseKeyValueArg } from "@rsc-utils/string-utils";
 
 type TArgIndexRet<T> = {
 	arg: string;
@@ -57,7 +57,7 @@ export class ArgsManager<T extends string = string> extends _ArgsManager<T> {
 
 		const parsers: TokenParsers = {
 			arg: createKeyValueArgRegex(),
-			spaces: createWhitespaceRegex(),
+			spaces: getWhitespaceRegex(),
 			quotes: createQuotedRegex({lengthQuantifier:"*"}),
 			...additionalParsers
 		};
