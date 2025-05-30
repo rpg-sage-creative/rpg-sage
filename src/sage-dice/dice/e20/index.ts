@@ -1,8 +1,6 @@
 import { GameType } from "@rsc-sage/types";
-import { randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
-import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import { correctEscapeForEmoji } from "../index.js";
 import {
 	DiceOutputType,
 	DiceSecretMethodType, DropKeepType,
@@ -24,6 +22,7 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types.js";
+import { correctEscapeForEmoji } from "../index.js";
 
 //#region test dice
 /*

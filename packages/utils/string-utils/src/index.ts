@@ -6,4 +6,3 @@ export * from "./url/index.js";
 export * from "./whitespace/index.js";
 export * from "./consts.js";
 export * from "./stringFormat.js";
-export * from "./tokenize.js";

@@ -1,6 +1,5 @@
 import { GameType } from "@rsc-sage/types";
-import { randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
+import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 
 import {
 	CritMethodType, DiceOutputType,

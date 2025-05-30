@@ -1,7 +1,7 @@
 import { GameType } from "@rsc-sage/types";
-import { randomSnowflake, sortPrimitive, warn, type Optional, type OrNull, type OrUndefined, type SortResult } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, randomSnowflake, sortPrimitive, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
-import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
+import { dequote } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import {
 	CritMethodType,

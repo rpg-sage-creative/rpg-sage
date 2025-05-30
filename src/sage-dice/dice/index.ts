@@ -1,5 +1,5 @@
+import { tokenize } from "@rsc-utils/core-utils";
 import { createEmojiRegex } from "@rsc-utils/discord-utils";
-import { tokenize } from "@rsc-utils/string-utils";
 
 /** Looks for text escaped with ` characters that contain emoji (:die: or <:die:12345>) and unescapes those emoji so they render correctly. */
 export function correctEscapeForEmoji(value: string): string {
