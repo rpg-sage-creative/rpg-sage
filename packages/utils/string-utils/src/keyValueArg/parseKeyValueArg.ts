@@ -1,5 +1,4 @@
-import { dequote } from "../quote/dequote.js";
-import { quote } from "../quote/quote.js";
+import { dequote, quote } from "@rsc-utils/core-utils";
 import { type KeyValueArg } from "./KeyValueArg.js";
 import { isKeyValueArg } from "./isKeyValueArg.js";
 

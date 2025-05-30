@@ -1,4 +1,4 @@
-import { dequote } from "@rsc-utils/string-utils";
+import { dequote } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 
 function createCharTypeRegex() {

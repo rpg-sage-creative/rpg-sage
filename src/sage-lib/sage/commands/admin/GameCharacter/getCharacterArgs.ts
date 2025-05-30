@@ -1,5 +1,5 @@
-import { Color, debug, isBlank, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { dequote, getQuotedRegexSource, getWordCharacterRegexSource } from "@rsc-utils/string-utils";
+import { Color, debug, dequote, getQuotedRegex, isBlank, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { getWordCharacterRegexSource } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import { GameUserType } from "../../../model/Game.js";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
@@ -24,7 +24,7 @@ function createStatModKeyValuePairRegex(): RegExp {
 	const keySource = getWordCharacterRegexSource({ allowDashes:true, allowPeriods:true, quantifier:"+" });
 	const modSource = `\\+=|\\-=`;
 	const incrementerSource = `\\+{2}|\\-{2}`;
-	const quotedSource = getQuotedRegexSource({ lengthQuantifier:"*" });
+	const quotedSource = getQuotedRegex({ contents:"*" }).source;
 	return XRegExp(`(${keySource})(?:(${incrementerSource})|(${modSource})(${quotedSource}|\\S+))`, "");
 }
 

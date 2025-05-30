@@ -1,4 +1,4 @@
-import { getQuotedRegexSource } from "../quote/getQuotedRegexSource.js";
+import { getQuotedRegex } from "@rsc-utils/core-utils";
 import { getWordCharacterRegexSource } from "../regex/getWordCharacterRegexSource.js";
 
 /**
@@ -8,6 +8,6 @@ import { getWordCharacterRegexSource } from "../regex/getWordCharacterRegexSourc
  */
 export function getKeyValueArgSource(key?: string): string {
 	key = key ?? getWordCharacterRegexSource({ allowDashes:true, allowPeriods:true, quantifier:"+" });
-	const quotedRegexSource = getQuotedRegexSource({ lengthQuantifier:"*" });
+	const quotedRegexSource = getQuotedRegex({ contents:"*" }).source;
 	return `${key}=(?:${quotedRegexSource}|\\S+)`;
 }
