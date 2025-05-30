@@ -1,6 +1,5 @@
-import { isWrapped, unwrap, warn } from "@rsc-utils/core-utils";
-import { DiscordMaxValues, EmbedBuilder } from "@rsc-utils/discord-utils";
-import { isUrl } from "@rsc-utils/io-utils";
+import { warn } from "@rsc-utils/core-utils";
+import { DiscordMaxValues, EmbedBuilder, urlOrUndefined } from "@rsc-utils/discord-utils";
 import type { HexColorString } from "discord.js";
 
 type Options = {
@@ -41,12 +40,9 @@ export function createMessageEmbed({ title, description, color, thumbnailUrl }: 
 	}
 
 	if (thumbnailUrl) {
-		if (isUrl(thumbnailUrl, { wrapChars:"<>", wrapOptional:true })) {
-			if (isWrapped(thumbnailUrl, "<>")) {
-				warn(`MessageEmbed.thumbnail wrapped: ${thumbnailUrl}`);
-				thumbnailUrl = unwrap(thumbnailUrl, "<>");
-			}
-			embed.setThumbnail(thumbnailUrl);
+		const validUrl = urlOrUndefined(thumbnailUrl);
+		if (validUrl) {
+			embed.setThumbnail(validUrl);
 		}else {
 			warn(`MessageEmbed.thumbnail invalid: ${thumbnailUrl}`);
 		}

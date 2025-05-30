@@ -1,8 +1,8 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
-import { applyChanges, Color, errorReturnUndefined, getDataRoot, isBlank, isWrapped, unwrap, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Color, errorReturnUndefined, getDataRoot, isBlank, isWrapped, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
-import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
-import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
+import { fileExistsSync, getText, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
@@ -491,9 +491,9 @@ export class GameCharacter implements IHasSave {
 	private fetchedMacros: MacroBase[] | undefined;
 	public async fetchStats(): Promise<void> {
 		if (!this.fetchedStats) {
-			const url = this.notes.getStat("stats.tsv.url")?.note;
-			if (isUrl(url, { wrapChars:"<>", wrapOptional:true })) {
-				const raw = await getText(unwrap(url, "<>")).catch(errorReturnUndefined);
+			const url = urlOrUndefined(this.notes.getStat("stats.tsv.url")?.note);
+			if (url) {
+				const raw = await getText(url).catch(errorReturnUndefined);
 				if (raw) {
 					const { stats, macros } = parseFetchedStats(raw, this.alias);
 					this.fetchedStats = stats;
@@ -557,13 +557,7 @@ export class GameCharacter implements IHasSave {
 					sheetUrl = toMessageUrl(sheetRef);
 				}
 			}
-			if (isUrl(sheetUrl, { wrapChars:"<>", wrapOptional:true })) {
-				if (!isWrapped(sheetUrl, "<>")) {
-					sheetUrl = wrap(sheetUrl, "<>");
-				}
-				return sheetUrl;
-			}
-			return null;
+			return wrap(urlOrUndefined(sheetUrl), "<>") ?? null;
 		}
 
 		const noteStat = this.notes.getStat(key)?.note.trim() ?? undefined;
