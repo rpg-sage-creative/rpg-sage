@@ -14,12 +14,23 @@ export class ArgsManager<T extends string = string> extends _ArgsManager<T> {
 	}
 
 	//#region overrides to make things public ahead of rewrite
+
 	public findArgIndexNonArgs(): TArgIndexRet<string>[] {
-		return super.findArgIndexNonArgs();
+		const args = super.valueArgs();
+		return args.map(arg => {
+			return { arg:arg.arg, index:arg.index, ret:arg.value };
+		});
 	}
+
 	public findKeyValueArgIndex(key: string): OrUndefined<TArgIndexRet<KeyValueArg>> {
-		return super.findKeyValueArgIndex(key);
+		const arg = super.findKeyValueArg(key);
+		if (arg) {
+			const ret = arg?.value ? { clean:`${arg.key}="${arg.value}"`, key:arg.key, keyLower:arg.keyLower, value:arg.value } : null;
+			return { arg:arg.arg, index:arg.index, ret };
+		}
+		return undefined;
 	}
+
 	//#endregion
 
 	public static from<T extends string = string>(arrayLike: ArrayLike<T> | Iterable<T>): ArgsManager<T>;

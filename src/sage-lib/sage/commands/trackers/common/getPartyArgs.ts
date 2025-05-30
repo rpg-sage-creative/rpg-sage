@@ -12,5 +12,5 @@ export function getPartyArgs(sageMessage: SageMessage): Party[] {
 	return sageMessage.args.keyValuePairs()
 		.filter(kvp => keyRegex.test(kvp.key))
 		.map(kvp => game.parties.get(kvp.value))
-		.filter(isDefined);
+		.filter(isDefined) as Party[];
 }

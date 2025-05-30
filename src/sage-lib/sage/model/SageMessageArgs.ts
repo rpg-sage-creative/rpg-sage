@@ -22,7 +22,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 	//#region deprecated passthroughs
 	/** @deprecated */
-	public keyValuePairs() { return this.argsManager.keyValuePairs(); }
+	public keyValuePairs() { return this.argsManager.keyValueArgs() }
 	/** @deprecated */
 	public filter(predicate: (value: string, index: number, array: string[]) => unknown, arg?: any) { return this.argsManager.filter(predicate, arg); }
 	/** @deprecated */
@@ -134,7 +134,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 	/** Returns a list of all argument keys passed to the command. */
 	public keys(): string[] {
-		return this.argsManager.keyValuePairs().map(kvp => kvp.key);
+		return this.argsManager.keyValueArgs().map(kvp => kvp.key);
 	}
 
 	/** Returns true if an argument matches the given key, regardless of value. */
