@@ -492,7 +492,7 @@ export class GameCharacter implements IHasSave {
 	public async fetchStats(): Promise<void> {
 		if (!this.fetchedStats) {
 			const url = this.notes.getStat("stats.tsv.url")?.note;
-			if (isUrl(url)) {
+			if (isUrl(url, { wrapChars:"<>", wrapOptional:true })) {
 				const raw = await getText(unwrap(url, "<>")).catch(errorReturnUndefined);
 				if (raw) {
 					const { stats, macros } = parseFetchedStats(raw, this.alias);
@@ -557,7 +557,7 @@ export class GameCharacter implements IHasSave {
 					sheetUrl = toMessageUrl(sheetRef);
 				}
 			}
-			if (isUrl(sheetUrl)) {
+			if (isUrl(sheetUrl, { wrapChars:"<>", wrapOptional:true })) {
 				if (!isWrapped(sheetUrl, "<>")) {
 					sheetUrl = wrap(sheetUrl, "<>");
 				}

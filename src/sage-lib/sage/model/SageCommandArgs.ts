@@ -1,8 +1,7 @@
 import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
 import { type Args, Color, type EnumLike, type HexColorString, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, unwrap, type UUID } from "@rsc-utils/core-utils";
 import { type MessageChannel, parseIds } from "@rsc-utils/discord-utils";
-import { type VALID_URL } from "@rsc-utils/io-utils";
-import { createUrlRegex } from "@rsc-utils/string-utils";
+import { isUrl, type VALID_URL } from "@rsc-utils/io-utils";
 import type { Attachment, Role, User } from "discord.js";
 import { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { SageCommand } from "./SageCommand.js";
@@ -231,8 +230,9 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	public getUrl(name: string): VALID_URL | null | undefined {
 		const url = this.getString(name);
 		if (isDefined(url)) {
-			const regex = createUrlRegex({ anchored:true, wrapOptional:true, wrapChars:"<>" });
-			return regex.test(url) ? unwrap(url, "<>") as VALID_URL : null;
+			return isUrl(url, { wrapChars:"<>", wrapOptional:true })
+				? unwrap(url, "<>") as VALID_URL
+				: null;
 		}
 		return url;
 	}

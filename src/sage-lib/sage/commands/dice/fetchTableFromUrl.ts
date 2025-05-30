@@ -10,7 +10,7 @@ import { parseTable } from "./parseTable.js";
 export async function fetchTableFromUrl(value?: string | null): Promise<SimpleRollableTable | undefined> {
 	if (value) {
 		const unwrapped = unwrap(value, "[]");
-		if (isUrl(unwrapped)) {
+		if (isUrl(unwrapped, { wrapChars:"<>", wrapOptional:true })) {
 			const tsv = await getText(unwrapped).catch(warnReturnUndefined);
 			return parseTable(tsv);
 		}

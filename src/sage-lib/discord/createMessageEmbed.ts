@@ -41,7 +41,7 @@ export function createMessageEmbed({ title, description, color, thumbnailUrl }: 
 	}
 
 	if (thumbnailUrl) {
-		if (isUrl(thumbnailUrl)) {
+		if (isUrl(thumbnailUrl, { wrapChars:"<>", wrapOptional:true })) {
 			if (isWrapped(thumbnailUrl, "<>")) {
 				warn(`MessageEmbed.thumbnail wrapped: ${thumbnailUrl}`);
 				thumbnailUrl = unwrap(thumbnailUrl, "<>");

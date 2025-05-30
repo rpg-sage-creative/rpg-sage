@@ -211,7 +211,7 @@ export class Macro<Category extends string = string> {
 			if (parseDialogContent(value)) {
 				return "dialog";
 			}
-			if (isUrl(unwrap(value, "[]"))) {
+			if (isUrl(unwrap(value, "[]"), { wrapChars:"<>", wrapOptional:true })) {
 				return "tableUrl";
 			}
 			if (parseTable(value)) {
