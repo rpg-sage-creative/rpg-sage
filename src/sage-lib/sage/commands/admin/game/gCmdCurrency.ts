@@ -1,6 +1,5 @@
-import { addCommas, isDefined, type Snowflake } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, isDefined, type Snowflake } from "@rsc-utils/core-utils";
 import { splitMessageOptions, toChannelUrl, toDiscordDate, toHumanReadable } from "@rsc-utils/discord-utils";
-import { capitalize } from "@rsc-utils/string-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageCommand } from "../../../model/SageCommand.js";

@@ -1,5 +1,4 @@
-import { error, sortPrimitive, type Comparable, type SearchInfo, type SearchScore, type Searchable, type SortResult } from "@rsc-utils/core-utils";
-import { capitalize } from "@rsc-utils/string-utils";
+import { capitalize, error, sortPrimitive, type Comparable, type SearchInfo, type SearchScore, type Searchable, type SortResult } from "@rsc-utils/core-utils";
 import { parseSources, type TParsedSource } from "../../data/Repository.js";
 import type { Base } from "./Base.js";
 import { HasSource, type SourcedCore, type TSourceInfo } from "./HasSource.js";

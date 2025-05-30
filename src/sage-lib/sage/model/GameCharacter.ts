@@ -333,7 +333,7 @@ export class GameCharacter implements IHasSave {
 				this._essence20 = loadCharacterCore(this.core.essence20) ?? null;
 			}
 			if (this.core.essence20Id) {
-				this._essence20 = loadCharacterSync(this.core.essence20Id);
+				this._essence20 = loadCharacterSync(this.core.essence20Id) ?? null;
 			}
 		}
 		return this._essence20 ?? null;
@@ -350,7 +350,7 @@ export class GameCharacter implements IHasSave {
 				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder);
 			}
 			if (this.core.pathbuilderId) {
-				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId);
+				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId) ?? null;
 			}
 		}
 		return this._pathbuilder ?? null;
