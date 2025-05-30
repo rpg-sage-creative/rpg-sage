@@ -1,4 +1,4 @@
-import { isNotBlank } from "@rsc-utils/string-utils";
+import { isNotBlank } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageMessage } from "../../../model/SageMessage.js";

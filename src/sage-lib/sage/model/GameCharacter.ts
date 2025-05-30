@@ -1,9 +1,9 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
-import { applyChanges, Color, errorReturnUndefined, getDataRoot, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Color, errorReturnUndefined, getDataRoot, isBlank, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { isBlank, isWrapped, unwrap, wrap } from "@rsc-utils/string-utils";
+import { isWrapped, unwrap, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import XRegExp from "xregexp";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";

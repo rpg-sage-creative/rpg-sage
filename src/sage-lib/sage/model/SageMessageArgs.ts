@@ -1,6 +1,5 @@
-import { isDefined, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isNotBlank, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { parseId, type MessageChannel } from "@rsc-utils/discord-utils";
-import { isNotBlank } from "@rsc-utils/string-utils";
 import type { Attachment, Role, User } from "discord.js";
 import type { ArgsManager } from "../../discord/ArgsManager.js";
 import type { GameCharacterCore } from "./GameCharacter.js";

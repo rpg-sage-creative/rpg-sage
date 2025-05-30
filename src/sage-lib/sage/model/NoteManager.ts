@@ -1,5 +1,4 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { isBlank } from "@rsc-utils/string-utils";
+import { isBlank, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { TKeyValuePair } from "./SageMessageArgs";
 
 export type TNoteCategory = {

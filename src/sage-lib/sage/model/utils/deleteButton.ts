@@ -1,7 +1,6 @@
 import { getSageId } from "@rsc-sage/env";
-import { errorReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, isNotBlank, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, toChannelMention, toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
-import { isNotBlank } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
 import { getLocalizedText, type LocalizedTextKey } from "../../../../sage-lang/getLocalizedText.js";
 import { deleteMessage, MessageDeleteResults } from "../../../discord/deletedMessages.js";
@@ -173,7 +172,7 @@ async function messageDeleteButtonHandler(sageInteraction: SageInteraction<Butto
 				content += `\n- ${localize("SAGE_MISSING_ACCESS_TO_THAT_CHANNEL")}`;
 			}
 		}
-		const dm = await sageInteraction.user.send({ content }).catch(errorReturnNull);
+		const dm = await sageInteraction.user.send({ content }).catch(errorReturnUndefined);
 		if (!dm) {
 			content += `\n*${localize("NOTE")}: ${localize("WE_TRIED_TO_DM_YOU")}*`;
 			await sageInteraction.replyStack.whisper(content, { forceEphemeral:true });

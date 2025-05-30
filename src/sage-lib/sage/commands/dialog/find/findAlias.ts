@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { isBlank } from "@rsc-utils/string-utils";
+import { isBlank, type Optional } from "@rsc-utils/core-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { TAlias } from "../../../model/User.js";
 import { findCompanion } from "./findCompanion.js";

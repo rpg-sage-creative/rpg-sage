@@ -1,4 +1,3 @@
-export * from "./blank/index.js";
 export * from "./chunk/index.js";
 export * from "./codeBlocks/index.js";
 export * from "./keyValueArg/index.js";
