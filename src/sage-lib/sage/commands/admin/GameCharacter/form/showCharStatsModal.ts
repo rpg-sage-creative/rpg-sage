@@ -3,7 +3,6 @@ import { parseKeyValueArgs } from "@rsc-utils/string-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";
-import type { TKeyValuePair } from "../../../../model/SageMessageArgs.js";
 import { createCharModal } from "./createCharModal.js";
 import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
@@ -50,12 +49,13 @@ async function handleCharStatsSubmit(sageInteraction: SageInteraction, idParts: 
 	const form = sageInteraction.getModalForm<CharStatsForm>();
 	const char = await getCharToEdit(sageInteraction, idParts.charId);
 	if (char && form) {
-		const pairs: TKeyValuePair[] = [];
-		pairs.push({ key:"level", value:form.level });
-		pairs.push({ key:"hp", value:form.hp });
-		pairs.push({ key:"maxHp", value:form.maxHp });
-		pairs.push({ key:"conditions", value:form.conditions });
-		pairs.push(...parseKeyValueArgs(form.other.replace(/\n/g, " ")));
+		const pairs = [
+			{ key:"level", value:form.level },
+			{ key:"hp", value:form.hp },
+			{ key:"maxHp", value:form.maxHp },
+			{ key:"conditions", value:form.conditions },
+			...parseKeyValueArgs(form.other.replace(/\n/g, " "))
+		];
 		await char.updateStats(pairs, false);
 	}
 	return showCharForm(sageInteraction, idParts.charId);
