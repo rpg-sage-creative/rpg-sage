@@ -1,8 +1,7 @@
-import { Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { ArgsManager, Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
 import XRegExp from "xregexp";
-import { ArgsManager } from "../../discord/ArgsManager.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { sendTo } from "../../discord/sendTo.js";
