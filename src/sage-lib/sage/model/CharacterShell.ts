@@ -1,10 +1,8 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
-import XRegExp from "xregexp";
+import { escapeRegex, type KeyValuePair, type Snowflake } from "@rsc-utils/core-utils";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
-import type { TKeyValuePair } from "./SageMessageArgs.js";
 
 export type CharacterShellCore = {
 	/** id of the GameCharacter */
@@ -51,7 +49,7 @@ export class CharacterShell {
 	public getStat(key: string): string | null | undefined {
 		const partyStats = this.core.stats;
 		if (partyStats) {
-			const keyRegex = new RegExp(`^${XRegExp.escape(key)}$`, "i");
+			const keyRegex = new RegExp(`^${escapeRegex(key)}$`, "i");
 			const statKey = Object.keys(partyStats).find(pKey => keyRegex.test(pKey));
 			if (statKey) {
 				const statValue = partyStats[statKey] ?? null;
@@ -72,7 +70,7 @@ export class CharacterShell {
 		return false;
 	}
 
-	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
+	public async updateStats(pairs: KeyValuePair[], save: boolean): Promise<boolean> {
 		if (this.game && ["pc","companion"].includes(this.game.type)) {
 			return this.game.updateStats(pairs, save);
 		}
@@ -80,7 +78,7 @@ export class CharacterShell {
 		const partyStats = this.core.stats ?? (this.core.stats = {});
 		for (const pair of pairs) {
 			const { key, value } = pair;
-			const keyRegex = new RegExp(`^${XRegExp.escape(key)}$`, "i");
+			const keyRegex = new RegExp(`^${escapeRegex(key)}$`, "i");
 			const statKey = Object.keys(partyStats).find(pKey => keyRegex.test(pKey)) ?? key;
 			if (partyStats[statKey] !== value) {
 				if (!value?.trim()) {
