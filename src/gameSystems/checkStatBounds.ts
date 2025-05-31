@@ -1,5 +1,5 @@
+import type { KeyValuePair } from "@rsc-utils/core-utils";
 import type { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";
-import type { TKeyValuePair } from "../sage-lib/sage/model/SageMessageArgs.js";
 import { checkStatBounds as checkStatBoundsP20 } from "./p20/lib/checkStatBounds.js";
 
 /**
@@ -9,7 +9,7 @@ import { checkStatBounds as checkStatBoundsP20 } from "./p20/lib/checkStatBounds
  * If the value is out of bounds, return the correct value.
  * If the value is acceptable, or we don't have a test for it, return undefined so that the calling logic knows to use the original value.
  */
-export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair): string | undefined {
+export function checkStatBounds(character: GameCharacter, pair: KeyValuePair): string | undefined {
 	if (character.gameSystem?.isP20) return checkStatBoundsP20(character, pair);
 	return undefined;
 }
