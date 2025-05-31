@@ -1,11 +1,10 @@
 import type { Awaitable } from "@rsc-utils/core-utils";
-import { debug } from "@rsc-utils/core-utils";
+import { ArgsManager, debug } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import type { SageCommand } from "../../sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage/model/SageInteraction.js";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
 import type { SageReaction } from "../../sage/model/SageReaction.js";
-import { ArgsManager } from "../ArgsManager.js";
 import { registerInteractionListener, registerMessageListener } from "../handlers.js";
 import { type TCommandAndArgs } from "../types.js";
 
