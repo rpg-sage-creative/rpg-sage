@@ -1,5 +1,4 @@
-import { isBlank, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { TKeyValuePair } from "./SageMessageArgs";
+import { isBlank, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 
 export type TNoteCategory = {
 	category: string;
@@ -35,7 +34,7 @@ export class NoteManager {
 	public setStat(stat: string, value: string): boolean {
 		return this._setCategorizedNote(CategoryStats, stat, value);
 	}
-	public updateStats(pairs: TKeyValuePair[]): boolean {
+	public updateStats(pairs: KeyValuePair[]): boolean {
 		let changed = false;
 		pairs.forEach(pair => changed = this._setCategorizedNote(CategoryStats, pair.key, pair.value) || changed);
 		return changed;
