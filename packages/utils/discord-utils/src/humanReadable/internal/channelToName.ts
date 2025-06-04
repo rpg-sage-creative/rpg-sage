@@ -1,6 +1,5 @@
 
-import type { Optional } from "@rsc-utils/core-utils";
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import { ZERO_WIDTH_SPACE, type Optional } from "@rsc-utils/core-utils";
 import type { Channel } from "discord.js";
 import { isDMBased, isGroupDMBased } from "../../types/types.js";
 import { toGuildName } from "../toGuildName.js";
