@@ -1,122 +1,24 @@
-import { isDefined, isNotBlank, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isNotBlank, type ArgsManager, type Optional } from "@rsc-utils/core-utils";
 import { parseId, type MessageChannel } from "@rsc-utils/discord-utils";
 import type { Attachment, Role, User } from "discord.js";
-import type { ArgsManager } from "../../discord/ArgsManager.js";
-import type { GameCharacterCore } from "./GameCharacter.js";
-import { SageCommandArgs, type Names } from "./SageCommandArgs.js";
+import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
-
-/** Represents an argument that was 'key=value'. If value is an empty string, it will be set as NULL. */
-export type TKeyValuePair<T extends string = string> = {
-	/** The value on the left of the first equals sign. */
-	key: string;
-	/** This value is null if they value was an empty string. */
-	value: T | null;
-};
 
 export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public constructor(sageMessage: SageMessage, private argsManager: ArgsManager) {
 		super(sageMessage);
 	}
 
-	//#region deprecated passthroughs
-	/** @deprecated */
-	public keyValuePairs() { return this.argsManager.keyValueArgs() }
-	/** @deprecated */
-	public filter(predicate: (value: string, index: number, array: string[]) => unknown, arg?: any) { return this.argsManager.filter(predicate, arg); }
-	/** @deprecated */
-	public nonKeyValuePairs() { return this.argsManager.findArgIndexNonArgs().map(non => non.arg).filter(s => s.trim()); }
-	/** @deprecated */
-	public toArray(): string[] { return this.argsManager; }
-	//#endregion
-
-	//#region Old
-
-	/** @deprecated */
-	public getCharacterOptions(names: Names, userDid?: Snowflake): GameCharacterCore {
-		// get the options directly
-		const characterCore: GameCharacterCore = {
-			alias: this.getString("alias")!,
-			autoChannels: undefined,
-			avatarUrl: this.getUrl("avatar")!,
-			companions: undefined,
-			embedColor: this.getHexColorString("color")!,
-			id: undefined!,
-			tokenUrl: this.getUrl("token")!,
-			name: names.newName ?? names.name!,
-			userDid: userDid ?? undefined
-		};
-
-		// see if they simply attached an image
-		const needsToken = characterCore.tokenUrl === undefined;
-		const needsAvatar = characterCore.avatarUrl === undefined;
-		if (needsToken || needsAvatar) {
-			const { attachments } = this.sageCommand.message;
-			if (attachments.size) {
-				const first = attachments.first()?.url;
-				if (needsToken && needsAvatar) {
-					characterCore.tokenUrl = first;
-					characterCore.avatarUrl = attachments.at(1)?.url;
-				}else if (needsToken) {
-					characterCore.tokenUrl = first;
-				}else if (needsAvatar) {
-					characterCore.avatarUrl = first;
-				}
-			}
-		}
-		return characterCore;
-	}
-
-
-	/** @deprecated */
-	public removeAndReturnName(defaultJoinRemaining = false, defaultJoinSeparator = " "): string | undefined {
-		const keyValue = this.argsManager.findKeyValueArgIndex("name")?.ret;
-		if (keyValue) {
-			return keyValue.value ?? undefined;
-		}
-
-		const notKeyValue = this.argsManager.findArgIndexNonArgs().shift();
-		if (notKeyValue) {
-			this.argsManager.removeAt(notKeyValue.index);
-			return notKeyValue.arg;
-		}
-
-		if (defaultJoinRemaining) {
-			const name = this.argsManager.findArgIndexNonArgs()
-				.map(withIndex => withIndex.arg)
-				.join(defaultJoinSeparator)
-				.trim();
-			return name === "" ? undefined : name;
-		}
-
-		return undefined;
-	}
-
-	/** @deprecated */
-	public removeAndReturnNames(defaultJoinRemaining = false, defaultJoinSeparator = " "): Names {
-		const names = {
-			charName: this.argsManager.findKeyValueArgIndex("charName")?.ret?.value,
-			oldName: this.argsManager.findKeyValueArgIndex("oldName")?.ret?.value,
-			name: this.argsManager.findKeyValueArgIndex("name")?.ret?.value,
-			newName: this.argsManager.findKeyValueArgIndex("newName")?.ret?.value,
-			count: 0
-		} as Names;
-		names.count = (names.charName ? 1 : 0) + (names.oldName ? 1 : 0) + (names.name ? 1 : 0) + (names.newName ? 1 : 0);
-		if (!names.count) {
-			names.name = this.removeAndReturnName(defaultJoinRemaining, defaultJoinSeparator);
-		}
-		return names;
-	}
-
-	//#endregion
+	/** Returns the underlying ArgsManager. */
+	public get manager(): ArgsManager { return this.argsManager; }
 
 	//#region SageCommandArgs
 
 	private getKeyValueArg(key: string) {
-		const keyValueArg = this.argsManager.findKeyValueArgIndex(key)?.ret;
+		const keyValueArg = this.argsManager.findKeyValueArg(key);
 
 		const hasKey = !!keyValueArg;
-		if (!keyValueArg) {
+		if (!hasKey) {
 			return { hasKey };
 		}
 
@@ -125,7 +27,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			return { hasKey, hasValue };
 		}
 
-		const value = keyValueArg.value;
+		const value = keyValueArg.value!;
 		const hasUnset = /^\s*unset\s*$/i.test(value);
 
 		return { hasKey, hasUnset, hasValue, value };
@@ -138,12 +40,12 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean {
-		return !!this.argsManager.findKeyValueArgIndex(name);
+		return !!this.argsManager.findKeyValueArg(name);
 	}
 
 	/** Returns true if the argument matching the given key has the value "unset". */
 	public hasUnset(name: string): boolean {
-		return /^\s*unset\s*$/i.test(this.argsManager.findKeyValueArgIndex(name)?.ret?.value ?? "");
+		return /^\s*unset\s*$/i.test(this.argsManager.findKeyValueArg(name)?.value ?? "");
 	}
 
 	/**
@@ -190,16 +92,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			}
 		}
 		return null;
-	}
-
-	public findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V> {
-		for (const arg of this.argsManager) {
-			const value = parseEnum(type, arg);
-			if (value !== undefined) {
-				return value as V;
-			}
-		}
-		return undefined;
 	}
 
 	/**

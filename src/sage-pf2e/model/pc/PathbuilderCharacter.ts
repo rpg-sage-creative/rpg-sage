@@ -1,5 +1,5 @@
 import { CharacterBase } from "@rsc-utils/character-utils";
-import { addCommas, capitalize, Collection, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, nth, randomSnowflake, sortPrimitive, stringify, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, nth, randomSnowflake, sortPrimitive, stringify, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
@@ -665,7 +665,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		});
 
 		this.abilities = new PbcAbilities(this);
-		this.feats = Collection.from(this.core.feats ?? []);
+		this.feats = this.core.feats ?? [];
 		this.savingThrows = SavingThrows.for(this);
 	}
 
@@ -698,7 +698,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 
 	/** Implements IHasAbilities */
 	public abilities: PbcAbilities;
-	public feats: Collection<TPathbuilderCharacterFeat>;
+	public feats: TPathbuilderCharacterFeat[];
 	public savingThrows: SavingThrows;
 
 	//#region level

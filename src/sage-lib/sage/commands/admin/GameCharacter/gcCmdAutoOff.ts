@@ -28,7 +28,7 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 	}
 
 	if (!character) {
-		return sendNotFound(sageMessage, `${characterTypeMeta.singularDescriptor} Auto Dialog (Off)`, characterTypeMeta.singularDescriptor!, alias ?? names.name);
+		return sendNotFound(sageMessage, `${characterTypeMeta.singularDescriptor} Auto Dialog (Off)`, characterTypeMeta.singularDescriptor!, { name:alias ?? names.name });
 	}
 
 	const channelIds = parseIds(sageMessage.message, "channel");

@@ -1,4 +1,4 @@
-import { errorReturnNull, getEnumValues, isDefined, parseEnum } from "@rsc-utils/core-utils";
+import { errorReturnNull, getEnumValues, isDefined } from "@rsc-utils/core-utils";
 import { splitMessageOptions } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
@@ -15,10 +15,7 @@ import { BotServerGameType } from "../helpers/BotServerGameType.js";
 function getEmojiTypes(sageMessage: SageMessage): EmojiType[] {
 
 	// get emoji by key, where key is keyof EmojiType
-	const types = sageMessage.args.toArray()
-		.map(arg => parseEnum<EmojiType>(EmojiType, arg))
-		.filter(isDefined);
-
+	const types = sageMessage.args.manager.enumValues(EmojiType);
 	if (!types.length) {
 		const type = sageMessage.args.getEnum(EmojiType, "type");
 		if (isDefined(type)) types.push(type);

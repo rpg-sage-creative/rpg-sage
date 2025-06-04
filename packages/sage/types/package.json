@@ -5,6 +5,6 @@
 	"main": "build/index.js",
 	"type": "module",
 	"dependencies": {
-		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.6.1"
+		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.7.1"
 	}
 }

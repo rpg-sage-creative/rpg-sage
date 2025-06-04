@@ -5,7 +5,7 @@ import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
 
 // #region rpg.SpUtils
 async function spUtils(sageMessage: SageMessage): Promise<void> {
-	const data = sageMessage.args.toArray()[0];
+	const data = sageMessage.args.manager.raw().join(" ");
 
 	const values = data.match(/\s*[\-\+]?\s*\d+(?:,\d{3})*\s*(?:cp|sp|gp|pp)/gi)!,
 		signedAndSorted = values.map(s => ("+" + s).replace(/\s+/g, "").replace(/\+([\-\+])/, "$1").toLowerCase()).sort(),

@@ -20,7 +20,7 @@ export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: O
 
 	// try by given name/index first
 	if (!isNameBlank) {
-		const namedChar = (isGameMaster ? gamePcs : gamePcs?.filterByUser(actorId))?.findByName(name)
+		const namedChar = (isGameMaster ? gamePcs?.findByName(name) : gamePcs?.findByUser(actorId, name))
 			?? userPcs.findByName(name);
 		if (namedChar) return namedChar;
 	}

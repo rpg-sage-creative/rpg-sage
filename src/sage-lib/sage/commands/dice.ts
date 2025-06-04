@@ -1,9 +1,8 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
-import { error, isWrapped, redactCodeBlocks, tokenize, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
+import { error, getKeyValueArgRegex, isWrapped, redactCodeBlocks, tokenize, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import { processStatBlocks } from "@rsc-utils/dice-utils";
 import { xRegExp } from "@rsc-utils/dice-utils/build/internal/xRegExp.js";
 import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
-import { createKeyValueArgRegex } from '@rsc-utils/string-utils';
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -239,7 +238,7 @@ function redactContent(content: string): string {
 
 	// let's do key/value pairs if we have a command
 	if (/^!+(\s*[\w-]+)+/i.test(redacted)) {
-		const tokens = tokenize(redacted, { keyValue:createKeyValueArgRegex() });
+		const tokens = tokenize(redacted, { keyValue:getKeyValueArgRegex({ allowDashes:true, allowPeriods:true }) });
 		const redactedTokens = tokens.map(({ key, token }) => key === "keyValue" ? "".padEnd(token.length, "*") : token);
 		redacted = redactedTokens.join("");
 	}

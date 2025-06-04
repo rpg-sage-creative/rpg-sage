@@ -68,7 +68,7 @@ function createMessageTester(_command: Command) {
 				const toCommandAndArgs = (data?: any) => {
 					return {
 						command: object && verb ? `${object}|${verb}` : String(_command),
-						args: new ArgsManager(args ?? match[match.length - 1] ?? ""),
+						args: ArgsManager.from(args ?? match[match.length - 1]),
 						data
 					} as TCommandAndArgs;
 				};

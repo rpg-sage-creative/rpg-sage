@@ -32,7 +32,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 			character = await getCharacter(sageMessage, characterTypeMeta, userId, names, alias);
 
 			if (!character) {
-				await sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor} Details`, characterTypeMeta.singularDescriptor!, names.name);
+				await sendNotFound(sageMessage, `${characterTypeMeta.singularDescriptor} Details`, characterTypeMeta.singularDescriptor!, { name:names.name });
 				return;
 			}
 		}

@@ -1,5 +1,4 @@
-import { debug, dequote, getQuotedRegex, getWhitespaceRegex, isWrapped, tokenize, warn, type Optional } from "@rsc-utils/core-utils";
-import { createKeyValueArgRegex, parseKeyValueArg, type KeyValueArg } from "@rsc-utils/string-utils";
+import { debug, dequote, getKeyValueArgRegex, getQuotedRegex, getWhitespaceRegex, isWrapped, parseKeyValueArg, tokenize, warn, type KeyValueArg, type Optional } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import type { DiceMacroBase } from "../../model/Macro.js";
 import { getMacroArgRegex, getMacroRemainingArgRegex, parseMacroArgMatch } from "../admin/macro/getMacroArgRegex.js";
@@ -74,7 +73,7 @@ type TArgs = { indexed:string[]; named:KeyValueArg[] };
 function parseMacroArgs(argString: string): TArgs {
 	const parsers = {
 		spaces: getWhitespaceRegex(),
-		named: createKeyValueArgRegex(),
+		named: getKeyValueArgRegex({ allowDashes:true, allowPeriods:true }),
 		quotes: getQuotedRegex({ contents:"*" })
 	};
 	const tokens = tokenize(argString.trim(), parsers);
@@ -110,7 +109,7 @@ function nonEmptyStringOrDefaultValue(vs: string, arg: Optional<string>, def: Op
 function namedArgValueOrDefaultValue(vs: string, arg: Optional<KeyValueArg>, def: Optional<string>): string {
 	if (arg) {
 		const value = nonEmptyStringOrDefaultValue(vs, arg.value, def);
-		if (arg.keyLower.match(/^(ac|dc|vs)$/) && value && !vs) {
+		if (arg.key.match(/^(ac|dc|vs)$/i) && value && !vs) {
 			return arg.key + value;
 		}
 		return value;
@@ -159,12 +158,12 @@ function flattenMacro(macroTiers: DiceMacroBase[][], dice: string, argsStack: TA
 function applyArgs(unwrapped: string, argsStack: TArgs[], includeUnusedArgs: boolean): string {
 	const namedArgsUsed = new Set<string>();
 
-	const findNamedArg = (keyLower: string) => argsStack
-		.find(({ named }) => named.find(arg => arg.keyLower === keyLower))
-		?.named.find(arg => arg.keyLower === keyLower);
+	const findNamedArg = (key: string) => argsStack
+		.find(({ named }) => named.find(arg => arg.keyRegex.test(key)))
+		?.named.find(arg => arg.keyRegex.test(key));
 
 	const mapAllUnusedNamedArgs = () => {
-		const allNamedArgKeys = new Set(argsStack.map(({ named }) => named.map(arg => arg.keyLower)).flat());
+		const allNamedArgKeys = new Set(argsStack.map(({ named }) => named.map(arg => arg.key.toLowerCase())).flat());
 		const unusedKeys = [...allNamedArgKeys].filter(key => !namedArgsUsed.has(key));
 		const unusedArgs = unusedKeys.map(findNamedArg) as KeyValueArg[];
 		const mappedArgs = unusedArgs.map(arg => `${arg?.key}="${arg?.value}"`).join(" ");

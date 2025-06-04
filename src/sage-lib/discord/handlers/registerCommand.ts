@@ -14,7 +14,7 @@ export function registerCommand(handler: TSageMessageHandler, ...commands: strin
 				const matcher = new RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
 				const match = matcher.exec(sageMessage.slicedContent.replace(/^!!?/, "").trim());
 				if (match) {
-					return { command, args: new ArgsManager(match[1]) };
+					return { command, args:ArgsManager.from(match[1]) };
 				}
 			}
 			return null;

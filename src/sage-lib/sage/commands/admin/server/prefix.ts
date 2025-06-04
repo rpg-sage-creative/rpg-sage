@@ -13,12 +13,12 @@ async function prefixSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const args = sageMessage.args?.toArray();
+	const args = sageMessage.args?.manager;
 	if (args?.length > 1) {
 		return sageMessage.reactFailure();
 	}
 
-	const saved = await server.setCommandPrefix(args[0]!);
+	const saved = await server.setCommandPrefix(args.raw()[0]!);
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 

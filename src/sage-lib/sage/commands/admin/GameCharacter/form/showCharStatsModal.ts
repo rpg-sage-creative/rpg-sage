@@ -1,5 +1,4 @@
-import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
-import { parseKeyValueArgs } from "@rsc-utils/string-utils";
+import { NIL_SNOWFLAKE, parseKeyValueArgs } from "@rsc-utils/core-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";
@@ -50,10 +49,10 @@ async function handleCharStatsSubmit(sageInteraction: SageInteraction, idParts: 
 	const char = await getCharToEdit(sageInteraction, idParts.charId);
 	if (char && form) {
 		const pairs = [
-			{ key:"level", value:form.level },
-			{ key:"hp", value:form.hp },
-			{ key:"maxHp", value:form.maxHp },
-			{ key:"conditions", value:form.conditions },
+			{ key:"level", keyRegex:new RegExp(`^level$`, "i"), value:form.level },
+			{ key:"hp", keyRegex:new RegExp(`^hp$`, "i"), value:form.hp },
+			{ key:"maxHp", keyRegex:new RegExp(`^maxHp$`, "i"), value:form.maxHp },
+			{ key:"conditions", keyRegex:new RegExp(`^conditions$`, "i"), value:form.conditions },
 			...parseKeyValueArgs(form.other.replace(/\n/g, " "))
 		];
 		await char.updateStats(pairs, false);

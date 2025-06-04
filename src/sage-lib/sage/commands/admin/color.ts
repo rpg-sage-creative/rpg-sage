@@ -1,4 +1,4 @@
-import { Color, errorReturnNull, getEnumValues, isDefined, parseEnum, partition } from "@rsc-utils/core-utils";
+import { Color, errorReturnUndefined, getEnumValues, isDefined, partition } from "@rsc-utils/core-utils";
 import { EmbedBuilder } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
@@ -15,10 +15,7 @@ import { BotServerGameType } from "../helpers/BotServerGameType.js";
 function getColorTypes(sageMessage: SageMessage): ColorType[] {
 
 	// get emoji by key, where key is keyof EmojiType
-	const types = sageMessage.args.toArray()
-		.map(arg => parseEnum<ColorType>(ColorType, arg))
-		.filter(isDefined);
-
+	const types = sageMessage.args.manager.enumValues(ColorType);
 	if (!types.length) {
 		const type = sageMessage.args.getEnum(ColorType, "type");
 		if (isDefined(type)) types.push(type);
@@ -119,7 +116,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType, ca
 	if (!render) {
 		if (which !== BotServerGameType.Bot && canSync) {
 			const prompt = `**No ${getColorName(which)} Colors Found!**\n> Sync with ${getOtherName(which)}?`;
-			const booleanResponse = await discordPromptYesNo(sageMessage, prompt).catch(errorReturnNull);
+			const booleanResponse = await discordPromptYesNo(sageMessage, prompt).catch(errorReturnUndefined);
 			if (booleanResponse) {
 				colors.sync(getOtherColors(sageMessage, which));
 				render = await getWhichEntity(sageMessage, which)?.save() ?? false;

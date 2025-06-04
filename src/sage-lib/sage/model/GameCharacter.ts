@@ -1,24 +1,20 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
-import { applyChanges, Color, errorReturnUndefined, getDataRoot, isBlank, isWrapped, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Color, errorReturnUndefined, getDataRoot, isBlank, isWrapped, StringMatcher, wrap, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
-import { fileExistsSync, getText, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { mkdirSync } from "fs";
-import XRegExp from "xregexp";
+import { fileExistsSync, getText, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { isStatsKey } from "../../../gameSystems/sheets.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
-import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMessageRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
-import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { hpToGauge } from "./utils/hpToGauge.js";
 
 /*
@@ -139,14 +135,12 @@ type TempIds = {
 	userId: string;
 };
 
-function createTempPath({ charId, gameId, userId }: TempIds): string {
+async function createTempPath({ charId, gameId, userId }: TempIds): Promise<string> {
 	const sageRoot = getDataRoot("sage");
 	const path = gameId
 		? `${sageRoot}/games/${gameId}/characters`
 		: `${sageRoot}/users/${userId}/characters`;
-	if (!fileExistsSync(path)) {
-		mkdirSync(path, { recursive:true });
-	}
+	await makeDir(path);
 	return `${path}/${charId}.json.tmp`;
 }
 
@@ -244,13 +238,13 @@ export class GameCharacter implements IHasSave {
 	}
 	public set alias(alias: string | undefined) {
 		this.core.alias = alias;
-		delete this._aliasForMatching;
+		delete this._aliasMatcher;
 	}
 	/** stores the clean alias used for matching */
-	private _aliasForMatching?: string;
+	private _aliasMatcher?: StringMatcher;
 	/** returns the clean alias used for matching */
-	public get aliasForMatching(): string {
-		return this._aliasForMatching ?? (this._aliasForMatching = GameCharacter.prepareForMatching(this.alias ?? this.name));
+	public get aliasMatcher(): StringMatcher {
+		return this._aliasMatcher ??= StringMatcher.from(this.core.alias);
 	}
 
 	/** Channels to automatically treat input as dialog */
@@ -299,14 +293,14 @@ export class GameCharacter implements IHasSave {
 	}
 	public set name(name: string) {
 		this.core.name = name;
-		delete this._nameForMatching;
-		delete this._aliasForMatching;
+		delete this._nameMatcher;
+		delete this._aliasMatcher;
 	}
 	/** stores the clean name used for matching */
-	private _nameForMatching?: string;
+	private _nameMatcher?: StringMatcher;
 	/** returns the clean name used for matching */
-	public get nameForMatching(): string {
-		return this._nameForMatching ?? (this._nameForMatching = GameCharacter.prepareForMatching(this.name));
+	public get nameMatcher(): StringMatcher {
+		return this._nameMatcher ??= StringMatcher.from(this.core.name);
 	}
 
 	/** The character's notes */
@@ -452,13 +446,12 @@ export class GameCharacter implements IHasSave {
 
 	//#endregion
 
-	/** Compares id, name literal, alias literal, then preparedName and preparedAlias. If recursive, it also checks companions. */
+	/** Compares id, name literal, alias literal, then nameMatcher and aliasMatcher. If recursive, it also checks companions. */
 	public matches(value: string, recursive = false): boolean {
 		if (this.name === value || this.alias === value || this.id === value) {
 			return true;
 		}
-		const preparedValue = GameCharacter.prepareForMatching(value);
-		if (this.nameForMatching === preparedValue || this.aliasForMatching === preparedValue) {
+		if (StringMatcher.from(value).matchesAny(this.nameMatcher, this.aliasMatcher)) {
 			return true;
 		}
 		return recursive && this.companions.hasMatching(value, true);
@@ -646,7 +639,7 @@ export class GameCharacter implements IHasSave {
 		return null;
 	}
 
-	public async processStatsAndMods(stats?: TKeyValuePair[], mods?:StatModPair[]): Promise<boolean> {
+	public async processStatsAndMods(stats?: KeyValueArg<string, string>[], mods?:IncrementArg<string, string>[]): Promise<boolean> {
 		let updated = false;
 		if (stats?.length) {
 			updated = await this.updateStats(stats, false);
@@ -656,9 +649,9 @@ export class GameCharacter implements IHasSave {
 		if (mods?.length) {
 			for (const pair of mods) {
 				const oldValue = this.getStat(pair.key) ?? 0;
-				const math = `(${oldValue}${pair.modifier}${pair.value})`;
+				const math = `(${oldValue}${pair.operator}${pair.value})`;
 				const newValue = doStatMath(math);
-				const updated = await this.updateStats([{ key:pair.key, value:newValue }], false);
+				const updated = await this.updateStats([{ key:pair.key, keyRegex:pair.keyRegex, value:newValue }], false);
 				modded ||= updated;
 			}
 		}
@@ -666,14 +659,14 @@ export class GameCharacter implements IHasSave {
 		return updated || modded;
 	}
 
-	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<boolean> {
+	public async updateStats(stats: KeyValuePair[], save: boolean): Promise<boolean> {
 		let changes = false;
-		const forNotes: TKeyValuePair[] = [];
+		const forNotes: KeyValuePair[] = [];
 		const pb = this.pathbuilder;
-		for (const pair of pairs) {
-			const key = pair.key;
+		for (const pair of stats) {
+			const { key, keyRegex } = pair;
 			const value = pair.value ?? "";
-			if (/^name$/i.test(key) && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
+			if (keyRegex.test("name") && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
 				this.name = value;
 				if (pb) {
 					pb.name = value;
@@ -684,20 +677,21 @@ export class GameCharacter implements IHasSave {
 
 			let correctedKey: string | undefined;
 			let correctedValue: string | undefined;
-			const isExplorationMode = /^explorationmode$/i.test(key);
-			const isExplorationSkill = /^explorationskill$/i.test(key);
+			const isExplorationMode = keyRegex.test("explorationMode");
+			const isExplorationSkill = keyRegex.test("explorationSkill");
 			if (isExplorationMode || isExplorationSkill) {
+				const matchValue = (val: string) => new RegExp(`^${val.replace(/(\s)/g, "$1?")}$`, "i").test(value);
 				if (isExplorationMode) {
 					correctedKey = "explorationMode";
-					correctedValue = getExplorationModes().find(mode => XRegExp(`^${mode.replace(/(\s)/g, "$1?")}$`, "i").test(value));
+					correctedValue = getExplorationModes().find(matchValue);
 				}
 				if (isExplorationSkill) {
 					correctedKey = "explorationSkill";
-					correctedValue = getSkills().find(skill => XRegExp(`^${skill.replace(/(\s)/g, "$1?")}$`, "i").test(value));
+					correctedValue = getSkills().find(matchValue);
 				}
 			}
 			if (pb) {
-				if (/^level$/i.test(key) && +value) {
+				if (keyRegex.test("level") && +value) {
 					const updatedLevel = await pb.setLevel(+value, save);
 					if (updatedLevel) {
 						const unset = this.notes.setStat("level", "");
@@ -720,7 +714,7 @@ export class GameCharacter implements IHasSave {
 				// abilities?
 				// proficiencies?
 			}
-			forNotes.push({ key:correctedKey??key, value:correctedValue??value });
+			forNotes.push({ key:correctedKey??key, keyRegex:new RegExp(`^${correctedKey??key}$`, "i"), value:correctedValue??value });
 		}
 
 		// iterate the stat pairs to double check bounds
@@ -737,9 +731,9 @@ export class GameCharacter implements IHasSave {
 		// name is tricky cause we can update via alias in name field; do it separate
 		if (name) {
 			// we don't wanna edit the name if we are simply using the alias to update
-			const notAlias = this.aliasForMatching !== GameCharacter.prepareForMatching(name);
+			const notAlias = !this.aliasMatcher.matches(name);
 			// if the name and alias are the same then we can update the name
-			const aliasMatchesName = this.nameForMatching === this.aliasForMatching;
+			const aliasMatchesName = this.nameMatcher.matches(this.aliasMatcher);
 			if (notAlias || aliasMatchesName) {
 				this.name = name;
 				changed = true;
@@ -747,8 +741,8 @@ export class GameCharacter implements IHasSave {
 		}
 
 		if (changed) {
-			delete this._aliasForMatching;
-			delete this._nameForMatching;
+			delete this._aliasMatcher;
+			delete this._nameMatcher;
 			delete this._pathbuilder;
 			if (save) {
 				return this.save();
@@ -770,12 +764,8 @@ export class GameCharacter implements IHasSave {
 
 	public static readonly defaultGmCharacterName = DEFAULT_GM_CHARACTER_NAME;
 
-	public static prepareForMatching(name: string): string {
-		return XRegExp.replace(name ?? "", XRegExp("[^\\pL\\pN]+"), "", "all").toLowerCase();
-	}
-
 	public static async fromTemp(ids: TempIds): Promise<GameCharacter | undefined> {
-		const path = createTempPath(ids);
+		const path = await createTempPath(ids);
 		if (fileExistsSync(path)) {
 			const core = await readJsonFile<GameCharacterCore>(path);
 			if (core) {
@@ -786,7 +776,7 @@ export class GameCharacter implements IHasSave {
 	}
 
 	public async saveTemp(ids: Omit<TempIds, "charId">): Promise<boolean> {
-		const path = createTempPath({ charId:this.id, ...ids });
+		const path = await createTempPath({ charId:this.id, ...ids });
 		return writeFile(path, this.core);
 
 	}

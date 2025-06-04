@@ -1,45 +1,19 @@
-import { Color, debug, dequote, getQuotedRegex, isBlank, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { getWordCharacterRegexSource } from "@rsc-utils/string-utils";
-import XRegExp from "xregexp";
+import { Color, debug, isBlank, type Args, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { GameUserType } from "../../../model/Game.js";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import type { TKeyValuePair } from "../../../model/SageMessageArgs.js";
 import { fetchAndParseAllDsv } from "../../../model/utils/dsv.js";
 import { getUserDid } from "./getUserDid.js";
 
-export type StatModPair = TKeyValuePair<string> & { modifier?:"+"|"-" };
-
 type Results = {
 	core?: GameCharacterCore;
-	mods?: StatModPair[];
+	mods?: IncrementArg[];
 	names: Names;
-	stats?: TKeyValuePair<string>[];
+	stats?: KeyValueArg[];
 	userId?: Snowflake;
 	type?: "pc" | "npc" | "companion" | "minion";
 };
-
-function createStatModKeyValuePairRegex(): RegExp {
-	const keySource = getWordCharacterRegexSource({ allowDashes:true, allowPeriods:true, quantifier:"+" });
-	const modSource = `\\+=|\\-=`;
-	const incrementerSource = `\\+{2}|\\-{2}`;
-	const quotedSource = getQuotedRegex({ contents:"*" }).source;
-	return XRegExp(`(${keySource})(?:(${incrementerSource})|(${modSource})(${quotedSource}|\\S+))`, "");
-}
-
-function parseStatModKeyValuePair(arg: string): StatModPair | undefined {
-	const regex = createStatModKeyValuePairRegex();
-	const match = regex.exec(arg);
-	if (match) {
-		const [_, key, incrementer, modifier, value] = match;
-		if (incrementer) {
-			return { key, modifier: incrementer[0] as "+", value: "1" };
-		}
-		return { key, modifier: modifier[0] as "+", value: dequote(value) };
-	}
-	return undefined;
-}
 
 function getCore({ args, message }: SageMessage, names: Names, isUpdate: boolean): GameCharacterCore | undefined {
 	const useAliasAsName = isUpdate && !names.isRename && !names.name;
@@ -151,9 +125,9 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpda
 	}
 
 	// only do mods on an update
-	const mods = isUpdate ? args.toArray().map(parseStatModKeyValuePair).filter(pair => pair) as StatModPair[] : [];
+	const mods = isUpdate ? args.manager.incrementArgs() : [];
 
-	const stats = args.keyValuePairs().filter(pair => !isValidCoreKey(pair.key) && !/[+-]$/.test(pair.key));
+	const stats = args.manager.keyValueArgs().filter(pair => !isValidCoreKey(pair.key));
 
 	return { core, mods, names, stats, userId };
 }
@@ -182,14 +156,14 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 			const getCore = () => (core ?? (core = {} as GameCharacterCore));
 			let names: Names | undefined;
 			const getNames = () => (names ?? (names = {} as Names));
-			let stats: TKeyValuePair[] | undefined;
+			let stats: KeyValueArg[] | undefined;
 			let type: "pc" | "npc" | "companion" | "minion" | undefined;
 			const typeRegexp = /^type$/i;
 			let userId: Snowflake | undefined;
 			const userRegexp = /^user$/i;
 			const unsetRegexp = /^unset$/i;
 
-			Object.entries(item).forEach(([key, value]) => {
+			Object.entries(item).forEach(([key, value], index) => {
 				const valueOrNull = isBlank(value) || unsetRegexp.test(value) ? null : value;
 				if (typeRegexp.test(key)) {
 					type = /^(gm|pc|npc|companion|minion)$/i.test(value) ? value.toLowerCase() as "pc" : undefined;
@@ -213,7 +187,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						default: debug({key,value}); break;
 					}
 				}else {
-					(stats ?? (stats = [])).push({ key, value:valueOrNull });
+					(stats ?? (stats = [])).push({ arg:`${key}="${value}"`, index, isKeyValue:true, key, keyRegex:new RegExp(`^${key}$`, "i"), value:valueOrNull });
 				}
 			});
 

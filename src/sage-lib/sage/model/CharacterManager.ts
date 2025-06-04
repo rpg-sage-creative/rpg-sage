@@ -1,11 +1,11 @@
-import { Collection, randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { resolveSnowflake, type CanBeSnowflakeResolvable } from "@rsc-utils/discord-utils";
-import { CharactersMatch } from "./CharactersMatch.js";
 import type { Game } from "./Game.js";
 import { GameCharacter, type GameCharacterCore, type TGameCharacterType } from "./GameCharacter.js";
 import { NamedCollection, type IHasSave } from "./NamedCollection.js";
 import type { Server } from "./Server.js";
 import type { User } from "./User.js";
+import Collection from "./utils/Collection.js";
 
 /*
 // function remapCharacters(this: CharacterManager, core: GameCharacterCore, index: number, array: (GameCharacterCore | GameCharacter)[]): void {
@@ -47,7 +47,7 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 
 	/** Creates a new GameCharacter object from the given core and adds it to the collection. Returns the GameCharacter if the save is successful, null otherwise. */
 	public async addCharacter(core: GameCharacterCore): Promise<GameCharacter | null> {
-		const found = this.findByUserAndName(core.userDid, core.name);
+		const found = this.findByUser(core.userDid, core.name);
 		if (!found) {
 			const newCore = <GameCharacterCore>{ ...core, id: randomSnowflake() };
 			const character = new GameCharacter(newCore, this),
@@ -57,14 +57,9 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		return null;
 	}
 
-	/** Returns all characters that match the given name. */
-	public filterByName(name: string): NamedCollection<GameCharacter> {
-		return this.filter(character => character.matches(name)) as NamedCollection<GameCharacter>;
-	}
-
 	/** Returns all characters with the given userDid. */
 	public filterByUser(userDid: Snowflake): NamedCollection<GameCharacter> {
-		return this.filter(character => character.userDid === userDid) as NamedCollection<GameCharacter>;
+		return this.filter(character => character.userDid === userDid);
 	}
 
 	/** Returns the first character that has a companion matching the given name. */
@@ -97,20 +92,15 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 	 * If only id is given, the first character for that user is returned.
 	 * If only name is given, the first character to match is returned.
 	 */
-	public findByUser(userDid: Optional<Snowflake>, name?: Optional<string>): GameCharacter | undefined {
-		if (userDid && name) {
-			return this.filterByUser(userDid).find(character => character.matches(name));
-		}else if (userDid) {
-			return this.find(character => character.userDid === userDid);
+	public findByUser(userId: Optional<Snowflake>, name?: Optional<string>): GameCharacter | undefined {
+		if (userId && name) {
+			return this.find(character => character.userDid === userId && character.matches(name));
+		}else if (userId) {
+			return this.find(character => character.userDid === userId);
 		}else if (name) {
 			return this.find(character => character.matches(name));
 		}
 		return undefined;
-	}
-
-	/** @deprecated use .findByUser() */
-	public findByUserAndName(userDid: Optional<Snowflake>, name: Optional<string>): GameCharacter | undefined {
-		return this.findByUser(userDid, name);
 	}
 
 	//#endregion
@@ -119,18 +109,18 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 
 	/** Finds the first companion that matches the given companion name. */
 	public findCompanion(companionName: Optional<string>): GameCharacter | undefined;
-	/** Filters the characters for the given userDid and returns the first companion that matches the given companion name. */
-	public findCompanion(userDid: Optional<Snowflake>, companionName: Optional<string>): GameCharacter | undefined;
-	/** Filters the characters for the given userDid and characterName and returns the first companion that matches the given companion name. */
-	public findCompanion(userDid: Optional<Snowflake>, characterName: Optional<string>, companionName: Optional<string>): GameCharacter | undefined;
+	/** Filters the characters for the given userId and returns the first companion that matches the given companion name. */
+	public findCompanion(userId: Optional<Snowflake>, companionName: Optional<string>): GameCharacter | undefined;
+	/** Filters the characters for the given userId and characterName and returns the first companion that matches the given companion name. */
+	public findCompanion(userId: Optional<Snowflake>, characterName: Optional<string>, companionName: Optional<string>): GameCharacter | undefined;
 	public findCompanion(...args: Optional<string>[]): GameCharacter | undefined {
 		// grab the args
 		const companionName = args.pop();
-		const userDid = args.shift();
+		const userId = args.shift();
 		const characterName = args.shift();
 
 		// filter on user
-		let characters = userDid ? this.filter(char => char.userDid === userDid) : this;
+		let characters = userId ? this.filter(char => char.userDid === userId) : this;
 
 		// filter on character
 		if (characterName) {
@@ -172,10 +162,6 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		const mapped = new Collection<T>();
 		this.forEach((value, index, collection) => mapped.push(callbackfn.call(thisArg, value, index, collection)));
 		return mapped;
-	}
-
-	public matchCharacters(input: string): CharactersMatch {
-		return CharactersMatch.match(this, input);
 	}
 
 	public getAutoCharacter(autoChannelData: {channelDid:Snowflake;userDid:Snowflake;}): GameCharacter | undefined {
@@ -237,7 +223,7 @@ export interface CharacterManager {
 
 	forEach(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => void, thisArg?: any): void;
 
-	map<T>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): Collection<T>;
+	map<T>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): T[];
 	// map<T extends GameCharacter>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): NamedCollection<T>;
 
 	reduce(callbackfn: (previousValue: GameCharacter, currentValue: GameCharacter, currentIndex: number, manager: CharacterManager) => GameCharacter): GameCharacter;

@@ -97,7 +97,7 @@ function calculateTierInfo(tier: string, pcLevels: number[]): TTierInfo {
 	};
 }
 function pfsTier(sageMessage: SageMessage): void {
-	const args = sageMessage.args.nonKeyValuePairs();
+	const args = sageMessage.args.manager.valueArgs().map(arg => arg.value) as string[];
 	const tierString = args.shift()!;
 	const pcLevelStrings = args;
 	//this: Discord.Message, tierString: string, ...pcLevelStrings: string[]
@@ -136,7 +136,7 @@ export function addScenario(scenarioId: string, tier: string, callback: TScenari
 }
 
 function pfsScenario(sageMessage: SageMessage): void {
-	const args = sageMessage.args.nonKeyValuePairs();
+	const args = sageMessage.args.manager.valueArgs().map(arg => arg.value) as string[];
 	const scenarioOrQuestId = args.shift();
 	const pcLevelStrings = args;
 	//this: Discord.Message, tierString: string, ...pcLevelStrings: string[]

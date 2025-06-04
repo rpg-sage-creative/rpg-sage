@@ -18,11 +18,11 @@ export async function gcCmdDelete(sageMessage: SageMessage): Promise<void> {
 
 	const character =
 		characterTypeMeta.isCompanion ? characterManager.findCompanion(userDid, names.charName!, names.name!)
-		: characterTypeMeta.isMinion ? characterManager.findCompanionByName(names.name)
-		: characterManager.findByUserAndName(userDid, names.name!);
+		: characterTypeMeta.isMinion ? characterManager.findCompanion(names.name)
+		: characterManager.findByUser(userDid, names.name!);
 
 	if (character) {
 		return promptCharConfirm(sageMessage, character, `Delete ${character.name}?`, char => char.remove());
 	}
-	return sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor}-delete`, characterTypeMeta.singularDescriptor!, names.name);
+	return sendNotFound(sageMessage, `Delete ${characterTypeMeta.singularDescriptor}`, characterTypeMeta.singularDescriptor!, { name:names.name });
 }

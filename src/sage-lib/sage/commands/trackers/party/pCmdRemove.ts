@@ -15,8 +15,8 @@ export async function pCmdRemove(sageMessage: SageMessage): Promise<void> {
 
 	const partyName = sageMessage.args.getString("name");
 	const party = partyName ? game.parties.get(partyName) : null;
-	const charArgs = sageMessage.args.keyValuePairs()
-		.filter(kvp => kvp.value && ["pc", "npc", "as", "nick"].includes(kvp.key.toLowerCase()) && party?.hasChar(kvp.value));
+	const charArgs = sageMessage.args.manager.keyValueArgs("pc", "npc", "as", "nick")
+		.filter(kvp => kvp.value && party?.hasChar(kvp.value));
 	if (!partyName || !party || !charArgs.length) {
 		const details: string[] = [];
 		if (!partyName) {

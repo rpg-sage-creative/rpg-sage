@@ -12,7 +12,7 @@ export function getCharArgs(sageMessage: SageMessage): CharArg[] {
 	const nickRegex = /^(as|nick)$/i;
 	const charRegex = /^(char|n?pc)$/i;
 	const countRegex = /^count$/i;
-	const args = sageMessage.args.keyValuePairs()
+	const args = sageMessage.args.manager.keyValueArgs()
 		.map(kvp => ({ ...kvp, isNick: nickRegex.test(kvp.key), isChar: charRegex.test(kvp.key), isCount: countRegex.test(kvp.key) }))
 		.filter(kvp => (kvp.isNick || kvp.isChar || kvp.isCount) && (kvp.value ?? "").length);
 	if (!args.find(kvp => kvp.isChar)) {

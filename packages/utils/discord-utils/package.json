@@ -1,6 +1,6 @@
 {"name":"@rsc-utils/discord-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
-  "@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.6.1",
-  "@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.3.0",
+  "@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.7.1",
+  "@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.3.1",
   "@rsc-utils/string-utils": "^0.0.0",
   "discord.js": "14.19.2",
   "emoji-regex": "^10.3.0",

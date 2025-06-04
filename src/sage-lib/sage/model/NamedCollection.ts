@@ -1,5 +1,6 @@
-import { Collection, isDefined, toUniqueDefined } from "@rsc-utils/core-utils";
+import { isDefined, toUniqueDefined } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
+import Collection from "./utils/Collection.js";
 
 export interface IHasSave {
 	save(): Promise<boolean>;

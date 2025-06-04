@@ -1,5 +1,5 @@
+import { ArgsManager } from "@rsc-utils/core-utils";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
-import { ArgsManager } from "../ArgsManager.js";
 import { registerMessageListener } from "../handlers.js";
 import type { TCommandAndArgs, TMessageHandler } from "../types.js";
 
@@ -15,7 +15,7 @@ export function registerCommandRegex(matcher: RegExp, handler: TMessageHandler):
 			//TODO: move to using groups: match.groups
 			return {
 				command: "command-regex",
-				args: new ArgsManager(Array.from(match).slice(1).map(s => s ?? ""))
+				args: ArgsManager.from(match.slice(1))
 			};
 		}
 		return null;
