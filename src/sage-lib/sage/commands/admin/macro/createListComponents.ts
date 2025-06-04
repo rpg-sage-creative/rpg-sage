@@ -1,6 +1,5 @@
-import { partition, type Snowflake } from "@rsc-utils/core-utils";
+import { ELLIPSIS, partition, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
-import { ELLIPSIS } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import type { Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { MacroOwner } from "../../../model/MacroOwner.js";
