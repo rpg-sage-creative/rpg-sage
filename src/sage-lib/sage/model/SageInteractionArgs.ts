@@ -1,4 +1,4 @@
-import type { EnumLike, Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { MessageChannel } from "@rsc-utils/discord-utils";
 import { ApplicationCommandOptionType, Attachment, CommandInteraction, GuildMember, Role, User } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
@@ -99,10 +99,6 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 		if (!hasKey) return undefined; //NOSONAR
 		if (hasUnset) return null; //NOSONAR
 		return this.interaction.options.get(nameLower)?.channel as MessageChannel ?? null;
-	}
-
-	public findEnum<K extends string = string, V extends number = number>(_type: EnumLike<K, V>): Optional<V> {
-		return undefined;
 	}
 
 	/**

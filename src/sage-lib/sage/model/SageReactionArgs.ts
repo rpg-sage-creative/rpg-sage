@@ -1,4 +1,4 @@
-import type { EnumLike, Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { MessageChannel } from "@rsc-utils/discord-utils";
 import type { Attachment, Role, User } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
@@ -48,10 +48,6 @@ export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 	 */
 	public getChannel(): Optional<MessageChannel> {
 		return null;
-	}
-
-	public findEnum<K extends string = string, V extends number = number>(_type: EnumLike<K, V>): Optional<V> {
-		return undefined;
 	}
 
 	/**

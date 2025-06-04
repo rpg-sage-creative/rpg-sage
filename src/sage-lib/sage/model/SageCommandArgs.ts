@@ -73,7 +73,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid attachment or "unset".
 	 */
-		public getAttachmentPdf(name: string): Optional<Attachment> {
+	public getAttachmentPdf(name: string): Optional<Attachment> {
 		const attachment = this.getAttachment(name);
 		if (!attachment) return attachment;
 		return attachment.contentType === "application/pdf" ? attachment : null;
@@ -138,9 +138,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 		return [...channelIdSet];
 	}
-
-	/** @deprecated */
-	public abstract findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V>;
 
 	/**
 	 * Gets the named option as a value from the given enum type.
