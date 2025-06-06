@@ -1,4 +1,4 @@
-import { ArgsManager, capitalize, error, filterAndMap, info, isDefined, oneToUS, sortComparable, toUnique, toUniqueDefined, verbose, type RenderableContent } from "@rsc-utils/core-utils";
+import { ArgsManager, capitalize, error, info, isDefined, oneToUS, sortComparable, toUnique, toUniqueDefined, verbose, type RenderableContent } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -17,7 +17,7 @@ function renderAllSource(objectType: string, objectTypePlural: string): Renderab
 		categories = all.map(source => source.searchResultCategory).filter(toUnique);
 	content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 	categories.forEach(category => {
-		const byCategory = filterAndMap(all, source => source.searchResultCategory === category, source => source.toSearchResult());
+		const byCategory = all.filter(source => source.searchResultCategory === category).map(source => source.toSearchResult());
 		content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join("\n> ")}`);
 	});
 	return content;
@@ -66,7 +66,7 @@ function renderAllBySource(objectType: string, objectTypePlural: string): Render
 			// categories.sort(sortCatWithRarity);
 			if (categories.length) {
 				categories.forEach(category => {
-					const byCategory = filterAndMap(bySource, item => item.searchResultCategory === category, item => item.toSearchResult());
+					const byCategory = bySource.filter(item => item.searchResultCategory === category).map(item => item.toSearchResult());
 					content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join(", ")}`);
 				});
 			} else {
