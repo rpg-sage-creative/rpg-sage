@@ -37,7 +37,7 @@ export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: O
 	if (isNameBlank && opts.first) {
 		const firstChar = gamePcs
 			? gamePcs.findByUser(actorId)
-			: userPcs.first();
+			: userPcs[0];
 		if (firstChar) return firstChar;
 	}
 

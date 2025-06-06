@@ -35,10 +35,9 @@ export function findCompanion(sageCommand: SageCommand, name: Optional<string>, 
 
 	// else grab their first
 	if (isNameBlank && opts.first) {
-		const firstComp = gamePcs
-			? gamePcs.findByUser(actorId)?.companions.first()
-			: userPcs.first()?.companions.first();
-		if (firstComp) return firstComp;
+		return gamePcs
+			? gamePcs.findByUser(actorId)?.companions[0]
+			: userPcs[0]?.companions[0];
 	}
 
 	return undefined;

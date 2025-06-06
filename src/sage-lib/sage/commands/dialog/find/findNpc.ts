@@ -37,10 +37,7 @@ export function findNpc(sageCommand: SageCommand, name: Optional<string>, opts: 
 
 	// else grab their first
 	if (opts.first) {
-		const firstChar = gameNpcs
-			? gameNpcs.first()
-			: userNpcs.first();
-		if (firstChar) return firstChar;
+		return (gameNpcs ?? userNpcs)[0];
 	}
 
 	return undefined;
