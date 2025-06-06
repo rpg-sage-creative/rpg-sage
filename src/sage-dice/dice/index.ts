@@ -1,5 +1,5 @@
 import { tokenize } from "@rsc-utils/core-utils";
-import { createEmojiRegex } from "@rsc-utils/discord-utils";
+import { getEmojiRegex } from "@rsc-utils/discord-utils";
 
 /** Looks for text escaped with ` characters that contain emoji (:die: or <:die:12345>) and unescapes those emoji so they render correctly. */
 export function correctEscapeForEmoji(value: string): string {
@@ -9,7 +9,7 @@ export function correctEscapeForEmoji(value: string): string {
 	// We only need to be concerned with `escaped text` substrings
 	return value.replace(/`[^`]+`/gu, escapedValue => {
 		// Get the emojiRegex
-		const emojiRegex = createEmojiRegex();
+		const emojiRegex = getEmojiRegex();
 
 		// Tokenize the substring so that we can iterate and toggle escaped/unescaped sections
 		const tokens = tokenize(escapedValue.slice(1, -1), { emojiRegex });

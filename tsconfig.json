@@ -20,7 +20,6 @@
 		// core-utils
 		{ "path": "./packages/utils/character-utils" },
 		{ "path": "./packages/utils/dice-utils" },
-		{ "path": "./packages/utils/string-utils" },
 
 		// string-utils
 		{ "path": "./packages/utils/discord-utils" },

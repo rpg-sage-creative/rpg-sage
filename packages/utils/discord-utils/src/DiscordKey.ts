@@ -1,6 +1,6 @@
 import { isNilSnowflake, isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { type Interaction, type MessageReference } from "discord.js";
-import { createDiscordUrlRegex } from "./parse/createDiscordUrlRegex.js";
+import { getDiscordUrlRegex } from "./parse/getDiscordUrlRegex.js";
 import type { ChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveSnowflake, type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolve/resolveSnowflake.js";
 import type { MessageOrPartial, MessageReferenceOrPartial, MessageTarget, ReactionOrPartial } from "./types/index.js";
@@ -132,13 +132,13 @@ export class DiscordKey implements MessageReference, ChannelReference {
 	}
 
 	public static fromUrl(url: string): DiscordKey | undefined {
-		const messageMatch = createDiscordUrlRegex("message").exec(url);
+		const messageMatch = getDiscordUrlRegex({ type:"message" }).exec(url);
 		if (messageMatch?.groups) {
 			const { guildId, channelId, messageId } = messageMatch.groups;
 			return new DiscordKey(guildId, channelId, channelId, messageId);
 		}
 
-		const channelMatch = createDiscordUrlRegex("channel").exec(url);
+		const channelMatch = getDiscordUrlRegex({ type:"channel" }).exec(url);
 		if (channelMatch?.groups) {
 			const { guildId, channelId } = channelMatch.groups;
 			return new DiscordKey(guildId, channelId, channelId);
