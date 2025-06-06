@@ -141,7 +141,11 @@ async function aliasCreate(sageMessage: SageMessage, alias: TAlias): Promise<boo
 
 	const bool = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (bool === true) {
-		return sageMessage.sageUser.aliases.pushAndSave(alias);
+		const { aliases } = sageMessage.sageUser;
+		if (!aliases.findByName(alias.name)) {
+			aliases.push(alias);
+			return await aliases.save() ?? false;
+		}
 	}
 	return false;
 }
@@ -209,7 +213,11 @@ async function deleteAlias(sageMessage: SageMessage, alias: TAlias): Promise<voi
 	promptRenderable.append(aliasPrompt);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (yes === true) {
-		const saved = await sageMessage.sageUser.aliases.removeAndSave(alias);
+		const { aliases } = sageMessage.sageUser;
+		const found = aliases.findByName(alias.name);
+		const index = found ? aliases.indexOf(found) : -1;
+		const removed = index > -1 ? aliases.splice(index, 1)[0] : undefined;
+		const saved = removed ? await aliases.save() ?? false : false;
 		return sageMessage.reactSuccessOrFailure(saved);
 	}
 	return Promise.resolve();
