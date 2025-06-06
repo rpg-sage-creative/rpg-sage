@@ -13,7 +13,6 @@ import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TE
 import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMessageRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
-import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import { hpToGauge } from "./utils/hpToGauge.js";
 
@@ -197,7 +196,7 @@ function fixLastMessages(core: GameCharacterCore): void {
 
 //#endregion
 
-export class GameCharacter implements IHasSave {
+export class GameCharacter {
 	public equals(other: string | GameCharacter | undefined): boolean {
 		if (!other) return false;
 		if (other instanceof GameCharacter) return other.id === this.core.id;
@@ -759,7 +758,6 @@ export class GameCharacter implements IHasSave {
 		return false;
 	}
 
-	//#region IHasSave
 	public async save(savePathbuilder?: boolean): Promise<boolean> {
 		const ownerSaved = await this.owner?.save() ?? false;
 		if (savePathbuilder && this.pathbuilderId) {
@@ -768,7 +766,6 @@ export class GameCharacter implements IHasSave {
 		}
 		return ownerSaved;
 	}
-	//#endregion
 
 	public static readonly defaultGmCharacterName = DEFAULT_GM_CHARACTER_NAME;
 

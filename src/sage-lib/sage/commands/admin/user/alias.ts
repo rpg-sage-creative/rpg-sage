@@ -1,4 +1,4 @@
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank, StringMatcher, type Optional } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -7,6 +7,13 @@ import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import type { DialogContent } from "../../dialog/DialogContent.js";
 import { parseDialogContent } from "../../dialog/parseDialogContent.js";
+
+function findAlias(aliases: TAlias[], aliasOrName: Optional<string | TAlias>): TAlias | undefined {
+	if (!aliasOrName) return undefined;
+	const aliasName = typeof(aliasOrName) === "string" ? aliasOrName : aliasOrName.name;
+	const matcher = StringMatcher.from(aliasName);
+	return aliases.find(alias => matcher.matches(alias.name));
+}
 
 function testGmTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (!sageMessage.game || sageMessage.isGameMaster) {
@@ -19,6 +26,7 @@ function testGmTarget(sageMessage: SageMessage, dialogContent: DialogContent): b
 	}
 	return false;
 }
+
 function testNpcTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (dialogContent.name?.toLowerCase() === "{name}") {
 		return true;
@@ -33,6 +41,7 @@ function testNpcTarget(sageMessage: SageMessage, dialogContent: DialogContent): 
 	}
 	return sageMessage.sageUser.nonPlayerCharacters.findByName(dialogContent.name) !== undefined;
 }
+
 function testPcTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (dialogContent.name?.toLowerCase() === "{name}") {
 		return true;
@@ -42,6 +51,7 @@ function testPcTarget(sageMessage: SageMessage, dialogContent: DialogContent): b
 	}
 	return sageMessage.sageUser.playerCharacters.findByName(dialogContent.name) !== undefined;
 }
+
 function testCompanionTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (dialogContent.name?.toLowerCase() === "{name}") {
 		return true;
@@ -141,10 +151,11 @@ async function aliasCreate(sageMessage: SageMessage, alias: TAlias): Promise<boo
 
 	const bool = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (bool === true) {
-		const { aliases } = sageMessage.sageUser;
-		if (!aliases.findByName(alias.name)) {
+		const { sageUser } = sageMessage
+		const { aliases } = sageUser;
+		if (!findAlias(aliases, alias)) {
 			aliases.push(alias);
-			return await aliases.save() ?? false;
+			return await sageUser.save() ?? false;
 		}
 	}
 	return false;
@@ -197,7 +208,7 @@ async function aliasSet(sageMessage: SageMessage): Promise<void> {
 	const target = dialogContentToTarget(dialogContent);
 
 	let saved = false;
-	const oldAlias = sageMessage.sageUser.aliases.findByName(aliasName);
+	const oldAlias = findAlias(sageMessage.sageUser.aliases, aliasName);
 	const newAlias = { name: aliasName, target: target };
 	if (oldAlias) {
 		saved = await aliasUpdate(sageMessage, oldAlias, newAlias);
@@ -213,11 +224,12 @@ async function deleteAlias(sageMessage: SageMessage, alias: TAlias): Promise<voi
 	promptRenderable.append(aliasPrompt);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
 	if (yes === true) {
-		const { aliases } = sageMessage.sageUser;
-		const found = aliases.findByName(alias.name);
+		const { sageUser } = sageMessage
+		const { aliases } = sageUser;
+		const found = findAlias(aliases, alias.name);
 		const index = found ? aliases.indexOf(found) : -1;
 		const removed = index > -1 ? aliases.splice(index, 1)[0] : undefined;
-		const saved = removed ? await aliases.save() ?? false : false;
+		const saved = removed ? await sageUser.save() ?? false : false;
 		return sageMessage.reactSuccessOrFailure(saved);
 	}
 	return Promise.resolve();
@@ -229,7 +241,7 @@ async function aliasDelete(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const aliasName = sageMessage.args.getString("name");
-	const alias = aliasName ? sageMessage.sageUser.aliases.findByName(aliasName) : null;
+	const alias = findAlias(sageMessage.sageUser.aliases, aliasName);
 	if (!aliasName || !alias) {
 		const details = [
 			"The command for deleting an advanced alias is:",
@@ -252,7 +264,7 @@ async function aliasDetails(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const aliasName = sageMessage.args.getString("name");
-	const alias = aliasName ? sageMessage.sageUser.aliases.findByName(aliasName) : null;
+	const alias = findAlias(sageMessage.sageUser.aliases, aliasName);
 	if (!aliasName || !alias) {
 		const details = [
 			"The command for viewing an advanced alias is:",

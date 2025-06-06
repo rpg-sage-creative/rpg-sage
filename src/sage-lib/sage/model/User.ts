@@ -6,7 +6,6 @@ import type { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
 import type { MacroBase } from "./Macro.js";
-import { NamedCollection } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { SageCache } from "./SageCache.js";
 
@@ -91,8 +90,6 @@ export class User extends HasSageCacheCore<UserCore> {
 	public constructor(core: UserCore, sageCache: SageCache) {
 		super(updateCore(core), sageCache);
 
-		this.core.aliases = NamedCollection.from(this.core.aliases ?? [], this);
-
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 
@@ -102,8 +99,8 @@ export class User extends HasSageCacheCore<UserCore> {
 		this.isSuperUser = core.did === getSuperUserId();
 	}
 
-	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
-	public get macros() { return this.core.macros ?? (this.core.macros = []); }
+	public get aliases(): TAlias[] { return this.core.aliases ??= []; }
+	public get macros() { return this.core.macros ??= []; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public notes: NoteManager;
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }

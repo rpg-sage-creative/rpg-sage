@@ -1,42 +1,19 @@
-import { randomSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { randomSnowflake, type Optional, type OrUndefined, type Snowflake } from "@rsc-utils/core-utils";
 import { resolveSnowflake, type CanBeSnowflakeResolvable } from "@rsc-utils/discord-utils";
 import type { Game } from "./Game.js";
 import { GameCharacter, type GameCharacterCore, type TGameCharacterType } from "./GameCharacter.js";
-import { NamedCollection, type IHasSave } from "./NamedCollection.js";
 import type { Server } from "./Server.js";
 import type { User } from "./User.js";
-import Collection from "./utils/Collection.js";
-
-/*
-// function remapCharacters(this: CharacterManager, core: GameCharacterCore, index: number, array: (GameCharacterCore | GameCharacter)[]): void {
-// 	if (!core.id) {
-// 		core.id = randomSnowflake();
-// 	}
-// 	array[index] = new GameCharacter(core, this);
-// }
-*/
 
 type TGameCharacterOwner = Game | GameCharacter | Server | User;
 
-export class CharacterManager extends NamedCollection<GameCharacter> implements IHasSave {
-	// 			public async addCharacter(userDid: Snowflake, name: string, iconUrl: string): Promise<boolean> {
-	// 				const found = findByUserDidAndName(this, userDid, name);
-	// 				if (found) {
-	// 					return false;
-	//				}
-	//			}
-	// 			public getCharacter(userDid: Snowflake, name: string): IGameCharacter {
-	// 				return findByUserDidAndName(this, userDid, name);
-	//			}
+export class CharacterManager extends Array<GameCharacter> {
 
 	/** The type of character represented by this manager. */
 	public characterType?: TGameCharacterType;
 
-	/** Convenient way to get the GM Character Name from this manager's owner Game/Server. */
-	// public get gmCharacterName(): string | undefined { return (this.owner as Game).gmCharacter.name; }
-
 	/** The owner of this collection that can be saved when changes are made. */
-	declare protected owner?: TGameCharacterOwner;
+	protected owner?: TGameCharacterOwner;
 
 	/** Tests to see if any characters match the given name, defaults to no recursion. */
 	public hasMatching(name: string, recursive = false): boolean {
@@ -50,15 +27,19 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		const found = this.findByUser(core.userDid, core.name);
 		if (!found) {
 			const newCore = <GameCharacterCore>{ ...core, id: randomSnowflake() };
-			const character = new GameCharacter(newCore, this),
-				added = await this.pushAndSave(character);
-			return added ? character : null;
+			const character = new GameCharacter(newCore, this);
+			if (!this.findByName(character.name)) {
+				this.push(character);
+				if (await this.save()) {
+					return character;
+				}
+			}
 		}
 		return null;
 	}
 
 	/** Returns all characters with the given userDid. */
-	public filterByUser(userDid: Snowflake): NamedCollection<GameCharacter> {
+	public filterByUser(userDid: Snowflake): GameCharacter[] {
 		return this.filter(character => character.userDid === userDid);
 	}
 
@@ -140,30 +121,6 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 
 	//#endregion
 
-	/** Returns the newest dialog message from all characters and companions. (Helpful for NPCs) */
-	// public getLastMessage(channelId: Snowflake): DialogMessageData | undefined {
-	// 	return this.getLastMessages(channelId).pop();
-	// }
-
-	/** Returns all the dialog messages for all characters/companions, sorted oldest to newest. (.pop() gets the newest) */
-	// public getLastMessages(channelId: Snowflake): DialogMessageData[] {
-	// 	const lastMessages: DialogMessageData[] = [];
-	// 	this.forEach(character => {
-	// 		lastMessages.push(...character.getLastMessages(channelId));
-	// 	});
-	// 	/*
-	// 	// lastMessages.sort((a, b) => a.timestamp - b.timestamp);
-	// 	*/
-	// 	return lastMessages;
-	// }
-
-	/** We likely don't want a CharacterManager if we map to a non-named value. */
-	public map<T>(callbackfn: (value: GameCharacter, index: number, collection: CharacterManager) => T, thisArg?: any): Collection<T> {
-		const mapped = new Collection<T>();
-		this.forEach((value, index, collection) => mapped.push(callbackfn.call(thisArg, value, index, collection)));
-		return mapped;
-	}
-
 	public getAutoCharacter(autoChannelData: {channelDid:Snowflake;userDid:Snowflake;}): GameCharacter | undefined {
 		for (const char of this) {
 			if (char.hasAutoChannel(autoChannelData)) {
@@ -178,11 +135,12 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		return undefined;
 	}
 
-	//#region IHasSave
+	//#region owner/save related
 
 	/** Fires a .save on the owner, generally a Game or User. Returns false if no owner. */
-	public save(): Promise<boolean> {
-		return this.owner?.save() ?? Promise.resolve(false);
+	public async save(): Promise<OrUndefined<boolean>> {
+		const { owner } = this;
+		return owner ? owner.save() : undefined;
 	}
 
 	//#endregion
@@ -210,34 +168,4 @@ export class CharacterManager extends NamedCollection<GameCharacter> implements 
 		}
 		return characterManager;
 	}
-}
-
-// Update the Collection signatures to indicate that we are now returning a NamedCollection
-export interface CharacterManager {
-
-	concat(...items: ConcatArray<GameCharacter>[]): CharacterManager;
-	concat(...items: (GameCharacter | ConcatArray<GameCharacter>)[]): CharacterManager;
-
-	filter(predicate: (value: GameCharacter, index: number, manager: CharacterManager) => unknown, thisArg?: any): CharacterManager;
-	filter<T extends GameCharacter>(predicate: (value: GameCharacter, index: number, manager: CharacterManager) => value is T, thisArg?: any): CharacterManager;
-
-	forEach(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => void, thisArg?: any): void;
-
-	map<T>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): T[];
-	// map<T extends GameCharacter>(callbackfn: (value: GameCharacter, index: number, manager: CharacterManager) => T, thisArg?: any): NamedCollection<T>;
-
-	reduce(callbackfn: (previousValue: GameCharacter, currentValue: GameCharacter, currentIndex: number, manager: CharacterManager) => GameCharacter): GameCharacter;
-	reduce(callbackfn: (previousValue: GameCharacter, currentValue: GameCharacter, currentIndex: number, manager: CharacterManager) => GameCharacter, initialValue: GameCharacter): GameCharacter;
-	reduce<T>(callbackfn: (previousValue: T, currentValue: GameCharacter, currentIndex: number, manager: CharacterManager) => T, initialValue: T): T;
-
-	reduceRight(callbackfn: (previousValue: GameCharacter, currentValue: GameCharacter, currentIndex: number, manager: CharacterManager) => GameCharacter): GameCharacter;
-	reduceRight(callbackfn: (previousValue: GameCharacter, currentValue: GameCharacter, currentIndex: number, manager: CharacterManager) => GameCharacter, initialValue: GameCharacter): GameCharacter;
-	reduceRight<T>(callbackfn: (previousValue: T, currentValue: GameCharacter, currentIndex: number, manager: CharacterManager) => T, initialValue: T): T;
-
-	reverse(): this;
-
-	slice(start?: number, end?: number): CharacterManager;
-
-	splice(start: number, deleteCount?: number): CharacterManager;
-	splice(start: number, deleteCount: number, ...items: GameCharacter[]): CharacterManager;
 }
