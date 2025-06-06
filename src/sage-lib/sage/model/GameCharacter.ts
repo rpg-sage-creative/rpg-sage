@@ -471,13 +471,21 @@ export class GameCharacter implements IHasSave {
 		return this.core;
 	}
 
-	public remove(): Promise<boolean> {
+	public async remove(): Promise<boolean> {
+		let manager: CharacterManager | undefined;
 		if (this.owner instanceof GameCharacter) {
-			return this.owner.companions.removeAndSave(this);
+			manager = this.owner.companions;
 		} else if (this.owner instanceof CharacterManager) {
-			return this.owner.removeAndSave(this);
+			manager = this.owner;
 		}
-		return Promise.resolve(false);
+		if (!manager) return false;
+		const found = manager.findByName(this.name);
+		if (!found) return false;
+		const index = manager.indexOf(found);
+		if (index < 0) return false;
+		const removed = manager.splice(index, 1)[0];
+		if (!removed) return false;
+		return await manager.save() ?? false;
 	}
 
 	private fetchedStats: Map<string, string> | undefined;
