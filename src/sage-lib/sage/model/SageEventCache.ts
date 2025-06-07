@@ -1,6 +1,6 @@
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, isThread, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, isThreadChannel, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
@@ -684,7 +684,7 @@ export class SageEventCache {
 		});
 		if (gameByChannel) return gameByChannel;
 
-		if (isThread(channel)) {
+		if (isThreadChannel(channel)) {
 			const gameByParent = await this.findActiveGameByReference({
 				guildId,
 				channelId: channel.parentId!
