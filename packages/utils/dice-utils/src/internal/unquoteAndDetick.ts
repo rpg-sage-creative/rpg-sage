@@ -1,4 +1,4 @@
-import { unquote } from "./unquote.js";
+import { dequote } from "@rsc-utils/core-utils";
 
 /**
  * @internal
@@ -6,5 +6,5 @@ import { unquote } from "./unquote.js";
  * Removes all backticks (`) from remaining value.
  */
 export function unquoteAndDetick(value: string): string {
-	return unquote(value).replace(/`/g, "");
+	return dequote(value).replace(/`/g, "");
 }

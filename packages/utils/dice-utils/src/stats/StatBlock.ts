@@ -1,5 +1,5 @@
+import { dequote } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
-import { unquote } from "../internal/unquote.js";
 
 function createCharTypeRegex() {
 	return XRegExp(`
@@ -72,7 +72,7 @@ function parseStatBlock(value: string): StatBlockResults | undefined {
 	if (!match) return undefined; //NOSONAR
 
 	let [nameOrCharType, statKey, defaultValue] = match.slice(1);
-	nameOrCharType = unquote(nameOrCharType).trim();
+	nameOrCharType = dequote(nameOrCharType).trim();
 	statKey = statKey.trim();
 	defaultValue = defaultValue?.trim();
 
