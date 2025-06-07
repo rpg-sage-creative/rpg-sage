@@ -17,13 +17,8 @@
 		"test"
 	],
 	"references": [
-		// core-utils
 		{ "path": "./packages/utils/character-utils" },
 		{ "path": "./packages/utils/dice-utils" },
-
-		// string-utils
-		{ "path": "./packages/utils/discord-utils" },
-
 		{ "path": "./packages/sage/types" },
 		{ "path": "./packages/sage/env" },
 

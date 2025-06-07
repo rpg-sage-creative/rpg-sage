@@ -60,6 +60,7 @@
 		"@napi-rs/canvas": "0.1.53",
 		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.7.1",
 		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.3.1",
+		"@rsc-utils/discord-utils": "rpg-sage-creative/discord-utils#v0.2.0",
 		"discord.js": "14.19.2",
 		"emoji-regex-xs": "^2.0.1",
 		"exifreader": "4.23.3",

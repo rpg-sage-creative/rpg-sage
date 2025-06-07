@@ -6,6 +6,6 @@
 	"type": "module",
 	"dependencies": {
 		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.7.1",
-		"@rsc-utils/discord-utils": "^0.0.0"
+		"@rsc-utils/discord-utils": "rpg-sage-creative/discord-utils#v0.2.0"
 	}
 }
