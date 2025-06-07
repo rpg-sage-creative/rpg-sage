@@ -1,10 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
 import type { AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DMChannel, ForumChannel, MediaChannel, Message, MessageComponentInteraction, MessageReaction, MessageReference, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
-import { isDMBasedChannel } from "./typeGuards/isDMBasedChannel.js";
-import { isGroupDMBasedChannel } from "./typeGuards/isGroupDMBasedChannel.js";
-import { isGuildBasedChannel } from "./typeGuards/isGuildBasedChannel.js";
-import { isNonThreadChannel } from "./typeGuards/isNonThreadChannel.js";
-import { isThreadChannel } from "./typeGuards/isThreadChannel.js";
 
 export type MessageReferenceOrPartial = MessageReference | Omit<MessageReference, "type">;
 
@@ -26,8 +20,6 @@ export type DRepliableInteraction<Cached extends CacheType = CacheType>
 	| CommandInteraction<Cached>
 	| ModalSubmitInteraction<Cached>
 	;
-
-type ChannelOrUser = Channel | UserOrPartial;
 
 export type DMBasedChannel = PartialGroupDMChannel | DMChannel | PartialDMChannel;
 
@@ -54,34 +46,5 @@ export type UserResolvable = User | PartialUser | APIUser | PartialRecipient;
 
 /** Channels that can have webhooks. */
 export type WebhookChannel = Exclude<NonThreadGuildBasedChannel, CategoryChannel | ForumChannel | MediaChannel>;
-
-//#endregion
-
-//#region type checks
-
-/** @deprecated */
-export function isDMBased(value: Optional<ChannelOrUser>) {
-	return isDMBasedChannel(value);
-}
-
-/** @deprecated */
-export function isGroupDMBased(value: Optional<ChannelOrUser>) {
-	return isGroupDMBasedChannel(value);
-}
-
-/** @deprecated */
-export function isGuildBased(value: Optional<ChannelOrUser>) {
-	return isGuildBasedChannel(value);
-}
-
-/** @deprecated */
-export function isNonThread(value: Optional<ChannelOrUser>) {
-	return isNonThreadChannel(value);
-}
-
-/** @deprecated */
-export function isThread(value: Optional<ChannelOrUser>) {
-	return isThreadChannel(value);
-}
 
 //#endregion
