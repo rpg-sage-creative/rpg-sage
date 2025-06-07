@@ -1,6 +1,7 @@
-import { type Optional } from "@rsc-utils/core-utils";
-import { type Channel } from "discord.js";
-import { isGuildBased, type MessageOrPartial, type MessageReferenceOrPartial } from "../types/types.js";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { Channel } from "discord.js";
+import { isGuildBasedChannel } from "../types/typeGuards/isGuildBasedChannel.js";
+import type { MessageOrPartial, MessageReferenceOrPartial } from "../types/types.js";
 
 function createUrl(guildId: Optional<string>, channelId: string): string {
 	return `https://discord.com/channels/${guildId ?? "@me"}/${channelId}`;
@@ -14,9 +15,10 @@ export function toChannelUrl(ref: Optional<ChannelResolvable>): string | undefin
 		if ("channelId" in ref) {
 			return createUrl(ref.guildId, ref.channelId);
 		}
-		if (isGuildBased(ref)) {
+		if (isGuildBasedChannel(ref)) {
 			return createUrl(ref.guildId, ref.id);
 		}
+		/** @todo do we need to test and handle isDMBased(ref) ? */
 		return createUrl(undefined, ref.id);
 	}
 	return undefined;
