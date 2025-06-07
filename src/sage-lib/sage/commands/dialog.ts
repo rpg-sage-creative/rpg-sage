@@ -1,5 +1,5 @@
 import { debug } from "@rsc-utils/core-utils";
-import { isDMBased } from "@rsc-utils/discord-utils";
+import { isDMBasedChannel } from "@rsc-utils/discord-utils";
 import { registerMessageListener } from "../../discord/handlers.js";
 import { MessageType, type TCommandAndArgsAndData } from "../../discord/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
@@ -30,7 +30,7 @@ async function isDialog(sageMessage: SageMessage): Promise<TCommandAndArgsAndDat
 }
 
 async function doDialog(sageMessage: SageMessage, dialogContents: DialogContent[]): Promise<void> {
-	if (isDMBased(sageMessage.dChannel)) {
+	if (isDMBasedChannel(sageMessage.dChannel)) {
 		return sageMessage.whisper(`Sorry, Dialog does not function in DMs.`);
 	}
 
