@@ -1,6 +1,5 @@
-import { randomSnowflake } from "@rsc-utils/core-utils";
+import { isBoolean, randomSnowflake } from "@rsc-utils/core-utils";
 import { isGradeFailure } from "../grade.js";
-import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
 import { tokenize, type TokenData } from "../internal/tokenize.js";
 import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
