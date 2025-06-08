@@ -1,4 +1,4 @@
-import { tokenize } from "../internal/tokenize.js";
+import { tokenize } from "@rsc-utils/core-utils";
 import { getComplexRegex } from "../math/doComplex.js";
 import { doPosNeg, getPosNegRegex } from "../math/doPosNeg.js";
 import { processMath } from "../math/processMath.js";

@@ -8,8 +8,7 @@ Ex: [1d8tt7] would mean that when an 8 is rolled, a value of 7 would be used.
 Ex: [1d8bt2] would mean that when a 1 is rolled, a value of 2 would be used.
 */
 
-import type { Optional } from "@rsc-utils/core-utils";
-import type { TokenData, TokenParsers } from "../internal/tokenize.js";
+import type { Optional, TokenData, TokenParsers } from "@rsc-utils/core-utils";
 import type { RollData } from "../types/RollData.js";
 import { DiceManipulation } from "./DiceManipulation.js";
 

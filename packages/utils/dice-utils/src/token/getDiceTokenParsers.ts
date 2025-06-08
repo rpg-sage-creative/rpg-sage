@@ -1,5 +1,5 @@
+import type { TokenParsers } from "@rsc-utils/core-utils";
 import { DiceTest } from "../DiceTest.js";
-import type { TokenParsers } from "../internal/tokenize.js";
 import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
 import { DiceExplode } from "../manipulate/DiceExplode.js";
 import { DiceThreshold } from "../manipulate/DiceThreshold.js";

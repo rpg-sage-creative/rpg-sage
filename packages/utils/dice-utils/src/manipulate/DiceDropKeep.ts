@@ -1,6 +1,5 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional, TokenData, TokenParsers } from "@rsc-utils/core-utils";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
-import type { TokenData, TokenParsers } from "../internal/tokenize.js";
 import type { RollData } from "../types/RollData.js";
 import { DiceManipulation } from "./DiceManipulation.js";
 

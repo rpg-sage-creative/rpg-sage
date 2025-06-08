@@ -1,4 +1,4 @@
-import type { TokenData } from "../internal/tokenize.js";
+import type { TokenData } from "@rsc-utils/core-utils";
 
 function isTestOrTarget(token: TokenData): token is TokenData<"target" | "test"> {
 	return ["test", "target"].includes(token.key);

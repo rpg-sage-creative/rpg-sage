@@ -1,6 +1,6 @@
+import type { TokenData, TokenParsers } from "@rsc-utils/core-utils";
 import { DiceTestType } from "../DiceTest.js";
 import { rollDataMapper } from "../internal/rollDataMapper.js";
-import type { TokenData, TokenParsers } from "../internal/tokenize.js";
 import { rollDie } from "../roll/rollDie.js";
 import type { RollData } from "../types/RollData.js";
 import { DiceManipulation } from "./DiceManipulation.js";

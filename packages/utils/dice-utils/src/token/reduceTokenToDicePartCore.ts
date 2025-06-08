@@ -1,7 +1,7 @@
+import type { TokenData } from "@rsc-utils/core-utils";
 import { appendTestToCore } from "../DiceTest.js";
 import type { TDiceBaseCore } from "../dice/DiceBase.js";
 import type { DicePartCore } from "../dice/DicePart.js";
-import type { TokenData } from "../internal/tokenize.js";
 import { DiceDropKeep, type DiceDropKeepType } from "../manipulate/DiceDropKeep.js";
 import { appendManipulationToCore } from "../manipulate/appendManipulationToCore.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
