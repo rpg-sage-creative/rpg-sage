@@ -1,7 +1,6 @@
-import { ArgsManager, Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { ArgsManager, Cache, debug, error, errorReturnUndefined, escapeRegex, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
-import XRegExp from "xregexp";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { sendTo } from "../../discord/sendTo.js";
@@ -78,7 +77,7 @@ export class SageMessage
 	private commandAndArgs?: TCommandAndArgs;
 	public get command(): string { return this.commandAndArgs?.command ?? "INVALID COMMAND"; }
 	public commandMatches(value: string | RegExp): boolean {
-		const regex = value instanceof RegExp ? value : XRegExp(`^${value}`, "i");
+		const regex = value instanceof RegExp ? value : new RegExp(`^${value}`, "i");
 		return regex.test(this.command);
 	}
 	public args!: SageMessageArgs;
@@ -276,8 +275,8 @@ export class SageMessage
 	public static async fromMessage(message: SMessage): Promise<SageMessage> {
 		const eventCache = await SageEventCache.fromMessage(message);
 		const prefixOrDefault = eventCache.getPrefixOrDefault();
-		const regexOr = prefixOrDefault ? XRegExp.escape(prefixOrDefault) : `sage`;
-		const prefixRegex = XRegExp(`^\\s*(${regexOr})?[!?][!]?`, "i");
+		const regexOr = prefixOrDefault ? escapeRegex(prefixOrDefault) : `sage`;
+		const prefixRegex = new RegExp(`^\\s*(${regexOr})?[!?][!]?`, "i");
 		const prefixMatch = prefixRegex.exec(message.content ?? "");
 		const prefixFound = prefixMatch?.[1] ?? "";
 		const hasPrefix = [prefixOrDefault.toLowerCase(), "sage"].includes(prefixFound.toLowerCase());

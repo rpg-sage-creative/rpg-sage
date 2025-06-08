@@ -1,7 +1,6 @@
 import { GameType } from "@rsc-sage/types";
-import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, escapeRegex, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { hasSecretFlag, rollDice } from "@rsc-utils/dice-utils";
-import XRegExp from "xregexp";
 import {
 	CritMethodType,
 	DiceOutputType,
@@ -49,7 +48,7 @@ function detick(value: string): string {
 
 /** Removes the first instance of desc from description while ensuring it doesn't break HTML (ex: Removing "b" from "<b>8</b> b") */
 function removeDesc(description: string, desc: string): string {
-	const tokens = tokenize(description, { html:/<[^>]+>/, desc:new RegExp(XRegExp.escape(desc)) });
+	const tokens = tokenize(description, { html:/<[^>]+>/, desc:new RegExp(escapeRegex(desc)) });
 	const firstDesc = tokens.find(token => token.key === "desc");
 	return tokens
 		.filter(token => token !== firstDesc)
