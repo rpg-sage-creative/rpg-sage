@@ -1,4 +1,3 @@
-export * from "./cleanWhitespace.js";
 export * from "./hasSecretFlag.js";
 export * from "./isDiceOutputType.js";
 export * from "./numberSorter.js";

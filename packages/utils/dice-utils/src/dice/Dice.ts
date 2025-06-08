@@ -1,7 +1,6 @@
-import { isBoolean, randomSnowflake, sum } from "@rsc-utils/core-utils";
+import { cleanWhitespace, isBoolean, randomSnowflake, sum } from "@rsc-utils/core-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
-import { cleanWhitespace } from "../internal/cleanWhitespace.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
 import { unquoteAndDetick } from "../internal/unquoteAndDetick.js";
 import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
