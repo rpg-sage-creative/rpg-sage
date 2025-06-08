@@ -1,4 +1,3 @@
-export * from "./hasSecretFlag.js";
 export * from "./isDiceOutputType.js";
 export * from "./rollDataMapper.js";
 export * from "./rollDataSorter.js";

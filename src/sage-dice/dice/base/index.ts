@@ -1,6 +1,6 @@
 import { GameType } from "@rsc-sage/types";
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { rollDice } from "@rsc-utils/dice-utils";
+import { hasSecretFlag, rollDice } from "@rsc-utils/dice-utils";
 import XRegExp from "xregexp";
 import {
 	CritMethodType,
@@ -344,7 +344,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 
 	//#region DiceBase
 	public get hasSecret(): boolean {
-		return this.description.match(/secret/i) !== null;
+		return hasSecretFlag(this.description);
 	}
 	public roll(): U {
 		const _constructor = <typeof DicePart>this.constructor;
