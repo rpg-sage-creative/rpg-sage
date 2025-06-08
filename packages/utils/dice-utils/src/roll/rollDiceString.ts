@@ -1,4 +1,4 @@
-import { sum } from "../sum.js";
+import { sum } from "@rsc-utils/core-utils";
 import { rollDice } from "./rollDice.js";
 
 /**

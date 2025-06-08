@@ -12,5 +12,4 @@ export * from "./DiceTest.js";
 export * from "./grade.js";
 export * from "./mapDicePartToRollString.js";
 export * from "./removeDesc.js";
-export * from "./sum.js";
 export * from "./sumDiceParts.js";

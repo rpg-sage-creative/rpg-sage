@@ -1,5 +1,5 @@
+import { sum } from "@rsc-utils/core-utils";
 import type { TDicePart } from "./dice/DicePart.js";
-import { sum } from "./sum.js";
 import type { DiceOperator } from "./types/DiceOperator.js";
 
 export function sumDiceParts(diceParts: TDicePart[]): number {

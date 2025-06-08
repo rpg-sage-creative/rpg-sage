@@ -1,8 +1,8 @@
+import { sum } from "@rsc-utils/core-utils";
 import type { TDicePart } from "../dice/DicePart.js";
 import { rollDataMapper } from "../internal/rollDataMapper.js";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
 import { markRollData } from "../markup/markRollData.js";
-import { sum } from "../sum.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { rollDice } from "./rollDice.js";
 
@@ -19,7 +19,7 @@ export function rollDicePart(dicePart: TDicePart): SortedRollData {
 	}
 
 	const initialCount = byIndex.length;
-	const initialSum = sum(byIndex.map(roll => roll.value));
+	const initialSum = sum(byIndex, roll => roll.value);
 
 	let noSort = false;
 

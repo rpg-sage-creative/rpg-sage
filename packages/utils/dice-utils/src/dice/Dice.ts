@@ -1,4 +1,4 @@
-import { isBoolean, randomSnowflake } from "@rsc-utils/core-utils";
+import { isBoolean, randomSnowflake, sum } from "@rsc-utils/core-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
 import { cleanWhitespace } from "../internal/cleanWhitespace.js";
@@ -6,7 +6,6 @@ import { isDiceOutputType } from "../internal/isDiceOutputType.js";
 import { unquoteAndDetick } from "../internal/unquoteAndDetick.js";
 import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
 import { removeDesc } from "../removeDesc.js";
-import { sum } from "../sum.js";
 import { sumDiceParts } from "../sumDiceParts.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import { UNICODE_LEFT_ARROW } from "../types/consts.js";
@@ -35,10 +34,10 @@ export class Dice<
 	public get primary(): ChildType | undefined { return this.children.find(dicePart => dicePart.hasDie); }
 
 	/** Sums the max of all the dice parts. */
-	public get max(): number { return sum(this.children.map(dicePart => dicePart.max)); }
+	public get max(): number { return sum(this.children, dicePart => dicePart.max); }
 
 	/** Sums the min of all the dice parts. */
-	public get min(): number { return sum(this.children.map(dicePart => dicePart.min)); }
+	public get min(): number { return sum(this.children, dicePart => dicePart.min); }
 
 	/** Gets the first test. */
 	public get test(): DiceTest { return this.children.find(dicePart => dicePart.hasTest)?.test ?? DiceTest.EmptyTest; }

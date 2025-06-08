@@ -1,5 +1,5 @@
 import { DiceOutputType, GameType } from "@rsc-sage/types";
-import { cleanWhitespace, HasIdCore, sortPrimitive, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
+import { cleanWhitespace, HasIdCore, sortPrimitive, sum, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
 /** @deprecated @todo Update imports for these enums. */
@@ -24,10 +24,6 @@ export function cleanDescription(description?: string): string {
 //#endregion
 
 //#region rollDice, sum, toMod
-
-export function sum(values: number[]): number {
-	return values.reduce((total, value) => total + value, 0);
-}
 
 export function sumDropKeep(values: number[], dropKeep?: TDropKeepData): number {
 	if (!dropKeep) {

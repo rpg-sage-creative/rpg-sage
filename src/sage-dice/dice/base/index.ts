@@ -1,5 +1,5 @@
 import { GameType } from "@rsc-sage/types";
-import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
 import XRegExp from "xregexp";
 import {
@@ -16,7 +16,6 @@ import {
 	mapRollToJson,
 	parseValueDropKeepData,
 	parseValueTestData,
-	sum,
 	sumDicePartRolls,
 	sumDropKeep,
 	type IDiceBase,
@@ -494,8 +493,8 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 
 	//#region calculated
 	public get baseDicePart(): OrUndefined<U> { return this.diceParts.find(dicePart => dicePart.hasDie); }
-	public get max(): number { return sum(this.diceParts.map(dicePart => dicePart.max)); }
-	public get min(): number { return sum(this.diceParts.map(dicePart => dicePart.min)); }
+	public get max(): number { return sum(this.diceParts, dicePart => dicePart.max); }
+	public get min(): number { return sum(this.diceParts, dicePart => dicePart.min); }
 	public get test(): OrUndefined<TTestData> { return this.diceParts.find(dicePart => dicePart.hasTest)?.test; }
 	//#endregion
 
