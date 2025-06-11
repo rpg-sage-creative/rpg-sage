@@ -1,13 +1,13 @@
 import { dequote } from "@rsc-utils/core-utils";
-import XRegExp from "xregexp";
+import { regex } from "regex";
 
 function createCharTypeRegex() {
-	return XRegExp(`
+	return regex("i")`
 		^
-		(pc|stat)?
-		(companion|hireling|alt|familiar)?
+		(?<pcOrStat> pc | stat )?
+		(?<alt> companion | hireling | alt | familiar )?
 		$
-	`, "xi");
+	`;
 }
 
 let charTypeRegex: RegExp;
@@ -16,36 +16,19 @@ function getCharTypeRegex(): RegExp {
 }
 
 function createStatBlockRegex() {
-	return XRegExp(`
-		# no tick
-		(?<!\`)
-
-		\\{
-			# char name or quoted char name
-			(
-				[\\w ]+    # <-- should we drop this space?
-				|          # <-- in other places we allow alias (no spaces) or "quoted name with spaces"
-				"[\\w ]+"
-			)
-
-			# separator
+	return regex("i")`
+		(?<!${"`"}) # no tick
+		\{
+			(?<charName> [\w\s]+ | "[\w\s]+" )
 			:{2}
-
-			# stat key
+			(?<statKey> [^:\{\}]+ )
 			(
-				[^:{}]+
-			)
-
-			# default value
-			(?:
 				:
-				([^{}]+)
+				(?<defaultValue> [^\{\}]+ )
 			)?
-		\\}
-
-		# no tick
-		(?!\`)
-	`, `xi`);
+		\}
+		(?!${"`"}) # no tick
+	`;
 }
 
 let statBlockRegex: RegExp;
@@ -68,7 +51,7 @@ type StatBlockResults = {
 };
 
 function parseStatBlock(value: string): StatBlockResults | undefined {
-	const match = XRegExp.exec(value, getStatBlockRegex());
+	const match = getStatBlockRegex().exec(value);
 	if (!match) return undefined; //NOSONAR
 
 	let [nameOrCharType, statKey, defaultValue] = match.slice(1);
@@ -78,7 +61,7 @@ function parseStatBlock(value: string): StatBlockResults | undefined {
 
 	const stackValue = `${nameOrCharType}::${statKey}`.toLowerCase();
 
-	const [charType, isPcType, isAltType] = XRegExp.exec(nameOrCharType, getCharTypeRegex()) ?? [];
+	const [charType, isPcType, isAltType] = getCharTypeRegex().exec(nameOrCharType) ?? [];
 	const charName = charType ? undefined : nameOrCharType;
 	return {
 		charName,
@@ -91,16 +74,16 @@ function parseStatBlock(value: string): StatBlockResults | undefined {
 	};
 }
 
-type ReplaceHandler = (block: StatBlockResults) => string | null;
+type ReplaceHandler = (block: StatBlockResults) => string | undefined;
 
 /** Wraps the value.replace with logic that parses the stat block, checks for recursion, and returns tick blocked match when needed. */
 export function replaceStatBlocks(value: string, handler: ReplaceHandler, stack: string[]): string {
-	return XRegExp.replace(value, getStatBlockRegex(), match => {
+	return value.replace(getStatBlockRegex(), match => {
 		const statBlock = parseStatBlock(match.toString());
-		let result: string | null = null;
+		let result: string | undefined;
 		if (statBlock && !stack.includes(statBlock.stackValue)) {
 			result = handler(statBlock);
 		}
 		return result ?? `\`${match}\``;
-	}, "all");
+	});
 }
