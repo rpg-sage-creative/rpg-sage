@@ -1,10 +1,10 @@
 import { dequote, getQuotedRegex, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
-import XRegExp from "xregexp";
+import { regex } from "regex";
 import { SageMessage } from "../../../model/SageMessage.js";
 
 export async function replaceCharacterMention(sageMessage: SageMessage, content: string): Promise<string> {
-	const charMentionRegex = XRegExp(`@\\w+|@(?:${getQuotedRegex({ contents:"+" }).source})`, "g");
+	const charMentionRegex = regex("g")`@\w+|@(?:${getQuotedRegex({ contents:"+" })})`;
 	if (!charMentionRegex.test(content)) {
 		return content;
 	}
