@@ -297,6 +297,9 @@ function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 	}
 	return coins.join(", ");
 }
+function moneyToJsonString({ cp, sp, gp, pp, credits, upb }: TPathbuilderCharacterMoney = { }) {
+	return JSON.stringify({ cp:cp||0, sp:sp||0, gp:gp||0, pp:pp||0, credits:credits||0, upb:upb||0 });
+}
 
 function equipmentToHtml(equipment: TPathbuilderCharacterEquipment[]): string {
 	const NAME = 0, COUNT = 1;
@@ -308,7 +311,7 @@ function doEquipmentMoney(char: PathbuilderCharacter) {
 	const core = char.toJSON();
 	const containers = Object.entries(core.equipmentContainers ?? {});
 	const hasEquipment = core.equipment.length > 0;
-	const hasMoney = Object.keys(core.money).find(key => core.money[key as keyof TPathbuilderCharacterMoney]);
+	const hasMoney = Object.keys(core.money).some(key => core.money[key as keyof TPathbuilderCharacterMoney]);
 	if (hasEquipment || containers.length || hasMoney) {
 		if (hasEquipment || containers.length) {
 			const worn: string[] = [];
@@ -328,7 +331,7 @@ function doEquipmentMoney(char: PathbuilderCharacter) {
 			containers.forEach(([id, container]) => out.push(`- <b>${container.containerName}</b> ${containerMap.get(id)?.join(", ") ?? ""}`.trim()));
 		}
 		if (hasMoney) {
-			out.push(`<b>Coins</b> ${moneyToHtml(core.money)}`);
+			out.push(`<b>Currency</b> ${moneyToHtml(core.money)}`);
 		}
 	}
 	return out;
@@ -636,6 +639,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		}
 
 		switch(statLower) {
+			case "pp": case "gp": case "sp": case "cp": case "upb": case "credits": return this.core.money[statLower] ?? null;
 			case "activeexploration": return this.getSheetValue("activeExploration") ?? null;
 			case "initskill": return this.getInitSkill();
 			case "level": return this.level;
@@ -708,8 +712,23 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 	}
 
 	public async setLevel(level: number, save: boolean): Promise<boolean> {
-		if (level > 0 && level < 21) {
+		if (level > 0 && level < 21 && level !== this.core.level) {
 			this.core.level = level;
+			if (save) {
+				return this.save();
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public async setMoney(money: TPathbuilderCharacterMoney, save: boolean): Promise<boolean> {
+		const coreMoney = this.core.money ??= { };
+		const coreString = moneyToJsonString(coreMoney);
+		const moneyString = moneyToJsonString(money);
+		if (coreString !== moneyString) {
+			const keys = ["cp", "sp", "gp", "pp", "credits", "upb"] as (keyof TPathbuilderCharacterMoney)[];
+			keys.forEach(key => coreMoney[key] = money[key] ?? coreMoney[key] ?? 0);
 			if (save) {
 				return this.save();
 			}
