@@ -68,7 +68,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 		if (!core && (stats?.length || mods?.length)) {
 			const statModKeys = (stats?.map(pair => pair.key) ?? []).concat(mods?.map(pair => pair.key) ?? []);
 			return promptModsConfirm(sageMessage, character, statModKeys, async char => {
-				const charSaved = await char.save();
+				const charSaved = await char.save(true);
 				if (charSaved && characterTypeMeta.isGm) {
 					return sageMessage.game!.update({ gmCharacterName:char.name });
 				}
@@ -78,7 +78,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 
 		let updated = false;
 		await promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
-			updated = await char.save();
+			updated = await char.save(true);
 			if (characterTypeMeta.isGm) {
 				const core = sageMessage.game?.toJSON();
 				if (core) core.gmCharacterName = char.name;
