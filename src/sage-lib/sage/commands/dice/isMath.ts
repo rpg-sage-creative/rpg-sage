@@ -1,5 +1,5 @@
-import { unwrap } from "@rsc-utils/core-utils";
-import { getNumberRegex, hasMath, processMath } from "@rsc-utils/dice-utils";
+import { getNumberRegex, unwrap } from "@rsc-utils/core-utils";
+import { hasMath, processMath } from "@rsc-utils/dice-utils";
 
 /**
  * Checks the value against regex to determine if it is a simple math equation.
