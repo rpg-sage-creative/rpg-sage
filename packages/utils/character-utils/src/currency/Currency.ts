@@ -1,9 +1,9 @@
-import { applyChanges, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type SortResult } from "@rsc-utils/core-utils";
+import { applyChanges, debug, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type SortResult } from "@rsc-utils/core-utils";
+import type { GameSystemCode } from "./internal/GameSystemCode.js";
 import { addValues } from "./internal/addValues.js";
 import { convertCurrency } from "./internal/convertCurrency.js";
 import { coreFrom } from "./internal/coreFrom.js";
 import { formatCurrency } from "./internal/formatCurrency.js";
-import type { GameSystemCode } from "./internal/GameSystemCode.js";
 import { getDenominations } from "./internal/getDenominations.js";
 import { parseCurrency } from "./internal/parseCurrency.js";
 import { simplifyCurrency } from "./internal/simplifyCurrency.js";
@@ -152,8 +152,11 @@ implements Comparable<AnyCurrency> {
 	 * Because of the presence of denominations and the need to make change during .subtractValues, we need to be careful about how we perform addition/subtraction.
 	 * Uses .zeroOut and .setValues, which call this.updateValues();
 	 */
-	public add(currency: ParsableCurrency): this {
-		const other = (this.constructor as CurrencyConstructor<CurrClass>).parse(currency);
+	public add(currency: ParsableCurrency): this;
+	public add(value: number, denom: DenomKeys): this;
+	public add(parsableOrValue: ParsableCurrency, denom?: DenomKeys): this {
+		const parsable = denom ? `${parsableOrValue} ${denom}` : parsableOrValue;
+		const other = (this.constructor as CurrencyConstructor<CurrClass>).parse(parsable);
 		const thisValue = this.toValue();
 		const otherValue = other.toValue();
 		const finalValue = thisValue + otherValue;
@@ -250,11 +253,27 @@ implements Comparable<AnyCurrency> {
 		return this.compareTo(other) < 0;
 	}
 
+	public math(operator: "+" | "-", value: number, denom: DenomKeys): this;
+	public math(operator: "*", value: number): this;
+	public math(operator: "+" | "-" | "*", value: number, denom?: DenomKeys): this {
+		switch(operator) {
+			case "+": return this.add(value, denom!);
+			case "-": return this.subtract(value, denom!);
+			case "*": return this.multiply(value);
+			default: debug(`Not Yet Implemented: Currency.math("${operator}", ${value}, ${denom})`);
+		}
+		return this;
+	}
+
 	/**
 	 * Multiplies this Currency by adding the current sum multiple times.
 	 * By calling .add, this uses .zeroOut and .setValues, which call this.updateValues();
 	 */
 	public multiply(times: number): this {
+		if (times === 0) {
+			return this.zeroOut();
+		}
+
 		let iterations = Math.abs(times) - 1;
 		if (iterations > 0) {
 			// clone this so that we add the same amount each time
@@ -304,8 +323,11 @@ implements Comparable<AnyCurrency> {
 	 * Because of the presence of denominations and the need to make change during .subtractValues, we need to be careful about how we perform addition/subtraction.
 	 * Uses .zeroOut and .setValues, which call this.updateValues();
 	 */
-	public subtract(currency: ParsableCurrency): this {
-		const other = (this.constructor as CurrencyConstructor<CurrClass>).parse(currency);
+	public subtract(currency: ParsableCurrency): this;
+	public subtract(value: number, denom: DenomKeys): this;
+	public subtract(parsableOrValue: ParsableCurrency, denom?: DenomKeys): this {
+		const parsable = denom ? `${parsableOrValue} ${denom}` : parsableOrValue;
+		const other = (this.constructor as CurrencyConstructor<CurrClass>).parse(parsable);
 		const thisValue = this.toValue();
 		const otherValue = other.toValue();
 		const finalValue = thisValue - otherValue;
