@@ -1,10 +1,11 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
-import { error, getKeyValueArgRegex, isWrapped, redactCodeBlocks, tokenize, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
+import { error, isWrapped, redactCodeBlocks, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import { processStatBlocks } from "@rsc-utils/dice-utils";
-import { xRegExp } from "@rsc-utils/dice-utils/build/internal/xRegExp.js";
 import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
+import { redactKeyValuePairs } from "../../../sage-utils/redactKeyValuePairs.js";
+import { redactMdLink } from "../../../sage-utils/redactMdLink.js";
 import { registerMessageListener } from "../../discord/handlers.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import type { CharacterManager } from "../model/CharacterManager.js";
@@ -236,27 +237,13 @@ function redactContent(content: string): string {
 	// use the existing logic for code blocks
 	let redacted = redactCodeBlocks(content);
 
-	// let's do key/value pairs if we have a command
+	// let's do key/value pairs if we have a command to avoid processing [] brackets in command options
 	if (/^!+(\s*[\w-]+)+/i.test(redacted)) {
-		const tokens = tokenize(redacted, { keyValue:getKeyValueArgRegex({ allowDashes:true, allowPeriods:true }) });
-		const redactedTokens = tokens.map(({ key, token }) => key === "keyValue" ? "".padEnd(token.length, "*") : token);
-		redacted = redactedTokens.join("");
+		redacted = redactKeyValuePairs(redacted);
 	}
 
-	// let's redact links
-	const linkRegex = xRegExp(`
-		\\[
-			[^\\]]+
-		\\]
-		\\(
-			(
-			<(s?ftp|https?)://[^\\)]+>
-			|
-			(s?ftp|https?)://[^\\)]+
-			)
-		\\)
-	`, "gix");
-	redacted = redacted.replace(linkRegex, link => "".padEnd(link.length, "*"));
+	// redact markdown links to get rid of the [] brackets
+	redacted = redactMdLink(redacted);
 
 	return redacted;
 }
