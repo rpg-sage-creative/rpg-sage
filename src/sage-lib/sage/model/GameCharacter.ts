@@ -1,11 +1,14 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
+import { Currency, type CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
 import { applyChanges, Color, errorReturnUndefined, getDataRoot, isBlank, isWrapped, StringMatcher, wrap, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
+import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { isStatsKey } from "../../../gameSystems/sheets.js";
+import { numberOrUndefined } from "../../../gameSystems/utils/numberOrUndefined.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
@@ -536,6 +539,12 @@ export class GameCharacter {
 		return hpToGauge(hp, maxHp);
 	}
 
+	public getNumber(key: string): number | undefined;
+	public getNumber(key: string, def: number): number;
+	public getNumber(key: string, def?: number): number | undefined {
+		return numberOrUndefined(this.getStat(key)) ?? def;
+	}
+
 	public getStat(key: string): string | null {
 		if (/^name$/i.test(key)) {
 			return this.name;
@@ -620,7 +629,19 @@ export class GameCharacter {
 			}
 		}
 
-		if (/^conditions$/i.test(key) && this.gameSystem?.isP20) {
+		// provide a temp shortcut for d20 based coins/currency
+		if (keyLower === "currency" || keyLower === "currency.raw") {
+			const curr = this.getCurrency();
+
+			// they don't want raw, so simplify it
+			if (keyLower === "currency") {
+				return curr.simplify().toString();
+			}
+
+			return curr.toString();
+		}
+
+		if (keyLower === "conditions" && this.gameSystem?.isP20) {
 			const conditions: string[] = [];
 
 			Condition.getToggledConditions().forEach(condition => {
@@ -645,6 +666,36 @@ export class GameCharacter {
 
 		return null;
 	}
+	public getCurrency() {
+		// try getting currency from gameSystem
+		let currency = Currency.new<CurrencyPf2e>(this.gameSystem?.code);
+
+		// otherwise see if we are SF2e
+		if (!currency && (this.getNumber("credits") || this.getNumber("upb"))) {
+			currency = Currency.new("SF2e");
+		}
+
+		// otherwise see if we are DnD5e
+		if (!currency && (this.getNumber("ep"))) {
+			currency = Currency.new("DnD5e");
+		}
+
+		// otherwise default to PF2e
+		if (!currency) {
+			currency = Currency.new("PF2e")!;
+		}
+
+		// create core using keys for this currency
+		const raw = currency.denominationKeys.reduce((core, denom) => {
+			const value = this.getNumber(denom);
+			if (value) core[denom] = value;
+			return core;
+		}, {} as DenominationsCore<any>);
+
+		// parse to properly load up denominations with a negative value
+		const constr = currency.constructor as typeof Currency;
+		return constr.parse(raw) as CurrencyPf2e;
+	}
 
 	public async processStatsAndMods(stats?: KeyValueArg<string, string>[], mods?:IncrementArg<string, string>[]): Promise<boolean> {
 		let updated = false;
@@ -654,12 +705,27 @@ export class GameCharacter {
 
 		let modded = false;
 		if (mods?.length) {
+			const curr = this.getCurrency();
+			let currModded = false;
 			for (const pair of mods) {
-				const oldValue = this.getStat(pair.key) ?? 0;
-				const math = `(${oldValue}${pair.operator}${pair.value})`;
-				const newValue = doStatMath(math);
-				const updated = await this.updateStats([{ key:pair.key, keyRegex:pair.keyRegex, value:newValue }], false);
-				modded ||= updated;
+				const keyLower = pair.key.toLowerCase();
+				if (curr.hasDenomination(keyLower)) {
+					const number = numberOrUndefined(pair.value);
+					if (number) {
+						curr.math(pair.operator, number, keyLower);
+						currModded = true;
+					}
+				}else {
+					const oldValue = this.getStat(pair.key) ?? 0;
+					const math = `(${oldValue}${pair.operator}${pair.value})`;
+					const newValue = doStatMath(math);
+					const updated = await this.updateStats([{ key:pair.key, keyRegex:pair.keyRegex, value:newValue }], false);
+					modded ||= updated;
+				}
+			}
+			if (currModded) {
+				const updated = await this.updateStats(curr.denominationKeys.map(denom => ({ key:denom, keyRegex:new RegExp(`^${denom}$`, "i"), value:String(curr[denom]) })), false);
+				modded || updated;
 			}
 		}
 
@@ -701,8 +767,19 @@ export class GameCharacter {
 				if (keyRegex.test("level") && +value) {
 					const updatedLevel = await pb.setLevel(+value, save);
 					if (updatedLevel) {
-						const unset = this.notes.setStat("level", "");
-						if (unset) changes = true;
+						this.notes.setStat("level", "");
+						changes = true;
+					}
+					continue;
+				}
+				if (["cp","sp","gp","pp","credits","upb"].some(s => keyRegex.test(s))) {
+					const keyLower = key.toLowerCase() as keyof TPathbuilderCharacterMoney;
+					const money = { } as TPathbuilderCharacterMoney;
+					money[keyLower] = +value;
+					const updatedMoney = await pb.setMoney(money, save);
+					if (updatedMoney) {
+						this.notes.setStat(keyLower, "");
+						changes = true;
 					}
 					continue;
 				}
