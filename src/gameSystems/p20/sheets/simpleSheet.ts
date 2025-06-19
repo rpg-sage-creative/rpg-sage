@@ -76,6 +76,19 @@ function hpToHtml(char: GameCharacter): string | undefined {
 		: undefined;
 }
 
+function coinsToHtml(char: GameCharacter): string | undefined {
+	const raw = char.getStat("currency.raw");
+	if (raw) {
+		const simple = char.getStat("currency");
+		if (raw !== simple) {
+			return `<b>Coins</b> ${raw}  <i>(${simple})</i>`;
+		}
+		return `<b>Coins</b> ${raw}`;
+	}
+	return undefined;
+}
+
+
 function conditionsToHtml(char: GameCharacter): string | undefined {
 	const conditions = char.getStat("conditions")?.split(/\s*,\s*/).filter(s => s);
 	if (conditions?.length) {
@@ -89,6 +102,7 @@ export function statsToHtml(char: GameCharacter): string[] {
 	out.push(abilitiesToHtml(char));
 	out.push(acSavesDcToHtml(char));
 	out.push(hpToHtml(char));
+	out.push(coinsToHtml(char));
 	out.push(conditionsToHtml(char));
 	return out.filter(s => s !== undefined) as string[];
 }

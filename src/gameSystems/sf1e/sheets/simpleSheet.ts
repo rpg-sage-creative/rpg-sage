@@ -71,11 +71,24 @@ function hpToHtml(char: GameCharacter): string | undefined {
 	return undefined;
 }
 
+function currencyToHtml(char: GameCharacter): string | undefined {
+	const credits = char.getStat("credits");
+	const upb = char.getStat("upb");
+	if (credits || upb) {
+		const out = [];
+		if (credits) out.push(`<b>Credits</b> ${credits}`);
+		if (upb) out.push(`<b>UPB</b> ${upb}`);
+		return out.join("; ");
+	}
+	return undefined;
+}
+
 export function statsToHtml(char: GameCharacter): string[] {
 	const out: (string | undefined)[] = [];
 	out.push(abilitiesToHtml(char));
 	out.push(acSavesToHtml(char));
 	out.push(hpToHtml(char));
+	out.push(currencyToHtml(char));
 	return out.filter(s => s !== undefined) as string[];
 }
 
