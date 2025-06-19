@@ -19,9 +19,20 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 
 	statModKeys.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
 
+	const isD20 = character.gameSystem?.code === "D20";
+	const is5e = character.gameSystem?.code === "DnD5e";
 	const isP20 = character.gameSystem?.isP20;
 	let showConditions = false;
+	let showCurrency = false;
 	statModKeys.forEach(key => {
+		const currencyType = isP20 ? ["cp","sp","gp","pp","credits","upb"].includes(key.toLowerCase())
+			: isD20 ? ["cp","sp","gp","pp"].includes(key.toLowerCase())
+			: is5e ? ["cp","sp","ep","gp","pp"].includes(key.toLowerCase())
+			: false;
+		if (currencyType) {
+			showCurrency = true;
+		}
+
 		// check if we are dealing with a isP20 condition
 		const conditionType = isP20 ? Condition.isConditionKey(key) : false;
 		if (conditionType) {
@@ -41,6 +52,16 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 			renderableContent.append(`<s><b>${key}</b></s>`);
 		}
 	});
+
+	if (showCurrency) {
+		const currency = character.getStat("currency");
+		const currencyRaw = character.getStat("currency.raw");
+		if (currency !== currencyRaw) {
+			renderableContent.appendTitledSection(`<b>Updated Currency</b>`, `${currencyRaw}  <i>(${currency})</i>`);
+		}else {
+			renderableContent.appendTitledSection(`<b>Updated Currency</b>`, `${currency}`);
+		}
+	}
 
 	if (showConditions) {
 		const conditions = character.getStat("conditions")?.split(/\s*,\s*/).filter(s => s) ?? [];
