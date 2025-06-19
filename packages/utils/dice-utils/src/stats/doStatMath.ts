@@ -1,6 +1,6 @@
-import { tokenize } from "@rsc-utils/core-utils";
-import { getComplexRegex } from "../math/doComplex.js";
-import { doPosNeg, getPosNegRegex } from "../math/doPosNeg.js";
+import { tokenize, type RegExpFlagOptions, type RegExpSpoilerOptions } from "@rsc-utils/core-utils";
+import { getComplexRegex } from "../math/internal/doComplex.js";
+import { doPosNeg, getPosNegRegex } from "../math/internal/doPosNeg.js";
 import { processMath } from "../math/processMath.js";
 
 /**
@@ -11,7 +11,7 @@ import { processMath } from "../math/processMath.js";
  * (Primarily for hiding values, such as AC.)
  */
 export function doStatMath(value: string): string {
-	const options = { allowSpoilers:true };
+	const options: RegExpFlagOptions & RegExpSpoilerOptions<"optional"> = { iFlag:"i", spoilers:"optional" };
 	const parsers = {
 		complex: getComplexRegex(options),
 		posNeg: getPosNegRegex(options),
