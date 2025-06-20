@@ -1,50 +1,49 @@
 import { getWhitespaceRegex } from "@rsc-utils/core-utils";
 import { getUrlRegex } from "@rsc-utils/io-utils";
-import XRegExp from "xregexp";
+import { regex } from "regex";
 
-function getHWS() {
-	return getWhitespaceRegex({ horizontalOnly:true, quantifier:"*" }).source;
+function getHWS({ iFlag }: { iFlag?:"i" } = { }) {
+	return getWhitespaceRegex({ iFlag, horizontalOnly:true, quantifier:"*" });
 }
 export function getDialogTypeOrAliasRegex(): RegExp {
 	const HWS = getHWS();
-	return XRegExp(`^${HWS}([\\pL\\pN]+)${HWS}::`);
+	return regex`^${HWS}(?<alias>[\p{Letter}\p{Number}]+)${HWS}::`;
 }
 
 export function getDialogNameAndDisplayNameRegex(): RegExp {
 	const HWS = getHWS();
-	return XRegExp(`^::${HWS}
-					((?:[^(](?!::))+) # capture the characters before the "(" that isn't followed by "::"
-					\\(([^)]+)\\)     # capture the characters in ()
-					${HWS}::`, "x");
+	return regex`^::${HWS}
+					(?<dialogName>([^\(](?!::))+)  # capture the characters before the "(" that isn't followed by "::"
+					\((?<displayName>[^\)]+)\)     # capture the characters in ()
+					${HWS}::`;
 }
 
 export function getDialogDisplayNameRegex(): RegExp {
 	const HWS = getHWS();
-	return XRegExp(`^::${HWS}\\(([^)]+)\\)${HWS}::`);
+	return regex`^::${HWS}\((?<displayName>[^\)]+)\)${HWS}::`;
 }
 
 export function getDialogPostTypeRegex(): RegExp {
-	const HWS = getHWS();
-	return XRegExp(`^::${HWS}(post|embed)${HWS}::`, "i");
+	const HWS = getHWS({ iFlag:"i" });
+	return regex("i")`^::${HWS}(?<postType>post|embed)${HWS}::`;
 }
 
 export function getDialogEmbedColorRegex(): RegExp {
-	const HWS = getHWS();
-	return XRegExp(`^::${HWS}(?:0x|#)((?:[0-9a-f]{3}){1,2})${HWS}::`, "i");
+	const HWS = getHWS({ iFlag:"i" });
+	return regex("i")`^::${HWS}(0x|\#)(?<color>([0-9a-f]{3}){1,2})${HWS}::`;
 }
 
 export function getDialogUrlRegex(): RegExp {
-	const WS = getWhitespaceRegex({ quantifier:"*" }).source;
-	const url = getUrlRegex({ wrapChars:"<>", wrapOptional:true }).source;
-	return XRegExp(`^::${WS}(${url})${WS}::`, "i");
+	const WS = getWhitespaceRegex({ iFlag:"i", quantifier:"*" });
+	const url = getUrlRegex({ capture:"url", iFlag:"i", wrapChars:"<>", wrapOptional:true });
+	return regex("i")`^::${WS}${url}${WS}::`;
 }
 
 export function getDialogOtherRegex(): RegExp {
 	const HWS = getHWS();
-	// return XRegExp(`^::${HWS}(.*?)${HWS}::`, "i");
-	return XRegExp(`^::${HWS}
-					(.*?)(?![^[]*\\]|[^{]*}) # let's not have brackets [] or braces {}
-					${HWS}::`, "x");
+	return regex`^::${HWS}
+					(.*?)(?![^\[]*\]|[^\{]*\}) # let's not have brackets [] or braces {}
+					${HWS}::`;
 }
 
 export type DialogRegexKey = "nameAndDisplayName" | "displayName" | "postType" | "embedColor" | "url" | "other";
