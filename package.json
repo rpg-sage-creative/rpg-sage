@@ -61,7 +61,7 @@
 		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.3.4",
 		"@rsc-utils/discord-utils": "rpg-sage-creative/discord-utils#v0.2.2",
 		"discord.js": "14.19.2",
-		"xregexp": "5.1.1"
+		"regex": "^6.0.1"
 	},
 	"exifreader": {
 		"include": {
