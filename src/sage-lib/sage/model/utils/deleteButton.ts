@@ -15,9 +15,12 @@ type ButtonOptions = {
 	label?: string;
 };
 
-/** Creates regex to test if the customId is a valid delete button customId. */
-function getCustomIdRegex(): RegExp {
-	return /^rpg-sage-message-delete-button-(?<userId>\d{16,})$/;
+let customIdRegex: RegExp | undefined;
+
+/** Extracts the userId from a valid delete button customId. */
+function getUserId(customId: string): Snowflake | undefined {
+	customIdRegex ??= /^rpg-sage-message-delete-button-(?<userId>\d{16,})$/;
+	return customIdRegex.exec(customId)?.groups?.userId as Snowflake;
 }
 
 /** Creates a delete button customId for the given userId. */
@@ -29,11 +32,6 @@ function createCustomId(userId: Snowflake): string {
 // function isMatchingCustomId(customId: string, userId: Snowflake): boolean {
 // 	return getUserId(customId) === userId;
 // }
-
-/** Extracts the userId from a valid delete button customId. */
-function getUserId(customId: string): Snowflake | undefined {
-	return getCustomIdRegex().exec(customId)?.groups?.userId as Snowflake;
-}
 
 /**
  * Creates a "Delete" MessageButton.
