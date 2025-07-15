@@ -15,7 +15,7 @@ type ButtonOptions = {
 	label?: string;
 };
 
-let customIdRegex: RegExp | undefined;
+let customIdRegex: RegExp;
 
 /** Extracts the userId from a valid delete button customId. */
 function getUserId(customId: string): Snowflake | undefined {
