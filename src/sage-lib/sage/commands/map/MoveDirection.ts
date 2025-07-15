@@ -54,16 +54,22 @@ function getCompassDirectionsRegex(type: "both" | "compass" | "ordinal") {
 	}
 }
 
+let distanceDirectionRegex: RegExp;
+let directionDistanceRegex: RegExp;
+
 /**
  * @param match expected to be regex.exec(string)[0] or string.replace(regexp, match => {}).
  */
 function parseDirectionPairs(match: string): MoveDirection[] {
+	distanceDirectionRegex ??= /(?<distance>\d+)(?<direction>nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)/i;
+	directionDistanceRegex ??= /(?<direction>nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)(?<distance>\d+)?/i;
+
 	// pairs array should be something like: ["s", "2n", "w3"]
 	const pairs = match.slice(1, -1).split(/\s/).filter(s => s);
 	return pairs.map(pair => {
 		// test with required number prefix before testing witth optional number suffix
-		const match = /(?<distance>\d+)(?<direction>nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)/i.exec(pair)
-			?? /(?<direction>nw|ne|n|sw|se|s|w|e|ul|ur|u|dl|dr|d|l|r)(?<distance>\d+)?/i.exec(pair);
+		const match = distanceDirectionRegex.exec(pair)
+			?? directionDistanceRegex.exec(pair);
 
 		const groups = match?.groups as { direction:CompassDirection|OrdinalDirection; distance?:`${number}`; };
 
