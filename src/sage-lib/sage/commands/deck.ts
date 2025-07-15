@@ -1,4 +1,5 @@
 import { BULLET, capitalize, error, type Snowflake } from "@rsc-utils/core-utils";
+import { isWholeNumberString } from "@rsc-utils/dice-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle } from "discord.js";
 import { Deck, type CardBase, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "../../../sage-utils/utils/GameUtils/deck/index.js";
@@ -198,11 +199,9 @@ function getCardsFromArgs(sageCommand: SageCommand, deck: Deck, stackKey: StackK
 	const cardValues = getStringArg(sageCommand, "card", "cards")?.toLowerCase().split(",").map(s => s.trim()).filter(s => s);
 	if (!cardValues) return { stack, cards, invalid };
 
-	const numberRegex = /^\d+$/;
-
 	cardValues.forEach(cardValue => {
 		// numbers are supposed to be ordinals
-		if (numberRegex.test(cardValue)) {
+		if (isWholeNumberString(cardValue)) {
 			const card = cardFromOrdinal(cardValue);
 			if (card) {
 				cards.push(card);

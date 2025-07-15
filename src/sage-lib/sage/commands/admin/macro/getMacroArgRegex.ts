@@ -1,17 +1,23 @@
+import { isWholeNumberString } from "@rsc-utils/dice-utils";
+
+let argRegex: RegExp;
+
 /** Creates the regex used to match the arg syntax for macros. */
 export function getMacroArgRegex(global: boolean): RegExp {
-	const regex = /(?<vs>\b(?:ac|dc|vs)\s*)?\{(?<key>\w+)(:(?!:)(?<defaultValue>[^}]*))?\}/;
-	return global ? new RegExp(regex, "g") : regex;
+	argRegex ??= /(?<vs>\b(?:ac|dc|vs)\s*)?\{(?<key>\w+)(:(?!:)(?<defaultValue>[^}]*))?\}/;
+	return global ? new RegExp(argRegex, "g") : argRegex;
 }
 
 export function testMacroArgRegex(value?: string): boolean {
 	return value ? getMacroArgRegex(false).test(value) : false;
 }
 
+let remainingArgRegex: RegExp;
+
 /** Creates the regex used to match the "remaining" args syntax for macros. */
 export function getMacroRemainingArgRegex(global: boolean): RegExp {
-	const regex = /\{(?:\.{3}|…)\}/;
-	return global ? new RegExp(regex, "g") : regex;
+	remainingArgRegex ??= /\{(?:\.{3}|…)\}/;
+	return global ? new RegExp(remainingArgRegex, "g") : remainingArgRegex;
 }
 
 export function testMacroRemainingArgRegex(value?: string): boolean {
@@ -30,7 +36,7 @@ export type MacroArgPair = NamedArgPair | IndexedArgPair;
 /** Accepts a string value that is a match result of getMacroArgRegex() and parses it into a MacroArgPair. */
 export function parseMacroArgMatch(value: string): MacroArgPair {
 	const { vs = "", key, defaultValue } = getMacroArgRegex(false).exec(value)?.groups ?? {};
-	if (/^\d+$/.test(key)) {
+	if (isWholeNumberString(key)) {
 		return { vs, keyIndex:+key, isIndexed:true, defaultValue };
 	}
 	return { vs, key, defaultValue };

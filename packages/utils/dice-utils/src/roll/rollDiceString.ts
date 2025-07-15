@@ -1,5 +1,8 @@
 import { sum } from "@rsc-utils/core-utils";
+import { isWholeNumberString } from "../isWholeNumberString.js";
 import { rollDice } from "./rollDice.js";
+
+let simpleDiceRegex: RegExp;
 
 /**
  * If the diceString is an integer, that number is returned.
@@ -8,27 +11,20 @@ import { rollDice } from "./rollDice.js";
  */
 export function rollDiceString(diceString: string): number | undefined {
 	const cleanDiceString = (diceString ?? "").replace(/\s+/g, "");
-	if (/^\d+$/.test(cleanDiceString)) {
+	if (isWholeNumberString(cleanDiceString)) {
 		return +cleanDiceString;
 	}
 
-	const regex = /^([-+])?(\d+)d(\d+)(?:([-+])(\d+))?$/i;
-	const match = regex.exec(cleanDiceString);
+	simpleDiceRegex ??= /^(?<diceSign>[-+])?(?<diceCount>\d+)d(?<diceSides>\d+)(?:(?<modifierSign>[-+])(?<modifier>\d+))?$/i;
+
+	const match = simpleDiceRegex.exec(cleanDiceString);
 	if (!match) {
 		return undefined;
 	}
 
-	const diceSign = match[1];
-	const diceCount = +match[2];
-	const diceSides = +match[3];
-	if (!diceCount || !diceSides) {
-		return undefined;
-	}
+	const { diceSign, diceCount, diceSides, modifierSign, modifier } = match.groups as Record<string, string | undefined>;
 
-	const modifierSign = match[4];
-	const modifier = +(match[5] ?? 0);
-
-	const val = sum(rollDice(diceCount, diceSides)) * (diceSign === "-" ? -1 : 1);
-	const mod = modifier * (modifierSign === "-" ? -1 : 1);
+	const val = sum(rollDice(+diceCount!, +diceSides!)) * (diceSign === "-" ? -1 : 1);
+	const mod = +(modifier ?? 0) * (modifierSign === "-" ? -1 : 1);
 	return val + mod;
 }
