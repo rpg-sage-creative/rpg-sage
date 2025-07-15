@@ -11,6 +11,7 @@ export * from "./cleanDicePartDescription.js";
 export * from "./DiceTest.js";
 export * from "./grade.js";
 export * from "./hasSecretFlag.js";
+export * from "./isWholeNumberString.js";
 export * from "./mapDicePartToRollString.js";
 export * from "./removeDesc.js";
 export * from "./sumDiceParts.js";
