@@ -1,43 +1,34 @@
 import { dequote } from "@rsc-utils/core-utils";
-import { regex } from "regex";
 
-function createCharTypeRegex() {
-	return regex("i")`
-		^
-		(?<pcOrStat> pc | stat )?
-		(?<alt> companion | hireling | alt | familiar )?
-		$
-	`;
-}
+/*
+toLiteral(regex("i")`
+	^
+	(?<pcOrStat> pc | stat )?
+	(?<alt> companion | hireling | alt | familiar )?
+	$
+`);
+*/
+const charTypeRegex = /^(?<pcOrStat>pc|stat)?(?<alt>companion|hireling|alt|familiar)?$/i;
 
-let charTypeRegex: RegExp;
-function getCharTypeRegex(): RegExp {
-	return charTypeRegex ?? (charTypeRegex = createCharTypeRegex());
-}
-
-function createStatBlockRegex() {
-	return regex("i")`
-		(?<!${"`"}) # no tick
-		\{
-			(?<charName> [\w\s]+ | "[\w\s]+" )
-			:{2}
-			(?<statKey> [^:\{\}]+ )
-			(
-				:
-				(?<defaultValue> [^\{\}]+ )
-			)?
-		\}
-		(?!${"`"}) # no tick
-	`;
-}
-
-let statBlockRegex: RegExp;
-function getStatBlockRegex(): RegExp {
-	return statBlockRegex ?? (statBlockRegex = createStatBlockRegex());
-}
+/*
+toLiteral(regex("i")`
+	(?<!${"`"}) # no tick
+	\{
+		(?<charName> [\w\s]+ | "[\w\s]+" )
+		:{2}
+		(?<statKey> [^:\{\}]+ )
+		(
+			:
+			(?<defaultValue> [^\{\}]+ )
+		)?
+	\}
+	(?!${"`"}) # no tick
+`);
+*/
+const statBlockRegex = /(?<!(?:`))\{(?<charName>[\w\s]+|"[\w\s]+"):{2}(?<statKey>[^:\{\}]+)(?::(?<defaultValue>[^\{\}]+))?\}(?!(?:`))/i;
 
 export function hasStatBlock(value: string): boolean {
-	return getStatBlockRegex().test(value);
+	return statBlockRegex.test(value);
 }
 
 type StatBlockResults = {
@@ -51,7 +42,7 @@ type StatBlockResults = {
 };
 
 function parseStatBlock(value: string): StatBlockResults | undefined {
-	const match = getStatBlockRegex().exec(value);
+	const match = statBlockRegex.exec(value);
 	if (!match) return undefined; //NOSONAR
 
 	let [nameOrCharType, statKey, defaultValue] = match.slice(1);
@@ -61,7 +52,7 @@ function parseStatBlock(value: string): StatBlockResults | undefined {
 
 	const stackValue = `${nameOrCharType}::${statKey}`.toLowerCase();
 
-	const [charType, isPcType, isAltType] = getCharTypeRegex().exec(nameOrCharType) ?? [];
+	const [charType, isPcType, isAltType] = charTypeRegex.exec(nameOrCharType) ?? [];
 	const charName = charType ? undefined : nameOrCharType;
 	return {
 		charName,
@@ -78,7 +69,7 @@ type ReplaceHandler = (block: StatBlockResults) => string | undefined;
 
 /** Wraps the value.replace with logic that parses the stat block, checks for recursion, and returns tick blocked match when needed. */
 export function replaceStatBlocks(value: string, handler: ReplaceHandler, stack: string[]): string {
-	return value.replace(getStatBlockRegex(), match => {
+	return value.replace(statBlockRegex, match => {
 		const statBlock = parseStatBlock(match.toString());
 		let result: string | undefined;
 		if (statBlock && !stack.includes(statBlock.stackValue)) {
