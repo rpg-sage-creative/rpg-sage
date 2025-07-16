@@ -5,6 +5,8 @@ import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { toModifier } from "../../utils/toModifier.js";
 import { Condition } from "../lib/Condition.js";
 
+// hero point token: 🅗ⒽⒽ (1 of 3)
+
 function abilitiesToHtml(char: GameCharacter): string | undefined {
 	let hasStats = false;
 	const stats = Ability.all().map(({ abbr, name }) => {
