@@ -1,38 +1,6 @@
-import { NIL_SNOWFLAKE, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { type Optional, type Snowflake, compressId, decompressId } from "@rsc-utils/core-utils";
 import { MacroOwnerType, type MacroOwnerTypeKey } from "../../../model/MacroOwner.js";
 import type { MacroState } from "./getArgs.js";
-
-function compressId(value?: Snowflake | UUID): string | undefined {
-	if (!value) return undefined;
-
-	// remove dashes from uuid
-	if (value.includes("-")) return value.replace(/-/g, "");
-
-	// convert snowflake to hex
-	return BigInt(value).toString(16);
-}
-
-function decompressId<Type extends Snowflake | UUID>(value?: string): Type | undefined {
-	if (!value) return undefined;
-
-	// put dashes back into uuid
-	if (value.length === 32) {
-		return [
-			value.slice(0, 8),
-			value.slice(8, 12),
-			value.slice(12, 16),
-			value.slice(16, 20),
-			value.slice(20)
-		].join("-") as Type;
-	}
-
-	if (value === "0") {
-		return NIL_SNOWFLAKE as string as Type;
-	}
-
-	// convert hex to snowflake
-	return BigInt(`0x${value}`).toString() as Type;
-}
 
 export type MacroActionKey = keyof typeof MacroAction;
 
@@ -99,10 +67,10 @@ export function createCustomId({ actorId, state, action, messageId }: Omit<Custo
 	const { ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex, macroIndex } = state;
 	return [
 		"macros",
-		compressId(actorId),
-		[MacroOwnerType[ownerType!] ?? "", ownerPageIndex, compressId(ownerId) ?? "", categoryPageIndex, categoryIndex, macroPageIndex, macroIndex].join(","),
+		compressId(actorId, 16),
+		[MacroOwnerType[ownerType!] ?? "", ownerPageIndex, compressId(ownerId, 16) ?? "", categoryPageIndex, categoryIndex, macroPageIndex, macroIndex].join(","),
 		MacroAction[action],
-		compressId(messageId) ?? "",
+		compressId(messageId, 16) ?? "",
 	].join("|");
 }
 
@@ -122,17 +90,17 @@ export function parseCustomId(customId: Optional<string>): CustomIdArgs {
 	const { actorId, ownerType, ownerPageIndex, ownerId, categoryPageIndex, categoryIndex, macroPageIndex, macroIndex, action, messageId } = match?.groups ?? {};
 	return {
 		indicator: "macros",
-		actorId: decompressId(actorId) as Snowflake,
+		actorId: decompressId(actorId, 16) as Snowflake,
 		state: {
 			ownerType: MacroOwnerType[+ownerType] as MacroOwnerTypeKey,
 			ownerPageIndex: +ownerPageIndex,
-			ownerId: decompressId(ownerId) as Snowflake,
+			ownerId: decompressId(ownerId, 16) as Snowflake,
 			categoryPageIndex: +categoryPageIndex,
 			categoryIndex: +categoryIndex,
 			macroPageIndex: +macroPageIndex,
 			macroIndex: +macroIndex,
 		},
 		action: MacroAction[+action] as MacroActionKey,
-		messageId: decompressId(messageId) as Snowflake,
+		messageId: decompressId(messageId, 16) as Snowflake,
 	};
 }
