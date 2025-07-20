@@ -1,6 +1,6 @@
 import { getSageId, getSuperUserId, getToken } from "@rsc-sage/env";
-import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, wrapUrl } from "@rsc-utils/discord-utils";
+import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, verbose, warn, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordApiError, DiscordMaxValues, wrapUrl } from "@rsc-utils/discord-utils";
 import { ActivityType, Client, type ClientOptions, type Guild, type Interaction, type Message, type MessageReaction, type PartialMessage, type PartialMessageReaction, type PartialUser, type User } from "discord.js";
 import { notifyOfError } from "../../../sage-utils/notifyOfError.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
@@ -34,6 +34,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	public static sns = true;
 	public static active: ActiveBot;
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
+
 	public static async notifyOfError(...args: unknown[]): Promise<void> {
 		if (ActiveBot.sns) {
 			const notifySubject = `RPG Sage Error - ${getCodeName()}`;
@@ -45,12 +46,19 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		}
 		ActiveBot.sendToSuperUser(`# error`, ...args);
 	}
+
 	public static async sendToSuperUser(...args: unknown[]): Promise<void> {
 		const user = await ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false }).catch(DiscordApiError.process);
 		if (user) {
-			const contents = chunk(args.map(formatArg).join("\n"), 2000);
-			for (const content of contents) {
-				await user.send(wrapUrl(content, true));
+			const maxLength = DiscordMaxValues.message.contentLength;
+			const formattedContent = wrapUrl(args.map(formatArg).join("\n"), true);
+			const chunks = chunk(formattedContent, maxLength);
+			for (const chunk of chunks) {
+				if (chunk.length && chunk.length < maxLength) {
+					await user.send(chunk);
+				}else {
+					warn(`invalid chunk length for discord (${chunk.length}): ${chunk}`);
+				}
 			}
 		}
 	}

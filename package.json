@@ -57,9 +57,9 @@
 		"@aws-sdk/client-sns": "3.787.0",
 		"@discordjs/rest": "2.5.0",
 		"@napi-rs/canvas": "0.1.53",
-		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.8.0",
-		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.3.5",
-		"@rsc-utils/discord-utils": "rpg-sage-creative/discord-utils#v0.2.3",
+		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.9.0",
+		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.3.6",
+		"@rsc-utils/discord-utils": "rpg-sage-creative/discord-utils#v0.2.4",
 		"discord.js": "14.19.2",
 		"regex": "^6.0.1"
 	},

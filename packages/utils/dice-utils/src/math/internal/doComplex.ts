@@ -1,8 +1,7 @@
-import { getNumberRegex, LogQueue, type RegExpGetOptions, type RegExpSpoilerOptions } from "@rsc-utils/core-utils";
+import { getNumberRegex, getOrCreateRegex, LogQueue, type RegExpGetOptions, type RegExpSpoilerOptions } from "@rsc-utils/core-utils";
 import { regex } from "regex";
 import { cleanPipes, unpipe } from "../../internal/pipes.js";
 import { doSimple, getSimpleRegex } from "./doSimple.js";
-import { getOrCreateRegex } from "./getOrCreateRegex.js";
 
 type SageMathFunction = "abs" | "min" | "max" | "floor" | "ceil" | "round" | "hypot";
 
@@ -74,11 +73,13 @@ function createComplexRegex(options?: CreateOptions): RegExp {
 		\s*\)
 	`;
 
-	return regex(iFlag)`
+	const complex = regex(iFlag)`
 		(?<!\w)                 # ignore the entire thing if preceded by a word character
 		( ${functionRegex} | ${multiplierRegex} )
 		(?!\w)                  # ignore the entire thing if followed by a word character
 	`;
+
+	return complex;
 }
 
 /** Returns a cached instance of the complex math regex. */
