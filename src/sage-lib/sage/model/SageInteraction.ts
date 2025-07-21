@@ -1,13 +1,14 @@
 import { debug, isDefined, isString, RenderableContent, type Cache, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, type DInteraction, type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
-import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
 import type { HasGame } from "./index.js";
 import { SageCommand, type IdPartsBase, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageEventCache } from "./SageEventCache.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
+
+export type SlashCommandGameType = "PF1E" | "PF2E" | "SF1E" | "SF2E" | "Finder";
 
 interface SageInteractionCore extends SageCommandCore {
 	interaction: DInteraction;
