@@ -1,5 +1,5 @@
 import { CharacterBase } from "@rsc-utils/character-utils";
-import { addCommas, capitalize, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, nth, randomSnowflake, sortPrimitive, stringify, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, nth, randomSnowflake, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
@@ -265,7 +265,7 @@ function doPets(char: PathbuilderCharacter): string[] {
 			const equipment = pet.equipment.length ? `; ${equipmentToHtml(pet.equipment)}` : ``;
 			return `<b>${pet.type}</b> ${name}${specializations}${armor}${equipment}`;
 		}else {
-			debug(stringify(pet));
+			debug(stringifyJson(pet));
 			return pet.name;
 		}
 	});
@@ -298,7 +298,7 @@ function moneyToHtml(money: TPathbuilderCharacterMoney): string {
 	return coins.join(", ");
 }
 function moneyToJsonString({ cp, sp, gp, pp, credits, upb }: TPathbuilderCharacterMoney = { }) {
-	return JSON.stringify({ cp:cp||0, sp:sp||0, gp:gp||0, pp:pp||0, credits:credits||0, upb:upb||0 });
+	return stringifyJson({ cp:cp||0, sp:sp||0, gp:gp||0, pp:pp||0, credits:credits||0, upb:upb||0 });
 }
 
 function equipmentToHtml(equipment: TPathbuilderCharacterEquipment[]): string {
