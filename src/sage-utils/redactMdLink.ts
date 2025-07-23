@@ -1,7 +1,8 @@
 import { regex } from "regex";
+let regexp: RegExp;
 export function redactMdLink(content: string): string {
 	// let's redact links
-	const regexp = regex("gi")`
+	regexp ??= regex("gi")`
 		\[
 			[^\]]+
 		\]
