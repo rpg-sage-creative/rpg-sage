@@ -1,4 +1,4 @@
-import { EphemeralMap, quote, ZERO_WIDTH_SPACE, type Snowflake } from "@rsc-utils/core-utils";
+import { EphemeralMap, error, quote, ZERO_WIDTH_SPACE, type Snowflake } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalSubmitInteraction, type ButtonInteraction } from "discord.js";
 import type { LocalizedTextKey, Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { Macro, type MacroBase } from "../../../model/Macro.js";
@@ -154,7 +154,17 @@ async function handleDeleteAll(sageInteraction: SageInteraction<ButtonInteractio
 async function showEditMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
 	// sageInteraction.replyStack.defer();
 	const modal = await createMacroModal(sageInteraction, args, "handleEditMacroModal");
-	await sageInteraction.interaction.showModal(modal);
+
+	/*
+	TypeError: sageInteraction.interaction.showModal is not a function
+	the following check for "showModal" is going to help determine what type of interaction we are handling that we aren't expecting
+	*/
+	const type = sageInteraction.interaction.type;
+	if ("showModal" in sageInteraction.interaction) {
+		await sageInteraction.interaction.showModal(modal);
+	}else {
+		error(`Invalid sageInteraction.interaction {"type":${type}}`);
+	}
 }
 
 /** Creates and shows the modal for create a new macro. */
