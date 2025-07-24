@@ -296,7 +296,6 @@ export class GameCharacter {
 	public set name(name: string) {
 		this.core.name = name;
 		delete this._nameMatcher;
-		delete this._aliasMatcher;
 	}
 	/** stores the clean name used for matching */
 	private _nameMatcher?: StringMatcher;
