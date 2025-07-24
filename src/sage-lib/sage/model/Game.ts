@@ -168,7 +168,8 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 			const gmCharacterName = this.core.gmCharacterName ?? this.server?.gmCharacterName ?? DEFAULT_GM_CHARACTER_NAME;
 			const gmCharacter = this.nonPlayerCharacters.findByName(gmCharacterName);
 			if (gmCharacter) {
-				this.nonPlayerCharacters.removeAt(this.nonPlayerCharacters.indexOf(gmCharacter));
+				const index = this.nonPlayerCharacters.indexOf(gmCharacter);
+				if (index > -1) this.nonPlayerCharacters.splice(index, 1);
 				gmCharacterCore = gmCharacter.toJSON();
 			}
 			if (!gmCharacterCore) {
