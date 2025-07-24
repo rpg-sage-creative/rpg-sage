@@ -1,21 +1,29 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import { escapeRegex, type Optional } from "@rsc-utils/core-utils";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { toReadableOwner } from "./toReadableOwner.js";
 
+function filterCharacters(characters: Optional<CharacterManager>, value: Optional<string>): GameCharacter[] {
+	if (characters) {
+		if (value) {
+			const regex = new RegExp(escapeRegex(value), "i");
+			return characters.filter(({ alias, name }) => regex.test(name) || alias && regex.test(alias));
+		}
+		return characters.slice();
+	}
+	return [];
+}
+
 export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterManager: Optional<CharacterManager>, entityNamePlural?: string): Promise<void> {
 	const { charName, name } = sageMessage.args.getNames();
-	const nameFilter = charName ?? name ?? "";
-	const hasNameFilter = nameFilter.length > 0;
-	const characters: GameCharacter[] = hasNameFilter
-		? characterManager?.filterByName(nameFilter) ?? []
-		: characterManager?.slice() ?? [];
+	const nameFilter = (charName ?? name)?.trim();
+	const characters = filterCharacters(characterManager, nameFilter);
 
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors());
 	renderableContent.append(`## ${entityNamePlural} (${characters.length})`)
-	if (hasNameFilter) {
+	if (nameFilter) {
 		renderableContent.append(`<b>Filtered by:</b> ${nameFilter}`);
 	}
 
