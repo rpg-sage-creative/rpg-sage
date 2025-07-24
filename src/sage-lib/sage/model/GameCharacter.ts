@@ -1,14 +1,16 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
-import { applyChanges, Color, errorReturnUndefined, getDataRoot, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
+import { applyChanges, Color, errorReturnUndefined, getDataRoot, StringMatcher, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
-import { DiscordKey, toMessageUrl } from "@rsc-utils/discord-utils";
-import { fileExistsSync, getText, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { isBlank, isWrapped, unwrap, wrap } from "@rsc-utils/string-utils";
+import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
+import { fileExistsSync, getText, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { isBlank, isWrapped, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
-import XRegExp from "xregexp";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
+import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { isStatsKey } from "../../../gameSystems/sheets.js";
+import { numberOrUndefined } from "../../../gameSystems/utils/numberOrUndefined.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
@@ -17,7 +19,6 @@ import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TE
 import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMessageRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
-import type { IHasSave } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { hpToGauge } from "./utils/hpToGauge.js";
@@ -204,7 +205,7 @@ function fixLastMessages(core: GameCharacterCore): void {
 
 //#endregion
 
-export class GameCharacter implements IHasSave {
+export class GameCharacter {
 	public equals(other: string | GameCharacter | undefined): boolean {
 		if (!other) return false;
 		if (other instanceof GameCharacter) return other.id === this.core.id;
@@ -245,13 +246,13 @@ export class GameCharacter implements IHasSave {
 	}
 	public set alias(alias: string | undefined) {
 		this.core.alias = alias;
-		delete this._aliasForMatching;
+		delete this._aliasMatcher;
 	}
 	/** stores the clean alias used for matching */
-	private _aliasForMatching?: string;
+	private _aliasMatcher?: StringMatcher;
 	/** returns the clean alias used for matching */
-	public get aliasForMatching(): string {
-		return this._aliasForMatching ?? (this._aliasForMatching = GameCharacter.prepareForMatching(this.alias ?? this.name));
+	public get aliasMatcher(): StringMatcher {
+		return this._aliasMatcher ??= StringMatcher.from(this.core.alias);
 	}
 
 	/** Channels to automatically treat input as dialog */
@@ -300,14 +301,13 @@ export class GameCharacter implements IHasSave {
 	}
 	public set name(name: string) {
 		this.core.name = name;
-		delete this._nameForMatching;
-		delete this._aliasForMatching;
+		delete this._nameMatcher;
 	}
 	/** stores the clean name used for matching */
-	private _nameForMatching?: string;
+	private _nameMatcher?: StringMatcher;
 	/** returns the clean name used for matching */
-	public get nameForMatching(): string {
-		return this._nameForMatching ?? (this._nameForMatching = GameCharacter.prepareForMatching(this.name));
+	public get nameMatcher(): StringMatcher {
+		return this._nameMatcher ??= StringMatcher.from(this.core.name);
 	}
 
 	/** The character's notes */
@@ -333,7 +333,7 @@ export class GameCharacter implements IHasSave {
 				this._essence20 = loadCharacterCore(this.core.essence20) ?? null;
 			}
 			if (this.core.essence20Id) {
-				this._essence20 = loadCharacterSync(this.core.essence20Id);
+				this._essence20 = loadCharacterSync(this.core.essence20Id) ?? null;
 			}
 		}
 		return this._essence20 ?? null;
@@ -350,7 +350,7 @@ export class GameCharacter implements IHasSave {
 				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder);
 			}
 			if (this.core.pathbuilderId) {
-				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId);
+				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId) ?? null;
 			}
 		}
 		return this._pathbuilder ?? null;
@@ -453,13 +453,12 @@ export class GameCharacter implements IHasSave {
 
 	//#endregion
 
-	/** Compares id, name literal, alias literal, then preparedName and preparedAlias. If recursive, it also checks companions. */
+	/** Compares id, name literal, alias literal, then nameMatcher and aliasMatcher. If recursive, it also checks companions. */
 	public matches(value: string, recursive = false): boolean {
 		if (this.name === value || this.alias === value || this.id === value) {
 			return true;
 		}
-		const preparedValue = GameCharacter.prepareForMatching(value);
-		if (this.nameForMatching === preparedValue || this.aliasForMatching === preparedValue) {
+		if (StringMatcher.from(value).matchesAny(this.nameMatcher, this.aliasMatcher)) {
 			return true;
 		}
 		return recursive && this.companions.hasMatching(value, true);
@@ -479,22 +478,30 @@ export class GameCharacter implements IHasSave {
 		return this.core;
 	}
 
-	public remove(): Promise<boolean> {
+	public async remove(): Promise<boolean> {
+		let manager: CharacterManager | undefined;
 		if (this.owner instanceof GameCharacter) {
-			return this.owner.companions.removeAndSave(this);
+			manager = this.owner.companions;
 		} else if (this.owner instanceof CharacterManager) {
-			return this.owner.removeAndSave(this);
+			manager = this.owner;
 		}
-		return Promise.resolve(false);
+		if (!manager) return false;
+		const found = manager.findByName(this.name);
+		if (!found) return false;
+		const index = manager.indexOf(found);
+		if (index < 0) return false;
+		const removed = manager.splice(index, 1)[0];
+		if (!removed) return false;
+		return await manager.save() ?? false;
 	}
 
 	private fetchedStats: Map<string, string> | undefined;
 	private fetchedMacros: MacroBase[] | undefined;
 	public async fetchStats(): Promise<void> {
 		if (!this.fetchedStats) {
-			const url = this.notes.getStat("stats.tsv.url")?.note;
-			if (isUrl(url)) {
-				const raw = await getText(unwrap(url, "<>")).catch(errorReturnUndefined);
+			const url = urlOrUndefined(this.notes.getStat("stats.tsv.url")?.note);
+			if (url) {
+				const raw = await getText(url).catch(errorReturnUndefined);
 				if (raw) {
 					const { stats, macros } = parseFetchedStats(raw, this.alias);
 					this.fetchedStats = stats;
@@ -537,6 +544,12 @@ export class GameCharacter implements IHasSave {
 		return hpToGauge(hp, maxHp);
 	}
 
+	public getNumber(key: string): number | undefined;
+	public getNumber(key: string, def: number): number;
+	public getNumber(key: string, def?: number): number | undefined {
+		return numberOrUndefined(this.getStat(key)) ?? def;
+	}
+
 	public getStat(key: string): string | null {
 		if (/^name$/i.test(key)) {
 			return this.name;
@@ -558,13 +571,8 @@ export class GameCharacter implements IHasSave {
 					sheetUrl = toMessageUrl(sheetRef);
 				}
 			}
-			if (isUrl(sheetUrl)) {
-				if (!isWrapped(sheetUrl, "<>")) {
-					sheetUrl = wrap(sheetUrl, "<>");
-				}
-				return sheetUrl;
-			}
-			return null;
+			const validUrl = urlOrUndefined(sheetUrl);
+			return validUrl ? wrap(validUrl, "<>") : null;
 		}
 
 		const noteStat = this.notes.getStat(key)?.note.trim() ?? undefined;
@@ -627,7 +635,19 @@ export class GameCharacter implements IHasSave {
 			}
 		}
 
-		if (/^conditions$/i.test(key) && this.gameSystem?.isP20) {
+		// provide a temp shortcut for d20 based coins/currency
+		if (keyLower === "currency" || keyLower === "currency.raw") {
+			const curr = this.getCurrency();
+
+			// they don't want raw, so simplify it
+			if (keyLower === "currency") {
+				return curr.simplify().toString();
+			}
+
+			return curr.toString();
+		}
+
+		if (keyLower === "conditions" && this.gameSystem?.isP20) {
 			const conditions: string[] = [];
 
 			Condition.getToggledConditions().forEach(condition => {
@@ -652,6 +672,36 @@ export class GameCharacter implements IHasSave {
 
 		return null;
 	}
+	public getCurrency() {
+		// try getting currency from gameSystem
+		let currency = Currency.new<CurrencyPf2e>(this.gameSystem?.code);
+
+		// otherwise see if we are SF2e
+		if (!currency && (this.getNumber("credits") || this.getNumber("upb"))) {
+			currency = Currency.new("SF2e");
+		}
+
+		// otherwise see if we are DnD5e
+		if (!currency && (this.getNumber("ep"))) {
+			currency = Currency.new("DnD5e");
+		}
+
+		// otherwise default to PF2e
+		if (!currency) {
+			currency = Currency.new("PF2e")!;
+		}
+
+		// create core using keys for this currency
+		const raw = currency.denominationKeys.reduce((core, denom) => {
+			const value = this.getNumber(denom);
+			if (value) core[denom] = value;
+			return core;
+		}, {} as DenominationsCore<any>);
+
+		// parse to properly load up denominations with a negative value
+		const constr = currency.constructor as typeof Currency;
+		return constr.parse(raw) as CurrencyPf2e;
+	}
 
 	public async processStatsAndMods(stats?: TKeyValuePair[], mods?:StatModPair[]): Promise<boolean> {
 		let updated = false;
@@ -661,12 +711,27 @@ export class GameCharacter implements IHasSave {
 
 		let modded = false;
 		if (mods?.length) {
+			const curr = this.getCurrency();
+			let currModded = false;
 			for (const pair of mods) {
-				const oldValue = this.getStat(pair.key) ?? 0;
-				const math = `(${oldValue}${pair.modifier}${pair.value})`;
-				const newValue = doStatMath(math);
-				const updated = await this.updateStats([{ key:pair.key, value:newValue }], false);
-				modded ||= updated;
+				const keyLower = pair.key.toLowerCase();
+				if (curr.hasDenomination(keyLower)) {
+					const number = numberOrUndefined(pair.value);
+					if (number) {
+						curr.math(pair.modifier!, number, keyLower);
+						currModded = true;
+					}
+				}else {
+					const oldValue = this.getStat(pair.key) ?? 0;
+					const math = `(${oldValue}${pair.modifier}${pair.value})`;
+					const newValue = doStatMath(math);
+					const updated = await this.updateStats([{ key:pair.key, value:newValue }], false);
+					modded ||= updated;
+				}
+			}
+			if (currModded) {
+				const updated = await this.updateStats(curr.denominationKeys.map(denom => ({ key:denom, value:String(curr[denom]) })), false);
+				modded || updated;
 			}
 		}
 
@@ -678,9 +743,10 @@ export class GameCharacter implements IHasSave {
 		const forNotes: TKeyValuePair[] = [];
 		const pb = this.pathbuilder;
 		for (const pair of pairs) {
-			const key = pair.key;
+			const { key } = pair;
+			const keyRegex = new RegExp(`^${key}$`, "i")
 			const value = pair.value ?? "";
-			if (/^name$/i.test(key) && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
+			if (keyRegex.test("name") && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
 				this.name = value;
 				if (pb) {
 					pb.name = value;
@@ -691,24 +757,36 @@ export class GameCharacter implements IHasSave {
 
 			let correctedKey: string | undefined;
 			let correctedValue: string | undefined;
-			const isExplorationMode = /^explorationmode$/i.test(key);
-			const isExplorationSkill = /^explorationskill$/i.test(key);
+			const isExplorationMode = keyRegex.test("explorationMode");
+			const isExplorationSkill = keyRegex.test("explorationSkill");
 			if (isExplorationMode || isExplorationSkill) {
+				const matchValue = (val: string) => new RegExp(`^${val.replace(/(\s)/g, "$1?")}$`, "i").test(value);
 				if (isExplorationMode) {
 					correctedKey = "explorationMode";
-					correctedValue = getExplorationModes().find(mode => XRegExp(`^${mode.replace(/(\s)/g, "$1?")}$`, "i").test(value));
+					correctedValue = getExplorationModes().find(matchValue);
 				}
 				if (isExplorationSkill) {
 					correctedKey = "explorationSkill";
-					correctedValue = getSkills().find(skill => XRegExp(`^${skill.replace(/(\s)/g, "$1?")}$`, "i").test(value));
+					correctedValue = getSkills().find(matchValue);
 				}
 			}
 			if (pb) {
-				if (/^level$/i.test(key) && +value) {
+				if (keyRegex.test("level") && +value) {
 					const updatedLevel = await pb.setLevel(+value, save);
 					if (updatedLevel) {
-						const unset = this.notes.setStat("level", "");
-						if (unset) changes = true;
+						this.notes.setStat("level", "");
+						changes = true;
+					}
+					continue;
+				}
+				if (["cp","sp","gp","pp","credits","upb"].some(s => keyRegex.test(s))) {
+					const keyLower = key.toLowerCase() as keyof TPathbuilderCharacterMoney;
+					const money = { } as TPathbuilderCharacterMoney;
+					money[keyLower] = +value;
+					const updatedMoney = await pb.setMoney(money, save);
+					if (updatedMoney) {
+						this.notes.setStat(keyLower, "");
+						changes = true;
 					}
 					continue;
 				}
@@ -744,9 +822,9 @@ export class GameCharacter implements IHasSave {
 		// name is tricky cause we can update via alias in name field; do it separate
 		if (name) {
 			// we don't wanna edit the name if we are simply using the alias to update
-			const notAlias = this.aliasForMatching !== GameCharacter.prepareForMatching(name);
+			const notAlias = !this.aliasMatcher.matches(name);
 			// if the name and alias are the same then we can update the name
-			const aliasMatchesName = this.nameForMatching === this.aliasForMatching;
+			const aliasMatchesName = this.nameMatcher.matches(this.aliasMatcher);
 			if (notAlias || aliasMatchesName) {
 				this.name = name;
 				changed = true;
@@ -754,8 +832,8 @@ export class GameCharacter implements IHasSave {
 		}
 
 		if (changed) {
-			delete this._aliasForMatching;
-			delete this._nameForMatching;
+			delete this._aliasMatcher;
+			delete this._nameMatcher;
 			delete this._pathbuilder;
 			if (save) {
 				return this.save();
@@ -764,7 +842,6 @@ export class GameCharacter implements IHasSave {
 		return false;
 	}
 
-	//#region IHasSave
 	public async save(savePathbuilder?: boolean): Promise<boolean> {
 		const ownerSaved = await this.owner?.save() ?? false;
 		if (savePathbuilder && this.pathbuilderId) {
@@ -773,13 +850,8 @@ export class GameCharacter implements IHasSave {
 		}
 		return ownerSaved;
 	}
-	//#endregion
 
 	public static readonly defaultGmCharacterName = DEFAULT_GM_CHARACTER_NAME;
-
-	public static prepareForMatching(name: string): string {
-		return XRegExp.replace(name ?? "", XRegExp("[^\\pL\\pN]+"), "", "all").toLowerCase();
-	}
 
 	public static async fromTemp(ids: TempIds): Promise<GameCharacter | undefined> {
 		const path = createTempPath(ids);

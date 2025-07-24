@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { isBlank } from "@rsc-utils/string-utils";
+import { isBlank, type Optional } from "@rsc-utils/core-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
@@ -38,10 +37,7 @@ export function findNpc(sageCommand: SageCommand, name: Optional<string>, opts: 
 
 	// else grab their first
 	if (opts.first) {
-		const firstChar = gameNpcs
-			? gameNpcs.first()
-			: userNpcs.first();
-		if (firstChar) return firstChar;
+		return (gameNpcs ?? userNpcs)[0];
 	}
 
 	return undefined;

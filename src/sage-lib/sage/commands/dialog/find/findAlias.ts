@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { isBlank } from "@rsc-utils/string-utils";
+import { isBlank, StringMatcher, type Optional } from "@rsc-utils/core-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { TAlias } from "../../../model/User.js";
 import { findCompanion } from "./findCompanion.js";
@@ -13,7 +12,8 @@ export function findAlias(sageCommand: SageCommand, aliasName: Optional<string>)
 		return undefined;
 	}
 
-	const found = sageCommand.sageUser.aliases.findByName(aliasName, true);
+	const matcher = StringMatcher.from(aliasName);
+	const found = sageCommand.sageUser.aliases.find(alias => matcher.matches(alias.name));
 	if (found) {
 		return found;
 	}
@@ -25,7 +25,7 @@ export function findAlias(sageCommand: SageCommand, aliasName: Optional<string>)
 	if (char) {
 		return {
 			name: aliasName,
-			target: `${char.type}::${char.nameForMatching}::`,
+			target: `${char.type}::${char.nameMatcher.matchValue}::`,
 			charAlias: true
 		};
 	}

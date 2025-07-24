@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { isBlank } from "@rsc-utils/string-utils";
+import { isBlank, type Optional } from "@rsc-utils/core-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
@@ -21,7 +20,7 @@ export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: O
 
 	// try by given name/index first
 	if (!isNameBlank) {
-		const namedChar = (isGameMaster ? gamePcs : gamePcs?.filterByUser(actorId))?.findByName(name)
+		const namedChar = (isGameMaster ? gamePcs?.findByName(name) : gamePcs?.findByUser(actorId, name))
 			?? userPcs.findByName(name);
 		if (namedChar) return namedChar;
 	}
@@ -38,7 +37,7 @@ export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: O
 	if (isNameBlank && opts.first) {
 		const firstChar = gamePcs
 			? gamePcs.findByUser(actorId)
-			: userPcs.first();
+			: userPcs[0];
 		if (firstChar) return firstChar;
 	}
 
