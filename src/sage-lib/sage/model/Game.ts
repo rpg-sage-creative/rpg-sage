@@ -219,9 +219,9 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	public findCharacterOrCompanion(name: string): GameCharacter | CharacterShell | undefined {
 		if (this.gmCharacter.matches(name)) return this.gmCharacter;
 		return this.playerCharacters.findByName(name)
-			?? this.playerCharacters.findCompanionByName(name)
+			?? this.playerCharacters.findCompanion(name)
 			?? this.nonPlayerCharacters.findByName(name)
-			?? this.nonPlayerCharacters.findCompanionByName(name)
+			?? this.nonPlayerCharacters.findCompanion(name)
 			?? this.encounters.findCharacter(name)
 			?? this.parties.findCharacter(name);
 	}

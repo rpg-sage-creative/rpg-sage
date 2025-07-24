@@ -133,9 +133,9 @@ export class User extends HasSageCacheCore<UserCore> {
 
 	public findCharacterOrCompanion(name: string): GameCharacter | undefined {
 		return this.playerCharacters.findByName(name)
-			?? this.playerCharacters.findCompanionByName(name)
+			?? this.playerCharacters.findCompanion(name)
 			?? this.nonPlayerCharacters.findByName(name)
-			?? this.nonPlayerCharacters.findCompanionByName(name);
+			?? this.nonPlayerCharacters.findCompanion(name);
 	}
 
 	public getAutoCharacterForChannel(...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {

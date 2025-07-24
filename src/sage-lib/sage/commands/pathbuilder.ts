@@ -591,9 +591,9 @@ function findUnlinkedGameCharacter({ game, sageUser }: SageCommand, { name }: Pa
 	const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
 	const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
 	return pcs.findByName(name)
-		?? pcs.findCompanionByName(name)
+		?? pcs.findCompanion(name)
 		?? npcs.findByName(name)
-		?? npcs.findCompanionByName(name);
+		?? npcs.findCompanion(name);
 }
 
 function findLinkedGameCharacter({ game, sageUser }: SageCommand, { characterId }: PathbuilderCharacter): GameCharacter | undefined {

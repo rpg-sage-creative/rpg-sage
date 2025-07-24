@@ -34,7 +34,7 @@ function testNpcTarget(sageMessage: SageMessage, dialogContent: DialogContent): 
 	if (sageMessage.game) {
 		if (sageMessage.isGameMaster) {
 			const found = sageMessage.game.nonPlayerCharacters.findByName(dialogContent.name)
-				?? sageMessage.game.nonPlayerCharacters.findCompanionByName(dialogContent.name);
+				?? sageMessage.game.nonPlayerCharacters.findCompanion(dialogContent.name);
 			return !!found;
 		}
 		return false;
@@ -59,7 +59,7 @@ function testCompanionTarget(sageMessage: SageMessage, dialogContent: DialogCont
 	if (sageMessage.game) {
 		return sageMessage.playerCharacter?.companions.findByName(dialogContent.name) !== undefined;
 	}
-	return !sageMessage.sageUser.playerCharacters.findCompanionByName(dialogContent.name) !== undefined;
+	return !sageMessage.sageUser.playerCharacters.findCompanion(dialogContent.name) !== undefined;
 }
 
 function toNamePart(dialogContent: DialogContent): string {

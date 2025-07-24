@@ -114,11 +114,6 @@ export class CharacterManager extends Array<GameCharacter> {
 		return companion;
 	}
 
-	/** @deprecated use .findCompanion(companionName) */
-	public findCompanionByName(companionName: Optional<string>): GameCharacter | undefined {
-		return this.findCompanion(companionName);
-	}
-
 	//#endregion
 
 	public getAutoCharacter(autoChannelData: {channelDid:Snowflake;userDid:Snowflake;}): GameCharacter | undefined {
