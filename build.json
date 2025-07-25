@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.11.2",
+"version":"1.11.3",
 "branch":"v1.x.x",
-"commit":"563fe9714e7c9250b16d628c9542bad4ad29d89f",
-"commitSubject":"updated GameCharacter, CharacterManager and improved find char logic",
-"commitTs":1753317548000,
-"commitDate":"2025-07-23-1739",
-"buildTs":1753468333000,
-"buildDate":"2025-07-25-1132",
+"commit":"cc94a3f1527959ec257cff528dfd55a9310043cc",
+"commitSubject":"disable `npm run test`",
+"commitTs":1753470625000,
+"commitDate":"2025-07-25-1210",
+"buildTs":1753470640000,
+"buildDate":"2025-07-25-1210",
 "author":"Randal"
 }
