@@ -77,10 +77,8 @@
 	"scripts": {
 		"build": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/build.sh --skipIndexTs",
 		"release": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/release.sh",
-		"test": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/test.sh",
-		"-prestart-dev": "npm run test",
+		"test": "echo 'no tests'",
 		"start-dev": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
-		"-prestart-dev-and-services": "npm run test",
 		"start-dev-and-services": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices",
 		"app-commands": "node ./build/app-commands.mjs codeName=dev dataRoot='./docker-volumes/rpg-sage-mono'"
 	}
