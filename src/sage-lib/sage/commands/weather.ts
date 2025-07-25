@@ -110,12 +110,17 @@ async function exportWeather(sageCommand: SageCommand, args: WeatherArgs, time: 
 //#region slash command
 
 /** Checks the command for the arg/enum to either process or alert of an issue. */
-function getEnumInfo<K extends string = string, V extends number = number>({ args }: SageCommand, enumType: EnumLike<K, V>, key: string) {
-	const keyValue = args.getEnum(enumType, key);
+function getEnumInfo<K extends string = string, V extends number = number>(sageCommand: SageCommand, enumType: EnumLike<K, V>, key: string) {
+
+	const keyValue = sageCommand.args.getEnum(enumType, key);
 	const hasKeyValue = keyValue !== undefined;
 
-	const nonKeyValue = args.findEnum(enumType);
-	const hasNonKeyValue = nonKeyValue !== undefined;
+	let nonKeyValue: V | undefined;
+	let hasNonKeyValue = false;
+	if (sageCommand.isSageMessage()) {
+		nonKeyValue = sageCommand.args.findEnum(enumType) ?? undefined;
+		hasNonKeyValue = nonKeyValue !== undefined;
+	}
 
 	const value = keyValue ?? nonKeyValue;
 

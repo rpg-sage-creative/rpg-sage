@@ -140,9 +140,6 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		return [...channelIdSet];
 	}
 
-	/** @deprecated */
-	public abstract findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V>;
-
 	/**
 	 * Gets the named option as a value from the given enum type.
 	 * Returns undefined if not found.

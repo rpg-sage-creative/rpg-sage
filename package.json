@@ -49,16 +49,14 @@
 	],
 	"devDependencies": {
 		"@types/follow-redirects": "1.14.4",
-		"@types/jest": "^29.5.14",
 		"@types/node": "^22.15.3",
-		"jest": "^29.7.0",
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
 		"@aws-sdk/client-sns": "3.787.0",
 		"@discordjs/rest": "2.5.0",
 		"@napi-rs/canvas": "0.1.53",
-		"discord.js": "14.19.2",
+		"discord.js": "14.21.0",
 		"emoji-regex": "10.3.0",
 		"exifreader": "4.23.3",
 		"follow-redirects": "1.15.6",
@@ -80,9 +78,9 @@
 		"build": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/build.sh --skipIndexTs",
 		"release": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/release.sh",
 		"test": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/test.sh",
-		"prestart-dev": "npm run test",
+		"-prestart-dev": "npm run test",
 		"start-dev": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
-		"prestart-dev-and-services": "npm run test",
+		"-prestart-dev-and-services": "npm run test",
 		"start-dev-and-services": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices",
 		"app-commands": "node ./build/app-commands.mjs codeName=dev dataRoot='./docker-volumes/rpg-sage-mono'"
 	}

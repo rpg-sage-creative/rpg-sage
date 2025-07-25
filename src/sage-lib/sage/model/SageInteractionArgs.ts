@@ -1,22 +1,32 @@
-import type { EnumLike, Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { MessageChannel } from "@rsc-utils/discord-utils";
-import { ApplicationCommandOptionType, Attachment, CommandInteraction, GuildMember, Role, User } from "discord.js";
+import { ApplicationCommandOptionType, Attachment, AutocompleteInteraction, ChatInputCommandInteraction, ContextMenuCommandInteraction, GuildMember, Role, User, type CommandInteractionOption } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageInteraction } from "./SageInteraction.js";
 
+type HandledInteraction = AutocompleteInteraction | ChatInputCommandInteraction | ContextMenuCommandInteraction;
+
 type OptionData<T extends boolean | number | string> = {
 	name: string;
-	nameLower: string;
 	hasKey: boolean;
 	hasUnset: boolean;
 	type?: ApplicationCommandOptionType;
 	value?: T | null;
 	stringValue?: string | null;
+	option?: CommandInteractionOption;
 };
 
 export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 
-	private get interaction(): CommandInteraction { return this.sageCommand.interaction as CommandInteraction; }
+	private get interaction() { return this.sageCommand.interaction as HandledInteraction; }
+
+	private get options() {
+		const { interaction } = this;
+		if (interaction.isAutocomplete()) return interaction.options;
+		if (interaction.isChatInputCommand()) return interaction.options;
+		if (interaction.isContextMenuCommand()) return interaction.options;
+		return undefined;
+	}
 
 	/**
 	 * Looks for the option by name.
@@ -27,11 +37,9 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	 */
 	private getOption<T extends boolean | number | string>(name: string): OptionData<T> {
 		const nameLower = name.toLowerCase();
-		const option = this.interaction.isChatInputCommand()
-			? this.interaction.options.get(nameLower)
-			: null;
+		const option = this.options?.get(nameLower);
 		if (!option) {
-			return { name, nameLower, hasKey:false, hasUnset:false };
+			return { name, hasKey:false, hasUnset:false };
 		}
 
 		// value for channel, mentionable, role, user should be the snowflake
@@ -40,12 +48,12 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 		const hasUnset = stringValue ? /^\s*unset\s*$/i.test(stringValue) : false;
 		return {
 			name,
-			nameLower,
 			type,
 			value: hasUnset ? null : value as T,
 			stringValue: hasUnset ? null : stringValue,
-			hasKey:true,
-			hasUnset
+			hasKey: true,
+			hasUnset,
+			option
 		};
 	}
 
@@ -70,10 +78,10 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	 * Returns null if not a valid attachment or "unset".
 	 */
 	public getAttachment(name: string): Optional<Attachment> {
-		const { nameLower, hasKey, hasUnset } = this.getOption(name);
+		const { hasKey, hasUnset, option } = this.getOption(name);
 		if (!hasKey) return undefined; //NOSONAR
 		if (hasUnset) return null; //NOSONAR
-		const attachment = this.interaction.options.get(nameLower)?.attachment;
+		const attachment = option?.attachment;
 		if (attachment instanceof Attachment) {
 			return attachment;
 		}
@@ -95,14 +103,10 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
 	public getChannel(name: string): Optional<MessageChannel> {
-		const { nameLower, hasKey, hasUnset } = this.getOption(name);
+		const { hasKey, hasUnset, option } = this.getOption(name);
 		if (!hasKey) return undefined; //NOSONAR
 		if (hasUnset) return null; //NOSONAR
-		return this.interaction.options.get(nameLower)?.channel as MessageChannel ?? null;
-	}
-
-	public findEnum<K extends string = string, V extends number = number>(_type: EnumLike<K, V>): Optional<V> {
-		return undefined;
+		return option?.channel as MessageChannel ?? null;
 	}
 
 	/**
@@ -120,10 +124,10 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
 	public getRole(name: string): Optional<Role> {
-		const { nameLower, hasKey, hasUnset } = this.getOption(name);
+		const { hasKey, hasUnset, option } = this.getOption(name);
 		if (!hasKey) return undefined; //NOSONAR
 		if (hasUnset) return null; //NOSONAR
-		const role = this.interaction.options.get(nameLower)?.role;
+		const role = option?.role;
 		if (role instanceof Role) {
 			return role;
 		}
@@ -145,10 +149,10 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	 * Returns null if not a valid User or "unset".
 	 */
 	public getUser(name: string): Optional<User> {
-		const { nameLower, hasKey, hasUnset } = this.getOption(name);
+		const { hasKey, hasUnset, option } = this.getOption(name);
 		if (!hasKey) return undefined; //NOSONAR
 		if (hasUnset) return null; //NOSONAR
-		const mentionable = this.interaction.options.get(nameLower)?.user;
+		const mentionable = option?.user;
 		if (mentionable instanceof GuildMember) {
 			return mentionable.user;
 		}else if (mentionable instanceof User) {

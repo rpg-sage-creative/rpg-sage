@@ -1,7 +1,7 @@
 {"name":"@rsc-utils/discord-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
   "@rsc-utils/core-utils": "^0.0.0",
   "@rsc-utils/string-utils": "^0.0.0",
-  "discord.js": "^14.15.3",
+  "discord.js": "^14.21.0",
   "emoji-regex": "^10.3.0",
   "xregexp": "^5.1.1"
 }}
