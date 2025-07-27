@@ -1,0 +1,6 @@
+{"name":"@rsc-utils/game-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
+		"@napi-rs/canvas": "^0.1.71",
+		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.9.1",
+		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.3.7",
+		"regex": "^6.0.1"
+}}

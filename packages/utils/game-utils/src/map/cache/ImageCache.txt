@@ -1,0 +1,12 @@
+/*
+map image caching to be done here
+> getMapImageCacheRoot()/user_snowflake/map_snowflake/image_snowflake
+
+by default, cache one map per user during render: "generic cache"
+- patrons will get map caching as part of the image storage perk that will be added
+
+each map render triggers:
+1- get map owner cache status
+ 1a- how many maps can they cache
+2- clear oldest cache to make room for
+*/

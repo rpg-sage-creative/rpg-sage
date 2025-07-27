@@ -1,0 +1,1 @@
+export type Tradition = "arcane" | "divine" | "focus" | "occult" | "primal";
