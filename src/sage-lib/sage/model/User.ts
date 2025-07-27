@@ -1,5 +1,5 @@
-import { getSuperAdminId, getSuperUserId } from "@rsc-sage/env";
 import { applyChanges, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { getSuperAdminId, getSuperUserId } from "@rsc-utils/discord-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import type { DialogType } from "../repo/base/IdRepository.js";

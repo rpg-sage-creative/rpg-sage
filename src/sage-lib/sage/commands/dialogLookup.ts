@@ -1,6 +1,5 @@
-import { isSageId, isTupperBoxId } from "@rsc-sage/env";
 import { errorReturnUndefined, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
+import { isSageId, isTupperBoxId, toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
 import type { Guild, GuildMember, Message } from "discord.js";
 import { ReactionType } from "../../discord/enums.js";
 import { registerReactionListener } from "../../discord/handlers.js";

@@ -1,6 +1,5 @@
-import { isSageId } from "@rsc-sage/env";
 import { Cache, debug, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, type ReactionOrPartial, type SMessageOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { DiscordApiError, isSageId, type ReactionOrPartial, type SMessageOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Message, MessageReaction } from "discord.js";
 import { ReactionType } from "../../discord/index.js";
 import { SageCommand, type SageCommandCore } from "./SageCommand.js";
