@@ -585,6 +585,12 @@ export class GameCharacter {
 			return fetchedStat;
 		}
 
+		const e20 = this.essence20;
+		if (e20) {
+			const e20Stat = e20.getStat(key);
+			return e20Stat === null ? null : String(e20Stat);
+		}
+
 		const pb = this.pathbuilder;
 		if (pb) {
 			let pbKey = key;
