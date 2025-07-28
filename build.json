@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.11.3",
+"version":"1.11.4",
 "branch":"v1.x.x",
-"commit":"cc94a3f1527959ec257cff528dfd55a9310043cc",
-"commitSubject":"disable `npm run test`",
-"commitTs":1753470625000,
-"commitDate":"2025-07-25-1210",
-"buildTs":1753470640000,
-"buildDate":"2025-07-25-1210",
+"commit":"3f3db42a859db10c89a409bedd738739d7c884f6",
+"commitSubject":"implement basic getStats for E20 (#138)",
+"commitTs":1753729842000,
+"commitDate":"2025-07-28-1210",
+"buildTs":1753729889000,
+"buildDate":"2025-07-28-1211",
 "author":"Randal"
 }
