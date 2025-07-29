@@ -1,5 +1,5 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
-import { Currency, type CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
+import { Currency, type CurrencyPf2e, type DenominationsCore } from "@rsc-utils/game-utils";
 import { applyChanges, Color, errorReturnUndefined, getDataRoot, isBlank, isWrapped, StringMatcher, wrap, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
@@ -75,6 +75,7 @@ export type GameCharacterCore = {
 	/** The character's Pathbuilder build. */
 	pathbuilder?: TPathbuilderCharacter;
 	pathbuilderId?: string;
+	/** The character's Essence20 build. */
 	essence20?: TEssence20CharacterCore;
 	essence20Id?: string;
 	/** The image used to represent the character to the left of the post */
@@ -560,7 +561,7 @@ export class GameCharacter {
 		if (/^sheet\.?url$/i.test(key)) {
 			let sheetUrl = this.notes.getStat(key)?.note.trim();
 			if (sheetUrl === "on") {
-				const { sheetRef } = this.pathbuilder ?? { };
+				const { sheetRef } = this.pathbuilder ?? this.essence20 ?? { };
 				if (sheetRef?.channelId) {
 					sheetUrl = toMessageUrl(sheetRef);
 				}
@@ -576,6 +577,12 @@ export class GameCharacter {
 		const fetchedStat = this.fetchedStats?.get(key);
 		if (fetchedStat !== undefined) {
 			return fetchedStat;
+		}
+
+		const e20 = this.essence20;
+		if (e20) {
+			const e20Stat = e20.getStat(key);
+			return e20Stat === null ? null : String(e20Stat);
 		}
 
 		const pb = this.pathbuilder;
@@ -724,7 +731,7 @@ export class GameCharacter {
 			}
 			if (currModded) {
 				const updated = await this.updateStats(curr.denominationKeys.map(denom => ({ key:denom, keyRegex:new RegExp(`^${denom}$`, "i"), value:String(curr[denom]) })), false);
-				modded || updated;
+				modded ||= updated;
 			}
 		}
 
@@ -735,13 +742,17 @@ export class GameCharacter {
 		let changes = false;
 		const forNotes: KeyValuePair[] = [];
 		const pb = this.pathbuilder;
+		const e20 = this.essence20;
 		for (const pair of stats) {
 			const { key, keyRegex } = pair;
 			const value = pair.value ?? "";
-			if (keyRegex.test("name") && value?.trim() && (this.name !== value || (pb && pb.name !== value))) {
+			if (keyRegex.test("name") && value?.trim() && (this.name !== value || (pb && pb.name !== value) || e20 && e20.name !== value)) {
 				this.name = value;
 				if (pb) {
 					pb.name = value;
+				}
+				if (e20) {
+					e20.name = value;
 				}
 				changes = true;
 				continue;
@@ -834,11 +845,17 @@ export class GameCharacter {
 		return false;
 	}
 
-	public async save(savePathbuilder?: boolean): Promise<boolean> {
+	public async save(saveImported?: boolean): Promise<boolean> {
 		const ownerSaved = await this.owner?.save() ?? false;
-		if (savePathbuilder && this.pathbuilderId) {
-			const pathbuilderSaved = await this.pathbuilder?.save() ?? false;
-			return ownerSaved && pathbuilderSaved;
+		if (saveImported) {
+			if (this.pathbuilderId) {
+				const pathbuilderSaved = await this.pathbuilder?.save() ?? false;
+				return ownerSaved && pathbuilderSaved;
+			}
+			if (this.essence20Id) {
+				const essence20Saved = await this.essence20?.save() ?? false;
+				return ownerSaved && essence20Saved;
+			}
 		}
 		return ownerSaved;
 	}

@@ -1,4 +1,4 @@
-import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
+import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/game-utils";
 import { errorReturnFalse, getDataRoot, type Optional } from "@rsc-utils/core-utils";
 import { fileExistsSync, writeFile } from "@rsc-utils/io-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
@@ -81,14 +81,83 @@ export interface PlayerCharacterCoreE20 extends CharacterBaseCore<"PlayerCharact
 	weapons: TWeaponE20[];
 }
 
-export const Abilities: TAbilityName[] = ["Strength", "Speed", "Smarts", "Social"];
-export type TAbilityName = "Strength" | "Speed" | "Smarts" | "Social";
+export const Abilities = ["Strength", "Speed", "Smarts", "Social"] as const;
+export type TAbilityName = typeof Abilities[number];
 
 export function orQ(value: Optional<string>): string {
 	return (value ?? "").trim() || "?";
 }
 
 export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> extends CharacterBase<T> {
+
+	public getStat(stat: string): number | string | null {
+		const regexp = new RegExp(`^${stat.replace(/\./g, "\\.")}$`, "i");
+
+		const coreKeys = ["level", "health", "damage"];
+		for (const key of coreKeys) {
+			if (regexp.test(key)) {
+				return this.core[key as "level"] ?? null;
+			}
+		}
+
+		/*
+		AorD >> Ability or Defense
+		AorD             >> abilities[index].ability/defense
+		AorD.ability     >> abilities[index].ability
+		AorD.abilityName >> abilities[index].abilityName
+		AorD.name        >> abilities[index].abilityName/defenseName
+		AorD.armor       >> abilities[index].armor
+		AorD.bonus       >> abilities[index].bonus
+		AorD.defense     >> abilities[index].defense
+		AorD.defenseName >> abilities[index].defenseName
+		AorD.essence     >> abilities[index].essence
+		Skill.die        >>
+		Skill.bonus      >>
+		Spec ?
+		*/
+
+		const properties: Exclude<keyof TStatE20, "skills">[] = ["ability", "abilityName", "armor", "bonus", "defense", "defenseName", "essence"];
+		for (const abil of this.abilities) {
+			if (regexp.test(abil.abilityName)) {
+				return abil.ability ?? null;
+			}
+			if (regexp.test(`${abil.abilityName}.name`)) {
+				return abil.abilityName ?? null;
+			}
+			if (regexp.test(abil.defenseName)) {
+				return abil.defense ?? null;
+			}
+			if (regexp.test(`${abil.defenseName}.name`)) {
+				return abil.defenseName ?? null;
+			}
+			for (const prop of properties) {
+				if (regexp.test(`${abil.abilityName}.${prop}`)
+					|| regexp.test(`${abil.defenseName}.${prop}`)) {
+					return abil[prop] ?? null;
+				}
+			}
+			const { skills = [] } = abil;
+			for (const skill of skills) {
+				// if (regexp.test(skill.name)) {
+				// 	return 1; // presence of a skill ... should that be a 1 or true or ...?
+				// }
+				if (regexp.test(`${skill.name}.die`)) {
+					return skill.die ?? null;
+				}
+				if (regexp.test(`${skill.name}.bonus`)) {
+					return skill.bonus ?? null;
+				}
+				// const { specializations = [] } = skill;
+				// for (const spec of specializations) {
+				// 	if (regexp.test(spec.name)) {
+				// 		return 1; // presence of a specialization ... should that be a 1 or true or ...?
+				// 	}
+				// }
+			}
+		}
+
+		return null;
+	}
 
 	public get abilities(): TStatE20[] { return this.core.abilities ?? []; }
 
