@@ -1,4 +1,4 @@
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
+import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
 import { isInvalidWebhookUsername, parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import { getJson, PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
@@ -33,13 +33,14 @@ type Handlers<T extends CharacterBaseCore, U extends CharacterBase<T> = Characte
 };
 
 function coreToResult<T extends CharacterBaseCore, U extends CharacterBase<T> = CharacterBase<T>>(core: T, toChar: (core: T) => U): FetchCoreResult<T> {
-	const invalidName = isInvalidWebhookUsername(core.name);
+	const coreName = core.names?.name;
+	const invalidName = isInvalidWebhookUsername(coreName);
 	if (invalidName === true) {
-		return core.name
-			? { core, error:"USERNAME_TOO_LONG", invalidName:core.name }
+		return coreName
+			? { core, error:"USERNAME_TOO_LONG", invalidName:coreName }
 			: { core, error:"USERNAME_MISSING" };
 	}else if (invalidName) {
-		return { core, error:"USERNAME_S_BANNED", invalidName:core.name! };
+		return { core, error:"USERNAME_S_BANNED", invalidName:coreName! };
 	}
 	return { core, char:toChar(core) };
 }

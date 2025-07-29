@@ -1,4 +1,4 @@
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
+import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
 import { error } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
@@ -52,7 +52,8 @@ export async function handleReimport
 	const newCore = result.core;
 
 	// check names
-	if (character.name !== newCore.name && newCore.name !== newName) {
+	const newCoreName = newCore.names?.name;
+	if (character.name !== newCoreName && newCoreName !== newName) {
 		return handleImportErrors(sageCommand, "REIMPORT", [{ error:"CHARACTER_NAME_MISMATCH" }]);
 	}
 

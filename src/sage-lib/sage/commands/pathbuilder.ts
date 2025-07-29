@@ -426,14 +426,16 @@ function prepareOutput({ sageCache }: SageCommand, character: PathbuilderCharact
 
 type TActionIdType = ["PB2E", string, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll" | "Link" | "Unlink"];
 
+let _oldActionRegex: RegExp;
 function matchesOldActionRegex(customId: string): boolean {
-	const actionRegex = /^(?:PB2E\|)*(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
-	return actionRegex.test(customId);
+	_oldActionRegex ??= /^(?:PB2E\|)*(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
+	return _oldActionRegex.test(customId);
 }
 
+let _actionRegex: RegExp;
 function matchesActionRegex(customId: string): boolean {
-	const actionRegex = /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll|Link|Unlink)$/i;
-	return actionRegex.test(customId);
+	_actionRegex ??= /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll|Link|Unlink)$/i;
+	return _actionRegex.test(customId);
 }
 
 function parseCustomId(customId: string): TActionIdType {
@@ -615,7 +617,7 @@ async function unlinkHandler(sageInteraction: SageButtonInteraction, character: 
 
 	if (char) {
 		character.characterId = null;
-		character.setSheetRef(parseReference(sageInteraction.interaction.message));
+		character.sheetRef = parseReference(sageInteraction.interaction.message);
 		character.userId = null;
 		char.pathbuilderId = null;
 		const charSaved = await character.save();
