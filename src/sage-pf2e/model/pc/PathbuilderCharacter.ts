@@ -1,4 +1,4 @@
-import { CharacterBase } from "@rsc-utils/character-utils";
+import { CharacterBase } from "@rsc-utils/game-utils";
 import { addCommas, capitalize, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, nth, randomSnowflake, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";

@@ -1,4 +1,4 @@
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
+import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
 import type { Optional } from "@rsc-utils/core-utils";
 import type { MessageTarget } from "@rsc-utils/discord-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
