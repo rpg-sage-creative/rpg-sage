@@ -737,7 +737,7 @@ export class GameCharacter {
 			}
 			if (currModded) {
 				const updated = await this.updateStats(curr.denominationKeys.map(denom => ({ key:denom, value:String(curr[denom]) })), false);
-				modded || updated;
+				modded ||= updated;
 			}
 		}
 
