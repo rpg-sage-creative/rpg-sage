@@ -1,4 +1,4 @@
-import type { CharacterBaseCore } from "@rsc-utils/character-utils";
+import type { CharacterBaseCore } from "@rsc-utils/game-utils";
 import type { AbilityAbbr, AbilityAbbrKey } from "../../../d20/lib/Ability.js";
 import type { ProficiencyType, SizeType } from "../../lib/types.js";
 

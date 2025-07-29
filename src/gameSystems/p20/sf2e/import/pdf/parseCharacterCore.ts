@@ -253,7 +253,10 @@ export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMa
 	return {
 		objectType: "P20Character",
 		id: randomSnowflake(),
-		name: mgr.getValue("name") ?? undefined,
+		names: {
+			name: mgr.getValue("name") ?? undefined,
+			player: mgr.getValue("playerName") ?? undefined
+		},
 		class: mgr.getValue("class", ""),
 		dualClass: null,
 		level,

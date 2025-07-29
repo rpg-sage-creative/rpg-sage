@@ -868,7 +868,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 	//#region toHtml
 
 	public toHtmlName(): string {
-		const name = this.core.name;
+		const name = this.core.names?.name;
 		const klass = this.core.class;
 		const dualClass = this.core.dualClass ? `/${this.core.dualClass}` : ``;
 		const level = this.level;

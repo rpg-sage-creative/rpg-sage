@@ -485,7 +485,9 @@ export function wanderersGuideToPathbuilderJson(json: any): PathbuilderCharacter
 		return {
 			objectType: "P20Character",
 			id: randomSnowflake(),
-			name: character.name,
+			names: {
+				name: character.name
+			},
 			class: details.class.name,
 			dualClass: null,
 			level,
