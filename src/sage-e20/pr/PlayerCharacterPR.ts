@@ -74,6 +74,82 @@ export interface PlayerCharacterCorePR extends PlayerCharacterCoreE20 {
 }
 
 export class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR> {
+	public getStat(stat: string): number | string | null {
+		if (!this.core.zord || !stat.toLowerCase().startsWith("zord.")) {
+			return super.getStat(stat);
+		}
+
+		const { zord } = this.core;
+
+		const regexp = new RegExp(`^${stat.slice(5).replace(/\./g, "\\.")}$`, "i");
+
+		const coreKeys: (keyof TZord & ("health" | "damage"))[] = ["health", "damage"];
+		for (const key of coreKeys) {
+			if (regexp.test(key)) {
+				return zord[key as "health"] ?? null;
+			}
+		}
+
+		/*
+		AorD >> Ability or Defense
+		AorD             >> abilities[index].ability/defense
+		AorD.ability     >> abilities[index].ability
+		AorD.abilityName >> abilities[index].abilityName
+		AorD.name        >> abilities[index].abilityName/defenseName
+		AorD.armor       >> abilities[index].armor
+		AorD.bonus       >> abilities[index].bonus
+		AorD.defense     >> abilities[index].defense
+		AorD.defenseName >> abilities[index].defenseName
+		AorD.essence     >> abilities[index].essence
+		Skill.die        >>
+		Skill.bonus      >>
+		Spec ?
+		*/
+
+		const properties: Exclude<keyof TStatZord, "skills">[] = ["ability", "abilityName", "defense", "defenseName"];
+		const { abilities = [] } = zord;
+		for (const abil of abilities) {
+			if (regexp.test(abil.abilityName)) {
+				return abil.ability ?? null;
+			}
+			if (regexp.test(`${abil.abilityName}.name`)) {
+				return abil.abilityName ?? null;
+			}
+			if (regexp.test(abil.defenseName!)) {
+				return abil.defense ?? null;
+			}
+			if (regexp.test(`${abil.defenseName}.name`)) {
+				return abil.defenseName ?? null;
+			}
+			for (const prop of properties) {
+				if (regexp.test(`${abil.abilityName}.${prop}`)
+					|| regexp.test(`${abil.defenseName}.${prop}`)) {
+					return abil[prop] ?? null;
+				}
+			}
+			const { skills = [] } = abil;
+			for (const skill of skills) {
+				// if (regexp.test(skill.name)) {
+				// 	return 1; // presence of a skill ... should that be a 1 or true or ...?
+				// }
+				if (regexp.test(`${skill.name}.die`)) {
+					return skill.die ?? null;
+				}
+				if (regexp.test(`${skill.name}.bonus`)) {
+					return skill.bonus ?? null;
+				}
+				// const { specializations = [] } = skill;
+				// for (const spec of specializations) {
+				// 	if (regexp.test(spec.name)) {
+				// 		return 1; // presence of a specialization ... should that be a 1 or true or ...?
+				// 	}
+				// }
+			}
+		}
+
+		return null;
+	}
+
 	public get zord(): TZord { return this.core.zord ?? { }; }
 
 	public toHtmlName(): string {

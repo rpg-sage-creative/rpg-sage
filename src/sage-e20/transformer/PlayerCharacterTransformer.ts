@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import { numberOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import { PlayerCharacterE20, type PlayerCharacterCoreE20, type TWeaponE20 } from "../common/PlayerCharacterE20.js";
 
 export type TAltMode = {
@@ -55,6 +55,40 @@ export interface PlayerCharacterCoreTransformer extends PlayerCharacterCoreE20 {
 }
 
 export class PlayerCharacterTransformer extends PlayerCharacterE20<PlayerCharacterCoreTransformer> {
+	public getStat(stat: string): number | string | null {
+		const { altModes } = this;
+		if (!altModes.length || !stat.toLowerCase().startsWith("altMode.")) {
+			return super.getStat(stat);
+		}
+
+		const parts = stat.split(".");
+		const nameOrIndex = numberOrUndefined(parts[1]) ?? parts[1]?.toLowerCase();
+		let alt = altModes.find((altMode, index) => index === nameOrIndex || altMode.name?.toLowerCase() === nameOrIndex);
+		if (alt) {
+			// if we found an alt by name or id, the stat key is now the parts after `alt.BLAH.`
+			stat = parts.slice(2).join(".");
+		}else {
+			// let's default to the first alt
+			alt = altModes[0];
+			// the stat key is now the parts after `alt.`
+			stat = parts.slice(1).join(".");
+		}
+
+		// no alt, kick out a null
+		if (!alt) return null;
+
+		const regexp = new RegExp(`^${stat}$`, "i");
+
+		const coreKeys: Exclude<keyof TAltMode, "movement" | "attacks">[] = ["health", "toughness", "evasion", "willpower", "cleverness"];
+		for (const key of coreKeys) {
+			if (regexp.test(key)) {
+				return alt[key] ?? null;
+			}
+		}
+
+		return null;
+	}
+
 	public get altModes(): TAltMode[] { return this.core.altModes ?? []; }
 
 	public toHtmlName(): string {
