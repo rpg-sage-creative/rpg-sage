@@ -58,11 +58,24 @@ function hpToHtml(char: GameCharacter): string | undefined {
 		: undefined;
 }
 
+function coinsToHtml(char: GameCharacter): string | undefined {
+	const raw = char.getStat("currency.raw");
+	if (raw) {
+		const simple = char.getStat("currency");
+		if (raw !== simple) {
+			return `<b>Coins</b> ${raw}  <i>(${simple})</i>`;
+		}
+		return `<b>Coins</b> ${raw}`;
+	}
+	return undefined;
+}
+
 export function statsToHtml(char: GameCharacter): string[] {
 	const out: (string | undefined)[] = [];
 	out.push(abilitiesToHtml(char));
 	out.push(acSavesToHtml(char));
 	out.push(hpToHtml(char));
+	out.push(coinsToHtml(char));
 	return out.filter(s => s !== undefined) as string[];
 }
 
