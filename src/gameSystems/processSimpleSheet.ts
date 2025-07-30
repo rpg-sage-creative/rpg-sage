@@ -5,14 +5,14 @@ import { isStatsKey as isStatsKeyD20, statsToHtml as statsToHtmlD20 } from "./d2
 import { isStatsKey as isStatsKeyP20, statsToHtml as statsToHtmlP20 } from "./p20/sheets/simpleSheet.js";
 import { isStatsKey as isStatsKeySF1e, statsToHtml as statsToHtmlSF1e } from "./sf1e/sheets/simpleSheet.js";
 
-export function canProcessStats({ gameSystem }: GameCharacter): boolean {
+function hasSimpleSheet(gameSystem: Optional<GameSystem>): gameSystem is GameSystem {
 	if (gameSystem) {
 		return ["D20", "DnD5e", "PF1e", "PF2e", "SF1e", "SF2e"].includes(gameSystem.code);
 	}
 	return false;
 }
 
-export function isStatsKey(key: string, gameSystem: Optional<GameSystem>): boolean {
+function isStatsKey(key: string, gameSystem: Optional<GameSystem>): boolean {
 	if (!gameSystem) return false;
 	switch(gameSystem.code) {
 		case "D20": return isStatsKeyD20(key);
@@ -25,8 +25,8 @@ export function isStatsKey(key: string, gameSystem: Optional<GameSystem>): boole
 	}
 }
 
-export function statsToHtml(character: GameCharacter): string[] {
-	const { gameSystem } = character;
+function statsToHtml(character: GameCharacter, gameSystem?: Optional<GameSystem>): string[] {
+	gameSystem ??= character.gameSystem;
 	if (!gameSystem) return [];
 	switch(gameSystem.code) {
 		case "D20": return statsToHtmlD20(character);
@@ -37,4 +37,40 @@ export function statsToHtml(character: GameCharacter): string[] {
 		case "SF2e": return statsToHtmlP20(character);
 		default: return [];
 	}
+}
+
+type Results = {
+	/** the keys (stats) used in the template; all lower cased */
+	keys: Set<Lowercase<string>>;
+	/** the title of the template; generally from getStats(key + ".title") */
+	title?: string;
+	/** the formatted / processed output */
+	lines: string[];
+};
+
+export function processSimpleSheet(character: GameCharacter, gameSystem?: Optional<GameSystem>): Results {
+	gameSystem ??= character.gameSystem;
+
+	const lines = hasSimpleSheet(gameSystem) ? statsToHtml(character, gameSystem) : [];
+
+	if (!lines?.length) {
+		return {
+			keys: new Set(),
+			title: undefined as string | undefined,
+			lines
+		};
+	}
+
+	const keys = new Set<Lowercase<string>>();
+	character.notes.getStats().forEach(note => {
+		if (isStatsKey(note.title, gameSystem)) {
+			keys.add(note.title.toLowerCase() as Lowercase<string>);
+		}
+	});
+
+	return {
+		keys,
+		title: `Stats ${gameSystem?.code}`,
+		lines
+	};
 }

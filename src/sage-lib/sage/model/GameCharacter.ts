@@ -1,15 +1,16 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
-import { applyChanges, Color, errorReturnUndefined, getDataRoot, StringMatcher, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Color, errorReturnUndefined, getDataRoot, sortByKey, StringMatcher, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { isBlank, isWrapped, wrap } from "@rsc-utils/string-utils";
+import { isWrapped, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
-import { isStatsKey } from "../../../gameSystems/sheets.js";
+import { processCharacterTemplate } from "../../../gameSystems/processCharacterTemplate.js";
+import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
 import { numberOrUndefined } from "../../../gameSystems/utils/numberOrUndefined.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
@@ -256,7 +257,7 @@ export class GameCharacter {
 	}
 
 	/** Channels to automatically treat input as dialog */
-	public get autoChannels(): AutoChannelData[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
+	public get autoChannels(): AutoChannelData[] { return this.core.autoChannels ??= []; }
 
 	/** The image used for the right side of the dialog */
 	public get avatarUrl(): string | undefined { return this.core.avatarUrl; }
@@ -465,13 +466,7 @@ export class GameCharacter {
 	}
 
 	public toDisplayName(template?: string): string {
-		if (isBlank(template)) {
-			template = this.displayNameTemplate;
-		}
-		if (!isBlank(template)) {
-			return template.replace(/{[^}]+}/g, match => this.getStat(match.slice(1, -1)) ?? match);
-		}
-		return this.name;
+		return processCharacterTemplate(this, "displayName.template", template).value ?? this.name;
 	}
 
 	public toJSON(): GameCharacterCore {
@@ -524,12 +519,43 @@ export class GameCharacter {
 
 	public get hasStats(): boolean { return this.notes.getStats().length > 0; }
 
-	public getNonGameStatsOutput(): string[] {
-		const { gameSystem } = this;
-		const allStatsNotes = this.notes.getStats();
-		const nonGameStatsNotes = gameSystem ? allStatsNotes.filter(note => !isStatsKey(note.title, gameSystem)) : allStatsNotes;
-		const sortedNonGameStatsNotes = nonGameStatsNotes.sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
-		return sortedNonGameStatsNotes.map(note => `<b>${note.title}</b> ${note.note}`);
+	public toStatsOutput() {
+		// get full list of stats
+		let statsToMap = this.notes.getStats();
+
+		// prep some values
+		const sorter = sortByKey("title");
+
+		const processTemplateKeys = () => {
+			const templateKeyTester = /\.template(\.title)?$/i;
+			const templateStats = statsToMap.filter(({ title }) => templateKeyTester.test(title));
+			templateStats.sort(sorter);
+			return {
+				keys: new Set<Lowercase<string>>(templateStats.map(({ title }) => title.toLowerCase() as Lowercase<string>)),
+				title: "Templates",
+				lines: templateStats.map(note => `<b>${note.title}</b> ${note.note}`)
+			};
+		};
+
+		const { keys: simpleKeys, title: simpleTitle, lines: simpleLines } = processSimpleSheet(this);
+		const { keys: customKeys, title: customTitle, lines: customLines } = processCharacterTemplate(this, "customSheet.template");
+		const { keys: templateKeys, title: templateTitle, lines: templateLines } = processTemplateKeys();
+
+		const usedKeys = new Set<Lowercase<string>>([...simpleKeys, ...customKeys, ...templateKeys]);
+
+		// remove keys used in simple sheet, custom sheet, or template stats
+		statsToMap = statsToMap.filter(note => !usedKeys.has(note.title.toLowerCase() as Lowercase<string>));
+		statsToMap.sort(sorter);
+
+		const otherTitle = simpleLines.length || customLines.length ? `Other Stats` : `Stats`;
+		const otherLines = statsToMap.map(note => `<b>${note.title}</b> ${note.note}`);
+
+		return [
+			{ title: simpleTitle, lines: simpleLines },
+			{ title: customTitle, lines: customLines },
+			{ title: otherTitle, lines: otherLines },
+			{ title: templateTitle, lines: templateLines },
+		];
 	}
 
 	public getHpGauge(): string {
