@@ -655,6 +655,21 @@ export class GameCharacter {
 			}
 		}
 
+		if (/^half\.(up|dn)\./i.test(key)) {
+			const statKey = key.slice(8);
+			const statValue = this.getStat(statKey);
+			if (statValue !== null) {
+				const mathed = doStatMath(`(${statValue})`);
+				const num = numberOrUndefined(mathed);
+				if (num !== undefined) {
+					const halved = /^half\.up\./i.test(key)
+						? Math.ceil(num / 2)
+						: Math.floor(num / 2);
+					return String(halved);
+				}
+			}
+		}
+
 		// provide a temp shortcut for calculating stat modifiers for d20 games
 		const abilities = ["strength","dexterity","constitution","intelligence","wisdom","charisma"];
 		const keyLower = key.toLowerCase();
