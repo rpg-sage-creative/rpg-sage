@@ -1,7 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
 import { applyChanges, Color, errorReturnUndefined, getDataRoot, sortByKey, StringMatcher, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath } from "@rsc-utils/dice-utils";
+import { doStatMath, processMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { isWrapped, wrap } from "@rsc-utils/string-utils";
@@ -203,6 +203,29 @@ function fixLastMessages(core: GameCharacterCore): void {
 		return lm;
 	});
 }
+
+//#endregion
+
+//#region stat key regex
+
+const StatRegExp = {
+	name: /^name$/i,
+	alias: /^alias$/i,
+	akaNickName: /^(aka|n(ick)?name)$/i,
+	hpGauge: /^hpGauge$/i,
+	sheetUrl: /^sheet\.?url$/i,
+	halfDownPrefix: /^half\.dn\./i,
+	halfUpPrefix: /^half\.up\./i,
+};
+
+const StatRegExpP20 = {
+	cantripRank: /^cantrip\.rank$/i,
+	conditions: /^conditions$/i,
+	dcPrefix: /^dc\./i,
+	explorationMode: /^explorationMode$/i,
+	explorationSkill: /^explorationSkill$/i,
+	ogac: /^ogac$/i,
+};
 
 //#endregion
 
@@ -577,19 +600,23 @@ export class GameCharacter {
 	}
 
 	public getStat(key: string): string | null {
-		if (/^name$/i.test(key)) {
+		if (StatRegExp.name.test(key)) {
 			return this.name;
 		}
-		if (/^alias$/i.test(key)) {
+
+		if (StatRegExp.alias.test(key)) {
 			return this.alias ?? null;
 		}
-		if (/^(aka|n(ick)?name)$/i.test(key)) {
+
+		if (StatRegExp.akaNickName.test(key)) {
 			return this.aka ?? this.name;
 		}
-		if (/^hpGauge$/i.test(key)) {
+
+		if (StatRegExp.hpGauge.test(key)) {
 			return this.getHpGauge();
 		}
-		if (/^sheet\.?url$/i.test(key)) {
+
+		if (StatRegExp.sheetUrl.test(key)) {
 			let sheetUrl = this.notes.getStat(key)?.note.trim();
 			if (sheetUrl === "on") {
 				const { sheetRef } = this.pathbuilder ?? { };
@@ -601,83 +628,71 @@ export class GameCharacter {
 			return validUrl ? wrap(validUrl, "<>") : null;
 		}
 
+		// get custom stat added via message posts
 		const noteStat = this.notes.getStat(key)?.note.trim() ?? undefined;
 		if (noteStat !== undefined) {
 			return noteStat;
 		}
 
+		// get stats fetched from "stats.tsv.url"
 		const fetchedStat = this.fetchedStats?.get(key);
 		if (fetchedStat !== undefined) {
 			return fetchedStat;
 		}
 
+		// get stats from underlying e20 character
 		const e20 = this.essence20;
 		if (e20) {
 			const e20Stat = e20.getStat(key);
 			return e20Stat === null ? null : String(e20Stat);
 		}
 
+		// get stats from underlying pathbuilder character
 		const pb = this.pathbuilder;
 		if (pb) {
 			let pbKey = key;
-			if (/^explorationMode$/i.test(key)) pbKey = "activeExploration";
-			if (/^explorationSkill$/i.test(key)) pbKey = "initskill";
+			if (StatRegExpP20.explorationMode.test(key)) pbKey = "activeExploration";
+			else if (StatRegExpP20.explorationSkill.test(key)) pbKey = "initskill";
 			const pbStat = pb.getStat(pbKey) ?? null;
 			if (pbStat !== null) {
 				return String(pbStat);
 			}
 		}
 
-		// provide a temp shortcut for off-guard ac for PF2e
-		if (/^ogac$/i.test(key)) {
-			const ac = this.getStat("ac");
-			if (ac !== null) {
-				return doStatMath(`(${ac}-2)`);
-			}
-		}
+		//#region universal calculated stats
 
-		// provide a temp shortcut for cantrip rank for PF2e
-		if (/^cantrip\.rank$/i.test(key)) {
-			const level = this.getStat("level");
-			if (level !== null) {
-				const mathed = doStatMath(`(${level})`);
-				const rank = Math.ceil(+mathed / 2);
-				return String(rank);
-			}
-		}
-
-		// provide a temp shortcut for dc values for PF2e
-		if (/^dc\./i.test(key)) {
-			const statKey = key.slice(3);
-			const statValue = this.getStat(statKey);
+		// divide the stat by 2 and round up
+		if (StatRegExp.halfUpPrefix.test(key)) {
+			const statValue = this.getStat(key.slice(8));
 			if (statValue !== null) {
-				return doStatMath(`(${statValue}+10)`);
+				const num = numberOrUndefined(doStatMath(`(${statValue})`));
+				return num === undefined
+					? `isNaN(${statValue})`
+					: String(Math.ceil(num / 2));
 			}
 		}
 
-		if (/^half\.(up|dn)\./i.test(key)) {
-			const statKey = key.slice(8);
-			const statValue = this.getStat(statKey);
+		// divide the stat by 2 and round down
+		if (StatRegExp.halfDownPrefix.test(key)) {
+			const statValue = this.getStat(key.slice(8));
 			if (statValue !== null) {
-				const mathed = doStatMath(`(${statValue})`);
-				const num = numberOrUndefined(mathed);
-				if (num !== undefined) {
-					const halved = /^half\.up\./i.test(key)
-						? Math.ceil(num / 2)
-						: Math.floor(num / 2);
-					return String(halved);
-				}
+				const num = numberOrUndefined(doStatMath(`(${statValue})`));
+				return num === undefined
+					? `isNaN(${statValue})`
+					: String(Math.floor(num / 2));
 			}
 		}
+
+		//#endregion
 
 		// provide a temp shortcut for calculating stat modifiers for d20 games
 		const abilities = ["strength","dexterity","constitution","intelligence","wisdom","charisma"];
-		const keyLower = key.toLowerCase();
+		const keyLower = key.toLowerCase() as Lowercase<string>;
 		for (const ability of abilities) {
 			if (ability.slice(0, 3) === keyLower || `mod.${ability}` === keyLower) {
 				const abilityValue = this.getStat(ability);
 				if (abilityValue !== null) {
-					return doStatMath(`floor((${abilityValue}-10)/2)`);
+					return processMath(`floor((${abilityValue}-10)/2)`, { allowSpoilers:true });
 				}
 			}
 		}
@@ -694,7 +709,37 @@ export class GameCharacter {
 			return curr.toString();
 		}
 
-		if (keyLower === "conditions" && this.gameSystem?.isP20) {
+		if (pb || this.gameSystem?.isP20) {
+			return this.getStatP20(key, keyLower)
+		}
+
+		return null;
+	}
+
+	protected getStatP20(key: string, keyLower: Lowercase<string>) {
+		// provide a shortcut for off-guard ac
+		if (StatRegExpP20.ogac.test(key)) {
+			const ac = this.getStat("ac");
+			if (ac !== null) {
+				return doStatMath(`(${ac}-2)`);
+			}
+		}
+
+		// provide a shortcut for cantrip rank
+		if (StatRegExpP20.cantripRank.test(key)) {
+			return this.getStat(`half.up.level`);
+		}
+
+		// provide a shortcut for dc values
+		if (StatRegExpP20.dcPrefix.test(key)) {
+			const statKey = key.slice(3);
+			const statValue = this.getStat(statKey);
+			if (statValue !== null) {
+				return doStatMath(`(${statValue}+10)`);
+			}
+		}
+
+		if (keyLower === "conditions") {
 			const conditions: string[] = [];
 
 			Condition.getToggledConditions().forEach(condition => {
@@ -719,6 +764,7 @@ export class GameCharacter {
 
 		return null;
 	}
+
 	public getCurrency() {
 		// try getting currency from gameSystem
 		let currency = Currency.new<CurrencyPf2e>(this.gameSystem?.code);
