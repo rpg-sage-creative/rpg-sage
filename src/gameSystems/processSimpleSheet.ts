@@ -68,9 +68,7 @@ export function processSimpleSheet(character: GameCharacter, gameSystem?: Option
 		}
 	});
 
-	return {
-		keys,
-		title: `Stats ${gameSystem?.code}`,
-		lines
-	};
+	const title = character.getStat(`simpleSheet.template.title`) ?? `Stats ${gameSystem?.code}`;
+
+	return { keys, title, lines };
 }

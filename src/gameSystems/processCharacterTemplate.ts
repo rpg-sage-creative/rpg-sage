@@ -53,9 +53,9 @@ export function processCharacterTemplate(character: GameCharacter, templateKey: 
 		});
 	};
 
-	const processedValue = processTemplate(templateKey, customTemplate);
+	const processedValue = processTemplate(`${templateKey}.template`, customTemplate);
 
-	const templateTitle = processedValue ? character.getStat(`${templateKey}.title`) ?? `Custom Stats` : undefined;
+	const templateTitle = processedValue ? character.getStat(`${templateKey}.template.title`) ?? `Custom Stats` : undefined;
 
 	return {
 		keys: matchKeys,

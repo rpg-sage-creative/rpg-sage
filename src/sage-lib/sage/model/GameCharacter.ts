@@ -466,7 +466,7 @@ export class GameCharacter {
 	}
 
 	public toDisplayName(template?: string): string {
-		return processCharacterTemplate(this, "displayName.template", template).value ?? this.name;
+		return processCharacterTemplate(this, "displayName", template).value ?? this.name;
 	}
 
 	public toJSON(): GameCharacterCore {
@@ -538,7 +538,7 @@ export class GameCharacter {
 		};
 
 		const { keys: simpleKeys, title: simpleTitle, lines: simpleLines } = processSimpleSheet(this);
-		const { keys: customKeys, title: customTitle, lines: customLines } = processCharacterTemplate(this, "customSheet.template");
+		const { keys: customKeys, title: customTitle, lines: customLines } = processCharacterTemplate(this, "customSheet");
 		const { keys: templateKeys, title: templateTitle, lines: templateLines } = processTemplateKeys();
 
 		const usedKeys = new Set<Lowercase<string>>([...simpleKeys, ...customKeys, ...templateKeys]);
