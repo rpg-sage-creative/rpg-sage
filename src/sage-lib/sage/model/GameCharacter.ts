@@ -1,4 +1,4 @@
-import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
 import { applyChanges, Color, errorReturnUndefined, getDataRoot, sortByKey, StringMatcher, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath, processMath } from "@rsc-utils/dice-utils";
@@ -237,8 +237,8 @@ export class GameCharacter {
 	public hasDeck(deckId: string) { return this.core.decks?.some(d => d.id === deckId) ?? false; }
 	public get hasDecks() { return (this.core.decks?.length ?? 0) > 0; }
 
-	/** nickname (aka) */
-	public get aka(): string | undefined { return this.core.aka ?? this.notes.getStat("nickname")?.note.trim(); }
+	/** nickname (aka); @todo phase out nickname as a note/stat */
+	public get aka(): string | undefined { return this.core.aka ?? this.getNoteStat("nickname"); }
 	public set aka(aka: string | undefined) { this.core.aka = aka; this.notes.setStat("nickname", ""); }
 
 	/** short name used to ease dialog access */
@@ -267,12 +267,8 @@ export class GameCharacter {
 	public get companions(): CharacterManager { return this.core.companions as CharacterManager; }
 
 	/** Convenient way of getting the displayName.template stat */
-	public get displayNameTemplate(): string | undefined {
-		return this.getStat("displayName.template") ?? undefined;
-	}
-	public set displayNameTemplate(displayNameTemplate: string | undefined) {
-		this.notes.setStat("displayName.template", displayNameTemplate ?? "");
-	}
+	public get displayNameTemplate(): string | undefined { return this.getNoteStat("displayName.template"); }
+	public set displayNameTemplate(displayNameTemplate: string | undefined) { this.notes.setStat("displayName.template", displayNameTemplate ?? ""); }
 
 	/** Discord compatible color: #001122 */
 	public get embedColor(): HexColorString | undefined { return this.core.embedColor; }
@@ -500,7 +496,7 @@ export class GameCharacter {
 	private fetchedMacros: MacroBase[] | undefined;
 	public async fetchStats(): Promise<void> {
 		if (!this.fetchedStats) {
-			const url = urlOrUndefined(this.notes.getStat("stats.tsv.url")?.note);
+			const url = urlOrUndefined(this.getNoteStat("stats.tsv.url"));
 			if (url) {
 				const raw = await getText(url).catch(errorReturnUndefined);
 				if (raw) {
@@ -520,22 +516,14 @@ export class GameCharacter {
 	}
 
 	public get gameSystem() {
-		return this.tempGameSystem ?? parseGameSystem(this.notes.getStat("gameSystem")?.note);
+		return parseGameSystem(this.getNoteStat("gameSystem"));
 	}
 
-	private tempGameSystem: GameSystem | undefined;
-	public getStatWithDefaultGameSystem(key: string, gameSystem: GameSystem) {
-		this.tempGameSystem = this.gameSystem ?? gameSystem;
-		const statValue = this.getStat(key);
-		this.tempGameSystem = undefined;
-		return statValue;
-	}
-
-	public get hasStats(): boolean { return this.notes.getStats().length > 0; }
+	public get hasStats(): boolean { return this.getNoteStats().length > 0; }
 
 	public toStatsOutput() {
 		// get full list of stats
-		let statsToMap = this.notes.getStats();
+		let statsToMap = this.getNoteStats();
 
 		// prep some values
 		const sorter = sortByKey("title");
@@ -590,8 +578,23 @@ export class GameCharacter {
 		return numberOrUndefined(this.getStat(key)) ?? def;
 	}
 
+	/** returns all notes that are stats */
+	private getNoteStats() {
+		return this.notes.getStats();
+	}
+
+	/** returns the value (trimmed) of the first note found or undefined */
+	private getNoteStat(...keys: string[]): string | undefined {
+		for (const key of keys) {
+			const value = this.notes.getStat(key)?.note.trim();
+			if (value) return value;
+		}
+		return undefined;
+	}
+
 	public getStat(key: string): string | null {
-		const keyLower = key.toLowerCase() as Lowercase<string>;
+		if (!key.trim()) return null;
+		const keyLower = key.toLowerCase();
 
 		//#region universal non-note stats or helpers
 
@@ -612,9 +615,9 @@ export class GameCharacter {
 			return this.getHpGauge();
 		}
 
-		// stop using sheeturl and enforce sheet.url
-		if (keyLower === "sheeturl" || keyLower === "sheet.url") {
-			let sheetUrl = (this.notes.getStat("sheet.url") ?? this.notes.getStat("sheetUrl"))?.note.trim();
+		// enforce sheet.url and stop using sheeturl
+		if (keyLower === "sheet.url" || keyLower === "sheeturl") {
+			let sheetUrl = this.getNoteStat("sheet.url", "sheeturl");
 			if (sheetUrl === "on") {
 				const { sheetRef } = this.essence20 ?? this.pathbuilder ?? { };
 				if (sheetRef?.channelId) {
@@ -634,31 +637,26 @@ export class GameCharacter {
 		//#region universal calculated stats
 
 		// divide the stat by 2 and round up
-		if (keyLower.startsWith("half.up.")) {
-			const statValue = this.getStat(key.slice(8));
-			if (statValue !== null) {
-				const num = numberOrUndefined(doStatMath(`(${statValue})`));
-				return num === undefined
-					? `isNaN(${statValue})`
-					: String(Math.ceil(num / 2));
-			}
-		}
-
+		const halfUp = keyLower.startsWith("half.up.");
 		// divide the stat by 2 and round down
-		if (keyLower.startsWith("half.dn.")) {
+		const halfDn = keyLower.startsWith("half.dn.");
+
+		if (halfUp || halfDn) {
 			const statValue = this.getStat(key.slice(8));
 			if (statValue !== null) {
 				const num = numberOrUndefined(doStatMath(`(${statValue})`));
-				return num === undefined
-					? `isNaN(${statValue})`
-					: String(Math.floor(num / 2));
+				if (num === undefined) {
+					return `isNaN(${statValue})`;
+				}
+				const fn = halfUp ? Math.ceil : Math.floor;
+				return String(fn(num / 2));
 			}
 		}
 
 		//#endregion
 
 		// get custom stat added via message posts
-		const noteStat = this.notes.getStat(key)?.note.trim() ?? undefined;
+		const noteStat = this.getNoteStat(key);
 		if (noteStat !== undefined) {
 			return noteStat;
 		}
@@ -713,14 +711,20 @@ export class GameCharacter {
 			return curr.toString();
 		}
 
-		if (pathbuilder || this.gameSystem?.isP20) {
-			return this.getStatP20(key, keyLower)
+		const { gameSystem } = this;
+		if (pathbuilder || gameSystem?.isP20) {
+			return this.getStatP20(key, keyLower);
+		}
+
+		/** @todo by doing this we are ensuring that users are able to keep using these functions that they may not have known were specific to pf2e */
+		if (!gameSystem) {
+			return this.getStatP20(key, keyLower);
 		}
 
 		return null;
 	}
 
-	protected getStatP20(key: string, keyLower: Lowercase<string>) {
+	protected getStatP20(key: string, keyLower: string) {
 		// provide a shortcut for off-guard ac
 		if (keyLower === "ogac") {
 			const ac = this.getStat("ac");
