@@ -78,6 +78,7 @@
 		"build": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/build.sh --skipIndexTs",
 		"release": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/release.sh",
 		"test": "echo 'no tests'",
+		"prestart-dev": "npm run build",
 		"start-dev": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
 		"start-dev-and-services": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices",
 		"app-commands": "node ./build/app-commands.mjs codeName=dev dataRoot='./docker-volumes/rpg-sage-mono'"
