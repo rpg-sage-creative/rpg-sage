@@ -1,15 +1,16 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
-import { applyChanges, Color, errorReturnUndefined, getDataRoot, StringMatcher, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath } from "@rsc-utils/dice-utils";
+import { applyChanges, Color, errorReturnUndefined, getDataRoot, sortByKey, StringMatcher, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { doStatMath, processMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { isBlank, isWrapped, wrap } from "@rsc-utils/string-utils";
+import { isWrapped, wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
-import { isStatsKey } from "../../../gameSystems/sheets.js";
+import { processCharacterTemplate } from "../../../gameSystems/processCharacterTemplate.js";
+import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
 import { numberOrUndefined } from "../../../gameSystems/utils/numberOrUndefined.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
@@ -236,8 +237,8 @@ export class GameCharacter {
 	public hasDeck(deckId: string) { return this.core.decks?.some(d => d.id === deckId) ?? false; }
 	public get hasDecks() { return (this.core.decks?.length ?? 0) > 0; }
 
-	/** nickname (aka) */
-	public get aka(): string | undefined { return this.core.aka ?? this.notes.getStat("nickname")?.note.trim(); }
+	/** nickname (aka); @todo phase out nickname as a note/stat */
+	public get aka(): string | undefined { return this.core.aka ?? this.getNoteStat("nickname"); }
 	public set aka(aka: string | undefined) { this.core.aka = aka; this.notes.setStat("nickname", ""); }
 
 	/** short name used to ease dialog access */
@@ -256,7 +257,7 @@ export class GameCharacter {
 	}
 
 	/** Channels to automatically treat input as dialog */
-	public get autoChannels(): AutoChannelData[] { return this.core.autoChannels ?? (this.core.autoChannels = []); }
+	public get autoChannels(): AutoChannelData[] { return this.core.autoChannels ??= []; }
 
 	/** The image used for the right side of the dialog */
 	public get avatarUrl(): string | undefined { return this.core.avatarUrl; }
@@ -266,12 +267,8 @@ export class GameCharacter {
 	public get companions(): CharacterManager { return this.core.companions as CharacterManager; }
 
 	/** Convenient way of getting the displayName.template stat */
-	public get displayNameTemplate(): string | undefined {
-		return this.getStat("displayName.template") ?? undefined;
-	}
-	public set displayNameTemplate(displayNameTemplate: string | undefined) {
-		this.notes.setStat("displayName.template", displayNameTemplate ?? "");
-	}
+	public get displayNameTemplate(): string | undefined { return this.getNoteStat("displayName.template"); }
+	public set displayNameTemplate(displayNameTemplate: string | undefined) { this.notes.setStat("displayName.template", displayNameTemplate ?? ""); }
 
 	/** Discord compatible color: #001122 */
 	public get embedColor(): HexColorString | undefined { return this.core.embedColor; }
@@ -465,13 +462,13 @@ export class GameCharacter {
 	}
 
 	public toDisplayName(template?: string): string {
-		if (isBlank(template)) {
-			template = this.displayNameTemplate;
-		}
-		if (!isBlank(template)) {
-			return template.replace(/{[^}]+}/g, match => this.getStat(match.slice(1, -1)) ?? match);
-		}
-		return this.name;
+		return processCharacterTemplate(this, "displayName", template).value ?? this.name;
+	}
+	public toSheetLink(): string | undefined {
+		return this.getStat("sheet.link") ?? undefined;
+	}
+	public toDialogFooterLine(template?: string): string | undefined {
+		return processCharacterTemplate(this, "dialogFooter", template).value;
 	}
 
 	public toJSON(): GameCharacterCore {
@@ -499,7 +496,7 @@ export class GameCharacter {
 	private fetchedMacros: MacroBase[] | undefined;
 	public async fetchStats(): Promise<void> {
 		if (!this.fetchedStats) {
-			const url = urlOrUndefined(this.notes.getStat("stats.tsv.url")?.note);
+			const url = urlOrUndefined(this.getNoteStat("stats.tsv.url"));
 			if (url) {
 				const raw = await getText(url).catch(errorReturnUndefined);
 				if (raw) {
@@ -519,17 +516,48 @@ export class GameCharacter {
 	}
 
 	public get gameSystem() {
-		return parseGameSystem(this.notes.getStat("gameSystem")?.note);
+		return parseGameSystem(this.getNoteStat("gameSystem"));
 	}
 
-	public get hasStats(): boolean { return this.notes.getStats().length > 0; }
+	public get hasStats(): boolean { return this.getNoteStats().length > 0; }
 
-	public getNonGameStatsOutput(): string[] {
-		const { gameSystem } = this;
-		const allStatsNotes = this.notes.getStats();
-		const nonGameStatsNotes = gameSystem ? allStatsNotes.filter(note => !isStatsKey(note.title, gameSystem)) : allStatsNotes;
-		const sortedNonGameStatsNotes = nonGameStatsNotes.sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
-		return sortedNonGameStatsNotes.map(note => `<b>${note.title}</b> ${note.note}`);
+	public toStatsOutput() {
+		// get full list of stats
+		let statsToMap = this.getNoteStats();
+
+		// prep some values
+		const sorter = sortByKey("title");
+
+		const processTemplateKeys = () => {
+			const templateKeyTester = /\.template(\.title)?$/i;
+			const templateStats = statsToMap.filter(({ title }) => templateKeyTester.test(title));
+			templateStats.sort(sorter);
+			return {
+				keys: new Set<Lowercase<string>>(templateStats.map(({ title }) => title.toLowerCase() as Lowercase<string>)),
+				title: "Templates",
+				lines: templateStats.map(note => `<b>${note.title}</b> ${note.note}`)
+			};
+		};
+
+		const { keys: simpleKeys, title: simpleTitle, lines: simpleLines } = processSimpleSheet(this);
+		const { keys: customKeys, title: customTitle, lines: customLines } = processCharacterTemplate(this, "customSheet");
+		const { keys: templateKeys, title: templateTitle, lines: templateLines } = processTemplateKeys();
+
+		const usedKeys = new Set<Lowercase<string>>([...simpleKeys, ...customKeys, ...templateKeys]);
+
+		// remove keys used in simple sheet, custom sheet, or template stats
+		statsToMap = statsToMap.filter(note => !usedKeys.has(note.title.toLowerCase() as Lowercase<string>));
+		statsToMap.sort(sorter);
+
+		const otherTitle = simpleLines.length || customLines.length ? `Other Stats` : `Stats`;
+		const otherLines = statsToMap.map(note => `<b>${note.title}</b> ${note.note}`);
+
+		return [
+			{ title: simpleTitle, lines: simpleLines },
+			{ title: customTitle, lines: customLines },
+			{ title: otherTitle, lines: otherLines },
+			{ title: templateTitle, lines: templateLines },
+		];
 	}
 
 	public getHpGauge(): string {
@@ -550,23 +578,48 @@ export class GameCharacter {
 		return numberOrUndefined(this.getStat(key)) ?? def;
 	}
 
+	/** returns all notes that are stats */
+	private getNoteStats() {
+		return this.notes.getStats();
+	}
+
+	/** returns the value (trimmed) of the first note found or undefined */
+	private getNoteStat(...keys: string[]): string | undefined {
+		for (const key of keys) {
+			const value = this.notes.getStat(key)?.note.trim();
+			if (value) return value;
+		}
+		return undefined;
+	}
+
 	public getStat(key: string): string | null {
-		if (/^name$/i.test(key)) {
+		if (!key.trim()) return null;
+		const keyLower = key.toLowerCase();
+
+		//#region universal non-note stats or helpers
+
+		if (keyLower === "name") {
 			return this.name;
 		}
-		if (/^alias$/i.test(key)) {
+
+		if (keyLower === "alias") {
 			return this.alias ?? null;
 		}
-		if (/^(aka|n(ick)?name)$/i.test(key)) {
+
+		/** @todo check the data to see if these are even in use */
+		if (["aka","nname","nickname"].includes(keyLower)) {
 			return this.aka ?? this.name;
 		}
-		if (/^hpGauge$/i.test(key)) {
+
+		if (keyLower === "hpgauge") {
 			return this.getHpGauge();
 		}
-		if (/^sheet\.?url$/i.test(key)) {
-			let sheetUrl = this.notes.getStat(key)?.note.trim();
+
+		// enforce sheet.url and stop using sheeturl
+		if (keyLower === "sheet.url" || keyLower === "sheeturl") {
+			let sheetUrl = this.getNoteStat("sheet.url", "sheeturl");
 			if (sheetUrl === "on") {
-				const { sheetRef } = this.pathbuilder ?? { };
+				const { sheetRef } = this.essence20 ?? this.pathbuilder ?? { };
 				if (sheetRef?.channelId) {
 					sheetUrl = toMessageUrl(sheetRef);
 				}
@@ -574,69 +627,74 @@ export class GameCharacter {
 			const validUrl = urlOrUndefined(sheetUrl);
 			return validUrl ? wrap(validUrl, "<>") : null;
 		}
+		if (keyLower === "sheet.link") {
+			const sheetUrl = this.getStat("sheet.url");
+			return sheetUrl ? `[✎](${sheetUrl})` : null;
+		}
 
-		const noteStat = this.notes.getStat(key)?.note.trim() ?? undefined;
+		//#endregion
+
+		//#region universal calculated stats
+
+		// divide the stat by 2 and round up
+		const halfUp = keyLower.startsWith("half.up.");
+		// divide the stat by 2 and round down
+		const halfDn = keyLower.startsWith("half.dn.");
+
+		if (halfUp || halfDn) {
+			const statValue = this.getStat(key.slice(8));
+			if (statValue !== null) {
+				const num = numberOrUndefined(doStatMath(`(${statValue})`));
+				if (num === undefined) {
+					return `isNaN(${statValue})`;
+				}
+				const fn = halfUp ? Math.ceil : Math.floor;
+				return String(fn(num / 2));
+			}
+		}
+
+		//#endregion
+
+		// get custom stat added via message posts
+		const noteStat = this.getNoteStat(key);
 		if (noteStat !== undefined) {
 			return noteStat;
 		}
 
+		// get stats fetched from "stats.tsv.url"
 		const fetchedStat = this.fetchedStats?.get(key);
 		if (fetchedStat !== undefined) {
 			return fetchedStat;
 		}
 
-		const e20 = this.essence20;
-		if (e20) {
-			const e20Stat = e20.getStat(key);
-			return e20Stat === null ? null : String(e20Stat);
+		// get stats from underlying e20 character
+		const { essence20 } = this;
+		if (essence20) {
+			const e20Stat = essence20.getStat(key);
+			if (e20Stat !== null) {
+				return String(e20Stat);
+			}
 		}
 
-		const pb = this.pathbuilder;
-		if (pb) {
+		// get stats from underlying pathbuilder character
+		const { pathbuilder } = this;
+		if (pathbuilder) {
 			let pbKey = key;
-			if (/^explorationMode$/i.test(key)) pbKey = "activeExploration";
-			if (/^explorationSkill$/i.test(key)) pbKey = "initskill";
-			const pbStat = pb.getStat(pbKey) ?? null;
+			if (keyLower === "explorationmode") pbKey = "activeExploration";
+			else if (keyLower === "explorationskill") pbKey = "initSkill";
+			const pbStat = pathbuilder.getStat(pbKey) ?? null;
 			if (pbStat !== null) {
 				return String(pbStat);
 			}
 		}
 
-		// provide a temp shortcut for off-guard ac for PF2e
-		if (/^ogac$/i.test(key)) {
-			const ac = this.getStat("ac");
-			if (ac !== null) {
-				return doStatMath(`(${ac}-2)`);
-			}
-		}
-
-		// provide a temp shortcut for cantrip rank for PF2e
-		if (/^cantrip\.rank$/i.test(key)) {
-			const level = this.getStat("level");
-			if (level !== null) {
-				const mathed = doStatMath(`(${level})`);
-				const rank = Math.ceil(+mathed / 2);
-				return String(rank);
-			}
-		}
-
-		// provide a temp shortcut for dc values for PF2e
-		if (/^dc\./i.test(key)) {
-			const statKey = key.slice(3);
-			const statValue = this.getStat(statKey);
-			if (statValue !== null) {
-				return doStatMath(`(${statValue}+10)`);
-			}
-		}
-
 		// provide a temp shortcut for calculating stat modifiers for d20 games
 		const abilities = ["strength","dexterity","constitution","intelligence","wisdom","charisma"];
-		const keyLower = key.toLowerCase();
 		for (const ability of abilities) {
 			if (ability.slice(0, 3) === keyLower || `mod.${ability}` === keyLower) {
 				const abilityValue = this.getStat(ability);
 				if (abilityValue !== null) {
-					return doStatMath(`floor((${abilityValue}-10)/2)`);
+					return processMath(`floor((${abilityValue}-10)/2)`, { allowSpoilers:true });
 				}
 			}
 		}
@@ -653,7 +711,43 @@ export class GameCharacter {
 			return curr.toString();
 		}
 
-		if (keyLower === "conditions" && this.gameSystem?.isP20) {
+		const { gameSystem } = this;
+		if (pathbuilder || gameSystem?.isP20) {
+			return this.getStatP20(key, keyLower);
+		}
+
+		/** @todo by doing this we are ensuring that users are able to keep using these functions that they may not have known were specific to pf2e */
+		if (!gameSystem) {
+			return this.getStatP20(key, keyLower);
+		}
+
+		return null;
+	}
+
+	protected getStatP20(key: string, keyLower: string) {
+		// provide a shortcut for off-guard ac
+		if (keyLower === "ogac") {
+			const ac = this.getStat("ac");
+			if (ac !== null) {
+				return doStatMath(`(${ac}-2)`);
+			}
+		}
+
+		// provide a shortcut for cantrip rank
+		if (keyLower === "cantrip.rank") {
+			return this.getStat(`half.up.level`);
+		}
+
+		// provide a shortcut for dc values
+		if (keyLower.startsWith("dc.")) {
+			const statKey = key.slice(3);
+			const statValue = this.getStat(statKey);
+			if (statValue !== null) {
+				return doStatMath(`(${statValue}+10)`);
+			}
+		}
+
+		if (keyLower === "conditions") {
 			const conditions: string[] = [];
 
 			Condition.getToggledConditions().forEach(condition => {
@@ -678,6 +772,7 @@ export class GameCharacter {
 
 		return null;
 	}
+
 	public getCurrency() {
 		// try getting currency from gameSystem
 		let currency = Currency.new<CurrencyPf2e>(this.gameSystem?.code);
@@ -848,11 +943,15 @@ export class GameCharacter {
 		return false;
 	}
 
-	public async save(savePathbuilder?: boolean): Promise<boolean> {
+	public async save(saveImported?: boolean): Promise<boolean> {
 		const ownerSaved = await this.owner?.save() ?? false;
-		if (savePathbuilder && this.pathbuilderId) {
-			const pathbuilderSaved = await this.pathbuilder?.save() ?? false;
-			return ownerSaved && pathbuilderSaved;
+		if (ownerSaved && saveImported) {
+			if (this.pathbuilderId) {
+				return await this.pathbuilder?.save() ?? false;
+			}
+			if (this.essence20Id) {
+				return await this.essence20?.save() ?? false;
+			}
 		}
 		return ownerSaved;
 	}

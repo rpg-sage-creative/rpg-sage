@@ -615,7 +615,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		}
 
 		const profKeyRegex = new RegExp(`^${key}$`, "i");
-		const profKey = Object.keys(this.core.proficiencies).find(profKey => profKeyRegex.test(profKey)) as TPathbuilderCharacterProficienciesKey;
+		const profKey = Object.keys(this.getCoreProficiencies()).find(profKey => profKeyRegex.test(profKey)) as TPathbuilderCharacterProficienciesKey;
 		if (profKey) {
 			const check = new Check(this, profKey);
 			check.addProficiency(profKey);
@@ -627,6 +627,14 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		}
 
 		return undefined;
+	}
+
+	/** By accessing proficiencies through this stat we can on the fly hack in custom stats, like "casting" */
+	private getCoreProficiencies() {
+		const { proficiencies } = this.core;
+		const { castingArcane = 0, castingDivine = 0, castingOccult = 0, castingPrimal = 0 } = proficiencies;
+		const casting = Math.max(castingArcane, castingDivine, castingOccult, castingPrimal);
+		return { casting, ...proficiencies };
 	}
 
 	public getStat(stat: string): number | string | null {
@@ -769,11 +777,11 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 	}
 
 	public getProficiencyMod(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): ProficiencyType {
-		const keys = Object.keys(this.core.proficiencies) as TPathbuilderCharacterProficienciesKey[];
+		const keys = Object.keys(this.getCoreProficiencies()) as TPathbuilderCharacterProficienciesKey[];
 		const lower = key.toLowerCase();
 		const found = keys.find(k => k.toLowerCase() === lower);
 		if (found) {
-			const keyMod = this.core.proficiencies[found] ?? 0;
+			const keyMod = this.getCoreProficiencies()[found] ?? 0;
 			const specificMod = specificKey ? this.getSpecificProficiencyMod(specificKey) : 0;
 			const profMod = Math.max(keyMod, specificMod);
 			return !profMod ? this.untrainedProficiencyMod : profMod;
