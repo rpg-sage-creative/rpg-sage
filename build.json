@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.11.4",
+"version":"1.11.5",
 "branch":"v1.x.x",
-"commit":"3f3db42a859db10c89a409bedd738739d7c884f6",
-"commitSubject":"implement basic getStats for E20 (#138)",
-"commitTs":1753729842000,
-"commitDate":"2025-07-28-1210",
-"buildTs":1753729889000,
-"buildDate":"2025-07-28-1211",
+"commit":"e3dc28480b1eb3ff853f005d0951fa11ee7f5a95",
+"commitSubject":"Custom sheet templates (#140)",
+"commitTs":1754322445000,
+"commitDate":"2025-08-04-0847",
+"buildTs":1754322551000,
+"buildDate":"2025-08-04-0849",
 "author":"Randal"
 }
