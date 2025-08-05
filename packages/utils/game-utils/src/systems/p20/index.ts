@@ -1,3 +1,3 @@
 export * from "./pf2e/index.js";
 export * from "./sf2e/index.js";
-export * from "./Bulk.js";
+export * from "./BulkP20.js";

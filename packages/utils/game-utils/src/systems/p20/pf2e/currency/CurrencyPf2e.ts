@@ -1,5 +1,5 @@
 import { Currency, type CurrencyCore, type CurrencyData } from "../../../../currency/Currency.js";
-import { Bulk } from "../../Bulk.js";
+import { BulkP20 } from "../../BulkP20.js";
 
 type GameSystemKey = "PF2e";
 
@@ -20,16 +20,16 @@ export class CurrencyPf2e extends Currency<GameSystemKey, DenominationKeys, Curr
 		this.spValue = this.toValue();
 	}
 
-	public bulk!: Bulk;
+	public bulk!: BulkP20;
 	public get cp(): number { return Math.round(this.core.cp); }
 	public get gp(): number { return Math.round(this.core.gp); }
 	public get pp(): number { return Math.round(this.core.pp); }
 	public get sp(): number { return Math.round(this.core.sp); }
 	public spValue!: number;
 
-	public static calculateBulk(curr: CurrencyPf2e): Bulk {
+	public static calculateBulk(curr: CurrencyPf2e): BulkP20 {
 		// bulk is 1 per 1,000 coins
-		return new Bulk(Math.floor((curr.cp + curr.sp + curr.gp + curr.pp) / 1000));
+		return new BulkP20(Math.floor((curr.cp + curr.sp + curr.gp + curr.pp) / 1000));
 	}
 
 	public static toGpString(sp: number): string {
