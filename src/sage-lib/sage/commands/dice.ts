@@ -1,8 +1,8 @@
-import { DiceOutputType, DicePostType, DiceSecretMethodType } from "@rsc-sage/types";
+import { DicePostType, DiceSecretMethodType } from "@rsc-sage/types";
 import { error, isWrapped, redactCodeBlocks, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import { processStatBlocks } from "@rsc-utils/dice-utils";
 import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
-import type { DiceCriticalMethodType, GameSystemType } from "@rsc-utils/game-utils";
+import { DiceOutputType, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { redactKeyValuePairs } from "../../../sage-utils/redactKeyValuePairs.js";

@@ -1,10 +1,9 @@
-import { DiceOutputType } from "@rsc-sage/types";
 import { cleanWhitespace, HasIdCore, sortPrimitive, sum, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
-import { GameSystemType } from "@rsc-utils/game-utils";
+import { DiceOutputType, GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
 /** @deprecated @todo Update imports for these enums. */
-export { DiceOutputType, DiceSecretMethodType } from "@rsc-sage/types";
+export { DiceSecretMethodType } from "@rsc-sage/types";
 
 //#region rpg.dice.common.ts
 

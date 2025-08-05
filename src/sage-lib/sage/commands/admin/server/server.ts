@@ -1,8 +1,8 @@
 import { DicePostType, DiceSortType } from "@rsc-sage/types";
 import { mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
-import { getCriticalMethodText } from "@rsc-utils/game-utils";
+import { DiceOutputType, getCriticalMethodText } from "@rsc-utils/game-utils";
 import type { Role } from "discord.js";
-import { DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
+import { DiceSecretMethodType } from "../../../../../sage-dice/index.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
