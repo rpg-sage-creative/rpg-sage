@@ -1,3 +1,5 @@
+import { DiceCriticalMethodType } from "../dice/types/DiceCriticalMethodType.js";
+
 export enum GameSystemType {
 	None = 0,
 	/** Pathfinder 1e */
@@ -26,6 +28,23 @@ export type GameSystemCode = keyof typeof GameSystemType;
 
 export type DiceSystemCode = GameSystemCode;
 
+type GameSystemBase = {
+	/** Short code for the game system */
+	code: GameSystemCode;
+	/** Description of the game */
+	description: string;
+	/** Which dice system does the game use */
+	dice: DiceSystemCode;
+	/** Name of the game */
+	name: string;
+	/** Default method of rolling critical dice for systems that have critical dice. */
+	diceCritMethod?: keyof typeof DiceCriticalMethodType;
+	/** Helper flag for E20 (Renegade Games Essence 20) games */
+	isE20?: boolean;
+	/** Helper flag for P20 (Paizo d20; PF2e/SF2e) games */
+	isP20?: boolean;
+};
+
 export type GameSystem = {
 	/** Short code for the game system */
 	code: GameSystemCode;
@@ -38,7 +57,7 @@ export type GameSystem = {
 	/** Numeric enum value for the game system */
 	type: GameSystemType;
 	/** Default method of rolling critical dice for systems that have critical dice. */
-	diceCritMethod?: "RollTwice" | "TimesTwo";
+	diceCritMethodType?: DiceCriticalMethodType;
 	/** Helper flag for E20 (Renegade Games Essence 20) games */
 	isE20?: boolean;
 	/** Helper flag for P20 (Paizo d20; PF2e/SF2e) games */
@@ -46,18 +65,22 @@ export type GameSystem = {
 };
 
 /** Stores all the available Game Systems. */
-const gameSystems: GameSystem[] = [
-	{ code:"None",  dice:"None",  name:"None", description:"No Game System." },
-	{ code:"CnC",   dice:"CnC",   name:"Coyote & Crow", description:"" },
-	{ code:"DnD5e", dice:"DnD5e", name:"Dungeons & Dragons 5e", description:"", diceCritMethod:"TimesTwo" },
-	{ code:"E20",   dice:"E20",   name:"Essence 20", description:"" },
-	{ code:"PF1e",  dice:"PF1e",  name:"Pathfinder 1e", description:"" },
-	{ code:"PF2e",  dice:"PF2e",  name:"Pathfinder 2e", description:"", diceCritMethod:"TimesTwo", isP20:true },
-	{ code:"Quest", dice:"Quest", name:"Quest RPG", description:"" },
-	{ code:"SF1e",  dice:"SF1e",  name:"Starfinder 1e", description:"", diceCritMethod:"RollTwice" },
-	{ code:"SF2e",  dice:"SF2e",  name:"Starfinder 2e", description:"", diceCritMethod:"TimesTwo", isP20:true },
-	{ code:"VtM5e", dice:"VtM5e", name:"Vampire: the Masquerade 5e", description:"" },
-].map(system => ({ ...system, type:GameSystemType[system.code as keyof typeof GameSystemType] } as GameSystem));
+const gameSystems: GameSystem[] = ((): GameSystemBase[] => {
+	return [
+		{ code:"None",  dice:"None",  name:"None", description:"No Game System." },
+		{ code:"CnC",   dice:"CnC",   name:"Coyote & Crow", description:"" },
+		{ code:"DnD5e", dice:"DnD5e", name:"Dungeons & Dragons 5e", description:"", diceCritMethod:"TimesTwo" },
+		{ code:"E20",   dice:"E20",   name:"Essence 20", description:"", isE20:true },
+		{ code:"PF1e",  dice:"PF1e",  name:"Pathfinder 1e", description:"" },
+		{ code:"PF2e",  dice:"PF2e",  name:"Pathfinder 2e", description:"", diceCritMethod:"TimesTwo", isP20:true },
+		{ code:"Quest", dice:"Quest", name:"Quest RPG", description:"" },
+		{ code:"SF1e",  dice:"SF1e",  name:"Starfinder 1e", description:"", diceCritMethod:"RollTwice" },
+		{ code:"SF2e",  dice:"SF2e",  name:"Starfinder 2e", description:"", diceCritMethod:"TimesTwo", isP20:true },
+		{ code:"VtM5e", dice:"VtM5e", name:"Vampire: the Masquerade 5e", description:"" },
+	];
+})().map(gameSystem => (
+	{ ...gameSystem, type: GameSystemType[gameSystem.code], diceCritMethodType: DiceCriticalMethodType[gameSystem.diceCritMethod!] }
+));
 
 /** Returns an array of the available Game Systems. */
 export function getGameSystems(): GameSystem[] {
@@ -75,6 +98,21 @@ export function parseGameSystem(value?: string | number | null): GameSystem | un
 		}
 	}
 	return undefined;
+}
+
+/** Reusable method for displaying the DiceCriticalMethodType used by a channel/game/server. */
+export function getCriticalMethodText(gameSystemType?: GameSystemType, method?: DiceCriticalMethodType, inherited?: DiceCriticalMethodType): string {
+	const gameSystem = parseGameSystem(gameSystemType);
+	if (gameSystem?.diceCritMethodType) {
+		if (method !== undefined) return DiceCriticalMethodType[method];
+		if (inherited !== undefined) return `<i>inherited (${DiceCriticalMethodType[inherited]})</i>`;
+		return `<i>unset (${DiceCriticalMethodType[gameSystem.diceCritMethodType]})</i>`;
+	}
+	const critSystems = gameSystems
+		.filter(system => system.diceCritMethodType)
+		.map(system => system.code)
+		.join(", ");
+	return `<i>only ${critSystems}</i>`;
 }
 
 /*

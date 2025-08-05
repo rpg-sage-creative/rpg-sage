@@ -1,6 +1,7 @@
-import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, type GameOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
+import { type DialogOptions, DialogPostType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, type GameOptions, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
 import { type Args, Color, type EnumLike, type HexColorString, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { type MessageChannel, parseIds, urlOrUndefined } from "@rsc-utils/discord-utils";
+import { DiceCriticalMethodType, GameSystemType } from "@rsc-utils/game-utils";
 import { type VALID_URL } from "@rsc-utils/io-utils";
 import type { Attachment, Role, User } from "discord.js";
 import { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
@@ -354,7 +355,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 
 	public getDiceOptions(): Args<DiceOptions> | undefined {
 		const diceOptions = {
-			diceCritMethodType: this.getEnum(DiceCritMethodType, "diceCrit"),
+			diceCritMethodType: this.getEnum(DiceCriticalMethodType, "diceCrit"),
 			diceOutputType: this.getEnum(DiceOutputType, "diceOutput"),
 			dicePostType: this.getEnum(DicePostType, "dicePost"),
 			diceSecretMethodType: this.getEnum(DiceSecretMethodType, "diceSecret"),

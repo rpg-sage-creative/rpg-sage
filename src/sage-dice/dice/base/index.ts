@@ -1,8 +1,7 @@
-import { GameType } from "@rsc-sage/types";
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, escapeRegex, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { hasSecretFlag, rollDice } from "@rsc-utils/dice-utils";
+import { DiceCriticalMethodType, GameSystemType } from "@rsc-utils/game-utils";
 import {
-	CritMethodType,
 	DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
@@ -367,7 +366,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	public static create({ count, sides, dropKeep, noSort, modifier, fixedRolls, sign, description, test }: TDicePartCoreArgs = {}): TDicePart {
 		return new DicePart({
 			objectType: "DicePart",
-			gameType: GameType.None,
+			gameType: GameSystemType.None,
 			id: randomSnowflake(),
 
 			count: count ?? 0,
@@ -447,8 +446,8 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 	//#region static
 
 	protected static _createCore<Core extends DicePartRollCore>(dicePart: TDicePart): Core;
-	protected static _createCore<Core extends DicePartRollCore>(dicePart: TDicePart, gameType: GameType): Core;
-	protected static _createCore(dicePart: TDicePart, gameType = GameType.None) {
+	protected static _createCore<Core extends DicePartRollCore>(dicePart: TDicePart, gameType: GameSystemType): Core;
+	protected static _createCore(dicePart: TDicePart, gameType = GameSystemType.None) {
 		const rolls = dicePart.fixedRolls?.slice(0, dicePart.count) ?? [];
 		if (rolls.length < dicePart.count) {
 			rolls.push(...rollDice(dicePart.count - rolls.length, dicePart.sides));
@@ -541,7 +540,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 	public static create(diceParts: TDicePart[]): TDice {
 		return new Dice({
 			objectType: "Dice",
-			gameType: GameType.None,
+			gameType: GameSystemType.None,
 			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
@@ -674,7 +673,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 	public static create(_dice: TDice, uuid: boolean): TDiceRoll {
 		const core: DiceRollCore = {
 			objectType: "DiceRoll",
-			gameType: GameType.None,
+			gameType: GameSystemType.None,
 			//Quick rolls can never be reloaded, so we don't need a UUID
 			id: uuid ? randomSnowflake() : null!,
 			dice: _dice.toJSON(),
@@ -705,7 +704,7 @@ function shouldStartNewPart(currentPart: TokenData[], currentToken: TokenData): 
 
 export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDiceGroupRoll> extends HasDieCore<T> implements IDiceBase<V> {
 	//#region from this.core
-	public get critMethodType(): OrUndefined<CritMethodType> {
+	public get critMethodType(): OrUndefined<DiceCriticalMethodType> {
 		return this.core.critMethodType;
 	}
 	private _dice?: U[];
@@ -745,7 +744,7 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 	public static create(_dice: TDice[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: number): TDiceGroup {
 		return new DiceGroup({
 			objectType: "DiceGroup",
-			gameType: GameType.None,
+			gameType: GameSystemType.None,
 			id: randomSnowflake(),
 			critMethodType: critMethodType,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
@@ -846,7 +845,7 @@ export class DiceGroupRoll<T extends DiceGroupRollCore, U extends TDiceGroup, V 
 	public static create(diceGroup: TDiceGroup, uuid: boolean): TDiceGroupRoll {
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
-			gameType: GameType.None,
+			gameType: GameSystemType.None,
 			//Quick rolls can never be reloaded, so we don't need a UUID
 			id: uuid ? randomSnowflake() : null!,
 			diceGroup: diceGroup.toJSON(),

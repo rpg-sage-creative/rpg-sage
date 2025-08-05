@@ -1,6 +1,7 @@
-import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType } from "@rsc-sage/types";
 import { getDateStrings, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { addZeroWidthSpaces, getPermsFor, getRollemId, getTupperBoxId, toHumanReadable } from "@rsc-utils/discord-utils";
+import { getCriticalMethodText } from "@rsc-utils/game-utils";
 import type { GuildMember, TextChannel } from "discord.js";
 import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
@@ -121,7 +122,7 @@ function gameDetailsAppendDice(renderableContent: RenderableContent, game: Game)
 	const server = game.server;
 	renderableContent.append(`<b>Default Dice Options</b>`);
 
-	const critMethodText = getCritMethodText(game.gameSystemType, game.diceCritMethodType, server.diceCritMethodType);
+	const critMethodText = getCriticalMethodText(game.gameSystemType, game.diceCritMethodType, server.diceCritMethodType);
 	renderableContent.append(`[spacer]<b>Crit Method</b> ${critMethodText}`);
 
 	const diceOutputType: keyof typeof DiceOutputType | undefined = <keyof typeof DiceOutputType>DiceOutputType[game.diceOutputType!];

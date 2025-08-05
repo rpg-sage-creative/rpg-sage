@@ -1,6 +1,7 @@
-import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, SageChannelType, parseSageChannelType, updateGame, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type SageChannel } from "@rsc-sage/types";
 import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, warn, type Args, type Comparable, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
+import { parseGameSystem, type DiceCriticalMethodType, type GameSystem, type GameSystemType } from "@rsc-utils/game-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
 import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
@@ -191,7 +192,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	/** @deprecated use .gameSystemType */
 	public get gameType(): GameSystemType | undefined { return this.core.gameSystemType; }
 	public get dialogPostType(): DialogPostType | undefined { return this.core.dialogPostType; }
-	public get diceCritMethodType(): DiceCritMethodType | undefined { return this.core.diceCritMethodType; }
+	public get diceCritMethodType(): DiceCriticalMethodType | undefined { return this.core.diceCritMethodType; }
 	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }

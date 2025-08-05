@@ -1,5 +1,5 @@
-import { GameSystemType } from "@rsc-sage/types";
 import { errorReturnFalse, getCodeName, getDataRoot, HasIdCore, warn, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
+import type { GameSystemType } from "@rsc-utils/game-utils";
 import { fileExists, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";

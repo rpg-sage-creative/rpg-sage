@@ -1,9 +1,10 @@
-import { DiceOutputType, GameType } from "@rsc-sage/types";
+import { DiceOutputType } from "@rsc-sage/types";
 import { cleanWhitespace, HasIdCore, sortPrimitive, sum, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
+import { GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
 /** @deprecated @todo Update imports for these enums. */
-export { DiceCritMethodType as CritMethodType, DiceOutputType, DiceSecretMethodType } from "@rsc-sage/types";
+export { DiceOutputType, DiceSecretMethodType } from "@rsc-sage/types";
 
 //#region rpg.dice.common.ts
 
@@ -232,10 +233,10 @@ export type TDiceOutput = {
 export type TSign = "+" | "-" | "*" | "/";
 
 export interface DieCore<T extends string = string> extends IdCore<T> {
-	gameType: GameType;
+	gameType: GameSystemType;
 }
 export abstract class HasDieCore<T extends DieCore<U>, U extends string = string> extends HasIdCore<T, U> {
-	public get gameType(): GameType { return this.core.gameType; }
+	public get gameType(): GameSystemType { return this.core.gameType; }
 }
 
 export interface IDiceBase<T extends IRollBase = IRollBase<any>> extends HasDieCore<DieCore> {

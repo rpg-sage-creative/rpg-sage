@@ -1,5 +1,6 @@
-import type { DicePart, DicePartRoll, DiceRoll, Dice, DiceGroupRoll, DiceGroup } from "./index.js";
-import type { DieCore, TDropKeepData, TSign, TTestData, CritMethodType, DiceOutputType, DiceSecretMethodType } from "../../index.js";
+import type { DiceCriticalMethodType } from "@rsc-utils/game-utils";
+import type { DiceOutputType, DiceSecretMethodType, DieCore, TDropKeepData, TSign, TTestData } from "../../index.js";
+import type { Dice, DiceGroup, DiceGroupRoll, DicePart, DicePartRoll, DiceRoll } from "./index.js";
 
 //#region DicePart
 
@@ -80,7 +81,7 @@ export type TDiceRoll = DiceRoll<DiceRollCore, TDice, TDicePartRoll>;
 //#region DiceGroup
 
 export interface DiceGroupCore extends DieCore<"DiceGroup"> {
-	critMethodType?: CritMethodType;
+	critMethodType?: DiceCriticalMethodType;
 	dice: DiceCore[];
 	diceOutputType?: DiceOutputType;
 	diceSecretMethodType?: DiceSecretMethodType;

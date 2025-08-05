@@ -1,8 +1,7 @@
-import { GameType } from "@rsc-sage/types";
 import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-
+import { DiceCriticalMethodType, GameSystemType } from "@rsc-utils/game-utils";
 import {
-	CritMethodType, DiceOutputType,
+	DiceOutputType,
 	DiceSecretMethodType,
 	DieRollGrade,
 	TestType,
@@ -24,7 +23,6 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types.js";
-
 
 //#region Tokenizer
 function getParsers(): TokenParsers {
@@ -174,7 +172,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, testOrTarget, fixedRolls }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
-			gameType: GameType.SF1e,
+			gameType: GameSystemType.SF1e,
 			id: randomSnowflake(),
 
 			count: count ?? 0,
@@ -206,7 +204,7 @@ type DicePartRollCore = baseDicePartRollCore;
 export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 	//#region static
 	public static create(dicePart: DicePart): DicePartRoll {
-		return new DicePartRoll(this._createCore(dicePart, GameType.SF1e));
+		return new DicePartRoll(this._createCore(dicePart, GameSystemType.SF1e));
 	}
 	public static fromCore(core: DicePartRollCore): DicePartRoll {
 		return new DicePartRoll(core);
@@ -231,7 +229,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	public static create(diceParts: DicePart[]): Dice {
 		return new Dice({
 			objectType: "Dice",
-			gameType: GameType.SF1e,
+			gameType: GameSystemType.SF1e,
 			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
@@ -272,7 +270,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 	public static create(_dice: Dice): DiceRoll {
 		return new DiceRoll({
 			objectType: "DiceRoll",
-			gameType: GameType.SF1e,
+			gameType: GameSystemType.SF1e,
 			id: randomSnowflake(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
@@ -296,10 +294,10 @@ function shouldStartNewPart(currentPart: TokenData[], currentToken: TokenData): 
 }
 
 interface DiceGroupCore extends baseDiceGroupCore {
-	critMethodType?: CritMethodType;
+	critMethodType?: DiceCriticalMethodType;
 }
 export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll> {
-	public get critMethodType(): CritMethodType { return this.core.critMethodType ?? CritMethodType.Unknown; }
+	public get critMethodType(): DiceCriticalMethodType { return this.core.critMethodType ?? DiceCriticalMethodType.Unknown; }
 
 	//#region attack / damage
 	public get hasAttackAndDamage(): boolean {
@@ -328,10 +326,10 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	}
 
 	//#region static
-	public static create(_dice: Dice[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType = CritMethodType.Unknown): DiceGroup {
+	public static create(_dice: Dice[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType = DiceCriticalMethodType.Unknown): DiceGroup {
 		return new DiceGroup({
 			objectType: "DiceGroup",
-			gameType: GameType.SF1e,
+			gameType: GameSystemType.SF1e,
 			id: randomSnowflake(),
 			critMethodType: critMethodType,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
@@ -342,7 +340,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static fromCore(core: DiceGroupCore): DiceGroup {
 		return new DiceGroup(core);
 	}
-	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): DiceGroup {
+	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: DiceCriticalMethodType): DiceGroup {
 		let currentPart: TokenData[];
 		const partedTokens: TokenData[][] = [];
 		tokens.forEach(token => {
@@ -384,7 +382,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		const _dice = partedDice.map(Dice.create);
 		return DiceGroup.create(_dice, diceOutputType, diceSecretMethodType, critMethodType);
 	}
-	public static parse(diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): DiceGroup {
+	public static parse(diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: DiceCriticalMethodType): DiceGroup {
 		const tokens = tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType, diceSecretMethodType, critMethodType);
 	}
@@ -398,7 +396,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 function createDiceGroupRoll(diceGroup: DiceGroup): DiceGroupRoll {
 	const core: DiceGroupRollCore = {
 		objectType: "DiceGroupRoll",
-		gameType: GameType.SF1e,
+		gameType: GameSystemType.SF1e,
 		id: randomSnowflake(),
 		diceGroup: diceGroup.toJSON(),
 		rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())
@@ -443,9 +441,9 @@ function critByAddingMax(diceGroupRoll: DiceGroupRoll): void {
 function manipulateCriticalDamage(diceGroupRoll: DiceGroupRoll): void {
 	if (diceGroupRoll.hasAttackCriticalSuccess) {
 		const critMethodType = diceGroupRoll.dice.critMethodType;
-		if (critMethodType === CritMethodType.AddMax) {
+		if (critMethodType === DiceCriticalMethodType.AddMax) {
 			critByAddingMax(diceGroupRoll);
-		} else if (critMethodType === CritMethodType.RollTwice) {
+		} else if (critMethodType === DiceCriticalMethodType.RollTwice) {
 			critByRollingTwice(diceGroupRoll);
 		}else {
 			critByTimesTwo(diceGroupRoll);

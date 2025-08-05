@@ -1,12 +1,12 @@
-import { GameType, getGameSystems, parseGameSystem, type GameSystem } from "@rsc-sage/types";
 import { debug, HasCore, parseEnum, randomSnowflake, type IdCore, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType, type TDiceOutput } from "../../common.js";
+import { GameSystemType, getGameSystems, parseGameSystem, type GameSystem, DiceCriticalMethodType } from "@rsc-utils/game-utils";
+import { DiceOutputType, DiceSecretMethodType, type TDiceOutput } from "../../common.js";
 import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
 import { DiceGroup as baseDiceGroup, DiceGroupRoll as baseDiceGroupRoll, type Dice as baseDice, type DicePart as baseDicePart } from "../base/index.js";
 import type { DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore, DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice, TDiceGroup as baseTDiceGroup, TDiceGroupRoll as baseTDiceGroupRoll, TDicePart as baseTDicePart } from "../base/types.js";
 
 type DiceSystem = { DiceGroup:typeof baseDiceGroup; DiceGroupRoll:typeof baseDiceGroupRoll; };
-const diceSystems = new Map<GameType, DiceSystem>();
+const diceSystems = new Map<GameSystemType, DiceSystem>();
 
 let gameSystems: GameSystem[] | undefined = getGameSystems();
 for (const gameSystem of gameSystems) {
@@ -19,19 +19,19 @@ for (const gameSystem of gameSystems) {
 }
 gameSystems = undefined;
 
-type DiceGroupParser<T extends baseTDiceGroup = baseTDiceGroup> = (diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType) => T;
+type DiceGroupParser<T extends baseTDiceGroup = baseTDiceGroup> = (diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: DiceCriticalMethodType) => T;
 
-function getDiceSystem(gameType?: GameType): DiceSystem {
-	let diceSystem = diceSystems.get(gameType ?? GameType.None);
+function getDiceSystem(gameType?: GameSystemType): DiceSystem {
+	let diceSystem = diceSystems.get(gameType ?? GameSystemType.None);
 	if (!diceSystem) {
 		let gameSystem = parseGameSystem(gameType);
 		if (!gameSystem || gameSystem.dice !== gameSystem.code) {
 			gameSystem = parseGameSystem(gameSystem?.dice);
 		}
-		diceSystem = diceSystems.get(gameSystem?.type ?? GameType.None);
+		diceSystem = diceSystems.get(gameSystem?.type ?? GameSystemType.None);
 	}
 	if (!diceSystem) {
-		diceSystem = diceSystems.get(GameType.None);
+		diceSystem = diceSystems.get(GameSystemType.None);
 	}
 	if (!diceSystem?.DiceGroup || !diceSystem.DiceGroupRoll) {
 		debug({gameType,diceSystem});
@@ -157,15 +157,15 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 	}
 	public static parse({
 		diceString,
-		defaultGameType = GameType.None,
+		defaultGameType = GameSystemType.None,
 		defaultDiceOutputType,
-		defaultCritMethodType = CritMethodType.Unknown,
+		defaultCritMethodType = DiceCriticalMethodType.Unknown,
 		defaultDiceSecretMethodType = DiceSecretMethodType.Ignore
 	}: {
 		diceString: string;
-		defaultGameType?: GameType;
+		defaultGameType?: GameSystemType;
 		defaultDiceOutputType?: DiceOutputType;
-		defaultCritMethodType?: CritMethodType;
+		defaultCritMethodType?: DiceCriticalMethodType;
 		defaultDiceSecretMethodType?: DiceSecretMethodType;
 	}): OrNull<DiscordDice> {
 		const matchArray = diceString.match(getBasicDiceRegex());
@@ -175,19 +175,19 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 
 		const diceGroups: baseTDiceGroup[] = [];
 		matchArray.map(match => match.slice(1, -1)).forEach(match => {
-			let gameType: OrUndefined<GameType>;
+			let gameType: OrUndefined<GameSystemType>;
 			[match, gameType] = matchGameType(match, defaultGameType);
 
 			let diceOutputType: OrUndefined<DiceOutputType>;
 			[match, diceOutputType] = matchDiceOutputType(match, defaultDiceOutputType);
 
-			let critMethodType: OrUndefined<CritMethodType>;
+			let critMethodType: OrUndefined<DiceCriticalMethodType>;
 			[match, critMethodType] = matchCritMethodType(match, gameType, defaultCritMethodType);
 
 			let count: number, map: number;
 			[match, count, map] = matchCountAndMap(match);
 
-			if (gameType !== GameType.PF2e && gameType !== GameType.SF2e) {
+			if (gameType !== GameSystemType.PF2e && gameType !== GameSystemType.SF2e) {
 				map = 0;
 			}
 
@@ -210,7 +210,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 }
 
 /** Returns the GameType at the beginning of the match along with the rest of the match. */
-function matchGameType(match: string, defaultGameType: OrUndefined<GameType>): [string, OrUndefined<GameType>] {
+function matchGameType(match: string, defaultGameType: OrUndefined<GameSystemType>): [string, OrUndefined<GameSystemType>] {
 	const gameCodes = getGameSystems().filter(game => game.type).map(game => game.code).join("|");
 	const GAME_CHECK = new RegExp(`^(?:(${gameCodes})\b)?`, "i");
 	const gameMatch = match.match(GAME_CHECK);
@@ -240,14 +240,14 @@ function matchDiceOutputType(match: string, defaultDiceOutputType: OrUndefined<D
 }
 
 /** Returns the CritMethodType at the beginning of the match along with the rest of the match. */
-function matchCritMethodType(match: string, gameType: OrUndefined<GameType>, defaultCritMethodType: OrUndefined<CritMethodType>): [string, OrUndefined<CritMethodType>] {
+function matchCritMethodType(match: string, gameType: OrUndefined<GameSystemType>, defaultCritMethodType: OrUndefined<DiceCriticalMethodType>): [string, OrUndefined<DiceCriticalMethodType>] {
 	const gameSystem = parseGameSystem(gameType);
 	if (gameSystem?.diceCritMethodType) {
 		const CRIT_METHOD_CHECK = /^(timestwo|rolltwice|addmax)?/i;
 		const critMethodMatch = match.match(CRIT_METHOD_CHECK);
 		if (critMethodMatch) {
 			const critMethodTypeString = critMethodMatch[0];
-			const critMethodType = parseEnum(GameType, critMethodTypeString, defaultCritMethodType);
+			const critMethodType = parseEnum(GameSystemType, critMethodTypeString, defaultCritMethodType);
 			return [
 				match.slice(critMethodTypeString.length).trim(),
 				critMethodType
@@ -312,7 +312,7 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 	public get hasSecret(): boolean { return !!this.rolls.find(roll => roll.hasSecret); }
 
 	public toString(outputType?: DiceOutputType, joiner = "\n"): string {
-		if (this.rolls[0].gameType === GameType.Quest) {
+		if (this.rolls[0].gameType === GameSystemType.Quest) {
 			joiner = ", ";
 		}
 		return this.rolls.map(roll => {
