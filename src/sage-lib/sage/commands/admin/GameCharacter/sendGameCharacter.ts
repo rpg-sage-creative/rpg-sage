@@ -2,7 +2,6 @@ import { SageChannelType } from "@rsc-sage/types";
 import { mapAsync, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import { toChannelMention, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
-import { canProcessStats, statsToHtml } from "../../../../../gameSystems/sheets.js";
 import { sendWebhook } from "../../../../discord/messages.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -107,16 +106,12 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 			renderableContent.appendTitledSection(`<b>Stats</b>`, `<i>NPC stats viewable in GM channel ...</i>`);
 
 		}else {
-			let statsTitle = "Stats";
-			if (canProcessStats(character)) {
-				const { gameSystem } = character;
-				renderableContent.appendTitledSection(`<b>Stats</b> ${gameSystem?.code}`, ...statsToHtml(character));
-				statsTitle = "Other Stats";
-			}
-			const stats = character.getNonGameStatsOutput();
-			if (stats.length) {
-				renderableContent.appendTitledSection(`<b>${statsTitle}</b>`, ...stats);
-			}
+			const sections = character.toStatsOutput();
+ 			sections.forEach(({ title, lines }) => {
+ 				if (lines.length) {
+ 					renderableContent.appendTitledSection(`<b>${title}</b>`, ...lines);
+ 				}
+ 			});
 		}
 	}
 

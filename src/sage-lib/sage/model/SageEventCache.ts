@@ -177,7 +177,7 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 		if (!discord.bot && !discord.system) {
 			member = await guild.members.fetch(id).catch(err => {
 				return isDiscordApiError(err, 10007, 10013)
-					? errorReturnUndefined(`guild.id = ${guild.id} (${guild.name}); guildMember.id = ${id} (${toHumanReadable(discord)})`)
+					? errorReturnUndefined(`unable to fetch user (err = ${err.code} "${{10007:"Unknown Member",10013:"Unknown User"}[err.code]}"); guild.id = ${guild.id} (${guild.name}); guildMember.id = ${id} (${toHumanReadable(discord)})`)
 					: errorReturnUndefined(err);
 			});
 		}

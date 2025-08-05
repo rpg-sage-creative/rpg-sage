@@ -82,14 +82,22 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	content = MoveDirection.replaceAll(content, sageMessage.moveDirectionOutputType);
 	//#endregion
 
-	//#region sheet link
-	const sheetUrl = character.getStat("sheetUrl");
-	if (sheetUrl) {
-		content += ` [✎](${sheetUrl})`;
-	}
-	//#endregion
+	//#region footer / sheet link
+ 	let dialogFooter = character.toDialogFooterLine();
+ 	const sheetLink = character.toSheetLink();
+ 	if (sheetLink) {
+ 		if (dialogFooter) {
+ 			if (!dialogFooter.includes(sheetLink.slice(5, -2))) {
+ 				dialogFooter += ` ${sheetLink}`;
+ 			}
+ 		}else {
+ 			content += ` ${sheetLink}`;
+ 		}
+ 	}
+ 	//#endregion
 
 	renderableContent.append(content);
+	if (dialogFooter) renderableContent.append(dialogFooter);
 
 	const thumbnailUrl = postData.imageUrl ?? character.avatarUrl;
 	renderableContent.setThumbnailUrl(thumbnailUrl);
