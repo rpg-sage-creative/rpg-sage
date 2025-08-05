@@ -1,5 +1,5 @@
 import { warn, ZERO_WIDTH_SPACE, type RenderableContent, type Snowflake, type SortResult } from "@rsc-utils/core-utils";
-import { GameSystemType, parseGameSystem } from "@rsc-utils/game-utils";
+import { GameSystemType, getGameSystems, parseGameSystem } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { deleteMessage } from "../../sage-lib/discord/deletedMessages.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
@@ -7,7 +7,6 @@ import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton.js";
-import { getPaizoGameSystems } from "./lib/PaizoGameSystem.js";
 import { fetchSelectedOrDefault, fetchSelectedOrDefaultEnum, fetchSelectedOrDefaultNumber } from "./lib/fetchSelectedOrDefault.js";
 import { findComponent } from "./lib/findComponent.js";
 
@@ -52,16 +51,14 @@ function createGameSystemSelect<ControlArg extends Control>(args: CustomIdArgs<C
 	const selectBuilder = new StringSelectMenuBuilder()
 		.setCustomId(createCustomId(args, "gameSystem"))
 		.setPlaceholder(`Please Select a Game System ...`);
-	getPaizoGameSystems().forEach(gameSystem => {
-		if (gameSystem.is2e) {
-			selectBuilder.addOptions(
-				new StringSelectMenuOptionBuilder()
-					.setLabel(gameSystem.name)
-					.setValue(gameSystem.code)
-					.setDefault(gameSystem.type === selected || (!selected && gameSystem.isPf && gameSystem.is2e))
-			);
-		}
-	});
+	getGameSystems("PF2e", "SF2e").forEach(gameSystem =>
+		selectBuilder.addOptions(
+			new StringSelectMenuOptionBuilder()
+				.setLabel(gameSystem.name)
+				.setValue(gameSystem.code)
+				.setDefault(gameSystem.type === selected || (!selected && gameSystem.code === "PF2e"))
+		)
+	);
 	return selectBuilder;
 }
 

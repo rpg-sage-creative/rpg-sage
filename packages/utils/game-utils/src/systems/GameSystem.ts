@@ -83,7 +83,13 @@ const gameSystems: GameSystem[] = ((): GameSystemBase[] => {
 ));
 
 /** Returns an array of the available Game Systems. */
-export function getGameSystems(): GameSystem[] {
+export function getGameSystems(): GameSystem[];
+/** Returns an array of the available Game Systems filtered by the given codes. */
+export function getGameSystems(...codes: GameSystemCode[]): (GameSystem & { code:GameSystemCode; })[];
+export function getGameSystems(...codes: GameSystemCode[]): GameSystem[] {
+	if (codes.length) {
+		return gameSystems.filter(({code}) => codes.includes(code));
+	}
 	return gameSystems;
 }
 

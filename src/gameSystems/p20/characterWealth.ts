@@ -1,6 +1,6 @@
 import { parseEnum } from "@rsc-sage/types";
 import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { GameSystemType } from "@rsc-utils/game-utils";
+import { GameSystemType, getGameSystems } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
@@ -8,7 +8,6 @@ import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { boundNumber } from "../utils/boundNumber.js";
-import { getPaizoGameSystems, isStarfinder } from "./lib/PaizoGameSystem.js";
 import { getSelectedOrDefault } from "./lib/getSelectedOrDefault.js";
 
 type RawWealthItem = { level:number; items:string; currency:number; lump:number; };
@@ -105,20 +104,24 @@ type WealthItem = { level:string; items:string; currency:string; lump:string; };
 /** Creates and formats the Character Wealth table for the given system. */
 function getWealthTable(gameSystemType: GameSystemType): WealthItem[] {
 	let rows: RawWealthItem[];
-	let creditMultiplier = 1;
+	let creditMultiplier = 0;
 	switch(gameSystemType) {
 		case GameSystemType.SF1e:
 			rows = getWealthTableSf1e();
+			creditMultiplier = 1;
 			break;
 		case GameSystemType.PF1e:
 			rows = getWealthTablePf1e();
 			break;
-		default:
+		case GameSystemType.SF2e:
 			rows = getWealthTableP20();
 			creditMultiplier = 10;
 			break;
+		default:
+			rows = getWealthTableP20();
+			break;
 	}
-	const curr = isStarfinder(gameSystemType)
+	const curr = creditMultiplier
 		? (value: number) => `${addCommas(value * creditMultiplier)} credits`
 		: (value: number) => `${addCommas(value)} gp`;
 	return rows.map(row => {
@@ -150,12 +153,12 @@ function buildForm(userId: Snowflake, selected: { gameSystemType: GameSystemType
 	const gameSelect = new StringSelectMenuBuilder()
 		.setCustomId(`p20-wealth-game`)
 		.setPlaceholder(`Please Select a Game System ...`);
-	getPaizoGameSystems().forEach(gameSystem =>
+	getGameSystems("PF1e", "PF2e", "SF1e", "SF2e").forEach(gameSystem =>
 		gameSelect.addOptions(
 			new StringSelectMenuOptionBuilder()
 				.setLabel(gameSystem.name)
 				.setValue(gameSystem.code)
-				.setDefault(gameSystem.type === selected.gameSystemType || (!selected.gameSystemType && gameSystem.type === GameSystemType.PF2e))
+				.setDefault(gameSystem.type === selected.gameSystemType || (!selected.gameSystemType && gameSystem.code === "PF2e"))
 		)
 	);
 

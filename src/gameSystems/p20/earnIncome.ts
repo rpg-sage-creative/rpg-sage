@@ -1,6 +1,6 @@
 import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent } from "@rsc-utils/discord-utils";
-import { GameSystemType, parseGameSystem } from "@rsc-utils/game-utils";
+import { GameSystemType, getGameSystems, parseGameSystem } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { Dice } from "../../sage-dice/dice/pf2e/index.js";
 import { DieRollGrade } from "../../sage-dice/index.js";
@@ -14,7 +14,6 @@ import { boundNumber } from "../utils/boundNumber.js";
 import { toModifier } from "../utils/toModifier.js";
 import { getByLevelTable } from "./dcs.js";
 import { getSelectedOrDefault, getSelectedOrDefaultEnum, getSelectedOrDefaultNumber } from "./lib/getSelectedOrDefault.js";
-import { getPaizoGameSystems } from "./lib/PaizoGameSystem.js";
 import type { ProficiencyName } from "./lib/Proficiency.js";
 import { ProficiencyType } from "./lib/types.js";
 
@@ -133,16 +132,14 @@ function createGameSystemSelect(userId: Snowflake, selected?: GameSystemType): S
 	const selectBuilder = new StringSelectMenuBuilder()
 		.setCustomId(createCustomId("gameSystem", userId))
 		.setPlaceholder(`Please Select a Game System ...`);
-	getPaizoGameSystems().forEach(gameSystem => {
-		if (gameSystem.is2e) {
-			selectBuilder.addOptions(
-				new StringSelectMenuOptionBuilder()
-					.setLabel(gameSystem.name)
-					.setValue(gameSystem.code)
-					.setDefault(gameSystem.type === selected || (!selected && gameSystem.isPf && gameSystem.is2e))
-			);
-		}
-	});
+	getGameSystems("PF2e", "SF2e").forEach(gameSystem =>
+		selectBuilder.addOptions(
+			new StringSelectMenuOptionBuilder()
+				.setLabel(gameSystem.name)
+				.setValue(gameSystem.code)
+				.setDefault(gameSystem.type === selected || (!selected && gameSystem.code === "PF2e"))
+		)
+	);
 	return selectBuilder;
 }
 
