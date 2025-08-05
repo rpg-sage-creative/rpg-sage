@@ -3,7 +3,6 @@ export * from "./const.js";
 export * from "./DialogPostType.js";
 export * from "./DicePostType.js";
 export * from "./DiceSecretMethodType.js";
-export * from "./DiceSortType.js";
 export * from "./GameOptions.js";
 export * from "./parseEnum.js";
 export * from "./PostType.js";

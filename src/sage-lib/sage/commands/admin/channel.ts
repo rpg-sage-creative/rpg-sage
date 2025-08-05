@@ -1,7 +1,7 @@
-import { DialogPostType, DicePostType, DiceSortType, SageChannelType, type SageChannel } from "@rsc-sage/types";
+import { DialogPostType, DicePostType, SageChannelType, type SageChannel } from "@rsc-sage/types";
 import { isDefined, mapAsync, stringifyJson, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, isDMBasedChannel, isMessageTarget, toChannelMention } from "@rsc-utils/discord-utils";
-import { DiceOutputType, GameSystemType, getCriticalMethodText, parseGameSystem } from "@rsc-utils/game-utils";
+import { DiceOutputType, DiceSortType, GameSystemType, getCriticalMethodText, parseGameSystem } from "@rsc-utils/game-utils";
 import { GuildChannel } from "discord.js";
 import { DiceSecretMethodType } from "../../../../sage-dice/index.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
