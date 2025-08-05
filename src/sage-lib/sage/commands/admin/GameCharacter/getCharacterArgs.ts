@@ -1,4 +1,4 @@
-import { Color, debug, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Color, debug, error, warn, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { VALID_URL } from "@rsc-utils/io-utils";
 import { dequote, getQuotedRegexSource, getWordCharacterRegexSource, isBlank } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
@@ -211,7 +211,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						// core
 						case "alias": getCore().alias = valueOrNull!; break;
 						case "avatar": getCore().avatarUrl = valueOrNull!; break;
-						case "color": getCore().embedColor = valueOrNull ? Color.from(value).hex : valueOrNull as any; break;
+						case "color": getCore().embedColor = hexOrNull(valueOrNull)!; break;
 						case "token": getCore().tokenUrl = valueOrNull!; break;
 						// names
 						case "charname": getNames().charName = value; break;
@@ -222,7 +222,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						default: debug({key,value}); break;
 					}
 				}else {
-					(stats ?? (stats = [])).push({ key, value:valueOrNull });
+					(stats ??= []).push({ key, value:valueOrNull });
 				}
 			});
 
@@ -237,4 +237,16 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 	}
 
 	return results;
+}
+function hexOrNull(valueOrNull: string | null): HexColorString | null {
+	if (valueOrNull) {
+		try {
+			const color = Color.from(valueOrNull);
+			if (color) return color.hex;
+			warn("Unable to parse color:", valueOrNull, color);
+		}catch(ex) {
+			error("Error parsing color:", valueOrNull, ex);
+		}
+	}
+	return null;
 }

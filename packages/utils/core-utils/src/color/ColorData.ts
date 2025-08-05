@@ -1,6 +1,7 @@
 export type HexColorString = `#${string}`;
 export type RgbColorString = `rgb(${number},${number},${number})`;
 export type RgbaColorString = `rgba(${number},${number},${number},${number})`;
+export type ColorString = HexColorString | RgbColorString | RgbaColorString;
 
 /** @internal */
 export type RgbString = RgbColorString | RgbaColorString;

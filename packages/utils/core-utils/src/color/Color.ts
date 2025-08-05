@@ -1,5 +1,6 @@
 import type { Optional } from "../types/generics.js";
-import type { ColorData, HexColorString, RgbaColorString, RgbColorString } from "./ColorData.js";
+import type { ColorData, ColorString, HexColorString, RgbaColorString, RgbColorString } from "./ColorData.js";
+import { hexToColor } from "./internal/hexToColor.js";
 import { toColorData } from "./internal/toColorData.js";
 import { isHexColorString } from "./isHexColorString.js";
 import { isRgbColorString } from "./isRgbColorString.js";
@@ -49,17 +50,16 @@ export class Color {
 
 	/** Creates a new Color object with the alpha value multiplied by the given multiplier. */
 	public tweakAlpha(multiplier: number): Color {
-		return Color.from(this.data, this.alpha * multiplier);
+		return new Color(hexToColor(this.data.hexa, this.alpha * multiplier)!);
 	}
 
 	// #endregion
 
-	public static from(color: string): Color;
-	public static from(color: string, alpha: number): Color;
-	public static from(color: ColorData, alpha: number): Color;
+	public static from(color: Optional<string>): Color | undefined;
+	public static from(color: ColorString, alpha: number): Color;
 	public static from(red: number, green: number, blue: number): Color;
 	public static from(red: number, green: number, blue: number, alpha: number): Color;
-	public static from(colorOrRed: string | number | ColorData, alphaOrGreen?: number, blue?: number, alpha?: number): Color | undefined {
+	public static from(colorOrRed: Optional<string> | number, alphaOrGreen?: number, blue?: number, alpha?: number): Color | undefined {
 		const color = toColorData(colorOrRed as number, alphaOrGreen as number, blue as number, alpha as number);
 		return color ? new Color(color) : undefined;
 	}
@@ -67,7 +67,7 @@ export class Color {
 	// #region "is" tests
 
 	/** Tests all color types in this module */
-	public static isValid(color: Optional<string>): boolean {
+	public static isValid(color: Optional<string>): color is ColorString {
 		return isHexColorString(color) || isRgbColorString(color);
 	}
 

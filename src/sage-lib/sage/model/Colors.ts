@@ -16,7 +16,7 @@ export class Colors {
 
 	public get(type: ColorType): Color | null {
 		const color = this.findColor(type);
-		return color ? Color.from(color.hex) : null;
+		return Color.from(color?.hex) ?? null;
 	}
 
 	public set(colorAndType: TColorAndType): boolean {

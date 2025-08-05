@@ -1,10 +1,10 @@
-import { Color, errorReturnNull, getEnumValues, isDefined, parseEnum, partition } from "@rsc-utils/core-utils";
+import { Color, error, errorReturnNull, getEnumValues, isDefined, parseEnum, partition, stringifyJson } from "@rsc-utils/core-utils";
 import { EmbedBuilder } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { Colors, TColorAndType } from "../../model/Colors.js";
 import type { Game } from "../../model/Game.js";
-import { ColorType } from "../../model/HasColorsCore.js";
+import { ColorType, type IColor } from "../../model/HasColorsCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { Server } from "../../model/Server.js";
@@ -86,10 +86,16 @@ type RenderPair = { which:BotServerGameType; type:ColorType; };
 function renderColors(sageCommand: SageCommand, ...pairs: RenderPair[]): EmbedBuilder[] {
 	const embeds: EmbedBuilder[] = [];
 
-	for (const { which, type } of pairs) {
+	const errorPushInvalid = (pair: RenderPair, botColor?: IColor, color?: string, hex?: string) => {
+		error(`renderColors:: Invalid embed color value: ${stringifyJson({pair,botColor,color,hex})}`);
+		embeds.push(new EmbedBuilder({ description:`Invalid ColorType: ${pair.type}` }));
+	}
+
+	for (const pair of pairs) {
+		const { which, type } = pair;
 		const botColor = sageCommand.bot.colors.findColor(type);
 		if (!botColor) {
-			embeds.push(new EmbedBuilder({ description:`Invalid ColorType: ${type}` }));
+			errorPushInvalid(pair, botColor);
 			continue;
 		}
 
@@ -104,8 +110,13 @@ function renderColors(sageCommand: SageCommand, ...pairs: RenderPair[]): EmbedBu
 			color = botColor.hex;
 		}
 
+		const hexColor = Color.from(color)?.hex;
+		if (!hexColor) {
+			errorPushInvalid(pair, botColor, color, hexColor);
+			continue;
+		}
+
 		const inheritedText = inherited ? `*(unset, inherited)*` : ``;
-		const hexColor = Color.from(color).hex;
 		const description = `${hexColor.toUpperCase()} ${ColorType[type]} ${inheritedText}`.trim();
 		embeds.push(new EmbedBuilder({ description }).setColor(hexColor));
 	}
