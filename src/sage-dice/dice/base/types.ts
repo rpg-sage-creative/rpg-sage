@@ -1,5 +1,5 @@
-import type { DiceCriticalMethodType, DiceOutputType } from "@rsc-utils/game-utils";
-import type { DiceSecretMethodType, DieCore, TDropKeepData, TSign, TTestData } from "../../index.js";
+import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType } from "@rsc-utils/game-utils";
+import type { DieCore, TDropKeepData, TSign, TTestData } from "../../index.js";
 import type { Dice, DiceGroup, DiceGroupRoll, DicePart, DicePartRoll, DiceRoll } from "./index.js";
 
 //#region DicePart

@@ -1,7 +1,7 @@
-import { DialogPostType, DicePostType, DiceSecretMethodType, SageChannelType } from "@rsc-sage/types";
+import { SageChannelType, type DialogPostType, type DicePostType } from "@rsc-sage/types";
 import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import type { DInteraction, DiscordCache, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
-import { parseGameSystem, type DiceCriticalMethodType, type DiceOutputType, type DiceSortType, type GameSystemType } from "@rsc-utils/game-utils";
+import { parseGameSystem, type DiceCriticalMethodType, type DiceOutputType, type DiceSecretMethodType, type DiceSortType, type GameSystemType } from "@rsc-utils/game-utils";
 import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, PartialGroupDMChannel, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";

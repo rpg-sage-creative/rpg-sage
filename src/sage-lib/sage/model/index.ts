@@ -1,5 +1,5 @@
-import type { DicePostType, DiceSecretMethodType } from "@rsc-sage/types";
-import type { DiceCriticalMethodType, DiceOutputType, GameSystemType } from "@rsc-utils/game-utils";
+import type { DicePostType } from "@rsc-sage/types";
+import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
 import { GameCharacter } from "./GameCharacter.js";
 
 export interface HasGame {
