@@ -31,8 +31,11 @@ export async function getGameChannels(sageCommand: SageCommand, includeThisChann
 	const miscIds = getChannelIds(sageCommand, "misc");
 	miscIds.forEach(id => channels.push({ id, type:SageChannelType.Miscellaneous }));
 
-	if (!channels.length && includeThisChannel && sageCommand.channelDid) {
-		channels.push({ id:sageCommand.channelDid, type:SageChannelType.OutOfCharacter });
+	if (!channels.length && includeThisChannel) {
+		const { dChannel } = sageCommand;
+		if (dChannel) {
+			channels.push({ id:dChannel.id as Snowflake, type:SageChannelType.OutOfCharacter });
+		}
 	}
 
 	const free: SageChannel[] = [];
