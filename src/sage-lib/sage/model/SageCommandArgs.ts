@@ -6,6 +6,7 @@ import { createUrlRegex, unwrap } from "@rsc-utils/string-utils";
 import type { Attachment, Role, User } from "discord.js";
 import { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { SageCommand } from "./SageCommand.js";
+import { GameCreatorType } from "./Server.js";
 
 /** An object containing names. */
 export type Names = {
@@ -415,6 +416,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 			...this.getDialogOptions(),
 			...this.getDiceOptions(),
 			...this.getSystemOptions(),
+			gameCreatorType: this.getEnum(GameCreatorType, "gameCreators") ?? this.getEnum(GameCreatorType, "gameCreator"),
 		};
 		if (isEmpty(serverOptions)) {
 			return undefined;

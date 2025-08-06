@@ -1,7 +1,7 @@
 import { registerReactionListener } from "../../../discord/handlers.js";
 import { ReactionType, type TCommand } from "../../../discord/index.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
-import { type SageReaction } from "../../model/SageReaction.js";
+import type { SageReaction } from "../../model/SageReaction.js";
 
 async function isPin(sageReaction: SageReaction): Promise<TCommand | null> {
 	// check the appropriate pin emoji, allows us to avoid caching messages we don't need to
@@ -35,19 +35,19 @@ async function isPin(sageReaction: SageReaction): Promise<TCommand | null> {
 		return null;
 	}
 
-	/** @todo allow admins */
-	// make sure the reactor is in the game
-	const user = await sageReaction.user.fetch();
-	const actorIsGameUser = await game.hasUser(user.id);
-	if (!actorIsGameUser) {
+	// make sure the reactor is in the game or an admin
+	if (!sageReaction.actor.isGameUser && !sageReaction.canAdminGame) {
 		return null;
 	}
 
 	// make sure the post was by Sage or a game player
 	const isAuthorSageOrWebhook = await sageReaction.isAuthorSageOrWebhook();
-	const authorIsGameUser = await game?.hasUser(message.author?.id);
-	if (!isAuthorSageOrWebhook && !authorIsGameUser) {
-		return null;
+	if (!isAuthorSageOrWebhook) {
+		// not a sage/webhook post, check the author
+		const author = await sageReaction.eventCache.validateAuthor();
+		if (!author.isGameUser) {
+			return null;
+		}
 	}
 
 	// trigger any add, but only a remove if it was the last pin reaction removed

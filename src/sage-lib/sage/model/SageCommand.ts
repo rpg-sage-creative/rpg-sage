@@ -19,7 +19,7 @@ import type { SageEventCache } from "./SageEventCache.js";
 import type { SageInteraction } from "./SageInteraction.js";
 import type { SageMessage } from "./SageMessage.js";
 import type { SageReaction } from "./SageReaction.js";
-import type { Server } from "./Server.js";
+import { GameCreatorType, type Server } from "./Server.js";
 import type { User } from "./User.js";
 
 export interface SageCommandCore {
@@ -176,14 +176,20 @@ export abstract class SageCommand<
 
 	//#region caches
 
+	/** eventCache.actor */
 	public get actor() { return this.eventCache.actor; }
+	/** eventCache.bot */
 	public get bot(): Bot { return this.eventCache.bot; }
+	/** eventCache.discord */
 	public get discord(): DiscordCache { return this.eventCache.discord; }
 	public get eventCache(): SageEventCache { return this.core.eventCache; }
+	/** eventCache.game */
 	public get game(): Game | undefined { return this.eventCache.game; }
 	/** @deprecated SageCache has been renamed SageEventCache and .sageCache is now .eventCache */
 	public get sageCache(): SageEventCache { return this.core.eventCache; }
+	/** eventCache.actor.sage */
 	public get sageUser(): User { return this.eventCache.actor.sage; }
+	/** eventCache.server?.sage */
 	public get server(): Server | undefined { return this.eventCache.server?.sage; }
 
 	//#endregion
@@ -239,9 +245,35 @@ export abstract class SageCommand<
 		return this.cache.getOrSet("canAdminGames", () => this.canAdminServer || !!this.actor.isGameAdmin);
 	}
 
+	/** Some servers want anybody to be able to create a Game without needing to setup permissions. */
+	public get canCreateGames(): boolean {
+		return this.cache.getOrSet("canCreateGames", () => {
+			const { server } = this;
+
+			// no server, no games
+			if (!server) return false;
+
+			// owner/admin/manage always
+			if (this.canManageServer) return true;
+
+			const { gameCreatorType } = server;
+
+			// if no then no; this explicit NO overrides canAdminGames
+			if (gameCreatorType === GameCreatorType.None) return false;
+
+			// if any then any; this explicit YES overrides canAdminGames
+			if (gameCreatorType === GameCreatorType.Any) return true;
+
+			// if you can admin games, you can create games
+			if (this.canAdminGames) return true;
+
+			return false;
+		});
+	}
+
 	/** Quick flag for "this" Game (game && (canAdminGames || isGameMaster)) */
 	public get canAdminGame(): boolean {
-		return this.cache.getOrSet("canAdminGame", () => !!this.game && (this.canAdminGames || this.isGameMaster));
+		return this.cache.getOrSet("canAdminGame", () => !!this.game && (this.canAdminGames || !!this.actor.isGameMaster));
 	}
 
 		/** Ensures we are either in the channel being targeted or we are in an admin channel. */
@@ -501,7 +533,9 @@ export abstract class SageCommand<
 
 	//#region games
 
+	/** @deprecated use actor.isGameMaster */
 	public get isGameMaster() { return this.eventCache.actor.isGameMaster === true; }
+	/** @deprecated use actor.isGamePlayer */
 	public get isPlayer() { return this.eventCache.actor.isGamePlayer === true; }
 
 	//#endregion

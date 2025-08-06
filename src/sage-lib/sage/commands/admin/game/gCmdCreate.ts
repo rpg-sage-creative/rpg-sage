@@ -83,7 +83,7 @@ async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined
 export async function gCmdCreate(sageCommand: SageCommand): Promise<void> {
 	sageCommand.replyStack.startThinking();
 
-	if (!sageCommand.canAdminGames) {
+	if (!sageCommand.canCreateGames) {
 		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to create Games.");
 	}
 

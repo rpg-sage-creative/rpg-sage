@@ -10,7 +10,6 @@ import { removeAuto } from "./removeAuto.js";
 import { sendGameCharacter } from "./sendGameCharacter.js";
 import { sendNotFound } from "./sendNotFound.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
-import { GameRoleType } from "../../../model/Game.js";
 
 export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
@@ -24,10 +23,9 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 	const userId = sageMessage.canAdminGame ? sageMessage.args.getUserId("user") ?? sageMessage.sageUser.did : sageMessage.sageUser.did;
 
 	if (sageMessage.game && userId !== sageMessage.sageUser.did) {
-		const role = characterTypeMeta.isGmOrNpcOrMinion ? GameRoleType.GameMaster : undefined;
-		const hasUser = await sageMessage.game.hasUser(userId, role);
+		const hasUser = characterTypeMeta.isGmOrNpcOrMinion ? sageMessage.actor.isGameMaster : sageMessage.actor.isGameUser;
 		if (!hasUser) {
-			return role
+			return characterTypeMeta.isGmOrNpcOrMinion
 				? sageMessage.whisper(`${toUserMention(userId)} isn't a Game Master of the Game.`)
 				: sageMessage.whisper(`${toUserMention(userId)} isn't part of the Game.`);
 		}
