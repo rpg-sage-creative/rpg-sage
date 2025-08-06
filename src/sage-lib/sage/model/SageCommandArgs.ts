@@ -415,7 +415,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 			...this.getDialogOptions(),
 			...this.getDiceOptions(),
 			...this.getSystemOptions(),
-			gameCreatorType: this.getEnum(GameCreatorType, "gameCreators") ?? this.getEnum(GameCreatorType, "gameCreator"),
+			gameCreatorType: this.getEnum(GameCreatorType, "gameCreators"),
 		};
 		if (isEmpty(serverOptions)) {
 			return undefined;
