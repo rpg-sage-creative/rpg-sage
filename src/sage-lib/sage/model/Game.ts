@@ -295,6 +295,23 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		return this.users.filter((_, index) => !all[index]);
 	}
 
+	/** @todo replace the other orphan logic with this unified function */
+	// public async orphans(): Promise<{ channels:SageChannel[]; gameMasters:GameUserData[]; players:GameUserData[]; others:GameUserData[]; }> {
+	// 	const { channels: gameChannels, discord, sageCache, users: gameUsers } = this;
+
+	// 	const guildChannels = await Promise.all(gameChannels.map(channel => sageCache.fetchChannel(channel.id)));
+	// 	const channels = gameChannels.filter((_, index) => !guildChannels[index]);
+
+
+	// 	const guildMembers = await Promise.all(gameUsers.map(user => discord.fetchGuildMember(user.did)));
+	// 	const orphanUsers = gameUsers.filter((_, index) => !guildMembers[index]);
+	// 	const gameMasters = orphanUsers.filter(gameUser => gameUser.type === GameUserType.GameMaster);
+	// 	const players = orphanUsers.filter(gameUser => gameUser.type === GameUserType.Player);
+	// 	const others = orphanUsers.filter(gameUser => gameUser.type !== GameUserType.GameMaster && gameUser.type !== GameUserType.Player);
+
+	// 	return { channels, gameMasters, players, others };
+	// }
+
 	/** Returns all game masters (manual and role) as GuildMember objects. */
 	public async gmGuildMembers(): Promise<GuildMember[]> {
 		const gmGuildMembers = await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)));
