@@ -648,39 +648,11 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		return this.getUser(userResolvable)?.type === GameUserType.Player;
 	}
 
-	/** Returns true if the game has the given User for the given RoleType. */
-	public async hasUser(userResolvable: Optional<CanBeUserIdResolvable>, roleType?: GameRoleType): Promise<boolean> {
-		const userId = resolveUserId(userResolvable);
-		if (!userId) {
-			return false;
-		}
-		if (roleType === undefined) {
-			if (this.getUser(userId) !== undefined) {
-				return true;
-			}
-			for (const role of this.roles) {
-				const bool = await hasRole(this.sageCache, userId, role.did);
-				if (bool) {
-					return true;
-				}
-			}
-			return false;
-		}
-		const userType = GameUserType[GameRoleType[roleType] as keyof typeof GameUserType];
-		if (userType !== undefined && this.getUser(userId)?.type === userType) {
-			return true;
-		}
-		const roleDid = this.getRole(roleType)?.did;
-		if (roleDid) {
-			return hasRole(this.sageCache, userId, roleDid);
-		}
-		return false;
-
-		async function hasRole(sageCache: SageCache, _userDid: Snowflake, _roleDid: Snowflake): Promise<boolean> {
-			const guildMember = await sageCache.discord.fetchGuildMember(_userDid);
-			const roleDids = Array.from(guildMember?.roles.cache.values() ?? []).map(role => role.id);
-			return roleDids.includes(_roleDid);
-		}
+	/** Only used by SageEventCache. */
+	public hasUser(userId: Snowflake, userRoleIds: Snowflake[], gameUserType: GameUserType): boolean {
+		const gameRoleType = GameRoleType[GameUserType[gameUserType] as keyof typeof GameRoleType];
+		return this.users.some(gameUser => gameUser.type === gameUserType && gameUser.did === userId)
+			|| this.roles.some(gameRole => gameRole.type === gameRoleType && userRoleIds.includes(gameRole.did));
 	}
 
 	// #endregion

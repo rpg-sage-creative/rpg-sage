@@ -8,8 +8,8 @@ import { globalCacheFilter, globalCacheRead, type GameCacheItem, type GlobalCach
 import { JsonRepo } from "../repo/base/JsonRepo.js";
 import { ActiveBot } from "./ActiveBot.js";
 import type { Bot } from "./Bot.js";
-import { Game, GameRoleType, type GameCore } from "./Game.js";
-import { Server } from "./Server.js";
+import { Game, GameUserType, type GameCore } from "./Game.js";
+import { AdminRoleType, Server } from "./Server.js";
 import { User } from "./User.js";
 
 let _userForSage: User | undefined;
@@ -42,14 +42,21 @@ async function getOrCreateUser(eventCache: SageEventCache, id: Optional<string>)
 //#region SageEventCacheUser
 
 type KnownUser = {
+	/** Discord Guild: Owner, Administrator, ManageGuild */
 	canManageServer: boolean;
 	discord: DUser;
 	id: Snowflake;
+	/** was given Sage's GameAdmin role */
 	isGameAdmin: boolean;
 	isGameMaster: boolean;
 	isGamePlayer: boolean;
+	/** isGameMaster || isGamePlayer */
+	isGameUser: boolean;
+	/** was given Sage's SageAdmin role */
 	isSageAdmin: boolean;
+	/** was given Sage's ServerAdmin role */
 	isServerAdmin: boolean;
+	/** Owner */
 	isOwner: boolean;
 	known: true;
 	member?: GuildMember;
@@ -64,6 +71,7 @@ type UnknownUser = {
 	isGameAdmin: false;
 	isGameMaster: false;
 	isGamePlayer: false;
+	isGameUser: false;
 	isSageAdmin: false;
 	isServerAdmin: false;
 	isOwner: false;
@@ -80,6 +88,7 @@ type UnvalidatedUser = {
 	isGameAdmin?: never;
 	isGameMaster?: never;
 	isGamePlayer?: never;
+	isGameUser?: never;
 	isSageAdmin?: never;
 	isServerAdmin?: never;
 	isOwner?: boolean;
@@ -113,7 +122,8 @@ type ValidateAuthorArgs = {
 
 type ValidateUserArgs = ValidateActorArgs | ValidateAuthorArgs;
 
-async function validateUser(evCache: SageEventCache, { which, actorOrPartial, authorOrPartial, messageOrPartial, reactionOrPartial }: ValidateUserArgs): Promise<SageEventCacheUser> {
+async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateUserArgs): Promise<SageEventCacheUser> {
+	const { which, actorOrPartial, authorOrPartial, messageOrPartial, reactionOrPartial } = validateUserArgs;
 
 	// try fetching the discord user object
 	let discord = await fetchIfPartial(actorOrPartial ?? authorOrPartial);
@@ -145,6 +155,7 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 	let isGameAdmin = false;
 	let isGameMaster = false;
 	let isGamePlayer = false;
+	let isGameUser = false;
 	let isSageAdmin = false;
 	let isServerAdmin = false;
 	let isOwner = false;
@@ -157,6 +168,7 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 			isGameAdmin,
 			isGameMaster,
 			isGamePlayer,
+			isGameUser,
 			isSageAdmin,
 			isServerAdmin,
 			isOwner,
@@ -168,6 +180,7 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 
 	// type cast id now
 	const id = discord.id as Snowflake;
+	const roleIds: Snowflake[] = [];
 
 	// we need a guildmember to check server perms
 	let member: GuildMember | undefined;
@@ -180,6 +193,9 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 					? errorReturnUndefined(`unable to fetch user (err = ${err.code} "${{10007:"Unknown Member",10013:"Unknown User"}[err.code]}"); guild.id = ${guild.id} (${guild.name}); guildMember.id = ${id} (${toHumanReadable(discord)})`)
 					: errorReturnUndefined(err);
 			});
+			if (member) {
+				roleIds.push(...member.roles.cache.keys() as MapIterator<Snowflake>);
+			}
 		}
 
 		// check the guild member for perms
@@ -187,19 +203,22 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 		canManageServer = isOwner || member?.permissions.has("Administrator") === true || member?.permissions.has("ManageGuild") === true;
 	}
 
+	// const hasRole = (roleId?: Snowflake) => roleId ? member?.roles.cache.has(roleId) ?? false : false;
+
 	const server = evCache.server.sage;
 	if (server) {
-		isGameAdmin = server.hasGameAdmin(id);
-		isSageAdmin = server.hasSageAdmin(id);
-		isServerAdmin = server.hasServerAdmin(id);
+		isGameAdmin = server.hasAdmin(id, roleIds, AdminRoleType.GameAdmin);
+		isServerAdmin = server.hasAdmin(id, roleIds, AdminRoleType.ServerAdmin);
+		isSageAdmin = server.hasAdmin(id, roleIds, AdminRoleType.SageAdmin);
 	}
 
 	// now let's check for game access
 	const { game } = evCache;
 	if (game) {
 		// NOTE: hasUser checks users and roles so is preferred
-		isGameMaster = await game.hasUser(id, GameRoleType.GameMaster) ?? false;
-		isGamePlayer = await game.hasUser(id, GameRoleType.Player) ?? false;
+		isGameMaster = game.hasUser(id, roleIds, GameUserType.GameMaster);
+		isGamePlayer = game.hasUser(id, roleIds, GameUserType.Player);
+		isGameUser = isGameMaster || isGamePlayer;
 	}
 
 	// keep getting uuid until we completely phase it out
@@ -212,6 +231,7 @@ async function validateUser(evCache: SageEventCache, { which, actorOrPartial, au
 		isGameAdmin,
 		isGameMaster,
 		isGamePlayer,
+		isGameUser,
 		isSageAdmin,
 		isServerAdmin,
 		isOwner,
@@ -400,7 +420,7 @@ async function createSageEventCache(options: SageEventCacheCreateOptions): Promi
 				core.game = await evCache.findActiveGame(channel);
 			}
 
-			// if we have a game, we are going to probably want to want isGameMaster and isGamePlayer
+			// if we have a game, we are going to probably want to know isGameMaster and isGamePlayer
 			if (core.game) {
 				await evCache.validateActor();
 			}

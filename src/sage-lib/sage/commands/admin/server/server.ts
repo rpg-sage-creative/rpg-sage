@@ -5,7 +5,7 @@ import type { Role } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
-import { AdminRoleType, type IAdminRole } from "../../../model/Server.js";
+import { AdminRoleType, GameCreatorType, type IAdminRole } from "../../../model/Server.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
@@ -54,6 +54,9 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 			// renderableContent.append(`<b>Region</b> ${guild.region}`);
 			renderableContent.append(`<b>MemberCount</b> ${guild.memberCount}`);
 			serverDetailsDefaultTypes(renderableContent, server);
+			const gameCreatorType = server.gameCreatorType;
+			const gameCreatorText = gameCreatorType === undefined ? `<i>unset (GameAdmin)</i>` : GameCreatorType[gameCreatorType];
+			renderableContent.append(`<b>Sage Game Creators</b> ${gameCreatorText}`);
 			renderableContent.append(`<b>Sage Roles</b> ${!roles.length ? "<i>none set</i>" : roles.map(role => `@${role.discordRole.name} (${AdminRoleType[role.role.type]})`).join(", ")}`);
 		} else {
 			renderableContent.append(`<b>Server Id</b> ${server.did || "<i>NOT SET</i>"}`);

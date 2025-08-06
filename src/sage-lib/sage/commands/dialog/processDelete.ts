@@ -1,11 +1,11 @@
-import { type Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder, User } from "discord.js";
 import { deleteMessage, isDeleted } from "../../../discord/deletedMessages.js";
 import { registerReactionListener } from "../../../discord/handlers.js";
 import { ReactionType, type TCommand } from "../../../discord/index.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
-import { type SageReaction } from "../../model/SageReaction.js";
+import type { SageReaction } from "../../model/SageReaction.js";
 import { includeDeleteButton } from "../../model/utils/deleteButton.js";
 import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
 
@@ -50,25 +50,19 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 
 	const { game } = sageReaction;
 	if (game) {
-		/** @todo allow admins */
-		// make sure the reactor is in the game
-		const user = await sageReaction.user.fetch();
-		const actorIsGameUser = await game.hasUser(user.id);
-		if (!actorIsGameUser) {
+		// make sure the reactor is a gm or an admin
+		if (!sageReaction.canAdminGame) {
 			return null;
 		}
 
 		// make sure the post was by Sage or a game player
 		const isAuthorSageOrWebhook = await sageReaction.isAuthorSageOrWebhook();
-		const authorIsGameUser = await game?.hasUser(message.author?.id);
-		if (!isAuthorSageOrWebhook && !authorIsGameUser) {
-			return null;
-		}
-
-		// ensure the reactor is a GM
-		const isGm = game.hasGameMaster(userId);
-		if (!isGm) {
-			return null;
+		if (!isAuthorSageOrWebhook) {
+			// not a sage/webhook post, check the author
+			const author = await sageReaction.eventCache.validateAuthor();
+			if (!author.isGameUser) {
+				return null;
+			}
 		}
 
 		return { command: "CommandDelete|Add" };

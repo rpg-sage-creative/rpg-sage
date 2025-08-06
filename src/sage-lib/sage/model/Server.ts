@@ -20,6 +20,7 @@ export type TAdminRoleType = keyof typeof AdminRoleType;
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
 export interface IAdminRole { did: Snowflake; type: AdminRoleType; }
 export interface IAdminUser { did: Snowflake; role: AdminRoleType; }
+export enum GameCreatorType { Admin = 0, Any = 1, None = 2 }
 
 export interface ServerCore extends IdCore<"Server">, IHasColors, IHasEmoji, Partial<ServerOptions> {
 	admins: IAdminUser[];
@@ -30,6 +31,8 @@ export interface ServerCore extends IdCore<"Server">, IHasColors, IHasEmoji, Par
 	name: string;
 	roles: IAdminRole[];
 	macros?: MacroBase[];
+	/** defaults to "Admin" */
+	gameCreatorType?: GameCreatorType;
 }
 
 // export abstract class HasDiceOptions<Core extends Partial<DiceOptions>> {
@@ -61,6 +64,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
+	public get gameCreatorType(): GameCreatorType | undefined { return this.core.gameCreatorType; }
 	public get gameId(): string | undefined { return this.core.gameId; }
 	public set gameId(gameId: string | undefined) { this.core.gameId = gameId; }
 	private _gameSystem?: GameSystem | null;
@@ -73,16 +77,16 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 	public get discord() { return this.sageCache.discord; }
 	public get name(): string { return this.core.name; }
 	public get roles(): IAdminRole[] { return this.core.roles ?? []; }
-	public get macros() { return this.core.macros ?? (this.core.macros = []); }
+	public get macros() { return this.core.macros ??= []; }
 	// #endregion
 
 	// #region has/is flags
-	public get hasAdmins(): boolean { return this.admins.length > 0; }
-	public get hasEmoji(): boolean { return this.emoji.size > 0; }
-	public get hasRoles(): boolean { return this.roles.length > 0; }
+	// public get hasAdmins(): boolean { return this.admins.length > 0; }
+	// public get hasEmoji(): boolean { return this.emoji.size > 0; }
+	// public get hasRoles(): boolean { return this.roles.length > 0; }
 
 	//TODO: sort out server active state/status
-	public get isActive(): boolean { return true; }
+	// public get isActive(): boolean { return true; }
 	public get isHome(): boolean { return Server.isHome(this.did); }
 	// #endregion
 
@@ -281,14 +285,6 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 		return this.roles.find(role => role.type === roleType);
 	}
 
-	public getUsersByRole(roleType: AdminRoleType): IAdminUser[] {
-		switch (roleType) {
-			case AdminRoleType.SageAdmin: return this.admins;
-			case AdminRoleType.ServerAdmin: return this.admins.filter(admin => admin.role === AdminRoleType.ServerAdmin);
-			case AdminRoleType.GameAdmin: return this.admins.filter(admin => admin.role === AdminRoleType.GameAdmin);
-			default: return [];
-		}
-	}
 	// #endregion
 
 	// #region has
@@ -299,19 +295,10 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 		return this.getChannel(didOrKey as DiscordKey) !== undefined;
 	}
 
-	/** Can admin anything Sage related. */
-	public hasSageAdmin(userDid: Snowflake): boolean {
-		return this.admins.find(admin => admin.did === userDid && admin.role === AdminRoleType.SageAdmin) !== undefined;
-	}
-
-	/** Can admin only server options. */
-	public hasServerAdmin(userDid: Snowflake): boolean {
-		return this.admins.find(admin => admin.did === userDid && admin.role === AdminRoleType.ServerAdmin) !== undefined;
-	}
-
-	/** Can admin only game options. */
-	public hasGameAdmin(userDid: Snowflake): boolean {
-		return this.admins.find(admin => admin.did === userDid && admin.role === AdminRoleType.GameAdmin) !== undefined;
+	/** Only used by SageEventCache. */
+	public hasAdmin(userId: Snowflake, userRoleIds: Snowflake[], type: AdminRoleType): boolean {
+		return this.admins.some(adminUser => adminUser.role === type && adminUser.did === userId)
+			|| this.roles.some(adminRole => adminRole.type === type && userRoleIds.includes(adminRole.did));
 	}
 
 	// #endregion
