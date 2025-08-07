@@ -1,4 +1,4 @@
-import { Color, debug, isBlank, type Args, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Color, debug, error, isBlank, warn, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { GameUserType } from "../../../model/Game.js";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";
@@ -103,6 +103,19 @@ function isValidCoreKey(key: string): boolean {
 	return validCoreKeys.includes(key.toLowerCase());
 }
 
+function hexOrUndefined(value: Optional<string>): HexColorString | undefined {
+	if (value) {
+		try {
+			const color = Color.from(value);
+			if (color) return color.hex;
+			warn("Unable to parse color:", value, color);
+		}catch(ex) {
+			error("Error parsing color:", value, ex);
+		}
+	}
+	return undefined;
+}
+
 export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpdate: boolean): Results {
 	const { args } = sageMessage;
 
@@ -176,7 +189,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						// core
 						case "alias": getCore().alias = valueOrNull!; break;
 						case "avatar": getCore().avatarUrl = valueOrNull!; break;
-						case "color": getCore().embedColor = valueOrNull ? Color.from(value).hex : valueOrNull as any; break;
+						case "color": getCore().embedColor = hexOrUndefined(valueOrNull) ?? null!; break;
 						case "token": getCore().tokenUrl = valueOrNull!; break;
 						// names
 						case "charname": getNames().charName = value; break;
@@ -187,7 +200,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						default: debug({key,value}); break;
 					}
 				}else {
-					(stats ?? (stats = [])).push({ arg:`${key}="${value}"`, index, isKeyValue:true, key, keyRegex:new RegExp(`^${key}$`, "i"), value:valueOrNull });
+					(stats ??= []).push({ arg:`${key}="${value}"`, index, isKeyValue:true, key, keyRegex:new RegExp(`^${key}$`, "i"), value:valueOrNull });
 				}
 			});
 
