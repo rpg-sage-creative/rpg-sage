@@ -17,10 +17,19 @@ import type { MacroBase } from "./Macro.js";
 import type { SageCache } from "./SageCache.js";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
-export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
+export enum AdminRoleType {
+	Unknown = 0,
+	GameAdmin = 1,
+	/** @deprecated */
+	ServerAdmin = 2,
+	/** @deprecated */
+	SageAdmin = 3,
+	GameCreator = 4
+}
 export interface IAdminRole { did: Snowflake; type: AdminRoleType; }
 export interface IAdminUser { did: Snowflake; role: AdminRoleType; }
-export enum GameCreatorType { Admin = 0, Any = 1, None = 2 }
+export enum GameCreatorType { Role = 0, Any = 1, None = 2 }
+export enum SuperAccessType { None = 0, SuperUser = 1, SuperAdmin = 2 }
 
 export interface ServerCore extends IdCore<"Server">, IHasColors, IHasEmoji, Partial<ServerOptions> {
 	admins: IAdminUser[];
@@ -33,6 +42,7 @@ export interface ServerCore extends IdCore<"Server">, IHasColors, IHasEmoji, Par
 	macros?: MacroBase[];
 	/** defaults to "Admin" */
 	gameCreatorType?: GameCreatorType;
+	superAccessType?: SuperAccessType;
 }
 
 // export abstract class HasDiceOptions<Core extends Partial<DiceOptions>> {
@@ -78,6 +88,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 	public get name(): string { return this.core.name; }
 	public get roles(): IAdminRole[] { return this.core.roles ?? []; }
 	public get macros() { return this.core.macros ??= []; }
+	public get superAccessType(): SuperAccessType | undefined { return this.core.superAccessType; }
 	// #endregion
 
 	// #region has/is flags
