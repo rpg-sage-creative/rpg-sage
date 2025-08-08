@@ -15,15 +15,15 @@ export function toMarkdown(html: string): string {
 
 		.formatBold()
 		.formatCode()
+		.formatFooter()
 		.formatHeaders()
 		.formatHorizontalTab()
 		.formatItalics()
 		.formatLinks()
-		.formatOrderedList()
+		.formatLists()
 		.formatParagraph()
 		.formatStrikethrough()
 		.formatUnderline()
-		.formatUnorderedList()
 
 		.formatBlockQuote()
 

@@ -2,7 +2,7 @@ import { regex } from "regex";
 import type { Pattern } from "regex/dist/cjs/pattern.js";
 import { parseKeyValueArgs } from "../../args/parseKeyValueArgs.js";
 
-type HtmlToMarkdownHandler = (innerHtml: string, attributes: Map<string, string>, nodeName: string, outerHtml: string) => string;
+type HtmlToMarkdownHandler = (innerHtml: string, attributes: Map<string, string>, nodeName: Lowercase<string>, outerHtml: string) => string;
 
 /** @internal Handles nested html tags */
 export function htmlToMarkdown(text: string, element: string | Pattern, openMarkdown: string): string;
@@ -28,17 +28,17 @@ export function htmlToMarkdown(text: string, element: string | Pattern, handlerO
 	}
 
 	// create the html element regex
-	const regexp = regex("gi")`<(?<nodeName>${element})(?<attributes>\s[^>]+)?>(?<inner>(.|\n)*?)</(?:${element})>`;
+	const regexp = regex("gi")`<(?<nodeName>${element})(?<attributes>\s[^>]+)?>(?<inner>(.|\n)*?)</\k<nodeName>>`;
 
 	// search/replace all
-	return text.replace(regexp, (outer, nodeName, attributes, inner) => {
+	return text.replace(regexp, (outer: string, nodeName: string, attributes: string, inner: string) => {
 		// create attribute map
 		const attributeMap = parseKeyValueArgs(attributes).reduce((map, arg) => {
-			map.set(arg.key, arg.value);
+			map.set(arg.key, arg.value ?? "");
 			return map;
 		}, new Map<string, string>());
 
 		// handle output
-		return handler(inner, attributeMap, nodeName, outer);
+		return handler(inner, attributeMap, nodeName.toLowerCase(), outer);
 	});
 }

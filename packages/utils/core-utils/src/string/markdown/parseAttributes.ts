@@ -1,24 +1,20 @@
+import type { Optional } from "../../types/generics.js";
+
+const attrRegex = /(?<key>\w+)="(?<value>[^"]+)"/gi;
+
 /** @internal Parses the given string for html attribute key/value pairs. */
-export function parseAttributes(attributesString: string): Map<string, string> {
+export function parseAttributes(attributesString: Optional<string>): Map<string, string> {
 	const attributes = new Map();
 
 	if (!attributesString) {
 		return attributes;
 	}
 
-	const attsRegex = /\w+="[^"]+"/gi;
-	const matches = attsRegex.exec(attributesString);
-	if (!matches) {
-		return attributes;
+	const matches = attributesString.matchAll(attrRegex);
+	for (const match of matches) {
+		const { key, value } = match.groups as Record<string, string>;
+		attributes.set(key, value);
 	}
-
-	matches.forEach(pair => {
-		const pairRegex = /(\w+)="([^"]+)"/i;
-		const match = pairRegex.exec(pair);
-		if (match) {
-			attributes.set(match[1], match[2]);
-		}
-	});
 
 	return attributes;
 }

@@ -2,6 +2,46 @@ import { pattern } from "regex";
 import { HORIZONTAL_TAB } from "../consts.js";
 import { htmlToMarkdown } from "./htmlToMarkdown.js";
 
+function handleListItem(level: number, dashOrNumber: "-" | number, content: string) {
+	const indent = "".padEnd(level * 2, " ");
+	const dot = dashOrNumber === "-" ? "" : ".";
+	return `\n${indent}${dashOrNumber}${dot} ${content}`;
+}
+
+function handleOrdered(content: string, level: number): string {
+	return htmlToMarkdown(content, "ol", (olInnerHtml, atts) => {
+		// setup list item indexer
+		let indexer = 0;
+
+		// get number start value
+		const start = isNaN(+atts.get("start")!) ? 1 : +atts.get("start")!;
+
+		// process children
+		const childPattern = pattern`ul|li`; // pattern`ol|ul|li`;
+		return htmlToMarkdown(olInnerHtml, childPattern, (childInnerHtml, _, childNodeName, childOuterHtml) => {
+			switch (childNodeName) {
+				case "ol": return handleOrdered(childOuterHtml, level + 1);
+				case "ul": return handleUnordered(childOuterHtml, level + 1);
+				default: return handleListItem(level, start + indexer++, childInnerHtml);
+			}
+		});
+	});
+}
+
+function handleUnordered(content: string, level: number): string {
+	return htmlToMarkdown(content, "ul", ulInnerHtml => {
+		// process children
+		const childPattern = pattern`ol|li`; // pattern`ol|ul|li`;
+		return htmlToMarkdown(ulInnerHtml, childPattern, (childInnerHtml, _, childNodeName, childOuterHtml) => {
+			switch (childNodeName) {
+				case "ol": return handleOrdered(childOuterHtml, level + 1);
+				case "ul": return handleUnordered(childOuterHtml, level + 1);
+				default: return handleListItem(level, "-", childInnerHtml);
+			}
+		});
+	});
+}
+
 /** @internal */
 export class HtmlToMarkdownFormatter {
 	public constructor(public text: string) { }
@@ -54,19 +94,21 @@ export class HtmlToMarkdownFormatter {
 		return this;
 	}
 
+	public formatLists(): this {
+		this.text = htmlToMarkdown(this.text, pattern`ol|ul`, (_innerHtml, _atts, nodeName, outerHtml) => {
+			console.log({_innerHtml,_atts,nodeName,outerHtml});
+			if (nodeName === "ol") {
+				return handleOrdered(outerHtml, 0);
+			}
+			return handleUnordered(outerHtml, 0);
+		});
+		return this;
+	}
+
 	public formatNewLine(): this {
 		if (this.text) {
 			this.text = this.text.replace(/<br\/?>/gi, "\n");
 		}
-		return this;
-	}
-
-	public formatOrderedList(): this {
-		this.text = htmlToMarkdown(this.text, "ol", (list, attributes) => {
-			const start = isNaN(+attributes.get("start")!) ? 1 : +attributes.get("start")!;
-			let index = 0;
-			return htmlToMarkdown(list, "li", value => `\n **${start + index++}.** ${value}`);
-		});
 		return this;
 	}
 
@@ -75,8 +117,13 @@ export class HtmlToMarkdownFormatter {
 		return this;
 	}
 
+	public formatFooter(): this {
+		this.text = htmlToMarkdown(this.text, "footer", innerHtml => `-# ` + innerHtml);
+		return this;
+	}
+
 	public formatStrikethrough(): this {
-		this.text = htmlToMarkdown(this.text, pattern`s|strike`, "~~");
+		this.text = htmlToMarkdown(this.text, pattern`del|s|strike`, "~~");
 		return this;
 	}
 
@@ -104,14 +151,6 @@ export class HtmlToMarkdownFormatter {
 
 	public formatUnderline(): this {
 		this.text = htmlToMarkdown(this.text, "u", "__");
-		return this;
-	}
-
-	public formatUnorderedList(): this {
-		this.text = htmlToMarkdown(this.text, "ul", parentList => {
-			const childHandled = htmlToMarkdown(parentList, "ul", nestedList => htmlToMarkdown(nestedList, "li", value => `\n - ${value}`));
-			return htmlToMarkdown(childHandled, "li", value => `\n- ${value}`);
-		});
 		return this;
 	}
 
