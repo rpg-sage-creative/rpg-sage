@@ -1,3 +1,4 @@
+import type { StringSet } from "@rsc-utils/core-utils";
 import { deleteMessages } from "../../../../discord/deletedMessages.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
@@ -6,8 +7,8 @@ import { createAdminRenderableContent } from "../../cmd.js";
 import { sendGameCharacter } from "./sendGameCharacter.js";
 import { sendGameCharacterMods } from "./sendGameCharacterMods.js";
 
-export async function promptModsConfirm(sageMessage: SageMessage, character: GameCharacter, statModKeys: string[], action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
-	await sendGameCharacterMods(sageMessage, character, statModKeys);
+export async function promptModsConfirm(sageMessage: SageMessage, character: GameCharacter, updatedKeys: StringSet, action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
+	await sendGameCharacterMods(sageMessage, character, updatedKeys);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
 	promptRenderable.append(`Update ${character.name}?`);
 	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);

@@ -1,5 +1,5 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { numberOrUndefined } from "../../gameSystems/utils/numberOrUndefined.js";
+import { numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import type { StatResults } from "../../sage-lib/sage/model/GameCharacter.js";
 import { PlayerCharacterE20, type PlayerCharacterCoreE20, type TWeaponE20 } from "../common/PlayerCharacterE20.js";
 
 export type TAltMode = {
@@ -56,38 +56,55 @@ export interface PlayerCharacterCoreTransformer extends PlayerCharacterCoreE20 {
 }
 
 export class PlayerCharacterTransformer extends PlayerCharacterE20<PlayerCharacterCoreTransformer> {
-	public getStat(stat: string): number | string | null {
+	public getStat(key: string, keyLower = key.toLowerCase() as Lowercase<string>): StatResults<string | number, undefined> {
 		const { altModes } = this;
-		if (!altModes.length || !stat.toLowerCase().startsWith("altMode.")) {
-			return super.getStat(stat);
+		if (!altModes.length || !keyLower.startsWith("altmode.")) {
+			return super.getStat(key, keyLower);
 		}
 
-		const parts = stat.split(".");
-		const nameOrIndex = numberOrUndefined(parts[1]) ?? parts[1]?.toLowerCase();
-		let alt = altModes.find((altMode, index) => index === nameOrIndex || altMode.name?.toLowerCase() === nameOrIndex);
+		let altKeyLower: Lowercase<string>;
+		const parts = keyLower.split(".");
+		const nameOrIndex = numberOrUndefined(parts[1]) ?? stringOrUndefined(parts[1]?.replace(/\W+/g, ""))?.toLowerCase();
+
+		/** @todo properly prepare alt names for comparison to key */
+		const compareName = (name: Optional<string>) => name && nameOrIndex ? nameOrIndex === name : false;
+
+		let alt = altModes.find((altMode, index) => index === nameOrIndex || compareName(altMode.name));
 		if (alt) {
 			// if we found an alt by name or id, the stat key is now the parts after `alt.BLAH.`
-			stat = parts.slice(2).join(".");
+			altKeyLower = parts.slice(2).join(".") as Lowercase<string>;
 		}else {
 			// let's default to the first alt
 			alt = altModes[0];
 			// the stat key is now the parts after `alt.`
-			stat = parts.slice(1).join(".");
+			altKeyLower = parts.slice(1).join(".") as Lowercase<string>;
 		}
 
-		// no alt, kick out a null
-		if (!alt) return null;
+		// return value creator
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => ({ key:casedKey, keyLower, value:value??undefined });
 
-		const regexp = new RegExp(`^${stat}$`, "i");
+		// no alt, kick out undefined
+		if (!alt) return ret();
+
+		const altNameOrIndex = nameOrIndex !== undefined ? typeof(nameOrIndex) === "number" ? nameOrIndex : alt.name?.replace(/\W+/g, "").toLowerCase() : undefined;
+		const casedKeyBase = altNameOrIndex === undefined ? `altMode` : `altMode.${altNameOrIndex}`;
+
+		/** @todo i may need to use keyLower.replace(/\W+, "") */
+		const testKey = (casedKeySuffix: string, value: Optional<string | number>) => {
+			return altKeyLower === casedKeySuffix.toLowerCase()
+				? ret(`${casedKeyBase}.${casedKeySuffix}`, value)
+				: undefined;
+		}
+
+		let results: StatResults<string | number, undefined> | undefined;
 
 		const coreKeys: Exclude<keyof TAltMode, "movement" | "attacks">[] = ["health", "toughness", "evasion", "willpower", "cleverness"];
-		for (const key of coreKeys) {
-			if (regexp.test(key)) {
-				return alt[key] ?? null;
-			}
+		for (const coreKey of coreKeys) {
+			results = testKey(coreKey, alt[coreKey]);
+			if (results) return results;
 		}
 
-		return null;
+		return ret();
 	}
 
 	public get altModes(): TAltMode[] { return this.core.altModes ?? []; }

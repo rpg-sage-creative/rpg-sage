@@ -1,4 +1,4 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import { StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { isBlank } from "@rsc-utils/string-utils";
 import type { TKeyValuePair } from "./SageMessageArgs";
 
@@ -34,22 +34,29 @@ export class NoteManager {
 		return this.getCategorizedNote(CategoryStats, stat);
 	}
 	public setStat(stat: string, value: string): boolean {
-		return this._setCategorizedNote(CategoryStats, stat, value);
+		return this._setCategorizedNote(CategoryStats, stat, value) !== undefined;
 	}
-	public updateStats(pairs: TKeyValuePair[]): boolean {
-		let changed = false;
-		pairs.forEach(pair => changed = this._setCategorizedNote(CategoryStats, pair.key, pair.value) || changed);
-		return changed;
+	/** returns keys (lowercased) updated */
+	public updateStats(pairs: TKeyValuePair[]): StringSet {
+		const keysUpdated = new StringSet();
+		pairs.forEach(pair => {
+			const updatedNote = this._setCategorizedNote(CategoryStats, pair.key, pair.value);
+			if (updatedNote) {
+				keysUpdated.add(updatedNote.title);
+			}
+		});
+		return keysUpdated;
 	}
 
-	private _setCategorizedNote(category: string, title: string, value: Optional<string>): boolean {
+	/** returns true if the value was updated */
+	private _setCategorizedNote(category: string, title: string, value: Optional<string>): TNote | undefined {
 		if (isBlank(value)) {
 			const note = this.getCategorizedNote(category, title);
 			if (note) {
 				this.notes.splice(this.notes.indexOf(note), 1);
-				return true;
+				return note;
 			}
-			return false;
+			return undefined;
 		}
 
 		const note = this.getCategorizedNote(category, title);
@@ -63,7 +70,7 @@ export class NoteManager {
 		} else {
 			note.note = value.trim();
 		}
-		return true;
+		return note;
 	}
 
 	private getCategorizedNotes(category: string): TNote[] {
@@ -75,7 +82,7 @@ export class NoteManager {
 		return this.getCategorizedNotes(category).find(n => n.title?.toLowerCase() === titleLower);
 	}
 	public setCategorizedNote(category: string, title: string, value: string): boolean {
-		return this._setCategorizedNote(category, title, value);
+		return this._setCategorizedNote(category, title, value) !== undefined;
 	}
 
 	public get size(): number {

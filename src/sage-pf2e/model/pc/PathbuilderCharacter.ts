@@ -10,6 +10,7 @@ import { Proficiency } from "../../../gameSystems/p20/lib/Proficiency.js";
 import { Skill } from "../../../gameSystems/p20/lib/Skill.js";
 import { ProficiencyType, SizeType } from "../../../gameSystems/p20/lib/types.js";
 import { toModifier } from "../../../gameSystems/utils/toModifier.js";
+import type { StatResults } from "../../../sage-lib/sage/model/GameCharacter.js";
 import type { DiceMacroBase } from "../../../sage-lib/sage/model/Macro.js";
 import type { GetStatPrefix } from "../../common.js";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository.js";
@@ -637,25 +638,65 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		return { casting, ...proficiencies };
 	}
 
-	public getStat(stat: string): number | string | null {
-		const lower = stat.toLowerCase();
-		const [prefix, statLower] = lower.includes(".") ? lower.split(".") as [GetStatPrefix, string] : [undefined, lower] as [GetStatPrefix | undefined, string];
+	public getStat(key: string, keyLower = key.toLowerCase() as Lowercase<string>): StatResults<string | number, undefined> {
+		// return value creator
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => ({ key:casedKey, keyLower, value:value??undefined });
 
-		// special case for showing full ability score
-		if (!prefix && Ability.isValid(statLower) && stat.length > 3) {
-			return this.abilities[statLower.slice(0, 3) as "str"];
+		let prefix: GetStatPrefix = "";
+		let statLower = keyLower;
+		if (keyLower.includes(".")) {
+			const parts = keyLower.split(".");
+			if (["dc", "ext", "label", "labeled", "mod", "p", "prof", "proficiency"].includes(parts[0])) {
+				prefix = parts.shift() as GetStatPrefix;
+				statLower = parts.join(".") as Lowercase<string>;
+			}
 		}
 
-		switch(statLower) {
-			case "pp": case "gp": case "sp": case "cp": case "upb": case "credits": return this.core.money[statLower] ?? null;
-			case "activeexploration": return this.getSheetValue("activeExploration") ?? null;
-			case "initskill": return this.getInitSkill();
-			case "level": return this.level;
-			case "maxhp": return this.maxHp;
-			case "ac": return prefix === "prof" ? this.core.acTotal?.acProfBonus ?? null : this.core.acTotal?.acTotal ?? null;
-			case "classdc": return this.createCheck(statLower)?.toStatString(prefix ?? "dc") ?? null;
-			default: return this.createCheck(statLower)?.toStatString(prefix) ?? null;
+		// we don't want a prefix for many of the stats
+		if (!prefix) {
+			// special case for showing full ability score
+			if (Ability.isValid(statLower) && statLower.length > 3) {
+				const ability = Ability.findByName(statLower);
+				return ret(ability.abbr, this.abilities[ability.abbrKey]);
+			}
+
+			switch(statLower) {
+				case "pp": case "gp": case "sp": case "cp": case "upb": case "credits":
+					return ret(statLower, this.core.money[statLower as keyof TPathbuilderCharacterMoney]);
+				case "activeexploration":
+					return ret("activeExploration", this.getSheetValue("activeExploration"));
+				case "initskill":
+					return ret("initSkill", this.getInitSkill());
+				case "level":
+					return ret("level", this.level);
+				case "maxhp":
+					return ret("maxHp", this.maxHp);
+				case "ac":
+					return ret("ac", this.core.acTotal?.acTotal);
+				case "classdc":
+					return ret("classDC", this.createCheck(statLower)?.toStatString("dc"));
+				default:
+					const check = this.createCheck(statLower);
+					return ret(check?.subject ?? key, check?.toStatString());
+			}
 		}
+
+		// now let's check stats that allow prefixes
+
+		if (statLower === "ac" && prefix === "prof") {
+			return ret(keyLower, this.core.acTotal?.acProfBonus);
+		}
+
+		if (statLower === "classdc") {
+			return ret("classDC", this.createCheck(statLower)?.toStatString(prefix));
+		}
+
+		const check = this.createCheck(statLower);
+		if (check) {
+			return ret(`${prefix}.${check.subject}`, check.toStatString(prefix));
+		}
+
+		return ret();
 	}
 
 	public getInitSkill(): string {

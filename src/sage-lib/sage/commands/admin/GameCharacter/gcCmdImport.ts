@@ -107,7 +107,7 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 			if (!core.userDid) core.userDid = userId;
 			const updated = await existing.update(core, false);
 			const changed = await existing.processStatsAndMods(stats, mods);
-			changes ||= updated || changed;
+			changes ||= updated || !!changed.size;
 			const key = updated || changed ? "CHARACTER_S_UPDATED" : "CHARACTER_S_NOT_UPDATED";
 			output.push(localize(key, existing.name));
 
