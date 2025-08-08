@@ -250,13 +250,6 @@ export abstract class SageCommand<
 		return perms[key];
 	}
 
-	/** Quick flag for Game admins (canAdminServer || isGameAdmin) */
-	public get canAdminGames(): boolean {
-		const { cache } = this;
-		return cache.get<ValidatedPermissions>("validatedPermissions")?.canManageGames
-			?? cache.getOrSet("canAdminGames", () => !!this.actor.canManageGames);
-	}
-
 	/** Some servers want anybody to be able to create a Game without needing to setup permissions. */
 	public get canCreateGames(): boolean {
 		return this.cache.getOrSet("canCreateGames", () => {
@@ -277,7 +270,7 @@ export abstract class SageCommand<
 			if (gameCreatorType === GameCreatorType.Any) return true;
 
 			// if you can admin games, you can create games
-			if (this.canAdminGames) return true;
+			if (this.actor.canManageGames) return true;
 
 			return false;
 		});
@@ -291,7 +284,7 @@ export abstract class SageCommand<
 
 	/** Ensures we have a game and can admin games or are the GM. */
 	public testGameAdmin(game: Optional<Game>): game is Game {
-		return !!game && (this.canAdminGames || game.hasGameMaster(this.actorId));
+		return !!game && (this.actor.canManageGames || game.hasGameMaster(this.actorId));
 	}
 
 	/** Ensures we are either in an admin channel or are the server owner or SuperUser. @deprecated find a better way involving validatePermissions() */

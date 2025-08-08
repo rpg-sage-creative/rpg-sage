@@ -41,13 +41,12 @@ async function getCharacters(sageCommand: SageCommand): Promise<MacroOwner[]> {
 async function getGames(sageCommand: SageCommand): Promise<MacroOwner[]> {
 	/** @todo sort out this id cast */
 	const gameToOwner = ({ id, name }: { id:unknown; name:string; }) => new MacroOwner(id as Snowflake, name, "game");
-	if (sageCommand.canAdminGames) {
+	if (await sageCommand.validatePermission("canManageGames")) {
 		const serverId = sageCommand.server?.did!;
-		const userId = sageCommand.canAdminGames ? undefined : sageCommand.actorId;
-		const games = await sageCommand.sageCache.fetchGames({ serverId, userId });
+		const games = await sageCommand.sageCache.fetchGames({ serverId });
 		return games.map(gameToOwner);
-	}else if (sageCommand.game && (sageCommand.isGameMaster || sageCommand.isPlayer)) {
-		return [gameToOwner(sageCommand.game)];
+	}else if (sageCommand.actor.isGameUser) {
+		return [gameToOwner(sageCommand.game!)];
 	}
 	return [];
 }

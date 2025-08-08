@@ -27,10 +27,13 @@ async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 			return null;
 		}
 	}
-	if (!sageCommand.canAdminGames && !sageCommand.actor.isGameMaster) {
+
+	const { canManageGames } = await sageCommand.validatePermissions();
+	if (!canManageGames && !sageCommand.actor.isGameMaster) {
 		await sageCommand.replyStack.whisper("*Server Admin, Game Admin, or Game Master privilege required!*");
 		return null;
 	}
+	
 	return game ?? null;
 }
 
