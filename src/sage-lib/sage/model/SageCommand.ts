@@ -19,7 +19,7 @@ import type { SageEventCache } from "./SageEventCache.js";
 import type { SageInteraction } from "./SageInteraction.js";
 import type { SageMessage } from "./SageMessage.js";
 import type { SageReaction } from "./SageReaction.js";
-import { GameCreatorType, type Server } from "./Server.js";
+import type { Server } from "./Server.js";
 import type { User } from "./User.js";
 
 type ValidatedPermissions = {
@@ -239,33 +239,7 @@ export abstract class SageCommand<
 		return perms[key];
 	}
 
-	/** Some servers want anybody to be able to create a Game without needing to setup permissions. */
-	public get canCreateGames(): boolean {
-		return this.cache.getOrSet("canCreateGames", () => {
-			const { server } = this;
-
-			// no server, no games
-			if (!server) return false;
-
-			// owner/admin/manage always
-			if (this.actor.canManageServer) return true;
-
-			const { gameCreatorType } = server;
-
-			// if no then no; this explicit NO overrides canAdminGames
-			if (gameCreatorType === GameCreatorType.None) return false;
-
-			// if any then any; this explicit YES overrides canAdminGames
-			if (gameCreatorType === GameCreatorType.Any) return true;
-
-			// if you can admin games, you can create games
-			if (this.actor.canManageGames) return true;
-
-			return false;
-		});
-	}
-
-		/** Ensures we are either in the channel being targeted or we are in an admin channel. */
+	/** Ensures we are either in the channel being targeted or we are in an admin channel. */
 	public testChannelAdmin(channelDid: Optional<Snowflake>): boolean {
 		/** @todo: figure out if i even need this or if there is a better way */
 		return channelDid === this.channelDid || ![SageChannelType.None, SageChannelType.Dice].includes(this.channel?.type!);
