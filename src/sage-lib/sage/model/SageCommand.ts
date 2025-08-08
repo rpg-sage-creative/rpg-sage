@@ -209,17 +209,6 @@ export abstract class SageCommand<
 		return this.eventCache.actor.sage.did;
 	}
 
-	/** @deprecated use await validatePermission("canManageServer") */
-	public get canManageServer(): boolean {
-		const { cache } = this;
-
-		// check that it is cached
-		if (cache.get<ValidatedPermissions>("validatedPermissions")?.canManageServer) return true;
-
-		const { actor, server } = this.eventCache;
-		return !!(server.known && actor.canManageServer);
-	}
-
 	// #endregion
 
 	// #region Permission Flags
@@ -259,7 +248,7 @@ export abstract class SageCommand<
 			if (!server) return false;
 
 			// owner/admin/manage always
-			if (this.canManageServer) return true;
+			if (this.actor.canManageServer) return true;
 
 			const { gameCreatorType } = server;
 
@@ -289,7 +278,7 @@ export abstract class SageCommand<
 
 	/** Ensures we are either in an admin channel or are the server owner or SuperUser. @deprecated find a better way involving validatePermissions() */
 	public testServerAdmin(): boolean {
-		return this.canManageServer || this.actor.sage.isSuperUser || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
+		return this.actor.canManageServer || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
 	}
 
 	// #endregion
