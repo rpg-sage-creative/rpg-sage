@@ -17,11 +17,13 @@ async function renderUser(renderableContent: RenderableContent, user: TAdminUser
 }
 
 async function adminList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminSage || !sageMessage.server) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
-	let users: TAdminUser[] = await mapAsync(sageMessage.server.admins, async admin => {
+	const server = sageMessage.server!;
+
+	let users: TAdminUser[] = await mapAsync(server.admins, async admin => {
 		return {
 			discordUser: await sageMessage.discord.fetchUser(admin.did),
 			...admin
@@ -35,7 +37,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 			users = users.filter(user => user?.discordUser?.username?.toLowerCase().includes(lower));
 		}
 
-		const renderableContent = createAdminRenderableContent(sageMessage.server);
+		const renderableContent = createAdminRenderableContent(server);
 		renderableContent.setTitle(`<b>admin-list</b>`);
 		if (users.length) {
 			await forEachAsync(users, async user => renderUser(renderableContent, user));

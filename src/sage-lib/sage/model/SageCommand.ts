@@ -250,13 +250,6 @@ export abstract class SageCommand<
 		return perms[key];
 	}
 
-	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
-	public get canAdminSage(): boolean {
-		const { cache } = this;
-		return cache.get<ValidatedPermissions>("validatedPermissions")?.canManageServer
-			?? cache.getOrSet("canAdminSage", () => !!this.actor.canManageServer);
-	}
-
 	/** Quick flag for Game admins (canAdminServer || isGameAdmin) */
 	public get canAdminGames(): boolean {
 		const { cache } = this;

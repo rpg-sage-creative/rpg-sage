@@ -4,7 +4,7 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
 async function prefixSet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminSage) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.reactBlock();
 	}
 
@@ -23,7 +23,7 @@ async function prefixSet(sageMessage: SageMessage): Promise<void> {
 }
 
 async function prefixGet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminSage) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.reactBlock();
 	}
 
@@ -42,7 +42,7 @@ async function prefixGet(sageMessage: SageMessage): Promise<void> {
 }
 
 async function prefixSync(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminSage) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.reactBlock();
 	}
 
@@ -60,7 +60,7 @@ async function prefixSync(sageMessage: SageMessage): Promise<void> {
 }
 
 async function prefixUnset(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminSage) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.reactBlock();
 	}
 
