@@ -22,3 +22,9 @@ export type OrNull<T> = T | null;
 
 /** Represents an object that can be undefined. */
 export type OrUndefined<T> = T | undefined;
+
+declare global {
+	interface String {
+		toLowerCase<Case extends string = Lowercase<string>>(): Case;
+	}
+}

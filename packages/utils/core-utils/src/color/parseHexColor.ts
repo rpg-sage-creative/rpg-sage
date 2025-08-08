@@ -16,7 +16,7 @@ export function parseHexColor(value: Optional<string>, includeAlpha?: boolean): 
 	if (!match) return undefined; // NOSONAR
 
 
-	let hex = match.digits.toLowerCase();
+	let hex = match.digits.toLowerCase<string>();
 	if (hex.length < 5) {
 		hex = [...hex].map(d => d + d).join("");
 	}
