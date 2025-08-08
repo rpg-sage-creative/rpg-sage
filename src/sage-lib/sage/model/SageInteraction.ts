@@ -108,7 +108,7 @@ export class SageInteraction<T extends DInteraction = any>
 		const subCommand = args[0] as SlashCommandGameType;
 		const subCommandLower = subCommand?.toLowerCase();
 
-		const commandValues = this.commandValues.map(s => s.toLowerCase());
+		const commandValues = this.commandValues.map(s => s.toLowerCase<string>());
 		if (["sage", "sage-stable", "sage-beta", "sage-dev"].includes(commandValues[0])) {
 			commandValues.shift();
 		}
