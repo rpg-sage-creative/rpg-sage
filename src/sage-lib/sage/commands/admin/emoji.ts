@@ -144,12 +144,13 @@ async function emojiListBot(sageMessage: SageMessage): Promise<void> {
 }
 
 async function emojiListServer(sageMessage: SageMessage): Promise<void> {
-	await _emojiList(sageMessage, BotServerGameType.Server, sageMessage.canAdminServer && sageMessage.testServerAdmin());
+	const canManageServer = await sageMessage.validatePermission("canManageServer");
+	await _emojiList(sageMessage, BotServerGameType.Server, canManageServer && sageMessage.testServerAdmin());
 }
 
 async function emojiListGame(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.game) {
-		await _emojiList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame);
+		await _emojiList(sageMessage, BotServerGameType.Game, await sageMessage.validatePermission("canManageGame"));
 	}else {
 		await sageMessage.replyStack.whisper("Game not found.");
 	}
@@ -192,16 +193,20 @@ async function emojiGetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
 	}
 
-	await _emojiList(sageMessage, BotServerGameType.Server, sageMessage.canAdminServer && sageMessage.testServerAdmin(), ...types);
+	const canManageServer = await sageMessage.validatePermission("canManageServer");
+	await _emojiList(sageMessage, BotServerGameType.Server, canManageServer && sageMessage.testServerAdmin(), ...types);
 }
 
 async function emojiGetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
 		return sageMessage.replyStack.whisper("Game not found.");
 	}
-	if (!sageMessage.canAdminGame && !sageMessage.isPlayer) {
+
+	const canManageGame = await sageMessage.validatePermission("canManageGame");
+	if (!canManageGame && !sageMessage.actor.isGamePlayer) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to access this Game.`);
 	}
+
 	if ([0, 5].includes(sageMessage.channel?.type!)) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to view Game emoji in this channel.`);
 	}
@@ -211,7 +216,7 @@ async function emojiGetGame(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid EmojiType: ${sageMessage.args.getString("type")}.`, page:`Emoji Management` });
 	}
 
-	await _emojiList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame, ...types);
+	await _emojiList(sageMessage, BotServerGameType.Game, canManageGame, ...types);
 }
 
 async function emojiGet(sageMessage: SageMessage): Promise<void> {
@@ -229,7 +234,7 @@ async function emojiGet(sageMessage: SageMessage): Promise<void> {
 //#region set
 
 async function emojiSetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji.`);
 	}
 	if (!sageMessage.testServerAdmin() || !sageMessage.server) {
@@ -263,7 +268,7 @@ async function emojiSetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
 		return sageMessage.replyStack.whisper("Game not found.");
 	}
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game emoji.`);
 	}
 
@@ -299,7 +304,7 @@ async function emojiSet(sageMessage: SageMessage): Promise<void> {
 //#region sync
 
 async function emojiSyncServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
@@ -326,7 +331,7 @@ async function emojiSyncGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
 		return sageMessage.replyStack.whisper("Game not found.");
 	}
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game emoji.`);
 	}
 
@@ -353,7 +358,7 @@ async function emojiSync(sageMessage: SageMessage): Promise<void> {
 //#region unset
 
 async function emojiUnsetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server emoji.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
@@ -385,7 +390,7 @@ async function emojiUnsetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
 		return sageMessage.replyStack.whisper("Game not found.");
 	}
-	if (!sageMessage.canAdminGame) {
+	if (!sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game emoji.`);
 	}
 

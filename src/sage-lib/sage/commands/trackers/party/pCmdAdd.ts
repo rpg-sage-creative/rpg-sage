@@ -8,7 +8,7 @@ export async function pCmdAdd(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Party Add", "Party commands not allowed outside a Game.");
 	}
 
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.denyForCanAdminGame("Party Add");
 	}
 

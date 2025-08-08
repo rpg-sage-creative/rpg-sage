@@ -6,7 +6,8 @@ export async function pCmdLoot(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Party Loot", "Party commands not allowed outside a Game.");
 	}
 
-	if (!sageMessage.canAdminGame && !sageMessage.playerCharacter) {
+	const canManageGame = await sageMessage.validatePermission("canManageGame");
+	if (!canManageGame && !sageMessage.playerCharacter) {
 		return sageMessage.denyForGame("Party Loot");
 	}
 

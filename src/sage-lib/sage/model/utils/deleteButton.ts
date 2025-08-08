@@ -111,7 +111,7 @@ export function includeDeleteButton<T extends BaseMessageOptions | InteractionRe
 }
 
 /** Checks the interaction for the customId used for deleting messages. */
-function messageDeleteButtonTester(sageInteraction: SageInteraction<ButtonInteraction>): boolean {
+async function messageDeleteButtonTester(sageInteraction: SageInteraction<ButtonInteraction>): Promise<boolean> {
 	if (sageInteraction.interaction.isButton()) {
 		const customId = sageInteraction.interaction.customId;
 		const buttonUserId = getUserId(customId);
@@ -123,9 +123,10 @@ function messageDeleteButtonTester(sageInteraction: SageInteraction<ButtonIntera
 			}
 
 			// let's let admin/gm types clean up channels
-			return sageInteraction.game
-				? sageInteraction.canAdminGame
-				: sageInteraction.canAdminServer;
+			if (sageInteraction.game) {
+				return sageInteraction.validatePermission("canManageGame");
+			}
+			return sageInteraction.validatePermission("canManageServer");
 		}
 	}
 	return false;

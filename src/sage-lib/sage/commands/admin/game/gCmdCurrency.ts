@@ -13,7 +13,7 @@ async function gCmdAddCurrency(sageCommand: SageCommand): Promise<void> {
 		return sageCommand.replyStack.whisper("There is no Game!");
 	}
 
-	if (!sageCommand.canAdminGame) {
+	if (!await sageCommand.validatePermission("canManageGame")) {
 		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to manage this Game.");
 	}
 
@@ -60,7 +60,7 @@ async function gCmdRemoveCurrency(sageCommand: SageCommand): Promise<void> {
 		return sageCommand.replyStack.whisper("There is no Game!");
 	}
 
-	if (!sageCommand.canAdminGame) {
+	if (!await sageCommand.validatePermission("canManageGame")) {
 		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to manage this Game.");
 	}
 
@@ -103,7 +103,7 @@ async function gCmdToggleCurrency(sageCommand: SageCommand): Promise<void> {
 		return sageCommand.replyStack.whisper("There is no Game!");
 	}
 
-	if (!sageCommand.canAdminGame) {
+	if (!await sageCommand.validatePermission("canManageGame")) {
 		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to manage this Game.");
 	}
 
@@ -180,7 +180,7 @@ async function gCmdAuditCurrency(sageCommand: SageCommand): Promise<void> {
 		return sageCommand.replyStack.whisper("There is no Game!");
 	}
 
-	if (!sageCommand.canAdminGame) {
+	if (!await sageCommand.validatePermission("canManageGame")) {
 		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to manage this Game.");
 	}
 

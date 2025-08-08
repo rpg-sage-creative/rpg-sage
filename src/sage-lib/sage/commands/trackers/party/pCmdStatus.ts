@@ -50,7 +50,8 @@ export async function pCmdStatus(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Party Status", "Party commands not allowed outside a Game.");
 	}
 
-	if (!sageMessage.canAdminGame && !sageMessage.playerCharacter) {
+	const canManageGame = await sageMessage.validatePermission("canManageGame");
+	if (!canManageGame && !sageMessage.playerCharacter) {
 		return sageMessage.denyForGame("Party Status");
 	}
 

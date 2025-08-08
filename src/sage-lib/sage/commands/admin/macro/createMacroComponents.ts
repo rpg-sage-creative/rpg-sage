@@ -76,7 +76,7 @@ export async function createMacroComponents(sageCommand: SageCommand, args: Args
 	const buttonRow = new ActionRowBuilder<ButtonBuilder>();
 
 	const canInfo = args.customIdArgs?.actorId === sageCommand.actorId;
-	const canEdit = args.macros?.canActorEdit(sageCommand);
+	const canEdit = await args.macros?.canActorEdit(sageCommand);
 
 	if (mode === "edit" && canEdit) {
 		buttonRow.addComponents(

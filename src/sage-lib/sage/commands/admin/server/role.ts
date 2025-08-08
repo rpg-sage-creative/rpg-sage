@@ -8,7 +8,7 @@ function getAdminRoleLabel(adminRole: IAdminRole): TAdminRoleType {
 }
 
 async function serverRoleList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.reactBlock();
 	}
 	if (!sageMessage.testServerAdmin()) {
@@ -36,7 +36,7 @@ async function serverRoleList(sageMessage: SageMessage): Promise<void> {
 }
 
 async function serverRoleSet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.reactBlock();
 	}
 	if (!sageMessage.testServerAdmin()) {
@@ -70,7 +70,7 @@ async function serverRoleSet(sageMessage: SageMessage): Promise<void> {
 }
 
 async function serverRoleRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.reactBlock();
 	}
 	if (!sageMessage.testServerAdmin()) {

@@ -9,7 +9,7 @@ export async function gCmdArchive(sageCommand: SageCommand): Promise<void> {
 		return sageCommand.replyStack.whisper("There is no Game to archive!");
 	}
 
-	if (!sageCommand.canAdminGame) {
+	if (!await sageCommand.validatePermission("canManageGame")) {
 		return sageCommand.replyStack.whisper("Sorry, you aren't allowed to archive this Game.");
 	}
 

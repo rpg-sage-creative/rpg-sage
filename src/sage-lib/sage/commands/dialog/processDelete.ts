@@ -51,7 +51,7 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	const { game } = sageReaction;
 	if (game) {
 		// make sure the reactor is a gm or an admin
-		if (!sageReaction.canAdminGame) {
+		if (!await sageReaction.validatePermission("canManageGame")) {
 			return null;
 		}
 

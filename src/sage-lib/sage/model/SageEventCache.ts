@@ -1,5 +1,5 @@
 import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getHomeServerId, getPermsFor, getTupperBoxId, isDiscordApiError, isSageId, isThreadChannel, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getHomeServerId, getPermsFor, getSuperAdminIds, getSuperUserId, getTupperBoxId, isDiscordApiError, isSageId, isThreadChannel, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
@@ -9,7 +9,7 @@ import { JsonRepo } from "../repo/base/JsonRepo.js";
 import { ActiveBot } from "./ActiveBot.js";
 import type { Bot } from "./Bot.js";
 import { Game, GameUserType, type GameCore } from "./Game.js";
-import { AdminRoleType, Server } from "./Server.js";
+import { AdminRoleType, GameCreatorType, Server, SuperAccessType } from "./Server.js";
 import { User } from "./User.js";
 
 let _userForSage: User | undefined;
@@ -42,22 +42,21 @@ async function getOrCreateUser(eventCache: SageEventCache, id: Optional<string>)
 //#region SageEventCacheUser
 
 type KnownUser = {
+	/** was given Sage's GameCreator role */
+	canCreateGames: boolean;
+	/** was given Sage's GameAdmin role */
+	canManageGames: boolean;
 	/** Discord Guild: Owner, Administrator, ManageGuild */
 	canManageServer: boolean;
+
 	discord: DUser;
 	id: Snowflake;
-	/** was given Sage's GameAdmin role */
-	isGameAdmin: boolean;
+
 	isGameMaster: boolean;
 	isGamePlayer: boolean;
 	/** isGameMaster || isGamePlayer */
 	isGameUser: boolean;
-	/** was given Sage's SageAdmin role */
-	isSageAdmin: boolean;
-	/** was given Sage's ServerAdmin role */
-	isServerAdmin: boolean;
-	/** Owner */
-	isOwner: boolean;
+
 	known: true;
 	member?: GuildMember;
 	sage: User;
@@ -65,16 +64,14 @@ type KnownUser = {
 };
 
 type UnknownUser = {
+	canCreateGames: false;
+	canManageGames: false;
 	canManageServer: false;
 	discord?: DUser;
 	id?: Snowflake;
-	isGameAdmin: false;
 	isGameMaster: false;
 	isGamePlayer: false;
 	isGameUser: false;
-	isSageAdmin: false;
-	isServerAdmin: false;
-	isOwner: false;
 	known: false;
 	member?: GuildMember;
 	sage: User;
@@ -82,16 +79,14 @@ type UnknownUser = {
 };
 
 type UnvalidatedUser = {
+	canCreateGames?: never;
+	canManageGames?: never;
 	canManageServer?: never;
 	discord?: never;
 	id?: never;
-	isGameAdmin?: never;
 	isGameMaster?: never;
 	isGamePlayer?: never;
 	isGameUser?: never;
-	isSageAdmin?: never;
-	isServerAdmin?: never;
-	isOwner?: boolean;
 	known?: never;
 	member?: never;
 	sage: User;
@@ -151,29 +146,28 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 	const sage = await getOrCreateUser(evCache, discord?.id);
 
 	// set flags as false by default
+	let canCreateGames = false;
+	let canManageGames = false;
 	let canManageServer = false;
-	let isGameAdmin = false;
 	let isGameMaster = false;
 	let isGamePlayer = false;
 	let isGameUser = false;
-	let isSageAdmin = false;
-	let isServerAdmin = false;
-	let isOwner = false;
 
 	// we don't have a valid discord user (or we couldn't fetch it for some reason)
 	if (!discord?.id) {
 		const unknownUser: UnknownUser = {
+			canCreateGames,
+			canManageGames,
 			canManageServer,
-			id: undefined,
-			isGameAdmin,
+			// discord: undefined,
+			// id: undefined,
 			isGameMaster,
 			isGamePlayer,
 			isGameUser,
-			isSageAdmin,
-			isServerAdmin,
-			isOwner,
 			known: false,
+			// member: undefined,
 			sage,
+			// uuid: undefined,
 		};
 		return unknownUser;
 	}
@@ -182,15 +176,22 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 	const id = discord.id as Snowflake;
 	const roleIds: Snowflake[] = [];
 
+	const { discord:guild, sage:server } = evCache.server;
+
+	// early and easiest check for canManageServer
+	if (server?.superAccessType) {
+		canManageServer = id === getSuperUserId()
+			|| (server.superAccessType === SuperAccessType.SuperAdmin && getSuperAdminIds().includes(id));
+	}
+
 	// we need a guildmember to check server perms
 	let member: GuildMember | undefined;
-	const guild = evCache.server.discord;
 	if (guild) {
 		// fetch the guild member if it isn't a bot and isn't a system user
 		if (!discord.bot && !discord.system) {
 			member = await guild.members.fetch(id).catch(err => {
 				return isDiscordApiError(err, 10007, 10013)
-					? errorReturnUndefined(`unable to fetch user (err = ${err.code} "${{10007:"Unknown Member",10013:"Unknown User"}[err.code]}"); guild.id = ${guild.id} (${guild.name}); guildMember.id = ${id} (${toHumanReadable(discord)})`)
+					? errorReturnUndefined(`unable to validate ${which} user (err = ${err.code} "${{10007:"Unknown Member",10013:"Unknown User"}[err.code]}"); guild.id = ${guild.id} (${guild.name}); guildMember.id = ${id} (${toHumanReadable(discord)})`)
 					: errorReturnUndefined(err);
 			});
 			if (member) {
@@ -198,18 +199,24 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 			}
 		}
 
-		// check the guild member for perms
-		isOwner = guild.ownerId === id;
-		canManageServer = isOwner || member?.permissions.has("Administrator") === true || member?.permissions.has("ManageGuild") === true;
+		// check the guild member for owner/admin/manage perms
+		canManageServer ||= guild.ownerId === id
+			|| member?.permissions.has("Administrator") === true
+			|| member?.permissions.has("ManageGuild") === true;
+	}
+
+	// if you can canManageServer you can do these as well
+	if (canManageServer) {
+		canCreateGames = true;
+		canManageGames = true;
 	}
 
 	// const hasRole = (roleId?: Snowflake) => roleId ? member?.roles.cache.has(roleId) ?? false : false;
 
-	const server = evCache.server.sage;
 	if (server) {
-		isGameAdmin = server.hasAdmin(id, roleIds, AdminRoleType.GameAdmin);
-		isServerAdmin = server.hasAdmin(id, roleIds, AdminRoleType.ServerAdmin);
-		isSageAdmin = server.hasAdmin(id, roleIds, AdminRoleType.SageAdmin);
+		// update "can" flags if needed
+		canCreateGames ||= server.gameCreatorType ? server.gameCreatorType === GameCreatorType.Any : server.hasAdmin(id, roleIds, AdminRoleType.GameCreator);
+		canManageGames ||= server.hasAdmin(id, roleIds, AdminRoleType.GameAdmin);
 	}
 
 	// now let's check for game access
@@ -225,16 +232,14 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 	const uuid = parseUuid(sage.toJSON().uuid ?? sage.id);
 
 	const knownUser: KnownUser = {
+		canCreateGames,
+		canManageGames,
 		canManageServer,
 		discord,
 		id,
-		isGameAdmin,
 		isGameMaster,
 		isGamePlayer,
 		isGameUser,
-		isSageAdmin,
-		isServerAdmin,
-		isOwner,
 		known: true,
 		member,
 		sage,
@@ -253,6 +258,7 @@ type KnownServer = {
 	isDm: false;
 	isServer: true;
 	known: true;
+	ownerId: Snowflake;
 	sage: Server;
 };
 
@@ -262,6 +268,7 @@ type UnknownServer = {
 	isDm: false;
 	isServer: true;
 	known: false;
+	ownerId?: Snowflake;
 	sage?: Server;
 };
 
@@ -271,6 +278,7 @@ type DmServer = {
 	isDm: true;
 	isServer: false;
 	known: false;
+	ownerId?: never;
 	sage?: never;
 };
 
@@ -280,6 +288,7 @@ type UnvalidatedServer = {
 	isDm?: never;
 	isServer?: never;
 	known?: never;
+	ownerId?: never;
 	sage?: never;
 };
 
@@ -326,6 +335,7 @@ async function validateServer(evCache: SageEventCache, discord: Optional<Guild>)
 		isDm: false,
 		isServer: true,
 		known: true,
+		ownerId: discord.ownerId as Snowflake,
 		sage,
 	}
 	return knownServer;
@@ -402,7 +412,11 @@ async function createSageEventCache(options: SageEventCacheCreateOptions): Promi
 	if (guild) {
 
 		// should we always validate owner / canmanage type stuff?
-		core.actor.isOwner = guild.ownerId === actorOrPartial.id;
+		if (guild.ownerId === actorOrPartial.id) {
+			core.actor.canManageServer = true as never;
+			core.actor.canManageGames = true as never;
+			core.actor.canCreateGames = true as never;
+		}
 
 		// validate the server to look for the game
 		const server = await evCache.validateServer();

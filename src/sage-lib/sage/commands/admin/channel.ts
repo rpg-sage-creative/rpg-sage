@@ -82,14 +82,14 @@ async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Opti
 }
 
 export async function channelDetails(sageMessage: SageMessage, channel?: SageChannel): Promise<void> {
-	if (!sageMessage.server || (!sageMessage.canAdminServer && !sageMessage.canAdminGame)) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.reactBlock();
 	}
 
 	// Get channel from args if it isn't passed
 	const channelId = channel?.id ?? sageMessage.args.getChannelId("channel") ?? sageMessage.threadOrChannelDid;
 	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.sageCache, channelId);
-	const server = sageMessage.server;
+	const server = sageMessage.server!;
 	channel = game?.getChannel(channelId) ?? server?.getChannel(channelId);
 
 	if (!channel) {
@@ -143,11 +143,14 @@ async function _channelList(sageMessage: SageMessage, whichType: BotServerGameTy
 }
 
 async function channelListServer(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminServer ? _channelList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
+	const canManageServer = await sageMessage.validatePermission("canManageServer");
+	return canManageServer ? _channelList(sageMessage, BotServerGameType.Server) : sageMessage.reactBlock();
 }
 
 async function channelListGame(sageMessage: SageMessage): Promise<void> {
-	return sageMessage.canAdminGame ? _channelList(sageMessage, BotServerGameType.Game) : sageMessage.reactBlock();
+	return await sageMessage.validatePermission("canManageGame")
+		? _channelList(sageMessage, BotServerGameType.Game)
+		: sageMessage.reactBlock();
 }
 
 async function channelList(sageMessage: SageMessage): Promise<void> {

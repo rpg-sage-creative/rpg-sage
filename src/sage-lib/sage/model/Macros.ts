@@ -348,11 +348,11 @@ export class Macros<Category extends string = string> {
 		return false;
 	}
 
-	public canActorEdit(sageCommand: SageCommand): boolean {
+	public async canActorEdit(sageCommand: SageCommand): Promise<boolean> {
 		switch(this.type) {
 			case "global": return sageCommand.actor.sage.isSuperUser;
-			case "server": return this.owner.id === sageCommand.server?.id && sageCommand.canManageServer;
-			case "game": return this.owner.id === sageCommand.game?.id && sageCommand.canAdminGame;
+			case "server": return this.owner.id === sageCommand.server?.id && await sageCommand.validatePermission("canManageServer");
+			case "game": return this.owner.id === sageCommand.game?.id && await sageCommand.validatePermission("canManageGame");
 			case "user": return this.owner.id === sageCommand.actorId;
 			case "character": return sageCommand.findCharacter(this.owner.id)?.userDid === sageCommand.actorId;
 			default: return false;

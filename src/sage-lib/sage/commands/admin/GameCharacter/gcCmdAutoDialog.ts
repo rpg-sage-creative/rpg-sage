@@ -369,10 +369,11 @@ export async function showForm(sageMessage: SageMessage): Promise<void> {
 			return sageMessage.replyStack.whisper(`Sorry, you cannot manage characters here.`);
 		}
 		if (sageMessage.game) {
-			if (!sageMessage.canAdminGame && !sageMessage.isPlayer) {
+			const { canManageGame } = await sageMessage.validatePermissions();
+			if (!canManageGame && !sageMessage.actor.isGamePlayer) {
 				return sageMessage.replyStack.whisper(`Sorry, you are not part of this Game.`);
 			}
-			if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.canAdminGame) {
+			if (characterTypeMeta.isGmOrNpcOrMinion && !canManageGame) {
 				return sageMessage.replyStack.whisper(`Sorry, only GMs and Admins can manage NPCs.`);
 			}
 		}else if (characterTypeMeta.isGmOrNpcOrMinion) {

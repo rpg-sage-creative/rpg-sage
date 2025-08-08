@@ -7,9 +7,10 @@ export function testCanAdminCharacter(sageCommand: SageCommand, characterTypeMet
 	}
 
 	if (sageCommand.game) {
+		if (sageCommand.canManageServer) return true;
 		return characterTypeMeta.isPcOrCompanion
-			? sageCommand.isGameMaster || sageCommand.isPlayer
-			: sageCommand.isGameMaster;
+			? !!sageCommand.actor.isGameUser
+			: !!sageCommand.actor.isGameMaster;
 	}
 
 	return characterTypeMeta.isPcOrCompanion;

@@ -7,7 +7,7 @@ export async function pCmdList(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Party List", "Party commands not allowed outside a Game.");
 	}
 
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.denyForCanAdminGame("Party List");
 	}
 

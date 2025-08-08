@@ -8,7 +8,7 @@ export async function pCmdRemove(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		await sageMessage.denyForCanAdminGame("Party Remove");
 		return;
 	}

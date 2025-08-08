@@ -9,7 +9,7 @@ export async function eCmdCreate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Create Encounter", "Encounter commands not allowed outside a Game.");
 	}
 
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.denyForCanAdminGame("Create Encounter");
 	}
 

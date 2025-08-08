@@ -22,6 +22,13 @@ import type { SageReaction } from "./SageReaction.js";
 import { GameCreatorType, type Server } from "./Server.js";
 import type { User } from "./User.js";
 
+type ValidatedPermissions = {
+	canCreateGames: boolean;
+	canManageGame: boolean;
+	canManageGames: boolean;
+	canManageServer: boolean;
+};
+
 export interface SageCommandCore {
 	eventCache: SageEventCache;
 }
@@ -202,47 +209,59 @@ export abstract class SageCommand<
 		return this.eventCache.actor.sage.did;
 	}
 
+	/** @deprecated use await validatePermission("canManageServer") */
 	public get canManageServer(): boolean {
 		const { cache } = this;
 
 		// check that it is cached
-		if (cache.get("canManageServer")) return true;
+		if (cache.get<ValidatedPermissions>("validatedPermissions")?.canManageServer) return true;
 
-		// if we have an actor, we can cache the results
-		const { actor } = this.eventCache;
-		if (actor.known) {
-			return cache.getOrSet("canManageServer", () => actor.canManageServer);
-		}
-
-		// revert to isOwner
-		return this.eventCache.actor.isOwner === true;
-	}
-
-	/** Returns true if the acting user is the server owner, a server administrator, or has the manage server permission. */
-	public checkCanManageServer(): Promise<boolean> {
-		return this.cache.getOrFetch("canManageServer", async () => {
-			const actor = await this.eventCache.validateActor();
-			return actor.canManageServer ?? false;
-		});
+		const { actor, server } = this.eventCache;
+		return !!(server.known && actor.canManageServer);
 	}
 
 	// #endregion
 
 	// #region Permission Flags
 
-	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
-	public get canAdminSage(): boolean {
-		return this.cache.getOrSet("canAdminSage", () => !!this.server && (this.actor.sage.isSuperUser || this.canManageServer || !!this.actor.isSageAdmin));
+	public async validatePermissions(): Promise<ValidatedPermissions> {
+		return this.cache.getOrFetch("validatedPermissions", async () => {
+			const actor = await this.eventCache.validateActor();
+			const server = await this.eventCache.validateServer();
+			const game = this.game;
+
+			const canManageGames =  !!(server.known && actor.canManageGames);
+			const canManageServer = !!(server.known && actor.canManageServer);
+			const canCreateGames =  !!(server.known && actor.canCreateGames);
+
+			const canManageGame = !!(game && (canManageGames || actor.isGameMaster));
+
+			return {
+				canCreateGames,
+				canManageGame,
+				canManageGames,
+				canManageServer,
+			};
+		});
 	}
 
-	/** Quick flag for Server admins (canAdminSage || isServerAdmin) */
-	public get canAdminServer(): boolean {
-		return this.cache.getOrSet("canAdminServer", () => this.canAdminSage || (!!this.server && !!this.actor.isServerAdmin));
+	public async validatePermission(key: keyof ValidatedPermissions): Promise<boolean> {
+		const perms = await this.validatePermissions();
+		return perms[key];
+	}
+
+	/** Quick flag for Sage admins (isSuperUser || isOwner || isSageAdmin) */
+	public get canAdminSage(): boolean {
+		const { cache } = this;
+		return cache.get<ValidatedPermissions>("validatedPermissions")?.canManageServer
+			?? cache.getOrSet("canAdminSage", () => !!this.actor.canManageServer);
 	}
 
 	/** Quick flag for Game admins (canAdminServer || isGameAdmin) */
 	public get canAdminGames(): boolean {
-		return this.cache.getOrSet("canAdminGames", () => this.canAdminServer || !!this.actor.isGameAdmin);
+		const { cache } = this;
+		return cache.get<ValidatedPermissions>("validatedPermissions")?.canManageGames
+			?? cache.getOrSet("canAdminGames", () => !!this.actor.canManageGames);
 	}
 
 	/** Some servers want anybody to be able to create a Game without needing to setup permissions. */
@@ -271,11 +290,6 @@ export abstract class SageCommand<
 		});
 	}
 
-	/** Quick flag for "this" Game (game && (canAdminGames || isGameMaster)) */
-	public get canAdminGame(): boolean {
-		return this.cache.getOrSet("canAdminGame", () => !!this.game && (this.canAdminGames || !!this.actor.isGameMaster));
-	}
-
 		/** Ensures we are either in the channel being targeted or we are in an admin channel. */
 	public testChannelAdmin(channelDid: Optional<Snowflake>): boolean {
 		/** @todo: figure out if i even need this or if there is a better way */
@@ -287,7 +301,7 @@ export abstract class SageCommand<
 		return !!game && (this.canAdminGames || game.hasGameMaster(this.actorId));
 	}
 
-	/** Ensures we are either in an admin channel or are the server owner or SuperUser. */
+	/** Ensures we are either in an admin channel or are the server owner or SuperUser. @deprecated find a better way involving validatePermissions() */
 	public testServerAdmin(): boolean {
 		return this.canManageServer || this.actor.sage.isSuperUser || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
 	}

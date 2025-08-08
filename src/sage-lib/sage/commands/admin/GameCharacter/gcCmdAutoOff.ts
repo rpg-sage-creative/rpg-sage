@@ -17,7 +17,7 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 
 	const names = sageMessage.args.getNames();
 	const alias = sageMessage.args.getString("alias") ?? undefined;
-	const userId = sageMessage.canAdminGame ? sageMessage.args.getUserId("user") ?? sageMessage.sageUser.did : sageMessage.sageUser.did;
+	const userId = sageMessage.actor.isGamePlayer ? sageMessage.sageUser.did : sageMessage.args.getUserId("user") ?? sageMessage.sageUser.did;
 
 	let character = characterTypeMeta.isGm
 		? sageMessage.gmCharacter

@@ -297,7 +297,7 @@ export async function createListComponentsAndMode(sageCommand: SageCommand, args
 	const buttonRow = new ActionRowBuilder<ButtonBuilder>();
 
 	// const canInfo = args.customIdArgs?.actorId === sageCommand.actorId;
-	const canEdit = args.macros?.canActorEdit(sageCommand);
+	const canEdit = await args.macros?.canActorEdit(sageCommand);
 
 	if (mode === "edit" && canEdit) {
 		buttonRow.addComponents(

@@ -36,7 +36,8 @@ async function isPin(sageReaction: SageReaction): Promise<TCommand | null> {
 	}
 
 	// make sure the reactor is in the game or an admin
-	if (!sageReaction.actor.isGameUser && !sageReaction.canAdminGame) {
+	const canManageGame = await sageReaction.validatePermission("canManageGame");
+	if (!canManageGame && !sageReaction.actor.isGamePlayer) {
 		return null;
 	}
 

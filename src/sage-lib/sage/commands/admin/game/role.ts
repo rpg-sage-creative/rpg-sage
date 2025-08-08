@@ -4,7 +4,7 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
 async function gameRoleList(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.reactBlock();
 	}
 
@@ -26,7 +26,7 @@ async function gameRoleList(sageMessage: SageMessage): Promise<void> {
 }
 
 async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.reactBlock();
 	}
 
@@ -54,7 +54,7 @@ async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
 
 
 async function gameRoleRemove(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.reactBlock();
 	}
 

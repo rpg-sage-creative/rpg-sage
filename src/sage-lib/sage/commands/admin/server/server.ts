@@ -21,10 +21,12 @@ function serverDetailsDefaultTypes(renderableContent: RenderableContent, server:
 }
 type TRole = { role:IAdminRole, discordRole:Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {
-	let server: Optional<Server> = sageMessage.server;
-	if (server && !sageMessage.canAdminServer) {
+	const { canManageServer } = await sageMessage.validatePermissions();
+	if (!canManageServer) {
 		return sageMessage.reactBlock();
 	}
+
+	let server: Optional<Server> = sageMessage.server;
 	if (!server && sageMessage.actor.sage.isSuperUser) {
 		const serverId = sageMessage.args.getIdType("server");
 		if (serverId) {
@@ -70,11 +72,13 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 
 async function serverUpdate(sageMessage: SageMessage): Promise<void> {
 	const { server } = sageMessage;
-	if (server && !sageMessage.canAdminServer) {
-		return sageMessage.reactBlock();
-	}
 	if (!server) {
 		return sageMessage.reactFailure();
+	}
+
+	const { canManageServer } = await sageMessage.validatePermissions();
+	if (!canManageServer) {
+		return sageMessage.reactBlock();
 	}
 
 	const serverOptions = sageMessage.args.getServerOptions();

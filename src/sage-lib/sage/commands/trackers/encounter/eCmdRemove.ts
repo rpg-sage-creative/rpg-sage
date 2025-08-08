@@ -11,7 +11,7 @@ export async function eCmdRemove(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		await sageMessage.denyForCanAdminGame(cmdLabel);
 		return;
 	}

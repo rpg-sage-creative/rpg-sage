@@ -7,7 +7,7 @@ export async function eCmdList(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Encounter List", "Encounter commands not allowed outside a Game.");
 	}
 
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.denyForCanAdminGame("Encounter List");
 	}
 

@@ -20,7 +20,7 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 	const names = sageMessage.args.getNames();
 	const alias = sageMessage.args.getString("alias") ?? undefined;
 	const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType") ?? undefined;
-	const userId = sageMessage.canAdminGame ? sageMessage.args.getUserId("user") ?? sageMessage.sageUser.did : sageMessage.sageUser.did;
+	const userId = sageMessage.actor.isGamePlayer ? sageMessage.sageUser.did : sageMessage.args.getUserId("user") ?? sageMessage.sageUser.did;
 
 	if (sageMessage.game && userId !== sageMessage.sageUser.did) {
 		const hasUser = characterTypeMeta.isGmOrNpcOrMinion ? sageMessage.actor.isGameMaster : sageMessage.actor.isGameUser;

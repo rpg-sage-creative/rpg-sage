@@ -155,12 +155,13 @@ async function colorListBot(sageMessage: SageMessage): Promise<void> {
 }
 
 async function colorListServer(sageMessage: SageMessage): Promise<void> {
-	await _colorList(sageMessage, BotServerGameType.Server, sageMessage.canAdminServer && sageMessage.testServerAdmin());
+	const canManageServer = await sageMessage.validatePermission("canManageServer");
+	await _colorList(sageMessage, BotServerGameType.Server, canManageServer && sageMessage.testServerAdmin());
 }
 
 async function colorListGame(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.game) {
-		await _colorList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame);
+		await _colorList(sageMessage, BotServerGameType.Game, await sageMessage.validatePermission("canManageGame"));
 	}else {
 		await sageMessage.replyStack.whisper("Game not found.");
 	}
@@ -203,14 +204,16 @@ async function colorGetServer(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
 	}
 
-	await _colorList(sageMessage, BotServerGameType.Server, sageMessage.canAdminServer && sageMessage.testServerAdmin(), ...types);
+	const canManageServer = await sageMessage.validatePermission("canManageServer");
+	await _colorList(sageMessage, BotServerGameType.Server, canManageServer && sageMessage.testServerAdmin(), ...types);
 }
 
 async function colorGetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
 		return sageMessage.replyStack.whisper("Game not found.");
 	}
-	if (!sageMessage.canAdminGame && !sageMessage.isPlayer) {
+	const canManageGame = await sageMessage.validatePermission("canManageGame");
+	if (!canManageGame && !sageMessage.isPlayer) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to access this Game.`);
 	}
 	if ([0, 5].includes(sageMessage.channel?.type!)) {
@@ -222,7 +225,7 @@ async function colorGetGame(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisperWikiHelp({ message:`Invalid ColorType: ${sageMessage.args.getString("type")}.`, page:`Color Management` });
 	}
 
-	await _colorList(sageMessage, BotServerGameType.Game, sageMessage.canAdminGame, ...types);
+	await _colorList(sageMessage, BotServerGameType.Game, canManageGame, ...types);
 }
 
 async function colorGet(sageMessage: SageMessage): Promise<void> {
@@ -240,7 +243,7 @@ async function colorGet(sageMessage: SageMessage): Promise<void> {
 //#region set
 
 async function colorSetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
@@ -272,7 +275,7 @@ async function colorSetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
 		return sageMessage.replyStack.whisper("Game not found.");
 	}
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game colors.`);
 	}
 
@@ -306,7 +309,7 @@ async function colorSet(sageMessage: SageMessage): Promise<void> {
 //#region sync
 
 async function colorSyncServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors.`);
 	}
 	if (!sageMessage.testServerAdmin()) {
@@ -334,7 +337,7 @@ async function colorSyncGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
 		return sageMessage.replyStack.whisper("Game not found.");
 	}
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game colors.`);
 	}
 
@@ -361,7 +364,7 @@ async function colorSync(sageMessage: SageMessage): Promise<void> {
 //#region unset
 
 async function colorUnsetServer(sageMessage: SageMessage): Promise<void> {
-	if (!sageMessage.canAdminServer) {
+	if (!await sageMessage.validatePermission("canManageServer")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Server colors.`);
 	}
 	if (!sageMessage.testServerAdmin() || !sageMessage.server) {
@@ -392,7 +395,7 @@ async function colorUnsetGame(sageMessage: SageMessage): Promise<void> {
 	if (!sageMessage.game) {
 		return sageMessage.replyStack.whisper("Game not found.");
 	}
-	if (!sageMessage.canAdminGame) {
+	if (!await sageMessage.validatePermission("canManageGame")) {
 		return sageMessage.replyStack.whisper(`Sorry, you aren't allowed to change Game colors.`);
 	}
 
