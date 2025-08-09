@@ -1,6 +1,6 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
-import { applyChanges, capitalize, Color, debug, errorReturnUndefined, getDataRoot, isDefined, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, capitalize, Color, errorReturnUndefined, getDataRoot, isDefined, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath, processMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, getText, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -897,13 +897,11 @@ export class GameCharacter {
 					let toSubtractFromTempHp = numberOrUndefined(pair.value);
 					if (toSubtractFromTempHp) {
 						const currentTempHp = this.getNumber(keyLower) ?? 0;
-						debug({pair,currentTempHp,toSubtractFromTempHp});
 						if (currentTempHp >= toSubtractFromTempHp) {
 							await processPair(pair);
 						}else {
 							const toSubtractFromHp = toSubtractFromTempHp - currentTempHp;
 							toSubtractFromTempHp = currentTempHp;
-							debug({pair,currentTempHp,toSubtractFromTempHp,toSubtractFromHp});
 							await processPair({ key:"tempHp", modifier:"-", value:String(toSubtractFromTempHp) });
 							await processPair({ key:"hp", modifier:"-", value:String(toSubtractFromHp) });
 						}
