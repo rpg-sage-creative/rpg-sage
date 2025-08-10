@@ -1,8 +1,8 @@
-import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
-import { applyChanges, Color, errorReturnUndefined, getDataRoot, isWrapped, numberOrUndefined, sortByKey, StringMatcher, wrap, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType, type KeyValuePair, type KeyValueTrio } from "@rsc-sage/types";
+import { applyChanges, capitalize, Color, errorReturnUndefined, getDataRoot, isDefined, isString, isWrapped, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
-import { Currency, parseGameSystem, type CurrencyPf2e, type DenominationsCore } from "@rsc-utils/game-utils";
+import { Currency, parseGameSystem, processMath, type CurrencyPf2e, type DenominationsCore } from "@rsc-utils/game-utils";
 import { fileExistsSync, getText, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
@@ -90,14 +90,14 @@ export type GameCharacterCore = {
 // 												| "Full" | "FullBloody" | "FullDying";
 
 function parseFetchedStats(raw: string, alias?: string) {
-	const stats = new Map<string, string>();
+	const stats = new Map<Lowercase<string>, KeyValueTrio<string, never>>();
 	const macros: MacroBase[] = [];
 	const lines = raw.split(/[\n\r]+/).map(line => line.split(/\t/).map(val => val.trim()));
 	lines.forEach(line => {
 		const results = parseFetchedStatsLine(line, alias);
 		if (results) {
 			if ("dialog" in results || "dice" in results) macros.push(results); // || "items" in results || "math" in results || "table" in results || "tableUrl" in results
-			if ("value" in results) stats.set(results.key, results.value);
+			if ("value" in results) stats.set(results.keyLower, results);
 		}
 	});
 	return { stats, macros };
@@ -105,11 +105,15 @@ function parseFetchedStats(raw: string, alias?: string) {
 function parseFetchedStatsLine(values: string[], alias?: string) {
 	const setAlias = (value?: string) => value && alias ? value.replace(/\{::/g, `{${alias}::`) : value;
 	const shift = () => setAlias(values.shift()?.trim());
-	const key = shift()?.toLowerCase();
+
+	const key = shift();
 	if (!key) return undefined;
+
 	const value = shift();
 	if (!value) return undefined;
-	if (key === "macro") {
+
+	const keyLower = key.toLowerCase();
+	if (keyLower === "macro") {
 		const three = shift(), four = shift();
 		if (four && isWrapped(four, "[]")) {
 			return { name:value, category:three, dice:four } as MacroBase;
@@ -119,7 +123,7 @@ function parseFetchedStatsLine(values: string[], alias?: string) {
 		}
 
 	}
-	return { key, value };
+	return { key, keyLower, value } as KeyValueTrio<string, never>;
 }
 
 /** Temp convenience function to get a DiscordKey from varying input */
@@ -199,6 +203,15 @@ function fixLastMessages(core: GameCharacterCore): void {
 }
 
 //#endregion
+
+export type StatResults<
+			Value extends string | number = string | number,
+			Nil extends null | undefined = null
+		> = {
+	key: string;
+	keyLower: Lowercase<string>;
+	value: Value | Nil;
+};
 
 export class GameCharacter {
 	public equals(other: string | GameCharacter | undefined): boolean {
@@ -459,7 +472,7 @@ export class GameCharacter {
 		return processCharacterTemplate(this, "displayName", template).value ?? this.name;
 	}
 	public toSheetLink(): string | undefined {
-		return this.getStat("sheet.link") ?? undefined;
+		return this.getString("sheet.link");
 	}
 	public toDialogFooterLine(template?: string): string | undefined {
 		return processCharacterTemplate(this, "dialogFooter", template).value;
@@ -486,7 +499,7 @@ export class GameCharacter {
 		return await manager.save() ?? false;
 	}
 
-	private fetchedStats: Map<string, string> | undefined;
+	private fetchedStats: Map<Lowercase<string>, KeyValueTrio<string, never>> | undefined;
 	private fetchedMacros: MacroBase[] | undefined;
 	public async fetchStats(): Promise<void> {
 		if (!this.fetchedStats) {
@@ -527,7 +540,7 @@ export class GameCharacter {
 			const templateStats = statsToMap.filter(({ title }) => templateKeyTester.test(title));
 			templateStats.sort(sorter);
 			return {
-				keys: new Set<Lowercase<string>>(templateStats.map(({ title }) => title.toLowerCase() as Lowercase<string>)),
+				keys: new Set(templateStats.map(({ title }) => title.toLowerCase())),
 				title: "Templates",
 				lines: templateStats.map(note => `<b>${note.title}</b> ${note.note}`)
 			};
@@ -537,10 +550,10 @@ export class GameCharacter {
 		const { keys: customKeys, title: customTitle, lines: customLines } = processCharacterTemplate(this, "customSheet");
 		const { keys: templateKeys, title: templateTitle, lines: templateLines } = processTemplateKeys();
 
-		const usedKeys = new Set<Lowercase<string>>([...simpleKeys, ...customKeys, ...templateKeys]);
+		const usedKeys = new Set([...simpleKeys, ...customKeys, ...templateKeys]);
 
 		// remove keys used in simple sheet, custom sheet, or template stats
-		statsToMap = statsToMap.filter(note => !usedKeys.has(note.title.toLowerCase() as Lowercase<string>));
+		statsToMap = statsToMap.filter(note => !usedKeys.has(note.title.toLowerCase()));
 		statsToMap.sort(sorter);
 
 		const otherTitle = simpleLines.length || customLines.length ? `Other Stats` : `Stats`;
@@ -555,21 +568,26 @@ export class GameCharacter {
 	}
 
 	public getHpGauge(): string {
-		let hpStat = this.getStat("hp") ?? "0";
+		let hpStat = this.getString("hp") ?? "0";
 		if (/^\|\|\d+\|\|$/.test(hpStat)) hpStat = hpStat.slice(2, -2);
 		const hp = +hpStat;
 
-		let maxHpStat = this.getStat("maxHp") ?? "0";
+		let maxHpStat = this.getString("maxHp") ?? "0";
 		if (/^\|\|\d+\|\|$/.test(maxHpStat)) maxHpStat = maxHpStat.slice(2, -2);
 		const maxHp = +maxHpStat;
 
 		return hpToGauge(hp, maxHp);
 	}
 
-	public getNumber(key: string): number | undefined;
-	public getNumber(key: string, def: number): number;
-	public getNumber(key: string, def?: number): number | undefined {
-		return numberOrUndefined(this.getStat(key)) ?? def;
+	/** returns the value for the given key */
+	public getNumber(key: string): number | undefined {
+		return numberOrUndefined(this.getStat(key, true).value);
+	}
+
+	/** returns the value for the given key */
+	public getString(key: string): string | undefined {
+		const stat = this.getStat(key, true);
+		return isDefined(stat.value) ? stringOrUndefined(String(stat.value)) : undefined;
 	}
 
 	/** returns all notes that are stats */
@@ -586,27 +604,55 @@ export class GameCharacter {
 		return undefined;
 	}
 
-	public getStat(key: string): string | null {
-		if (!key.trim()) return null;
+	private getNoteKeyAndStat(...keys: string[]): { key:string; value:string; } | undefined {
+		for (const key of keys) {
+			const stat = this.notes.getStat(key);
+			if (stat) {
+				const value = stat.note.trim();
+				if (value) {
+					return { key:stat.title, value:value };
+				}
+			}
+		}
+		return undefined;
+	}
+
+	/** @deprecated start using getNumber or getString */
+	public getStat(key: string): string | null;
+	/** @deprecated start using getNumber or getString */
+	public getStat(key: string, includeKey: true): StatResults<string>;
+	public getStat(key: string, includeKey?: boolean): StatResults<string> | string | null {
 		const keyLower = key.toLowerCase();
+
+		// shortcut to easily return as the args request
+		const ret = (casedKey = key, value: Optional<number | string> = null) => {
+			value = isDefined(value) && !isString(value) ? String(value) : value ?? null;
+			return includeKey ? { key:casedKey, keyLower, value } : value;
+		};
+
+		// no key, no value
+		if (!key.trim()) return ret(key, null);
 
 		//#region universal non-note stats or helpers
 
 		if (keyLower === "name") {
-			return this.name;
+			return ret("name", this.name);
 		}
 
 		if (keyLower === "alias") {
-			return this.alias ?? null;
+			return ret("alias", this.alias);
 		}
 
 		/** @todo check the data to see if these are even in use */
 		if (["aka","nname","nickname"].includes(keyLower)) {
-			return this.aka ?? this.name;
+			return ret("nickname", this.aka);
+		}
+		if ("nickorname" === keyLower) {
+			return ret("nickOrName", this.aka ?? this.name);
 		}
 
 		if (keyLower === "hpgauge") {
-			return this.getHpGauge();
+			return ret("hpGauge", this.getHpGauge());
 		}
 
 		// enforce sheet.url and stop using sheeturl
@@ -619,11 +665,11 @@ export class GameCharacter {
 				}
 			}
 			const validUrl = urlOrUndefined(sheetUrl);
-			return validUrl ? wrap(validUrl, "<>") : null;
+			return ret("sheet.url", validUrl ? wrap(validUrl, "<>") : null);
 		}
 		if (keyLower === "sheet.link") {
-			const sheetUrl = this.getStat("sheet.url");
-			return sheetUrl ? `[✎](${sheetUrl})` : null;
+			const sheetUrl = this.getString("sheet.url");
+			return ret("sheet.link", sheetUrl ? `[✎](${sheetUrl})` : sheetUrl);
 		}
 
 		//#endregion
@@ -636,37 +682,38 @@ export class GameCharacter {
 		const halfDn = keyLower.startsWith("half.dn.");
 
 		if (halfUp || halfDn) {
-			const statValue = this.getStat(key.slice(8));
-			if (statValue !== null) {
+			const { key:casedKey, value:statValue } = this.getStat(key.slice(8), includeKey as true);
+			if (statValue) {
+				const retKey = `half.${halfUp ? "up" : "dn"}.${casedKey}`;
 				const num = numberOrUndefined(doStatMath(`(${statValue})`));
 				if (num === undefined) {
-					return `isNaN(${statValue})`;
+					return ret(retKey, `isNaN(${statValue})`);
 				}
 				const fn = halfUp ? Math.ceil : Math.floor;
-				return String(fn(num / 2));
+				return ret(retKey, fn(num / 2));
 			}
 		}
 
 		//#endregion
 
 		// get custom stat added via message posts
-		const noteStat = this.getNoteStat(key);
+		const noteStat = this.getNoteKeyAndStat(key);
 		if (noteStat !== undefined) {
-			return noteStat;
+			return ret(noteStat.key, noteStat.value);
 		}
 
 		// get stats fetched from "stats.tsv.url"
-		const fetchedStat = this.fetchedStats?.get(key);
-		if (fetchedStat !== undefined) {
-			return fetchedStat;
+		const fetchedStat = this.fetchedStats?.get(keyLower);
+		if (fetchedStat) {
+			return ret(fetchedStat.key, fetchedStat.value);
 		}
 
 		// get stats from underlying e20 character
 		const { essence20 } = this;
 		if (essence20) {
-			const e20Stat = essence20.getStat(key);
-			if (e20Stat !== null) {
-				return String(e20Stat);
+			const e20Stat = essence20.getStat(key, keyLower);
+			if (isDefined(e20Stat.value)) {
+				return ret(e20Stat.key, String(e20Stat.value));
 			}
 		}
 
@@ -676,19 +723,21 @@ export class GameCharacter {
 			let pbKey = key;
 			if (keyLower === "explorationmode") pbKey = "activeExploration";
 			else if (keyLower === "explorationskill") pbKey = "initSkill";
-			const pbStat = pathbuilder.getStat(pbKey) ?? null;
-			if (pbStat !== null) {
-				return String(pbStat);
+			const pbStat = pathbuilder.getStat(pbKey);
+			if (isDefined(pbStat.value)) {
+				return ret(pbStat.key, String(pbStat.value));
 			}
 		}
 
 		// provide a temp shortcut for calculating stat modifiers for d20 games
 		const abilities = ["strength","dexterity","constitution","intelligence","wisdom","charisma"];
 		for (const ability of abilities) {
-			if (ability.slice(0, 3) === keyLower || `mod.${ability}` === keyLower) {
-				const abilityValue = this.getStat(ability);
-				if (abilityValue !== null) {
-					return doStatMath(`floor((${abilityValue}-10)/2)`);
+			const isAbbr = ability.slice(0, 3) === keyLower;
+			if (isAbbr || `mod.${ability}` === keyLower) {
+				const abilityStat = this.getStat(ability, true);
+				if (abilityStat.value !== undefined) {
+					const retKey = isAbbr ? capitalize(abilityStat.key.slice(0, 3)) : `mod.${abilityStat.key}`;
+					return ret(retKey, processMath(`floor((${abilityStat.value}-10)/2)`, { spoilers:"optional" }));
 				}
 			}
 		}
@@ -699,61 +748,66 @@ export class GameCharacter {
 
 			// they don't want raw, so simplify it
 			if (keyLower === "currency") {
-				return curr.simplify().toString();
+				return ret("currency", curr.simplify().toString());
 			}
 
-			return curr.toString();
+			return ret("currency.raw", curr.toString());
 		}
 
 		const { gameSystem } = this;
 		if (pathbuilder || gameSystem?.isP20) {
-			return this.getStatP20(key, keyLower);
+			const p20Stat = this.getStatP20(key, keyLower);
+			return ret(p20Stat.key, p20Stat.value);
 		}
 
 		/** @todo by doing this we are ensuring that users are able to keep using these functions that they may not have known were specific to pf2e */
 		if (!gameSystem) {
-			return this.getStatP20(key, keyLower);
+			const p20Stat = this.getStatP20(key, keyLower);
+			return ret(p20Stat.key, p20Stat.value);
 		}
 
-		return null;
+		return ret();
 	}
 
-	protected getStatP20(key: string, keyLower: string) {
+	protected getStatP20(key: string, keyLower = key.toLowerCase()): StatResults<string | number, undefined> {
+		// return value creator
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => ({ key:casedKey, keyLower, value:value??undefined });
+
 		// provide a shortcut for off-guard ac
 		if (keyLower === "ogac") {
-			const ac = this.getStat("ac");
-			if (ac !== null) {
-				return doStatMath(`(${ac}-2)`);
+			const acStat = this.getStat("ac", true);
+			if (isDefined(acStat.value)) {
+				return ret(keyLower, doStatMath(`(${acStat.value}-2)`));
 			}
 		}
 
 		// provide a shortcut for cantrip rank
 		if (keyLower === "cantrip.rank") {
-			return this.getStat(`half.up.level`);
+			return ret(keyLower, this.getStat(`half.up.level`, true).value);
 		}
 
 		// provide a shortcut for dc values
 		if (keyLower.startsWith("dc.")) {
 			const statKey = key.slice(3);
-			const statValue = this.getStat(statKey);
-			if (statValue !== null) {
-				return doStatMath(`(${statValue}+10)`);
+			const stat = this.getStat(statKey, true);
+			if (isDefined(stat.value)) {
+				return ret(`dc.${stat.key}`, doStatMath(`(${stat.value}+10)`));
 			}
 		}
 
 		if (keyLower === "conditions") {
 			const conditions: string[] = [];
 
-			Condition.getToggledConditions().forEach(condition => {
-				if (this.getStat(condition) !== null) {
+			Condition.ToggledConditions.forEach(condition => {
+				if (this.getString(condition) !== null) {
 					const riders = Condition.getConditionRiders(condition);
 					const riderText = riders.length ? ` (${riders.join(", ")})` : ``;
 					conditions.push(condition + riderText);
 				}
 			});
 
-			Condition.getValuedConditions().forEach(condition => {
-				const value = this.getStat(condition);
+			Condition.ValuedConditions.forEach(condition => {
+				const value = this.getString(condition);
 				if (value !== null) {
 					conditions.push(`${condition} ${value}`);
 				}
@@ -761,10 +815,10 @@ export class GameCharacter {
 
 			conditions.sort();
 
-			return conditions.join(", ");
+			return ret(keyLower, conditions.join(", "));
 		}
 
-		return null;
+		return ret();
 	}
 
 	public getCurrency() {
@@ -798,66 +852,102 @@ export class GameCharacter {
 		return constr.parse(raw) as CurrencyPf2e;
 	}
 
-	public async processStatsAndMods(stats?: KeyValueArg<string, string>[], mods?:IncrementArg<string, string>[]): Promise<boolean> {
-		let updated = false;
+	public async processStatsAndMods(stats?: KeyValuePair<string, null>[], mods?:IncrementArg[]): Promise<StringSet> {
+		const keysModdedAndUpdated = new StringSet();
+
+		const updateStats = async (pairs: KeyValuePair<string, null>[]) => {
+			const keysUpdated = await this.updateStats(pairs, false);
+			keysUpdated.forEach(key => keysModdedAndUpdated.add(key));
+		};
+
 		if (stats?.length) {
-			updated = await this.updateStats(stats, false);
+			await updateStats(stats);
 		}
 
-		let modded = false;
 		if (mods?.length) {
 			const curr = this.getCurrency();
 			let currModded = false;
+
+			const processPair = async (pair: KeyValuePair<string, null> & { operator:"+"|"-" }) => {
+				const oldValue = this.getString(pair.key) ?? 0;
+				await updateStats([{
+					key: pair.key,
+					value: doStatMath(`(${oldValue}${pair.operator}${pair.value})`)
+				}]);
+			};
+
 			for (const pair of mods) {
 				const keyLower = pair.key.toLowerCase();
+
+				// if denomination, handle it separately
 				if (curr.hasDenomination(keyLower)) {
 					const number = numberOrUndefined(pair.value);
 					if (number) {
 						curr.math(pair.operator, number, keyLower);
 						currModded = true;
 					}
-				}else {
-					const oldValue = this.getStat(pair.key) ?? 0;
-					const math = `(${oldValue}${pair.operator}${pair.value})`;
-					const newValue = doStatMath(math);
-					const updated = await this.updateStats([{ key:pair.key, keyRegex:pair.keyRegex, value:newValue }], false);
-					modded ||= updated;
+				}
+
+				// if subtracting hp, check to see if we need to also subtract from temphp
+				else if (keyLower === "hp" && pair.operator === "-") {
+					let hpDelta = numberOrUndefined(pair.value);
+					if (hpDelta) {
+						const tempHp = this.getNumber("temphp") ?? 0;
+						if (!tempHp) {
+							await processPair(pair);
+						}else if (tempHp >= hpDelta) {
+							await processPair({ key:"tempHp", operator:"-", value:String(hpDelta) });
+						}else {
+							hpDelta -= tempHp;
+							await processPair({ key:"tempHp", operator:"-", value:String(tempHp) });
+							await processPair({ key:"hp", operator:"-", value:String(hpDelta) });
+						}
+					}
+				}
+
+				// finally do basic processing
+				else {
+					await processPair(pair);
 				}
 			}
+
+			// if we modded the currency data, we still gotta update the stats themselves
 			if (currModded) {
-				const updated = await this.updateStats(curr.denominationKeys.map(denom => ({ key:denom, keyRegex:new RegExp(`^${denom}$`, "i"), value:String(curr[denom]) })), false);
-				modded ||= updated;
+				await updateStats(curr.denominationKeys.map(denom => ({
+					key: denom,
+					value: String(curr[denom])
+				})));
 			}
 		}
 
-		return updated || modded;
+		return keysModdedAndUpdated;
 	}
 
-	public async updateStats(stats: KeyValuePair[], save: boolean): Promise<boolean> {
-		let changes = false;
-		const forNotes: KeyValuePair[] = [];
-		const pb = this.pathbuilder;
+	/** returns keys (lowercased) updated */
+	public async updateStats(pairs: KeyValuePair<string, null>[], save: boolean): Promise<StringSet> {
+		const keysUpdated = new StringSet();
+
+		const forNotes: KeyValueTrio<string, null>[] = [];
+		const p20 = this.pathbuilder;
 		const e20 = this.essence20;
-		for (const pair of stats) {
-			const { key, keyRegex } = pair;
-			const value = pair.value ?? "";
-			if (keyRegex.test("name") && value?.trim() && (this.name !== value || (pb && pb.name !== value) || e20 && e20.name !== value)) {
+		for (const { key, value:valueOrNull } of pairs) {
+			const keyLower = key.toLowerCase();
+
+			const value = valueOrNull ?? "";
+			if (keyLower === "name" && value?.trim() && (this.name !== value || (p20 && p20.name !== value) || (e20 && e20.name !== value))) {
 				this.name = value;
-				if (pb) {
-					pb.name = value;
-				}
-				if (e20) {
-					e20.name = value;
-				}
-				changes = true;
+				if (p20) p20.name = value;
+				if (e20) e20.name = value;
+				keysUpdated.add(keyLower);
 				continue;
 			}
 
 			let correctedKey: string | undefined;
 			let correctedValue: string | undefined;
-			const isExplorationMode = keyRegex.test("explorationMode");
-			const isExplorationSkill = keyRegex.test("explorationSkill");
+			const isExplorationMode = keyLower === "explorationmode";
+			const isExplorationSkill = keyLower === "explorationskill";
 			if (isExplorationMode || isExplorationSkill) {
+				// makes the spaces in a value optional in the regex used to test the value
 				const matchValue = (val: string) => new RegExp(`^${val.replace(/(\s)/g, "$1?")}$`, "i").test(value);
 				if (isExplorationMode) {
 					correctedKey = "explorationMode";
@@ -868,49 +958,59 @@ export class GameCharacter {
 					correctedValue = getSkills().find(matchValue);
 				}
 			}
-			if (pb) {
-				if (keyRegex.test("level") && +value) {
-					const updatedLevel = await pb.setLevel(+value, save);
+
+			if (p20) {
+				if (keyLower === "level" && +value) {
+					const updatedLevel = await p20.setLevel(+value, save);
 					if (updatedLevel) {
 						this.notes.setStat("level", "");
-						changes = true;
+						keysUpdated.add(keyLower);
 					}
 					continue;
 				}
-				if (["cp","sp","gp","pp","credits","upb"].some(s => keyRegex.test(s))) {
-					const keyLower = key.toLowerCase() as keyof TPathbuilderCharacterMoney;
+
+				if (["cp","sp","gp","pp","credits","upb"].includes(keyLower)) {
 					const money = { } as TPathbuilderCharacterMoney;
-					money[keyLower] = +value;
-					const updatedMoney = await pb.setMoney(money, save);
+					money[keyLower as keyof TPathbuilderCharacterMoney] = +value;
+					const updatedMoney = await p20.setMoney(money, save);
 					if (updatedMoney) {
 						this.notes.setStat(keyLower, "");
-						changes = true;
+						keysUpdated.add(keyLower);
 					}
 					continue;
 				}
+
 				if (isExplorationMode) {
-					pb.setSheetValue("activeExploration", correctedValue ?? "Other");
+					p20.setSheetValue("activeExploration", correctedValue ?? "Other");
 					const unset = this.notes.setStat(correctedKey ?? key, "");
-					if (unset) changes = true;
+					if (unset) keysUpdated.add(correctedKey ?? key);
 					continue;
 				}
+
 				if (isExplorationSkill) {
-					pb.setSheetValue("activeSkill", correctedValue ?? "Perception");
+					p20.setSheetValue("activeSkill", correctedValue ?? "Perception");
 					const unset = this.notes.setStat(correctedKey ?? key, "");
-					if (unset) changes = true;
+					if (unset) keysUpdated.add(correctedKey ?? key);
 					continue;
 				}
+
 				// abilities?
 				// proficiencies?
 			}
-			forNotes.push({ key:correctedKey??key, keyRegex:new RegExp(`^${correctedKey??key}$`, "i"), value:correctedValue??value });
+			forNotes.push({
+				key: correctedKey ?? key,
+				keyLower,
+				value: correctedValue ?? value
+			});
 		}
 
 		// iterate the stat pairs to double check bounds
 		forNotes.forEach(pair => pair.value = checkStatBounds(this, pair) ?? pair.value);
 
-		const updatedNotes = this.notes.updateStats(forNotes);
-		return changes || updatedNotes;
+		const updatedNoteKeys = this.notes.updateStats(forNotes);
+		updatedNoteKeys.forEach(noteKey => keysUpdated.add(noteKey));
+
+		return keysUpdated;
 	}
 
 	public async update({ alias, avatarUrl, embedColor, name, pathbuilder, pathbuilderId, tokenUrl, userDid }: Args<GameCharacterCore>, save = true): Promise<boolean> {

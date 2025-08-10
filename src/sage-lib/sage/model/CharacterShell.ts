@@ -1,8 +1,8 @@
-import { escapeRegex, type KeyValuePair, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isString, numberOrUndefined, StringSet, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
-import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
+import type { GameCharacter, StatResults, TGameCharacterType } from "./GameCharacter.js";
 
 export type CharacterShellCore = {
 	/** id of the GameCharacter */
@@ -46,19 +46,45 @@ export class CharacterShell {
 		return this.game?.userDid;
 	}
 
-	public getStat(key: string): string | null | undefined {
-		const partyStats = this.core.stats;
-		if (partyStats) {
-			const keyRegex = new RegExp(`^${escapeRegex(key)}$`, "i");
-			const statKey = Object.keys(partyStats).find(pKey => keyRegex.test(pKey));
-			if (statKey) {
-				const statValue = partyStats[statKey] ?? null;
-				if (statValue !== null) {
-					return statValue;
+	public getNumber(key: string): number | undefined {
+		return numberOrUndefined(this.getString(key));
+	}
+
+	public getString(key: string): string | undefined {
+		return this.getStat(key) ?? undefined;
+	}
+
+	/** @deprecated start using getNumber or getString */
+	public getStat(key: string): string | null;
+	/** @deprecated start using getNumber or getString */
+	public getStat(key: string, includeKey: true): StatResults<string>;
+	public getStat(key: string, includeKey?: boolean): StatResults<string> | string | null {
+		const keyLower = key.toLowerCase();
+
+		// shortcut to easily return as the args request
+		const ret = (casedKey = key, value: Optional<number | string> = null) => {
+			value = isDefined(value) && !isString(value) ? String(value) : value ?? null;
+			return includeKey ? { key:casedKey, keyLower, value } : value;
+		};
+
+		const { stats:shellStats } = this.core;
+		if (shellStats) {
+			for (const shellKey of Object.keys(shellStats)) {
+				if (keyLower === shellKey.toLowerCase()) {
+					const statValue = shellStats[shellKey];
+					if (isDefined(statValue)) {
+						return ret(shellKey, statValue);
+					}
 				}
 			}
 		}
-		return this.game?.getStat(key) ?? null;
+
+		const { game } = this;
+		if (game) {
+			return game.getStat(key, includeKey as true);
+		}
+
+		return ret();
 	}
 
 	public getWealth(summaryTemplate?: string | null): Wealth {
@@ -70,25 +96,28 @@ export class CharacterShell {
 		return false;
 	}
 
-	public async updateStats(pairs: KeyValuePair[], save: boolean): Promise<boolean> {
+	public async updateStats(pairs: KeyValuePair[], save: boolean): Promise<StringSet> {
 		if (this.game && ["pc","companion"].includes(this.game.type)) {
 			return this.game.updateStats(pairs, save);
 		}
-		let changes = false;
-		const partyStats = this.core.stats ?? (this.core.stats = {});
+
+		const updatedKeys = new StringSet();
+		const shellStats = this.core.stats ??= {};
 		for (const pair of pairs) {
 			const { key, value } = pair;
-			const keyRegex = new RegExp(`^${escapeRegex(key)}$`, "i");
-			const statKey = Object.keys(partyStats).find(pKey => keyRegex.test(pKey)) ?? key;
-			if (partyStats[statKey] !== value) {
+			const keyLower = key.toLowerCase();
+
+			// find the shellKey every pair in case two pairs write the same key
+			const shellKey = Object.keys(shellStats).find(shellKey => keyLower === shellKey.toLowerCase()) ?? key;
+			if (shellStats[shellKey] !== value) {
 				if (!value?.trim()) {
-					delete partyStats[statKey];
+					delete shellStats[shellKey];
 				}else {
-					partyStats[statKey] = value;
+					shellStats[shellKey] = value;
 				}
-				changes = true;
+				updatedKeys.add(shellKey);
 			}
 		}
-		return changes;
+		return updatedKeys;
 	}
 }

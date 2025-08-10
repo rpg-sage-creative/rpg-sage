@@ -1,3 +1,4 @@
+import { sortPrimitive, StringSet } from "@rsc-utils/core-utils";
 import type { Message } from "discord.js";
 import { Condition } from "../../../../../gameSystems/p20/lib/Condition.js";
 import { sendWebhook } from "../../../../discord/messages.js";
@@ -5,7 +6,7 @@ import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
-export async function sendGameCharacterMods(sageMessage: SageMessage, character: GameCharacter, statModKeys: string[]): Promise<Message[]> {
+export async function sendGameCharacterMods(sageMessage: SageMessage, character: GameCharacter, updatedKeys: StringSet): Promise<Message[]> {
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
 
 	if (character.embedColor) {
@@ -17,17 +18,20 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 
 	renderableContent.appendTitledSection(`<b>Stats Updated</b>`);
 
-	statModKeys.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
-
 	const isD20 = character.gameSystem?.code === "D20";
 	const is5e = character.gameSystem?.code === "DnD5e";
 	const isP20 = character.gameSystem?.isP20;
+
 	let showConditions = false;
 	let showCurrency = false;
-	statModKeys.forEach(key => {
-		const currencyType = isP20 ? ["cp","sp","gp","pp","credits","upb"].includes(key.toLowerCase())
-			: isD20 ? ["cp","sp","gp","pp"].includes(key.toLowerCase())
-			: is5e ? ["cp","sp","ep","gp","pp"].includes(key.toLowerCase())
+
+	const sortedKeys = [...updatedKeys].sort(sortPrimitive);
+	sortedKeys.forEach(key => {
+		const keyLower = key.toLowerCase();
+
+		const currencyType = isP20 ? ["cp","sp","gp","pp","credits","upb"].includes(keyLower)
+			: isD20 ? ["cp","sp","gp","pp"].includes(keyLower)
+			: is5e ? ["cp","sp","ep","gp","pp"].includes(keyLower)
 			: false;
 		if (currencyType) {
 			showCurrency = true;
@@ -39,7 +43,7 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 			showConditions = true;
 		}
 
-		const value = character.getStat(key);
+		const value = character.getString(key);
 		if (value) {
 			if (conditionType === "toggled") {
 				// toggled conditions don't need to show their "on" value
@@ -54,8 +58,8 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 	});
 
 	if (showCurrency) {
-		const currency = character.getStat("currency");
-		const currencyRaw = character.getStat("currency.raw");
+		const currency = character.getString("currency");
+		const currencyRaw = character.getString("currency.raw");
 		if (currency !== currencyRaw) {
 			renderableContent.appendTitledSection(`<b>Updated Currency</b>`, `${currencyRaw}  <i>(${currency})</i>`);
 		}else {
@@ -64,7 +68,7 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 	}
 
 	if (showConditions) {
-		const conditions = character.getStat("conditions")?.split(/\s*,\s*/).filter(s => s) ?? [];
+		const conditions = character.getString("conditions")?.split(/\s*,\s*/).filter(s => s) ?? [];
 		const conditionsString = conditions.length ? conditions.join(", ") : `<i>no conditions</i>`;
 		renderableContent.appendTitledSection(`<b>Updated Conditions</b>`, conditionsString);
 	}

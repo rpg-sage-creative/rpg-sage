@@ -2,7 +2,7 @@ import { warn } from "@rsc-utils/core-utils";
 import { Skill } from "../gameSystems/p20/lib/Skill.js";
 import { type AbilityName } from "../gameSystems/d20/lib/Ability.js";
 
-export type GetStatPrefix = "" | "dc" | "label" | "labeled" | "mod" | "p" | "prof" | "proficiency";
+export type GetStatPrefix = "" | "dc" | "ext" | "label" | "labeled" | "mod" | "p" | "prof" | "proficiency";
 
 //#region Abilities
 export const STRENGTH = "Strength", DEXTERITY = "Dexterity", CONSTITUTION = "Constitution", INTELLIGENCE = "Intelligence", WISDOM = "Wisdom", CHARISMA = "Charisma";

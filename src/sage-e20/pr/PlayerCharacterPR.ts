@@ -1,5 +1,6 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import { type Optional, numberOrUndefined, stringOrUndefined } from "@rsc-utils/core-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
+import type { StatResults } from "../../sage-lib/sage/model/GameCharacter.js";
 import { type PlayerCharacterCoreE20, PlayerCharacterE20, type TAbilityName, type TStatE20, orQ } from "../common/PlayerCharacterE20.js";
 
 export type TStatPR = TStatE20 & {
@@ -74,20 +75,52 @@ export interface PlayerCharacterCorePR extends PlayerCharacterCoreE20 {
 }
 
 export class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR> {
-	public getStat(stat: string): number | string | null {
-		if (!this.core.zord || !stat.toLowerCase().startsWith("zord.")) {
-			return super.getStat(stat);
+	public getStat(key: string, keyLower = key.toLowerCase()): StatResults<string | number, undefined> {
+		const { zords } = this;
+		if (!zords.length || !keyLower.startsWith("zord.")) {
+			return super.getStat(key, keyLower);
 		}
 
-		const { zord } = this.core;
+		let zordKeyLower: Lowercase<string>;
+		const parts = keyLower.split(".");
+		const nameOrIndex = numberOrUndefined(parts[1]) ?? stringOrUndefined(parts[1]?.replace(/\W+/g, ""))?.toLowerCase();
 
-		const regexp = new RegExp(`^${stat.slice(5).replace(/\./g, "\\.")}$`, "i");
+		/** @todo prepare zord names for comparison to key */
+		const compareName = (name: Optional<string>) => name && nameOrIndex ? nameOrIndex === name : false;
+
+		let zord = zords.find((zord, index) => index === nameOrIndex || compareName(zord.name));
+		if (zord) {
+			// if we found an zord by name or id, the stat key is now the parts after `zord.BLAH.`
+			zordKeyLower = parts.slice(2).join(".") as Lowercase<string>;
+		}else {
+			// let's default to the first zord
+			zord = zords[0];
+			// the stat key is now the parts after `zord.`
+			zordKeyLower = parts.slice(1).join(".") as Lowercase<string>;
+		}
+
+		// return value creator
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => ({ key:casedKey, keyLower, value:value??undefined });
+
+		// no zord, kick out undefined
+		if (!zord) return ret();
+
+		const zordNameOrIndex = nameOrIndex !== undefined ? typeof(nameOrIndex) === "number" ? nameOrIndex : zord.name?.replace(/\W+/g, "").toLowerCase() : undefined;
+		const casedKeyBase = zordNameOrIndex === undefined ? `zord` : `zord.${zordNameOrIndex}`;
+
+		/** @todo i may need to use keyLower.replace(/\W+, "") */
+		const testKey = (casedKeySuffix: string, value: Optional<string | number>) => {
+			return zordKeyLower === casedKeySuffix.toLowerCase()
+				? ret(`${casedKeyBase}.${casedKeySuffix}`, value)
+				: undefined;
+		}
+
+		let results: StatResults<string | number, undefined> | undefined;
 
 		const coreKeys: (keyof TZord & ("health" | "damage"))[] = ["health", "damage"];
-		for (const key of coreKeys) {
-			if (regexp.test(key)) {
-				return zord[key as "health"] ?? null;
-			}
+		for (const coreKey of coreKeys) {
+			results = testKey(coreKey, zord[coreKey]);
+			if (results) return results;
 		}
 
 		/*
@@ -109,35 +142,38 @@ export class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR>
 		const properties: Exclude<keyof TStatZord, "skills">[] = ["ability", "abilityName", "defense", "defenseName"];
 		const { abilities = [] } = zord;
 		for (const abil of abilities) {
-			if (regexp.test(abil.abilityName)) {
-				return abil.ability ?? null;
-			}
-			if (regexp.test(`${abil.abilityName}.name`)) {
-				return abil.abilityName ?? null;
-			}
-			if (regexp.test(abil.defenseName!)) {
-				return abil.defense ?? null;
-			}
-			if (regexp.test(`${abil.defenseName}.name`)) {
-				return abil.defenseName ?? null;
-			}
+			results = testKey(abil.abilityName, abil.ability);
+			if (results) return results;
+
+			results = testKey(`${abil.abilityName}.name`, abil.abilityName);
+			if (results) return results;
+
+			results = testKey(abil.defenseName!, abil.defense);
+			if (results) return results;
+
+			results = testKey(`${abil.defenseName}.name`, abil.defenseName);
+			if (results) return results;
+
 			for (const prop of properties) {
-				if (regexp.test(`${abil.abilityName}.${prop}`)
-					|| regexp.test(`${abil.defenseName}.${prop}`)) {
-					return abil[prop] ?? null;
-				}
+				results = testKey(`${abil.abilityName}.${prop}`, abil[prop]);
+				if (results) return results;
+
+				results = testKey(`${abil.defenseName}.${prop}`, abil[prop]);
+				if (results) return results;
 			}
+
 			const { skills = [] } = abil;
 			for (const skill of skills) {
 				// if (regexp.test(skill.name)) {
 				// 	return 1; // presence of a skill ... should that be a 1 or true or ...?
 				// }
-				if (regexp.test(`${skill.name}.die`)) {
-					return skill.die ?? null;
-				}
-				if (regexp.test(`${skill.name}.bonus`)) {
-					return skill.bonus ?? null;
-				}
+
+				results = testKey(`${skill.name}.die`, skill.die);
+				if (results) return results;
+
+				results = testKey(`${skill.name}.bonus`, skill.bonus);
+				if (results) return results;
+
 				// const { specializations = [] } = skill;
 				// for (const spec of specializations) {
 				// 	if (regexp.test(spec.name)) {
@@ -147,10 +183,11 @@ export class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR>
 			}
 		}
 
-		return null;
+		return ret();
 	}
 
 	public get zord(): TZord { return this.core.zord ?? { }; }
+	public get zords(): TZord[] { return this.core.zord ? [this.core.zord] : []; }
 
 	public toHtmlName(): string {
 		const name = this.core.name ?? "Unnamed Character";

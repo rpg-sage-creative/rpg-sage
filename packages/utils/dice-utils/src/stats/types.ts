@@ -1,9 +1,11 @@
-import type { Optional } from "@rsc-utils/core-utils";
 
 export type StatsCharacter = {
 	companions: StatsCharacterManager<StatsCharacter> | undefined;
 	name: string;
-	getStat(key: string): Optional<string>;
+	/** @deprecated use getString or getNumber */
+	getStat(key: string): string | null;
+	getString(key: string): string | undefined;
+	getNumber(key: string): number | undefined;
 };
 
 export type StatsCharacterManager<T extends StatsCharacter = StatsCharacter> = {

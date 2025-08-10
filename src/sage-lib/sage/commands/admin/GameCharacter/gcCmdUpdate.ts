@@ -63,11 +63,10 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 			}
 		}
 
-		await character.processStatsAndMods(stats, mods);
+		const updatedKeys = await character.processStatsAndMods(stats, mods);
 
-		if (!core && (stats?.length || mods?.length)) {
-			const statModKeys = (stats?.map(pair => pair.key) ?? []).concat(mods?.map(pair => pair.key) ?? []);
-			return promptModsConfirm(sageMessage, character, statModKeys, async char => {
+		if (!core && updatedKeys.size) {
+			return promptModsConfirm(sageMessage, character, updatedKeys, async char => {
 				const charSaved = await char.save(true);
 				if (charSaved && characterTypeMeta.isGm) {
 					return sageMessage.game!.update({ gmCharacterName:char.name });

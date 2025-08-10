@@ -1,6 +1,6 @@
-import type { KeyValuePair } from "@rsc-utils/core-utils";
+import type { KeyValueTrio } from "@rsc-sage/types";
+import { numberOrUndefined } from "@rsc-utils/core-utils";
 import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
-import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { Condition } from "./Condition.js";
 
 /**
@@ -10,9 +10,8 @@ import { Condition } from "./Condition.js";
  * If the value is out of bounds, return the correct value.
  * If the value is acceptable, or we don't have a test for it, return undefined so that the calling logic knows to use the original value.
  */
-export function checkStatBounds(character: GameCharacter, pair: KeyValuePair): string | undefined {
-	const keyLower = pair.key.toLowerCase();
-	const numberValue = numberOrUndefined(pair.value);
+export function checkStatBounds(character: GameCharacter, { keyLower, value }: KeyValueTrio<string, null | undefined>): string | undefined {
+	const numberValue = numberOrUndefined(value);
 	const isZeroOrLess = !numberValue || numberValue < 0;
 
 	if (keyLower === "hp") {
@@ -20,7 +19,7 @@ export function checkStatBounds(character: GameCharacter, pair: KeyValuePair): s
 		if (isZeroOrLess) return "0";
 
 		// check max hp
-		const maxHp = numberOrUndefined(character.getStat("maxHp"));
+		const maxHp = character.getNumber("maxHp");
 		if (maxHp && numberValue > maxHp) return String(maxHp);
 
 		// return no change
@@ -32,14 +31,12 @@ export function checkStatBounds(character: GameCharacter, pair: KeyValuePair): s
 	}
 
 	// conditions have a min value of 0
-	const valuedConditions = Condition.getValuedConditions();
-	if (valuedConditions.includes(keyLower)) {
+	if (Condition.isValuedCondition(keyLower)) {
 		if (isZeroOrLess) return "";
 	}
 
 	// toggled conditions are tracked using a 1 for on
-	const toggledConditions = Condition.getToggledConditions();
-	if (toggledConditions.includes(keyLower)) {
+	if (Condition.isToggledCondition(keyLower)) {
 		return isZeroOrLess ? "" : "1";
 	}
 
