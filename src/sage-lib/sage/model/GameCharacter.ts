@@ -892,18 +892,19 @@ export class GameCharacter {
 					}
 				}
 
-				// if subtracting temphp, check to see if we need to also subtract from hp
-				else if (keyLower === "temphp" && pair.modifier === "-") {
-					let toSubtractFromTempHp = numberOrUndefined(pair.value);
-					if (toSubtractFromTempHp) {
-						const currentTempHp = this.getNumber(keyLower) ?? 0;
-						if (currentTempHp >= toSubtractFromTempHp) {
+				// if subtracting hp, check to see if we need to also subtract from temphp
+				else if (keyLower === "hp" && pair.modifier === "-") {
+					let hpDelta = numberOrUndefined(pair.value);
+					if (hpDelta) {
+						const tempHp = this.getNumber("temphp") ?? 0;
+						if (!tempHp) {
 							await processPair(pair);
+						}else if (tempHp >= hpDelta) {
+							await processPair({ key:"tempHp", modifier:"-", value:String(hpDelta) });
 						}else {
-							const toSubtractFromHp = toSubtractFromTempHp - currentTempHp;
-							toSubtractFromTempHp = currentTempHp;
-							await processPair({ key:"tempHp", modifier:"-", value:String(toSubtractFromTempHp) });
-							await processPair({ key:"hp", modifier:"-", value:String(toSubtractFromHp) });
+							hpDelta -= tempHp;
+							await processPair({ key:"tempHp", modifier:"-", value:String(tempHp) });
+							await processPair({ key:"hp", modifier:"-", value:String(hpDelta) });
 						}
 					}
 				}
