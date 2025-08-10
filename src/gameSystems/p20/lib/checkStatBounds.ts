@@ -32,14 +32,12 @@ export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair): 
 	}
 
 	// conditions have a min value of 0
-	const valuedConditions = Condition.getValuedConditions();
-	if (valuedConditions.includes(keyLower)) {
+	if (Condition.isValuedCondition(keyLower)) {
 		if (isZeroOrLess) return "";
 	}
 
 	// toggled conditions are tracked using a 1 for on
-	const toggledConditions = Condition.getToggledConditions();
-	if (toggledConditions.includes(keyLower)) {
+	if (Condition.isToggledCondition(keyLower)) {
 		return isZeroOrLess ? "" : "1";
 	}
 

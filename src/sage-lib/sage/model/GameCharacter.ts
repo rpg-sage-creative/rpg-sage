@@ -803,16 +803,16 @@ export class GameCharacter {
 		if (keyLower === "conditions") {
 			const conditions: string[] = [];
 
-			Condition.getToggledConditions().forEach(condition => {
-				if (this.getStat(condition) !== null) {
+			Condition.ToggledConditions.forEach(condition => {
+				if (this.getString(condition) !== null) {
 					const riders = Condition.getConditionRiders(condition);
 					const riderText = riders.length ? ` (${riders.join(", ")})` : ``;
 					conditions.push(condition + riderText);
 				}
 			});
 
-			Condition.getValuedConditions().forEach(condition => {
-				const value = this.getStat(condition);
+			Condition.ValuedConditions.forEach(condition => {
+				const value = this.getString(condition);
 				if (value !== null) {
 					conditions.push(`${condition} ${value}`);
 				}
