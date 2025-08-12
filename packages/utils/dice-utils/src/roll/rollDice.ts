@@ -1,4 +1,4 @@
-import { rollDie } from "./rollDie.js";
+import { rollDie } from "@rsc-utils/game-utils";
 
 /**
  * Returns the results of multiple die rolls.

@@ -1,5 +1,5 @@
 import { error, Season } from "@rsc-utils/core-utils";
-import { rollDie } from "@rsc-utils/dice-utils";
+import { rollDie } from "@rsc-utils/game-utils";
 
 export enum ElevationType { SeaLevel, Lowland, Highland }
 export enum ClimateType { Cold, Temperate, Tropical }

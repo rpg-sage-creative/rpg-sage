@@ -21,8 +21,8 @@
 		{ "path": "./packages/utils/core-utils" },
 		{ "path": "./packages/utils/io-utils" },
 		{ "path": "./packages/utils/discord-utils" },
-		{ "path": "./packages/utils/dice-utils" },
 		{ "path": "./packages/utils/game-utils" },
+		{ "path": "./packages/utils/dice-utils" },
 		{ "path": "./packages/sage/types" },
 		{ "path": "./packages/sage/env" }
 	]
