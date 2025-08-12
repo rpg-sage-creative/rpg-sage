@@ -1,1 +1,0 @@
-export * from "./CurrencyDnD5e.js";

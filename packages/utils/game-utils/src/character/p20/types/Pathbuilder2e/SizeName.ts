@@ -1,1 +1,0 @@
-export type SizeName = "Tiny" | "Small" | "Medium" | "Large" | "Huge";

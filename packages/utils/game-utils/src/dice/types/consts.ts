@@ -1,1 +1,0 @@
-export const UNICODE_LEFT_ARROW = "\u27f5";

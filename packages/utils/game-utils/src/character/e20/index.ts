@@ -1,1 +1,0 @@
-export * from "./CharacterBaseE20.js";

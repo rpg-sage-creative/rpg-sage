@@ -1,9 +1,13 @@
 {
 	"name": "@rsc-utils/game-utils",
 	"version": "0.0.0",
-	"private": true,
+	"license": "LGPL-3.0-or-later",
 	"main": "build/index.js",
 	"type": "module",
+	"devDependencies": {
+		"@types/node": "^22.15.17",
+		"typescript": "^5.8.3"
+	},
 	"dependencies": {
 		"@napi-rs/canvas": "^0.1.71",
 		"@rsc-utils/core-utils": "@rsc-utils/core-utils",
