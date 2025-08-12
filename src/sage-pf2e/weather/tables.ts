@@ -1,5 +1,6 @@
 import { cloneJson, warn } from "@rsc-utils/core-utils";
-import { randomInt, type SimpleDice } from "@rsc-utils/dice-utils";
+import type { SimpleDice } from "@rsc-utils/dice-utils";
+import { randomInt } from "@rsc-utils/game-utils";
 import { ClimateType, WindType } from "./weather.js";
 
 export interface TableItem { min: number; max: number; }

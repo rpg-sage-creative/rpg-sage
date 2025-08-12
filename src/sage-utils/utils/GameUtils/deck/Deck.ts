@@ -1,5 +1,5 @@
 import { capitalize, randomSnowflake, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { randomItems, shuffle } from "@rsc-utils/dice-utils";
+import { randomItems, shuffle } from "@rsc-utils/game-utils";
 import { getCards, type CardBase, type DeckType } from "./decks/getCards.js";
 
 /*
