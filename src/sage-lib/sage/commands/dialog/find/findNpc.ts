@@ -10,8 +10,17 @@ type Options = {
 export function findNpc(sageCommand: SageCommand, name: Optional<string>, opts: Options): GameCharacter | undefined {
 	// if (!sageCommand.allowDialog) return undefined;
 
-	const { game, isGameMaster } = sageCommand;
-	if (game && !isGameMaster) return undefined;
+	const { actor, game } = sageCommand;
+
+	// reusable logic for when to allow a user to use an npc
+	const ret = (char?: GameCharacter) => {
+		// anybody can use an NPC outside a Game
+		if (!game) return char;
+		// GMs can always use an NPC
+		if (actor.isGameMaster) return char;
+		// non-GM must have the npc assigned to them
+		return actor.id === char?.userDid ? char : undefined;
+	}
 
 	const gameNpcs = game?.nonPlayerCharacters;
 	const userNpcs = sageCommand.sageUser.nonPlayerCharacters;
@@ -24,20 +33,20 @@ export function findNpc(sageCommand: SageCommand, name: Optional<string>, opts: 
 			?? gameNpcs?.findCompanion(name)
 			?? userNpcs.findByName(name)
 			?? userNpcs.findCompanion(name);
-		if (namedChar) return namedChar;
+		if (namedChar) return ret(namedChar);
 	}
 
 	// try grabbing auto character
 	if (opts.auto) {
-		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:sageCommand.actorId };
+		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:actor.id! };
 		const autoChar = gameNpcs?.getAutoCharacter(autoChannel)
 			?? userNpcs.getAutoCharacter(autoChannel);
-		if (autoChar) return autoChar;
+		if (autoChar) return ret(autoChar);
 	}
 
 	// else grab their first
 	if (opts.first) {
-		return (gameNpcs ?? userNpcs)[0];
+		return ret((gameNpcs ?? userNpcs)[0]);
 	}
 
 	return undefined;
