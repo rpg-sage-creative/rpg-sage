@@ -1,23 +1,19 @@
 import { debug, HasCore, parseEnum, randomSnowflake, type IdCore, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, getGameSystems, parseGameSystem, type GameSystem } from "@rsc-utils/game-utils";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, getGameSystems, parseGameSystem } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../common.js";
 import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
-import { DiceGroup as baseDiceGroup, DiceGroupRoll as baseDiceGroupRoll, type Dice as baseDice, type DicePart as baseDicePart } from "../base/index.js";
+import type { Dice as baseDice, DiceGroup as baseDiceGroup, DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart } from "../base/index.js";
 import type { DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore, DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice, TDiceGroup as baseTDiceGroup, TDiceGroupRoll as baseTDiceGroupRoll, TDicePart as baseTDicePart } from "../base/types.js";
 
 type DiceSystem = { DiceGroup:typeof baseDiceGroup; DiceGroupRoll:typeof baseDiceGroupRoll; };
 const diceSystems = new Map<GameSystemType, DiceSystem>();
 
-let gameSystems: GameSystem[] | undefined = getGameSystems();
-for (const gameSystem of gameSystems) {
-	// we only have a dice for systems that have a their code and dice the same
-	if (gameSystem.dice === gameSystem.code) {
-		const diceCode = gameSystem.type ? gameSystem.dice.toLowerCase() : "base";
-		const { DiceGroup, DiceGroupRoll } = await import(`../${diceCode}/index.js`) as DiceSystem;
-		diceSystems.set(gameSystem.type, { DiceGroup, DiceGroupRoll });
-	}
+// load all the dice systems
+for (const gameSystem of getGameSystems()) {
+	const diceCode = gameSystem.type ? gameSystem.dice.toLowerCase() : "base";
+	const { DiceGroup, DiceGroupRoll } = await import(`../${diceCode}/index.js`) as DiceSystem;
+	diceSystems.set(gameSystem.type, { DiceGroup, DiceGroupRoll });
 }
-gameSystems = undefined;
 
 type DiceGroupParser<T extends baseTDiceGroup = baseTDiceGroup> = (diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: DiceCriticalMethodType) => T;
 

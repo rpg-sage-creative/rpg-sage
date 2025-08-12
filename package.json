@@ -73,7 +73,7 @@
 		"build": "bash ./modules/core-utils/scripts/sh/build.sh --skipIndexTs",
 		"release": "bash ./modules/core-utils/scripts/sh/release.sh",
 		"test": "bash ./modules/core-utils/scripts/sh/test.sh",
-		"prestart-dev": "npm run test",
+		"-prestart-dev": "npm run test",
 		"start-dev": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
 		"prestart-dev-and-services": "npm run test",
 		"start-dev-and-services": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices",

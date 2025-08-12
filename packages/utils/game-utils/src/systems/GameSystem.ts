@@ -71,11 +71,11 @@ const gameSystems: GameSystem[] = ((): GameSystemBase[] => {
 		{ code:"CnC",   dice:"CnC",   name:"Coyote & Crow", description:"" },
 		{ code:"DnD5e", dice:"DnD5e", name:"Dungeons & Dragons 5e", description:"", diceCritMethod:"TimesTwo" },
 		{ code:"E20",   dice:"E20",   name:"Essence 20", description:"", isE20:true },
-		{ code:"PF1e",  dice:"PF1e",  name:"Pathfinder 1e", description:"" },
+		{ code:"PF1e",  dice:"D20",  name:"Pathfinder 1e", description:"" },
 		{ code:"PF2e",  dice:"PF2e",  name:"Pathfinder 2e", description:"", diceCritMethod:"TimesTwo", isP20:true },
 		{ code:"Quest", dice:"Quest", name:"Quest RPG", description:"" },
 		{ code:"SF1e",  dice:"SF1e",  name:"Starfinder 1e", description:"", diceCritMethod:"RollTwice" },
-		{ code:"SF2e",  dice:"SF2e",  name:"Starfinder 2e", description:"", diceCritMethod:"TimesTwo", isP20:true },
+		{ code:"SF2e",  dice:"PF2e",  name:"Starfinder 2e", description:"", diceCritMethod:"TimesTwo", isP20:true },
 		{ code:"VtM5e", dice:"VtM5e", name:"Vampire: the Masquerade 5e", description:"" },
 	];
 })().map(gameSystem => (
