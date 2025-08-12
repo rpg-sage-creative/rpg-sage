@@ -22,7 +22,7 @@ export function doStatMath(value: string): string {
 		switch(key) {
 			case "complex": return processMath(token, options);
 			case "posNeg": return doPosNeg(token, options);
-			default: console.log(token); return token;
+			default: return token;
 		}
 	});
 	return processed.join("");
