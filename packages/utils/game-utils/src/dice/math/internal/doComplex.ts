@@ -99,7 +99,6 @@ export function doComplex(input: string, options?: GetOptions): string {
 
 	const complexRegex = createComplexRegex({ gFlag:"g", iFlag:options?.iFlag, spoilers });
 	while (complexRegex.test(output)) {
-		// because of the way the capture groups use or "|" our array args seem to be the same regardless of the capture group names ...
 		output = output.replace(complexRegex, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _simpleMath: string) => {
 			if (!spoilers && unpipe(_).hasPipes) return _;
 
@@ -139,13 +138,6 @@ export function doComplex(input: string, options?: GetOptions): string {
 			// handle parentheses
 			return retVal(`${doSimple(simpleMathPipeInfo.unpiped)}`);
 		});
-
-		// remove any parentheses from raw numbers
-		output = output.replace(/\(\d+\)/g, value => {
-			console.log(value);
-			return value.slice(1, -1);
-		});
-
 		logQueue.add({label:"while",input,output});
 	}
 
