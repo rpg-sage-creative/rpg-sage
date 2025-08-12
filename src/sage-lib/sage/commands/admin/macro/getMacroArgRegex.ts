@@ -1,4 +1,4 @@
-import { isWholeNumberString } from "@rsc-utils/dice-utils";
+import { isWholeNumberString } from "@rsc-utils/core-utils";
 
 let argRegex: RegExp;
 

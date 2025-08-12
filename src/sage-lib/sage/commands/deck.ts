@@ -1,5 +1,4 @@
-import { BULLET, capitalize, error, type Snowflake } from "@rsc-utils/core-utils";
-import { isWholeNumberString } from "@rsc-utils/dice-utils";
+import { BULLET, capitalize, error, isWholeNumberString, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle } from "discord.js";
 import { Deck, type CardBase, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "../../../sage-utils/utils/GameUtils/deck/index.js";

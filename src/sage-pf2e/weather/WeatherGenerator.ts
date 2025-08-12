@@ -1,6 +1,6 @@
 import { Season, cloneJson, fahrenheitToCelsius, isDefined } from "@rsc-utils/core-utils";
-import { randomBoolean, randomInt, rollDiceString, type SimpleDice } from "@rsc-utils/dice-utils";
-import { rollDie } from "@rsc-utils/game-utils";
+import { randomBoolean, randomInt, type SimpleDice } from "@rsc-utils/dice-utils";
+import { rollDiceString, rollDie } from "@rsc-utils/game-utils";
 import { GDate } from "../../sage-cal/pf2e/GDate.js";
 import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "../index.js";
 import {
