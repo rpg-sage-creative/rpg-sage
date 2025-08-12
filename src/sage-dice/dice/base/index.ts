@@ -1,6 +1,6 @@
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, escapeRegex, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { hasSecretFlag, rollDice } from "@rsc-utils/dice-utils";
-import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
+import { hasSecretFlag } from "@rsc-utils/dice-utils";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice } from "@rsc-utils/game-utils";
 import {
 	DieRollGrade,
 	DropKeepType,

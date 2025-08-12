@@ -1,10 +1,10 @@
 import { sum } from "@rsc-utils/core-utils";
+import { rollDice } from "@rsc-utils/game-utils";
 import type { TDicePart } from "../dice/DicePart.js";
 import { rollDataMapper } from "../internal/rollDataMapper.js";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
 import { markRollData } from "../markup/markRollData.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
-import { rollDice } from "./rollDice.js";
 
 /** Creates the SortedRollData used to generate formatted dice output. */
 export function rollDicePart(dicePart: TDicePart): SortedRollData {

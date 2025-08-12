@@ -1,6 +1,6 @@
 import { sum } from "@rsc-utils/core-utils";
+import { rollDice } from "@rsc-utils/game-utils";
 import { isWholeNumberString } from "../isWholeNumberString.js";
-import { rollDice } from "./rollDice.js";
 
 let simpleDiceRegex: RegExp;
 
