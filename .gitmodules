@@ -7,3 +7,6 @@
 [submodule "modules/core-utils"]
 	path = modules/core-utils
 	url = https://github.com/rpg-sage-creative/core-utils.git
+[submodule "modules/game-utils"]
+	path = modules/game-utils
+	url = https://github.com/rpg-sage-creative/game-utils.git

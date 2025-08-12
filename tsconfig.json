@@ -11,6 +11,7 @@
 		"docker",
 		"docs",
 		"logs",
+		"modules",
 		"node_modules",
 		"packages",
 		"scripts",
@@ -23,7 +24,6 @@
 		{ "path": "./packages/utils/dice-utils" },
 		{ "path": "./packages/utils/game-utils" },
 		{ "path": "./packages/sage/types" },
-		{ "path": "./packages/sage/env" },
-
+		{ "path": "./packages/sage/env" }
 	]
 }
