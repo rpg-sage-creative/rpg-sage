@@ -5,7 +5,7 @@
 	"main": "build/index.js",
 	"type": "module",
 	"dependencies": {
-		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.9.7",
-		"@rsc-utils/discord-utils": "rpg-sage-creative/discord-utils#v0.2.9"
+		"@rsc-utils/core-utils": "@rsc-utils/core-utils",
+		"@rsc-utils/discord-utils": "@rsc-utils/discord-utils"
 	}
 }

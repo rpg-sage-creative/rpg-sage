@@ -1,0 +1,10 @@
+{
+	"extends": "../../../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "./build",
+		"rootDir": "../../../modules/discord-utils/src"
+	},
+	"include": [
+		"../../../modules/discord-utils/src"
+	]
+}

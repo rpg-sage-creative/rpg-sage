@@ -1,13 +1,18 @@
 {
-	"name": "@rsc-utils/game-utils",
+	"name": "@rsc-utils/discord-utils",
 	"version": "0.0.0",
-	"private": true,
+	"license": "LGPL-3.0-or-later",
 	"main": "build/index.js",
 	"type": "module",
+	"devDependencies": {
+		"@types/node": "^22.15.17",
+		"typescript": "^5.8.3"
+	},
 	"dependencies": {
-		"@napi-rs/canvas": "^0.1.71",
 		"@rsc-utils/core-utils": "@rsc-utils/core-utils",
 		"@rsc-utils/io-utils": "@rsc-utils/io-utils",
+		"discord.js": "^14.21.0",
+		"emoji-regex-xs": "^1.0.0",
 		"regex": "^6.0.1"
 	}
 }

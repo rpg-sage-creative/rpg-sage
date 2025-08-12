@@ -56,9 +56,6 @@
 	"dependencies": {
 		"@aws-sdk/client-sns": "3.787.0",
 		"@napi-rs/canvas": "^0.1.71",
-		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.9.7",
-		"@rsc-utils/discord-utils": "rpg-sage-creative/discord-utils#v0.2.9",
-		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.3.9",
 		"discord.js": "^14.21.0",
 		"regex": "^6.0.1"
 	},
@@ -73,9 +70,9 @@
 		}
 	},
 	"scripts": {
-		"build": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/build.sh --skipIndexTs",
-		"release": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/release.sh",
-		"test": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/test.sh",
+		"build": "bash ./modules/core-utils/scripts/sh/build.sh --skipIndexTs",
+		"release": "bash ./modules/core-utils/scripts/sh/release.sh",
+		"test": "bash ./modules/core-utils/scripts/sh/test.sh",
 		"prestart-dev": "npm run test",
 		"start-dev": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
 		"prestart-dev-and-services": "npm run test",

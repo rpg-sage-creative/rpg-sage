@@ -96,7 +96,7 @@ export class CharacterShell {
 		return false;
 	}
 
-	public async updateStats(pairs: KeyValuePair[], save: boolean): Promise<StringSet> {
+	public async updateStats(pairs: KeyValuePair<string, null>[], save: boolean): Promise<StringSet> {
 		if (this.game && ["pc","companion"].includes(this.game.type)) {
 			return this.game.updateStats(pairs, save);
 		}

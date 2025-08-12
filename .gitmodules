@@ -1,0 +1,9 @@
+[submodule "modules/discord-utils"]
+	path = modules/discord-utils
+	url = https://github.com/rpg-sage-creative/discord-utils.git
+[submodule "modules/io-utils"]
+	path = modules/io-utils
+	url = https://github.com/rpg-sage-creative/io-utils.git
+[submodule "modules/core-utils"]
+	path = modules/core-utils
+	url = https://github.com/rpg-sage-creative/core-utils.git
