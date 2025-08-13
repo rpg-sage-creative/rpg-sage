@@ -1,6 +1,5 @@
 import { isDefined, randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { isGradeFailure } from "@rsc-utils/dice-utils";
-import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, isGradeFailure } from "@rsc-utils/game-utils";
 import {
 	DieRollGrade,
 	DropKeepType,

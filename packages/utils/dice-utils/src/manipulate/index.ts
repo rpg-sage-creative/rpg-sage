@@ -1,4 +1,3 @@
-export * from "./appendManipulationToCore.js";
 export * from "./DiceDropKeep.js";
 export * from "./DiceExplode.js";
 export * from "./DiceManipulation.js";
