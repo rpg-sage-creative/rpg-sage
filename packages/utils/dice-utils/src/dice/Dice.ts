@@ -1,4 +1,5 @@
 import { cleanWhitespace, isBoolean, randomSnowflake, sum } from "@rsc-utils/core-utils";
+import { UNICODE_LEFT_ARROW } from "@rsc-utils/game-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
@@ -7,7 +8,6 @@ import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
 import { removeDesc } from "../removeDesc.js";
 import { sumDiceParts } from "../sumDiceParts.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
-import { UNICODE_LEFT_ARROW } from "../types/consts.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
 import { DicePart, type DicePartCore, type TDicePart } from "./DicePart.js";
 

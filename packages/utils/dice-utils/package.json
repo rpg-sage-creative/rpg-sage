@@ -5,6 +5,7 @@
   "main": "build/index.js",
   "type": "module",
   "dependencies": {
-    "@rsc-utils/core-utils": "@rsc-utils/core-utils"
+    "@rsc-utils/core-utils": "@rsc-utils/core-utils",
+    "@rsc-utils/game-utils": "@rsc-utils/game-utils"
   }
 }

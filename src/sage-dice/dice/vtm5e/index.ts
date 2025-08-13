@@ -1,9 +1,9 @@
 import { cleanWhitespace, getCodeName, randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice } from "@rsc-utils/game-utils";
+import { DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice, UNICODE_LEFT_ARROW } from "@rsc-utils/game-utils";
 import {
-	TestType, UNICODE_LEFT_ARROW,
 	cleanDescription,
 	parseTestTargetValue,
+	TestType,
 	type TDiceLiteral,
 	type TTestData
 } from "../../common.js";

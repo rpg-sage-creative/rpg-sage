@@ -1,12 +1,12 @@
 import { cleanWhitespace, randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { DiceExplode } from "@rsc-utils/dice-utils";
-import { DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice } from "@rsc-utils/game-utils";
+import { DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice, UNICODE_LEFT_ARROW } from "@rsc-utils/game-utils";
 import {
-	DieRollGrade,
-	TestType, UNICODE_LEFT_ARROW,
 	cleanDescription,
+	DieRollGrade,
 	gradeToEmoji,
 	parseTestTargetValue,
+	TestType,
 	type TDiceLiteral,
 	type TTestData
 } from "../../common.js";

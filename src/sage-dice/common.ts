@@ -2,14 +2,6 @@ import { cleanWhitespace, HasIdCore, sortPrimitive, sum, warn, type IdCore, type
 import { DiceOutputType, GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
-//#region rpg.dice.common.ts
-
-//#region CONST
-
-export const UNICODE_LEFT_ARROW = "\u27f5";
-
-//#endregion
-
 //#region DiceString
 
 /** This strips a trailing colon (,) or semicolon (;) */

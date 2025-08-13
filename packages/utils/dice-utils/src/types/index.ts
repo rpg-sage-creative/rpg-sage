@@ -1,4 +1,3 @@
-export * from "./consts.js";
 export * from "./DiceCriticalMethodType.js";
 export * from "./DiceOperator.js";
 export * from "./DiceOutputType.js";
