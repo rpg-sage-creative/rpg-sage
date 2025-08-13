@@ -1,6 +1,5 @@
 import { cleanWhitespace, randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { DiceExplode } from "@rsc-utils/dice-utils";
-import { DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice, UNICODE_LEFT_ARROW } from "@rsc-utils/game-utils";
+import { DiceExplode, DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice, UNICODE_LEFT_ARROW } from "@rsc-utils/game-utils";
 import {
 	cleanDescription,
 	DieRollGrade,
