@@ -2,7 +2,8 @@
 	"extends": "../../../tsconfig.base.json",
 	"compilerOptions": {
 		"outDir": "./build",
-		"rootDir": "../../../modules/core-utils/src"
+		"rootDir": "../../../modules/core-utils/src",
+		"tsBuildInfoFile": "./tsconfig.tsbuildinfo"
 	},
 	"include": [
 		"../../../modules/core-utils/src"
