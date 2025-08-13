@@ -1,8 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType, type KeyValuePair, type KeyValueTrio } from "@rsc-sage/types";
 import { applyChanges, capitalize, Color, errorReturnUndefined, getDataRoot, isDefined, isString, isWrapped, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
-import { Currency, parseGameSystem, processMath, type CurrencyPf2e, type DenominationsCore } from "@rsc-utils/game-utils";
+import { Currency, doStatMath, parseGameSystem, processMath, type CurrencyPf2e, type DenominationsCore } from "@rsc-utils/game-utils";
 import { fileExistsSync, getText, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";

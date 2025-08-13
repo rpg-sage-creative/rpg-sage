@@ -15,16 +15,10 @@ COPY node_modules/@rsc-sage/env/ ./env
 COPY node_modules/@rsc-sage/types/ ./types
 
 WORKDIR /rpg-sage/dev/node_modules/@rsc-utils
-COPY node_modules/@rsc-utils/args-utils/ ./args-utils
-COPY node_modules/@rsc-utils/character-utils/ ./character-utils
-COPY node_modules/@rsc-utils/class-utils/ ./class-utils
 COPY node_modules/@rsc-utils/core-utils/ ./core-utils
-COPY node_modules/@rsc-utils/dice-utils/ ./dice-utils
 COPY node_modules/@rsc-utils/discord-utils/ ./discord-utils
+COPY node_modules/@rsc-utils/game-utils/ ./game-utils
 COPY node_modules/@rsc-utils/io-utils/ ./io-utils
-COPY node_modules/@rsc-utils/progress-utils/ ./progress-utils
-COPY node_modules/@rsc-utils/search-utils/ ./search-utils
-COPY node_modules/@rsc-utils/string-utils/ ./string-utils
 
 RUN mkdir -p /rpg-sage/data/sage/bots
 RUN mkdir -p /rpg-sage/data/sage/cache

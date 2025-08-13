@@ -1,6 +1,5 @@
-import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, escapeRegex, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { hasSecretFlag } from "@rsc-utils/dice-utils";
-import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, UNICODE_LEFT_ARROW, rollDice } from "@rsc-utils/game-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, UNICODE_LEFT_ARROW, hasSecretFlag, removeDesc, rollDice } from "@rsc-utils/game-utils";
 import {
 	DieRollGrade,
 	DropKeepType,
@@ -40,16 +39,6 @@ function strike(value: string): string {
 
 function detick(value: string): string {
 	return value.replace(/`/g, "");
-}
-
-/** Removes the first instance of desc from description while ensuring it doesn't break HTML (ex: Removing "b" from "<b>8</b> b") */
-function removeDesc(description: string, desc: string): string {
-	const tokens = tokenize(description, { html:/<[^>]+>/, desc:new RegExp(escapeRegex(desc)) });
-	const firstDesc = tokens.find(token => token.key === "desc");
-	return tokens
-		.filter(token => token !== firstDesc)
-		.map(token => token.token)
-		.join("");
 }
 
 function replaceSpoiler(value: string): string {
