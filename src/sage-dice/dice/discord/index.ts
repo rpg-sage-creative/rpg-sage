@@ -1,7 +1,6 @@
 import { debug, HasCore, parseEnum, randomSnowflake, type IdCore, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, getGameSystems, parseGameSystem } from "@rsc-utils/game-utils";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, matchBasicDice, getGameSystems, parseGameSystem } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../common.js";
-import { getBasicDiceRegex } from "../../getBasicDiceRegex.js";
 import type { Dice as baseDice, DiceGroup as baseDiceGroup, DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart } from "../base/index.js";
 import type { DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore, DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice, TDiceGroup as baseTDiceGroup, TDiceGroupRoll as baseTDiceGroupRoll, TDicePart as baseTDicePart } from "../base/types.js";
 
@@ -164,8 +163,8 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 		defaultCritMethodType?: DiceCriticalMethodType;
 		defaultDiceSecretMethodType?: DiceSecretMethodType;
 	}): OrNull<DiscordDice> {
-		const matchArray = diceString.match(getBasicDiceRegex());
-		if (!matchArray) {
+		const matchArray = matchBasicDice(diceString);
+		if (!matchArray.length) {
 			return null;
 		}
 
