@@ -1,16 +1,15 @@
 import { isDefined, randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, isGradeFailure } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, isGradeFailure } from "@rsc-utils/game-utils";
 import {
-	DieRollGrade,
-	DropKeepType,
-	TestType,
-	cleanDescription,
 	createValueTestData,
 	decreaseGrade,
+	DieRollGrade,
+	DropKeepType,
 	gradeRoll, increaseGrade,
 	isGradeSuccess,
 	parseTestTargetValue,
 	parseTestType,
+	TestType,
 	type TDiceLiteral,
 	type TSign,
 	type TTestData
@@ -337,7 +336,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			id: randomSnowflake(),
 
 			count: count ?? 0,
-			description: cleanDescription(description),
+			description: cleanDicePartDescription(description),
 			dropKeep: dropKeep,
 			fixedRolls,
 			modifier: modifier ?? 0,
@@ -702,7 +701,7 @@ function manipulateCriticalDamage(diceGroupRoll: DiceGroupRoll): void {
 			baseDamage = hasFatal ? damageDice.baseDicePart : null,
 			fatalSides = hasFatal && baseDamage ? diceGroupRoll.fatalDie || increaseDieSize(baseDamage.sides) : null;
 		if (hasFatal && baseDamage && fatalSides) {
-			const fatalBaseDicePart = DicePart.create({ count: baseDamage.count, sides: fatalSides, description: cleanDescription(`${baseDamage.description} <i>(fatal)</i>`) }),
+			const fatalBaseDicePart = DicePart.create({ count: baseDamage.count, sides: fatalSides, description: cleanDicePartDescription(`${baseDamage.description} <i>(fatal)</i>`) }),
 				baseDamageIndex = damageDice.diceParts.indexOf(baseDamage);
 			damageDice.diceParts.splice(baseDamageIndex, 1, fatalBaseDicePart);
 			damageRollCores.splice(baseDamageIndex, 1, fatalBaseDicePart.roll().toJSON());

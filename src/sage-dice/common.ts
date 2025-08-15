@@ -1,16 +1,6 @@
-import { cleanWhitespace, HasIdCore, sortPrimitive, sum, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
+import { HasIdCore, sortPrimitive, sum, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
 import { DiceOutputType, GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
-
-//#region DiceString
-
-/** This strips a trailing colon (,) or semicolon (;) */
-export function cleanDescription(description?: string): string {
-	const replaced = (description ?? "").replace(/[;,]\s*$/, "");
-	return cleanWhitespace(replaced);
-}
-
-//#endregion
 
 //#region rollDice, sum, toMod
 
@@ -47,10 +37,6 @@ export function sumDicePartRolls(dicePartRolls: THasSignAndTotal[]): number {
 			return value + dicePartRoll.total;
 		}
 	}, 0);
-}
-
-export function toMod(mod: number, spaced = false): string {
-	return `${mod < 0 ? "-" : "+"}${spaced ? " " : ""}${Math.abs(mod)}`;
 }
 
 //#endregion
