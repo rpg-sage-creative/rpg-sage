@@ -1,43 +1,10 @@
-import { HasIdCore, sortPrimitive, sum, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
+import { HasIdCore, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
 import { DiceOutputType, GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
 //#region rollDice, sum, toMod
 
-export function sumDropKeep(values: number[], dropKeep?: TDropKeepData): number {
-	if (!dropKeep) {
-		return sum(values);
-	}
-	const sorted = values.slice().sort(sortPrimitive);
-	switch (dropKeep.type) {
-		case DropKeepType.DropHighest:
-			return sum(sorted.slice(0, -dropKeep.value));
-		case DropKeepType.DropLowest:
-			return sum(sorted.slice(dropKeep.value));
-		case DropKeepType.KeepHighest:
-			return sum(sorted.slice(-dropKeep.value));
-		case DropKeepType.KeepLowest:
-			return sum(sorted.slice(0, dropKeep.value));
-		default:
-			warn(`Invalid dropKeep.type = ${dropKeep.type} (${DropKeepType[dropKeep.type]})`);
-			return sum(values);
-	}
-}
 
-type THasSignAndTotal = { sign?:TSign; total:number; };
-export function sumDicePartRolls(dicePartRolls: THasSignAndTotal[]): number {
-	return dicePartRolls.reduce((value, dicePartRoll) => {
-		if (dicePartRoll.sign === "-") {
-			return value + dicePartRoll.total;
-		} else if (dicePartRoll.sign === "*") {
-			return value * dicePartRoll.total;
-		} else if (dicePartRoll.sign === "/") {
-			return value / dicePartRoll.total;
-		} else {
-			return value + dicePartRoll.total;
-		}
-	}, 0);
-}
 
 //#endregion
 
