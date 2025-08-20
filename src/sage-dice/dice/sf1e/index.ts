@@ -94,7 +94,7 @@ function gradeResults(roll: DiceRoll): DieRollGrade {
 
 	if (alias?.match(/ac/i)) {
 		const d20 = roll.rolls.find(dpr => dpr.dice.sides === 20);
-		if (d20?.isMin) DieRollGrade.CriticalFailure;
+		if (d20?.isMin) return DieRollGrade.CriticalFailure;
 		if (d20?.isMax) {
 			if (successOrFailure === DieRollGrade.Success) return DieRollGrade.CriticalSuccess;
 			return DieRollGrade.Success;
