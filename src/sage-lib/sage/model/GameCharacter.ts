@@ -1,7 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType, type KeyValuePair, type KeyValueTrio } from "@rsc-sage/types";
 import { applyChanges, capitalize, Color, errorReturnUndefined, getDataRoot, isDefined, isString, isWrapped, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
-import { Currency, doStatMath, parseGameSystem, processMath, type CurrencyPf2e, type DenominationsCore } from "@rsc-utils/game-utils";
+import { Currency, Deck, doStatMath, parseGameSystem, processMath, type CurrencyPf2e, type DeckCore, type DeckType, type DenominationsCore } from "@rsc-utils/game-utils";
 import { fileExistsSync, getText, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
@@ -10,7 +10,6 @@ import { processCharacterTemplate } from "../../../gameSystems/processCharacterT
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
-import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMessageRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
