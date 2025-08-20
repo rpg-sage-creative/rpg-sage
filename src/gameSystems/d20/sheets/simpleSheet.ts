@@ -1,8 +1,9 @@
-import { Ability } from "../lib/Ability.js";
-import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
-import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
-import { toModifier } from "../../utils/toModifier.js";
+import { numberOrUndefined } from "@rsc-utils/core-utils";
 import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
+import { processCharacterTemplate } from "../../processCharacterTemplate.js";
+import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
+import { toModifier } from "../../utils/toModifier.js";
+import { Ability } from "../lib/Ability.js";
 
 function abilitiesToHtml(char: GameCharacter): string | undefined {
 	let hasStats = false;
@@ -51,11 +52,21 @@ function acSavesToHtml(char: GameCharacter): string | undefined {
 }
 
 function hpToHtml(char: GameCharacter): string | undefined {
-	const hp = char.getStat("hp");
-	const maxHp = char.getStat("maxHp");
-	return hp || maxHp
-		? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}`
-		: undefined;
+	const hp = char.getNumber("hp");
+	const maxHp = char.getNumber("maxHp");
+	const tempHp = char.getNumber("tempHp");
+
+	if (tempHp) {
+		return processCharacterTemplate(char, "hp.tempHp").value
+			?? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}; <b>Temp HP</b> ${tempHp ?? "0"}`;
+	}
+
+	if (hp || maxHp) {
+		return processCharacterTemplate(char, "hp").value
+			?? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}`;
+	}
+
+	return undefined;
 }
 
 function coinsToHtml(char: GameCharacter): string | undefined {
