@@ -17,14 +17,6 @@ fi
 ROOT_DIR="$(pwd)"
 ROOT_NAME="$(basename -- "$(pwd)")"
 
-# scrub build folders
-echo "Scrubbing build folders ..."
-find . -type d -name 'build' -not -path '*/node_modules/*'  -exec rm -rf {} +
-
-# scrub build info
-echo "Scrubbing tsbuildinfo files ..."
-find . -type f -name '*.tsbuildinfo' -not -path './node_modules/*' -exec rm -rf {} +
-
 # we have a known issue with this lib needing this "declare module"
 if [ -d "./node_modules/pdf2json" ]; then
 	if [ ! -f "./node_modules/pdf2json/index.d.ts" ]; then
@@ -48,12 +40,23 @@ function buildModule() {
 		npm i
 	fi
 
+	# scrub build folder
+	echo "  Deleting build folder ..."
+	rm -rf build
+
+	# scrub build info
+	echo "  Deleting tsbuildinfo files ..."
+	rm -f *.tsbuildinfo
+
+	echo "  Generating index.ts files ..."
 	node "$INDEX_MJS" indexTs -r
 	if [ "$?" != "0" ]; then echo "Error generating index.ts files!"; exit 1; fi
 
+	echo "  Transpiling ts files ..."
 	tsc --build tsconfig.json
 	if [ "$?" != "0" ]; then echo "Building: $repoName ... Failed!"; exit 1; fi
 
+	echo "  Generating declaration files ..."
 	tsc --build tsconfig.d.json
 	if [ "$?" != "0" ]; then echo "Building: $repoName ... Failed!"; exit 1; fi
 }
@@ -67,14 +70,22 @@ echo "Building: $ROOT_NAME ..."
 
 cd "$ROOT_DIR"
 
+# scrub build folders
+echo "  Deleting build folders ..."
+find . -type d -name 'build' -not -path '*/node_modules/*' -not -path './modules/*'  -exec rm -rf {} +
+
+# scrub build info
+echo "  Deleting tsbuildinfo files ..."
+find . -type f -name '*.tsbuildinfo' -not -path './node_modules/*' -not -path './modules/*' -exec rm -rf {} +
+
 # transpile the TS
-echo "Building tsconfig.json ..."
+echo "  Transpiling ts files ..."
 tsc --build tsconfig.json
 if [ "$?" != "0" ]; then echo "Build Failed!"; exit 1; fi
 
 # build out the .d.ts files that exclude the private/internal docs
 if [ -f "./tsconfig.d.json" ]; then
-	echo "Building tsconfig.d.json ..."
+	echo "  Generating declaration files ..."
 	tsc --build tsconfig.d.json
 	if [ "$?" != "0" ]; then echo "Build Failed!"; exit 1; fi
 fi
