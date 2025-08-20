@@ -1,11 +1,9 @@
 import { DicePostType } from "@rsc-sage/types";
-import { error, isWrapped, redactCodeBlocks, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
+import { error, isWrapped, redactCodeBlocks, redactKeyValuePairs, redactMdLink, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, processStatBlocks, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
-import { redactKeyValuePairs } from "../../../sage-utils/redactKeyValuePairs.js";
-import { redactMdLink } from "../../../sage-utils/redactMdLink.js";
 import { registerMessageListener } from "../../discord/handlers.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
 import type { CharacterManager } from "../model/CharacterManager.js";
