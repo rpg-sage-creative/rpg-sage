@@ -1,8 +1,7 @@
 import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice } from "@rsc-utils/game-utils";
 import {
 	createValueTestData,
-	DropKeepType,
 	parseTestTargetValue,
 	TestType,
 	type TDiceLiteral,
@@ -68,9 +67,9 @@ function getParsers(): TokenParsers {
 
 function applyEdgeSnagSpecShift<T extends DicePartCore>({ core, hasEdge, hasSnag, hasSpecialization, upShift, downShift }: { core: T, hasEdge: boolean, hasSnag: boolean, hasSpecialization: boolean, upShift: number, downShift: number }): T {
 	if (hasEdge && !hasSnag) {
-		core.dropKeep = { type:DropKeepType.KeepHighest, value:1 };
+		core.dropKeep = { type:DiceDropKeepType.KeepHighest, value:1 };
 	}else if (!hasEdge && hasSnag) {
-		core.dropKeep = { type:DropKeepType.KeepLowest, value:1 };
+		core.dropKeep = { type:DiceDropKeepType.KeepLowest, value:1 };
 	}
 	if (hasSpecialization) {
 		core.sign = "+";

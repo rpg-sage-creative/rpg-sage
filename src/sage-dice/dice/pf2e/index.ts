@@ -1,10 +1,9 @@
 import { isDefined, randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, isGradeFailure } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, DiceCriticalMethodType, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, GameSystemType, isGradeFailure } from "@rsc-utils/game-utils";
 import {
 	createValueTestData,
 	decreaseGrade,
 	DieRollGrade,
-	DropKeepType,
 	gradeRoll, increaseGrade,
 	isGradeSuccess,
 	parseTestTargetValue,
@@ -59,8 +58,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
 	if (token.key === "dice") {
 		reduceSignToDropKeepData.push(
-			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:FORTUNE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
-			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:MISFORTUNE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "-" }
+			{ sign:"+" as TSign, type:DiceDropKeepType.KeepHighest, value:1, alias:FORTUNE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
+			{ sign:"-" as TSign, type:DiceDropKeepType.KeepLowest, value:1, alias:MISFORTUNE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "-" }
 		);
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
