@@ -1,5 +1,5 @@
-import type { DiceCriticalMethodType, DiceDropKeepData, DiceOutputType, DiceSecretMethodType, DiceTestData } from "@rsc-utils/game-utils";
-import type { DieCore, TSign } from "../../index.js";
+import type { DiceCriticalMethodType, DiceDropKeepData, DiceOperator, DiceOutputType, DiceSecretMethodType, DiceTestData } from "@rsc-utils/game-utils";
+import type { DieCore } from "../../index.js";
 import type { Dice, DiceGroup, DiceGroupRoll, DicePart, DicePartRoll, DiceRoll } from "./index.js";
 
 //#region DicePart
@@ -30,7 +30,7 @@ interface DicePartCoreBase {
 	sides: number;
 
 	/** sign (- or +) of the dice or modifier */
-	sign?: TSign;
+	sign?: DiceOperator;
 
 	/** target test information */
 	test?: DiceTestData;

@@ -1,6 +1,6 @@
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { DiceCriticalMethodType, DiceDropKeep, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, DiceTest, DieRollGrade, GameSystemType, UNICODE_LEFT_ARROW, cleanDicePartDescription, gradeRoll, gradeToEmoji, hasSecretFlag, removeDesc, rollDice, type DiceDropKeepData, type DiceTestData } from "@rsc-utils/game-utils";
-import { HasDieCore, type IDiceBase, type IRollBase, type TDiceLiteral, type TSign } from "../../common.js";
+import { DiceCriticalMethodType, DiceDropKeep, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, DiceTest, DieRollGrade, GameSystemType, UNICODE_LEFT_ARROW, cleanDicePartDescription, gradeRoll, gradeToEmoji, hasSecretFlag, removeDesc, rollDice, type DiceDropKeepData, type DiceOperator, type DiceTestData, type SimpleDice } from "@rsc-utils/game-utils";
+import { HasDieCore, type IDiceBase, type IRollBase } from "../../common.js";
 import { correctEscapeForEmoji } from "../index.js";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
@@ -27,7 +27,7 @@ function sumDropKeep(values: number[], dropKeep?: DiceDropKeepData): number {
 	}
 }
 
-type THasSignAndTotal = { sign?:TSign; total:number; };
+type THasSignAndTotal = { sign?:DiceOperator; total:number; };
 function sumDicePartRolls(dicePartRolls: THasSignAndTotal[]): number {
 	return dicePartRolls.reduce((value, dicePartRoll) => {
 		if (dicePartRoll.sign === "-") {
@@ -93,7 +93,7 @@ function reduceDescriptionToken<T extends DicePartCore>(core: T, token: TokenDat
 }
 
 export type TReduceSignToDropKeep = {
-	sign: TSign;
+	sign: DiceOperator;
 	type: DiceDropKeepType;
 	value: number;
 	alias: string;
@@ -105,7 +105,7 @@ export type TReduceSignToDropKeep = {
  * */
 function reduceDiceToken<T extends DicePartCore>(core: T, token: TokenData, reduceSignToDropKeepData?: TReduceSignToDropKeep[]): T {
 	if (token.matches) {
-		core.sign = <TSign>token.matches[0];
+		core.sign = token.matches[0] as DiceOperator;
 		core.fixedRolls = (token.matches[1] ?? "").split(",").map(s => +s.trim()).filter(n => n);
 		core.count = +token.matches[2] || 0;
 		core.sides = +token.matches[3] || 0;
@@ -139,7 +139,7 @@ function reduceNoSortToken<T extends DicePartCore>(core: T, token: TokenData, la
 
 function reduceModToken<T extends DicePartCore>(core: T, token: TokenData): T {
 	if (token.matches) {
-		core.sign = <TSign>token.matches[0];
+		core.sign = token.matches[0] as DiceOperator;
 		core.modifier = +token.matches[1] || 0;
 	}
 	return core;
@@ -296,7 +296,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	public get noSort(): boolean { return this.core.noSort; }
 	public get fixedRolls(): OrUndefined<number[]> { return this.core.fixedRolls; }
 	public get sides(): number { return this.core.sides; }
-	public get sign(): OrUndefined<TSign> { return this.core.sign; }
+	public get sign(): OrUndefined<DiceOperator> { return this.core.sign; }
 	public get test(): OrUndefined<DiceTestData> { return this.core.test; }
 	//#endregion
 
@@ -403,7 +403,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 
 export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> extends HasDieCore<T> implements IRollBase<U, number> {
 	//#region from this.dice
-	public get sign(): OrUndefined<TSign> {
+	public get sign(): OrUndefined<DiceOperator> {
 		return this.dice.sign;
 	}
 	//#endregion
@@ -559,7 +559,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 		return diceGroup?.dice[0] ?? null;
 	}
 	/** Returns null if diceString can't be parsed, otherwise it returns the results */
-	public static roll(diceString: TDiceLiteral): number;
+	public static roll(diceString: SimpleDice): number;
 	public static roll(diceString: string): OrNull<number>;
 	public static roll(diceString: string): OrNull<number> {
 		const _dice = Dice.parse(diceString);

@@ -1,6 +1,5 @@
 import { randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, DieRollGrade, GameSystemType, gradeToEmoji, rollDice, type DiceTargetData, type DiceTestData } from "@rsc-utils/game-utils";
-import type { TDiceLiteral } from "../../common.js";
+import { cleanDicePartDescription, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, DieRollGrade, GameSystemType, gradeToEmoji, rollDice, type DiceTargetData, type DiceTestData, type SimpleDice } from "@rsc-utils/game-utils";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -151,7 +150,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		const diceGroup = DiceGroup.parse(diceString);
 		return diceGroup && diceGroup.dice[0] || null;
 	}
-	public static roll(diceString: TDiceLiteral): number;
+	public static roll(diceString: SimpleDice): number;
 	public static roll(diceString: string): OrNull<number>;
 	public static roll(diceString: string): OrNull<number> {
 		const _dice = Dice.parse(diceString);

@@ -1,6 +1,5 @@
 import { randomSnowflake, tokenize, type Optional, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceCriticalMethodType, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, DieRollGrade, GameSystemType, gradeRoll, isGradeSuccess, type DiceTargetData, type DiceTestData } from "@rsc-utils/game-utils";
-import type { TDiceLiteral, TSign } from "../../common.js";
+import { cleanDicePartDescription, DiceCriticalMethodType, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, DieRollGrade, GameSystemType, gradeRoll, isGradeSuccess, type DiceTargetData, type DiceTestData, type SimpleDice } from "@rsc-utils/game-utils";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -31,8 +30,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
 	if (token.key === "dice") {
 		reduceSignToDropKeepData.push(
-			{ sign:"+" as TSign, type:DiceDropKeepType.KeepHighest, value:1, alias:ADVANTAGE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
-			{ sign:"-" as TSign, type:DiceDropKeepType.KeepLowest, value:1, alias:DISADVANTAGE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "-" }
+			{ sign:"+", type:DiceDropKeepType.KeepHighest, value:1, alias:ADVANTAGE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
+			{ sign:"-", type:DiceDropKeepType.KeepLowest, value:1, alias:DISADVANTAGE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "-" }
 		);
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
@@ -201,7 +200,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		const diceGroup = DiceGroup.parse(diceString);
 		return diceGroup && diceGroup.dice[0] || null;
 	}
-	public static roll(diceString: TDiceLiteral): number;
+	public static roll(diceString: SimpleDice): number;
 	public static roll(diceString: string): OrNull<number>;
 	public static roll(diceString: string): OrNull<number> {
 		const _dice = Dice.parse(diceString);

@@ -4,16 +4,12 @@ import type { DiceOutputType, GameSystemType } from "@rsc-utils/game-utils";
 
 //#region Interfaces/Types
 
-export type TDiceLiteral = `${number}d${number}` | `${number}d${number}+${number}` | `${number}d${number}-${number}`;
-
 export type TDiceOutput = {
 	hasSecret: boolean;
 	inlineOutput: string;
 	input: string,
 	output: string;
 };
-
-export type TSign = "+" | "-" | "*" | "/";
 
 export interface DieCore<T extends string = string> extends IdCore<T> {
 	gameType: GameSystemType;
