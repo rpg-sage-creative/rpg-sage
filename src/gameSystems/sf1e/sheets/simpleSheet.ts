@@ -1,8 +1,9 @@
+import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
 import { Ability } from "../../d20/lib/Ability.js";
+import { processCharacterTemplate } from "../../processCharacterTemplate.js";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { toModifier } from "../../utils/toModifier.js";
-import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
 
 function abilitiesToHtml(char: GameCharacter): string | undefined {
 	let hasStats = false;
@@ -55,13 +56,13 @@ function acSavesToHtml(char: GameCharacter): string | undefined {
 function hpToHtml(char: GameCharacter): string | undefined {
 	let hasHealth = false;
 	const out = ["Stamina", "HP", "Resolve"].map(label => {
-		const value = char.getStat(label);
-		const maxValue = char.getStat(`max${label}`);
+		const value = char.getNumber(label);
+		const maxValue = char.getNumber(`max${label}`);
 		if (value || maxValue) {
 			hasHealth = true;
-			return `<b>${label}</b> ${value ?? "??"}/${maxValue ?? "??"}`;
 		}
-		return `<b>${label}</b> ??/??`;
+		return processCharacterTemplate(char, `${label}.template`).value
+			?? `<b>${label}</b> ${value ?? "??"}/${maxValue ?? "??"}`;
 	});
 
 	if (hasHealth) {
