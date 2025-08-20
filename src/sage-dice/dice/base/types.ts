@@ -1,5 +1,5 @@
-import type { DiceCriticalMethodType, DiceDropKeepData, DiceOutputType, DiceSecretMethodType } from "@rsc-utils/game-utils";
-import type { DieCore, TSign, TTestData } from "../../index.js";
+import type { DiceCriticalMethodType, DiceDropKeepData, DiceOutputType, DiceSecretMethodType, DiceTestData } from "@rsc-utils/game-utils";
+import type { DieCore, TSign } from "../../index.js";
 import type { Dice, DiceGroup, DiceGroupRoll, DicePart, DicePartRoll, DiceRoll } from "./index.js";
 
 //#region DicePart
@@ -33,7 +33,7 @@ interface DicePartCoreBase {
 	sign?: TSign;
 
 	/** target test information */
-	test?: TTestData;
+	test?: DiceTestData;
 
 	target?: TargetData;
 }

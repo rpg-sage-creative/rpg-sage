@@ -1,18 +1,6 @@
-import { isDefined, randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceCriticalMethodType, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, GameSystemType, isGradeFailure } from "@rsc-utils/game-utils";
-import {
-	createValueTestData,
-	decreaseGrade,
-	DieRollGrade,
-	gradeRoll, increaseGrade,
-	isGradeSuccess,
-	parseTestTargetValue,
-	parseTestType,
-	TestType,
-	type TDiceLiteral,
-	type TSign,
-	type TTestData
-} from "../../common.js";
+import { mapFirst, randomSnowflake, tokenize, type Optional, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { cleanDicePartDescription, decreaseGrade, DiceCriticalMethodType, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, DieRollGrade, GameSystemType, gradeRoll, increaseGrade, isGradeFailure, isGradeSuccess, type DiceTargetData, type DiceTestData } from "@rsc-utils/game-utils";
+import type { TDiceLiteral, TSign } from "../../common.js";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -52,7 +40,7 @@ const FORTUNE = "Fortune";
 const MISFORTUNE = "Misfortune";
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
 	if (token.key === "target" || SpecialTestAliases.includes(token.key as TSpecialTestAliasType)) {
-		core.target = parseTargetData(token);
+		core.target = DiceTest.parseTargetData(token, parseTargetType, parseTargetValue);
 		return core;
 	}
 	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
@@ -67,11 +55,11 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 //#endregion
 
 //#region Targets/Tests
-type TSpecialTestAliasType = "concealed" | "deafened" | "hidden" | "stupefied" | "undetected";
-const SpecialTestAliases: TSpecialTestAliasType[] = ["deafened", "stupefied", "concealed", "hidden", "undetected"];
+type TSpecialTestAliasType = typeof SpecialTestAliases[number];
+const SpecialTestAliases = ["deafened", "stupefied", "concealed", "hidden", "undetected"] as const;
 export enum TargetType { None = 0, AC = 1, DC = 2, VS = 3, Concealed = 4, Deafened = 5, Hidden = 6, Stupefied = 7, Undetected = 8 }
-export type TTargetData = { type:TargetType; value:number; hidden:boolean; raw?:string; };
-function parseTargetType(targetType: string): TargetType {
+function parseTargetType(targetType: Optional<string>): TargetType {
+	if (!targetType) return TargetType.None;
 	const targetTypeLower = targetType.toLowerCase();
 	if (targetTypeLower.endsWith("ac")) {
 		return TargetType.AC;
@@ -106,28 +94,7 @@ function parseTargetValue(type: TargetType, value: number): number {
 		default: return 0;
 	}
 }
-function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
-	if (token.matches) {
-		const type = parseTargetType(token.matches[0] ?? "");
-		let { value, hidden } = parseTestTargetValue(token.matches[1] ?? "");
-		value = parseTargetValue(type, value);
-		return { type, value, hidden, raw:token.token };
-	}
-	return undefined;
-}
-function targetDataToTestData(targetData: TTargetData | TTestData): OrUndefined<TTestData> {
-	if (targetData) {
-		const alias = (<TTestData>targetData).alias;
-		if (alias) {
-			const testType = parseTestType(alias);
-			if (testType) {
-				return createValueTestData(testType, targetData.value, targetData.hidden);
-			}
-		}
-		return createValueTestData(TestType.GreaterThanOrEqual, targetData.value, targetData.hidden, TargetType[targetData.type].toLowerCase());
-	}
-	return undefined;
-}
+
 //#endregion
 
 //#region CONST
@@ -292,25 +259,16 @@ function increaseDieSize(sides: number): number {
 }
 //#endregion
 
-//#region mapFirst
-function mapFirst<T, U>(array: T[], mapper: (o: T, i: number, a: T[]) => U): OrUndefined<U> {
-	for (let i = 0; i < array.length; i++) {
-		const result = mapper(array[i], i, array);
-		if (isDefined(result)) {
-			return result;
-		}
-	}
-	return undefined;
-}
-//#endregion
-
 //#region DicePart
+
 interface DicePartCore extends baseDicePartCore {
-	target?: TTargetData;
+	target?: DiceTargetData<TargetType>;
 }
+
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | DiceTargetData<TargetType>;
 };
+
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
 	public get hasFortune(): boolean {
@@ -342,8 +300,8 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			noSort: noSort === true,
 			sides: sides ?? 0,
 			sign: sign,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget,
-			target: <TTargetData>testOrTarget
+			test: DiceTest.fromTarget(testOrTarget, TargetType, DiceTestType.GreaterThanOrEqual),
+			target: testOrTarget as DiceTargetData<TargetType>
 		});
 	}
 	public static fromCore(core: DicePartCore): DicePart {

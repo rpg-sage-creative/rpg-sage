@@ -1,12 +1,6 @@
-import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice } from "@rsc-utils/game-utils";
-import {
-	createValueTestData,
-	parseTestTargetValue,
-	TestType,
-	type TDiceLiteral,
-	type TTestData
-} from "../../common.js";
+import { randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { cleanDicePartDescription, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, GameSystemType, rollDice, type DiceTargetData, type DiceTestData } from "@rsc-utils/game-utils";
+import type { TDiceLiteral } from "../../common.js";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -57,7 +51,10 @@ import { correctEscapeForEmoji } from "../index.js";
 */
 //#endregion
 
+enum TargetType { None = 0, DIF = 1 }
+
 //#region Tokenizer
+
 function getParsers(): TokenParsers {
 	const parsers = baseGetParsers();
 	parsers["suffix"] = /(e|s|\*|up\d+|dn\d+)+/i;
@@ -101,38 +98,23 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 				downShift: tallyShifts(token.token, "down")
 			});
 		}
-	}
-	if (token.key === "target") {
-		core.target = parseTargetData(token);
+
+	}else if (token.key === "target") {
+		core.target = DiceTest.parseTargetData(token, () => TargetType.DIF);
 		return core;
+
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens);
 }
-//#endregion
 
-//#region Targets/Tests
-enum TargetType { None = 0, DIF = 1 }
-type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; };
-function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
-	if (token.matches) {
-		const type = TargetType.DIF;
-		const { value, hidden } = parseTestTargetValue(token.matches[1]);
-		return { type, value, hidden, raw:token.token };
-	}
-	return undefined;
-}
-function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : createValueTestData(TestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "dif");
-}
 //#endregion
 
 //#region helpers
-export type TSkillDie = "fumble" | "fail" | "d20" | "d2" | "d4" | "d6" | "d8" | "d10" | "d12" | "2d8" | "3d6" | "success" | "critical";
-/** return ["fumble","fail","d20","d2","d4","d6","d8","d10","d12","2d8","3d6","success","critical"]; */
+export type TSkillDie = typeof E20_LADDER[number];
+const E20_LADDER = ["fumble","fail","d20","d2","d4","d6","d8","d10","d12","2d8","3d6","success","critical"] as const;
 function getLadder(startValue: TSkillDie = "fumble"): TSkillDie[] {
-	const ladder: TSkillDie[] = ["fumble","fail","d20","d2","d4","d6","d8","d10","d12","2d8","3d6","success","critical"];
-	const startIndex = ladder.indexOf(startValue);
-	return ladder.slice(startIndex);
+	const startIndex = E20_LADDER.indexOf(startValue);
+	return E20_LADDER.slice(startIndex);
 }
 
 type TShiftArrow = "↑" | "↓" | "";
@@ -258,7 +240,7 @@ interface DicePartCore extends baseDicePartCore {
 	downShift?: number;
 	upShift?: number;
 	specialization?: boolean;
-	target?: TTargetData;
+	target?: DiceTargetData<TargetType>;
 	/** ex: d4↑1 */
 	shiftedDesc?: string;
 	skillDie: TSkillDie;
@@ -267,7 +249,7 @@ type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 	downShift?: number;
 	upShift?: number;
 	specialization?: boolean;
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | DiceTargetData<TargetType>;
 	/** ex: d4↑1 */
 	shiftedDesc?: string;
 	skillDie?: TSkillDie;
@@ -346,8 +328,8 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			sign: sign,
 			skillDie: skillDie ?? `${count ?? ""}d${sides ?? 20}`.replace(/^1d/, "d") as TSkillDie,
 			specialization,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
-			target: <TTargetData>testOrTarget ?? null,
+			test: DiceTest.fromTarget(testOrTarget, TargetType, DiceTestType.GreaterThanOrEqual),
+			target: testOrTarget as DiceTargetData<TargetType>,
 			upShift: upShift ?? undefined
 		});
 	}

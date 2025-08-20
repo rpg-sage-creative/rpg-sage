@@ -1,17 +1,6 @@
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { DiceCriticalMethodType, DiceDropKeep, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, GameSystemType, UNICODE_LEFT_ARROW, cleanDicePartDescription, hasSecretFlag, removeDesc, rollDice, type DiceDropKeepData } from "@rsc-utils/game-utils";
-import {
-	DieRollGrade,
-	HasDieCore,
-	gradeRoll, gradeToEmoji,
-	mapRollToJson,
-	parseValueTestData,
-	type IDiceBase,
-	type IRollBase,
-	type TDiceLiteral,
-	type TSign,
-	type TTestData
-} from "../../common.js";
+import { DiceCriticalMethodType, DiceDropKeep, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, DiceTest, DieRollGrade, GameSystemType, UNICODE_LEFT_ARROW, cleanDicePartDescription, gradeRoll, gradeToEmoji, hasSecretFlag, removeDesc, rollDice, type DiceDropKeepData, type DiceTestData } from "@rsc-utils/game-utils";
+import { HasDieCore, type IDiceBase, type IRollBase, type TDiceLiteral, type TSign } from "../../common.js";
 import { correctEscapeForEmoji } from "../index.js";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
@@ -157,7 +146,7 @@ function reduceModToken<T extends DicePartCore>(core: T, token: TokenData): T {
 }
 
 function reduceTestToken<T extends DicePartCore>(core: T, token: TokenData): T {
-	core.test = parseValueTestData(token);
+	core.test = DiceTest.parseData(token);
 	return core;
 }
 
@@ -308,7 +297,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 	public get fixedRolls(): OrUndefined<number[]> { return this.core.fixedRolls; }
 	public get sides(): number { return this.core.sides; }
 	public get sign(): OrUndefined<TSign> { return this.core.sign; }
-	public get test(): OrUndefined<TTestData> { return this.core.test; }
+	public get test(): OrUndefined<DiceTestData> { return this.core.test; }
 	//#endregion
 
 	//#region calculated
@@ -507,7 +496,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 	public get baseDicePart(): OrUndefined<U> { return this.diceParts.find(dicePart => dicePart.hasDie); }
 	public get max(): number { return sum(this.diceParts, dicePart => dicePart.max); }
 	public get min(): number { return sum(this.diceParts, dicePart => dicePart.min); }
-	public get test(): OrUndefined<TTestData> { return this.diceParts.find(dicePart => dicePart.hasTest)?.test; }
+	public get test(): OrUndefined<DiceTestData> { return this.diceParts.find(dicePart => dicePart.hasTest)?.test; }
 	//#endregion
 
 	//#region flags
@@ -691,7 +680,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			//Quick rolls can never be reloaded, so we don't need a UUID
 			id: uuid ? randomSnowflake() : null!,
 			dice: _dice.toJSON(),
-			rolls: _dice.diceParts.map<DicePartRollCore>(mapRollToJson)
+			rolls: _dice.diceParts.map<DicePartRollCore>(part => part.roll().toJSON())
 		};
 		return new DiceRoll(core);
 	}
@@ -863,7 +852,7 @@ export class DiceGroupRoll<T extends DiceGroupRollCore, U extends TDiceGroup, V 
 			//Quick rolls can never be reloaded, so we don't need a UUID
 			id: uuid ? randomSnowflake() : null!,
 			diceGroup: diceGroup.toJSON(),
-			rolls: diceGroup.dice.map<DiceRollCore>(mapRollToJson)
+			rolls: diceGroup.dice.map<DiceRollCore>(dice => dice.roll().toJSON())
 		});
 	}
 	public static fromCore(core: DiceGroupRollCore): TDiceGroupRoll {

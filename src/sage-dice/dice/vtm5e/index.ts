@@ -1,21 +1,8 @@
 import { cleanWhitespace, getCodeName, randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice, UNICODE_LEFT_ARROW } from "@rsc-utils/game-utils";
-import {
-	parseTestTargetValue,
-	TestType,
-	type TDiceLiteral,
-	type TTestData
-} from "../../common.js";
-import {
-	Dice as baseDice, DiceGroup as baseDiceGroup,
-	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
-	DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll
-} from "../base/index.js";
-import type {
-	DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore,
-	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
-	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
-} from "../base/types.js";
+import { cleanDicePartDescription, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, GameSystemType, rollDice, UNICODE_LEFT_ARROW, type DiceTargetData, type DiceTestData } from "@rsc-utils/game-utils";
+import type { TDiceLiteral } from "../../common.js";
+import { Dice as baseDice, DiceGroup as baseDiceGroup, DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart, DicePartRoll as baseDicePartRoll, DiceRoll as baseDiceRoll } from "../base/index.js";
+import type { DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore, DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs } from "../base/types.js";
 
 /*
 
@@ -47,6 +34,7 @@ function getParsers(): TokenParsers {
 	};
 }
 
+enum TargetType { None = 0, VS = 1 }
 type TokenType = TokenData<"dice" | "target" | "desc">;
 
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData<any>): T;
@@ -59,25 +47,13 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 		}
 
 	}else if (token.key === "target") {
-		const { value, hidden } = parseTestTargetValue(token.matches[1]);
-		core.target = { type:TargetType.VS, value, hidden };
+		core.target = DiceTest.parseTargetData(token, () => TargetType.VS);
 
 	}else {
 		core.description = (core.description ?? "") + token.token;
+
 	}
 	return core;
-}
-
-//#endregion
-
-//#region Targets/Tests
-
-enum TargetType { None = 0, VS = 1 }
-
-type TTargetData = { type:TargetType; value:number; hidden:boolean; };
-
-function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : { alias:"vs", type: TestType.GreaterThanOrEqual, value:targetData.value, hidden:targetData.hidden };
 }
 
 //#endregion
@@ -344,12 +320,12 @@ function toString(diceRoll: DiceRoll, size?: DiceOutputType): string {
 
 interface DicePartCore extends baseDicePartCore {
 	hunger?: number;
-	target?: TTargetData;
+	target?: DiceTargetData<TargetType>;
 }
 
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 	hunger?: number;
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | DiceTargetData<TargetType>;
 };
 
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
@@ -381,8 +357,8 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			noSort: false,
 			sides: 10,
 			sign: undefined,
-			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as TTestData ?? null,
-			target: testOrTarget as TTargetData ?? null
+			test: DiceTest.fromTarget(testOrTarget, TargetType, DiceTestType.GreaterThanOrEqual),
+			target: testOrTarget as DiceTargetData<TargetType>
 		});
 	}
 	public static fromCore(core: DicePartCore): DicePart {

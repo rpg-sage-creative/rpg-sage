@@ -1,14 +1,6 @@
 import { randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceOutputType, DiceSecretMethodType, GameSystemType, rollDice } from "@rsc-utils/game-utils";
-import {
-	createValueTestData,
-	DieRollGrade,
-	gradeToEmoji,
-	parseTestTargetValue,
-	TestType,
-	type TDiceLiteral,
-	type TTestData
-} from "../../common.js";
+import { cleanDicePartDescription, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, DieRollGrade, GameSystemType, gradeToEmoji, rollDice, type DiceTargetData, type DiceTestData } from "@rsc-utils/game-utils";
+import type { TDiceLiteral } from "../../common.js";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -27,25 +19,24 @@ function getParsers(): TokenParsers {
 		target: /(vs)\s*(\d+|\|\|\d+\|\|)/i
 	};
 }
-function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData): T {
+
+enum TargetType { None = 0, VS = 1 }
+type TokenType = TokenData<"dice" | "target" | "desc">;
+
+function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData<any>): T;
+function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenType): T {
 	if (token.key === "dice") {
 		core.count = 1;
 		core.sides = 20;
+
 	}else if (token.key === "target") {
-		const { value, hidden } = parseTestTargetValue(token.matches[1]);
-		core.target = { type:TargetType.VS, value, hidden };
+		core.target = DiceTest.parseTargetData(token, () => TargetType.VS);
+
 	}else {
-		core.description = (core.description || "") + token.token;
+		core.description = (core.description ?? "") + token.token;
+
 	}
 	return core;
-}
-//#endregion
-
-//#region Targets/Tests
-enum TargetType { None = 0, VS = 1 }
-type TTargetData = { type:TargetType; value:number; hidden:boolean; };
-function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	return !targetData ? null : createValueTestData(TestType.GreaterThan, targetData.value, targetData.hidden, "vs");
 }
 //#endregion
 
@@ -80,10 +71,10 @@ function _gradeEmoji(grade: DieRollGrade, vs: boolean): string {
 
 //#region DicePart
 interface DicePartCore extends baseDicePartCore {
-	target?: TTargetData;
+	target?: DiceTargetData<TargetType>;
 }
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | DiceTargetData<TargetType>;
 };
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region static
@@ -100,8 +91,8 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			noSort: false,
 			sides: 20,
 			sign: undefined,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
-			target: <TTargetData>testOrTarget ?? null
+			test: DiceTest.fromTarget(testOrTarget, TargetType, DiceTestType.GreaterThan),
+			target: testOrTarget as DiceTargetData<TargetType>
 		});
 	}
 	public static fromCore(core: DicePartCore): DicePart {

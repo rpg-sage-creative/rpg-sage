@@ -1,15 +1,6 @@
-import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
-import {
-	createValueTestData,
-	DieRollGrade,
-	gradeRoll, isGradeSuccess,
-	parseTestTargetValue,
-	parseTestType,
-	TestType,
-	type TDiceLiteral,
-	type TTestData
-} from "../../common.js";
+import { randomSnowflake, tokenize, type Optional, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { cleanDicePartDescription, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, DieRollGrade, GameSystemType, gradeRoll, isGradeSuccess, type DiceTargetData, type DiceTestData } from "@rsc-utils/game-utils";
+import type { TDiceLiteral } from "../../common.js";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
 	DiceGroupRoll as baseDiceGroupRoll, DicePart as baseDicePart,
@@ -30,7 +21,7 @@ function getParsers(): TokenParsers {
 }
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
 	if (token.key === "target") {
-		core.target = parseTargetData(token);
+		core.target = DiceTest.parseTargetData(token, parseTargetType)
 		return core;
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens);
@@ -39,8 +30,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 
 //#region Targets/Tests
 export enum TargetType { None = 0, AC = 1, DC = 2, EAC = 3, KAC = 4 }
-export type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; };
-function parseTargetType(targetType: string): TargetType {
+function parseTargetType(targetType: Optional<string>): TargetType {
+	if (!targetType) return TargetType.None;
 	const targetTypeLower = targetType.toLowerCase();
 	if (targetTypeLower.endsWith("eac")) {
 		return TargetType.EAC;
@@ -55,28 +46,6 @@ function parseTargetType(targetType: string): TargetType {
 	}
 }
 
-function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
-	if (token.matches) {
-		const type = parseTargetType(token.matches[0]);
-		const { value = 0, hidden = false } = type ? parseTestTargetValue(token.matches[1]) : { };
-		return { type, value, hidden, raw:token.token };
-	}
-	return undefined;
-}
-
-function targetDataToTestData(targetData: TTargetData | TTestData): OrUndefined<TTestData> {
-	if (targetData) {
-		const alias = (<TTestData>targetData).alias;
-		if (alias) {
-			const testType = parseTestType(alias);
-			if (testType) {
-				return createValueTestData(testType, targetData.value, targetData.hidden);
-			}
-		}
-		return createValueTestData(TestType.GreaterThanOrEqual, targetData.value, targetData.hidden, TargetType[targetData.type].toLowerCase());
-	}
-	return undefined;
-}
 //#endregion
 
 //#region Grades
@@ -88,8 +57,9 @@ function gradeResults(roll: DiceRoll): DieRollGrade {
 
 	if (alias?.match(/ac/i)) {
 		const d20 = roll.rolls.find(dpr => dpr.dice.sides === 20);
-		if (d20?.isMin) DieRollGrade.CriticalFailure;
-		if (d20?.isMax) {
+		if (d20?.isMin) {
+			return DieRollGrade.CriticalFailure;
+		}else if (d20?.isMax) {
 			if (successOrFailure === DieRollGrade.Success) return DieRollGrade.CriticalSuccess;
 			return DieRollGrade.Success;
 		}
@@ -148,10 +118,10 @@ function diceGroupRollToString(diceGroupRoll: DiceGroupRoll, outputType: DiceOut
 
 //#region DicePart
 interface DicePartCore extends baseDicePartCore {
-	target?: TTargetData;
+	target?: DiceTargetData<TargetType>;
 }
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
-	testOrTarget?: TTestData | TTargetData;
+	testOrTarget?: DiceTestData | DiceTargetData<TargetType>;
 };
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
@@ -180,8 +150,8 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			noSort: noSort === true,
 			sides: sides ?? 0,
 			sign: sign,
-			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget,
-			target: <TTargetData>testOrTarget
+			test: DiceTest.fromTarget(testOrTarget, TargetType, DiceTestType.GreaterThanOrEqual),
+			target: testOrTarget as DiceTargetData<TargetType>
 		});
 	}
 	public static fromCore(core: DicePartCore): DicePart {
