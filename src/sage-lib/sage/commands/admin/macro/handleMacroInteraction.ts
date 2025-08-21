@@ -1,6 +1,6 @@
+import type { LocalizedTextKey, Localizer } from "@rsc-sage/localization";
 import { EphemeralMap, error, quote, ZERO_WIDTH_SPACE, type Snowflake } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalSubmitInteraction, type ButtonInteraction } from "discord.js";
-import type { LocalizedTextKey, Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { Macro, type MacroBase } from "../../../model/Macro.js";
 import { findCharacterOrCompanion, Macros } from "../../../model/Macros.js";
 import type { SageCommand } from "../../../model/SageCommand.js";

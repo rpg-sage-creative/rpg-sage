@@ -23,6 +23,7 @@
 		{ "path": "./packages/utils/discord-utils" },
 		{ "path": "./packages/utils/game-utils" },
 		{ "path": "./packages/sage/types" },
-		{ "path": "./packages/sage/env" }
+		{ "path": "./packages/sage/env" },
+		{ "path": "./packages/sage/localization" }
 	]
 }

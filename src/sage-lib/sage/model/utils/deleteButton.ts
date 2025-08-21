@@ -1,7 +1,7 @@
+import { getLocalizedText, type LocalizedTextKey } from "@rsc-sage/localization";
 import { errorReturnUndefined, isNotBlank, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, getSageId, toChannelMention, toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
-import { getLocalizedText, type LocalizedTextKey } from "../../../../sage-lang/getLocalizedText.js";
 import { deleteMessage, MessageDeleteResults } from "../../../discord/deletedMessages.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import type { SageCommand } from "../SageCommand.js";

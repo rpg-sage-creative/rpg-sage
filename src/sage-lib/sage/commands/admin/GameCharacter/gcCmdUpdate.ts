@@ -1,5 +1,5 @@
+import { getLocalizedText } from "@rsc-sage/localization";
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
-import { getLocalizedText } from "../../../../../sage-lang/getLocalizedText.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { getCharacter } from "./getCharacter.js";

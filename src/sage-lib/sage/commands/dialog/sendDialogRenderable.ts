@@ -1,7 +1,7 @@
+import { getLocalizedText } from "@rsc-sage/localization";
 import { errorReturnEmptyArray, type RenderableContent } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
-import { getLocalizedText } from "../../../../sage-lang/getLocalizedText.js";
 import { replaceWebhook, sendWebhook, type AuthorOptions } from "../../../discord/messages.js";
 import type { AttachmentResolvable } from "../../../discord/sendTo.js";
 import type { SageMessage } from "../../model/SageMessage.js";

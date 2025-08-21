@@ -1,0 +1,10 @@
+{
+	"name": "@rsc-sage/localization",
+	"version": "0.0.0",
+	"private": true,
+	"main": "build/index.js",
+	"type": "module",
+	"dependencies": {
+		"@rsc-utils/core-utils": "@rsc-utils/core-utils"
+	}
+}

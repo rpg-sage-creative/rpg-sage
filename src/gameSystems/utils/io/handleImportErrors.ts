@@ -1,5 +1,5 @@
+import { hasLocalizedText } from "@rsc-sage/localization";
 import { debug } from "@rsc-utils/core-utils";
-import { hasLocalizedText } from "../../../sage-lang/getLocalizedText.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 
 export type FetchResultError = "INVALID_ID" | "INVALID_EXISTING_ID"
