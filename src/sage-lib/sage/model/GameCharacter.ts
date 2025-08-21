@@ -797,7 +797,7 @@ export class GameCharacter {
 			const conditions: string[] = [];
 
 			Condition.ToggledConditions.forEach(condition => {
-				if (this.getString(condition) !== null) {
+				if (this.getString(condition) !== undefined) {
 					const riders = Condition.getConditionRiders(condition);
 					const riderText = riders.length ? ` (${riders.join(", ")})` : ``;
 					conditions.push(condition + riderText);
@@ -806,7 +806,7 @@ export class GameCharacter {
 
 			Condition.ValuedConditions.forEach(condition => {
 				const value = this.getString(condition);
-				if (value !== null) {
+				if (value !== undefined) {
 					conditions.push(`${condition} ${value}`);
 				}
 			});
