@@ -1,6 +1,7 @@
 import { GameType } from "@rsc-sage/types";
 import { randomSnowflake, sortPrimitive, warn, type Optional, type OrNull, type OrUndefined, type SortResult } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
+import { correctEscapedMentions } from "@rsc-utils/discord-utils";
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
 import XRegExp from "xregexp";
 import {
@@ -27,7 +28,6 @@ import {
 	type TSign,
 	type TTestData
 } from "../../common.js";
-import { correctEscapeForEmoji } from "../index.js";
 import type {
 	DiceCore, DiceGroupCore, DiceGroupRollCore,
 	DicePartCore, DicePartRollCore, DiceRollCore, TDice, TDiceGroup, TDiceGroupRoll, TDicePart, TDicePartCoreArgs, TDicePartRoll, TDiceRoll
@@ -620,12 +620,12 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			const output = desc
 				? `${emoji} '${replaceSpoiler(detick(dequote(desc)))}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(removeDesc(description, desc))}`
 				: `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(description)}`;
-			return correctEscapeForEmoji(cleanWhitespace(output));
+			return correctEscapedMentions(cleanWhitespace(output), { emoji:true, users:true });
 		}else {
 			const output = desc
 				? `${xxs} ${ZERO_WIDTH_SPACE}  \`${replaceSpoiler(detick(dequote(desc)))}\` ${UNICODE_LEFT_ARROW} ${replaceSpoiler(removeDesc(description, desc))}`
 				: `${xxs} ${ZERO_WIDTH_SPACE} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(description)}`;
-			return correctEscapeForEmoji(cleanWhitespace(output));
+			return correctEscapedMentions(cleanWhitespace(output), { emoji:true, users:true });
 		}
 	}
 	protected toStringXS(hideRolls: boolean): string {
@@ -634,7 +634,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const output = desc
 			? `${xxs} ${ZERO_WIDTH_SPACE} \`${replaceSpoiler(detick(dequote(desc))) ?? ""}\``
 			: xxs;
-		return correctEscapeForEmoji(cleanWhitespace(output));
+		return correctEscapedMentions(cleanWhitespace(output), { emoji:true, users:true });
 	}
 	protected toStringXXS(hideRolls: boolean): string {
 		const gradeEmoji = gradeToEmoji(this.grade),

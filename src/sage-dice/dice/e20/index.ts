@@ -1,8 +1,8 @@
 import { GameType } from "@rsc-sage/types";
 import { randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
+import { correctEscapedMentions } from "@rsc-utils/discord-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
-import { correctEscapeForEmoji } from "../index.js";
 import {
 	DiceOutputType,
 	DiceSecretMethodType, DropKeepType,
@@ -646,7 +646,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		const baseDescription = baseRoll?.dice.baseDicePart?.description ?? baseRoll?.dice.diceParts.find(dp => dp.description)?.description;
 		const d20Description = d20Roll?.dice.baseDicePart?.description ?? d20Roll?.dice.diceParts.find(dp => dp.description)?.description;
 		const description = baseDescription ?? d20Description;
-		const desc = description ? correctEscapeForEmoji(`\`${description}\``) : "";
+		const desc = description ? correctEscapedMentions(`\`${description}\``, { emoji:true, users:true }) : "";
 		const partsDesc = rollable ? `⟵ ${parts.join("; ")}` : ``;
 		const nonRollableLabel = this.dice.getNonRollableLabel();
 		return `${emoji} <b>${nonRollableLabel ?? total}</b> ${dif} ${desc} ${partsDesc}`.replace(/\s+/g, " ");
