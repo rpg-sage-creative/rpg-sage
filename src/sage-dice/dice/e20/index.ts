@@ -1,4 +1,5 @@
 import { randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { correctEscapedMentions } from "@rsc-utils/discord-utils";
 import { cleanDicePartDescription, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, GameSystemType, rollDice, type DiceTargetData, type DiceTestData, type SimpleDice } from "@rsc-utils/game-utils";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
@@ -11,7 +12,6 @@ import type {
 	DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore,
 	DicePartRollCore as baseDicePartRollCore, DiceRollCore as baseDiceRollCore, TDicePartCoreArgs as baseTDicePartCoreArgs
 } from "../base/types.js";
-import { correctEscapeForEmoji } from "../index.js";
 
 //#region test dice
 /*
@@ -622,7 +622,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		const baseDescription = baseRoll?.dice.baseDicePart?.description ?? baseRoll?.dice.diceParts.find(dp => dp.description)?.description;
 		const d20Description = d20Roll?.dice.baseDicePart?.description ?? d20Roll?.dice.diceParts.find(dp => dp.description)?.description;
 		const description = baseDescription ?? d20Description;
-		const desc = description ? correctEscapeForEmoji(`\`${description}\``) : "";
+		const desc = description ? correctEscapedMentions(`\`${description}\``, { emoji:true, users:true }) : "";
 		const partsDesc = rollable ? `⟵ ${parts.join("; ")}` : ``;
 		const nonRollableLabel = this.dice.getNonRollableLabel();
 		return `${emoji} <b>${nonRollableLabel ?? total}</b> ${dif} ${desc} ${partsDesc}`.replace(/\s+/g, " ");
