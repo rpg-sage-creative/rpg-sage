@@ -32,6 +32,8 @@ function buildModule() {
 	local repoName="$1"
 	local modulePath="$ROOT_DIR/modules/$repoName"
 
+	cd "$modulePath"
+
 	echo "Cleaning: $repoName ..."
 
 	# scrub build folder
@@ -43,8 +45,6 @@ function buildModule() {
 	rm -f *.tsbuildinfo
 
 	echo "Building: $repoName ..."
-
-	cd "$modulePath"
 
 	if [ ! -d "./node_modules" ]; then
 		echo "  Installing node_modules ..."

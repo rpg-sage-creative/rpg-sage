@@ -18,9 +18,9 @@ function scrubModule() {
 	local repoName="$1"
 	local modulePath="$ROOT_DIR/modules/$repoName"
 
-	echo "Scrubbing: $repoName ..."
-
 	cd "$modulePath"
+
+	echo "Scrubbing: $repoName ..."
 
 	# scrub node_modules folder
 	echo "  Deleting node_modules folder ..."
