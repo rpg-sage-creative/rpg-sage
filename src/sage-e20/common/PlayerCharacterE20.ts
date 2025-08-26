@@ -103,7 +103,9 @@ export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> exten
 
 	public getStat(key: string, keyLower = key.toLowerCase()): StatResults<string | number, undefined> {
 		// return value creator
-		const ret = (casedKey = key, value: Optional<number | string> = undefined) => ({ key:casedKey, keyLower, value:value??undefined });
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => (
+			{ isDefined:isDefined(value), key:casedKey, keyLower, value:value??undefined } as StatResults<string | number, undefined>
+		);
 
 		// tests given key and returns ret value if a match
 		const testKey = (casedKey: string, value: Optional<string | number>) => keyLower === casedKey.toLowerCase() ? ret(casedKey, value) : undefined;

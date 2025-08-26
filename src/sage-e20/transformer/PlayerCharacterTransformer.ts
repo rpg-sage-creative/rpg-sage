@@ -1,4 +1,4 @@
-import { numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import { isDefined, numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import type { StatResults } from "../../sage-lib/sage/model/GameCharacter.js";
 import { PlayerCharacterE20, type PlayerCharacterCoreE20, type TWeaponE20 } from "../common/PlayerCharacterE20.js";
 
@@ -81,7 +81,9 @@ export class PlayerCharacterTransformer extends PlayerCharacterE20<PlayerCharact
 		}
 
 		// return value creator
-		const ret = (casedKey = key, value: Optional<number | string> = undefined) => ({ key:casedKey, keyLower, value:value??undefined });
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => (
+			{ isDefined:isDefined(value), key:casedKey, keyLower, value:value??undefined } as StatResults<string | number, undefined>
+		);
 
 		// no alt, kick out undefined
 		if (!alt) return ret();

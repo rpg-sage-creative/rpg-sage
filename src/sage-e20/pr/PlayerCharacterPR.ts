@@ -1,4 +1,4 @@
-import { type Optional, numberOrUndefined, stringOrUndefined } from "@rsc-utils/core-utils";
+import { type Optional, isDefined, numberOrUndefined, stringOrUndefined } from "@rsc-utils/core-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
 import type { StatResults } from "../../sage-lib/sage/model/GameCharacter.js";
 import { type PlayerCharacterCoreE20, PlayerCharacterE20, type TAbilityName, type TStatE20, orQ } from "../common/PlayerCharacterE20.js";
@@ -100,7 +100,9 @@ export class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR>
 		}
 
 		// return value creator
-		const ret = (casedKey = key, value: Optional<number | string> = undefined) => ({ key:casedKey, keyLower, value:value??undefined });
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => (
+			{ isDefined:isDefined(value), key:casedKey, keyLower, value:value??undefined } as StatResults<string | number, undefined>
+		);
 
 		// no zord, kick out undefined
 		if (!zord) return ret();
