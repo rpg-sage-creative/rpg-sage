@@ -1,5 +1,5 @@
 import { error, RenderableContent, warn, warnReturnNull, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { addInvalidWebhookUsername, DiscordKey, isDMBasedChannel, isGuildBasedChannel, isMessage, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
+import { addInvalidWebhookUsername, DiscordKey, isGuildBasedChannel, isMessage, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
@@ -50,7 +50,7 @@ type WebhookOptions = {
 export async function sendWebhook(targetChannel: Channel, webhookOptions: WebhookOptions): Promise<Message[] | undefined> {
 	const { authorOptions, renderableContent, dialogType, files, sageCache } = webhookOptions;
 
-	if (isDMBasedChannel(targetChannel)) {
+	if (targetChannel.isDMBased()) {
 		const actor = await sageCache.validateActor();
 		if (actor.discord) {
 			return send(sageCache, targetChannel as MessageTarget, renderableContent, actor.discord);
