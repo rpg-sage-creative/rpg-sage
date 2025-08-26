@@ -71,6 +71,7 @@
 	},
 	"scripts": {
 		"build": "bash ./scripts/sh/build.sh",
+		"scrub": "bash ./scripts/sh/scrub.sh",
 		"release": "bash ./scripts/sh/release.sh",
 		"test": "bash ./scripts/sh/test.sh",
 		"start-dev": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
