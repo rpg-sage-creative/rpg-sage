@@ -64,9 +64,13 @@ export class CharacterShell {
 
 		// shortcut to easily return as the args request
 		const ret = (casedKey = key, value: Optional<number | string> = null) => {
-			value = isDefined(value) && !isString(value) ? String(value) : value ?? null;
-			return includeKey ? { key:casedKey, keyLower, value } : value;
+			const _isDefined = isDefined(value);
+			const _value = _isDefined && !isString(value) ? String(value) : value ?? null;
+			return includeKey
+				? { isDefined:_isDefined, key:casedKey, keyLower, value:_value } as StatResults<string>
+				: _value;
 		};
+
 
 		const { stats:shellStats } = this.core;
 		if (shellStats) {

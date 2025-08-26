@@ -1,5 +1,5 @@
 import { CharacterBase } from "@rsc-utils/character-utils";
-import { addCommas, capitalize, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, nth, randomSnowflake, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, randomSnowflake, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
@@ -640,7 +640,9 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 
 	public getStat(key: string, keyLower = key.toLowerCase() as Lowercase<string>): StatResults<string | number, undefined> {
 		// return value creator
-		const ret = (casedKey = key, value: Optional<number | string> = undefined) => ({ key:casedKey, keyLower, value:value??undefined });
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => (
+			{ isDefined:isDefined(value), key:casedKey, keyLower, value:value??undefined } as StatResults<string | number, undefined>
+		);
 
 		let prefix: GetStatPrefix = "";
 		let statLower = keyLower;

@@ -212,10 +212,19 @@ function fixLastMessages(core: GameCharacterCore): void {
 export type StatResults<
 			Value extends string | number = string | number,
 			Nil extends null | undefined = null
-		> = {
+		> =
+{
+	isDefined: true;
 	key: string;
 	keyLower: Lowercase<string>;
-	value: Value | Nil;
+	value: Value;
+}
+|
+{
+	isDefined: false;
+	key: string;
+	keyLower: Lowercase<string>;
+	value: Nil;
 };
 
 export class GameCharacter {
@@ -586,13 +595,14 @@ export class GameCharacter {
 
 	/** returns the value for the given key */
 	public getNumber(key: string): number | undefined {
-		return numberOrUndefined(this.getStat(key, true).value);
+		const stat = this.getStat(key, true);
+		return stat.isDefined ? numberOrUndefined(stat.value) : undefined;
 	}
 
 	/** returns the value for the given key */
 	public getString(key: string): string | undefined {
 		const stat = this.getStat(key, true);
-		return isDefined(stat.value) ? stringOrUndefined(String(stat.value)) : undefined;
+		return stat.isDefined ? stringOrUndefined(String(stat.value)) : undefined;
 	}
 
 	/** returns all notes that are stats */
@@ -631,8 +641,11 @@ export class GameCharacter {
 
 		// shortcut to easily return as the args request
 		const ret = (casedKey = key, value: Optional<number | string> = null) => {
-			value = isDefined(value) && !isString(value) ? String(value) : value ?? null;
-			return includeKey ? { key:casedKey, keyLower, value } : value;
+			const _isDefined = isDefined(value);
+			const _value = _isDefined && !isString(value) ? String(value) : value ?? null;
+			return includeKey
+				? { isDefined:_isDefined, key:casedKey, keyLower, value:_value } as StatResults<string>
+				: _value;
 		};
 
 		// no key, no value
@@ -687,15 +700,17 @@ export class GameCharacter {
 		const halfDn = keyLower.startsWith("half.dn.");
 
 		if (halfUp || halfDn) {
-			const { key:casedKey, value:statValue } = this.getStat(key.slice(8), includeKey as true);
+			const statKey = key.slice(8);
+			const { key:casedKey, value:statValue } = this.getStat(statKey, true);
 			if (statValue) {
 				const retKey = `half.${halfUp ? "up" : "dn"}.${casedKey}`;
-				const num = numberOrUndefined(doStatMath(`(${statValue})`));
-				if (num === undefined) {
+				const mathedValue = doStatMath(`(${statValue})`);
+				const numberValue = numberOrUndefined(mathedValue);
+				if (numberValue === undefined) {
 					return ret(retKey, `isNaN(${statValue})`);
 				}
 				const fn = halfUp ? Math.ceil : Math.floor;
-				return ret(retKey, fn(num / 2));
+				return ret(retKey, fn(numberValue / 2));
 			}
 		}
 
@@ -717,7 +732,7 @@ export class GameCharacter {
 		const { essence20 } = this;
 		if (essence20) {
 			const e20Stat = essence20.getStat(key, keyLower);
-			if (isDefined(e20Stat.value)) {
+			if (e20Stat.isDefined) {
 				return ret(e20Stat.key, String(e20Stat.value));
 			}
 		}
@@ -729,7 +744,7 @@ export class GameCharacter {
 			if (keyLower === "explorationmode") pbKey = "activeExploration";
 			else if (keyLower === "explorationskill") pbKey = "initSkill";
 			const pbStat = pathbuilder.getStat(pbKey);
-			if (isDefined(pbStat.value)) {
+			if (pbStat.isDefined) {
 				return ret(pbStat.key, String(pbStat.value));
 			}
 		}
@@ -776,12 +791,14 @@ export class GameCharacter {
 
 	protected getStatP20(key: string, keyLower = key.toLowerCase() as Lowercase<string>): StatResults<string | number, undefined> {
 		// return value creator
-		const ret = (casedKey = key, value: Optional<number | string> = undefined) => ({ key:casedKey, keyLower, value:value??undefined });
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => (
+			{ isDefined:isDefined(value), key:casedKey, keyLower, value:value??undefined } as StatResults<string | number, undefined>
+		);
 
 		// provide a shortcut for off-guard ac
 		if (keyLower === "ogac") {
 			const acStat = this.getStat("ac", true);
-			if (isDefined(acStat.value)) {
+			if (acStat.isDefined) {
 				return ret(keyLower, doStatMath(`(${acStat.value}-2)`));
 			}
 		}
@@ -795,7 +812,7 @@ export class GameCharacter {
 		if (keyLower.startsWith("dc.")) {
 			const statKey = key.slice(3);
 			const stat = this.getStat(statKey, true);
-			if (isDefined(stat.value)) {
+			if (stat.isDefined) {
 				return ret(`dc.${stat.key}`, doStatMath(`(${stat.value}+10)`));
 			}
 		}
