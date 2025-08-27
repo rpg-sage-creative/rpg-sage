@@ -1,6 +1,8 @@
-import type { GuildMember, PermissionFlagsBits, TextChannel } from "discord.js";
-import { getRequiredChannelPerms } from "./getRequiredChannelPerms.js";
+import { error } from "@rsc-utils/core-utils";
 import { getPermsFor } from "@rsc-utils/discord-utils";
+import type { GuildMember, PermissionFlagsBits } from "discord.js";
+import type { GameChannel } from "../../sage/model/Game.js";
+import { getRequiredChannelPerms } from "./getRequiredChannelPerms.js";
 
 /*
 https://discord.com/developers/docs/topics/permissions
@@ -32,7 +34,7 @@ type FixPermResults = {
 };
 
 /** Checks the given channel to see what perms are missing. */
-export async function fixMissingChannelPerms(botGuildMember: GuildMember, channel: TextChannel): Promise<FixPermResults> {
+export async function fixMissingChannelPerms(botGuildMember: GuildMember, channel: GameChannel): Promise<FixPermResults> {
 	// check the state before we do any work
 	const before = getPermsFor(channel, botGuildMember, ...getRequiredChannelPerms());
 	const { canManageChannel, canViewChannel } = before;
@@ -50,8 +52,20 @@ export async function fixMissingChannelPerms(botGuildMember: GuildMember, channe
 
 	// update perms
 	let fixError = false;
-	const updatedChannel = await channel.permissionOverwrites.create(botGuildMember, overwrites)
-		.catch(() => { fixError = true; return null; }); // NOSONAR
+	const errorHandler = (log: boolean) => {
+		if (log) {
+			const fnName = "fixMissingChannelPerms";
+			const fnSection = "permissionOverwrites";
+			const channelType = channel.type;
+			const parentChannelType = channel.parent?.type;
+			error({ fnName, fnSection, channelType, parentChannelType });
+		}
+		fixError = true;
+		return null;
+	};
+	const updatedChannel = "permissionOverwrites" in channel
+		? await channel.permissionOverwrites.create(botGuildMember, overwrites).catch(() => errorHandler(false))
+		: errorHandler(true);
 
 	// recheck perms
 	const after = getPermsFor(updatedChannel ?? channel, botGuildMember, ...getRequiredChannelPerms());
