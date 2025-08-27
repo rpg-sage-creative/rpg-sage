@@ -1,5 +1,5 @@
 import { error, isNullOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { fetchIfPartial, isSupportedChannel, isSupportedInteraction, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { isSupportedChannel, isSupportedInteraction, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SMessage, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
@@ -360,7 +360,7 @@ export async function handleMessage(message: MessageOrPartial, originalMessage: 
 			const wasPartial = message.partial;
 
 			// fetch it just in case
-			const fetchedMessage = await fetchIfPartial(message);
+			const fetchedMessage = await message.fetch() as SMessage;
 
 			// recheck a previously partial message
 			canIgnore = wasPartial && fetchedMessage ? canIgnoreMessage(fetchedMessage, originalMessage) : false;
