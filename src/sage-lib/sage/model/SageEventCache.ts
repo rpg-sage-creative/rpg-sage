@@ -728,7 +728,7 @@ export class SageEventCache {
 		}
 
 		const category = channel.isThread()
-			? channel.parent.parent
+			? channel.parent?.parent
 			: channel.parent;
 		if (category) {
 			const gameByCategory = await this.findActiveGameByReference({
