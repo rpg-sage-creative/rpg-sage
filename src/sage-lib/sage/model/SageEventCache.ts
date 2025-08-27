@@ -1,6 +1,6 @@
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, isThread, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { toMarkdown } from "@rsc-utils/string-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
@@ -697,7 +697,9 @@ export class SageEventCache {
 
 	/** Gets the active/current Game for the MessageReference */
 	private async findActiveGameByChannel(channel: Channel): Promise<Game | undefined> {
-		const guildId = "guildId" in channel ? channel.guildId ?? undefined : undefined;
+		if (channel.isDMBased()) return undefined;
+
+		const guildId = channel.guildId ?? undefined;
 
 		const gameByChannel = await this.findActiveGameByReference({
 			guildId,
@@ -705,12 +707,23 @@ export class SageEventCache {
 		});
 		if (gameByChannel) return gameByChannel;
 
-		if (isThread(channel)) {
+		if (channel.isThread()) {
 			const gameByParent = await this.findActiveGameByReference({
 				guildId,
 				channelId: channel.parentId!
 			});
 			if (gameByParent) return gameByParent;
+		}
+
+		const category = channel.isThread()
+			? channel.parent?.parent
+			: channel.parent;
+		if (category) {
+			const gameByCategory = await this.findActiveGameByReference({
+				guildId,
+				channelId: category.id
+			});
+			if (gameByCategory) return gameByCategory;
 		}
 
 		return undefined;
