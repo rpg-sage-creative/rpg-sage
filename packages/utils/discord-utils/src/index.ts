@@ -1,7 +1,6 @@
 export * from "./components/index.js";
 export * from "./embed/index.js";
 export * from "./emojiRegex/index.js";
-export * from "./fetch/index.js";
 export * from "./formatting/index.js";
 export * from "./humanReadable/index.js";
 export * from "./mention/index.js";
