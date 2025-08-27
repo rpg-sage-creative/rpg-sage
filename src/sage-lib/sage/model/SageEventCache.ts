@@ -1,7 +1,7 @@
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
 import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getHomeServerId, getPermsFor, getSuperAdminIds, getSuperUserId, getTupperBoxId, isDiscordApiError, isSageId, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
-import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
+import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getHomeServerId, getPermsFor, getSuperAdminIds, getSuperUserId, getTupperBoxId, isDiscordApiError, isSageId, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SMessageOrPartial, type SupportedChannel, type SupportedInteraction, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
+import type { User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
 import { globalCacheFilter, globalCacheRead, type GameCacheItem, type GlobalCacheItem } from "../repo/base/globalCache.js";
@@ -365,7 +365,7 @@ type SageEventCacheCore = {
 type SageEventCacheCreateOptions = {
 	actorOrPartial: UserOrPartial;
 	authorOrPartial: UserOrPartial | undefined;
-	channel: Channel | undefined;
+	channel: SupportedChannel | undefined;
 	discord: DiscordCache;
 	discordKey: DiscordKey;
 	guild: Guild | undefined;
@@ -655,7 +655,7 @@ export class SageEventCache {
 		return (key: any, ...args: any[]) => getLocalizedText(key, lang, ...args);
 	}
 
-	public async fetchChannel<T extends Channel = Channel>(channelId: Optional<Snowflake>): Promise<T | undefined> {
+	public async fetchChannel<T extends SupportedChannel = SupportedChannel>(channelId: Optional<Snowflake>): Promise<T | undefined> {
 		if (!channelId) return undefined;
 		const guildId = this.server?.id;
 		if (guildId) {
@@ -692,7 +692,7 @@ export class SageEventCache {
 		return this.discord.fetchMessage(keyOrReference, this.user?.did);
 	}
 
-	public async findActiveGame(reference: Optional<Channel | SupportedInteraction | MessageOrPartial | MessageReferenceOrPartial>): Promise<Game | undefined> {
+	public async findActiveGame(reference: Optional<SupportedChannel | SupportedInteraction | SMessageOrPartial | MessageReferenceOrPartial>): Promise<Game | undefined> {
 		if (reference) {
 			if ("messageId" in reference) {
 				return this.findActiveGameByReference(reference);
@@ -708,8 +708,10 @@ export class SageEventCache {
 	}
 
 	/** Gets the active/current Game for the MessageReference */
-	private async findActiveGameByChannel(channel: Channel): Promise<Game | undefined> {
-		const guildId = "guildId" in channel ? channel.guildId ?? undefined : undefined;
+	private async findActiveGameByChannel(channel: SupportedChannel): Promise<Game | undefined> {
+		if (channel.isDMBased()) return undefined;
+
+		const guildId = channel.guildId ?? undefined;
 
 		const gameByChannel = await this.findActiveGameByReference({
 			guildId,
@@ -723,6 +725,17 @@ export class SageEventCache {
 				channelId: channel.parentId!
 			});
 			if (gameByParent) return gameByParent;
+		}
+
+		const category = channel.isThread()
+			? channel.parent.parent
+			: channel.parent;
+		if (category) {
+			const gameByCategory = await this.findActiveGameByReference({
+				guildId,
+				channelId: category.id
+			});
+			if (gameByCategory) return gameByCategory;
 		}
 
 		return undefined;
@@ -768,7 +781,7 @@ export class SageEventCache {
 		return new SageEventCache(core);
 	}
 
-	private static async _fromMessage(messageOrPartial: MessageOrPartial, actorOrPartial: UserOrPartial, reactionOrPartial?: ReactionOrPartial): Promise<SageEventCache> {
+	private static async _fromMessage(messageOrPartial: SMessageOrPartial, actorOrPartial: UserOrPartial, reactionOrPartial?: ReactionOrPartial): Promise<SageEventCache> {
 		const evCache = await createSageEventCache({
 			actorOrPartial,
 			authorOrPartial: messageOrPartial.author ?? undefined,
@@ -782,15 +795,15 @@ export class SageEventCache {
 		return evCache;
 	}
 
-	public static async fromMessage(messageOrPartial: MessageOrPartial): Promise<SageEventCache> {
-		const message = await fetchIfPartial(messageOrPartial) as Message;
+	public static async fromMessage(messageOrPartial: SMessageOrPartial): Promise<SageEventCache> {
+		const message = await fetchIfPartial(messageOrPartial) as SMessage;
 		const evCache = await SageEventCache._fromMessage(message, message.author);
 		await evCache.validateActor();
 		return evCache;
 	}
 
 	public static fromMessageReaction(reactionOrPartial: ReactionOrPartial, actorOrPartial: UserOrPartial): Promise<SageEventCache> {
-		return SageEventCache._fromMessage(reactionOrPartial.message, actorOrPartial, reactionOrPartial);
+		return SageEventCache._fromMessage(reactionOrPartial.message as SMessage, actorOrPartial, reactionOrPartial);
 	}
 
 	public static async fromInteraction(interaction: SupportedInteraction): Promise<SageEventCache> {

@@ -1,7 +1,7 @@
 import { DialogPostType, type SageChannel } from "@rsc-sage/types";
 import { debug, type Snowflake } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type GuildTextBasedChannel, type SelectMenuComponentOptionData } from "discord.js";
+import { toHumanReadable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type SelectMenuComponentOptionData } from "discord.js";
 import { getSelectedOrDefault } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { AutoChannelData, GameCharacter } from "../../../model/GameCharacter.js";
@@ -227,7 +227,7 @@ async function createChannelList(sageCommand: SageCommand, chars: Chars, selecte
 	};
 
 	const labelAutoChannel = async (autoChannel: AutoChannelData, force?: boolean) => {
-		const channel = await sageCommand.discord.fetchChannel<GuildTextBasedChannel>({ guildId:serverId, channelId:autoChannel.channelDid });
+		const channel = await sageCommand.discord.fetchChannel<SupportedGameMessagesChannel>({ guildId:serverId, channelId:autoChannel.channelDid });
 		if (!channel && !force) return undefined;
 		const channelLabel = channel?.name ?? `#${autoChannel.channelDid}`;
 		const userName = autoChannel.userDid ? ` ${await toUserName(autoChannel.userDid)}` : "";

@@ -1,8 +1,8 @@
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, SageChannelType, parseSageChannelType, updateGame, type GameOptions, type SageChannel } from "@rsc-sage/types";
 import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, warn, type Args, type Comparable, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
+import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameChannel } from "@rsc-utils/discord-utils";
 import { parseGameSystem, type DiceCriticalMethodType, type DiceOutputType, type DiceSecretMethodType, type DiceSortType, type GameSystem, type GameSystemType } from "@rsc-utils/game-utils";
-import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
+import type { GuildMember, HexColorString, Role } from "discord.js";
 import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
@@ -62,7 +62,7 @@ type MappedChannelNameTags = {
 type MappedGameChannel = {
 	id: Snowflake;
 	sChannel: SageChannel;
-	gChannel: GuildTextBasedChannel | undefined;
+	gChannel: SupportedGameChannel | undefined;
 	nameTags: MappedChannelNameTags;
 };
 
@@ -101,7 +101,7 @@ export function nameTagsToType(nameTags: MappedChannelNameTags): string {
 }
 
 /** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
-function mapGuildChannelNameTags(channel: GuildTextBasedChannel): MappedChannelNameTags {
+function mapGuildChannelNameTags(channel: SupportedGameChannel): MappedChannelNameTags {
 	return sageChannelTypeToNameTags(parseSageChannelType(channel.name));
 }
 
@@ -117,7 +117,7 @@ async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promi
 			nameTags: mapSageChannelNameTags(sChannel)
 		});
 
-		const gChannel = await sageCache.fetchChannel<GuildTextBasedChannel>(sChannel.id);
+		const gChannel = await sageCache.fetchChannel<SupportedGameChannel>(sChannel.id);
 		if (gChannel) {
 			gChannels.push({
 				id: sChannel.id,
@@ -251,12 +251,12 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 				?? allChannels[0]
 			)?.sChannel;
 	}
-	public async gmGuildChannel(): Promise<OrNull<GuildChannel>> {
+	public async gmGuildChannel(): Promise<OrNull<SupportedGameChannel>> {
 		for (const sChannel of this.channels) {
 			if (sChannel.type === SageChannelType.GameMaster) {
-				const gChannel = await this.sageCache.fetchChannel(sChannel.id);
+				const gChannel = await this.sageCache.fetchChannel<SupportedGameChannel>(sChannel.id);
 				if (gChannel) {
-					return gChannel as GuildChannel;
+					return gChannel;
 				}
 			}
 		}
@@ -277,10 +277,10 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		return pGuildMembers.filter(isDefined);
 	}
 
-	/** Returns all manually added channels as GuildTextBasedChannel objects. */
-	public async guildChannels(): Promise<GuildTextBasedChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
-		return all.filter(isDefined) as GuildTextBasedChannel[];
+	/** Returns all manually added channels as SupportedGameChannel objects. */
+	public async guildChannels(): Promise<SupportedGameChannel[]> {
+		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel<SupportedGameChannel>(channel.id)));
+		return all.filter(isDefined);
 	}
 
 	/** Returns all manually added channels that are not found on this Server. */
