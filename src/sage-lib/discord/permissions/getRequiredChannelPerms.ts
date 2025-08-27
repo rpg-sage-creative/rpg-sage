@@ -9,13 +9,16 @@ type PermFlagBitsKeys = keyof typeof PermissionFlagsBits;
 /** Gets the set of permissions Sage needs for the channel. */
 export function getRequiredChannelPerms(): PermFlagBitsKeys[] {
 	return [
-		"ViewChannel",
+		"AddReactions",
+		"AttachFiles",
+		"EmbedLinks",
 		"ManageMessages",
 		"ManageWebhooks",
+		"PinMessages",
 		"ReadMessageHistory",
 		"SendMessages",
 		"SendMessagesInThreads",
-		"AddReactions",
 		"UseExternalEmojis",
+		"ViewChannel",
 	];
 }
