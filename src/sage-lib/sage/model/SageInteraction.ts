@@ -1,5 +1,5 @@
 import { debug, isDefined, isString, RenderableContent, type Cache, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, type DInteraction, type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
+import { DiscordKey, type SupportedButtonInteraction, type SupportedInteraction, type SupportedMessagesChannel, type SupportedModalSubmitInteraction, type SupportedStringSelectInteraction } from "@rsc-utils/discord-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
@@ -11,7 +11,7 @@ import { SageInteractionArgs } from "./SageInteractionArgs.js";
 export type SlashCommandGameType = "PF1E" | "PF2E" | "SF1E" | "SF2E" | "Finder";
 
 interface SageInteractionCore extends SageCommandCore {
-	interaction: DInteraction;
+	interaction: SupportedInteraction;
 	type: InteractionType;
 }
 
@@ -35,7 +35,13 @@ function defaultCustomIdParser<T extends IdParts>(customId: string): T | undefin
 		: undefined;
 }
 
-export class SageInteraction<T extends DInteraction = any>
+export type SageButtonInteraction = SageInteraction<SupportedButtonInteraction>;
+export type SageModalInteraction = SageInteraction<SupportedModalSubmitInteraction>;
+/** @deprecated use SageStringSelectInteraction */
+export type SageSelectInteraction = SageStringSelectInteraction;
+export type SageStringSelectInteraction = SageInteraction<SupportedStringSelectInteraction>;
+
+export class SageInteraction<T extends SupportedInteraction = SupportedInteraction>
 	extends SageCommand<SageInteractionCore, SageInteractionArgs>
 	implements HasGame {
 
@@ -168,8 +174,8 @@ export class SageInteraction<T extends DInteraction = any>
 		return this.core.interaction as T;
 	}
 
-	public get interactionChannel(): MessageChannel | undefined {
-		return this.interaction.channel as unknown as MessageChannel ?? undefined;
+	public get interactionChannel(): SupportedMessagesChannel | undefined {
+		return this.interaction.channel as SupportedMessagesChannel ?? undefined;
 	}
 
 	/** Returns the user */
@@ -219,9 +225,9 @@ export class SageInteraction<T extends DInteraction = any>
 
 	/** Sends a full message to the channel or user the interaction originated in. */
 	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageTarget): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageTarget, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.interaction.channel as MessageTarget, originalAuthor = this.interaction.user): Promise<Message[]> {
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: SupportedMessagesChannel): Promise<Message[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: SupportedMessagesChannel, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.interaction.channel as SupportedMessagesChannel, originalAuthor = this.interaction.user): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			return [];
@@ -233,7 +239,7 @@ export class SageInteraction<T extends DInteraction = any>
 		}
 		return [];
 	}
-	public async canSend(targetChannel = this.interaction.channel as MessageTarget): Promise<boolean> {
+	public async canSend(targetChannel = this.interaction.channel as SupportedMessagesChannel): Promise<boolean> {
 		return this.eventCache.canSendMessageTo(DiscordKey.from(targetChannel));
 	}
 
@@ -248,7 +254,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	//#endregion
 
-	public static async fromInteraction<T extends DInteraction>(interaction: T): Promise<SageInteraction<T>> {
+	public static async fromInteraction<T extends SupportedInteraction>(interaction: T): Promise<SageInteraction<T>> {
 		return new SageInteraction({
 			eventCache: await SageEventCache.fromInteraction(interaction),
 			interaction,

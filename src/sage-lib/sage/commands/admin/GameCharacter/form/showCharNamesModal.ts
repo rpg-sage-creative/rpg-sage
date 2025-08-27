@@ -2,7 +2,7 @@ import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
-import type { SageInteraction } from "../../../../model/SageInteraction.js";
+import type { SageButtonInteraction, SageInteraction } from "../../../../model/SageInteraction.js";
 import { createCharModal } from "./createCharModal.js";
 import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
@@ -16,7 +16,7 @@ export type CharNamesForm = {
 	displayNameTemplate?: string;
 };
 
-export function showCharNamesModal(sageInteraction: SageInteraction, char: GameCharacter): Promise<void> {
+export function showCharNamesModal(sageInteraction: SageButtonInteraction, char: GameCharacter): Promise<void> {
 	const { maxLength } = DiscordMaxValues.webhook.username;
 	const modal = createCharModal({
 		userId: sageInteraction.actorId,

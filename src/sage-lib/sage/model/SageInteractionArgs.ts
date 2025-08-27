@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { MessageChannel } from "@rsc-utils/discord-utils";
+import type { SupportedChannel } from "@rsc-utils/discord-utils";
 import { ApplicationCommandOptionType, Attachment, AutocompleteInteraction, ChatInputCommandInteraction, ContextMenuCommandInteraction, GuildMember, Role, User, type CommandInteractionOption } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageInteraction } from "./SageInteraction.js";
@@ -102,11 +102,11 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public getChannel(name: string): Optional<MessageChannel> {
+	public getChannel(name: string): Optional<SupportedChannel> {
 		const { hasKey, hasUnset, option } = this.getOption(name);
 		if (!hasKey) return undefined; //NOSONAR
 		if (hasUnset) return null; //NOSONAR
-		return option?.channel as MessageChannel ?? null;
+		return option?.channel as SupportedChannel;
 	}
 
 	/**

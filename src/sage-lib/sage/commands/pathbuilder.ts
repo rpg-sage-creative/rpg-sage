@@ -1,6 +1,6 @@
 import { errorReturnUndefined, isDefined, isNotBlank, StringMatcher, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
+import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type SupportedTarget } from "@rsc-utils/discord-utils";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
@@ -10,13 +10,10 @@ import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import { MacroOwner } from "../model/MacroOwner.js";
 import { Macros } from "../model/Macros.js";
 import type { SageCommand } from "../model/SageCommand.js";
-import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageButtonInteraction, SageStringSelectInteraction } from "../model/SageInteraction.js";
 import type { User } from "../model/User.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
-
-type SageButtonInteraction = SageInteraction<ButtonInteraction>;
-type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
 
 function createActionRow<T extends ButtonBuilder | StringSelectMenuBuilder>(...components: T[]): ActionRowBuilder<T> {
 	components.forEach(comp => {
@@ -180,7 +177,7 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: Pathbuilde
 }
 
 /** posts the imported character to the channel */
-export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+export async function postCharacter(sageCommand: SageCommand, channel: Optional<SupportedTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	const { sageCache } = sageCommand;
 	setMacroUser(character, sageCache.user);
 	const saved = await character.save();
@@ -475,7 +472,7 @@ function sheetTester(sageInteraction: SageButtonInteraction): boolean {
 	return getValidPathbuilderCharacterId(customId) !== undefined;
 }
 
-async function viewHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
+async function viewHandler(sageInteraction: SageStringSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
 	if (values.includes("All")) {
@@ -494,21 +491,21 @@ async function viewHandler(sageInteraction: SageSelectInteraction, character: Pa
 	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
-async function explorationHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
+async function explorationHandler(sageInteraction: SageStringSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeExploration = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeExploration", activeExploration);
 	await character.save();
 	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
-async function skillHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
+async function skillHandler(sageInteraction: SageStringSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await character.save();
 	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
-async function macroHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
+async function macroHandler(sageInteraction: SageStringSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeMacro = sageInteraction.interaction.values[0];
 	if (activeMacro === "REFRESH") {
 		setMacroUser(character, sageInteraction.sageUser);
@@ -633,7 +630,7 @@ async function unlinkHandler(sageInteraction: SageButtonInteraction, character: 
 	}
 }
 
-async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
+async function sheetHandler(sageInteraction: SageStringSelectInteraction | SageButtonInteraction): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
 	const customId = sageInteraction.interaction.customId;
 	const [_PB2E, characterId, command] = parseCustomId(customId);
@@ -646,16 +643,16 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 		}
 
 		switch(command) {
-			case "View": return viewHandler(sageInteraction, character);
-			case "Exploration": return explorationHandler(sageInteraction, character);
-			case "Skill": return skillHandler(sageInteraction, character);
-			case "Macro": return macroHandler(sageInteraction, character);
-			case "Roll": return rollHandler(sageInteraction, character, false);
-			case "Secret": return rollHandler(sageInteraction, character, true);
-			case "Init": return rollHandler(sageInteraction, character, false, true);
-			case "MacroRoll": return macroRollHandler(sageInteraction, character);
-			case "Link": return linkHandler(sageInteraction, character);
-			case "Unlink": return unlinkHandler(sageInteraction, character);
+			case "View": return viewHandler(sageInteraction as SageStringSelectInteraction, character);
+			case "Exploration": return explorationHandler(sageInteraction as SageStringSelectInteraction, character);
+			case "Skill": return skillHandler(sageInteraction as SageStringSelectInteraction, character);
+			case "Macro": return macroHandler(sageInteraction as SageStringSelectInteraction, character);
+			case "Roll": return rollHandler(sageInteraction as SageButtonInteraction, character, false);
+			case "Secret": return rollHandler(sageInteraction as SageButtonInteraction, character, true);
+			case "Init": return rollHandler(sageInteraction as SageButtonInteraction, character, false, true);
+			case "MacroRoll": return macroRollHandler(sageInteraction as SageButtonInteraction, character);
+			case "Link": return linkHandler(sageInteraction as SageButtonInteraction, character);
+			case "Unlink": return unlinkHandler(sageInteraction as SageButtonInteraction, character);
 		}
 	}
 	return Promise.resolve();

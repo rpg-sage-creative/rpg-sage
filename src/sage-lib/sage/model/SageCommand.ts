@@ -1,9 +1,9 @@
 import type { LocalizedTextKey } from "@rsc-sage/localization";
 import { SageChannelType, type DialogPostType, type DicePostType } from "@rsc-sage/types";
 import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import type { DInteraction, DiscordCache, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
+import type { DiscordCache, EmbedBuilder, SupportedAutocompleteInteraction, SupportedButtonInteraction, SupportedInteraction, SupportedMessageContextInteraction, SupportedMessagesChannel, SupportedModalSubmitInteraction, SupportedRepliableInteraction, SupportedSlashCommandInteraction, SupportedStringSelectInteraction, SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
 import { parseGameSystem, type DiceCriticalMethodType, type DiceOutputType, type DiceSecretMethodType, type DiceSortType, type GameSystemType } from "@rsc-utils/game-utils";
-import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, PartialGroupDMChannel, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
+import { Message, type ActionRowBuilder, type AttachmentBuilder, type ButtonBuilder, type HexColorString, type If, type StringSelectMenuBuilder } from "discord.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
@@ -91,26 +91,26 @@ export abstract class SageCommand<
 		return undefined;
 	}
 
-	public isSageInteraction(type: "BUTTON"): this is SageInteraction<ButtonInteraction>;
-	public isSageInteraction(type: "SELECT"): this is SageInteraction<StringSelectMenuInteraction>;
-	public isSageInteraction(type: "MESSAGE"): this is SageInteraction<ButtonInteraction | StringSelectMenuInteraction>;
-	public isSageInteraction(type: "TEXT"): this is SageInteraction<MessageComponentInteraction>;
-	public isSageInteraction(type: "COMPONENT"): this is SageInteraction<MessageComponentInteraction>;
-	public isSageInteraction(type: "AUTO"): this is SageInteraction<AutocompleteInteraction>;
-	public isSageInteraction(type: "MODAL"): this is SageInteraction<ModalSubmitInteraction>;
-	public isSageInteraction(type: "SLASH"): this is SageInteraction<CommandInteraction>;
-	public isSageInteraction(type: "MSG_CONTEXT"): this is SageInteraction<MessageContextMenuCommandInteraction>;
-	public isSageInteraction(type: "USR_CONTEXT"): this is SageInteraction<UserContextMenuCommandInteraction>;
-	public isSageInteraction(type: "CONTEXT"): this is SageInteraction<MessageContextMenuCommandInteraction | UserContextMenuCommandInteraction>;
-	public isSageInteraction<T extends DRepliableInteraction>(type: "REPLIABLE"): this is SageInteraction<T>;
-	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T>;
+	public isSageInteraction(type: "BUTTON"): this is SageInteraction<SupportedButtonInteraction>;
+	public isSageInteraction(type: "SELECT"): this is SageInteraction<SupportedStringSelectInteraction>;
+	public isSageInteraction(type: "MESSAGE"): this is SageInteraction<SupportedButtonInteraction | SupportedStringSelectInteraction>;
+	public isSageInteraction(type: "TEXT"): this is SageInteraction<SupportedMessageContextInteraction>;
+	// public isSageInteraction(type: "COMPONENT"): this is SageInteraction<MessageComponentInteraction>;
+	public isSageInteraction(type: "AUTO"): this is SageInteraction<SupportedAutocompleteInteraction>;
+	public isSageInteraction(type: "MODAL"): this is SageInteraction<SupportedModalSubmitInteraction>;
+	public isSageInteraction(type: "SLASH"): this is SageInteraction<SupportedSlashCommandInteraction>;
+	public isSageInteraction(type: "MSG_CONTEXT"): this is SageInteraction<SupportedMessageContextInteraction>;
+	public isSageInteraction(type: "USR_CONTEXT"): this is SageInteraction<SupportedUserContextInteraction>;
+	public isSageInteraction(type: "CONTEXT"): this is SageInteraction<SupportedMessageContextInteraction | SupportedUserContextInteraction>;
+	public isSageInteraction<T extends SupportedRepliableInteraction = SupportedRepliableInteraction>(type: "REPLIABLE"): this is SageInteraction<T>;
+	public isSageInteraction<T extends SupportedInteraction = SupportedInteraction>(): this is SageInteraction<T>;
 	public isSageInteraction(type?: "AUTO" | "MODAL" | "SLASH" | "BUTTON" | "SELECT" | "MESSAGE" | "TEXT" | "COMPONENT" | "REPLIABLE" | "MSG_CONTEXT" | "USR_CONTEXT" | "CONTEXT"): boolean {
 		if ("interaction" in this) {
 			if (!type) {
 				return true;
 			}
 
-			const interaction = this.interaction as DInteraction;
+			const interaction = this.interaction as SupportedInteraction;
 
 			if (type === "REPLIABLE") {
 				return interaction.isRepliable();
@@ -130,17 +130,17 @@ export abstract class SageCommand<
 			// InteractionType
 			if (["AUTO", "MODAL", "SLASH"].includes(type)) {
 				switch(type) {
-					case "AUTO": return interaction.type === InteractionType.ApplicationCommandAutocomplete;
-					case "MODAL": return interaction.type === InteractionType.ModalSubmit;
-					case "SLASH": return interaction.type === InteractionType.ApplicationCommand;
+					case "AUTO": return interaction.isAutocomplete();
+					case "MODAL": return interaction.isModalSubmit();
+					case "SLASH": return interaction.isChatInputCommand();
 				}
 
 			// MessageComponentType
 			}else if ("componentType" in interaction && ["BUTTON", "MESSAGE", "SELECT"].includes(type)) {
 				switch(type) {
-					case "BUTTON": return interaction.componentType === ComponentType.Button;
-					case "MESSAGE": return interaction.componentType === ComponentType.Button || interaction.componentType === ComponentType.StringSelect;
-					case "SELECT": return interaction.componentType === ComponentType.StringSelect;
+					case "BUTTON": return interaction.isButton();
+					case "MESSAGE": return interaction.isButton() || interaction.isStringSelectMenu();
+					case "SELECT": return interaction.isStringSelectMenu();
 				}
 
 			}
@@ -302,10 +302,11 @@ export abstract class SageCommand<
 
 	//#region channels
 
-	public get dChannel(): Exclude<TextBasedChannel, PartialGroupDMChannel> | undefined {
-		return this.isSageInteraction<CommandInteraction>()
-			? this.interaction.channel as Exclude<TextBasedChannel, PartialGroupDMChannel> ?? undefined
-			: (this as unknown as SageMessage).message?.channel;
+	public get dChannel(): SupportedMessagesChannel | undefined {
+		if (this.isSageInteraction<SupportedInteraction>()) return this.interaction.channel ?? undefined;
+		if (this.isSageMessage()) return this.message?.channel ?? undefined;
+		if (this.isSageReaction()) return this.message?.channel ?? undefined;
+		return undefined;
 	}
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */

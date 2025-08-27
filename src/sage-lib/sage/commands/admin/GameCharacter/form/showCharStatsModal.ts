@@ -1,7 +1,7 @@
 import { NIL_SNOWFLAKE, parseKeyValueArgs } from "@rsc-utils/core-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
-import type { SageInteraction } from "../../../../model/SageInteraction.js";
+import type { SageButtonInteraction, SageInteraction } from "../../../../model/SageInteraction.js";
 import { createCharModal } from "./createCharModal.js";
 import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
@@ -16,7 +16,7 @@ export type CharStatsForm = {
 	other: string;
 };
 
-export function showCharStatsModal(sageInteraction: SageInteraction, char: GameCharacter): Promise<void> {
+export function showCharStatsModal(sageInteraction: SageButtonInteraction, char: GameCharacter): Promise<void> {
 	const regex = /^(level|hp|maxhp|conditions)$/i;
 	const stats = char.notes.getStats()
 		.filter(stat => !regex.test(stat.title))

@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { MessageChannel } from "@rsc-utils/discord-utils";
+import type { SupportedChannel } from "@rsc-utils/discord-utils";
 import type { Attachment, Role, User } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageReaction } from "./SageReaction.js";
@@ -46,7 +46,7 @@ export class SageReactionArgs extends SageCommandArgs<SageReaction> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public getChannel(): Optional<MessageChannel> {
+	public getChannel(): Optional<SupportedChannel> {
 		return null;
 	}
 

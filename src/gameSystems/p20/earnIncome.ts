@@ -1,12 +1,12 @@
 import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent } from "@rsc-utils/discord-utils";
 import { DieRollGrade, GameSystemType, getGameSystems, parseGameSystem } from "@rsc-utils/game-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { Dice } from "../../sage-dice/dice/pf2e/index.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
-import { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
+import { type SageButtonInteraction, type SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { Coins } from "../../sage-pf2e/index.js";
 import { boundNumber } from "../utils/boundNumber.js";
@@ -366,7 +366,7 @@ async function showEarnIncome(sageCommand: SageCommand): Promise<void> {
 	await sageCommand.replyStack.reply({ content, components });
 }
 
-async function changeEarnIncome(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
+async function changeEarnIncome(sageInteraction: SageStringSelectInteraction): Promise<void> {
 	sageInteraction.replyStack.defer();
 	const args = getArgs(sageInteraction);
 	const content = getEarnIncomeByTaskLevel(args);
@@ -385,7 +385,7 @@ function multiplyIncome(incomePerDay: string, days: number): string {
 	return Coins.parse(incomePerDay).multiply(days).toGpString();
 }
 
-async function rollEarnIncome(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
+async function rollEarnIncome(sageInteraction: SageButtonInteraction): Promise<void> {
 	sageInteraction.replyStack.defer();
 	const args = getArgs(sageInteraction);
 	const modifier = args.modifier ? toModifier(args.modifier) : "";

@@ -1,6 +1,6 @@
 import { DicePostType } from "@rsc-sage/types";
 import { error, isWrapped, redactCodeBlocks, redactKeyValuePairs, redactMdLink, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
-import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
+import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, processStatBlocks, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
@@ -24,8 +24,6 @@ import { rollRandomItem } from "./dice/rollRandomItem.js";
 import { rollTable } from "./dice/rollTable.js";
 import { sendDiceToMultiple } from "./dice/sendDiceToMultiple.js";
 import { sendDiceToSingle } from "./dice/sendDiceToSingle.js";
-
-type TGmChannel = Optional<MessageTarget>;
 
 type TDiscordDiceParseOptions = {
 	gameSystemType?: GameSystemType;
@@ -325,26 +323,26 @@ export async function sendDice(sageCommand: SageCommand, outputs: TDiceOutput[])
 
 //#region Channels
 
-async function ensureTargetChannel(sageCommand: SageCommand): Promise<MessageChannel> {
+async function ensureTargetChannel(sageCommand: SageCommand): Promise<SupportedMessagesChannel> {
 	const channel = await sageCommand.sageCache.fetchChannel(sageCommand.channel?.sendDiceTo);
 	if (channel) {
-		return channel as MessageChannel;
+		return channel as SupportedMessagesChannel;
 	}
 	if (sageCommand.isSageInteraction("MESSAGE") || sageCommand.isSageInteraction("MODAL")) {
-		return sageCommand.interaction.channel as MessageChannel;
+		return sageCommand.interaction.channel as SupportedMessagesChannel;
 	}
 	const message = await sageCommand.fetchMessage();
-	return message!.channel as MessageChannel;
+	return message!.channel as SupportedMessagesChannel;
 }
 
-async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolean): Promise<TGmChannel> {
+async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolean): Promise<Optional<SupportedTarget>> {
 	if (!hasSecret || (sageCommand.diceSecretMethodType !== DiceSecretMethodType.GameMasterChannel && sageCommand.diceSecretMethodType !== DiceSecretMethodType.GameMasterDirect)) {
 		return null;
 	}
 	if (sageCommand.diceSecretMethodType === DiceSecretMethodType.GameMasterChannel) {
 		const channel = await sageCommand.game?.gmGuildChannel();
 		if (channel) {
-			return channel as MessageChannel;
+			return channel as SupportedMessagesChannel;
 		}
 	}
 	const member = await sageCommand.game?.gmGuildMember();

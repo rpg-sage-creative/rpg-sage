@@ -1,22 +1,19 @@
+import { numberOrUndefined, parseEnum } from "@rsc-utils/core-utils";
+import { findComponent } from "@rsc-utils/discord-utils";
 import type { StringSelectMenuComponent } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
-import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
-import { parseEnum } from "@rsc-utils/core-utils";
 
 /** Gets the selected value (updated or default) for the given customId. */
 export function getSelectedOrDefault(sageCommand: SageCommand, customId: string, ...argKeys: string[]): string | undefined {
-	if (sageCommand.isSageInteraction()) {
+	if (sageCommand.isSageInteraction("SELECT")) {
 		if (sageCommand.customIdMatches(customId)) {
 			return sageCommand.interaction.values[0];
 		}
-		for (const row of sageCommand.interaction.message.components) {
-			for (const component of row.components) {
-				if (component.customId === customId) {
-					for (const option of (component as StringSelectMenuComponent).options) {
-						if (option.default) {
-							return option.value;
-						}
-					}
+		const select = findComponent<StringSelectMenuComponent>(sageCommand.interaction.message, customId);
+		if (select) {
+			for (const option of select.options) {
+				if (option.default) {
+					return option.value;
 				}
 			}
 		}

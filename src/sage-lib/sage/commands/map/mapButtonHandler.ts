@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
-import type { SageInteraction } from "../../model/SageInteraction.js";
+import type { SageButtonInteraction, SageInteraction } from "../../model/SageInteraction.js";
 import { ensurePlayerCharacter } from "./ensurePlayerCharacter.js";
 import { GameMap } from "./GameMap.js";
 import { LayerType } from "./GameMapBase.js";
@@ -26,7 +26,7 @@ async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap
 	return stack.deleteReply();
 }
 
-async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+async function actionHandlerMapAura(sageInteraction: SageButtonInteraction, gameMap: GameMap): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 	const stack = sageInteraction.replyStack;
 
@@ -46,7 +46,7 @@ async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: G
 	return stack.deleteReply();
 }
 
-async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+async function actionHandlerMapToken(sageInteraction: SageButtonInteraction, gameMap: GameMap): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 	const stack = sageInteraction.replyStack;
 
@@ -71,7 +71,7 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 	return stack.editReply(localize("ERROR_SETTING_ACTIVE_TOKEN"));
 }
 
-async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+async function actionHandlerMapRaise(sageInteraction: SageButtonInteraction, gameMap: GameMap): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 
 	if (!gameMap.isGameMasterOrOwner) {
@@ -108,7 +108,7 @@ async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: 
 	return stack.editReply(localize("ERROR_MANIPULATING_IMAGE"));
 }
 
-async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+async function actionHandlerMapLower(sageInteraction: SageButtonInteraction, gameMap: GameMap): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 
 	if (!gameMap.isGameMasterOrOwner) {
@@ -145,11 +145,11 @@ async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: 
 	return stack.editReply(localize("ERROR_MANIPULATING_IMAGE"));
 }
 
-async function actionHandlerMapConfig(sageInteraction: SageInteraction, _: GameMap): Promise<void> {
+async function actionHandlerMapConfig(sageInteraction: SageButtonInteraction, _: GameMap): Promise<void> {
 	return sageInteraction.reply(sageInteraction.getLocalizer()("NOT_IMPLEMENTED_YET"), true);
 }
 
-async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
+async function actionHandlerMapDelete(sageInteraction: SageButtonInteraction, gameMap: GameMap): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 	const activeImage = gameMap.activeImage;
 	if (activeImage) {
@@ -174,7 +174,7 @@ async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap:
 	}
 }
 
-async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
+async function actionHandlerMapMove(sageInteraction: SageButtonInteraction, actionData: TActionData): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 	const stack = sageInteraction.replyStack;
 
@@ -204,7 +204,7 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 	return sageInteraction.reply(localize("NO_IMAGE_TO_MOVE"), true);
 }
 
-async function actionHandler(sageInteraction: SageInteraction, actionData: TActionData): Promise<void> {
+async function actionHandler(sageInteraction: SageButtonInteraction, actionData: TActionData): Promise<void> {
 	const { gameMap } = actionData;
 	switch(actionData.mapAction) {
 		case "MapConfig": return actionHandlerMapConfig(sageInteraction, gameMap);
@@ -221,7 +221,7 @@ async function actionHandler(sageInteraction: SageInteraction, actionData: TActi
 type TActionData = { gameMap:GameMap; mapAction:MapAction; };
 
 /** Returns action data (mapCore and mapAction) or undefined */
-async function actionTester(sageInteraction: SageInteraction): Promise<TActionData | undefined> {
+async function actionTester(sageInteraction: SageButtonInteraction): Promise<TActionData | undefined> {
 	// const [mapId, mapAction] = (sageInteration.interaction.customId ?? "").split("|") as [Discord.Snowflake, TMapAction];
 	const mapAction = (sageInteraction.interaction.customId ?? "").split("|")[1];
 	if (isMapAction(mapAction)) {

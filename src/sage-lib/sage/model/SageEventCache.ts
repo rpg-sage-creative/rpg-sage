@@ -1,6 +1,6 @@
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
 import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getHomeServerId, getPermsFor, getSuperAdminIds, getSuperUserId, getTupperBoxId, isDiscordApiError, isSageId, isThreadChannel, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getHomeServerId, getPermsFor, getSuperAdminIds, getSuperUserId, getTupperBoxId, isDiscordApiError, isSageId, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
@@ -463,7 +463,7 @@ export class SageEventCache {
 	}
 
 	/** Convenience method for send(SageEventCache, MessageTarget, RenderableContentResolvable, Optional<DUser>) */
-	public send(targetChannel: MessageTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<DUser>): Promise<SMessage[]> {
+	public send(targetChannel: SupportedTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<DUser>): Promise<SMessage[]> {
 		return send(this, targetChannel, renderableContent, originalAuthor);
 	}
 
@@ -520,7 +520,7 @@ export class SageEventCache {
 		return this.canSendMessageToMap.get(key)!;
 	}
 
-	public canSendMessageToChannel(channel: MessageChannel): Promise<boolean> {
+	public canSendMessageToChannel(channel: SupportedChannel): Promise<boolean> {
 		return this.canSendMessageTo(DiscordKey.from(channel));
 	}
 
@@ -615,7 +615,7 @@ export class SageEventCache {
 		return new SageEventCache(core);
 	}
 
-	public cloneForChannel(channel: Optional<MessageTarget>): SageEventCache {
+	public cloneForChannel(channel: Optional<SupportedTarget>): SageEventCache {
 		const core = { ...this.core };
 		if (channel) {
 			core.discordKey = DiscordKey.from(channel);
@@ -692,7 +692,7 @@ export class SageEventCache {
 		return this.discord.fetchMessage(keyOrReference, this.user?.did);
 	}
 
-	public async findActiveGame(reference: Optional<Channel | DInteraction | MessageOrPartial | MessageReferenceOrPartial>): Promise<Game | undefined> {
+	public async findActiveGame(reference: Optional<Channel | SupportedInteraction | MessageOrPartial | MessageReferenceOrPartial>): Promise<Game | undefined> {
 		if (reference) {
 			if ("messageId" in reference) {
 				return this.findActiveGameByReference(reference);
@@ -717,7 +717,7 @@ export class SageEventCache {
 		});
 		if (gameByChannel) return gameByChannel;
 
-		if (isThreadChannel(channel)) {
+		if (channel.isThread()) {
 			const gameByParent = await this.findActiveGameByReference({
 				guildId,
 				channelId: channel.parentId!
@@ -793,7 +793,7 @@ export class SageEventCache {
 		return SageEventCache._fromMessage(reactionOrPartial.message, actorOrPartial, reactionOrPartial);
 	}
 
-	public static async fromInteraction(interaction: DInteraction): Promise<SageEventCache> {
+	public static async fromInteraction(interaction: SupportedInteraction): Promise<SageEventCache> {
 		const messageOrPartial = "message" in interaction ? interaction.message ?? undefined : undefined;
 		const evCache = await createSageEventCache({
 			actorOrPartial: interaction.user,

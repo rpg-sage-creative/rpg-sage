@@ -1,6 +1,6 @@
 import { DialogPostType, DicePostType, SageChannelType, type SageChannel } from "@rsc-sage/types";
 import { isDefined, mapAsync, stringifyJson, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, isMessageTarget, toChannelMention } from "@rsc-utils/discord-utils";
+import { DiscordKey, isSupportedChannel, isSupportedGameChannel, toChannelMention } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, DiceSortType, GameSystemType, getCriticalMethodText, parseGameSystem } from "@rsc-utils/game-utils";
 import { GuildChannel } from "discord.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
@@ -73,12 +73,17 @@ function channelDetailsAppendGame(renderableContent: RenderableContent, server: 
 	}
 }
 
-async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Optional<Snowflake>): Promise<[string, Game | undefined]> {
+async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Optional<Snowflake>) {
 	const channel = await sageCache.fetchChannel(channelId);
-	if (!isMessageTarget(channel) || channel.isDMBased()) {
-		return ["DM", undefined];
+	if (!isSupportedChannel(channel)) {
+		return { channelName:"InvalidChannel" };
 	}
-	return [channel.name, await sageCache.findActiveGame(channel)];
+
+	if (isSupportedGameChannel(channel)) {
+		return { channelName:channel.name, game:await sageCache.findActiveGame(channel) };
+	}
+
+	return { channelName:"DM" };
 }
 
 export async function channelDetails(sageMessage: SageMessage, channel?: SageChannel): Promise<void> {
@@ -88,18 +93,18 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 
 	// Get channel from args if it isn't passed
 	const channelId = channel?.id ?? sageMessage.args.getChannelId("channel") ?? sageMessage.threadOrChannelDid;
-	const [guildChannelName, game] = await getChannelNameAndActiveGame(sageMessage.sageCache, channelId);
+	const { channelName, game } = await getChannelNameAndActiveGame(sageMessage.sageCache, channelId);
 	const server = sageMessage.server!;
 	channel = game?.getChannel(channelId) ?? server?.getChannel(channelId);
 
 	if (!channel) {
 		const notProvisionedContent = createAdminRenderableContent(sageMessage.getHasColors());
-		notProvisionedContent.appendTitledSection(`<b>#${guildChannelName}</b>`, `<i>Channel not provisioned!</i>`);
+		notProvisionedContent.appendTitledSection(`<b>#${channelName}</b>`, `<i>Channel not provisioned!</i>`);
 		return <any>sageMessage.send(notProvisionedContent);
 	}
 
 	const renderableContent = createAdminRenderableContent(server);
-	renderableContent.appendTitledSection(`<b>#${guildChannelName}</b>`, `<b>Channel Id</b> ${channelId}`);
+	renderableContent.appendTitledSection(`<b>#${channelName}</b>`, `<b>Channel Id</b> ${channelId}`);
 
 	channelDetailsAppendGame(renderableContent, server, game, channel);
 	await channelDetailsAppendDialog(renderableContent, server, game, channel);

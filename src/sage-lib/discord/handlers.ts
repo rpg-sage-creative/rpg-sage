@@ -1,6 +1,6 @@
 import { error, isNullOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { fetchIfPartial, toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
-import { ChannelType, MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
+import { fetchIfPartial, isSupportedChannel, isSupportedInteraction, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
 import { SageReaction } from "../sage/model/SageReaction.js";
@@ -200,8 +200,6 @@ export function getRegisteredPartials() {
 //#region interactions
 
 type InteractionFlags = {
-	canHandle?: boolean;
-	canIgnore?: boolean;
 	invalidInteraction?: boolean;
 	isAnySelectMenu?: boolean;
 	isButton?: boolean;
@@ -211,24 +209,15 @@ type InteractionFlags = {
 	isModalSubmit?: boolean;
 	isUserContextMenuCommand?: boolean;
 }
-function getInteractionFlags(interaction: Optional<Interaction>): InteractionFlags {
-	if (!interaction) {
-		return { canIgnore:true, invalidInteraction:true };
-	}
-
-	if (isChannelWeCanIgnore(interaction?.channel)) {
-		return { canIgnore:true };
-	}
-
+function getInteractionFlags(interaction: SupportedInteraction): InteractionFlags {
 	const ret = (key: keyof InteractionFlags) => {
-		const flags: InteractionFlags = { canIgnore:false, canHandle:true };
+		const flags: InteractionFlags = { };
 		flags[key] = true;
 		return flags;
 	};
 
 	try {
-		const keys = ["isAnySelectMenu", "isButton", "isCommand", "isMessageComponent", "isMessageContextMenuCommand", "isModalSubmit"] as (keyof Interaction & ("isAnySelectMenu" | "isButton" | "isCommand" | "isMessageComponent" | "isMessageContextMenuCommand" | "isModalSubmit" | "isMessageContextMenuCommand"))[];
-		//, "isUserContextMenuCommand"
+		const keys = ["isAnySelectMenu", "isButton", "isCommand", "isMessageComponent", "isMessageContextMenuCommand", "isModalSubmit", "isUserContextMenuCommand"] as const;
 		for (const key of keys) {
 			if (interaction[key]()) {
 				return ret(key);
@@ -238,16 +227,15 @@ function getInteractionFlags(interaction: Optional<Interaction>): InteractionFla
 		error(toHumanReadable(interaction.user) ?? "@UnknownInteractionUser", interaction.toJSON(), ex);
 	}
 
-	return { canIgnore:false, canHandle:false };
+	return { invalidInteraction:true };
 }
 
 export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0 };
 
-	const flags = getInteractionFlags(interaction);
-	if (flags.canHandle) {
+	if (isSupportedInteraction(interaction)) {
 		try {
-			const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
+			const sageInteraction = await SageInteraction.fromInteraction(interaction as SupportedInteraction);
 			await handleInteractions(sageInteraction, output);
 			sageInteraction.clear();
 		}catch(ex) {
@@ -260,7 +248,7 @@ export async function handleInteraction(interaction: Interaction): Promise<THand
 				customId: "customId" in interaction ? interaction.customId : undefined,
 				user: toHumanReadable(interaction.member?.user ?? interaction.user),
 				json: "customId" in interaction ? undefined : interaction.toJSON(),
-				...flags
+				...getInteractionFlags(interaction)
 			});
 		}
 	}
@@ -332,11 +320,6 @@ function isEditWeCanIgnore(message: MessageOrPartial, originalMessage: Optional<
 	return matchingContent && moreEmbedLengths && contentIncludesUrls;
 }
 
-/** We don't want to process actions in announcement channels/threads nor in categories (not sure that is even possible, though). */
-function isChannelWeCanIgnore(channel: Optional<Channel>): boolean {
-	return [ChannelType.AnnouncementThread, ChannelType.GuildAnnouncement, ChannelType.GuildCategory].includes(channel?.type!);
-}
-
 /** We don't want to process actions by bots or system messages. */
 function isUserWeCanIgnore(user: Optional<UserOrPartial>): boolean {
 	return user?.bot || user?.system ? true : false;
@@ -361,7 +344,7 @@ function isMessageWeCanIgnore(message: MessageOrPartial): boolean {
 /** Combines all the is_X_WeCanIgnore methods for reuse. */
 function canIgnoreMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): boolean {
 	return isUserWeCanIgnore(message.author)
-	|| isChannelWeCanIgnore(message.channel)
+	|| !isSupportedChannel(message.channel)
 	|| isMessageWeCanIgnore(message)
 	|| isEditWeCanIgnore(message, originalMessage);
 }
@@ -425,7 +408,7 @@ export async function handleReaction(messageReaction: ReactionOrPartial, user: U
 	const output = { tested: 0, handled: 0 };
 
 	const canIgnore = isUserWeCanIgnore(user)
-		|| isChannelWeCanIgnore(messageReaction.message.channel);
+		|| !isSupportedChannel(messageReaction.message.channel);
 
 	if (canIgnore) {
 		return output;

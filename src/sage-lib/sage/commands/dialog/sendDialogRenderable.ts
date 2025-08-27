@@ -1,6 +1,6 @@
 import { getLocalizedText } from "@rsc-sage/localization";
 import { errorReturnEmptyArray, type RenderableContent } from "@rsc-utils/core-utils";
-import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
 import { replaceWebhook, sendWebhook, type AuthorOptions } from "../../../discord/messages.js";
 import type { AttachmentResolvable } from "../../../discord/sendTo.js";
@@ -37,7 +37,7 @@ export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, 
 
 	const targetChannel = await sageCache.fetchChannel(sageMessage.channel?.sendDialogTo);
 	if (targetChannel) {
-		const sent = await sendWebhook(targetChannel, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(errorReturnEmptyArray);
+		const sent = await sendWebhook(targetChannel as SupportedMessagesChannel, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(errorReturnEmptyArray);
 		return sent?.filter(msg => msg) ?? [];
 	}
 

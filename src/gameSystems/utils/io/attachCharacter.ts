@@ -1,11 +1,11 @@
-import type { CharacterBase } from "@rsc-utils/game-utils";
 import { error, errorReturnNull, type Optional } from "@rsc-utils/core-utils";
-import type { MessageTarget } from "@rsc-utils/discord-utils";
+import type { SupportedTarget } from "@rsc-utils/discord-utils";
+import type { CharacterBase } from "@rsc-utils/game-utils";
 import { AttachmentBuilder } from "discord.js";
 import { resolveToEmbeds } from "../../../sage-lib/discord/resolvers/resolveToEmbeds.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 
-export async function attachCharacter({ sageCache }: SageCommand, target: Optional<MessageTarget>, character: CharacterBase, pin: boolean): Promise<void> {
+export async function attachCharacter({ sageCache }: SageCommand, target: Optional<SupportedTarget>, character: CharacterBase, pin: boolean): Promise<void> {
 	if (!target) {
 		return error(`Attaching a character without a target.`);
 	}

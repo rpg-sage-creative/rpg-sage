@@ -2,7 +2,7 @@ import { EphemeralMap, error, errorReturnFalse, errorReturnNull, randomSnowflake
 import { createActionRow, getActionRows } from "@rsc-utils/discord-utils";
 import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Message } from "discord.js";
 import type { SageCommand } from "../sage/model/SageCommand.js";
-import type { SageInteraction } from "../sage/model/SageInteraction.js";
+import type { SageButtonInteraction, SageInteraction } from "../sage/model/SageInteraction.js";
 import { deleteMessage } from "./deletedMessages.js";
 import { registerInteractionListener } from "./handlers.js";
 import { resolveToContent } from "./resolvers/resolveToContent.js";
@@ -162,7 +162,7 @@ export function isPromptButton(sageInteraction: SageInteraction): IsPromptButton
 }
 
 /** Tests the interactions to see if they are for a valid prompt's button. */
-async function handlePrompt(sageInteraction: SageInteraction, results: IsPromptButtonResults): Promise<void> {
+async function handlePrompt(sageInteraction: SageButtonInteraction, results: IsPromptButtonResults): Promise<void> {
 	const { messageId, customId } = results;
 	await sageInteraction.interaction.deferUpdate();
 	await resolvePrompt(messageId, customId as Snowflake);

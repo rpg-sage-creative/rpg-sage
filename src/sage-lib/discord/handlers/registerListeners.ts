@@ -8,7 +8,7 @@ import { registerInteractionListener, registerMessageListener } from "../handler
 import { type TCommandAndArgs } from "../types.js";
 
 type SageCommandHandler = (sageCommand: SageCommand) => Awaitable<void>;
-type SageInteractionHandler = (sageInteraction: SageInteraction) => Awaitable<void>;
+type SageInteractionHandler = (sageInteraction: SageInteraction<any>) => Awaitable<void>;
 type SageMessageHandler = (sageMessage: SageMessage) => Awaitable<void>;
 type SageReactionHandler = (sageReaction: SageReaction) => Awaitable<void>;
 

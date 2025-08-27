@@ -1,10 +1,9 @@
 import { partition, type RenderableContent } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, toUserMention } from "@rsc-utils/discord-utils";
-import type { StringSelectMenuInteraction } from "discord.js";
 import type { Macro } from "../../../model/Macro.js";
 import { MacroOwner } from "../../../model/MacroOwner.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import type { SageInteraction } from "../../../model/SageInteraction.js";
+import type { SageStringSelectInteraction } from "../../../model/SageInteraction.js";
 import { createListComponents } from "./createListComponents.js";
 import { getArgs, isInvalidActorError, type Args, type InteractionArgs } from "./getArgs.js";
 import { mCmdDetails } from "./mCmdDetails.js";
@@ -115,7 +114,7 @@ export async function mCmdList(sageCommand: SageCommand, args?: Args | boolean):
 	}
 }
 
-export async function handleSelection(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
+export async function handleSelection(sageInteraction: SageStringSelectInteraction): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	// get the args

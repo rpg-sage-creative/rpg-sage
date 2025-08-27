@@ -11,7 +11,7 @@ export async function fetchSelectedOrDefault(input: MessagesOrSageCommand, custo
 			if (argKey && item.args.hasString(argKey)) {
 				return item.args.getString(argKey)!;
 			}
-			if (item.isSageInteraction() && item.customIdMatches(customId)) {
+			if (item.isSageInteraction("SELECT") && item.customIdMatches(customId)) {
 				return item.interaction.values[0];
 			}
 		}

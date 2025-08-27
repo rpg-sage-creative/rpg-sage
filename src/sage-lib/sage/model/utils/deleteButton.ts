@@ -1,11 +1,11 @@
 import { getLocalizedText, type LocalizedTextKey } from "@rsc-sage/localization";
 import { errorReturnUndefined, isNotBlank, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, getSageId, toChannelMention, toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
 import { deleteMessage, MessageDeleteResults } from "../../../discord/deletedMessages.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import type { SageCommand } from "../SageCommand.js";
-import type { SageInteraction } from "../SageInteraction.js";
+import type { SageButtonInteraction } from "../SageInteraction.js";
 
 type ButtonOptions = {
 	customId?: string;
@@ -111,7 +111,7 @@ export function includeDeleteButton<T extends BaseMessageOptions | InteractionRe
 }
 
 /** Checks the interaction for the customId used for deleting messages. */
-async function messageDeleteButtonTester(sageInteraction: SageInteraction<ButtonInteraction>): Promise<boolean> {
+async function messageDeleteButtonTester(sageInteraction: SageButtonInteraction): Promise<boolean> {
 	if (sageInteraction.interaction.isButton()) {
 		const customId = sageInteraction.interaction.customId;
 		const buttonUserId = getUserId(customId);
@@ -133,7 +133,7 @@ async function messageDeleteButtonTester(sageInteraction: SageInteraction<Button
 }
 
 /** Handles the interaction used for deleting messages. */
-async function messageDeleteButtonHandler(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
+async function messageDeleteButtonHandler(sageInteraction: SageButtonInteraction): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 
 	const customId = sageInteraction.interaction.customId;

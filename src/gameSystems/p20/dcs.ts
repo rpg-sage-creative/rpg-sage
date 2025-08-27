@@ -2,11 +2,11 @@ import { parseEnum } from "@rsc-sage/types";
 import { nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent } from "@rsc-utils/discord-utils";
 import { GameSystemType } from "@rsc-utils/game-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
-import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
+import type { SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton, createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { boundNumber, type BoundedOptions } from "../utils/boundNumber.js";
 import { toModifier } from "../utils/toModifier.js";
@@ -260,9 +260,9 @@ async function showDCs(sageCommand: SageCommand): Promise<void> {
 }
 
 /** Gets the selected value (updated or default) for the given customId. */
-function getSelected<T extends string = string>(sageInteraction: SageInteraction<StringSelectMenuInteraction>, customId: string): T | undefined;
-function getSelected(sageInteraction: SageInteraction<StringSelectMenuInteraction>, customId: string, boundOpts: BoundedOptions): number;
-function getSelected(sageInteraction: SageInteraction<StringSelectMenuInteraction>, customId: string, boundOpts?: BoundedOptions): string | number | undefined {
+function getSelected<T extends string = string>(sageInteraction: SageStringSelectInteraction, customId: string): T | undefined;
+function getSelected(sageInteraction: SageStringSelectInteraction, customId: string, boundOpts: BoundedOptions): number;
+function getSelected(sageInteraction: SageStringSelectInteraction, customId: string, boundOpts?: BoundedOptions): string | number | undefined {
 	const ret = boundOpts
 		? (value: string) => boundNumber(+value, boundOpts)
 		: (value: string) => value;
@@ -281,7 +281,7 @@ function getSelected(sageInteraction: SageInteraction<StringSelectMenuInteractio
 }
 
 /** Updates the form when a system or level is changed. */
-async function changeDCs(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
+async function changeDCs(sageInteraction: SageStringSelectInteraction): Promise<void> {
 	sageInteraction.replyStack.defer();
 	const isReset = sageInteraction.customIdMatches(`p20-dcs-reset`);
 	const gameSystemType = parseEnum(GameSystemType, getSelected(sageInteraction, "p20-dcs-game") ?? "PF2e");

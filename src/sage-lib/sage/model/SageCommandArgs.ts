@@ -1,6 +1,6 @@
 import { type DialogOptions, DialogPostType, type DiceOptions, DicePostType, type GameOptions, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
 import { type Args, Color, type EnumLike, type HexColorString, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { type MessageChannel, parseIds, urlOrUndefined } from "@rsc-utils/discord-utils";
+import { parseIds, type SupportedChannel, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, DiceSortType, GameSystemType } from "@rsc-utils/game-utils";
 import { type VALID_URL } from "@rsc-utils/io-utils";
 import type { Attachment, Role, User } from "discord.js";
@@ -103,7 +103,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public abstract getChannel(name: string): Optional<MessageChannel>;
+	public abstract getChannel(name: string): Optional<SupportedChannel>;
 
 	/** Returns true if getChannel(name) is not null and not undefined. */
 	public hasChannel(name: string): boolean {

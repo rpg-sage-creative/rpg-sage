@@ -1,6 +1,6 @@
 import { error, RenderableContent, warn, warnReturnNull, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { addInvalidWebhookUsername, DiscordKey, isGuildBasedChannel, isMessage, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
-import type { Channel, Message, MessageReaction, User } from "discord.js";
+import { addInvalidWebhookUsername, DiscordKey, isMessage, isSupportedGameChannel, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel, type SupportedTarget } from "@rsc-utils/discord-utils";
+import type { Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
 import { DialogMessageRepository } from "../sage/repo/DialogMessageRepository.js";
@@ -47,13 +47,13 @@ type WebhookOptions = {
  * Currently, we don't send webhooks to DMs; if the targetChannel is a DM we send as Sage to the user.
  * If we cannot find a webhook, we return a Promise.reject.
  */
-export async function sendWebhook(targetChannel: Channel, webhookOptions: WebhookOptions): Promise<Message[] | undefined> {
+export async function sendWebhook(targetChannel: SupportedMessagesChannel, webhookOptions: WebhookOptions): Promise<Message[] | undefined> {
 	const { authorOptions, renderableContent, dialogType, files, sageCache } = webhookOptions;
 
 	if (targetChannel.isDMBased()) {
 		const actor = await sageCache.validateActor();
 		if (actor.discord) {
-			return send(sageCache, targetChannel as MessageTarget, renderableContent, actor.discord);
+			return send(sageCache, targetChannel, renderableContent, actor.discord);
 		}
 		return [];
 	}
@@ -63,7 +63,7 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-dialog`);
 	}
 
-	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel as MessageTarget), renderableContent);
+	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
 	const contentToEmbeds = dialogType === DialogType.Embed;
 	const embedsToContent = dialogType === DialogType.Post;
 	// const content = dialogType === DialogType.Post ? resolveToTexts(sageCache.cloneForChannel(targetChannel), renderableContent).join("\n") : undefined;
@@ -160,7 +160,7 @@ export async function replace(sageCache: SageCache, originalMessage: SMessage, r
 	return send(sageCache, originalMessage.channel, renderableContent, originalMessage.author);
 }
 
-export async function send(sageCache: SageCache, targetChannel: MessageTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<User>): Promise<SMessage[]> {
+export async function send(sageCache: SageCache, targetChannel: SupportedTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<User>): Promise<SMessage[]> {
 	try {
 		const menuRenderable = (<IMenuRenderable>renderableContent).toMenuRenderableContent && <IMenuRenderable>renderableContent || null,
 			menuItemCount = menuRenderable?.getMenuLength() ?? 0;
@@ -179,11 +179,11 @@ export async function send(sageCache: SageCache, targetChannel: MessageTarget, r
 	return [];
 }
 
-async function sendRenderableContent(sageCache: SageCache, renderableContent: RenderableContentResolvable, targetChannel: MessageTarget, originalAuthor: Optional<User>): Promise<SMessage[]> {
+async function sendRenderableContent(sageCache: SageCache, renderableContent: RenderableContentResolvable, targetChannel: SupportedTarget, originalAuthor: Optional<User>): Promise<SMessage[]> {
 	const messages: Message[] = [];
 	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
 	if (embeds.length > 2) {
-		if (isGuildBasedChannel(targetChannel)) {
+		if (isSupportedGameChannel(targetChannel)) {
 			const embed = createMessageEmbed({ description:"*Long reply sent via direct message!*" });
 			const sent = await sendTo({ sageCache, target:targetChannel, embeds:[embed] }, { }, (err: unknown) => error(`${toHumanReadable(targetChannel)}: Notifying of sendRenderableContent DM`, err));
 			messages.push(...sent ?? []);
@@ -199,7 +199,7 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: Re
 	return messages as SMessage[];
 }
 
-function sendMenuRenderableContent(sageCache: SageCache, menuRenderable: IMenuRenderable, targetChannel: MessageTarget, originalAuthor: Optional<User>): void {
+function sendMenuRenderableContent(sageCache: SageCache, menuRenderable: IMenuRenderable, targetChannel: SupportedTarget, originalAuthor: Optional<User>): void {
 	const menuLength = menuRenderable.getMenuLength();
 	if (menuLength > 1) {
 		sendAndAwaitReactions(sageCache, menuRenderable, targetChannel, originalAuthor).then(index => {
@@ -217,7 +217,7 @@ function sendMenuRenderableContent(sageCache: SageCache, menuRenderable: IMenuRe
 
 const TIMEOUT = "TIMEOUT";
 const TIMEOUT_MILLI = 60 * 1000;
-function sendAndAwaitReactions(sageCache: SageCache, menuRenderable: IMenuRenderable, targetChannel: MessageTarget, originalAuthor: Optional<User>): Promise<number> {
+function sendAndAwaitReactions(sageCache: SageCache, menuRenderable: IMenuRenderable, targetChannel: SupportedTarget, originalAuthor: Optional<User>): Promise<number> {
 	return new Promise<number>(async (resolve, reject) => {
 		const menuLength = menuRenderable.getMenuLength();
 		if (menuLength < 1) {

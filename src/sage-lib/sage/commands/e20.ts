@@ -1,8 +1,8 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { errorReturnNull } from "@rsc-utils/core-utils";
-import { EmbedBuilder, type MessageTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
+import { EmbedBuilder, type SupportedTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
 import { readJsonFile, readJsonFileSync } from "@rsc-utils/io-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/e20/index.js";
 import { PlayerCharacterE20, type TSkillE20, type TSkillSpecialization, type TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
 import { type PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
@@ -12,7 +12,7 @@ import { registerInteractionListener } from "../../discord/handlers.js";
 import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageCommand } from "../model/SageCommand.js";
-import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageButtonInteraction, SageStringSelectInteraction } from "../model/SageInteraction.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 
@@ -110,7 +110,7 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, eChar: TPlayerChar
  * posts the imported character to the channel
  * @todo implement or stub macro logic from pathbuilder and then use shared/reusable code.
  */
-export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: TPlayerCharacter, pin: boolean): Promise<void> {
+export async function postCharacter(sageCommand: SageCommand, channel: Optional<SupportedTarget>, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const { sageCache } = sageCommand;
 	const saved = await character.save();
 	if (saved) {
@@ -385,12 +385,12 @@ export function getValidE20CharacterId(customId?: string | null): string | undef
 	return undefined;
 }
 
-function sheetTester(sageInteraction: SageInteraction): boolean {
+function sheetTester(sageInteraction: SageButtonInteraction | SageStringSelectInteraction): boolean {
 	const customId = sageInteraction.interaction.customId;
 	return getValidE20CharacterId(customId) !== undefined;
 }
 
-async function viewHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
+async function viewHandler(sageInteraction: SageStringSelectInteraction, character: TPlayerCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
 	if (values.includes("All")) {
@@ -409,14 +409,14 @@ async function viewHandler(sageInteraction: SageInteraction<StringSelectMenuInte
 	return updateSheet(sageInteraction, character);
 }
 
-async function skillHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
+async function skillHandler(sageInteraction: SageStringSelectInteraction, character: TPlayerCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await character.save();
 	return updateSheet(sageInteraction, character);
 }
 
-async function edgeSnagShiftHandler(sageInteraction: SageInteraction, character: TPlayerCharacter): Promise<void> {
+async function edgeSnagShiftHandler(sageInteraction: SageStringSelectInteraction, character: TPlayerCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	if (values.includes("Nothing")) {
 		values.length = 0;
@@ -437,7 +437,7 @@ function testEdgeSnag<T>(testValues: TEdgeSnagShift[], outValues: { edge: T, sna
 	}
 }
 
-async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, character: TPlayerCharacter, secret = false, init = false, untrained = false): Promise<void> {
+async function rollHandler(sageInteraction: SageButtonInteraction, character: TPlayerCharacter, secret = false, init = false, untrained = false): Promise<void> {
 	let dice = "";
 	if (untrained) {
 		dice = `[d20s ${character.name} Untrained]`;
@@ -489,19 +489,19 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 	}
 }
 
-async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
+async function sheetHandler(sageInteraction: SageButtonInteraction | SageStringSelectInteraction): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
 	const [_E20, characterId, command] = sageInteraction.interaction.customId.split("|");
 	const character = await loadCharacter(characterId);
 	if (character) {
 		switch(command as "View" | "Skill" | "Spec" | "EdgeSnag" | "EdgeSnagShift" | "Roll" | "Secret" | "Init" | "Untrained") {
-			case "View": return viewHandler(sageInteraction, character);
-			case "Skill": case "Spec": return skillHandler(sageInteraction, character);
-			case "EdgeSnag": case "EdgeSnagShift": return edgeSnagShiftHandler(sageInteraction, character);
-			case "Roll": return rollHandler(sageInteraction, character, false);
-			case "Secret": return rollHandler(sageInteraction, character, true);
-			case "Init": return rollHandler(sageInteraction, character, false, true);
-			case "Untrained": return rollHandler(sageInteraction, character, false, false, true);
+			case "View": return viewHandler(sageInteraction as SageStringSelectInteraction, character);
+			case "Skill": case "Spec": return skillHandler(sageInteraction as SageStringSelectInteraction, character);
+			case "EdgeSnag": case "EdgeSnagShift": return edgeSnagShiftHandler(sageInteraction as SageStringSelectInteraction, character);
+			case "Roll": return rollHandler(sageInteraction as SageButtonInteraction, character, false);
+			case "Secret": return rollHandler(sageInteraction as SageButtonInteraction, character, true);
+			case "Init": return rollHandler(sageInteraction as SageButtonInteraction, character, false, true);
+			case "Untrained": return rollHandler(sageInteraction as SageButtonInteraction, character, false, false, true);
 		}
 	}
 	return Promise.resolve();

@@ -1,5 +1,5 @@
 import { isDefined, isNotBlank, type ArgsManager, type Optional } from "@rsc-utils/core-utils";
-import { parseId, type MessageChannel } from "@rsc-utils/discord-utils";
+import { parseId, type SupportedChannel } from "@rsc-utils/discord-utils";
 import type { Attachment, Role, User } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
@@ -80,7 +80,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	 * Returns undefined if not found.
 	 * Returns null if not a valid GuildBasedChannel or "unset".
 	 */
-	public getChannel<T extends MessageChannel>(name: string): Optional<T> {
+	public getChannel<T extends SupportedChannel>(name: string): Optional<T> {
 		const keyValueArg = this.getKeyValueArg(name);
 		if (!keyValueArg.hasKey) return undefined;
 		if (keyValueArg.hasUnset) return null;
