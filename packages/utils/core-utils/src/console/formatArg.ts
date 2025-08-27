@@ -1,12 +1,12 @@
 import { stringifyJson } from "../json/stringifyJson.js";
 
-type ErrorLike = {
+export type ErrorLike = {
 	message: string;
 	name: string;
 	stack: string;
 };
 
-function isErrorLike(arg: any): arg is ErrorLike {
+export function isErrorLike(arg: any): arg is ErrorLike {
 	if (arg) {
 		if (arg instanceof Error) {
 			return true;
