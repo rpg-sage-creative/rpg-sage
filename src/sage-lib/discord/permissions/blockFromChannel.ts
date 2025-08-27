@@ -1,6 +1,7 @@
 import { error } from "@rsc-utils/core-utils";
 import { getPermsFor } from "@rsc-utils/discord-utils";
-import type { GuildMember, NonThreadGuildBasedChannel } from "discord.js";
+import type { GuildMember } from "discord.js";
+import type { NonThreadGameChannel } from "../../sage/model/Game.js";
 
 /*
 https://discord.com/developers/docs/topics/permissions
@@ -30,7 +31,7 @@ type BlockResults = {
 };
 
 /** Blocks the given target from the given channel. */
-export async function blockFromChannel(sage: GuildMember, channel: NonThreadGuildBasedChannel, memberToBlock: GuildMember): Promise<BlockResults> {
+export async function blockFromChannel(sage: GuildMember, channel: NonThreadGameChannel, memberToBlock: GuildMember): Promise<BlockResults> {
 	// see if we can manage the channel
 	const { canManageChannel, canViewChannel } = getPermsFor(channel, sage);
 
