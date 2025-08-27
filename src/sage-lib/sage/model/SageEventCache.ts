@@ -1,6 +1,6 @@
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
-import { debug, errorReturnFalse, errorReturnUndefined, isDefined, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, fetchIfPartial, getHomeServerId, getPermsFor, getSuperAdminIds, getSuperUserId, getTupperBoxId, isDiscordApiError, isSageId, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SMessageOrPartial, type SupportedChannel, type SupportedInteraction, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, getHomeServerId, getPermsFor, getSuperAdminIds, getSuperUserId, getTupperBoxId, isDiscordApiError, isSageId, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SMessageOrPartial, type SupportedChannel, type SupportedInteraction, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
@@ -120,26 +120,55 @@ type ValidateUserArgs = ValidateActorArgs | ValidateAuthorArgs;
 async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateUserArgs): Promise<SageEventCacheUser> {
 	const { which, actorOrPartial, authorOrPartial, messageOrPartial, reactionOrPartial } = validateUserArgs;
 
+	let discord: DUser | undefined;
+	let { discord:guild, sage:server } = evCache.server;
+
+	const validationErrors: string[] = [];
+	const appendError = (action: string, err: unknown) => {
+		validationErrors.push(`Error Validating User (SageEventCache.ts -> validateUser)`);
+		validationErrors.push(`${BULLET} ${action}`);
+		if (discord) {
+			validationErrors.push(`${BULLET} discord = ${discord.id} (${toHumanReadable(discord)})`);
+		}
+		if (guild) {
+			validationErrors.push(`${BULLET} guild = ${guild.id} (${guild.name})`);
+		}
+		if (isDiscordApiError(err, 10007, 10013)) {
+			const errName = {10007:"Unknown Member",10013:"Unknown User"}[err.code];
+			validationErrors.push(`${BULLET} DiscordApiError ${err.code} (${errName})`)
+		}else if (isErrorLike(err)) {
+			validationErrors.push(`${BULLET} ${err.name ?? "NoName"}: ${err.message ?? "NoMessage"}`);
+		}else if (err) {
+			validationErrors.push(`${BULLET} ${stringifyJson(err)}`);
+		}
+		return undefined;
+	};
+	const sendErrors = () => {
+		if (validationErrors.length > 0) {
+			error(validationErrors);
+		}
+	};
+
 	// try fetching the discord user object
-	let discord = await fetchIfPartial(actorOrPartial ?? authorOrPartial);
+	discord = await (actorOrPartial ?? authorOrPartial)?.fetch().catch(err => appendError(`discord = await (actorOrPartial ?? authorOrPartial)?.fetch()`, err));
 
 	// actor will always get passed in, author might not if the original was a partial
 	if (!discord && which === "author") {
 		// if we don't have a reaction and have a message, try getting author directly from message
 		if (!reactionOrPartial && messageOrPartial) {
-			const message = await fetchIfPartial(messageOrPartial);
+			const message = await messageOrPartial.fetch().catch(err => appendError(`const message = await messageOrPartial.fetch()`, err));
 			discord = message?.author;
 		}
 
 		// still no discord user and we have a reaction, try getting it from reaction's message
 		if (!discord && reactionOrPartial) {
-			const reaction = await fetchIfPartial(reactionOrPartial);
-			const message = await fetchIfPartial(reaction?.message);
+			const reaction = await reactionOrPartial.fetch().catch(err => appendError(`const reaction = await reactionOrPartial.fetch()`, err));
+			const message = await reaction?.message.fetch().catch(err => appendError(`const message = await reaction?.message.fetch()`, err));
 			discord = message?.author;
 		}
 
 		// in case we managed to still have a partial ...
-		discord = await fetchIfPartial(discord);
+		discord = await discord?.fetch().catch(err => appendError(`discord = await discord?.fetch()`, err));
 	}
 
 	// we want to always have a sage user object, so pass in nil if we don't have an id
@@ -169,14 +198,13 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 			sage,
 			// uuid: undefined,
 		};
+		sendErrors();
 		return unknownUser;
 	}
 
 	// type cast id now
 	const id = discord.id as Snowflake;
 	const roleIds: Snowflake[] = [];
-
-	const { discord:guild, sage:server } = evCache.server;
 
 	// early and easiest check for canManageServer
 	if (server?.superAccessType) {
@@ -186,14 +214,11 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 
 	// we need a guildmember to check server perms
 	let member: GuildMember | undefined;
+	guild = await guild?.fetch().catch(err => appendError(`guild = await guild?.fetch()`, err));
 	if (guild) {
 		// fetch the guild member if it isn't a bot and isn't a system user
 		if (!discord.bot && !discord.system) {
-			member = await guild.members.fetch(id).catch(err => {
-				return isDiscordApiError(err, 10007, 10013)
-					? errorReturnUndefined(`unable to validate ${which} user (err = ${err.code} "${{10007:"Unknown Member",10013:"Unknown User"}[err.code]}"); guild.id = ${guild.id} (${guild.name}); guildMember.id = ${id} (${toHumanReadable(discord)})`)
-					: errorReturnUndefined(err);
-			});
+			member = await guild.members.fetch(id).catch(err => appendError(`member = await guild.members.fetch(id)`, err));
 			if (member) {
 				roleIds.push(...member.roles.cache.keys() as MapIterator<Snowflake>);
 			}
@@ -245,6 +270,7 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 		sage,
 		uuid,
 	};
+	sendErrors();
 	return knownUser;
 }
 
@@ -796,7 +822,7 @@ export class SageEventCache {
 	}
 
 	public static async fromMessage(messageOrPartial: SMessageOrPartial): Promise<SageEventCache> {
-		const message = await fetchIfPartial(messageOrPartial) as SMessage;
+		const message = await messageOrPartial.fetch() as SMessage;
 		const evCache = await SageEventCache._fromMessage(message, message.author);
 		await evCache.validateActor();
 		return evCache;
