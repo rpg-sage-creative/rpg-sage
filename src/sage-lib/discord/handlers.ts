@@ -373,8 +373,9 @@ export async function handleMessage(message: MessageOrPartial, originalMessage: 
 			}
 		}
 	} catch (ex) {
-		// DiscordAPIError[10008]: Unknown Message <-- probably a deleted message
-		if (!isDiscordApiError(ex, 10008)) {
+		// DiscordAPIError[10008]: Unknown Message <-- probably a deleted message from tupperbox
+		// DiscordAPIError[50001]: Missing Access  <-- probably in a server and getting events but can't see this channel
+		if (!isDiscordApiError(ex, 10008, 50001)) {
 			error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
 		}
 	}
