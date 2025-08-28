@@ -602,7 +602,7 @@ export class SageEventCache {
 				const { thread, channel } = await evCache.discord.fetchChannelAndThread(discordKey);
 				if (isDeleted(discordKey.message)) return false; // check deleted messages just in case
 				if (channel) {
-					return getPermsFor(thread ?? channel, DiscordCache.getSageId()).canAddReactions;
+					return getPermsFor(thread ?? channel, DiscordCache.getSageId()).can("AddReactions");
 				}else {
 					return false;
 				}
@@ -619,8 +619,8 @@ export class SageEventCache {
 			}else {
 				const { thread, channel } = await this.discord.fetchChannelAndThread(discordKey);
 				if (channel) {
-					const { canManageWebhooks, canSendMessages } = getPermsFor(thread ?? channel, DiscordCache.getSageId());
-					this.canWebhookToMap.set(key, canManageWebhooks && canSendMessages);
+					const perms = getPermsFor(thread ?? channel, DiscordCache.getSageId());
+					this.canWebhookToMap.set(key, perms.can("ManageWebhooks") && perms.can("SendTo"));
 				}else {
 					this.canWebhookToMap.set(key, false);
 				}

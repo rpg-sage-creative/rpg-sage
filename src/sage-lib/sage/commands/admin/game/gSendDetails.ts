@@ -1,9 +1,8 @@
 import { DialogPostType, DicePostType } from "@rsc-sage/types";
 import { getDateStrings, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { addZeroWidthSpaces, getPermsFor, getRollemId, getTupperBoxId, toHumanReadable } from "@rsc-utils/discord-utils";
+import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, getRollemId, getTupperBoxId, toHumanReadable } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, DiceSortType, getCriticalMethodText } from "@rsc-utils/game-utils";
 import type { GuildMember, TextChannel } from "discord.js";
-import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
@@ -33,7 +32,7 @@ async function showGameGetGame(sageCommand: SageCommand): Promise<Game | null> {
 		await sageCommand.replyStack.whisper("*Server Admin, Game Admin, or Game Master privilege required!*");
 		return null;
 	}
-	
+
 	return game ?? null;
 }
 
@@ -50,7 +49,7 @@ function showGameRenderGameType(renderableContent: RenderableContent, game: Game
 async function checkForMissingPerms(sageCommand: SageCommand, guildChannel?: TextChannel | null): Promise<string[]> {
 	const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.id);
 	if (bot && guildChannel) {
-		return getPermsFor(guildChannel, bot, ...getRequiredChannelPerms()).missing;
+		return getPermsFor(guildChannel, bot, ...getRequiredPermissions("RunGame")).missing;
 	}
 	return [];
 }
@@ -64,8 +63,7 @@ async function checkForOtherBots(guildChannel?: TextChannel | null): Promise<str
 
 	const bots = [["Tupperbox", getTupperBoxId()], ["Rollem", getRollemId()]];
 	for (const [botName, botId] of bots) {
-		const { canViewChannel } = getPermsFor(guildChannel, botId);
-		if (canViewChannel) {
+		if (getPermsFor(guildChannel, botId).can("ViewChannel")) {
 			botNames.push(botName);
 		}
 	}
