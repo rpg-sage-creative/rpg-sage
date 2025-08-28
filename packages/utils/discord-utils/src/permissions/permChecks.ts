@@ -1,10 +1,9 @@
-import { type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { type AnyThreadChannel, type Channel } from "discord.js";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { AnyThreadChannel, Channel } from "discord.js";
 import { getPermsFor } from "./getPermsFor.js";
-import { isDMBased, isThread } from "../types/types.js";
 
 function isLockedOrArchivedThread(channel: Channel): channel is AnyThreadChannel {
-	if (isThread(channel)) {
+	if (channel.isThread()) {
 		if (channel.locked) {
 			return true;
 		}
@@ -28,7 +27,7 @@ export function canSendMessageTo(botId: Snowflake, channel: Optional<Channel>): 
 		return false;
 	}
 
-	if (isDMBased(channel)) {
+	if (channel.isDMBased()) {
 		return true;
 	}
 
@@ -38,7 +37,7 @@ export function canSendMessageTo(botId: Snowflake, channel: Optional<Channel>): 
 	}
 
 	const perms = getPermsFor(channel, botId);
-	return perms.canSendMessages;
+	return perms.can("SendTo");
 }
 
 export function canReactTo(botId: Snowflake, channel: Optional<Channel>): boolean {
@@ -46,7 +45,7 @@ export function canReactTo(botId: Snowflake, channel: Optional<Channel>): boolea
 		return false;
 	}
 
-	if (isDMBased(channel)) {
+	if (channel.isDMBased()) {
 		return true;
 	}
 
@@ -55,7 +54,7 @@ export function canReactTo(botId: Snowflake, channel: Optional<Channel>): boolea
 	}
 
 	const perms = getPermsFor(channel, botId);
-	return perms.canAddReactions;
+	return perms.can("AddReactions");
 }
 
 export function canWebhookTo(botId: Snowflake, channel: Optional<Channel>): boolean {
@@ -63,7 +62,7 @@ export function canWebhookTo(botId: Snowflake, channel: Optional<Channel>): bool
 		return false;
 	}
 
-	if (isDMBased(channel)) {
+	if (channel.isDMBased()) {
 		return false;
 	}
 
@@ -72,5 +71,5 @@ export function canWebhookTo(botId: Snowflake, channel: Optional<Channel>): bool
 	}
 
 	const perms = getPermsFor(channel, botId);
-	return perms.canSendWebhooks;
+	return perms.can("WebhookTo");
 }

@@ -251,7 +251,7 @@ export class DiscordCache {
 		const key = `${channel.id}-canManageWebhooks`;
 
 		if (!this.#cached.has(key)) {
-			const { canManageWebhooks } = getPermsFor(channel, DiscordCache.getSageId());
+			const canManageWebhooks = getPermsFor(channel, DiscordCache.getSageId()).can("ManageWebhooks");
 			this.#cached.set(key, canManageWebhooks);
 		}
 		return this.#cached.get(key) === true;

@@ -1,7 +1,6 @@
 import { error } from "@rsc-utils/core-utils";
-import { getPermsFor } from "@rsc-utils/discord-utils";
-import type { GuildMember } from "discord.js";
-import type { NonThreadGameChannel } from "../../sage/model/Game.js";
+import type { GuildMember, GuildTextBasedChannel } from "discord.js";
+import { getPermsFor } from "./getPermsFor.js";
 
 /*
 https://discord.com/developers/docs/topics/permissions
@@ -31,12 +30,15 @@ type BlockResults = {
 };
 
 /** Blocks the given target from the given channel. */
-export async function blockFromChannel(sage: GuildMember, channel: NonThreadGameChannel, memberToBlock: GuildMember): Promise<BlockResults> {
+export async function blockFromChannel(sage: GuildMember, channel: GuildTextBasedChannel, memberToBlock: GuildMember): Promise<BlockResults> {
+	const perms = getPermsFor(channel, sage);
+
 	// see if we can manage the channel
-	const { canManageChannel, canViewChannel } = getPermsFor(channel, sage);
+	const canManageChannel = perms.can("ManageChannels");
+	const canViewChannel = perms.can("ViewChannel");
 
 	// check the state before we do any work
-	const blockedBefore = !getPermsFor(channel, memberToBlock).canViewChannel;
+	const blockedBefore = !getPermsFor(channel, memberToBlock).can("ViewChannel");
 
 	// if we can't manage or we don't need to, return now
 	if (!canManageChannel || !canViewChannel || blockedBefore) {
@@ -64,7 +66,7 @@ export async function blockFromChannel(sage: GuildMember, channel: NonThreadGame
 		: errorHandler(true);
 
 	// recheck perms
-	const blockedAfter = !getPermsFor(updatedChannel ?? channel, memberToBlock).canViewChannel;
+	const blockedAfter = !getPermsFor(updatedChannel ?? channel, memberToBlock).can("ViewChannel");
 
 	return {
 		canManageChannel,

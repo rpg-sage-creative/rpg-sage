@@ -1,7 +1,5 @@
-import { getPermsFor, toHumanReadable } from "@rsc-utils/discord-utils";
+import { fixMissingChannelPerms, getPermsFor, getRequiredPermissions, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { TextChannel } from "discord.js";
-import { fixMissingChannelPerms } from "../../../../discord/permissions/fixMissingChannelPerms.js";
-import { getRequiredChannelPerms } from "../../../../discord/permissions/getRequiredChannelPerms.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -28,8 +26,8 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 	for (const gameChannel of gameChannels) {
 		const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(gameChannel.id);
 		if (guildChannel) {
-			const perms = getPermsFor(guildChannel, bot, ...getRequiredChannelPerms());
-			if (!perms.canViewChannel) {
+			const perms = getPermsFor(guildChannel, bot, ...getRequiredPermissions("RunGame"));
+			if (!perms.can("ViewChannel")) {
 				cannotView++;
 			}
 			if (perms.missing.length) {

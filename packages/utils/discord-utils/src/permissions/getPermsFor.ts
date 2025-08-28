@@ -1,123 +1,99 @@
-import { PermissionFlagsBits, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
+import type { Optional } from "@rsc-utils/core-utils";
+import { PermissionFlagsBits, PermissionsBitField, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
-import { isGuildBased, isThread as isThreadChannel, isWebhookChannel, type WebhookChannel } from "../types/types.js";
+import { isWebhookChannel, type WebhookChannel } from "../types/types.js";
 
-type AccessResults = {
-	/** perms.has("ManageChannels") */
-	canManageChannel: boolean;
-
-	/** perms.has("ManageWebhooks") */
-	canManageWebhooks: boolean;
-
-	/** perms.has("ViewChannel") */
-	canViewChannel: boolean;
+type PermissionsArgs = {
+	checked?: PermFlagBitsKeys[];
+	isInChannel?: boolean;
+	isThread?: boolean;
+	missing?: PermFlagBitsKeys[];
+	perms?: Optional<PermissionsBitField>;
+	present?: PermFlagBitsKeys[];
+	webhookChannel?: Optional<WebhookChannel>;
+};
+class Permissions {
+	/** the perms checked */
+	public checked: PermFlagBitsKeys[];
 
 	/** is the member in the members list (has joined a thread) */
-	isInChannel: boolean;
+	public isInChannel: boolean;
 
-	/** perms.has("SendMessages") or perms.has("SendMessagesInThreads") */
-	canSendMessages: boolean;
+	/** is the channel actually a thread */
+	public isThread: boolean;
 
-	/** perms.has("AddReactions") */
-	canAddReactions: boolean;
+	/** the perms not found */
+	public missing: PermFlagBitsKeys[];
 
-	/** canManageWebhooks and "fetchWebhooks" in channel */
-	canSendWebhooks: boolean;
+	/** the underlying permissions data */
+	public perms?: PermissionsBitField;
 
-	/** Only returned if canSendWebhooks === true; the channel or thread parent that has webhooks */
-	webhookChannel?: WebhookChannel;
+	/** the perms found */
+	public present: PermFlagBitsKeys[];
 
-	canSendPolls: boolean;
-};
+	/** the webhook channel (parent of a thread) */
+	public webhookChannel?: WebhookChannel;
 
-function emptyResults(): AccessResults {
-	return {
-		canManageChannel: false,
-		canManageWebhooks: false,
-		canViewChannel: false,
-		isInChannel: false,
-		canSendMessages: false,
-		canAddReactions: false,
-		canSendWebhooks: false,
-		canSendPolls: false
-	};
+	public constructor({ checked, isInChannel, isThread, missing, perms, present, webhookChannel }: PermissionsArgs = { }) {
+		this.checked = checked ?? [];
+		this.isInChannel = isInChannel ?? false;
+		this.isThread = isThread ?? false;
+		this.missing = missing ?? [];
+		this.perms = perms ?? undefined;
+		this.present = present ?? [];
+		this.webhookChannel = webhookChannel ?? undefined;
+	}
+
+	/** Tests to see if the requested permission is present */
+	public can(key: "SendTo" | "WebhookTo" | keyof typeof PermissionFlagsBits): boolean {
+		if (key === "SendTo") {
+			return this.isThread ? this.can("SendMessagesInThreads") : this.can("SendMessages");
+		}
+		if (key === "WebhookTo") {
+			return this.can("ManageWebhooks") && this.webhookChannel !== undefined;
+		}
+		return this.perms?.has(key) ?? false;
+	}
+
+	// public has(key: "checked" | "missing" | "present"): boolean {
+	// 	return this[key].length > 0;
+	// }
 }
 
 type PermFlagBitsKeys = keyof typeof PermissionFlagsBits;
 
-type CheckedResults = AccessResults & {
-	/** the perms checked */
-	checked: PermFlagBitsKeys[];
-
-	/** missing.length > 0 */
-	// hasMissing: boolean;
-
-	/** presnt.length > 0 */
-	// hasPresent: boolean;
-
-	/** the perms not found */
-	missing: PermFlagBitsKeys[];
-
-	/** the perms found */
-	present: PermFlagBitsKeys[];
-};
-
 type GuildMemberOrRoleResolvable = GuildMember | GuildMemberResolvable | Role | RoleResolvable;
 
 /** A quick check to see if a member or role can view or manage a channel. */
-export function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable): AccessResults;
+export function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable): Permissions;
 
 /** Checks the user/role and channel to see which of the given permissions are missing or present. */
-export function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable, ...permsToCheck: PermFlagBitsKeys[]): CheckedResults;
+export function getPermsFor(channel: Channel, memberOrRole: GuildMemberOrRoleResolvable, ...permsToCheck: PermFlagBitsKeys[]): Permissions;
 
-export function getPermsFor(channel: Channel, memberOrRole?: GuildMemberOrRoleResolvable, ...checked: PermFlagBitsKeys[]): AccessResults | CheckedResults {
+export function getPermsFor(channel: Channel, memberOrRole?: GuildMemberOrRoleResolvable, ...checked: PermFlagBitsKeys[]): Permissions {
 	const memberOrRoleId = resolveSnowflake(memberOrRole);
 
 	// return false if member or channel are not valid
-	if (!memberOrRoleId || !isGuildBased(channel)) {
-		return emptyResults();
+	if (!memberOrRoleId || !channel || channel.isDMBased()) {
+		return new Permissions();
 	}
 
 	// check for thread and ensure we have the correct channel for perms checking
-	const isThread = isThreadChannel(channel);
+	const isThread = channel.isThread();
 	const channelWithPerms = isThread ? channel.parent : channel;
-	if (!isGuildBased(channelWithPerms)) {
-		return emptyResults();
+	if (!channelWithPerms || channelWithPerms.isDMBased()) {
+		return new Permissions();
 	}
 
 	const perms = channelWithPerms?.permissionsFor(memberOrRoleId);
-	const canManageChannel = perms?.has(PermissionFlagsBits.ManageChannels) ?? false;
-	const canManageWebhooks = perms?.has(PermissionFlagsBits.ManageWebhooks) ?? false;
-	const canViewChannel = perms?.has(PermissionFlagsBits.ViewChannel) ?? false;
 	const isInChannel = isThread ? channel.guildMembers.has(memberOrRoleId) : channel.members.has(memberOrRoleId);
-	const canSendMessages = perms?.has(isThread ? PermissionFlagsBits.SendMessagesInThreads : PermissionFlagsBits.SendMessages) ?? false;
-	const canAddReactions = perms?.has(PermissionFlagsBits.AddReactions) ?? false;
-	const canSendWebhooks = canManageWebhooks && isWebhookChannel(channelWithPerms);
-	const webhookChannel = canSendWebhooks ? channelWithPerms : undefined;
-	const canSendPolls = perms?.has(PermissionFlagsBits.SendPolls) ?? false;
+	const webhookChannel = isWebhookChannel(channelWithPerms) ? channelWithPerms : undefined;
 
 	if (arguments.length < 3) {
-		return { canManageChannel, canManageWebhooks, canViewChannel, isInChannel, canSendMessages, canAddReactions, canSendWebhooks, webhookChannel, canSendPolls };
+		return new Permissions({ isInChannel, isThread, perms, webhookChannel });
 	}
 
 	const missing = perms ? checked.filter(perm => !perms.has(perm)) : checked.slice();
-	// const hasMissing = missing.length > 0;
 	const present = perms ? checked.filter(perm => perms.has(perm)) : [];
-	// const hasPresent = present.length > 0;
-	return {
-		canManageChannel,
-		canManageWebhooks,
-		canViewChannel,
-		isInChannel,
-		canSendMessages,
-		canAddReactions,
-		canSendWebhooks,
-		webhookChannel,
-		canSendPolls,
-		checked,
-		missing,
-		// hasMissing,
-		present,
-		// hasPresent,
-	};
+	return new Permissions({ checked, isInChannel, isThread, missing, perms, present, webhookChannel });
 }

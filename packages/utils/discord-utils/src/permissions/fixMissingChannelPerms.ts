@@ -1,8 +1,7 @@
 import { error } from "@rsc-utils/core-utils";
-import { getPermsFor } from "@rsc-utils/discord-utils";
-import type { GuildMember, PermissionFlagsBits } from "discord.js";
-import type { GameChannel } from "../../sage/model/Game.js";
-import { getRequiredChannelPerms } from "./getRequiredChannelPerms.js";
+import type { GuildMember, GuildTextBasedChannel, PermissionFlagsBits } from "discord.js";
+import { getPermsFor } from "./getPermsFor.js";
+import { getRequiredPermissions } from "./getRequiredPermissions.js";
 
 /*
 https://discord.com/developers/docs/topics/permissions
@@ -34,10 +33,13 @@ type FixPermResults = {
 };
 
 /** Checks the given channel to see what perms are missing. */
-export async function fixMissingChannelPerms(botGuildMember: GuildMember, channel: GameChannel): Promise<FixPermResults> {
+export async function fixMissingChannelPerms(botGuildMember: GuildMember, channel: GuildTextBasedChannel): Promise<FixPermResults> {
+	const runGamePerms = getRequiredPermissions("RunGame");
+
 	// check the state before we do any work
-	const before = getPermsFor(channel, botGuildMember, ...getRequiredChannelPerms());
-	const { canManageChannel, canViewChannel } = before;
+	const before = getPermsFor(channel, botGuildMember, ...runGamePerms);
+	const canManageChannel = before.can("ManageChannels");
+	const canViewChannel = before.can("ViewChannel");
 
 	// if we can't manage or we don't need to, return now
 	if (!canManageChannel || !canViewChannel || before.missing.length) {
@@ -68,7 +70,7 @@ export async function fixMissingChannelPerms(botGuildMember: GuildMember, channe
 		: errorHandler(true);
 
 	// recheck perms
-	const after = getPermsFor(updatedChannel ?? channel, botGuildMember, ...getRequiredChannelPerms());
+	const after = getPermsFor(updatedChannel ?? channel, botGuildMember, ...runGamePerms);
 
 	return {
 		canManageChannel,

@@ -1,8 +1,7 @@
 import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { isDefined } from "@rsc-utils/core-utils";
-import { getPermsFor, toHumanReadable } from "@rsc-utils/discord-utils";
+import { blockFromChannel, getPermsFor, toHumanReadable } from "@rsc-utils/discord-utils";
 import type { TextChannel } from "discord.js";
-import { blockFromChannel } from "../../../../discord/permissions/blockFromChannel.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -40,11 +39,11 @@ export async function gBlockBots(sageCommand: SageCommand, _game?: Game): Promis
 			const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(gameChannel.id);
 				if (guildChannel) {
 				const sagePerms = getPermsFor(guildChannel, sageGuildMember);
-				if (!sagePerms.canViewChannel || !sagePerms.canManageChannel) {
+				if (!sagePerms.can("ViewChannel") || !sagePerms.can("ManageChannels")) {
 					continue;
 				}
 				const botPerms = getPermsFor(guildChannel, bot.guildMember);
-				if (botPerms.canViewChannel) {
+				if (botPerms.can("ViewChannel")) {
 					channelsNotBlocked.push(guildChannel);
 				}
 			}
