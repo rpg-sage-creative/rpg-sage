@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.11.5",
+"version":"1.11.6",
 "branch":"v1.x.x",
-"commit":"e3dc28480b1eb3ff853f005d0951fa11ee7f5a95",
-"commitSubject":"Custom sheet templates (#140)",
-"commitTs":1754322445000,
-"commitDate":"2025-08-04-0847",
-"buildTs":1754322551000,
-"buildDate":"2025-08-04-0849",
+"commit":"766c086c628d67c1a3d0d69a1ed09e8e78d4453a",
+"commitSubject":"join validation errors with newlines",
+"commitTs":1756354869000,
+"commitDate":"2025-08-27-2121",
+"buildTs":1756355496000,
+"buildDate":"2025-08-27-2131",
 "author":"Randal"
 }
