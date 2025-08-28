@@ -490,6 +490,7 @@ export function wanderersGuideToPathbuilderJson(json: any): PathbuilderCharacter
 			class: details.class.name,
 			dualClass: null,
 			level,
+			xp: 0,
 			ancestry: details.ancestry.name,
 			heritage: content.feats_features?.heritages?.[0]?.name ?? null,
 			background: details.background.name,

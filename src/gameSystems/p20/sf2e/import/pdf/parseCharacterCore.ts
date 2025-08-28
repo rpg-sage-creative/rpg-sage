@@ -258,6 +258,7 @@ export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMa
 		class: mgr.getValue("class", ""),
 		dualClass: null,
 		level,
+		xp: mgr.getNumber("xp", 0),
 		ancestry: mgr.getValue("ancestry", ""),
 		heritage: mgr.getValue("heritage", ""),
 		background: mgr.getValue("background", ""),

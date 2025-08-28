@@ -673,6 +673,8 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 					return ret("level", this.level);
 				case "maxhp":
 					return ret("maxHp", this.maxHp);
+				case "xp":
+					return ret("xp", this.core.xp);
 				case "ac":
 					return ret("ac", this.core.acTotal?.acTotal);
 				case "classdc":
@@ -728,12 +730,15 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 	public getSpellMacros(): DiceMacroBase[] { return []; }
 
 	//#region flags/has
+
 	public hasFeat(value: string): boolean {
 		return StringMatcher.matchesAny(value, this.core.feats.map(feat => feat[0]));
 	}
+
 	public hasSpecial(value: string): boolean {
 		return StringMatcher.matchesAny(value, this.core.specials);
 	}
+
 	private _resilientBonus: number | undefined;
 	public get resilientBonus(): number {
 		if (this._resilientBonus === undefined) {
@@ -838,6 +843,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		}
 		return this.untrainedProficiencyMod;
 	}
+
 	private getSpecificProficiencyMod(key: string): ProficiencyType {
 		if (this.core?.specificProficiencies?.legendary?.includes(key)) {
 			return ProficiencyType.Legendary;
@@ -892,6 +898,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		const levelMod = this.getLevelMod(profMod);
 		return levelMod + profMod + this.abilities.wisMod;
 	}
+
 	public get perceptionSpecials(): string[] {
 		return this.core.specials
 			.filter((s, _, a) =>
@@ -902,6 +909,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			|| s.startsWith("Tremorsense")
 			);
 	}
+
 	/** max hit points */
 	public get maxHp(): number {
 		const attributes = this.core.attributes;
