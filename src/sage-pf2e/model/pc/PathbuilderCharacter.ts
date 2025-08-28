@@ -671,6 +671,8 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 					return ret("initSkill", this.getInitSkill());
 				case "level":
 					return ret("level", this.level);
+				case "xp":
+					return ret("xp", this.core.xp);
 				case "maxhp":
 					return ret("maxHp", this.maxHp);
 				case "ac":

@@ -279,6 +279,8 @@ export type PathbuilderCharacterCore = CharacterBaseCore<"PathbuilderCharacter" 
 	/** default: 1 */
 	level: number; // 1
 
+	xp: number;
+
 	/** default: "Human" */
 	ancestry: string;
 
