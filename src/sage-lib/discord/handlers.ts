@@ -1,5 +1,5 @@
 import { error, isNullOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { isDiscordApiError, toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { ChannelType, MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
@@ -390,7 +390,10 @@ export async function handleMessage(message: MessageOrPartial, originalMessage: 
 			}
 		}
 	} catch (ex) {
-		error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
+		// DiscordAPIError[10008]: Unknown Message <-- probably a deleted message
+		if (!isDiscordApiError(ex, 10008)) {
+			error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
+		}
 	}
 
 	return output;
