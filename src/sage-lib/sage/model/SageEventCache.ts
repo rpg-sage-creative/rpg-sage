@@ -152,7 +152,7 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 	};
 	const sendErrors = () => {
 		if (validationErrors.length > 0) {
-			error(validationErrors);
+			error(validationErrors.join("\n"));
 		}
 	};
 
