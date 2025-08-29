@@ -1,6 +1,6 @@
 import { DialogPostType, type SageChannel } from "@rsc-sage/types";
 import { debug, type Snowflake } from "@rsc-utils/core-utils";
-import { toHumanReadable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
+import type { SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type SelectMenuComponentOptionData } from "discord.js";
 import { getSelectedOrDefault } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
@@ -12,7 +12,6 @@ import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js"
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterTypeMeta, type TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
-import { toReadableOwner } from "./toReadableOwner.js";
 
 //#region customId
 
@@ -222,8 +221,7 @@ async function createChannelList(sageCommand: SageCommand, chars: Chars, selecte
 	};
 
 	const toUserName = async (userId: Snowflake) => {
-		const userName = await toReadableOwner(sageCommand, userId);
-		return userName ?? `@${userId}`;
+		return await sageCommand.fetchReadableUser(userId) ?? `@${userId}`;
 	};
 
 	const labelAutoChannel = async (autoChannel: AutoChannelData, force?: boolean) => {
@@ -389,7 +387,8 @@ export async function showForm(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const content = `Configuring Auto Dialog for:\n> **User** ${toHumanReadable(sageMessage.message.author)}\n> **Character** ${character.name}`;
+	const readableUser = await sageMessage.fetchReadableUser(sageMessage.message.author?.id);
+	const content = `Configuring Auto Dialog for:\n> **User** ${readableUser}\n> **Character** ${character.name}`;
 	const components = await createComponents(sageMessage, getCharsById(sageMessage, character.id));
 
 	await sageMessage.replyStack.send({ content, components });

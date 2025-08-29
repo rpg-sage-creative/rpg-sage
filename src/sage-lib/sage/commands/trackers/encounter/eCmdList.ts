@@ -1,4 +1,3 @@
-import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { SageMessage } from "../../../model/SageMessage.js";
 
 export async function eCmdList(sageMessage: SageMessage): Promise<void> {
@@ -18,8 +17,8 @@ export async function eCmdList(sageMessage: SageMessage): Promise<void> {
 		const charNames: string[] = [];
 		const characters = encounter.getSortedCharacters();
 		for (const char of characters) {
-			const user = char.userId ? await sageMessage.discord.fetchGuildMember(char.userId) : null;
-			const userText = user ? ` (${toHumanReadable(user)})` : "";
+			const readableOwner = await sageMessage.fetchReadableUser(char.userId);
+			const userText = readableOwner ? ` (${readableOwner})` : "";
 			charNames.push(`\n- ${char.name} ${userText}`);
 		}
 		if (!charNames.length) {

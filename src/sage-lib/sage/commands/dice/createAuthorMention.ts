@@ -1,4 +1,4 @@
-import { toHumanReadable, toUserMention } from "@rsc-utils/discord-utils";
+import { toUserMention } from "@rsc-utils/discord-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
 
 /**
@@ -20,8 +20,7 @@ export async function createAuthorMention(sageCommand: SageCommand, isSecretMent
 
 	// if this is being posted in secret to GM /OR/ the player doesn't want pings, use a human-readable non-mention instead
 	if (isSecretMention || gameUser.dicePing === false) {
-		const user = await sageCommand.discord.fetchUser(actorId);
-		authorReference = toHumanReadable(user);
+		authorReference = await sageCommand.fetchReadableUser(actorId) ?? undefined;
 	}
 
 	// if the player is a PC, include the character's name to keep everybody on the same page

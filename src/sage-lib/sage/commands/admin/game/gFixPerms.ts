@@ -1,4 +1,4 @@
-import { fixMissingChannelPerms, getPermsFor, getRequiredPermissions, toHumanReadable } from "@rsc-utils/discord-utils";
+import { fixMissingChannelPerms, getPermsFor, getRequiredPermissions, toChannelName } from "@rsc-utils/discord-utils";
 import type { TextChannel } from "discord.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
@@ -63,7 +63,7 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 		if (results.fixSuccess) {
 			changed = true;
 		}else if (!results.permsCorrect) {
-			unable.push(`<i>Unable to fix #${toHumanReadable(guildChannel)}</i>`);
+			unable.push(`<i>Unable to fix ${toChannelName(guildChannel)}</i>`);
 		}
 	}
 

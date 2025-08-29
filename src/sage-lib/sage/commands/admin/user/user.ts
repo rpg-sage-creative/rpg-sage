@@ -1,5 +1,5 @@
 import { DialogPostType } from "@rsc-sage/types";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { toUserName } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -79,7 +79,7 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 
 	const discordUser = await sageMessage.discord.fetchUser(sageUser.did);
 	if (discordUser) {
-		renderableContent.setTitle(`<b>${toHumanReadable(discordUser)}</b>`);
+		renderableContent.setTitle(`<b>${toUserName(discordUser)}</b>`);
 		renderableContent.append(`<b>Discord Id</b> ${discordUser.id}`);
 		renderableContent.setThumbnailUrl(discordUser.displayAvatarURL());
 		//TODO: sort out presence

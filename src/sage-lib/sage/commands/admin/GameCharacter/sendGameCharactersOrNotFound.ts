@@ -3,7 +3,6 @@ import type { CharacterManager } from "../../../model/CharacterManager.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";
-import { toReadableOwner } from "./toReadableOwner.js";
 
 function filterCharacters(characters: Optional<CharacterManager>, value: Optional<string>): GameCharacter[] {
 	if (characters) {
@@ -47,7 +46,7 @@ export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, cha
 			if (hasOwner || hasCompanions || hasParent) {
 				if (hasOwner) {
 					const ownerOrPlayer = character.isGmOrNpc ? "Owner" : "Player";
-					const owner = await toReadableOwner(sageMessage, character.userDid);
+					const owner = await sageMessage.fetchReadableUser(character.userDid);
 					const ownerTag = owner ?? "<i>none</i>";
 					charInfo.push(`<b>${ownerOrPlayer}</b> ${ownerTag}`);
 				}

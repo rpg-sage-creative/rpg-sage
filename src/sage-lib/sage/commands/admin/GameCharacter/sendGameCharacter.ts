@@ -1,13 +1,12 @@
 import { SageChannelType } from "@rsc-sage/types";
 import { mapAsync, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
-import { toChannelMention, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
+import { toChannelMention, toMessageUrl } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
 import { sendWebhook } from "../../../../discord/messages.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
-import { toReadableOwner } from "./toReadableOwner.js";
 
 function orNone(text: Optional<string>): string {
 	return stringOrUndefined(text) ?? "<i>none</i>";
@@ -31,7 +30,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.setThumbnailUrl(character.avatarUrl);
 	}
 
-	const ownerTag = await toReadableOwner(sageMessage, character.userDid);
+	const ownerTag = await sageMessage.fetchReadableUser(character.userDid);
 	renderableContent.append(`<b>Owner</b> ${orNone(ownerTag)}`);
 
 	renderableContent.append(`<b>Alias</b> ${orUnset(character.alias)}`);
@@ -67,8 +66,8 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 			parts.push(`(${DialogType[data.dialogPostType]})`);
 		}
 		if (data.userDid && character.userDid !== data.userDid) {
-			const user = await sageMessage.discord.fetchGuildMember(data.userDid);
-			parts.push(toHumanReadable(user) ?? data.userDid);
+			const userName = await sageMessage.fetchReadableUser(data.userDid);
+			parts.push(userName ?? data.userDid);
 		}
 		return parts.join(" ");
 	});

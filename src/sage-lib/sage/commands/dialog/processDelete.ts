@@ -1,5 +1,5 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
+import { DiscordApiError, toMessageUrl, toUserName } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder, User } from "discord.js";
 import { deleteMessage, isDeleted } from "../../../discord/deletedMessages.js";
 import { registerReactionListener } from "../../../discord/handlers.js";
@@ -109,7 +109,7 @@ async function doDelete(sageReaction: SageReaction): Promise<void> {
 		const poster = await sageReaction.sageCache.getOrFetchUser(dialogMessage.userId);
 		if (poster?.dmOnDelete) {
 			const user = await sageReaction.discord.fetchUser(poster.did);
-			if (user) await sendDm(user, toHumanReadable(actorUser))
+			if (user) await sendDm(user, toUserName(actorUser));
 		}
 	}
 

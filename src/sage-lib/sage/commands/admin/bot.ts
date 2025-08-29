@@ -1,5 +1,5 @@
 import { getBuildInfo, isDefined } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { toUserName } from "@rsc-utils/discord-utils";
 import { GameSystemType } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Bot } from "../../model/Bot.js";
@@ -40,7 +40,7 @@ async function sendBot(sageMessage: SageMessage): Promise<void> {
 	const botUser = await sageMessage.discord.fetchUser(bot.id);
 	if (botUser) {
 		renderableContent.setThumbnailUrl(botUser.displayAvatarURL());
-		renderableContent.append(`<b>Username</b> ${toHumanReadable(botUser)}`);
+		renderableContent.append(`<b>Username</b> ${toUserName(botUser)}`);
 		renderableContent.append(`<b>User Id</b> ${botUser.id}`);
 		//TODO: resolved to a guildmember to get presence and last message
 		// renderableContent.append(`<b>Status</b> ${botUser.presence.status}`);

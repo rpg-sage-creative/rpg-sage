@@ -1,6 +1,6 @@
 import { DialogPostType, DicePostType } from "@rsc-sage/types";
 import { getDateStrings, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, getRollemId, getTupperBoxId, toHumanReadable } from "@rsc-utils/discord-utils";
+import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, getRollemId, getTupperBoxId, toGuildMemberName } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, DiceSortType, getCriticalMethodText } from "@rsc-utils/game-utils";
 import type { GuildMember, TextChannel } from "discord.js";
 import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
@@ -199,7 +199,7 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 		const userId = guildMember.id as Snowflake;
 		return {
 			userId,
-			name: toHumanReadable(guildMember),
+			name: toGuildMemberName(guildMember),
 			characters: game.playerCharacters.filterByUser(userId).map(char => addZeroWidthSpaces(char.name)).join("; ")
 		};
 	};

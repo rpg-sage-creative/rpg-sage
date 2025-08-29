@@ -1,5 +1,4 @@
 import { forEachAsync, isDefined, mapAsync, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { SageCommand } from "../../../model/SageCommand.js";
@@ -9,8 +8,9 @@ import { createAdminRenderableContent } from "../../cmd.js";
 
 type TAdminUser = IAdminUser & { discordUser: User };
 
-async function renderUser(renderableContent: RenderableContent, user: TAdminUser): Promise<void> {
-	renderableContent.appendTitledSection(`<b>${toHumanReadable(user?.discordUser) || "<i>Unknown</i>"}</b>`);
+async function renderUser(sageCommand: SageMessage, renderableContent: RenderableContent, user: TAdminUser): Promise<void> {
+	const readableUser = await sageCommand.fetchReadableUser(user?.discordUser.id);
+	renderableContent.appendTitledSection(`<b>${readableUser ?? "<i>Unknown</i>"}</b>`);
 	// renderableContent.append(`<b>User Id</b> ${user.discordUser?.id}`);
 	// renderableContent.append(`<b>Username</b> ${user?.discordUser?.username || "<i>Unknown</i>"}`);
 	renderableContent.append(`<b>Role</b> ${AdminRoleType[user.role] ?? "<i>Unknown</i>"}`);
@@ -40,7 +40,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 		const renderableContent = createAdminRenderableContent(server);
 		renderableContent.setTitle(`<b>admin-list</b>`);
 		if (users.length) {
-			await forEachAsync(users, async user => renderUser(renderableContent, user));
+			await forEachAsync(users, async user => renderUser(sageMessage, renderableContent, user));
 		} else {
 			renderableContent.append(`<blockquote>No Admins Found!</blockquote>`);
 		}

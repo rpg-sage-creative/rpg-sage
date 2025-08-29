@@ -1,5 +1,5 @@
 import { addCommas, capitalize, isDefined, type Snowflake } from "@rsc-utils/core-utils";
-import { splitMessageOptions, toChannelUrl, toDiscordDate, toHumanReadable } from "@rsc-utils/discord-utils";
+import { splitMessageOptions, toChannelUrl, toDiscordDate, toGuildMemberName } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -165,7 +165,7 @@ async function _gCmdShowCurrency(sageCommand: SageCommand): Promise<void> {
 	const players = playerGuildMembers.map(pGuildMember => {
 		return {
 			userId: pGuildMember.id as Snowflake,
-			name: toHumanReadable(pGuildMember)
+			name: toGuildMemberName(pGuildMember)
 		};
 	});
 	renderPostCurrency(game, renderableContent, players);
@@ -197,7 +197,7 @@ async function gCmdAuditCurrency(sageCommand: SageCommand): Promise<void> {
 		return sageCommand.replyStack.whisper(`Your command must include user="".`);
 	}
 
-	const readableUser = toHumanReadable(user);
+	const readableUser = await sageCommand.fetchReadableUser(user.id);
 	const isValidUser = sageCommand.game.hasPlayer(userId) || postCurrencyData.some(data => data.totals.some(total => total.userId === userId));
 	if (!isValidUser) {
 		return sageCommand.replyStack.whisper(`The given user (${readableUser}) has no currency.`);

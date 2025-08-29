@@ -1,7 +1,7 @@
 import type { LocalizedTextKey } from "@rsc-sage/localization";
 import { SageChannelType, type DialogPostType, type DicePostType } from "@rsc-sage/types";
 import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import type { DiscordCache, EmbedBuilder, SupportedAutocompleteInteraction, SupportedButtonInteraction, SupportedInteraction, SupportedMessageContextInteraction, SupportedMessagesChannel, SupportedModalSubmitInteraction, SupportedRepliableInteraction, SupportedSlashCommandInteraction, SupportedStringSelectInteraction, SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
+import { toHumanReadable, type CanBeUserIdResolvable, type DiscordCache, type EmbedBuilder, type SupportedAutocompleteInteraction, type SupportedButtonInteraction, type SupportedInteraction, type SupportedMessageContextInteraction, type SupportedMessagesChannel, type SupportedModalSubmitInteraction, type SupportedRepliableInteraction, type SupportedSlashCommandInteraction, type SupportedStringSelectInteraction, type SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
 import { parseGameSystem, type DiceCriticalMethodType, type DiceOutputType, type DiceSecretMethodType, type DiceSortType, type GameSystemType } from "@rsc-utils/game-utils";
 import { Message, type ActionRowBuilder, type AttachmentBuilder, type ButtonBuilder, type HexColorString, type If, type StringSelectMenuBuilder } from "discord.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
@@ -561,4 +561,14 @@ export abstract class SageCommand<
 	}
 
 	//#endregion
+
+	public async fetchReadableUser(resolvable: Optional<CanBeUserIdResolvable>): Promise<string | undefined> {
+		if (resolvable) {
+			const guildMember = await this.discord.fetchGuildMember(resolvable);
+			if (guildMember) return toHumanReadable(guildMember);
+			const user = await this.discord.fetchUser(resolvable);
+			if (user) return toHumanReadable(user);
+		}
+		return undefined;
+	}
 }

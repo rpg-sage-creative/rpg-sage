@@ -1,5 +1,5 @@
 import { isDefined } from "@rsc-utils/core-utils";
-import { blockFromChannel, getPermsFor, getRollemId, getTupperBoxId, toHumanReadable } from "@rsc-utils/discord-utils";
+import { blockFromChannel, getPermsFor, getRollemId, getTupperBoxId, toChannelName } from "@rsc-utils/discord-utils";
 import type { TextChannel } from "discord.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
@@ -68,7 +68,7 @@ export async function gBlockBots(sageCommand: SageCommand, _game?: Game): Promis
 			if (results.fixSuccess) {
 				changed = true;
 			}else if (!results.blockCorrect) {
-				unable.push(`<i>Unable to block ${bot.name} from #${toHumanReadable(guildChannel)}</i>`);
+				unable.push(`<i>Unable to block ${bot.name} from ${toChannelName(guildChannel)}</i>`);
 			}
 		}
 

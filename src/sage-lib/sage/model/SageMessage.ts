@@ -1,5 +1,5 @@
 import { ArgsManager, Cache, debug, error, errorReturnUndefined, escapeRegex, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
+import { DiscordApiError, DiscordKey, safeMentions, toChannelName, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
@@ -104,7 +104,7 @@ export class SageMessage
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			if (notifyIfBlocked) {
-				await this.reactBlock(`Unable to send message because Sage doesn't have permissions to channel: ${toHumanReadable(targetChannel)}`);
+				await this.reactBlock(`Unable to send message because Sage doesn't have permissions to channel: ${toChannelName(targetChannel)}`);
 			}
 			return [];
 		}
@@ -141,7 +141,7 @@ export class SageMessage
 	public async reply(renderableOrArgs: RenderableContentResolvable | TSendArgs, ephemeral?: boolean): Promise<void> {
 		const canSend = await this.canSend(this.message.channel);
 		if (!canSend) {
-			return this.reactBlock(`Unable to reply to your message because Sage doesn't have permissions to channel: ${toHumanReadable(this.message.channel)}`);
+			return this.reactBlock(`Unable to reply to your message because Sage doesn't have permissions to channel: ${toChannelName(this.message.channel)}`);
 		}
 		const args = this.resolveToOptions(renderableOrArgs, ephemeral);
 		await this.message.reply(args);
