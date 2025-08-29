@@ -160,29 +160,29 @@ export function getRegisteredIntents() {
 	// messageListeners.forEach(listener => registered.push(...listener.intents ?? []));
 	// reactionListeners.forEach(listener => registered.push(...listener.intents ?? []));
 
+	const { Flags } = IntentsBitField;
 	return [
-		IntentsBitField.Flags.Guilds,
-		IntentsBitField.Flags.GuildMembers,
-		IntentsBitField.Flags.GuildModeration,
-		// IntentsBitField.Flags.GuildBans <-- deprecated
-		IntentsBitField.Flags.GuildEmojisAndStickers,
-		// IntentsBitField.Flags.GuildIntegrations
-		IntentsBitField.Flags.GuildWebhooks,
-		IntentsBitField.Flags.GuildInvites,
-		// IntentsBitField.Flags.GuildVoiceStates,
-		IntentsBitField.Flags.GuildPresences,
-		IntentsBitField.Flags.GuildMessages,
-		IntentsBitField.Flags.GuildMessageReactions,
-		// IntentsBitField.Flags.GuildMessageTyping,
-		IntentsBitField.Flags.DirectMessages,
-		IntentsBitField.Flags.DirectMessageReactions,
-		// IntentsBitField.Flags.DirectMessageTyping,
-		IntentsBitField.Flags.MessageContent,
-		IntentsBitField.Flags.GuildScheduledEvents,
-		// IntentsBitField.Flags.AutoModerationConfiguration,
-		// IntentsBitField.Flags.AutoModerationExecution,
-		IntentsBitField.Flags.GuildMessagePolls,
-		IntentsBitField.Flags.DirectMessagePolls,
+		// Flags.AutoModerationConfiguration,
+		// Flags.AutoModerationExecution,
+		Flags.DirectMessagePolls,
+		Flags.DirectMessageReactions,
+		// Flags.DirectMessageTyping,
+		Flags.DirectMessages,
+		Flags.GuildExpressions,
+		// Flags.GuildIntegrations,
+		Flags.GuildInvites,
+		Flags.GuildMembers,
+		Flags.GuildMessagePolls,
+		Flags.GuildMessageReactions,
+		// Flags.GuildMessageTyping,
+		Flags.GuildMessages,
+		// Flags.GuildModeration,
+		Flags.GuildPresences,
+		Flags.GuildScheduledEvents,
+		// Flags.GuildVoiceStates,
+		Flags.GuildWebhooks,
+		Flags.Guilds,
+		Flags.MessageContent,
 	];
 }
 
@@ -334,7 +334,28 @@ function isEditWeCanIgnore(message: MessageOrPartial, originalMessage: Optional<
 
 /** We don't want to process actions in announcement channels/threads nor in categories (not sure that is even possible, though). */
 function isChannelWeCanIgnore(channel: Optional<Channel>): boolean {
-	return [ChannelType.AnnouncementThread, ChannelType.GuildAnnouncement, ChannelType.GuildCategory].includes(channel?.type!);
+	if (!channel?.type) return true;
+
+	const isInvalidChannel = [
+		ChannelType.AnnouncementThread,
+		ChannelType.GroupDM,
+		ChannelType.GuildAnnouncement,
+		ChannelType.GuildDirectory,
+		ChannelType.GuildMedia,
+		ChannelType.GuildStageVoice,
+		ChannelType.GuildVoice,
+	].includes(channel.type);
+	if (isInvalidChannel) return true;
+
+	if ("parent" in channel && channel.parent) {
+		const isInvalidParent = [
+			ChannelType.GuildAnnouncement,
+			ChannelType.GuildMedia,
+		].includes(channel.parent.type);
+		if (isInvalidParent) return true;
+	}
+
+	return false;
 }
 
 /** We don't want to process actions by bots or system messages. */
