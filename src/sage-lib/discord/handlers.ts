@@ -334,7 +334,7 @@ function isEditWeCanIgnore(message: MessageOrPartial, originalMessage: Optional<
 
 /** We don't want to process actions in announcement channels/threads nor in categories (not sure that is even possible, though). */
 function isChannelWeCanIgnore(channel: Optional<Channel>): boolean {
-	if (!channel?.type) return true;
+	if (!channel) return true;
 
 	const isInvalidChannel = [
 		ChannelType.AnnouncementThread,
@@ -394,14 +394,11 @@ export async function handleMessage(message: MessageOrPartial, originalMessage: 
 		// can we ignore it without fetching?
 		let canIgnore = canIgnoreMessage(message, originalMessage);
 		if (!canIgnore) {
-			// save partial so we know to recheck canIgnoreMessage after a fetch
-			const wasPartial = message.partial;
-
 			// fetch it just in case
 			const fetchedMessage = await message.fetch();
 
-			// recheck a previously partial message
-			canIgnore = wasPartial && fetchedMessage ? canIgnoreMessage(fetchedMessage, originalMessage) : false;
+			// recheck a fetched message just in case
+			canIgnore = fetchedMessage ? canIgnoreMessage(fetchedMessage, originalMessage) : false;
 
 			// process the message
 			if (!canIgnore && fetchedMessage) {
