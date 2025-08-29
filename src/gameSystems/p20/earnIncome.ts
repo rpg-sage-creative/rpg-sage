@@ -56,10 +56,10 @@ function getEarnIncomeTablePf2e(): RawEarnIncomeItem[] {
 }
 function getEarnIncomeTableSf2e(): RawEarnIncomeItem[] {
 	return [
-		{ level:0, failure:"0.1 credit", trained:"0.5 credit", expert:"0.5 credit", master:"0.5 credit", legendary:"0.5 credit" },
-		{ level:1, failure:"0.2 credit", trained:"2 credits", expert:"2 credits", master:"2 credits", legendary:"2 credits" },
-		{ level:2, failure:"0.4 credit", trained:"3 credits", expert:"3 credits", master:"3 credits", legendary:"3 credits" },
-		{ level:3, failure:"0.8 credit", trained:"5 credits", expert:"5 credits", master:"5 credits", legendary:"5 credits" },
+		{ level:0, failure:"1 credit", trained:"1 credit", expert:"1 credit", master:"1 credit", legendary:"1 credit" },
+		{ level:1, failure:"1 credit", trained:"2 credits", expert:"2 credits", master:"2 credits", legendary:"2 credits" },
+		{ level:2, failure:"1 credit", trained:"3 credits", expert:"3 credits", master:"3 credits", legendary:"3 credits" },
+		{ level:3, failure:"1 credit", trained:"5 credits", expert:"5 credits", master:"5 credits", legendary:"5 credits" },
 		{ level:4, failure:"1 credit", trained:"7 credits", expert:"8 credits", master:"8 credits", legendary:"8 credits" },
 		{ level:5, failure:"2 credits", trained:"9 credits", expert:"10 credits", master:"10 credits", legendary:"10 credits" },
 		{ level:6, failure:"3 credits", trained:"15 credits", expert:"20 credits", master:"20 credits", legendary:"20 credits" },
@@ -135,12 +135,12 @@ function createGameSystemSelect(userId: Snowflake, selected?: GameSystemType): S
 		.setPlaceholder(`Please Select a Game System ...`);
 	getPaizoGameSystems().forEach(gameSystem => {
 		if (gameSystem.is2e) {
-			selectBuilder.addOptions(
-				new StringSelectMenuOptionBuilder()
-					.setLabel(gameSystem.name)
-					.setValue(gameSystem.code)
+		selectBuilder.addOptions(
+			new StringSelectMenuOptionBuilder()
+				.setLabel(gameSystem.name)
+				.setValue(gameSystem.code)
 					.setDefault(gameSystem.type === selected || (!selected && gameSystem.isPf && gameSystem.is2e))
-			);
+	);
 		}
 	});
 	return selectBuilder;
@@ -382,8 +382,8 @@ async function changeEarnIncome(sageInteraction: SageInteraction<StringSelectMen
 }
 
 function multiplyIncome(incomePerDay: string, days: number): string {
-	if (incomePerDay.includes("credits")) {
-		const credits = +incomePerDay.replace(/[^\d\.]/g, "");
+	if (incomePerDay.includes("credit")) {
+		const credits = +incomePerDay.replace(/\D/g, "");
 		return `${addCommas(credits * days)} credits`;
 	}
 	return Coins.parse(incomePerDay).multiply(days).toGpString();
