@@ -958,7 +958,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		if (includes(["All", "Stats"])) {
 			push();
 			push(`${abilitiesToHtml(this)}`);
-			push(`<b>AC</b> ${this.core.acTotal?.acTotal ?? "??"}; ${this.savingThrows.toHtml()}; <b>Class DC</b> ${this.getStat("classdc")}`);
+			push(`<b>AC</b> ${this.core.acTotal?.acTotal ?? "??"}; ${this.savingThrows.toHtml()}; <b>Class DC</b> ${this.getStat("classDC").value ?? "??"}`);
 			const hitFocusPoints = [`<b>HP</b> ${this.maxHp}`];
 			const maxFp = this.maxFp;
 			if (maxFp) {
