@@ -1,4 +1,4 @@
-import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { addCommas, boundNumber, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent } from "@rsc-utils/discord-utils";
 import { DieRollGrade, GameSystemType, getGameSystems, parseGameSystem } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
@@ -9,7 +9,6 @@ import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import { type SageButtonInteraction, type SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { Coins } from "../../sage-pf2e/index.js";
-import { boundNumber } from "../utils/boundNumber.js";
 import { toModifier } from "../utils/toModifier.js";
 import { getByLevelTable } from "./dcs.js";
 import { getSelectedOrDefault, getSelectedOrDefaultEnum, getSelectedOrDefaultNumber } from "./lib/getSelectedOrDefault.js";

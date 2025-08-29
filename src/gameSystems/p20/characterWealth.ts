@@ -1,5 +1,5 @@
 import { parseEnum } from "@rsc-sage/types";
-import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { addCommas, boundNumber, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { GameSystemType, getGameSystems } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
@@ -7,7 +7,6 @@ import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
-import { boundNumber } from "../utils/boundNumber.js";
 import { getSelectedOrDefault } from "./lib/getSelectedOrDefault.js";
 
 type RawWealthItem = { level:number; items:string; currency:number; lump:number; };

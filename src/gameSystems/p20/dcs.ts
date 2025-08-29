@@ -1,5 +1,5 @@
 import { parseEnum } from "@rsc-sage/types";
-import { nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { boundNumber, nth, type BoundedOptions, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent } from "@rsc-utils/discord-utils";
 import { GameSystemType } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from "discord.js";
@@ -8,7 +8,6 @@ import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton, createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
-import { boundNumber, type BoundedOptions } from "../utils/boundNumber.js";
 import { toModifier } from "../utils/toModifier.js";
 
 type Table = "Simple" | "Level" | "Rank";
