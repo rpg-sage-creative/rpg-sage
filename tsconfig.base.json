@@ -22,8 +22,8 @@
 		"lib": [ "DOM", "ES2022", "ES2024.Promise" ],
 		// "locale": "en-US",
 
-		"module": "ES2022",
-		"moduleResolution": "Node",
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
 
 		"newLine": "LF",
 		"noFallthroughCasesInSwitch": true,
