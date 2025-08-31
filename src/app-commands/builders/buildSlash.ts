@@ -11,6 +11,9 @@ function buildOne(raw: SlashCommand): SlashCommandBuilder {
 
 	const cmd = setName(new SlashCommandBuilder(), raw);
 
+	// setDefaultMemberPermissions() will let me restrict commands to folks with specific discord perms
+	// setContexts() will let me turn off game/channel commands in DMs
+
 	raw.children?.forEach(child => {
 		if (child.children?.length) {
 			cmd.addSubcommandGroup(grp =>
