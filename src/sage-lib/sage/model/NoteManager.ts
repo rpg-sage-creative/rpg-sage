@@ -1,6 +1,6 @@
 import { StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { isBlank } from "@rsc-utils/string-utils";
-import type { TKeyValuePair } from "./SageMessageArgs";
+import type { TKeyValuePair } from "./SageMessageArgs.js";
 
 export type TNoteCategory = {
 	category: string;

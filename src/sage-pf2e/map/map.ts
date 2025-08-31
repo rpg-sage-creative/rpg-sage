@@ -1,4 +1,4 @@
-import { ClimateType, ElevationType } from "../weather/weather";
+import { ClimateType, ElevationType } from "../weather/weather.js";
 
 export interface IMapLocation {
 	name: string;

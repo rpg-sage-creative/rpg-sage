@@ -1,13 +1,12 @@
-import { regex } from "regex";
-import type { Pattern } from "regex/dist/cjs/pattern.js";
+import { regex, type InterpolatedValue } from "regex";
 import { parseKeyValueArgs } from "../../args/parseKeyValueArgs.js";
 
 type HtmlToMarkdownHandler = (innerHtml: string, attributes: Map<string, string>, nodeName: Lowercase<string>, outerHtml: string) => string;
 
 /** @internal Handles nested html tags */
-export function htmlToMarkdown(text: string, element: string | Pattern, openMarkdown: string): string;
-export function htmlToMarkdown(text: string, element: string | Pattern, handler: HtmlToMarkdownHandler): string;
-export function htmlToMarkdown(text: string, element: string | Pattern, handlerOrOpenMarkdown: string | HtmlToMarkdownHandler): string {
+export function htmlToMarkdown(text: string, element: string | InterpolatedValue, openMarkdown: string): string;
+export function htmlToMarkdown(text: string, element: string | InterpolatedValue, handler: HtmlToMarkdownHandler): string;
+export function htmlToMarkdown(text: string, element: string | InterpolatedValue, handlerOrOpenMarkdown: string | HtmlToMarkdownHandler): string {
 	// if we don't have text to convert, just return what we got
 	if (!text) {
 		return text;

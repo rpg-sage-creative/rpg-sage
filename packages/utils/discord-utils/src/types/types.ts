@@ -1,6 +1,6 @@
 import type { Optional } from "@rsc-utils/core-utils";
 import type { MessageReference, AnySelectMenuInteraction, AnyThreadChannel, APIUser, AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, CommandInteraction, DiscordAPIError, DMChannel, ForumChannel, GuildBasedChannel, Interaction, MediaChannel, Message, MessageComponentInteraction, MessageReaction, ModalSubmitInteraction, NonThreadGuildBasedChannel, PartialDMChannel, PartialGroupDMChannel, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User, Partialize } from "discord.js";
-import type { DiscordApiError } from "../DiscordApiError";
+import type { DiscordApiError } from "../DiscordApiError.js";
 
 //#region types
 
