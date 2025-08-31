@@ -1,6 +1,6 @@
 import { error, isNullOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { isDiscordApiError, isSupportedChannel, isSupportedInteraction, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SMessage, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
-import { MessageType as DMessageType, GatewayIntentBits, IntentsBitField, Partials, PermissionFlagsBits, type Interaction } from "discord.js";
+import { MessageType as DMessageType, GatewayIntentBits, PermissionFlagsBits, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
 import { SageReaction } from "../sage/model/SageReaction.js";
@@ -153,46 +153,6 @@ export function registerMessageListener(tester: TMessageTester, handler: TMessag
 export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, { type = ReactionType.Both, command, ...options }: RegisterReactionOptions = { }): void {
 	command = (command ?? tester.name ?? handler.name).trim();
 	registerListener({ which:"ReactionListener", tester, handler, type, command, ...options });
-}
-
-export function getRegisteredIntents() {
-	// const registered: IntentsString[] = [];
-	// messageListeners.forEach(listener => registered.push(...listener.intents ?? []));
-	// reactionListeners.forEach(listener => registered.push(...listener.intents ?? []));
-
-	const { Flags } = IntentsBitField;
-	return [
-		// Flags.AutoModerationConfiguration,
-		// Flags.AutoModerationExecution,
-		Flags.DirectMessagePolls,
-		Flags.DirectMessageReactions,
-		// Flags.DirectMessageTyping,
-		Flags.DirectMessages,
-		Flags.GuildExpressions,
-		// Flags.GuildIntegrations,
-		Flags.GuildInvites,
-		Flags.GuildMembers,
-		Flags.GuildMessagePolls,
-		Flags.GuildMessageReactions,
-		// Flags.GuildMessageTyping,
-		Flags.GuildMessages,
-		// Flags.GuildModeration,
-		Flags.GuildPresences,
-		Flags.GuildScheduledEvents,
-		// Flags.GuildVoiceStates,
-		Flags.GuildWebhooks,
-		Flags.Guilds,
-		Flags.MessageContent,
-	];
-}
-
-export function getRegisteredPartials() {
-	return [
-		// Partials.GuildMember, // guild member updates
-		Partials.Message,        // message update, reaction add/remove
-		Partials.Reaction,       // reaction add/remove
-		// Partials.User            // reaction add/remove
-	];
 }
 
 //#endregion

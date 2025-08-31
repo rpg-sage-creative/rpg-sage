@@ -1,9 +1,9 @@
 import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, verbose, warn, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, DiscordMaxValues, getSageId, getSuperUserId, getToken, wrapUrl } from "@rsc-utils/discord-utils";
+import { DiscordApiError, DiscordMaxValues, getRegisteredIntents, getRegisteredPartials, getSageId, getSuperUserId, getToken, wrapUrl } from "@rsc-utils/discord-utils";
 import { ActivityType, Client, type ClientOptions, type Guild, type Interaction, type Message, type MessageReaction, type PartialMessage, type PartialMessageReaction, type PartialUser, type User } from "discord.js";
 import { notifyOfError } from "../../../sage-utils/notifyOfError.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
-import { getRegisteredIntents, getRegisteredPartials, handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
+import { handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
 import { MessageType, ReactionType } from "../../discord/index.js";
 import { initializeServer } from "../repo/base/initializeServer.js";
 import { Bot, type BotCore } from "./Bot.js";
