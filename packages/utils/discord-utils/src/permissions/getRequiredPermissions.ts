@@ -18,8 +18,8 @@ const SageFlagMap: Record<PermFlagBitsKeys, PermReasonKeys[]> = {
 	"CreateEvents": [],
 	"CreateGuildExpressions": [], /** @todo manage server emoji? */
 	"CreateInstantInvite": [], /** @todo for future game postings? */
-	"CreatePrivateThreads": [], /** @todo to send secret messages vs ephemeral or dm? */
-	"CreatePublicThreads": [],  /** @todo for future npc shop keep? */
+	"CreatePrivateThreads": ["RunGame"], /** @todo to send secret messages vs ephemeral or dm? */
+	"CreatePublicThreads": ["RunGame"],  /** @todo for future npc shop keep? */
 	"DeafenMembers": [],
 	"EmbedLinks": ["RunGame"],
 	"KickMembers": [],
