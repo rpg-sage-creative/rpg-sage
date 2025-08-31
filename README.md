@@ -23,7 +23,8 @@ RPG Sage requires:
 
 The following is the authorize url for RPG Sage (Stable):
 ```
-https://discord.com/api/oauth2/authorize?client_id=644942473315090434&permissions=4026920017&scope=bot%20applications.commands
+https://discord.com/oauth2/authorize?client_id=644942473315090434&permissions=2815145709792336&integration_type=0&scope=bot+applications.commands
+
 ```
 
 ## Deploy
