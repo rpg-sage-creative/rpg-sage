@@ -5,7 +5,8 @@ import type { SageMessage } from "../../../model/SageMessage.js";
 import type { DialogContent } from "../DialogContent.js";
 import { sendDialogPost } from "../sendDialogPost.js";
 import type { ChatOptions } from "./ChatOptions.js";
-import { replaceCharacterMention } from "./replaceCharacterMention.js";
+import { replaceCharacterMentions } from "./replaceCharacterMentions.js";
+import { replaceTableMessages } from "./replaceTableMentions.js";
 
 type ChatContent = {
 	character?: GameCharacter | null;
@@ -22,7 +23,9 @@ export async function doChat(sageMessage: SageMessage, { character, colorType, d
 		if (nameRegex.test(content)) {
 			content = content.replace(nameRegex, displayName ?? character.name);
 		}
-		content = await replaceCharacterMention(sageMessage, content);
+
+		content = await replaceCharacterMentions(sageMessage, content);
+		content = await replaceTableMessages(sageMessage, content);
 
 		await sendDialogPost(sageMessage, {
 			authorName: displayName, // defaults to character.name

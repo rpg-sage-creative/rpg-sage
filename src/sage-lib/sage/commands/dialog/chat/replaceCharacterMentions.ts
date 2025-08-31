@@ -3,20 +3,20 @@ import { toUserMention } from "@rsc-utils/discord-utils";
 import { regex } from "regex";
 import { SageMessage } from "../../../model/SageMessage.js";
 
-export async function replaceCharacterMention(sageMessage: SageMessage, content: string): Promise<string> {
+export async function replaceCharacterMentions(sageMessage: SageMessage, content: string): Promise<string> {
 	const charMentionRegex = regex("g")`@\w+|@(?:${getQuotedRegex({ contents:"+" })})`;
 	if (!charMentionRegex.test(content)) {
 		return content;
 	}
 
-	const gmUser = await sageMessage.game?.gmGuildMember();
+	const { game, sageUser } = sageMessage;
+	const gmUser = await game?.gmGuildMember();
 	const gmUserId = gmUser?.id;
 
 	return content.replace(charMentionRegex, mention => {
 		const sliced = dequote(mention.slice(1));
 		let charName: string | undefined;
 		let userMention: string | undefined;
-		const { game } = sageMessage;
 		if (game) {
 			const charOrShell = game.findCharacterOrCompanion(sliced);
 			if (charOrShell) {
@@ -33,7 +33,7 @@ export async function replaceCharacterMention(sageMessage: SageMessage, content:
 				}
 			}
 		}else {
-			const char = sageMessage.sageUser.findCharacterOrCompanion(sliced);
+			const char = sageUser.findCharacterOrCompanion(sliced);
 			if (char) {
 				charName = char.name;
 				userMention = toUserMention(char.userDid) ?? "";
