@@ -86,7 +86,7 @@ async function getChannelNameAndActiveGame(sageCache: SageCache, channelId: Opti
 }
 
 export async function channelDetails(sageMessage: SageMessage, channel?: SageChannel): Promise<void> {
-	if (!await sageMessage.validatePermission("canManageGame")) {
+	if (!await sageMessage.validatePermission("canManageChannel")) {
 		return sageMessage.reactBlock();
 	}
 

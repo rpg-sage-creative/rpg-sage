@@ -24,6 +24,7 @@ import type { User } from "./User.js";
 
 type ValidatedPermissions = {
 	canCreateGames: boolean;
+	canManageChannel: boolean;
 	canManageGame: boolean;
 	canManageGames: boolean;
 	canManageServer: boolean;
@@ -224,9 +225,11 @@ export abstract class SageCommand<
 			const canCreateGames =  !!(server.known && actor.canCreateGames);
 
 			const canManageGame = !!(game && (canManageGames || actor.isGameMaster));
+			const canManageChannel = game ? canManageGame : canManageServer;
 
 			return {
 				canCreateGames,
+				canManageChannel,
 				canManageGame,
 				canManageGames,
 				canManageServer,
