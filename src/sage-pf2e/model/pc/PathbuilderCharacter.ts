@@ -138,7 +138,7 @@ function spellsListToHtml(spells: string[]): string {
 }
 
 function spellCasterToHtml(char: PathbuilderCharacter, spellCaster: TPathbuilderCharacterSpellCaster): string {
-	const label = spellCaster.spellcastingType === "prepared" ? `Prepare Spells (${spellCaster.name})` : spellCasterToLabel(spellCaster);
+	const label = spellCaster.spellcastingType === "prepared" ? `Prepared Spells (${spellCaster.name})` : spellCasterToLabel(spellCaster);
 	const mod = char.getLevelMod(spellCaster.proficiency)
 		+ char.abilities.getAbilityScoreModifier(ABILITIES.find(abil => abil.toLowerCase().startsWith(spellCaster.ability))!)
 		+ spellCaster.proficiency;
