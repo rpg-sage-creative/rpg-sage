@@ -1,4 +1,4 @@
-import { DialogPostType, type SageChannel } from "@rsc-sage/types";
+import { DialogPostType } from "@rsc-sage/types";
 import { debug, type Snowflake } from "@rsc-utils/core-utils";
 import type { SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type SelectMenuComponentOptionData } from "discord.js";
@@ -6,6 +6,7 @@ import { getSelectedOrDefault } from "../../../../../gameSystems/p20/lib/getSele
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { AutoChannelData, GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
+import type { ValidatedChannel } from "../../../model/SageEventCache/validateChannel.js";
 import type { SageButtonInteraction, SageStringSelectInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
@@ -58,9 +59,9 @@ function parseAutoChannel(channelData: ChannelData | undefined): SelectedChannel
 	return undefined;
 }
 
-function isSameChannel(autoChannel: AutoChannelData | undefined, gameChannel: SageChannel | undefined): boolean {
+function isSameChannel(autoChannel: AutoChannelData | undefined, gameChannel: ValidatedChannel | undefined): boolean {
 	return autoChannel && gameChannel
-		? autoChannel.channelDid === gameChannel.did || autoChannel.channelDid === gameChannel.id
+		? autoChannel.channelDid === gameChannel.id
 		: false;
 }
 
@@ -235,7 +236,7 @@ async function createChannelList(sageCommand: SageCommand, chars: Chars, selecte
 
 	// add game channels first
 
-	const gameChannels = sageCommand.game?.channels ?? [];
+	const gameChannels = await sageCommand.game?.validateChannels() ?? [];
 	for (const gameChannel of gameChannels) {
 		let added = false;
 		for (const character of chars.all) {
@@ -254,7 +255,7 @@ async function createChannelList(sageCommand: SageCommand, chars: Chars, selecte
 		}
 
 		if (!added) {
-			const autoChannel = { channelDid:gameChannel.did ?? gameChannel.id };
+			const autoChannel = { channelDid:gameChannel.id };
 			const label = await labelAutoChannel(autoChannel);
 			const value = stringifyAutoChannel(autoChannel);
 			if (label) addOption({ label, value });

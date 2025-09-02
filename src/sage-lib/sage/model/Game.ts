@@ -1,6 +1,6 @@
-import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, SageChannelType, parseSageChannelType, updateGame, type GameOptions, type SageChannel } from "@rsc-sage/types";
-import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, warn, type Args, type Comparable, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameChannel } from "@rsc-utils/discord-utils";
+import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, SageChannelType, updateGame, type GameOptions, type SageChannel } from "@rsc-sage/types";
+import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, warn, type Args, type Comparable, type IdCore, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
 import { parseGameSystem, type DiceCriticalMethodType, type DiceOutputType, type DiceSecretMethodType, type DiceSortType, type GameSystem, type GameSystemType } from "@rsc-utils/game-utils";
 import type { GuildMember, HexColorString, Role } from "discord.js";
 import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";
@@ -19,6 +19,7 @@ import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
 import type { MacroBase } from "./Macro.js";
 import type { SageCache } from "./SageCache.js";
+import { validateChannel, type ValidatedChannel, type ValidatedGameChannel } from "./SageEventCache/validateChannel.js";
 import type { Server } from "./Server.js";
 
 export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
@@ -52,83 +53,76 @@ export interface GameCore extends IdCore<"Game">, IHasColors, IHasEmoji, Partial
 }
 
 type MappedChannelNameTags = {
-	ic: boolean;
-	ooc: boolean;
-	gm: boolean;
 	dice: boolean;
+	gm: boolean;
+	ic: boolean;
 	misc: boolean;
+	none: boolean;
+	ooc: boolean;
 };
 
-type MappedGameChannel = {
-	id: Snowflake;
-	sChannel: SageChannel;
-	gChannel: SupportedGameChannel | undefined;
-	nameTags: MappedChannelNameTags;
-};
-
-function sageChannelTypeToNameTags(channelType?: SageChannelType): MappedChannelNameTags {
-	const gm = channelType === SageChannelType.GameMaster;
-	const ooc = channelType === SageChannelType.OutOfCharacter;
-	const ic = channelType === SageChannelType.InCharacter;
-	const dice = channelType === SageChannelType.Dice;
-	const misc = !gm && !ooc && !ic && !dice;
-
-	return { ic, gm, ooc, dice, misc };
-}
+// type MappedGameChannel = {
+// 	id: Snowflake;
+// 	sChannel: SageChannel;
+// 	gChannel: SupportedGameChannel | undefined;
+// 	nameTags: MappedChannelNameTags;
+// };
 
 /** Reads IChannel properties to determine channel type: IC, GM, OOC, MISC */
-export function mapSageChannelNameTags(channel: SageChannel): MappedChannelNameTags {
-	return sageChannelTypeToNameTags(channel.type);
+export function mapSageChannelNameTags(resolvable: SageChannel | SageChannelType): MappedChannelNameTags {
+	const channelType = typeof(resolvable) === "number" ? resolvable : resolvable.type;
+	return {
+		dice: channelType === SageChannelType.Dice,
+		gm: channelType === SageChannelType.GameMaster,
+		ic: channelType === SageChannelType.InCharacter,
+		misc: channelType === SageChannelType.Miscellaneous,
+		none: channelType === SageChannelType.None,
+		ooc: channelType === SageChannelType.OutOfCharacter,
+	};
+}
+
+export function sageChannelTypeToString(type: SageChannelType): string {
+	return nameTagsToType(mapSageChannelNameTags(type));
 }
 
 export function nameTagsToType(nameTags: MappedChannelNameTags): string {
-	if (nameTags.gm) {
-		return "GM <i>(Game Master)</i>";
-	}
-	if (nameTags.ic) {
-		return "IC <i>(In Character)</i>";
-	}
-	if (nameTags.ooc) {
-		return "OOC <i>(Out of Character)</i>";
-	}
-	if (nameTags.dice) {
-		return "Dice";
-	}
-	if (nameTags.misc) {
-		return "Misc";
-	}
+	if (nameTags.dice) return "Dice";
+	if (nameTags.gm) return "GM <i>(Game Master)</i>";
+	if (nameTags.ic) return "IC <i>(In Character)</i>";
+	if (nameTags.misc) return "Misc";
+	if (nameTags.ooc) return "OOC <i>(Out of Character)</i>";
 	return "<i>None</i>";
 }
 
 /** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
-function mapGuildChannelNameTags(channel: SupportedGameChannel): MappedChannelNameTags {
-	return sageChannelTypeToNameTags(parseSageChannelType(channel.name));
-}
+// function mapGuildChannelNameTags(channel: SupportedGameChannel): MappedChannelNameTags {
+// 	return mapSageChannelNameTags(parseSageChannelType(channel.name) ?? SageChannelType.Miscellaneous);
+// }
 
 /** Returns [guildChannels.concat(sageChannels), guildChannels, sageChannels] */
-async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promise<[MappedGameChannel[], MappedGameChannel[], MappedGameChannel[]]> {
-	const sChannels: MappedGameChannel[] = [];
-	const gChannels: MappedGameChannel[] = [];
-	for (const sChannel of channels) {
-		sChannels.push({
-			id: sChannel.id,
-			sChannel: sChannel,
-			gChannel: undefined, // NOSONAR
-			nameTags: mapSageChannelNameTags(sChannel)
-		});
+// async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promise<[MappedGameChannel[], MappedGameChannel[], MappedGameChannel[]]> {
+// 	const sChannels: MappedGameChannel[] = [];
+// 	const gChannels: MappedGameChannel[] = [];
+// 	for (const sChannel of channels) {
+// 		sChannels.push({
+// 			id: sChannel.id,
+// 			sChannel: sChannel,
+// 			gChannel: undefined, // NOSONAR
+// 			nameTags: mapSageChannelNameTags(sChannel)
+// 		});
 
-		const gChannel = await sageCache.fetchChannel<SupportedGameChannel>(sChannel.id);
-		if (gChannel) {
-			gChannels.push({
-				id: sChannel.id,
-				sChannel: sChannel,
-				gChannel: gChannel,
-				nameTags: mapGuildChannelNameTags(gChannel)
-			});
-		}
-	}
-	return [gChannels.concat(sChannels), gChannels, sChannels];
-}
+// 		const gChannel = await sageCache.fetchChannel<SupportedGameChannel>(sChannel.id);
+// 		if (gChannel) {
+// 			gChannels.push({
+// 				id: sChannel.id,
+// 				sChannel: sChannel,
+// 				gChannel: gChannel,
+// 				nameTags: mapGuildChannelNameTags(gChannel)
+// 			});
+// 		}
+// 	}
+// 	return [gChannels.concat(sChannels), gChannels, sChannels];
+// }
 
 /** Cleans up the users from the time we weren't correctly validating duplicate users when adding them. */
 function fixDupeUsers(game: GameCore): void {
@@ -212,7 +206,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	/** Returns users assigned manually, NOT users assigned via Player role. */
 	private get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
 
-	public get channels(): SageChannel[] { return this.core.channels ?? (this.core.channels = []); }
+	// public get channels(): SageChannel[] { return this.core.channels ?? (this.core.channels = []); }
 	public get gameMasters(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
 	public get gmCharacter(): GameCharacter { return this.core.gmCharacter as GameCharacter; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
@@ -234,34 +228,55 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	public get postCurrency() { return this.core.postCurrency ?? (this.core.postCurrency = {}); }
 
 	//#region Guild fetches
-	public async findBestPlayerChannel(): Promise<SageChannel | undefined> {
-		const [allChannels, gChannels, sChannels] = await mapChannels(this.channels, this.sageCache);
-		return (
-				allChannels.find(channel => channel.nameTags.ic)
-				?? allChannels.find(channel => channel.nameTags.ooc)
-				?? sChannels.find(channel => !channel.nameTags.gm)
-				?? gChannels.find(channel => !channel.nameTags.gm)
-			)?.sChannel;
+	public async findBestPlayerChannel(): Promise<ValidatedChannel | undefined> {
+		const validatedChannels = await this.validateChannels();
+
+		const findBest = (filter?: (type?: SageChannelType) => unknown) => {
+			let channels = validatedChannels.filter(vc => vc.discord);
+			if (filter) channels = channels.filter(vc => filter(vc.type));
+			return channels.find(vc => vc.isChannel && !vc.byParent)
+				?? channels.find(vc => vc.isThread && !vc.byParent)
+				?? channels.find(vc => vc.isChannel)
+				?? channels.find(vc => vc.isThread)
+				?? channels[0];
+		};
+
+		return findBest(type => type === SageChannelType.InCharacter)
+			?? findBest(type => type === SageChannelType.OutOfCharacter)
+			?? findBest(type => type && type !== SageChannelType.GameMaster);
 	}
-	public async findBestGameMasterChannel(): Promise<SageChannel> {
-		const [allChannels] = await mapChannels(this.channels, this.sageCache);
-		return (
-				allChannels.find(channel => channel.nameTags.gm)
-				?? allChannels.find(channel => channel.nameTags.ic)
-				?? allChannels[0]
-			)?.sChannel;
+	public async findBestGameMasterChannel(): Promise<ValidatedChannel> {
+		const validatedChannels = await this.validateChannels();
+
+		const findBest = (filter?: (type?: SageChannelType) => unknown) => {
+			let channels = validatedChannels.filter(vc => vc.discord);
+			if (filter) channels = channels.filter(vc => filter(vc.type));
+			return channels.find(vc => vc.isChannel && !vc.byParent)
+				?? channels.find(vc => vc.isThread && !vc.byParent)
+				?? channels.find(vc => vc.isChannel)
+				?? channels.find(vc => vc.isThread)
+				?? channels[0];
+		};
+
+		return findBest(type => type === SageChannelType.GameMaster)
+			?? findBest(type => type === SageChannelType.Miscellaneous)
+			?? findBest(type => type === SageChannelType.OutOfCharacter)
+			?? findBest(type => type === SageChannelType.InCharacter)
+			?? validatedChannels[0];
 	}
-	public async gmGuildChannel(): Promise<OrNull<SupportedGameChannel>> {
-		for (const sChannel of this.channels) {
-			if (sChannel.type === SageChannelType.GameMaster) {
-				const gChannel = await this.sageCache.fetchChannel<SupportedGameChannel>(sChannel.id);
-				if (gChannel) {
-					return gChannel;
-				}
-			}
+	public async gmGuildChannel(): Promise<ValidatedChannel | undefined> {
+		const validatedChannels = await this.validateChannels();
+		const validatedGmChannels = validatedChannels.filter(vc => vc.type === SageChannelType.GameMaster && vc.discord);
+		if (validatedGmChannels.length) {
+			return validatedGmChannels.find(vc => vc.isChannel && !vc.byParent)
+				?? validatedGmChannels.find(vc => vc.isThread && !vc.byParent)
+				?? validatedGmChannels.find(vc => vc.isChannel)
+				?? validatedGmChannels.find(vc => vc.isThread)
+				?? validatedGmChannels[0];
 		}
-		return null;
+		return undefined;
 	}
+
 
 	/** Returns all players (manual and role) as GuildMember objects. */
 	public async pGuildMembers(): Promise<GuildMember[]> {
@@ -278,15 +293,15 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	}
 
 	/** Returns all manually added channels as SupportedGameChannel objects. */
-	public async guildChannels(): Promise<SupportedGameChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel<SupportedGameChannel>(channel.id)));
-		return all.filter(isDefined);
+	public async guildChannels(): Promise<ValidatedChannel[]> {
+		const validatedChannels = await this.validateChannels();
+		return validatedChannels.filter(vc => vc.sage && !vc.byParent);
 	}
 
 	/** Returns all manually added channels that are not found on this Server. */
 	public async orphanChannels(): Promise<SageChannel[]> {
-		const all = await Promise.all(this.channels.map(channel => this.sageCache.fetchChannel(channel.id)));
-		return this.channels.filter((_, index) => !all[index]);
+		const validatedChannels = await this.validateChannels();
+		return validatedChannels.filter(vc => vc.sage && !vc.byParent && !vc.discord);
 	}
 
 	/** Returns all manually added users that are not found on this Server. */
@@ -605,17 +620,18 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	public getChannel(channelDid: Optional<Snowflake>): SageChannel | undefined;
 	public getChannel(didOrKey: Optional<Snowflake> | DiscordKey): SageChannel | undefined {
 		if (didOrKey) {
+			const { channels = [] } = this.core;
 			if (typeof(didOrKey) === "string") {
-				return this.channels.find(channel => channel.id === didOrKey);
+				return channels.find(channel => channel.id === didOrKey);
 			}
 			const channelAndThread = didOrKey.channelAndThread;
 			if (channelAndThread.thread && channelAndThread.channel) {
-				return this.channels.find(channel => channel.id === channelAndThread.thread)
-					?? this.channels.find(channel => channel.id === channelAndThread.channel);
+				return channels.find(channel => channel.id === channelAndThread.thread)
+					?? channels.find(channel => channel.id === channelAndThread.channel);
 			}else if (channelAndThread.thread) {
-				return this.channels.find(channel => channel.id === channelAndThread.thread);
+				return channels.find(channel => channel.id === channelAndThread.thread);
 			}else if (channelAndThread.channel) {
-				return this.channels.find(channel => channel.id === channelAndThread.channel);
+				return channels.find(channel => channel.id === channelAndThread.channel);
 			}
 		}
 		return undefined;
@@ -634,11 +650,11 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	// #region Has
 
-	public hasChannel(discordKey: DiscordKey): boolean;
-	public hasChannel(channelDid: Optional<Snowflake>): boolean;
-	public hasChannel(didOrKey: Optional<Snowflake> | DiscordKey): boolean {
-		return this.getChannel(didOrKey as DiscordKey) !== undefined;
-	}
+	// public hasChannel(discordKey: DiscordKey): boolean;
+	// public hasChannel(channelDid: Optional<Snowflake>): boolean;
+	// public hasChannel(didOrKey: Optional<Snowflake> | DiscordKey): boolean {
+	// 	return this.getChannel(didOrKey as DiscordKey) !== undefined;
+	// }
 
 	public hasGameMaster(userResolvable: Optional<CanBeUserIdResolvable>): boolean {
 		return this.getUser(userResolvable)?.type === GameUserType.GameMaster;
@@ -659,6 +675,41 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	public async save(): Promise<boolean> {
 		return this.sageCache.saveGame(this);
+	}
+
+	public async validateChannels(): Promise<ValidatedChannel[]>;
+	public async validateChannels(validOnly: true): Promise<ValidatedGameChannel[]>;
+	public async validateChannels(validOnly?: boolean) {
+		const validatedChannels = [] as ValidatedChannel[];
+
+		// validate explicit channels (channels added to the game directly)
+		const { channels:sageChannels = [] } = this.core;
+		for (const sageChannel of sageChannels) {
+			validatedChannels.push(await validateChannel(this.sageCache, sageChannel.did ?? sageChannel.id, { sageChannel }));
+		}
+
+		// ids of channels validated thus far
+		const validatedIds = validatedChannels.map(({ id }) => id);
+
+		// validate implicit channels (channels in a category added to the game)
+		for (const parent of validatedChannels) {
+			if (parent.isCategory) {
+				const childIds = parent.discord?.children.cache.keys() as MapIterator<Snowflake> ?? [];
+				for (const childId of childIds) {
+					if (!validatedIds.includes(childId)) {
+						const validatedChild = await validateChannel(this.sageCache, childId, { parent });
+						validatedChannels.push(validatedChild);
+						validatedIds.push(childId);
+					}
+				}
+			}
+		}
+
+		if (validOnly) {
+			return validatedChannels.filter(vc => vc.isValidated);
+		}
+
+		return validatedChannels;
 	}
 
 	// #region IComparable

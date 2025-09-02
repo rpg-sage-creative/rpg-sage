@@ -1,8 +1,7 @@
 import { DialogPostType, DicePostType, SageChannelType, type SageChannel } from "@rsc-sage/types";
 import { isDefined, mapAsync, stringifyJson, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, isSupportedChannel, isSupportedGameChannel, toChannelMention } from "@rsc-utils/discord-utils";
+import { DiscordKey, isSupportedChannel, isSupportedGameChannel, toChannelMention, type SupportedGameChannel } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, DiceSortType, GameSystemType, getCriticalMethodText, parseGameSystem } from "@rsc-utils/game-utils";
-import { GuildChannel } from "discord.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Game } from "../../model/Game.js";
 import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game.js";
@@ -117,9 +116,9 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 
 //#region list
 
-async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: SageChannel[]): Promise<GuildChannel[]> {
-	const guildChannels = await mapAsync(channels, async channel => sageMessage.sageCache.fetchChannel(channel.id));
-	const existing = guildChannels.filter(isDefined) as GuildChannel[];
+async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: SageChannel[]): Promise<SupportedGameChannel[]> {
+	const guildChannels = await mapAsync(channels, async channel => sageMessage.eventCache.fetchChannel<SupportedGameChannel>(channel.id));
+	const existing = guildChannels.filter(isDefined);
 
 	const filter = sageMessage.args.getString("filter");
 	if (filter && existing.length) {
@@ -135,7 +134,9 @@ async function _channelList(sageMessage: SageMessage, whichType: BotServerGameTy
 		await sageMessage.send(`<b>No Channel List in DMs</b>`);
 		return;
 	}
-	const guildChannels = await fetchAndFilterGuildChannels(sageMessage, which.channels);
+	const guildChannels = "channels" in which
+		? await fetchAndFilterGuildChannels(sageMessage, which.channels)
+		: (await which.validateChannels()).filter(vc => !vc.byParent).map(vc => vc.discord!) as SupportedGameChannel[];
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), `<b>${BotServerGameType[whichType]} Channel List</b>`);
 	if (guildChannels.length) {
 		for (const guildChannel of guildChannels) {

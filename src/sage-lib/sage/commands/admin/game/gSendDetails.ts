@@ -1,9 +1,9 @@
-import { DialogPostType, DicePostType } from "@rsc-sage/types";
+import { DialogPostType, DicePostType, SageChannelType } from "@rsc-sage/types";
 import { getDateStrings, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, getRollemId, getTupperBoxId, toGuildMemberName } from "@rsc-utils/discord-utils";
+import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, getRollemId, getTupperBoxId, toGuildMemberName, type SupportedGameChannel } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, DiceSortType, getCriticalMethodText } from "@rsc-utils/game-utils";
-import type { GuildMember, TextChannel } from "discord.js";
-import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
+import type { GuildMember } from "discord.js";
+import { GameRoleType, sageChannelTypeToString, type Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { MoveDirectionOutputType } from "../../map/MoveDirection.js";
@@ -46,15 +46,17 @@ function showGameRenderGameType(renderableContent: RenderableContent, game: Game
 	}
 }
 
-async function checkForMissingPerms(sageCommand: SageCommand, guildChannel?: TextChannel | null): Promise<string[]> {
-	const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.id);
-	if (bot && guildChannel) {
-		return getPermsFor(guildChannel, bot, ...getRequiredPermissions("RunGame")).missing;
+async function checkForMissingPerms(sageCommand: SageCommand, guildChannel?: Optional<SupportedGameChannel>): Promise<string[]> {
+	if (guildChannel) {
+		const bot = await sageCommand.discord.fetchGuildMember(sageCommand.bot.id);
+		if (bot) {
+			return getPermsFor(guildChannel, bot, ...getRequiredPermissions("RunGame")).missing;
+		}
 	}
 	return [];
 }
 
-async function checkForOtherBots(guildChannel?: TextChannel | null): Promise<string[]> {
+async function checkForOtherBots(guildChannel?: Optional<SupportedGameChannel>): Promise<string[]> {
 	const botNames: string[] = [];
 
 	if (!guildChannel) {
@@ -72,26 +74,38 @@ async function checkForOtherBots(guildChannel?: TextChannel | null): Promise<str
 }
 
 async function showGameRenderChannels(renderableContent: RenderableContent, sageCommand: SageCommand, game: Game): Promise<void> {
-	renderableContent.append(`<b>Channels</b> ${game.channels.length}`);
+	const validatedChannels = await game.validateChannels();
+	const gameChannels = validatedChannels.filter(vc => !vc.byParent);
 
-	const tags = ["ic", "ooc", "dice", "gm", "misc"];
-	for (const tag of tags) {
-		const metas = game.channels
-			.map(sageChannel => ({ sageChannel, nameTags:mapSageChannelNameTags(sageChannel) }))
-			.filter(ch => ch.nameTags[tag as "ic"]);
-		if (metas.length) {
-			renderableContent.append(`[spacer]<b>${nameTagsToType(metas[0].nameTags)}</b>`);
-			for (const meta of metas) {
-				const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(meta.sageChannel.id);
-				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
+	renderableContent.append(`<b>Channels</b> ${gameChannels.length}`);
 
-				const missingPerms = await checkForMissingPerms(sageCommand, guildChannel);
-				const sageEmoji = missingPerms.length ? "[sage-missing-permissions]" : "";
+	const types = [
+		SageChannelType.InCharacter,
+		SageChannelType.OutOfCharacter,
+		SageChannelType.Dice,
+		SageChannelType.GameMaster,
+		SageChannelType.Miscellaneous,
+		SageChannelType.None
+	];
+	for (const type of types) {
+		const typeChannels = gameChannels.filter(vc => vc.type === type || !vc.type && !type);
+		if (typeChannels.length) {
+			renderableContent.append(`[spacer]<b>${sageChannelTypeToString(type)}</b>`);
+			for (const channel of typeChannels) {
+				if (channel.isValidated) {
+					const guildChannel = channel.discord;
+					const guildChannelName = guildChannel ? `#${channel.discord.name}` : `<i>unavailable</i>`;
 
-				const otherBots = await checkForOtherBots(guildChannel);
-				const otherBotsEmoji = otherBots.map(name => `[${name}]`).join("");
+					const missingPerms = guildChannel.type !== 4 ? await checkForMissingPerms(sageCommand, guildChannel) : [];
+					const sageEmoji = missingPerms.length ? "[sage-missing-permissions]" : "";
 
-				renderableContent.append(`[spacer][spacer]${guildChannelName} ${sageEmoji}${otherBotsEmoji}`.trim());
+					const otherBots = guildChannel.type !== 4 ? await checkForOtherBots(guildChannel) : [];
+					const otherBotsEmoji = otherBots.map(name => `[${name}]`).join("");
+
+					renderableContent.append(`[spacer][spacer]${guildChannelName} ${sageEmoji}${otherBotsEmoji}`.trim());
+				}else {
+					renderableContent.append(`[spacer][spacer]#${channel.id}`.trim());
+				}
 			}
 		}
 	}

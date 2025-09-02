@@ -1,371 +1,25 @@
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
-import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, getHomeServerId, getPermsFor, getSuperAdminIds, getSuperUserId, getTupperBoxId, isDiscordApiError, isSageId, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SMessageOrPartial, type SupportedChannel, type SupportedInteraction, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
-import type { User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
+import { debug, errorReturnFalse, isDefined, mapAsync, NIL_SNOWFLAKE, silly, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, getHomeServerId, getPermsFor, getTupperBoxId, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SMessageOrPartial, type SupportedChannel, type SupportedChannelOrParent, type SupportedDMChannel, type SupportedInteraction, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
+import type { User as DUser, Guild, Interaction, Message } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
 import { globalCacheFilter, globalCacheRead, type GameCacheItem, type GlobalCacheItem } from "../repo/base/globalCache.js";
 import { JsonRepo } from "../repo/base/JsonRepo.js";
 import { ActiveBot } from "./ActiveBot.js";
 import type { Bot } from "./Bot.js";
-import { Game, GameUserType, type GameCore } from "./Game.js";
-import { AdminRoleType, GameCreatorType, Server, SuperAccessType } from "./Server.js";
+import { Game, type GameCore } from "./Game.js";
+import { getOrCreateUser } from "./SageEventCache/getOrCreateUser.js";
+import { validateServer, type SageEventCacheServer } from "./SageEventCache/validateServer.js";
+import { validateUser, type SageEventCacheUser } from "./SageEventCache/validateUser.js";
+import { Server } from "./Server.js";
 import { User } from "./User.js";
-
-let _userForSage: User | undefined;
-
-async function getOrCreateUser(eventCache: SageEventCache, id: Optional<string>): Promise<User> {
-	const userId = orNilSnowflake(id);
-
-	let user: User | undefined;
-	if (isSageId(userId)) {
-		_userForSage ??= new User(User.createCore(userId), eventCache);
-		user = _userForSage;
-
-	}else {
-		// check cache first
-		user = await eventCache.getOrFetchUser(userId);
-
-		// create a new one
-		user ??= new User(User.createCore(userId), eventCache);
-	}
-
-	return user;
-}
 
 /**
  * @todo have ensureActor(), ensureGame(), ensureGuild()
  * Move isGameX to EnsuredGame
  * Move canManageServer, member to EnsuredGuild
  */
-
-//#region SageEventCacheUser
-
-type KnownUser = {
-	/** was given Sage's GameCreator role */
-	canCreateGames: boolean;
-	/** was given Sage's GameAdmin role */
-	canManageGames: boolean;
-	/** Discord Guild: Owner, Administrator, ManageGuild */
-	canManageServer: boolean;
-
-	discord: DUser;
-	id: Snowflake;
-
-	isGameMaster: boolean;
-	isGamePlayer: boolean;
-	/** isGameMaster || isGamePlayer */
-	isGameUser: boolean;
-
-	known: true;
-	member?: GuildMember;
-	sage: User;
-	uuid?: UUID;
-};
-
-type UnknownUser = {
-	canCreateGames: false;
-	canManageGames: false;
-	canManageServer: false;
-	discord?: DUser;
-	id?: Snowflake;
-	isGameMaster: false;
-	isGamePlayer: false;
-	isGameUser: false;
-	known: false;
-	member?: GuildMember;
-	sage: User;
-	uuid?: never;
-};
-
-type UnvalidatedUser = {
-	canCreateGames?: never;
-	canManageGames?: never;
-	canManageServer?: never;
-	discord?: never;
-	id?: never;
-	isGameMaster?: never;
-	isGamePlayer?: never;
-	isGameUser?: never;
-	known?: never;
-	member?: never;
-	sage: User;
-	uuid?: never;
-};
-
-type SageEventCacheUser = UnvalidatedUser | UnknownUser | KnownUser;
-
-//#endregion
-
-//#region ValidateUser
-
-type ValidateActorArgs = {
-	which: "actor";
-	actorOrPartial?: UserOrPartial;
-	authorOrPartial?: never;
-	messageOrPartial?: MessageOrPartial;
-	reactionOrPartial?: ReactionOrPartial;
-};
-
-type ValidateAuthorArgs = {
-	which: "author";
-	actorOrPartial?: never;
-	authorOrPartial?: UserOrPartial;
-	messageOrPartial?: MessageOrPartial;
-	reactionOrPartial?: ReactionOrPartial;
-};
-
-type ValidateUserArgs = ValidateActorArgs | ValidateAuthorArgs;
-
-async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateUserArgs): Promise<SageEventCacheUser> {
-	const { which, actorOrPartial, authorOrPartial, messageOrPartial, reactionOrPartial } = validateUserArgs;
-
-	let discord: DUser | undefined;
-	let { discord:guild, sage:server } = evCache.server;
-
-	const validationErrors: string[] = [];
-	const appendError = (action: string, err: unknown) => {
-		validationErrors.push(`Error Validating User (SageEventCache.ts -> validateUser)`);
-		validationErrors.push(`${BULLET} ${action}`);
-		if (discord) {
-			validationErrors.push(`${BULLET} discord = ${discord.id} (${toHumanReadable(discord)})`);
-		}
-		if (guild) {
-			validationErrors.push(`${BULLET} guild = ${guild.id} (${guild.name})`);
-		}
-		if (isDiscordApiError(err, 10007, 10013)) {
-			const errName = {10007:"Unknown Member",10013:"Unknown User"}[err.code];
-			validationErrors.push(`${BULLET} DiscordApiError ${err.code} (${errName})`)
-		}else if (isErrorLike(err)) {
-			validationErrors.push(`${BULLET} ${err.name ?? "NoName"}: ${err.message ?? "NoMessage"}`);
-		}else if (err) {
-			validationErrors.push(`${BULLET} ${stringifyJson(err)}`);
-		}
-		return undefined;
-	};
-	const sendErrors = () => {
-		if (validationErrors.length > 0) {
-			error(validationErrors.join("\n"));
-		}
-	};
-
-	// try fetching the discord user object
-	discord = await (actorOrPartial ?? authorOrPartial)?.fetch().catch(err => appendError(`discord = await (actorOrPartial ?? authorOrPartial)?.fetch()`, err));
-
-	// actor will always get passed in, author might not if the original was a partial
-	if (!discord && which === "author") {
-		// if we don't have a reaction and have a message, try getting author directly from message
-		if (!reactionOrPartial && messageOrPartial) {
-			const message = await messageOrPartial.fetch().catch(err => appendError(`const message = await messageOrPartial.fetch()`, err));
-			discord = message?.author;
-		}
-
-		// still no discord user and we have a reaction, try getting it from reaction's message
-		if (!discord && reactionOrPartial) {
-			const reaction = await reactionOrPartial.fetch().catch(err => appendError(`const reaction = await reactionOrPartial.fetch()`, err));
-			const message = await reaction?.message.fetch().catch(err => appendError(`const message = await reaction?.message.fetch()`, err));
-			discord = message?.author;
-		}
-
-		// in case we managed to still have a partial ...
-		discord = await discord?.fetch().catch(err => appendError(`discord = await discord?.fetch()`, err));
-	}
-
-	// we want to always have a sage user object, so pass in nil if we don't have an id
-	const sage = await getOrCreateUser(evCache, discord?.id);
-
-	// set flags as false by default
-	let canCreateGames = false;
-	let canManageGames = false;
-	let canManageServer = false;
-	let isGameMaster = false;
-	let isGamePlayer = false;
-	let isGameUser = false;
-
-	// we don't have a valid discord user (or we couldn't fetch it for some reason)
-	if (!discord?.id) {
-		const unknownUser: UnknownUser = {
-			canCreateGames,
-			canManageGames,
-			canManageServer,
-			// discord: undefined,
-			// id: undefined,
-			isGameMaster,
-			isGamePlayer,
-			isGameUser,
-			known: false,
-			// member: undefined,
-			sage,
-			// uuid: undefined,
-		};
-		sendErrors();
-		return unknownUser;
-	}
-
-	// type cast id now
-	const id = discord.id as Snowflake;
-	const roleIds: Snowflake[] = [];
-
-	// early and easiest check for canManageServer
-	if (server?.superAccessType) {
-		canManageServer = id === getSuperUserId()
-			|| (server.superAccessType === SuperAccessType.SuperAdmin && getSuperAdminIds().includes(id));
-	}
-
-	// we need a guildmember to check server perms
-	let member: GuildMember | undefined;
-	guild = await guild?.fetch().catch(err => appendError(`guild = await guild?.fetch()`, err));
-	if (guild) {
-		// fetch the guild member if it isn't a bot and isn't a system user
-		if (!discord.bot && !discord.system) {
-			member = await guild.members.fetch(id).catch(err => appendError(`member = await guild.members.fetch(id)`, err));
-			if (member) {
-				roleIds.push(...member.roles.cache.keys() as MapIterator<Snowflake>);
-			}
-		}
-
-		// check the guild member for owner/admin/manage perms
-		canManageServer ||= guild.ownerId === id
-			|| member?.permissions.has("Administrator") === true
-			|| member?.permissions.has("ManageGuild") === true;
-	}
-
-	// if you can canManageServer you can do these as well
-	if (canManageServer) {
-		canCreateGames = true;
-		canManageGames = true;
-	}
-
-	// const hasRole = (roleId?: Snowflake) => roleId ? member?.roles.cache.has(roleId) ?? false : false;
-
-	if (server) {
-		// update "can" flags if needed
-		canCreateGames ||= server.gameCreatorType ? server.gameCreatorType === GameCreatorType.Any : server.hasAdmin(id, roleIds, AdminRoleType.GameCreator);
-		canManageGames ||= server.hasAdmin(id, roleIds, AdminRoleType.GameAdmin);
-	}
-
-	// now let's check for game access
-	const { game } = evCache;
-	if (game) {
-		// NOTE: hasUser checks users and roles so is preferred
-		isGameMaster = game.hasUser(id, roleIds, GameUserType.GameMaster);
-		isGamePlayer = game.hasUser(id, roleIds, GameUserType.Player);
-		isGameUser = isGameMaster || isGamePlayer;
-	}
-
-	// keep getting uuid until we completely phase it out
-	const uuid = parseUuid(sage.toJSON().uuid ?? sage.id);
-
-	const knownUser: KnownUser = {
-		canCreateGames,
-		canManageGames,
-		canManageServer,
-		discord,
-		id,
-		isGameMaster,
-		isGamePlayer,
-		isGameUser,
-		known: true,
-		member,
-		sage,
-		uuid,
-	};
-	sendErrors();
-	return knownUser;
-}
-
-//#endregion
-
-//#region SageEventCacheServer
-
-type KnownServer = {
-	discord: Guild;
-	id: Snowflake;
-	isDm: false;
-	isServer: true;
-	known: true;
-	ownerId: Snowflake;
-	sage: Server;
-};
-
-type UnknownServer = {
-	discord?: Guild;
-	id?: Snowflake;
-	isDm: false;
-	isServer: true;
-	known: false;
-	ownerId?: Snowflake;
-	sage?: Server;
-};
-
-type DmServer = {
-	discord?: never;
-	id?: never;
-	isDm: true;
-	isServer: false;
-	known: false;
-	ownerId?: never;
-	sage?: never;
-};
-
-type UnvalidatedServer = {
-	discord?: Guild;
-	id?: never;
-	isDm?: never;
-	isServer?: never;
-	known?: never;
-	ownerId?: never;
-	sage?: never;
-};
-
-type SageEventCacheServer = UnvalidatedServer | DmServer | UnknownServer | KnownServer;
-
-//#endregion
-
-async function validateServer(evCache: SageEventCache, discord: Optional<Guild>): Promise<SageEventCacheServer> {
-	// no guild means dm
-	if (!discord) {
-		const dmServer: DmServer = {
-			isDm: true,
-			isServer: false,
-			known: false
-		};
-		return dmServer;
-	}
-
-	// type cast id
-	const id = discord.id as Snowflake;
-
-	// what means unkonwn, failed fetch ?
-	// const unkonwnServer = { };
-	// return unknownServer;
-
-	// fetch sage object
-	let sage = await evCache.getOrFetchServer(discord.id);
-
-	// we didn't find one, so create one
-	if (!sage) {
-		sage = new Server(Server.createCore(discord), evCache);
-	}
-
-	// if the names don't match (new server or a change) then update and save
-	if (sage.name !== discord.name) {
-		sage.toJSON().name = discord.name;
-		/** @todo we don't need the result of this save so we could fire it and not wait */
-		await sage.save();
-	}
-
-	const knownServer: KnownServer = {
-		discord,
-		id,
-		isDm: false,
-		isServer: true,
-		known: true,
-		ownerId: discord.ownerId as Snowflake,
-		sage,
-	}
-	return knownServer;
-}
 
 //#region createSageEventCache
 
@@ -681,14 +335,14 @@ export class SageEventCache {
 		return (key: any, ...args: any[]) => getLocalizedText(key, lang, ...args);
 	}
 
-	public async fetchChannel<T extends SupportedChannel = SupportedChannel>(channelId: Optional<Snowflake>): Promise<T | undefined> {
+	public async fetchChannel<T extends SupportedChannelOrParent | SupportedDMChannel = SupportedChannelOrParent | SupportedDMChannel>(channelId: Optional<Snowflake>): Promise<T | undefined> {
 		if (!channelId) return undefined;
 		const guildId = this.server?.id;
 		if (guildId) {
 			return this.discord.fetchChannel({ guildId, channelId });
 		}
 		if (this.user) {
-			return this.discord.fetchDmChannel({ channelId, userId:this.user?.did }) as Promise<T>;
+			return this.discord.fetchDmChannel({ channelId, userId:this.user?.did }) as Promise<T | undefined>;
 		}
 		return undefined;
 	}

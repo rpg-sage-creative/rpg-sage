@@ -340,7 +340,8 @@ async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolea
 		return null;
 	}
 	if (sageCommand.diceSecretMethodType === DiceSecretMethodType.GameMasterChannel) {
-		const channel = await sageCommand.game?.gmGuildChannel();
+		const validatedChannel = await sageCommand.game?.gmGuildChannel();
+		const channel = validatedChannel?.discord;
 		if (channel) {
 			return channel as SupportedMessagesChannel;
 		}

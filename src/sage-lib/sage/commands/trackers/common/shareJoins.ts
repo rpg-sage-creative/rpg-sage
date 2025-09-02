@@ -6,7 +6,7 @@ export async function shareJoins(hasCharacters: HasCharacters<any>, characters: 
 	if (characters.length) {
 		const game = hasCharacters.game;
 		const ic = await game.findBestPlayerChannel();
-		const channel = await game.sageCache.fetchChannel(ic?.did);
+		const channel = await game.sageCache.fetchChannel(ic?.id);
 		if (isSupportedGameMessagesChannel(channel)) {
 			const joinedWhat = "setInit" in hasCharacters ? "encounter" : "party";
 			const joinedName = joinedWhat === "party" && game.parties.count > 1 ? `"${hasCharacters.name}"` : "";

@@ -276,7 +276,7 @@ export abstract class SageCommand<
 
 			if (this.game) {
 				//  we need to make sure the game isn't all blocked channels
-				const gameChannels = this.game?.channels;
+				const gameChannels = this.game?.toJSON().channels;
 				const othersNotBlocked = gameChannels?.some(channel => !blockedTypes.includes(channel.type!));
 				return !othersNotBlocked;
 			}

@@ -83,23 +83,15 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		let hasGmChannels = false;
 		const { isGmOrNpcOrMinion } = character;
 		if (isGmOrNpcOrMinion) {
-			const { channelDid, game, threadDid } = sageMessage;
-			const { channels } = game ?? {};
-			const gmChannels = channels?.filter(ch => ch.type === SageChannelType.GameMaster);
-			if (gmChannels?.length) {
-				hasGmChannels = true;
-				if (threadDid) {
-					// thread is gm channel
-					isGmChannel = gmChannels.some(ch => (ch.did ?? ch.id) === threadDid);
-					// thread is not channel and channel is gm channel
-					if (!isGmChannel) {
-						isGmChannel = !channels?.some(ch => (ch.did ?? ch.id) === threadDid)
-							&& gmChannels.some(ch => (ch.did ?? ch.id) === channelDid);
-					}
-				}else {
-					isGmChannel = gmChannels.some(ch => (ch.did ?? ch.id) === channelDid);
-				}
-			}
+			const { dChannel, game } = sageMessage;
+			const validatedChannels = await game?.validateChannels() ?? [];
+			const gmChannels = validatedChannels.filter(vc => vc.type === SageChannelType.GameMaster);
+			hasGmChannels = gmChannels.length > 0;
+			isGmChannel = dChannel?.isThread()
+				// thread is not a a validated channel AND thread parent is a gm channel
+				? validatedChannels.every(vc => vc.id !== dChannel.id) && gmChannels.some(vc => vc.parent?.id === dChannel.id)
+				// channel is a gm channel
+				: gmChannels.some(vc => vc.id === dChannel?.id);
 		}
 		if (isGmOrNpcOrMinion && hasGmChannels && !isGmChannel) {
 			renderableContent.appendTitledSection(`<b>Stats</b>`, `<i>NPC stats viewable in GM channel ...</i>`);

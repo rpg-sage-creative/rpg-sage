@@ -1,5 +1,4 @@
-import { fixMissingChannelPerms, getPermsFor, getRequiredPermissions, toChannelName } from "@rsc-utils/discord-utils";
-import type { TextChannel } from "discord.js";
+import { fixMissingChannelPerms, getPermsFor, getRequiredPermissions, toChannelName, type SupportedCategoryChannel, type SupportedGameChannel } from "@rsc-utils/discord-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -20,11 +19,12 @@ export async function gFixPerms(sageCommand: SageCommand, _game?: Game): Promise
 		return false;
 	}
 
-	const channelsMissingPerms: TextChannel[] = [];
-	const gameChannels = game.channels;
+	const channelsMissingPerms: (SupportedGameChannel | SupportedCategoryChannel)[] = [];
+	const validatedChannels = await game.validateChannels(true);
+	const gameChannels = validatedChannels.filter(vc => !vc.byParent);
 	let cannotView = 0;
 	for (const gameChannel of gameChannels) {
-		const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(gameChannel.id);
+		const guildChannel = gameChannel.discord;
 		if (guildChannel) {
 			const perms = getPermsFor(guildChannel, bot, ...getRequiredPermissions("RunGame"));
 			if (!perms.can("ViewChannel")) {
