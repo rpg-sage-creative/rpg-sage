@@ -70,7 +70,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		});
 
 		// To see options, look for: Discord.ClientEvents (right click nav .on below)
-		client.once("clientReady", this.onClientReady.bind(this));
+		client.once("ready", this.onClientReady.bind(this));
 
 		// TODO: if created in a game category i could add or prompt to add?
 		// channelCreate: [channel: GuildChannel];
