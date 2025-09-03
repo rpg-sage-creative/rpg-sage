@@ -77,7 +77,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		});
 
 		// To see options, look for: Discord.ClientEvents (right click nav .on below)
-		client.once("ready", this.onClientReady.bind(this));
+		client.once("clientReady", this.onClientReady.bind(this));
 
 		// TODO: if created in a game category i could add or prompt to add?
 		// channelCreate: [channel: GuildChannel];
@@ -154,8 +154,8 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 
 		addLogHandler("error", ActiveBot.notifyOfError);
 
-		info(`Discord.Client.on("ready") [success]`);
-		ActiveBot.sendToSuperUser(`Discord.Client.on("ready") [success]`);
+		info(`Discord.Client.on("clientReady") [success]`);
+		ActiveBot.sendToSuperUser(`Discord.Client.on("clientReady") [success]`);
 	}
 
 	onClientGuildCreate(guild: Guild): void {
