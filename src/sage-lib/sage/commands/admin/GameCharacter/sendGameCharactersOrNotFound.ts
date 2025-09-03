@@ -15,13 +15,36 @@ function filterCharacters(characters: Optional<CharacterManager>, value: Optiona
 	return [];
 }
 
+function charToDetails(character: GameCharacter): string {
+	if (character.alias) {
+		return `\`sage! ${character.alias} details\``;
+	}
+	const charNameKeyValue = `name="${character.name}"`;
+	const parentNameKeyValue = character.isCompanionOrMinion ? `charName="${character.parent?.name}" ` : ``;
+	return `\`sage! ${character.type} details ${parentNameKeyValue}${charNameKeyValue}\``;
+}
+
 export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterManager: Optional<CharacterManager>, entityNamePlural?: string): Promise<void> {
+	const isCompanionOrMinion = characterManager?.characterType === "companion" || characterManager?.characterType === "minion";
+
 	const { charName, name } = sageMessage.args.getNames();
-	const nameFilter = (charName ?? name)?.trim();
-	const characters = filterCharacters(characterManager, nameFilter);
+	const nameFilter = isCompanionOrMinion ? name : charName ?? name;
+	const characters = filterCharacters(characterManager, nameFilter?.trim());
 
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors());
+
+	const singleParent = characters.reduce((parent, char) => parent === char.parent ? parent : undefined, characters[0]?.parent);
+	if (singleParent) {
+		renderableContent.append(`## ${singleParent.name}`);
+	}
+
+	const isGame = !!sageMessage.game;
+	if (isGame) {
+		renderableContent.append(`## ${sageMessage.game.name}`)
+	}
+
 	renderableContent.append(`## ${entityNamePlural} (${characters.length})`)
+
 	if (nameFilter) {
 		renderableContent.append(`<b>Filtered by:</b> ${nameFilter}`);
 	}
@@ -38,12 +61,14 @@ export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, cha
 
 			renderableContent.append(`### ${character.name}`);
 
-			const hasOwner = !!character.userDid || character.isPc;
-			const hasParent = character.isCompanionOrMinion;
+			const hasAlias = !!character.alias;
+			const hasOwner = isGame ? !!character.userDid || character.isPc : false;
+			const hasParent = character.isCompanionOrMinion && !singleParent;
 			const hasCompanions = character.companions.length > 0;
 
 			const charInfo: string[] = [];
-			if (hasOwner || hasCompanions || hasParent) {
+			if (hasAlias || hasOwner || hasCompanions || hasParent) {
+
 				if (hasOwner) {
 					const ownerOrPlayer = character.isGmOrNpc ? "Owner" : "Player";
 					const owner = await sageMessage.fetchReadableUser(character.userDid);
@@ -51,13 +76,19 @@ export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, cha
 					charInfo.push(`<b>${ownerOrPlayer}</b> ${ownerTag}`);
 				}
 
+				if (hasAlias) {
+					charInfo.push(`<b>Alias</b> ${character.alias}`);
+				}
+
+				charInfo.push(charToDetails(character));
+
 				if (hasCompanions) {
 					const companionType = character.isPc ? `Companions` : `Minions`;
 					if (character.companions.length) {
-						const companionNames = character.companions.map(companion => `\n- ${companion.name}`).join("");
-						charInfo.push(`<b>${companionType}</b>${companionNames}`);
+						const companionNames = character.companions.map(companion => `\n- ${companion.name}\n  - ${charToDetails(companion)}`).join("");
+						charInfo.push(`\n<b>${companionType}</b>${companionNames}`);
 					}else {
-						charInfo.push(`<b>${companionType}</b> <i>none</i>`);
+						charInfo.push(`\n<b>${companionType}</b> <i>none</i>`);
 					}
 				}
 
@@ -65,11 +96,11 @@ export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, cha
 					const parentTag = character.parent?.name ?? "<i>none</i>";
 					charInfo.push(`<b>Character</b> ${parentTag}`);
 				}
-			}
 
-			const charNameKeyValue = `name="${character.name}"`;
-			const parentNameKeyValue = hasParent ? `charName="${character.parent?.name}" ` : ``;
-			charInfo.push(`\`sage! ${characterManager?.characterType} details ${parentNameKeyValue}${charNameKeyValue}\``);
+			}else {
+
+				charInfo.push(charToDetails(character));
+			}
 
 			renderableContent.appendBlock(...charInfo);
 		}
