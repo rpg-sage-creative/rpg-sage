@@ -352,8 +352,8 @@ export class Macros<Category extends string = string> {
 	public canActorEdit(sageCommand: SageCommand): boolean {
 		switch(this.type) {
 			case "global": return sageCommand.actor.sage.isSuperUser;
-			case "server": return this.owner.id === sageCommand.server?.id && sageCommand.canManageServer;
-			case "game": return this.owner.id === sageCommand.game?.id && sageCommand.canAdminGame;
+			case "server": return sageCommand.server?.equals(this.owner.id) === true && sageCommand.canManageServer;
+			case "game": return sageCommand.game?.equals(this.owner.id) === true && sageCommand.canAdminGame;
 			case "user": return this.owner.id === sageCommand.actorId;
 			case "character": return sageCommand.findCharacter(this.owner.id)?.userDid === sageCommand.actorId;
 			default: return false;
