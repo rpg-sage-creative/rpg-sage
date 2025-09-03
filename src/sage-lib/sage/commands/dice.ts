@@ -292,7 +292,7 @@ async function hasUnifiedDiceCommand(sageCommand: SageCommand): Promise<TCommand
 	if (!sageCommand.allowDice) {
 		return undefined;
 	}
-	if (sageCommand.game && !(sageCommand.isGameMaster || sageCommand.isPlayer)) {
+	if (sageCommand.game && !(sageCommand.canAdminGame || sageCommand.isPlayer)) {
 		return undefined;
 	}
 
