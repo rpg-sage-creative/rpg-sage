@@ -663,22 +663,40 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			}
 
 			switch(statLower) {
-				case "pp": case "gp": case "sp": case "cp": case "upb": case "credits":
-					return ret(statLower, this.core.money[statLower as keyof TPathbuilderCharacterMoney]);
+				case "ac":
+					return ret("ac", this.core.acTotal?.acTotal);
+				case "age":
+					return ret("age", this.core.age);
+				case "ancestry":
+					return ret("ancestry", this.core.ancestry);
 				case "activeexploration":
 					return ret("activeExploration", this.getSheetValue("activeExploration"));
+				case "background":
+					return ret("background", this.core.background);
+				case "classdc":
+					return ret("classDC", this.createCheck(statLower)?.toStatString("dc"));
+				case "deity":
+					return ret("deity", this.core.deity);
+				case "dualclass":
+					return ret("dualClass", this.core.dualClass);
+				case "gender":
+					return ret("gender", this.core.gender);
+				case "heritage":
+					return ret("heritage", this.core.heritage);
 				case "initskill":
 					return ret("initSkill", this.getInitSkill());
+				case "languages":
+					return ret("languages", this.core.languages?.join(", "));
 				case "level":
 					return ret("level", this.level);
 				case "maxhp":
 					return ret("maxHp", this.maxHp);
+				case "size":
+					return ret("size", this.core.sizeName ?? SizeType[this.core.size ?? 2]);
 				case "xp":
 					return ret("xp", this.core.xp);
-				case "ac":
-					return ret("ac", this.core.acTotal?.acTotal);
-				case "classdc":
-					return ret("classDC", this.createCheck(statLower)?.toStatString("dc"));
+				case "pp": case "gp": case "sp": case "cp": case "upb": case "credits":
+					return ret(statLower, this.core.money[statLower as keyof TPathbuilderCharacterMoney]);
 				default:
 					const check = this.createCheck(statLower);
 					return ret(check?.subject ?? key, check?.toStatString());
