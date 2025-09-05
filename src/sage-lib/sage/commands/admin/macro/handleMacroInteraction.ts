@@ -301,7 +301,7 @@ export async function handleMacroInteraction(sageInteraction: SageButtonInteract
 type InvalidMacroKey = LocalizedTextKey & ("INVALID_MACRO_NAME" | "INVALID_MACRO_DUPLICATE" | "INVALID_MACRO_TABLE" | "INVALID_MACRO_DICE" | "INVALID_MACRO_DIALOG");
 async function isInvalid(macros: Macros, macro: Macro, isUpdate: boolean): Promise<InvalidMacroKey | undefined> {
 	// validate name
-	const isValidName = /^[\w -]+$/.test(macro.name);
+	const isValidName = /^[\w -.]+$/.test(macro.name);
 	if (!isValidName) {
 		return "INVALID_MACRO_NAME";
 	}
