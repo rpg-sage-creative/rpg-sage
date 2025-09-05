@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedChannel } from "@rsc-utils/discord-utils";
 import { ApplicationCommandOptionType, Attachment, AutocompleteInteraction, ChatInputCommandInteraction, ContextMenuCommandInteraction, GuildMember, Role, User, type CommandInteractionOption } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
@@ -149,7 +149,7 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 	 * Returns null if not a valid User or "unset".
 	 */
 	public getUser(name: string): Optional<User> {
-		const { hasKey, hasUnset, option } = this.getOption(name);
+		const { hasKey, hasUnset, option, stringValue } = this.getOption(name);
 		if (!hasKey) return undefined; //NOSONAR
 		if (hasUnset) return null; //NOSONAR
 		const mentionable = option?.user;
@@ -157,6 +157,10 @@ export class SageInteractionArgs extends SageCommandArgs<SageInteraction> {
 			return mentionable.user;
 		}else if (mentionable instanceof User) {
 			return mentionable;
+		}
+		const trimmed = stringValue?.trim();
+		if (isNonNilSnowflake(trimmed)) {
+			return this.sageCommand.discord.client.users.cache.get(trimmed) ?? null;
 		}
 		return null;
 	}
