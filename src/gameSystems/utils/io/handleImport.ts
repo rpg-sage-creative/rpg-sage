@@ -28,6 +28,7 @@ export async function handleImport
 
 	const pin = sageCommand.args.getBoolean("pin") ?? false;
 	const attach = sageCommand.args.getBoolean("attach") ?? false;
+	const ownerId = sageCommand.args.getUserId("owner") ?? sageCommand.args.getUserId("user") ?? sageCommand.actorId;
 
 	// fetch cores
 	const results = await handlers.fetchCores(sageCommand);
@@ -41,6 +42,7 @@ export async function handleImport
 
 		// process results with cores
 		const char = result.char as U;
+		char.userId = ownerId;
 		if (attach) {
 			const { attachCharacter = _attachCharacter } = handlers;
 			await attachCharacter(sageCommand, channel ?? user, char, pin);

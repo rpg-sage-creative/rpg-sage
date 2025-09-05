@@ -1,4 +1,4 @@
-import { isDefined, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isNonNilSnowflake, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { parseId, type MessageChannel } from "@rsc-utils/discord-utils";
 import { isNotBlank } from "@rsc-utils/string-utils";
 import type { Attachment, Role, User } from "discord.js";
@@ -260,9 +260,15 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		if (!keyValueArg.hasKey) return undefined;
 		if (keyValueArg.hasUnset) return null;
 		if (keyValueArg.hasValue) {
-			const userId = parseId(keyValueArg.value.trim(), "user");
+			const trimmed = keyValueArg.value.trim();
+			// check for mention
+			const userId = parseId(trimmed, "user");
 			if (userId) {
 				return this.sageCommand.message.mentions.users.get(userId) ?? null;
+			}
+			// check for raw snowflake
+			if (isNonNilSnowflake(trimmed)) {
+				return this.sageCommand.discord.client.users.cache.get(trimmed) ?? null;
 			}
 		}
 		return null;
