@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.11.6",
+"version":"1.11.7",
 "branch":"v1.x.x",
-"commit":"766c086c628d67c1a3d0d69a1ed09e8e78d4453a",
-"commitSubject":"join validation errors with newlines",
-"commitTs":1756354869000,
-"commitDate":"2025-08-27-2121",
-"buildTs":1756355496000,
-"buildDate":"2025-08-27-2131",
+"commit":"f552878c5f92224164b25a3db7d3a42769476ae5",
+"commitSubject":"stop bulk dialog replies from all tagging the reply",
+"commitTs":1757080486000,
+"commitDate":"2025-09-05-0654",
+"buildTs":1757090288000,
+"buildDate":"2025-09-05-0938",
 "author":"Randal"
 }
