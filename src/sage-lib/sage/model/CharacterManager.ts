@@ -12,6 +12,14 @@ export class CharacterManager extends Array<GameCharacter> {
 	/** The type of character represented by this manager. */
 	public characterType?: TGameCharacterType;
 
+	public get gameSystem() {
+		const { owner } = this;
+		if (owner && "gameSystem" in owner) {
+			return owner.gameSystem;
+		}
+		return undefined;
+	}
+
 	/** The owner of this collection that can be saved when changes are made. */
 	protected owner?: TGameCharacterOwner;
 

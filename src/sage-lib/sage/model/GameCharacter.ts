@@ -1,4 +1,4 @@
-import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType } from "@rsc-sage/types";
+import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
 import { applyChanges, capitalize, Color, errorReturnUndefined, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath, processMath } from "@rsc-utils/dice-utils";
@@ -615,8 +615,26 @@ export class GameCharacter {
 		return this.fetchedMacros ?? [];
 	}
 
-	public get gameSystem() {
-		return parseGameSystem(this.getNoteStat("gameSystem"));
+	public get gameSystem(): GameSystem | undefined {
+		const gameSystem = parseGameSystem(this.getNoteStat("gameSystem"))
+			?? this.owner?.gameSystem;
+
+		if (this.pathbuilder) {
+			if (gameSystem?.isP20) {
+				return gameSystem;
+			}
+			/** @todo check for sf2e */
+			return parseGameSystem("PF2E");
+		}
+
+		if (this.essence20) {
+			if (gameSystem?.code === "E20") {
+				return gameSystem;
+			}
+			return parseGameSystem("e20");
+		}
+
+		return gameSystem;
 	}
 
 	public get hasStats(): boolean { return this.getNoteStats().length > 0; }
