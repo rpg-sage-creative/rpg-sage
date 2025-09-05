@@ -17,7 +17,7 @@ function filterCharacters(characters: Optional<CharacterManager>, value: Optiona
 
 function charToDetails(character: GameCharacter): string {
 	if (character.alias) {
-		return `\`sage! ${character.alias} details\``;
+		return `\`sage! ${character.alias}\``;
 	}
 	const charNameKeyValue = `name="${character.name}"`;
 	const parentNameKeyValue = character.isCompanionOrMinion ? `charName="${character.parent?.name}" ` : ``;
@@ -33,14 +33,16 @@ export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, cha
 
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors());
 
-	const singleParent = characters.reduce((parent, char) => parent === char.parent ? parent : undefined, characters[0]?.parent);
-	if (singleParent) {
-		renderableContent.append(`## ${singleParent.name}`);
-	}
-
 	const isGame = !!sageMessage.game;
 	if (isGame) {
 		renderableContent.append(`## ${sageMessage.game.name}`)
+	}else {
+		renderableContent.append(`## ${await sageMessage.fetchReadableUser(sageMessage.actorId)}`);
+	}
+
+	const singleParent = characters.reduce((parent, char) => parent === char.parent ? parent : undefined, characters[0]?.parent);
+	if (singleParent) {
+		renderableContent.append(`## ${singleParent.name}`);
 	}
 
 	renderableContent.append(`## ${entityNamePlural} (${characters.length})`)
@@ -61,16 +63,27 @@ export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, cha
 
 			renderableContent.append(`### ${character.name}`);
 
+			const displayName = character.toDisplayName();
+			if (displayName !== character.name) {
+				renderableContent.append(`aka ${displayName}`);
+			}
+
+			const descriptors = character.toNameDescriptors();
+
+			const hasDescriptors = descriptors.length > 0;
 			const hasAlias = !!character.alias;
 			const hasOwner = isGame ? !!character.userDid || character.isPc : false;
 			const hasParent = character.isCompanionOrMinion && !singleParent;
 			const hasCompanions = character.companions.length > 0;
 
 			const charInfo: string[] = [];
-			if (hasAlias || hasOwner || hasCompanions || hasParent) {
+			if (hasDescriptors || hasAlias || hasOwner || hasCompanions || hasParent) {
+				if (hasDescriptors) {
+					charInfo.push(descriptors.join(" "));
+				}
 
 				if (hasOwner) {
-					const ownerOrPlayer = character.isGmOrNpc ? "Owner" : "Player";
+					const ownerOrPlayer = character.isGmOrNpcOrMinion ? "Owner" : "Player";
 					const owner = await sageMessage.fetchReadableUser(character.userDid);
 					const ownerTag = owner ?? "<i>none</i>";
 					charInfo.push(`<b>${ownerOrPlayer}</b> ${ownerTag}`);

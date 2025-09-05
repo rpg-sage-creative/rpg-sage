@@ -1,5 +1,5 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType, type KeyValuePair, type KeyValueTrio } from "@rsc-sage/types";
-import { applyChanges, capitalize, Color, errorReturnUndefined, getDataRoot, isDefined, isString, isWrapped, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, capitalize, Color, errorReturnUndefined, getDataRoot, isDefined, isNotBlank, isString, isWrapped, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, Deck, doStatMath, parseGameSystem, processMath, type CurrencyPf2e, type DeckCore, type DeckType, type DenominationsCore } from "@rsc-utils/game-utils";
 import { fileExistsSync, getText, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -337,6 +337,14 @@ export class GameCharacter {
 	/** The ID of the parent of a companion. */
 	public get parentId(): Snowflake | undefined { return this.parent?.id; }
 
+	public get scope() {
+		const { owner } = this;
+		if (!owner) {
+			return "Unknown";
+		}
+		return owner.scope;
+	}
+
 	private _essence20: TEssence20Character | null | undefined;
 	public get essence20(): TEssence20Character | null {
 		if (this._essence20 === undefined) {
@@ -476,7 +484,77 @@ export class GameCharacter {
 	}
 
 	public toDisplayName(template?: string): string {
-		return processCharacterTemplate(this, "displayName", template).value ?? this.name;
+		const templated = processCharacterTemplate(this, "displayName", template);
+		if (templated.value) {
+			return templated.value;
+		}
+		if (this.isGmOrNpcOrMinion) {
+			const descriptors = this.toNameDescriptors();
+			if (descriptors.length) {
+				return `${this.name} (${descriptors.join(" ")})`;
+			}
+		}
+		return this.name;
+	}
+
+	/**
+	 * provides descriptors for the character.
+	 * if `nameDescriptors.template` exists, it will be processed and then split by commas.
+	 * otherwise:
+	 *   pcs will return ["ancestry (heritage)", "class/dualClass level"]
+	 *   npcs will return ["descriptor", "gender", "ancestry", "background"]
+	 */
+	public toNameDescriptors(): string[] {
+		const template = processCharacterTemplate(this, "nameDescriptors");
+		if (template.value) {
+			return template.value
+				.split(",")
+				.filter(isNotBlank)
+				.map(s => s.trim());
+		}
+
+		const descriptors: string[] = [];
+		const push = (value: Optional<string>) => {
+			if (isNotBlank(value)) descriptors.push(value.trim());
+		};
+
+		// possibly used by both pcs / npcs
+		const ancestry = stringOrUndefined(this.getString("aDescriptor") ?? this.getString("ancestry"));
+		const heritage = stringOrUndefined(this.getString("hDescriptor") ?? this.getString("heritage"));
+		const klass = this.getString("class");
+
+		if (this.isPcOrCompanion) {
+			// ancestry (heritage)
+			if (ancestry && heritage) {
+				push(`${ancestry} (${heritage})`);
+			}else {
+				push(ancestry ?? heritage);
+			}
+
+			// class/dualClass level
+			const classes = stringOrUndefined([klass, this.getString("dualClass")].filter(isNotBlank).map(s => s.trim()).join("/"));
+			const level = this.getNumber("level")?.toString();
+			if (classes && level) {
+				push(`${classes} ${level}`);
+			}else {
+				push(classes);
+			}
+
+		}else {
+			// generic descriptor
+			push(this.getString("descriptor"));
+
+			// gender
+			push(this.getString("gDescriptor") ?? this.getString("gender"));
+
+			// ancestry / heritage
+			push(ancestry ?? heritage);
+
+			// background / class
+			push(this.getString("bDescriptor") ?? this.getString("background") ?? klass);
+		}
+
+		return descriptors;
 	}
 	public toSheetLink(): string | undefined {
 		return this.getString("sheet.link");
@@ -648,6 +726,13 @@ export class GameCharacter {
 
 		if (keyLower === "name") {
 			return ret("name", this.name);
+		}
+
+		if (keyLower === "namedescriptors" || keyLower === "csv.namedescriptors") {
+			const isCsv = keyLower.startsWith("csv");
+			const descriptors = this.toNameDescriptors();
+			const separator = isCsv ? ", " : " ";
+			return ret(isCsv ? "csv.nameDescriptors" : "nameDescriptors", descriptors.length ? descriptors.join(separator) : null);
 		}
 
 		if (keyLower === "alias") {

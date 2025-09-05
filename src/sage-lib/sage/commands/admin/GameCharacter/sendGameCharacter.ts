@@ -30,8 +30,13 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.setThumbnailUrl(character.avatarUrl);
 	}
 
+	const nameDescriptors = character.toNameDescriptors();
+	if (nameDescriptors) {
+		renderableContent.append(`${nameDescriptors.join(" ")}`);
+	}
+
 	const ownerTag = await sageMessage.fetchReadableUser(character.userDid);
-	renderableContent.append(`<b>Owner</b> ${orNone(ownerTag)}`);
+	renderableContent.append(`<b>Scope</b> ${character.scope}; <b>Owner</b> ${orNone(ownerTag)}`);
 
 	renderableContent.append(`<b>Alias</b> ${orUnset(character.alias)}`);
 
