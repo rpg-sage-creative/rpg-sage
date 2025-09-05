@@ -35,10 +35,12 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`${nameDescriptors.join(" ")}`);
 	}
 
+	renderableContent.append(`<b>Alias</b> ${orUnset(character.alias)}`);
+
+	renderableContent.append("");
+
 	const ownerTag = await sageMessage.fetchReadableUser(character.userDid);
 	renderableContent.append(`<b>Scope</b> ${character.scope}; <b>Owner</b> ${orNone(ownerTag)}`);
-
-	renderableContent.append(`<b>Alias</b> ${orUnset(character.alias)}`);
 
 	renderableContent.append(`<b>Embed Color</b> ${orUnset(character.embedColor)}`);
 
@@ -83,7 +85,8 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`<b>Auto Dialog</b> <i>none</i>`);
 	}
 
-	if (character.hasStats) {
+	const hasStats = character.hasStats || !!character.pathbuilder;
+	if (hasStats) {
 		let isGmChannel = false;
 		let hasGmChannels = false;
 		const { isGmOrNpcOrMinion } = character;

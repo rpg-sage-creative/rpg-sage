@@ -1,7 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType, type KeyValuePair, type KeyValueTrio } from "@rsc-sage/types";
 import { applyChanges, capitalize, Color, errorReturnUndefined, getDataRoot, isDefined, isNotBlank, isString, isWrapped, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
-import { Currency, Deck, doStatMath, parseGameSystem, processMath, type CurrencyPf2e, type DeckCore, type DeckType, type DenominationsCore } from "@rsc-utils/game-utils";
+import { Currency, Deck, doStatMath, parseGameSystem, processMath, type CurrencyPf2e, type DeckCore, type DeckType, type DenominationsCore, type GameSystem } from "@rsc-utils/game-utils";
 import { fileExistsSync, getText, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
@@ -607,8 +607,26 @@ export class GameCharacter {
 		return this.fetchedMacros ?? [];
 	}
 
-	public get gameSystem() {
-		return parseGameSystem(this.getNoteStat("gameSystem"));
+	public get gameSystem(): GameSystem | undefined {
+		const gameSystem = parseGameSystem(this.getNoteStat("gameSystem"))
+			?? this.owner?.gameSystem;
+
+		if (this.pathbuilder) {
+			if (gameSystem?.isP20) {
+				return gameSystem;
+			}
+			/** @todo check for sf2e */
+			return parseGameSystem("PF2E");
+		}
+
+		if (this.essence20) {
+			if (gameSystem?.code === "E20") {
+				return gameSystem;
+			}
+			return parseGameSystem("e20");
+		}
+
+		return gameSystem;
 	}
 
 	public get hasStats(): boolean { return this.getNoteStats().length > 0; }

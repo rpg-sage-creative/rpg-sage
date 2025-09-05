@@ -15,6 +15,14 @@ export class CharacterManager extends Array<GameCharacter> {
 	/** The owner of this collection that can be saved when changes are made. */
 	protected owner?: TGameCharacterOwner;
 
+	public get gameSystem() {
+		const { owner } = this;
+		if (owner && "gameSystem" in owner) {
+			return owner.gameSystem;
+		}
+		return undefined;
+	}
+	
 	public get scope(): "Game" | "Server" | "User" | "Unknown" {
 		const { owner } = this;
 		if (!owner) {
