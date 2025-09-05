@@ -15,6 +15,23 @@ export class CharacterManager extends Array<GameCharacter> {
 	/** The owner of this collection that can be saved when changes are made. */
 	protected owner?: TGameCharacterOwner;
 
+	public get scope(): "Game" | "Server" | "User" | "Unknown" {
+		const { owner } = this;
+		if (!owner) {
+			return "Unknown";
+		}
+		if ("objectType" in owner) {
+			switch(owner.objectType) {
+				case "Game": return "Game";
+				case "Server": return "Server";
+				case "User": return "User";
+				default:
+					return "Unknown";
+			}
+		}
+		return owner.scope;
+	}
+
 	/** Tests to see if any characters match the given name, defaults to no recursion. */
 	public hasMatching(name: string, recursive = false): boolean {
 		return this.find(gameCharacter => gameCharacter.matches(name, recursive)) !== undefined;
