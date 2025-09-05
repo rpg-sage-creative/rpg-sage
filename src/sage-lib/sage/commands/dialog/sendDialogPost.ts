@@ -26,7 +26,7 @@ type DialogPostData = {
 	title?: string;
 };
 
-export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, skipDelete }: ChatOptions): Promise<Message[]> {
+export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, isFirst }: ChatOptions): Promise<Message[]> {
 	const character = postData?.character;
 	if (!character) {
 		return Promise.reject("Invalid TDialogPostData");
@@ -122,7 +122,9 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	}
 	//#endregion
 
-	const messages = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete })
+	const skipDelete = !isFirst;
+	const skipReplyingTo = !isFirst;
+	const messages = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete, skipReplyingTo })
 		.catch(errorReturnEmptyArray);
 	if (messages.length) {
 		await logPostCurrency(sageMessage, "dialog");

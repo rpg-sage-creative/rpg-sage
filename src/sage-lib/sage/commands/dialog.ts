@@ -34,11 +34,11 @@ async function doDialog(sageMessage: SageMessage, dialogContents: DialogContent[
 		return sageMessage.whisper(`Sorry, Dialog does not function in DMs.`);
 	}
 
-	// we attach the image the first dialog that has (attachment) as an argument, otherwise the first of all dialogs
+	// we attach the image to the first dialog that has (attachment) as an argument, otherwise the first of all dialogs
 	const attachmentIndex = Math.max(dialogContents.findIndex(dialogContent => dialogContent.attachment === true), 0);
 	for (let index = 0; index < dialogContents.length; index++) {
 		const dialogContent = dialogContents[index];
-		const options = { skipDelete:index > 0, doAttachment:index === attachmentIndex };
+		const options = { doAttachment:index === attachmentIndex, isFirst:index === 0, isLast:index === dialogContents.length - 1 };
 		switch (dialogContent.type) {
 			case "npc": case "enemy": case "ally": case "boss": case "minion":
 				await npcChat(sageMessage, dialogContent, options);

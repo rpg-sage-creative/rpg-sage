@@ -15,12 +15,13 @@ type DialogRenderableOptions = {
 	renderableContent: RenderableContent;
 	sageMessage: SageMessage;
 	skipDelete?: boolean;
+	skipReplyingTo?: boolean;
 };
 
 /**
  * @todo sort out why i am casting caches to <any>
  */
-export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, renderableContent, sageMessage, skipDelete }: DialogRenderableOptions): Promise<Message[]> {
+export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, renderableContent, sageMessage, skipDelete, skipReplyingTo }: DialogRenderableOptions): Promise<Message[]> {
 	if (authorOptions.username) {
 		const invalidName = isInvalidWebhookUsername(authorOptions.username);
 		if (invalidName) {
@@ -41,6 +42,6 @@ export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, 
 		return sent?.filter(msg => msg) ?? [];
 	}
 
-	const replaced = await replaceWebhook(sageMessage.message, { sageCache, renderableContent, authorOptions, dialogType, files, skipDelete }).catch(errorReturnEmptyArray);
+	const replaced = await replaceWebhook(sageMessage.message, { sageCache, renderableContent, authorOptions, dialogType, files, skipDelete, skipReplyingTo }).catch(errorReturnEmptyArray);
 	return replaced.filter(msg => msg);
 }
