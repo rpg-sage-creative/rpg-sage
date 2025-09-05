@@ -41,6 +41,7 @@ type WebhookOptions = {
 	renderableContent: RenderableContentResolvable;
 	sageCache: SageCache;
 	skipDelete?: boolean;
+	skipReplyingTo?: boolean;
 };
 
 /**
@@ -80,7 +81,7 @@ export async function sendWebhook(targetChannel: SupportedMessagesChannel, webho
 }
 
 export async function replaceWebhook(originalMessage: SMessageOrPartial, webhookOptions: WebhookOptions): Promise<Message[]> {
-	const { authorOptions, renderableContent, dialogType, files, sageCache, skipDelete } = webhookOptions;
+	const { authorOptions, renderableContent, dialogType, files, sageCache, skipDelete, skipReplyingTo } = webhookOptions;
 
 	if (!skipDelete && !originalMessage.deletable) {
 		return Promise.reject(`Cannot Delete Message: ${messageToDetails(originalMessage)}`);
@@ -100,7 +101,7 @@ export async function replaceWebhook(originalMessage: SMessageOrPartial, webhook
 
 	let content = undefined;
 	let replyingTo: string | undefined;
-	if (originalMessage.reference) {
+	if (originalMessage.reference && !skipReplyingTo) {
 		const referenceMessage = await sageCache.fetchMessage(originalMessage.reference);
 		const displayName = referenceMessage ? `*${referenceMessage.author.displayName}*` : ``;
 
