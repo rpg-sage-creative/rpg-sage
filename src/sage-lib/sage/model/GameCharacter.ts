@@ -870,6 +870,11 @@ export class GameCharacter {
 			return ret("currency.raw", curr.toString());
 		}
 
+		// if we don't have hp, let's try using maxHp
+		if (keyLower === "hp") {
+			return ret("hp", this.getNumber("maxHp"));
+		}
+
 		const { gameSystem } = this;
 		if (pathbuilder || gameSystem?.isP20) {
 			const p20Stat = this.getStatP20(key, keyLower);
