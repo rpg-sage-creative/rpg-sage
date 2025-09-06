@@ -673,6 +673,8 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 					return ret("activeExploration", this.getSheetValue("activeExploration"));
 				case "background":
 					return ret("background", this.core.background);
+				case "class":
+					return ret("class", this.core.class);
 				case "classdc":
 					return ret("classDC", this.createCheck(statLower)?.toStatString("dc"));
 				case "deity":
