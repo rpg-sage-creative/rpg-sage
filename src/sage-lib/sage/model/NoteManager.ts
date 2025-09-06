@@ -47,7 +47,7 @@ export class NoteManager {
 		return keysUpdated;
 	}
 
-	/** returns true if the value was updated */
+	/** returns the note updated */
 	private _setCategorizedNote(category: string, title: string, value: Optional<string>): TNote | undefined {
 		if (isBlank(value)) {
 			const note = this.getCategorizedNote(category, title);
@@ -58,13 +58,14 @@ export class NoteManager {
 			return undefined;
 		}
 
-		const note = this.getCategorizedNote(category, title);
+		let note = this.getCategorizedNote(category, title);
 		if (!note) {
-			this.notes.push({
+			note = {
 				"category": category ?? CategoryUncategorized,
 				"title": title ?? Untitled,
 				"note": value.trim()
-			});
+			};
+			this.notes.push(note);
 
 		} else {
 			note.note = value.trim();
