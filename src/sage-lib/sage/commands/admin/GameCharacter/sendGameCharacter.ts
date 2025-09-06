@@ -85,8 +85,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`<b>Auto Dialog</b> <i>none</i>`);
 	}
 
-	const hasStats = character.hasStats || !!character.pathbuilder;
-	if (hasStats) {
+	if (character.hasStats) {
 		let isGmChannel = false;
 		let hasGmChannels = false;
 		const { isGmOrNpcOrMinion } = character;

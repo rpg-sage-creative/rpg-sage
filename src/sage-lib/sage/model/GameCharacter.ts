@@ -611,6 +611,10 @@ export class GameCharacter {
 		const gameSystem = parseGameSystem(this.getNoteStat("gameSystem"))
 			?? this.owner?.gameSystem;
 
+		// if they explicitly set None, honor it
+		if (gameSystem?.type === 0) return gameSystem;
+
+		// ensure a pathbuilder import uses a p20 system
 		if (this.pathbuilder) {
 			if (gameSystem?.isP20) {
 				return gameSystem;
@@ -619,6 +623,7 @@ export class GameCharacter {
 			return parseGameSystem("PF2E");
 		}
 
+		// ensure an essence20 import uses a e20 system
 		if (this.essence20) {
 			if (gameSystem?.code === "E20") {
 				return gameSystem;
@@ -629,7 +634,11 @@ export class GameCharacter {
 		return gameSystem;
 	}
 
-	public get hasStats(): boolean { return this.getNoteStats().length > 0; }
+	public get hasStats(): boolean {
+		return this.getNoteStats().length > 0
+			|| !!this.pathbuilder
+			|| !!this.essence20;
+	}
 
 	public toStatsOutput() {
 		// get full list of stats
@@ -1057,7 +1066,7 @@ export class GameCharacter {
 			const keyLower = key.toLowerCase();
 
 			const value = valueOrNull ?? "";
-			if (keyLower === "name" && value?.trim() && (this.name !== value || (p20 && p20.name !== value) || (e20 && e20.name !== value))) {
+			if (keyLower === "name" && value.trim() && (this.name !== value || (p20 && p20.name !== value) || (e20 && e20.name !== value))) {
 				this.name = value;
 				if (p20) p20.name = value;
 				if (e20) e20.name = value;
