@@ -62,7 +62,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	if (character.isCompanion || character.isMinion) {
 		renderableContent.append(`<b>Character</b> ${orUnknown(character.parent?.name)}`);
 	} else {
-		const companionNames = character.companions.map(companion => companion.name).join("\n- ");
+		const companionNames = character.companions.map(companion => `\n- ${companion.name}`).join("");
 		const companionType = character.isPc ? `Companions` : `Minions`;
 		renderableContent.append(`<b>${companionType}</b> ${orNone(companionNames)}`);
 	}
