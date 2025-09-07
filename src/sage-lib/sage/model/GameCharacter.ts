@@ -519,9 +519,8 @@ export class GameCharacter {
 		};
 
 		// possibly used by both pcs / npcs
-		const ancestry = stringOrUndefined(this.getString("aDescriptor") ?? this.getString("ancestry"));
-		const heritage = stringOrUndefined(this.getString("hDescriptor") ?? this.getString("heritage"));
-		const klass = this.getString("class");
+		const ancestry = this.getString("aDescriptor") ?? this.getString("ancestry");
+		const heritage = this.getString("hDescriptor") ?? this.getString("heritage");
 
 		if (this.isPcOrCompanion) {
 			// ancestry (heritage)
@@ -532,7 +531,8 @@ export class GameCharacter {
 			}
 
 			// class/dualClass level
-			const classes = stringOrUndefined([klass, this.getString("dualClass")].filter(isNotBlank).map(s => s.trim()).join("/"));
+			const classes = this.getString("cDescriptor")
+				?? stringOrUndefined([this.getString("class"), this.getString("dualClass")].filter(isNotBlank).map(s => s.trim()).join("/"));
 			const level = this.getNumber("level")?.toString();
 			if (classes && level) {
 				push(`${classes} ${level}`);
@@ -551,7 +551,7 @@ export class GameCharacter {
 			push(ancestry ?? heritage);
 
 			// background / class
-			push(this.getString("bDescriptor") ?? this.getString("background") ?? klass);
+			push(this.getString("bDescriptor") ?? this.getString("background") ?? this.getString("cDescriptor") ?? this.getString("class"));
 		}
 
 		return descriptors;
