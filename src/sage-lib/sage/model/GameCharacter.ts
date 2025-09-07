@@ -525,26 +525,28 @@ export class GameCharacter {
 			if (isNotBlank(value)) descriptors.push(value.trim());
 		};
 
-		// possibly used by both pcs / npcs
-		const ancestry = this.getString("aDescriptor") ?? this.getString("ancestry");
-		const heritage = this.getString("hDescriptor") ?? this.getString("heritage");
-
 		if (this.isPcOrCompanion) {
 			// ancestry (heritage)
-			if (ancestry && heritage) {
-				push(`${ancestry} (${heritage})`);
-			}else {
-				push(ancestry ?? heritage);
-			}
+			push(this.getString("aDescriptor", "ancestry", "hDescriptor", "heritage"));
 
 			// class/dualClass level
-			const classes = this.getString("cDescriptor")
-				?? stringOrUndefined([this.getString("class"), this.getString("dualClass")].filter(isNotBlank).map(s => s.trim()).join("/"));
-			const level = this.getNumber("level")?.toString();
-			if (classes && level) {
-				push(`${classes} ${level}`);
+			const cDescriptor = this.getString("cDescriptor");
+			if (cDescriptor) {
+				push(cDescriptor);
+
 			}else {
-				push(classes);
+				const classes = stringOrUndefined(
+					[this.getString("class"), this.getString("dualClass")]
+						.filter(isNotBlank)
+						.map(s => s.trim())
+						.join("/")
+				);
+				const level = this.getNumber("level")?.toString();
+				if (classes && level) {
+					push(`${classes} ${level}`);
+				}else {
+					push(classes);
+				}
 			}
 
 		}else {
@@ -552,13 +554,13 @@ export class GameCharacter {
 			push(this.getString("descriptor"));
 
 			// gender
-			push(this.getString("gDescriptor") ?? this.getString("gender"));
+			push(this.getString("gDescriptor", "gender"));
 
 			// ancestry / heritage
-			push(ancestry ?? heritage);
+			push(this.getString("aDescriptor", "ancestry", "hDescriptor", "heritage"));
 
 			// background / class
-			push(this.getString("bDescriptor") ?? this.getString("background") ?? this.getString("cDescriptor") ?? this.getString("class"));
+			push(this.getString("bDescriptor", "background", "cDescriptor", "class"));
 		}
 
 		return descriptors;
@@ -699,16 +701,26 @@ export class GameCharacter {
 		return hpToGauge(hp, maxHp);
 	}
 
-	/** returns the value for the given key */
-	public getNumber(key: string): number | undefined {
-		const stat = this.getStat(key, true);
-		return stat.isDefined ? numberOrUndefined(stat.value) : undefined;
+	/** returns the value for the first key that has a defined value */
+	public getNumber(...keys: string[]): number | undefined {
+		for (const key of keys) {
+			const stat = this.getStat(key, true);
+			if (stat.isDefined) {
+				return numberOrUndefined(stat.value)
+			}
+		}
+		return undefined;
 	}
 
-	/** returns the value for the given key */
-	public getString(key: string): string | undefined {
-		const stat = this.getStat(key, true);
-		return stat.isDefined ? stringOrUndefined(String(stat.value)) : undefined;
+	/** returns the value for the first key that has a defined value */
+	public getString(...keys: string[]): string | undefined {
+		for (const key of keys) {
+			const stat = this.getStat(key, true);
+			if (stat.isDefined) {
+				return stringOrUndefined(String(stat.value));
+			}
+		}
+		return undefined;
 	}
 
 	/** returns all notes that are stats */
