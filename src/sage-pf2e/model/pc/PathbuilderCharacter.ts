@@ -644,12 +644,16 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			{ isDefined:isDefined(value), key:casedKey, keyLower, value:value??undefined } as StatResults<string | number, undefined>
 		);
 
-		let prefix: GetStatPrefix = "";
+		let prefix: GetStatPrefix | "arch" | "full" = "";
 		let statLower = keyLower;
 		if (keyLower.includes(".")) {
 			const parts = keyLower.split(".");
 			if (["dc", "ext", "label", "labeled", "mod", "p", "prof", "proficiency"].includes(parts[0])) {
 				prefix = parts.shift() as GetStatPrefix;
+				statLower = parts.join(".") as Lowercase<string>;
+			}
+			if (["arch", "full"].includes(parts[0]) && ["class", "dualclass"].includes(parts[1])) {
+				prefix = parts.shift() as "arch" | "full";
 				statLower = parts.join(".") as Lowercase<string>;
 			}
 		}
@@ -674,13 +678,13 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 				case "background":
 					return ret("background", this.core.background);
 				case "class":
-					return ret("class", this.core.class);
+					return ret("class", this.core.class.split("(")[0].trim());
 				case "classdc":
 					return ret("classDC", this.createCheck(statLower)?.toStatString("dc"));
 				case "deity":
 					return ret("deity", this.core.deity);
 				case "dualclass":
-					return ret("dualClass", this.core.dualClass);
+					return ret("dualClass", this.core.dualClass?.split("(")[0].trim());
 				case "gender":
 					return ret("gender", this.core.gender);
 				case "heritage":
@@ -706,6 +710,23 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		}
 
 		// now let's check stats that allow prefixes
+
+		if (statLower === "class") {
+			if (prefix === "full") {
+				return ret("full.class", this.core.class);
+			}
+			if (prefix === "arch") {
+				return ret("arch.class", this.core.class.split("(")[1]?.split(")")[0]);
+			}
+		}
+		if (statLower === "dualclass") {
+			if (prefix === "full") {
+				return ret("full.dualClass", this.core.dualClass);
+			}
+			if (prefix === "arch") {
+				return ret("arch.dualClass", this.core.dualClass?.split("(")[1]?.split(")")[0]);
+			}
+		}
 
 		if (statLower === "ac" && prefix === "prof") {
 			return ret(keyLower, this.core.acTotal?.acProfBonus);
