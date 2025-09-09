@@ -30,7 +30,11 @@ function updateGame(sageCommand: SageCommand, options: UpdateGameOptions): Game 
 		&& !options.usersToAdd.some(u => user.did === u.did) // remove users being readded
 	).concat(options.usersToAdd);
 
-	return new Game(json, sageCommand.server!, sageCommand.sageCache);
+	const game = new Game(json, sageCommand.server!, sageCommand.sageCache);
+	if (options.gameOptions.gmCharacterName && options.gameOptions.gmCharacterName !== game.gmCharacter.name) {
+		game.gmCharacter.name = options.gameOptions.gmCharacterName;
+	}
+	return game;
 }
 
 async function gameUpdate(sageCommand: SageCommand): Promise<boolean | undefined | null> {
