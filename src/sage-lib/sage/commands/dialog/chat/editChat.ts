@@ -44,7 +44,7 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 
 	const embed = message.embeds[0];
 	const originalContent = embed?.description ?? message.content;
-	const updatedImageUrl = dialogContent.imageUrl;
+	const updatedImageUrl = dialogContent.embedImageUrl;
 	const updatedContent = sageMessage.sageCache.format(dialogContent.content);
 	const updatedEmbed = updateEmbed(embed, updatedImageUrl, updatedContent);
 	const threadId = sageMessage.threadDid;

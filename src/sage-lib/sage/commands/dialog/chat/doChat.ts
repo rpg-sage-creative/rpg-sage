@@ -6,7 +6,7 @@ import type { DialogContent } from "../DialogContent.js";
 import { sendDialogPost } from "../sendDialogPost.js";
 import type { ChatOptions } from "./ChatOptions.js";
 import { replaceCharacterMentions } from "./replaceCharacterMentions.js";
-import { replaceTableMessages } from "./replaceTableMentions.js";
+import { replaceTableMentions } from "./replaceTableMentions.js";
 
 type ChatContent = {
 	character?: GameCharacter | null;
@@ -16,7 +16,7 @@ type ChatContent = {
 
 export async function doChat(sageMessage: SageMessage, { character, colorType, dialogContent }: ChatContent, options: ChatOptions): Promise<void> {
 	if (character) {
-		let { content, displayName, imageUrl, embedColor, postType } = dialogContent;
+		let { content, displayName, embedImageUrl, dialogImageUrl, embedColor, postType } = dialogContent;
 
 		// do some content manipulation
 		const nameRegex = /{name}/gi;
@@ -25,15 +25,16 @@ export async function doChat(sageMessage: SageMessage, { character, colorType, d
 		}
 
 		content = await replaceCharacterMentions(sageMessage, content);
-		content = await replaceTableMessages(sageMessage, content);
+		content = await replaceTableMentions(sageMessage, content);
 
 		await sendDialogPost(sageMessage, {
 			authorName: displayName, // defaults to character.name
 			character,
 			colorType: colorType ?? undefined,
 			content,
-			imageUrl,
+			dialogImageUrl,
 			embedColor,
+			embedImageUrl,
 			postType,
 		}, options).catch(error);
 	}else {

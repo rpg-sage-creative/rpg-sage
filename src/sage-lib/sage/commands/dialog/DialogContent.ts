@@ -20,8 +20,11 @@ export type DialogContent = {
 	/** the name to post as */
 	displayName?: string;
 
-	/** url of an image to post in an embed dialog */
-	imageUrl?: string;
+	/** url of an image to post in an embed dialog (discord's thumbnailURL) */
+	embedImageUrl?: string;
+
+	/** url of an image to post alongside the dialog (discord's avatarURL) */
+	dialogImageUrl?: string;
 
 	/** color on the left of the embedded dialog box */
 	embedColor?: HexColorString;
