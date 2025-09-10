@@ -32,9 +32,12 @@ export function getDialogEmbedColorRegex(): RegExp {
 	return XRegExp(`^::${HWS}(?:0x|#)((?:[0-9a-f]{3}){1,2})${HWS}::`, "i");
 }
 
-export function getDialogUrlRegex(): RegExp {
+export function getDialogUrlRegex(key?: "dialog" | "embed"): RegExp {
 	const WS = createWhitespaceRegex({ quantifier:"*" }).source;
 	const url = createUrlRegex({ wrapChars:"<>", wrapOptional:true }).source;
+	if (key) {
+		return XRegExp(`^::${WS}${key}=(${url})${WS}::`, "i");
+	}
 	return XRegExp(`^::${WS}(${url})${WS}::`, "i");
 }
 
@@ -46,7 +49,7 @@ export function getDialogOtherRegex(): RegExp {
 					${HWS}::`, "x");
 }
 
-export type DialogRegexKey = "nameAndDisplayName" | "displayName" | "postType" | "embedColor" | "url" | "other";
+export type DialogRegexKey = "nameAndDisplayName" | "displayName" | "postType" | "embedColor" | "embedImageUrl" | "dialogImageUrl" | "url" | "other";
 type DialogRegexPair = { key:DialogRegexKey; regex:RegExp; };
 export function getDialogRegexPairs(): DialogRegexPair[] {
 	return [
@@ -54,6 +57,8 @@ export function getDialogRegexPairs(): DialogRegexPair[] {
 		{ key:"displayName", regex:getDialogDisplayNameRegex() },
 		{ key:"postType", regex:getDialogPostTypeRegex() },
 		{ key:"embedColor", regex:getDialogEmbedColorRegex() },
+		{ key:"dialogImageUrl", regex:getDialogUrlRegex("dialog") },
+		{ key:"embedImageUrl", regex:getDialogUrlRegex("embed") },
 		{ key:"url", regex:getDialogUrlRegex() },
 		{ key:"other", regex:getDialogOtherRegex() }
 	];

@@ -14,7 +14,8 @@ function testGmTarget(sageMessage: SageMessage, dialogContent: DialogContent): b
 			|| dialogContent.displayName
 			|| dialogContent.postType
 			|| dialogContent.embedColor
-			|| dialogContent.imageUrl
+			|| dialogContent.embedImageUrl
+			|| dialogContent.dialogImageUrl
 			|| dialogContent.content);
 	}
 	return false;
@@ -73,7 +74,8 @@ function dialogContentToTarget(dialogContent: DialogContent, separator = "::"): 
 	const baseParts = [
 		dialogContent.type,
 		toNamePart(dialogContent),
-		dialogContent.imageUrl,
+		dialogContent.embedImageUrl,
+		dialogContent.dialogImageUrl ? `dialog=${dialogContent.dialogImageUrl}` : undefined,
 		dialogContent.embedColor,
 		DialogType[dialogContent.postType!],
 	];

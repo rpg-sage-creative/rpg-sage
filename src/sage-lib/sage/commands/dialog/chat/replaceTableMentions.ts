@@ -25,7 +25,7 @@ async function fetchTable(sageMessage: SageMessage): Promise<GuildMemberOrUser[]
 	];
 }
 
-export async function replaceTableMessages(sageMessage: SageMessage, content: string): Promise<string> {
+export async function replaceTableMentions(sageMessage: SageMessage, content: string): Promise<string> {
 	if (!sageMessage.game) {
 		return content;
 	}

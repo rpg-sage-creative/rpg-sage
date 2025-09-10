@@ -76,9 +76,19 @@ export function parseDialogContent(content: string): DialogContent | undefined {
 				}
 				break;
 			}
-			case "url": {
-				if (!dialogContent.imageUrl) {
-					dialogContent.imageUrl = match.value.startsWith("<") && match.value.endsWith(">")
+			case "url": case "embedImageUrl": {
+				if (!dialogContent.embedImageUrl) {
+					dialogContent.embedImageUrl = match.value.startsWith("<") && match.value.endsWith(">")
+						? match.value.slice(1, -1)
+						: match.value;
+				}else {
+					breakWhile = true;
+				}
+				break;
+			}
+			case "dialogImageUrl": {
+				if (!dialogContent.dialogImageUrl) {
+					dialogContent.dialogImageUrl = match.value.startsWith("<") && match.value.endsWith(">")
 						? match.value.slice(1, -1)
 						: match.value;
 				}else {

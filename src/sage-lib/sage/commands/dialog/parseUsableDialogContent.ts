@@ -50,8 +50,9 @@ export function parseUsableDialogContent(sageCommand: SageCommand, content: stri
 		postType: dialogContent.postType ?? aliasContent.postType,
 		name: dialogContent.name ?? aliasContent.name,
 		displayName: dialogContent.displayName ?? aliasContent.displayName,
-		imageUrl: dialogContent.imageUrl ?? aliasContent.imageUrl,
 		embedColor: dialogContent.embedColor ?? aliasContent.embedColor,
+		embedImageUrl: dialogContent.embedImageUrl ?? aliasContent.embedImageUrl,
+		dialogImageUrl: dialogContent.dialogImageUrl ?? aliasContent.dialogImageUrl,
 		content: updatedContent
 	};
 }

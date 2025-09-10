@@ -20,8 +20,9 @@ type DialogPostData = {
 	character: GameCharacter;
 	colorType?: ColorType;
 	content: string;
+	dialogImageUrl?: string;
 	embedColor?: HexColorString;
-	imageUrl?: string;
+	embedImageUrl?: string;
 	postType?: DialogType;
 	title?: string;
 };
@@ -99,11 +100,11 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	renderableContent.append(content);
 	if (dialogFooter) renderableContent.append(dialogFooter);
 
-	const thumbnailUrl = postData.imageUrl ?? character.avatarUrl;
+	const thumbnailUrl = postData.embedImageUrl ?? character.avatarUrl;
 	renderableContent.setThumbnailUrl(thumbnailUrl);
 
-	// Discord "avatarURL" is the profile pic, which I am calling the "tokenUrl"
-	const avatarUrl = character.tokenUrl ?? sageMessage.bot.tokenUrl;
+	// Discord "avatarURL" is the profile pic, which I am calling the "dialogImageUrl"
+	const avatarUrl = postData.dialogImageUrl ?? character.tokenUrl ?? sageMessage.bot.tokenUrl;
 	const authorOptions = { username: authorName, avatarURL: avatarUrl };
 
 	const dialogTypeOverride = postData.postType;
