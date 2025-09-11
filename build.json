@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.11.7",
+"version":"1.11.8",
 "branch":"v1.x.x",
-"commit":"f552878c5f92224164b25a3db7d3a42769476ae5",
-"commitSubject":"stop bulk dialog replies from all tagging the reply",
-"commitTs":1757080486000,
-"commitDate":"2025-09-05-0654",
-"buildTs":1757090288000,
-"buildDate":"2025-09-05-0938",
+"commit":"2c5d56bf2f8b77f9781f98a814fb1025b36eed7a",
+"commitSubject":"implement stats and minions for game and server gm characters",
+"commitTs":1757630535000,
+"commitDate":"2025-09-11-1542",
+"buildTs":1757630894000,
+"buildDate":"2025-09-11-1548",
 "author":"Randal"
 }
