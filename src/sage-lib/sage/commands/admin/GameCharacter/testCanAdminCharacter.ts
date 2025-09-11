@@ -7,9 +7,14 @@ export function testCanAdminCharacter(sageCommand: SageCommand, characterTypeMet
 	}
 
 	if (sageCommand.game) {
+		if (sageCommand.canAdminGames) return true;
 		return characterTypeMeta.isPcOrCompanion
 			? sageCommand.isGameMaster || sageCommand.isPlayer
 			: sageCommand.isGameMaster;
+	}
+
+	if (characterTypeMeta.isGm || (characterTypeMeta.isMinion && sageCommand.args.getNames().charName === "gm")) {
+		return sageCommand.canAdminGames;
 	}
 
 	return characterTypeMeta.isPcOrCompanion;

@@ -1,5 +1,4 @@
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
-import { getLocalizedText } from "../../../../../sage-lang/getLocalizedText.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { getCharacter } from "./getCharacter.js";
@@ -12,10 +11,20 @@ import { sendNotFound } from "./sendNotFound.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameCharacter): Promise<void> {
+	const localize = sageMessage.getLocalizer();
+
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage, character);
 	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
+		if (characterTypeMeta.isGm) {
+			if (sageMessage.game) {
+				return sageMessage.replyStack.whisper(`Sorry, only the GM, GameAdmins, or admins can edit the GM character.`);
+			}
+			if (sageMessage.server) {
+				return sageMessage.replyStack.whisper(`Sorry, only admins can edit the GM character.`);
+			}
+		}
 		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
-			return sageMessage.replyStack.whisper(`Sorry, NPCs only exist inside a Game.`);
+			return sageMessage.replyStack.whisper(localize("NPC_ONLY_IN_GAME"));
 		}
 		return sageMessage.replyStack.whisper(`Sorry, you cannot update characters here.`);
 	}
@@ -32,7 +41,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 			character = await getCharacter(sageMessage, characterTypeMeta, userId, names, alias);
 
 			if (!character) {
-				await sendNotFound(sageMessage, `${characterTypeMeta.commandDescriptor} Details`, characterTypeMeta.singularDescriptor!, names.name);
+				await sendNotFound(sageMessage, `${characterTypeMeta.singularDescriptor} Details`, characterTypeMeta.singularDescriptor!, names.name);
 				return;
 			}
 		}
@@ -56,8 +65,8 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 				const invalidName = isInvalidWebhookUsername(core.name);
 				if (invalidName) {
 					const content = invalidName === true
-						? getLocalizedText("USERNAME_TOO_LONG", "en-US")
-						: getLocalizedText("USERNAME_S_BANNED", "en-US", invalidName)
+						? localize("USERNAME_TOO_LONG")
+						: localize("USERNAME_S_BANNED", invalidName)
 					return sageMessage.replyStack.whisper(content);
 				}
 			}
@@ -67,22 +76,25 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 
 		if (!core && updatedKeys.size) {
 			return promptModsConfirm(sageMessage, character, updatedKeys, async char => {
-				const charSaved = await char.save(true);
-				if (charSaved && characterTypeMeta.isGm) {
-					return sageMessage.game!.update({ gmCharacterName:char.name });
+				if (characterTypeMeta.isGm) {
+					const owner = sageMessage.game ?? sageMessage.server;
+					if (owner && owner.toJSON().gmCharacterName !== char.name) {
+						owner.toJSON().gmCharacterName = char.name;
+					}
 				}
-				return charSaved;
+				return char.save(true);
 			});
 		}
 
 		let updated = false;
 		await promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
-			updated = await char.save(true);
 			if (characterTypeMeta.isGm) {
-				const core = sageMessage.game?.toJSON();
-				if (core) core.gmCharacterName = char.name;
+				const owner = sageMessage.game ?? sageMessage.server;
+				if (owner && owner.toJSON().gmCharacterName !== char.name) {
+					owner.toJSON().gmCharacterName = char.name;
+				}
 			}
-			return updated;
+			return updated = await char.save(true);
 		});
 
 		const not = updated ? "" : "***NOT***";

@@ -32,7 +32,9 @@ export function findNpc(sageCommand: SageCommand, name: Optional<string>, opts: 
 		const namedChar = gameNpcs?.findByName(name)
 			?? gameNpcs?.findCompanion(name)
 			?? userNpcs.findByName(name)
-			?? userNpcs.findCompanion(name);
+			?? userNpcs.findCompanion(name)
+			?? game?.gmCharacter.companions.findByName(name)
+			?? sageCommand.server?.gmCharacter.companions.findByName(name);
 		if (namedChar) return ret(namedChar);
 	}
 

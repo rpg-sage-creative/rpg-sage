@@ -55,15 +55,17 @@ function getBasicBracketRegex(): RegExp {
 
 /** Used to prefetch stats and macros for characters so that the dice/macro logic can run synchronously */
 async function prepStatsAndMacros(sageCommand: SageCommand) {
-	const { game, isGameMaster, isPlayer, sageUser } = sageCommand;
+	const { game, server, isGameMaster, isPlayer, sageUser } = sageCommand;
 	if (!game || isGameMaster || isPlayer) {
+		const gameGm = game?.gmCharacter;
+		const serverGm = server?.gmCharacter;
 		const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
 		const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
 		/** @todo replace pc with "active character" */
 		const pc = isPlayer && game ? sageCommand.playerCharacter : undefined;
 		const encounters = game?.encounters;
 		const macros = await fetchAllStatsAndMacros(npcs, pcs, pc, sageUser);
-		return { npcs, pcs, pc, encounters, macros };
+		return { gameGm, serverGm, npcs, pcs, pc, encounters, macros };
 	}
 	return undefined;
 }
