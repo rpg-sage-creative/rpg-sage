@@ -172,7 +172,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 			}
 			this.core.gmCharacter = gmCharacterCore;
 		}
-		this.core.gmCharacter = new GameCharacter(this.core.gmCharacter as GameCharacterCore, CharacterManager.from([this.core.gmCharacter as GameCharacterCore], this, "gm"));
+		this.core.gmCharacter = CharacterManager.from([this.core.gmCharacter as GameCharacterCore], this, "gm")[0];
 	}
 
 	public get createdDate(): Date { return new Date(this.core.createdTs ?? 283305600000); }
