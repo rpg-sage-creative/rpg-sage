@@ -691,6 +691,8 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 					return ret("heritage", this.core.heritage);
 				case "initskill":
 					return ret("initSkill", this.getInitSkill());
+				case "keyability":
+					return ret("keyability", this.core.keyability);
 				case "languages":
 					return ret("languages", this.core.languages?.join(", "));
 				case "level":
