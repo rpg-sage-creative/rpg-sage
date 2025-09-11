@@ -6,11 +6,17 @@ export function testCanAdminCharacter(sageCommand: SageCommand, characterTypeMet
 		return false;
 	}
 
+	const { actor } = sageCommand;
+
 	if (sageCommand.game) {
-		if (sageCommand.actor.canManageServer) return true;
+		if (actor.canManageGames) return true;
 		return characterTypeMeta.isPcOrCompanion
-			? !!sageCommand.actor.isGameUser
-			: !!sageCommand.actor.isGameMaster;
+			? !!actor.isGameUser
+			: !!actor.isGameMaster;
+	}
+
+	if (characterTypeMeta.isGm || (characterTypeMeta.isMinion && sageCommand.args.getNames().charName === "gm")) {
+		return !!actor.canManageGames;
 	}
 
 	return characterTypeMeta.isPcOrCompanion;

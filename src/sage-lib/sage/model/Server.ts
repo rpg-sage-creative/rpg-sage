@@ -350,6 +350,9 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 	//#region update (defaultGame, defaultDiceOutput)
 	public async update(changes: Args<ServerOptions>): Promise<boolean> {
 		const changed = applyChanges(this.core, changes);
+		if (changes.gmCharacterName && changes.gmCharacterName !== this.gmCharacter.name) {
+			this.gmCharacter.name = changes.gmCharacterName;
+		}
 		if (changed) {
 			return this.save();
 		}

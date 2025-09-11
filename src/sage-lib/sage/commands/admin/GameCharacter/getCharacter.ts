@@ -19,8 +19,10 @@ export async function getCharacter(sageCommand: SageCommand, characterTypeMeta: 
 
 	if (characterTypeMeta.isCompanion) {
 		characterManager = characterManager?.findByUser(userId, names.charName)?.companions;
+
 	}else if (characterTypeMeta.isMinion) {
-		characterManager = characterManager?.findByName(names.charName)?.companions;
+		characterManager = characterManager?.findByName(names.charName)?.companions
+			?? (names.charName?.toLowerCase() === "gm" ? sageCommand.gmCharacter?.companions : undefined);
 	}
 
 	if (names.oldName || names.name) {

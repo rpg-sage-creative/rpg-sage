@@ -41,7 +41,8 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 		characterManager = character?.companions;
 	}
 	if (characterTypeMeta.isMinion) {
-		const character = characterManager?.findByName(names.charName);
+		const character = characterManager?.findByName(names.charName)
+			?? (names.charName?.toLowerCase() === "gm" ? (sageMessage.game ?? sageMessage.server)?.gmCharacter : undefined);
 		characterManager = character?.companions;
 	}
 	if (!characterManager) {
