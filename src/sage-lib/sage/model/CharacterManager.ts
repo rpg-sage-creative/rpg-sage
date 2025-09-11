@@ -170,27 +170,21 @@ export class CharacterManager extends Array<GameCharacter> {
 
 	//#endregion
 
-	/** Creates a new NamedCollection from the given values and optional owner. */
+	/** Creates a new CharacterManager from the given values and optional owner / type. */
 	public static from<T extends GameCharacterCore>(arrayLike: ArrayLike<T> | Iterable<T>): CharacterManager;
 	public static from<T extends GameCharacterCore>(arrayLike: ArrayLike<T> | Iterable<T>, owner: TGameCharacterOwner, characterType: TGameCharacterType): CharacterManager;
-	public static from(other: CharacterManager): CharacterManager;
-	public static from(other: CharacterManager, owner: TGameCharacterOwner, characterType: TGameCharacterType): CharacterManager;
-	public static from<T extends GameCharacterCore>(values: ArrayLike<T> | Iterable<T> | CharacterManager, owner?: TGameCharacterOwner, characterType?: TGameCharacterType): CharacterManager {
+	public static from<T extends GameCharacterCore>(values: ArrayLike<T> | Iterable<T>, owner?: TGameCharacterOwner, characterType?: TGameCharacterType): CharacterManager {
 		const characterManager = new CharacterManager();
 		characterManager.owner = owner ?? undefined;
 		characterManager.characterType = characterType ?? undefined;
-		if (values instanceof CharacterManager) {
-			characterManager.owner = owner ?? values.owner ?? undefined;
-			characterManager.characterType = characterType ?? values.characterType ?? undefined;
-			characterManager.push(...values);
-		}else if (values) {
-			Array.from(values).forEach(core => {
-				if (!core.id) {
-					core.id = randomSnowflake();
-				}
-				characterManager.push(new GameCharacter(core, characterManager));
-			});
-		}
+
+		Array.from(values).forEach(core => {
+			if (!core.id) {
+				core.id = randomSnowflake();
+			}
+			characterManager.push(new GameCharacter(core, characterManager));
+		});
+
 		return characterManager;
 	}
 }
