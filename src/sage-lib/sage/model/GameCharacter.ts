@@ -1,8 +1,8 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType, type KeyValuePair, type KeyValueTrio } from "@rsc-sage/types";
-import { applyChanges, capitalize, Color, errorReturnUndefined, getDataRoot, isDefined, isNotBlank, isString, isWrapped, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, Deck, doStatMath, parseGameSystem, processMath, type CurrencyPf2e, type DeckCore, type DeckType, type DenominationsCore, type GameSystem } from "@rsc-utils/game-utils";
-import { fileExistsSync, getText, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { fileExistsSync, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
@@ -86,43 +86,6 @@ export type GameCharacterCore = {
 // 												| "Token" | "TokenBloody" | "TokenDying"
 // 												| "Profile" | "ProfileBloody" | "ProfileDying"
 // 												| "Full" | "FullBloody" | "FullDying";
-
-function parseFetchedStats(raw: string, alias?: string) {
-	const stats = new Map<Lowercase<string>, KeyValueTrio<string, never>>();
-	const macros: MacroBase[] = [];
-	const lines = raw.split(/[\n\r]+/).map(line => line.split(/\t/).map(val => val.trim()));
-	lines.forEach(line => {
-		const results = parseFetchedStatsLine(line, alias);
-		if (results) {
-			if ("dialog" in results || "dice" in results) macros.push(results); // || "items" in results || "math" in results || "table" in results || "tableUrl" in results
-			if ("value" in results) stats.set(results.keyLower, results);
-		}
-	});
-	return { stats, macros };
-}
-function parseFetchedStatsLine(values: string[], alias?: string) {
-	const setAlias = (value?: string) => value && alias ? value.replace(/\{::/g, `{${alias}::`) : value;
-	const shift = () => setAlias(values.shift()?.trim());
-
-	const key = shift();
-	if (!key) return undefined;
-
-	const value = shift();
-	if (!value) return undefined;
-
-	const keyLower = key.toLowerCase();
-	if (keyLower === "macro") {
-		const three = shift(), four = shift();
-		if (four && isWrapped(four, "[]")) {
-			return { name:value, category:three, dice:four } as MacroBase;
-		}
-		if (three && isWrapped(three, "[]")) {
-			return { name:value, dice:three } as MacroBase;
-		}
-
-	}
-	return { key, keyLower, value } as KeyValueTrio<string, never>;
-}
 
 /** Temp convenience function to get a DiscordKey from varying input */
 export function toDiscordKey(channelDidOrDiscordKey: DiscordKey | Snowflake, threadDid?: Snowflake): DiscordKey {
@@ -586,29 +549,6 @@ export class GameCharacter {
 		return await manager.save() ?? false;
 	}
 
-	private fetchedStats: Map<Lowercase<string>, KeyValueTrio<string, never>> | undefined;
-	private fetchedMacros: MacroBase[] | undefined;
-	public async fetchStats(): Promise<void> {
-		if (!this.fetchedStats) {
-			const url = urlOrUndefined(this.getNoteStat("stats.tsv.url"));
-			if (url) {
-				const raw = await getText(url).catch(errorReturnUndefined);
-				if (raw) {
-					const { stats, macros } = parseFetchedStats(raw, this.alias);
-					this.fetchedStats = stats;
-					this.fetchedMacros = macros;
-					return;
-				}
-			}
-			this.fetchedStats = new Map();
-			this.fetchedMacros = [];
-		}
-	}
-	public async fetchMacros(): Promise<MacroBase[]> {
-		await this.fetchStats();
-		return this.fetchedMacros ?? [];
-	}
-
 	public get gameSystem(): GameSystem | undefined {
 		const gameSystem = parseGameSystem(this.getNoteStat("gameSystem"))
 			?? this.owner?.gameSystem;
@@ -837,12 +777,6 @@ export class GameCharacter {
 		const noteStat = this.getNoteKeyAndStat(key);
 		if (noteStat !== undefined) {
 			return ret(noteStat.key, noteStat.value);
-		}
-
-		// get stats fetched from "stats.tsv.url"
-		const fetchedStat = this.fetchedStats?.get(keyLower);
-		if (fetchedStat) {
-			return ret(fetchedStat.key, fetchedStat.value);
 		}
 
 		// get stats from underlying e20 character
