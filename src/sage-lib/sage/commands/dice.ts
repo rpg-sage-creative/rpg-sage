@@ -96,7 +96,6 @@ async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User
 	if (!char) return out;
 
 	const macros = [
-		...await char.fetchMacros(),
 		...(char.pathbuilder?.getAttackMacros() ?? []),
 		...(char.pathbuilder?.getSpellMacros() ?? []),
 	];
