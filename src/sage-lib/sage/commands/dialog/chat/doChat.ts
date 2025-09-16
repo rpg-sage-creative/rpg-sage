@@ -7,6 +7,8 @@ import { sendDialogPost } from "../sendDialogPost.js";
 import type { ChatOptions } from "./ChatOptions.js";
 import { replaceCharacterMentions } from "./replaceCharacterMentions.js";
 import { replaceTableMentions } from "./replaceTableMentions.js";
+import { StatMacroProcessor } from "../../dice/stats/StatMacroProcessor.js";
+import { MoveDirection } from "../../map/MoveDirection.js";
 
 type ChatContent = {
 	character?: GameCharacter | null;
@@ -18,14 +20,14 @@ export async function doChat(sageMessage: SageMessage, { character, colorType, d
 	if (character) {
 		let { content, displayName, embedImageUrl, dialogImageUrl, embedColor, postType } = dialogContent;
 
+		const processor = StatMacroProcessor.from(sageMessage).for(character)
+
 		// do some content manipulation
-		const nameRegex = /{name}/gi;
-		if (nameRegex.test(content)) {
-			content = content.replace(nameRegex, displayName ?? character.name);
-		}
+		content = processor.process(content);
 
 		content = await replaceCharacterMentions(sageMessage, content);
 		content = await replaceTableMentions(sageMessage, content);
+		content = MoveDirection.replaceAll(content, sageMessage.moveDirectionOutputType);
 
 		await sendDialogPost(sageMessage, {
 			authorName: displayName, // defaults to character.name
@@ -36,7 +38,7 @@ export async function doChat(sageMessage: SageMessage, { character, colorType, d
 			embedColor,
 			embedImageUrl,
 			postType,
-		}, options).catch(error);
+		}, options, processor).catch(error);
 	}else {
 		await sageMessage.reactWarn(`Unable to find character for dialog: "${dialogContent.alias ?? dialogContent.type}::"`);
 	}

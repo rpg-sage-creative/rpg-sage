@@ -4,6 +4,12 @@ export type StatsCharacter = {
 	name: string;
 	/** @deprecated use getString or getNumber */
 	getStat(key: string): string | null;
+	getStat(key: string, bool?: boolean): {
+		isDefined: boolean;
+		key: string;
+		keyLower: Lowercase<string>;
+		value: string | null;
+	};
 	getString(key: string): string | undefined;
 	getNumber(key: string): number | undefined;
 };

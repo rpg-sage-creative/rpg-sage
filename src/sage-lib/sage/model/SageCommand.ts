@@ -21,6 +21,7 @@ import type { SageMessage } from "./SageMessage.js";
 import type { SageReaction } from "./SageReaction.js";
 import { GameCreatorType, type Server } from "./Server.js";
 import type { User } from "./User.js";
+import { findActiveCharacter } from "./utils/findActiveCharacter.js";
 
 export interface SageCommandCore {
 	eventCache: SageEventCache;
@@ -417,6 +418,19 @@ export abstract class SageCommand<
 		});
 	}
 
+	private activeCharacterId?: Snowflake;
+	private activeCharacter?: GameCharacter;
+	public getActiveCharacter(): GameCharacter | undefined {
+		let { activeCharacter, activeCharacterId } = this;
+
+		// go look if we have no character or the ids don't match
+		if (!activeCharacter || (activeCharacterId && activeCharacterId !== activeCharacter?.id)) {
+			this.activeCharacter = activeCharacter = findActiveCharacter(this, activeCharacterId);
+		}
+
+		return activeCharacter;
+	}
+
 	public get gmCharacter(): GameCharacter | undefined {
 		return this.cache.getOrSet("gmCharacter", () =>
 			this.game?.gmCharacter ?? this.server?.gmCharacter
@@ -434,19 +448,25 @@ export abstract class SageCommand<
 				?? nonPlayerCharacters.findByName(value)
 				?? nonPlayerCharacters.findCompanion(value);
 		};
+		const gmFind = (gmChar: GameCharacter) => {
+			if (gmChar.matches(value)) return gmChar;
+			return gmChar.companions.findByName(value);
+		};
 
 		const { game, server } = this;
 		if (game) {
-			if (game.gmCharacter.matches(value)) {
-				return game.gmCharacter;
-			}
+			// check game chars/npcs
 			const gameChar = find(game);
 			if (gameChar) return gameChar;
 
+			// check gm
+			const gmChar = gmFind(game.gmCharacter);
+			if (gmChar) return gmChar;
+
 		}else if (server) {
-			if (server.gmCharacter.matches(value)) {
-				return server.gmCharacter;
-			}
+			const gmChar = gmFind(server.gmCharacter);
+			if (gmChar) return gmChar;
+
 		}
 		return this.sageUser ? find(this.sageUser) : undefined;
 	}

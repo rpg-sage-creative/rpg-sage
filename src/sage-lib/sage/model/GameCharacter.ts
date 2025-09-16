@@ -1,7 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
 import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath, processMath } from "@rsc-utils/dice-utils";
+import { doStatMath, processMath, StatBlockProcessor } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { wrap } from "@rsc-utils/string-utils";
@@ -9,7 +9,6 @@ import { mkdirSync } from "fs";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
-import { processCharacterTemplate } from "../../../gameSystems/processCharacterTemplate.js";
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
 import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
@@ -191,7 +190,7 @@ export type StatResults<
 };
 
 export class GameCharacter {
-	public equals(other: string | GameCharacter | undefined): boolean {
+	public equals(other: Optional<string | GameCharacter>): boolean {
 		if (!other) return false;
 		if (other instanceof GameCharacter) return other.id === this.core.id;
 		return this.core.id === other;
@@ -249,10 +248,6 @@ export class GameCharacter {
 
 	/** The character's companion characters. */
 	public get companions(): CharacterManager { return this.core.companions as CharacterManager; }
-
-	/** Convenient way of getting the displayName.template stat */
-	public get displayNameTemplate(): string | undefined { return this.getNoteStat("displayName.template"); }
-	public set displayNameTemplate(displayNameTemplate: string | undefined) { this.notes.setStat("displayName.template", displayNameTemplate ?? ""); }
 
 	/** Discord compatible color: #001122 */
 	public get embedColor(): HexColorString | undefined { return this.core.embedColor; }
@@ -453,10 +448,10 @@ export class GameCharacter {
 		return recursive && this.companions.hasMatching(value, true);
 	}
 
-	public toDisplayName(template?: string): string {
-		const templated = processCharacterTemplate(this, "displayName", template);
-		if (templated.value) {
-			return templated.value;
+	public toDisplayName({ processor, overrideTemplate }: { processor?:StatBlockProcessor; overrideTemplate?: string; } = { }): string {
+		const templatedValue = StatBlockProcessor.doIt({ char:this, processor, overrideTemplate, templateKey:"displayName" });
+		if (templatedValue) {
+			return templatedValue;
 		}
 		if (this.isGmOrNpcOrMinion) {
 			const descriptors = this.toNameDescriptors();
@@ -475,7 +470,7 @@ export class GameCharacter {
 	 *   npcs will return ["descriptor", "gender", "ancestry", "background"]
 	 */
 	public toNameDescriptors(): string[] {
-		const template = processCharacterTemplate(this, "nameDescriptors");
+		const template = StatBlockProcessor.processTemplate(this, "nameDescriptors");
 		if (template.value) {
 			return template.value
 				.split(",")
@@ -532,8 +527,9 @@ export class GameCharacter {
 	public toSheetLink(): string | undefined {
 		return this.getString("sheet.link");
 	}
-	public toDialogFooterLine(template?: string): string | undefined {
-		return processCharacterTemplate(this, "dialogFooter", template).value;
+
+	public toDialogFooterLine({ processor, overrideTemplate }: { processor?:StatBlockProcessor; overrideTemplate?: string; } = { }): string | undefined {
+		return StatBlockProcessor.doIt({ char:this, processor, overrideTemplate, templateKey:"dialogFooter" });
 	}
 
 	public toJSON(): GameCharacterCore {
@@ -609,7 +605,7 @@ export class GameCharacter {
 		};
 
 		const { keys: simpleKeys, title: simpleTitle, lines: simpleLines } = processSimpleSheet(this);
-		const { keys: customKeys, title: customTitle, lines: customLines } = processCharacterTemplate(this, "customSheet");
+		const { keys: customKeys, title: customTitle, lines: customLines } = StatBlockProcessor.processTemplate(this, "customSheet");
 		const { keys: templateKeys, title: templateTitle, lines: templateLines } = processTemplateKeys();
 
 		const usedKeys = new Set<Lowercase<string>>([...simpleKeys, ...customKeys, ...templateKeys]);
@@ -814,7 +810,7 @@ export class GameCharacter {
 			const isAbbr = ability.slice(0, 3) === keyLower;
 			if (isAbbr || `mod.${ability}` === keyLower) {
 				const abilityStat = this.getStat(ability, true);
-				if (abilityStat.value !== undefined) {
+				if (isDefined(abilityStat.value)) {
 					const retKey = isAbbr ? capitalize(abilityStat.key.slice(0, 3)) : `mod.${abilityStat.key}`;
 					return ret(retKey, processMath(`floor((${abilityStat.value}-10)/2)`, { allowSpoilers:true }));
 				}
@@ -906,6 +902,10 @@ export class GameCharacter {
 
 		return ret();
 	}
+
+	/** Convenient way of getting the displayName.template stat */
+	public getTemplate(baseKey: string): string | undefined { return this.getNoteStat(`${baseKey}.template`); }
+	public setTemplate(baseKey: string, template?: string): boolean { return this.notes.setStat(`${baseKey}.template`, template ?? ""); }
 
 	public getCurrency() {
 		// try getting currency from gameSystem

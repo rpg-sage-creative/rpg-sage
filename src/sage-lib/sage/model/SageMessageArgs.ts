@@ -93,22 +93,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return undefined;
 	}
 
-	/** @deprecated */
-	public removeAndReturnNames(defaultJoinRemaining = false, defaultJoinSeparator = " "): Names {
-		const names = {
-			charName: this.argsManager.findKeyValueArgIndex("charName")?.ret?.value,
-			oldName: this.argsManager.findKeyValueArgIndex("oldName")?.ret?.value,
-			name: this.argsManager.findKeyValueArgIndex("name")?.ret?.value,
-			newName: this.argsManager.findKeyValueArgIndex("newName")?.ret?.value,
-			count: 0
-		} as Names;
-		names.count = (names.charName ? 1 : 0) + (names.oldName ? 1 : 0) + (names.name ? 1 : 0) + (names.newName ? 1 : 0);
-		if (!names.count) {
-			names.name = this.removeAndReturnName(defaultJoinRemaining, defaultJoinSeparator);
-		}
-		return names;
-	}
-
 	//#endregion
 
 	//#region SageCommandArgs

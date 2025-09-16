@@ -11,7 +11,7 @@ import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
 import { logPostCurrency } from "../admin/PostCurrency.js";
 import { parseDiceMatches, sendDice, type TDiceMatch } from "../dice.js";
-import { MoveDirection } from "../map/MoveDirection.js";
+import { StatMacroProcessor } from "../dice/stats/StatMacroProcessor.js";
 import type { ChatOptions } from "./chat/ChatOptions.js";
 import { sendDialogRenderable } from "./sendDialogRenderable.js";
 
@@ -27,7 +27,7 @@ type DialogPostData = {
 	title?: string;
 };
 
-export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, isFirst }: ChatOptions): Promise<Message[]> {
+export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, isFirst }: ChatOptions, statProcessor: StatMacroProcessor): Promise<Message[]> {
 	const character = postData?.character;
 	if (!character) {
 		return Promise.reject("Invalid TDialogPostData");
@@ -36,7 +36,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const webhook = true; //sageMessage.dialogType === "Webhook";
 	const renderableContent = new RenderableContent();
 
-	const authorName = character.toDisplayName(postData.authorName);
+	const authorName = statProcessor.process(character.toDisplayName({ processor:statProcessor, overrideTemplate:postData.authorName }));
 	const title = postData.title || authorName;
 	if (!webhook || title !== authorName) {
 		renderableContent.setTitle(title);
@@ -79,12 +79,8 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	}
 	//#endregion
 
-	//#region map/movement arrows
-	content = MoveDirection.replaceAll(content, sageMessage.moveDirectionOutputType);
-	//#endregion
-
 	//#region footer / sheet link
-	let dialogFooter = character.toDialogFooterLine();
+	let dialogFooter = character.toDialogFooterLine({ processor:statProcessor });
 	const sheetLink = character.toSheetLink();
 	if (sheetLink) {
 		if (dialogFooter) {

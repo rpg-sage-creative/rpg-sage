@@ -1,6 +1,6 @@
+import { StatBlockProcessor } from "@rsc-utils/dice-utils";
 import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
 import { Ability } from "../../d20/lib/Ability.js";
-import { processCharacterTemplate } from "../../processCharacterTemplate.js";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { toModifier } from "../../utils/toModifier.js";
@@ -61,7 +61,7 @@ function hpToHtml(char: GameCharacter): string | undefined {
 		if (value || maxValue) {
 			hasHealth = true;
 		}
-		return processCharacterTemplate(char, `${label}.template`).value
+		return StatBlockProcessor.processTemplate(char, `${label}.template`).value
 			?? `<b>${label}</b> ${value ?? "??"}/${maxValue ?? "??"}`;
 	});
 
