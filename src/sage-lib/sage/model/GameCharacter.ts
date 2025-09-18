@@ -806,7 +806,7 @@ export class GameCharacter {
 			const isAbbr = ability.slice(0, 3) === keyLower;
 			if (isAbbr || `mod.${ability}` === keyLower) {
 				const abilityStat = this.getStat(ability, true);
-				if (abilityStat.value !== undefined) {
+				if (isDefined(abilityStat.value)) {
 					const retKey = isAbbr ? capitalize(abilityStat.key.slice(0, 3)) : `mod.${abilityStat.key}`;
 					return ret(retKey, processMath(`floor((${abilityStat.value}-10)/2)`, { spoilers:"optional" }));
 				}
