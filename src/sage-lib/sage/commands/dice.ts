@@ -1,5 +1,5 @@
 import { DicePostType } from "@rsc-sage/types";
-import { error, isWrapped, redactCodeBlocks, redactKeyValuePairs, redactMdLink, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
+import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, processStatBlocks, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
@@ -230,24 +230,9 @@ async function parseMatch(sageCommand: SageCommand, match: string, overrides?: T
 	return [];
 }
 
-function redactContent(content: string): string {
-	// use the existing logic for code blocks
-	let redacted = redactCodeBlocks(content);
-
-	// let's do key/value pairs if we have a command to avoid processing [] brackets in command options
-	if (/^!+(\s*[\w-]+)+/i.test(redacted)) {
-		redacted = redactKeyValuePairs(redacted);
-	}
-
-	// redact markdown links to get rid of the [] brackets
-	redacted = redactMdLink(redacted);
-
-	return redacted;
-}
-
 export async function parseDiceMatches(sageCommand: SageCommand, content: string): Promise<TDiceMatch[]> {
 	const diceMatches: TDiceMatch[] = [];
-	const redacted = redactContent(content);
+	const redacted = redactContent(content, { codeBlocks:true, keyValuePairs:/^!+(\s*[\w-]+)+/i.test(content), mdLinks:true });
 	const regex = getBasicBracketRegex();
 	let execArray: RegExpExecArray | null;
 	while (execArray = regex.exec(redacted)) {
