@@ -1,4 +1,3 @@
-import { mapSageChannelNameTags } from "../../../model/Game.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { Encounter } from "./Encounter.js";
 import { addButtons } from "./addButtons.js";
@@ -86,7 +85,7 @@ export async function eCmdStatus(sageMessage: SageMessage): Promise<void> {
 	//post status
 	const sentMessage = await sageMessage.sendPost(encounter.renderInit());
 	if (sentMessage) {
-		const gmMode = sageMessage.gameChannel ? mapSageChannelNameTags(sageMessage.gameChannel).gm : false;
+		const gmMode = sageMessage.gameChannel?.type === 3;
 		addButtons(encounter, sentMessage[0], gmMode);
 		if (isPin) {
 			// pin posted status

@@ -1,10 +1,9 @@
-import { DialogPostType, DicePostType, SageChannelType, type SageChannel } from "@rsc-sage/types";
+import { DialogPostType, DicePostType, SageChannelType, toReadableSageChannelType, type SageChannel } from "@rsc-sage/types";
 import { isDefined, mapAsync, stringifyJson, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, isSupportedChannel, isSupportedGameChannel, toChannelMention, type SupportedGameChannel } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, DiceSortType, GameSystemType, getCriticalMethodText, parseGameSystem } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Game } from "../../model/Game.js";
-import { mapSageChannelNameTags, nameTagsToType } from "../../model/Game.js";
 import type { SageCache } from "../../model/SageCache.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { SageMessage } from "../../model/SageMessage.js";
@@ -15,7 +14,7 @@ import { BotServerGameType } from "../helpers/BotServerGameType.js";
 //#region details
 
 async function channelDetailsAppendDialog(renderableContent: RenderableContent, server: Server, game: Optional<Game>, channel: SageChannel): Promise<void> {
-	if (![SageChannelType.None, SageChannelType.Dice].includes(channel.type!)) {
+	if (![SageChannelType.None, SageChannelType.Dice, SageChannelType.AutoDice].includes(channel.type!)) {
 		renderableContent.append(`<b>Dialog Options</b>`);
 
 		const dialogType = DialogPostType[channel.dialogPostType!];
@@ -62,9 +61,8 @@ function channelDetailsAppendGame(renderableContent: RenderableContent, server: 
 		const gameTypeText = gameType === "None" ? "" : `<i>(${gameType})</i>`;
 		renderableContent.appendTitledSection(`<b>Game:</b> ${game.name} ${gameTypeText}`);
 
-		const nameTags = mapSageChannelNameTags(channel);
-		const channelType = nameTagsToType(nameTags);
-		renderableContent.append(`<b>Channel Type</b> ${channelType}`);
+		const readableType = toReadableSageChannelType(channel.type) ?? "<i>Unknown</i>";
+		renderableContent.append(`<b>Channel Type</b> ${readableType}`);
 	} else {
 		const gameSystem = parseGameSystem(channel.gameSystemType);
 		const inheritedGameSystem = parseGameSystem(server.gameSystemType);

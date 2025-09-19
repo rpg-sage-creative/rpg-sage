@@ -52,78 +52,6 @@ export interface GameCore extends IdCore<"Game">, IHasColors, IHasEmoji, Partial
 	macros?: MacroBase[];
 }
 
-type MappedChannelNameTags = {
-	dice: boolean;
-	gm: boolean;
-	ic: boolean;
-	misc: boolean;
-	none: boolean;
-	ooc: boolean;
-};
-
-// type MappedGameChannel = {
-// 	id: Snowflake;
-// 	sChannel: SageChannel;
-// 	gChannel: SupportedGameChannel | undefined;
-// 	nameTags: MappedChannelNameTags;
-// };
-
-/** Reads IChannel properties to determine channel type: IC, GM, OOC, MISC */
-export function mapSageChannelNameTags(resolvable: SageChannel | SageChannelType): MappedChannelNameTags {
-	const channelType = typeof(resolvable) === "number" ? resolvable : resolvable.type;
-	return {
-		dice: channelType === SageChannelType.Dice,
-		gm: channelType === SageChannelType.GameMaster,
-		ic: channelType === SageChannelType.InCharacter,
-		misc: channelType === SageChannelType.Miscellaneous,
-		none: channelType === SageChannelType.None,
-		ooc: channelType === SageChannelType.OutOfCharacter,
-	};
-}
-
-export function sageChannelTypeToString(type: SageChannelType): string {
-	return nameTagsToType(mapSageChannelNameTags(type));
-}
-
-export function nameTagsToType(nameTags: MappedChannelNameTags): string {
-	if (nameTags.dice) return "Dice";
-	if (nameTags.gm) return "GM <i>(Game Master)</i>";
-	if (nameTags.ic) return "IC <i>(In Character)</i>";
-	if (nameTags.misc) return "Misc";
-	if (nameTags.ooc) return "OOC <i>(Out of Character)</i>";
-	return "<i>None</i>";
-}
-
-/** Reads GuildChannel.name to determine channel type: IC, GM, OOC, MISC */
-// function mapGuildChannelNameTags(channel: SupportedGameChannel): MappedChannelNameTags {
-// 	return mapSageChannelNameTags(parseSageChannelType(channel.name) ?? SageChannelType.Miscellaneous);
-// }
-
-/** Returns [guildChannels.concat(sageChannels), guildChannels, sageChannels] */
-// async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promise<[MappedGameChannel[], MappedGameChannel[], MappedGameChannel[]]> {
-// 	const sChannels: MappedGameChannel[] = [];
-// 	const gChannels: MappedGameChannel[] = [];
-// 	for (const sChannel of channels) {
-// 		sChannels.push({
-// 			id: sChannel.id,
-// 			sChannel: sChannel,
-// 			gChannel: undefined, // NOSONAR
-// 			nameTags: mapSageChannelNameTags(sChannel)
-// 		});
-
-// 		const gChannel = await sageCache.fetchChannel<SupportedGameChannel>(sChannel.id);
-// 		if (gChannel) {
-// 			gChannels.push({
-// 				id: sChannel.id,
-// 				sChannel: sChannel,
-// 				gChannel: gChannel,
-// 				nameTags: mapGuildChannelNameTags(gChannel)
-// 			});
-// 		}
-// 	}
-// 	return [gChannels.concat(sChannels), gChannels, sChannels];
-// }
-
 /** Cleans up the users from the time we weren't correctly validating duplicate users when adding them. */
 function fixDupeUsers(game: GameCore): void {
 	// 0 = unkonwn, 1 = player, 2 = gm
@@ -241,7 +169,8 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 				?? channels[0];
 		};
 
-		return findBest(type => type === SageChannelType.InCharacter)
+		return findBest(type => type === SageChannelType.AutoInCharacter)
+			?? findBest(type => type === SageChannelType.InCharacter)
 			?? findBest(type => type === SageChannelType.OutOfCharacter)
 			?? findBest(type => type && type !== SageChannelType.GameMaster);
 	}
@@ -262,6 +191,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 			?? findBest(type => type === SageChannelType.Miscellaneous)
 			?? findBest(type => type === SageChannelType.OutOfCharacter)
 			?? findBest(type => type === SageChannelType.InCharacter)
+			?? findBest(type => type === SageChannelType.AutoInCharacter)
 			?? validatedChannels[0];
 	}
 	public async gmGuildChannel(): Promise<ValidatedChannel | undefined> {

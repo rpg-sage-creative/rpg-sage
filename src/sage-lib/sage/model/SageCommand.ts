@@ -245,7 +245,7 @@ export abstract class SageCommand<
 	/** Ensures we are either in the channel being targeted or we are in an admin channel. */
 	public testChannelAdmin(channelDid: Optional<Snowflake>): boolean {
 		/** @todo: figure out if i even need this or if there is a better way */
-		return channelDid === this.channelDid || ![SageChannelType.None, SageChannelType.Dice].includes(this.channel?.type!);
+		return channelDid === this.channelDid || ![SageChannelType.None, SageChannelType.Dice, SageChannelType.AutoDice].includes(this.channel?.type!);
 	}
 
 	/** Ensures we have a game and can admin games or are the GM. */
@@ -255,7 +255,7 @@ export abstract class SageCommand<
 
 	/** Ensures we are either in an admin channel or are the server owner or SuperUser. @deprecated find a better way involving validatePermissions() */
 	public testServerAdmin(): boolean {
-		return this.actor.canManageServer || ![SageChannelType.None, SageChannelType.Dice].includes(this.serverChannel?.type!);
+		return this.actor.canManageServer || ![SageChannelType.None, SageChannelType.Dice, SageChannelType.AutoDice].includes(this.serverChannel?.type!);
 	}
 
 	// #endregion
@@ -270,7 +270,7 @@ export abstract class SageCommand<
 				return true;
 			}
 
-			const blockedTypes = [SageChannelType.None, SageChannelType.InCharacter];
+			const blockedTypes = [SageChannelType.None, SageChannelType.InCharacter, SageChannelType.AutoInCharacter];
 
 			// we only stop commands in None or InCharacter
 			if (!blockedTypes.includes(channel.type!)) {
@@ -290,7 +290,7 @@ export abstract class SageCommand<
 	}
 
 	public get allowDialog(): boolean {
-		return this.cache.getOrSet("allowDialog", () => !this.channel || ![SageChannelType.None,SageChannelType.Dice].includes(this.channel.type!));
+		return this.cache.getOrSet("allowDialog", () => !this.channel || ![SageChannelType.None, SageChannelType.Dice, SageChannelType.AutoDice].includes(this.channel.type!));
 	}
 
 	public get allowDice(): boolean {

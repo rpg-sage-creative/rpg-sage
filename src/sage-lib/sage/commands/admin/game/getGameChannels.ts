@@ -6,15 +6,20 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 type Results = { free:SageChannel[]; used:SageChannel[]; };
 
 function getChannelIds({ args }: SageCommand, name: string): Snowflake[] {
-	const channelName = `${name}-channel`;
-	if (args.hasChannel(channelName)) {
-		return args.getChannelIds(channelName);
+	const ids: Snowflake[] = [];
+	ids.push(...args.getChannelIds(`${name}-channel`));
+	ids.push(...args.getChannelIds(`${name}`));
+	if (name.includes("-")) {
+		ids.push(...args.getChannelIds(`${name.replace("-", "")}`));
 	}
-	return args.getChannelIds(name);
+	return ids;
 }
 
 export async function getGameChannels(sageCommand: SageCommand, includeThisChannel: boolean): Promise<Results> {
 	const channels: SageChannel[] = [];
+
+	const autoIcIds = getChannelIds(sageCommand, "auto-ic");
+	autoIcIds.forEach(id => channels.push({ id, type:SageChannelType.AutoInCharacter }));
 
 	const icIds = getChannelIds(sageCommand, "ic");
 	icIds.forEach(id => channels.push({ id, type:SageChannelType.InCharacter }));
@@ -24,6 +29,9 @@ export async function getGameChannels(sageCommand: SageCommand, includeThisChann
 
 	const gmIds = getChannelIds(sageCommand, "gm");
 	gmIds.forEach(id => channels.push({ id, type:SageChannelType.GameMaster }));
+
+	const autoDiceIds = getChannelIds(sageCommand, "auto-dice");
+	autoDiceIds.forEach(id => channels.push({ id, type:SageChannelType.AutoDice }));
 
 	const diceIds = getChannelIds(sageCommand, "dice");
 	diceIds.forEach(id => channels.push({ id, type:SageChannelType.Dice }));

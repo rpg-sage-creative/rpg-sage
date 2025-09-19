@@ -1,6 +1,6 @@
-import { parseSageChannelType, SageChannelType, type SageChannel } from "@rsc-sage/types";
+import { parseSageChannelTags, SageChannelType, type SageChannel, type SageChannelTag } from "@rsc-sage/types";
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { isSupportedThreadChannel, type SupportedCategoryChannel, type SupportedChannelOrParent, type SupportedDMChannel, type SupportedForumChannel, type SupportedGameChannel } from "@rsc-utils/discord-utils";
+import { isSupportedThreadChannel, type SupportedCategoryChannel, type SupportedDMChannel, type SupportedForumChannel, type SupportedGameChannel } from "@rsc-utils/discord-utils";
 import type { SageEventCache } from "../SageEventCache.js";
 
 export type ValidatedSupportedChannel = {
@@ -28,8 +28,9 @@ export type ValidatedSupportedChannel = {
 	isNone: boolean;
 	isOOC: boolean;
 
-	// nameTags: MappedChannelNameTags;
+	tags: SageChannelTag[];
 	type?: SageChannelType;
+	typeLabel?: string;
 };
 
 export type ValidatedSupportedCategory = {
@@ -57,8 +58,9 @@ export type ValidatedSupportedCategory = {
 	isNone: boolean;
 	isOOC: boolean;
 
-	// nameTags: MappedChannelNameTags;
+	tags: SageChannelTag[];
 	type?: SageChannelType;
+	typeLabel?: string;
 };
 
 export type ValidatedSupportedForum = {
@@ -86,8 +88,9 @@ export type ValidatedSupportedForum = {
 	isNone: boolean;
 	isOOC: boolean;
 
-	// nameTags: MappedChannelNameTags;
+	tags: SageChannelTag[];
 	type?: SageChannelType;
+	typeLabel?: string;
 };
 
 export type ValidatedGameChannel = ValidatedSupportedChannel | ValidatedSupportedCategory | ValidatedSupportedForum;
@@ -117,50 +120,12 @@ export type UnvalidatedChannel = {
 	isNone?: false;
 	isOOC?: false;
 
-	// nameTags: MappedChannelNameTags;
+	tags?: never[];
 	type?: never;
+	typeLabel?: never;
 };
 
 export type ValidatedChannel = ValidatedSupportedChannel | ValidatedSupportedCategory | ValidatedSupportedForum | UnvalidatedChannel;
-
-const channelTags = {
-	"dice": SageChannelType.Dice,
-	"gm": SageChannelType.GameMaster,
-	"ic": SageChannelType.InCharacter,
-	"misc": SageChannelType.Miscellaneous,
-	"none": SageChannelType.None,
-	"ooc": SageChannelType.OutOfCharacter,
-};
-
-function findChannelType(channel?: SupportedChannelOrParent): SageChannelType | undefined {
-	if (!channel) return undefined;
-
-	// was SageChannelType.None found?
-	let none = false;
-
-	if ("appliedTags" in channel) {
-		for (const tag of channel.appliedTags) {
-			const lower = tag.toLowerCase();
-			const type = lower in channelTags ? channelTags[lower as keyof typeof channelTags] : undefined;
-			if (type) return type;
-			none ||= type === SageChannelType.None;
-		}
-	}
-
-	if ("name" in channel) {
-		const type = parseSageChannelType(channel.name);
-		if (type) return type;
-		none ||= type === SageChannelType.None;
-	}
-
-	if ("topic" in channel) {
-		const type = parseSageChannelType(channel.topic);
-		if (type) return type;
-		none ||= type === SageChannelType.None;
-	}
-
-	return none ? SageChannelType.None : undefined;
-}
 
 export async function validateChannel(sageEventCache: SageEventCache, id: Snowflake, { sageChannel:sage, parent }: { sageChannel?: SageChannel, parent?: ValidatedChannel }): Promise<ValidatedChannel> {
 	const discord = await sageEventCache.fetchChannel(id);
@@ -174,15 +139,20 @@ export async function validateChannel(sageEventCache: SageEventCache, id: Snowfl
 		return unvalidated;
 	}
 
-	const type = sage?.type ?? findChannelType(discord) ?? parent?.type;
-	const typeValues = {
+	const { tags = parent?.tags ?? [], type = parent?.type, label:typeLabel = parent?.typeLabel } = parseSageChannelTags(discord, sage?.type);
+
+	const typeTagsAndFlags = {
+		isAutoDice: type === SageChannelType.AutoDice,
+		isAutoIC: type === SageChannelType.AutoInCharacter,
 		isDice: type === SageChannelType.Dice,
 		isGM: type === SageChannelType.GameMaster,
 		isIC: type === SageChannelType.InCharacter,
 		isMisc: type === SageChannelType.Miscellaneous,
 		isNone: type === SageChannelType.None,
 		isOOC: type === SageChannelType.OutOfCharacter,
-		type
+		tags,
+		type,
+		typeLabel
 	};
 
 	if (discord.type === 4) {
@@ -192,7 +162,7 @@ export async function validateChannel(sageEventCache: SageEventCache, id: Snowfl
 			sage,
 			isCategory: true,
 			isValidated: true,
-			...typeValues
+			...typeTagsAndFlags,
 		};
 		return category;
 	}
@@ -205,7 +175,7 @@ export async function validateChannel(sageEventCache: SageEventCache, id: Snowfl
 			isForum: true,
 			isValidated: true,
 			byParent: false,
-			...typeValues
+			...typeTagsAndFlags,
 		};
 		return forum;
 	}
@@ -222,7 +192,7 @@ export async function validateChannel(sageEventCache: SageEventCache, id: Snowfl
 		isThread,
 		isValidated: true,
 		byParent: false,
-		...typeValues
+		...typeTagsAndFlags,
 	};
 	return channel;
-};
+}

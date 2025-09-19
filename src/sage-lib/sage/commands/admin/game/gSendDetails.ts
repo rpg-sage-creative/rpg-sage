@@ -3,7 +3,7 @@ import { getDateStrings, type Optional, type RenderableContent, type Snowflake }
 import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, getRollemId, getTupperBoxId, toGuildMemberName, type SupportedGameChannel } from "@rsc-utils/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, DiceSortType, getCriticalMethodText } from "@rsc-utils/game-utils";
 import type { GuildMember } from "discord.js";
-import { GameRoleType, sageChannelTypeToString, type Game } from "../../../model/Game.js";
+import { GameRoleType, type Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { MoveDirectionOutputType } from "../../map/MoveDirection.js";
@@ -73,6 +73,7 @@ async function checkForOtherBots(guildChannel?: Optional<SupportedGameChannel>):
 	return botNames;
 }
 
+/** @todo return missing perms to be appended to the bottom of the output */
 async function showGameRenderChannels(renderableContent: RenderableContent, sageCommand: SageCommand, game: Game): Promise<void> {
 	const validatedChannels = await game.validateChannels();
 	const gameChannels = validatedChannels.filter(vc => !vc.byParent);
@@ -80,8 +81,10 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 	renderableContent.append(`<b>Channels</b> ${gameChannels.length}`);
 
 	const types = [
+		SageChannelType.AutoInCharacter,
 		SageChannelType.InCharacter,
 		SageChannelType.OutOfCharacter,
+		SageChannelType.AutoDice,
 		SageChannelType.Dice,
 		SageChannelType.GameMaster,
 		SageChannelType.Miscellaneous,
@@ -90,7 +93,7 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 	for (const type of types) {
 		const typeChannels = gameChannels.filter(vc => vc.type === type || !vc.type && !type);
 		if (typeChannels.length) {
-			renderableContent.append(`[spacer]<b>${sageChannelTypeToString(type)}</b>`);
+			renderableContent.append(`[spacer]<b>${typeChannels[0].typeLabel}</b>`);
 			for (const channel of typeChannels) {
 				if (channel.isValidated) {
 					const guildChannel = channel.discord;
