@@ -1,15 +1,15 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
 import { dequote, getQuotedRegexSource } from "@rsc-utils/string-utils";
-import { SageMessage } from "../../../model/SageMessage.js";
+import type { SageCommand } from "../../../model/SageCommand.js";
 
-export async function replaceCharacterMentions(sageMessage: SageMessage, content: string): Promise<string> {
+export async function replaceCharacterMentions(sageCommand: SageCommand, content: string): Promise<string> {
 	const charMentionRegex = new RegExp(`@\\w+|@${getQuotedRegexSource()}`, "g");
 	if (!charMentionRegex.test(content)) {
 		return content;
 	}
 
-	const { game, sageUser } = sageMessage;
+	const { game, sageUser } = sageCommand;
 	const gmUser = await game?.gmGuildMember();
 	const gmUserId = gmUser?.id;
 
