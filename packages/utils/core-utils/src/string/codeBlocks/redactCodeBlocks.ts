@@ -12,11 +12,11 @@ export function redactCodeBlocks(content: string, redactedCharacter = "*") {
 	const matches = matchCodeBlocks(content);
 
 	// redacted the matches
-	matches.forEach(({ index, ticks, length }) => {
+	matches.forEach(({ index, length, ticks, content:matchContent }) => {
+
 		/** the redacted / replacement text */
-		const ends = "".padEnd(ticks, "`");
-		const center = "".padEnd(length - ticks * 2, redactedCharacter);
-		const redacted = ends + center + ends;
+		const center = "".padEnd(matchContent.length, redactedCharacter);
+		const redacted = ticks + center + ticks;
 
 		content = content.slice(0, index)
 			+ redacted
