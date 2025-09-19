@@ -1,4 +1,4 @@
-import { tokenize, type Optional } from "@rsc-utils/core-utils";
+import { getCodeBlockRegex, tokenize, type Optional } from "@rsc-utils/core-utils";
 import { regex } from "regex";
 import { unquote } from "../internal/unquote.js";
 import { doStatMath } from "./doStatMath.js";
@@ -48,11 +48,6 @@ function getStatBlockRegex() {
 // 		\}{2}
 // 	`;
 // }
-
-let escapeTickRegex: RegExp;
-function getEscapeTickRegex() {
-	return escapeTickRegex ??= /(?<ticks>`{1,3}).*?\k<ticks>/;
-}
 
 type AltType = "alt" | "companion" | "familiar" | "hireling";
 
@@ -173,9 +168,8 @@ export class StatBlockProcessor {
 
 	protected _process(value: string, options: ProcessOptions): string {
 		const statBlockRegex = (this.constructor as typeof StatBlockProcessor).getStatBlockRegex();
-		const escapeTickRegex = (this.constructor as typeof StatBlockProcessor).getEscapeTickRegex();
 		const parsers = {
-			ticks: escapeTickRegex,
+			ticks: getCodeBlockRegex(),
 			statBlock: statBlockRegex,
 		};
 		while (statBlockRegex.test(value)) {
@@ -303,7 +297,6 @@ export class StatBlockProcessor {
 
 	/** Returns the RegExp instance used to match a StatBlock. */
 	public static getCharReferenceRegex = getCharReferenceRegex;
-	public static getEscapeTickRegex = getEscapeTickRegex;
 	public static getStatBlockRegex = getStatBlockRegex;
 	// public static getStatBlockTestRegex = getStatBlockTestRegex;
 
