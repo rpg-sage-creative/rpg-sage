@@ -6,6 +6,7 @@ import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message }
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
+import type { SyncDialogContentFormatter } from "../commands/dialog/chat/DialogProcessor.js";
 import { globalCacheFilter, globalCacheRead, type GameCacheItem, type GlobalCacheItem } from "../repo/base/globalCache.js";
 import { JsonRepo } from "../repo/base/JsonRepo.js";
 import { ActiveBot } from "./ActiveBot.js";
@@ -659,6 +660,9 @@ export class SageEventCache {
 
 	public format(text: string): string {
 		return toMarkdown(this.emojify(text));
+	}
+	public getFormatter(): SyncDialogContentFormatter {
+		return (value: Optional<string>) => this.format(value ?? "").trim();
 	}
 
 	public getPrefixOrDefault(): string {

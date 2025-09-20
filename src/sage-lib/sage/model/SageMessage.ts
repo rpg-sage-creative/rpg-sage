@@ -126,7 +126,7 @@ export class SageMessage
 		const sendArgs = {
 			sageCache: this.eventCache,
 			target,
-			content: resolveToContent(this.eventCache, renderableContentResolvable).join("\n")
+			content: resolveToContent(renderableContentResolvable, this.eventCache.getFormatter()).join("\n")
 		};
 		const catchHandler = (err: unknown) => {
 			error(`${toHumanReadable(target)}: SageMessage.sendPost`, err);

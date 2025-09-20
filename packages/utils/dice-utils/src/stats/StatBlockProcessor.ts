@@ -147,7 +147,7 @@ export class StatBlockProcessor {
 		return { aliasOrName:value, stackValue:value };
 	}
 
-	public process(value: string): string {
+	public processStatBlocks(value: string): string {
 		return this._process(value, { matches:new Set(), stack:[] });
 	}
 
@@ -311,7 +311,7 @@ export class StatBlockProcessor {
 	}
 
 	public static for(char: StatsCharacter) { return new StatBlockProcessor({actingCharacter:char}); }
-	public static process(char: StatsCharacter, value: string) { return new StatBlockProcessor({actingCharacter:char}).process(value); }
+	public static process(char: StatsCharacter, value: string) { return new StatBlockProcessor({actingCharacter:char}).processStatBlocks(value); }
 	public static processTemplate(char: StatsCharacter, templateKey: string) { return new StatBlockProcessor({actingCharacter:char}).processTemplate(templateKey); }
 
 	/** @todo merge this and process and processTemplate somehow .. maybe just use these args in those two */
@@ -322,7 +322,7 @@ export class StatBlockProcessor {
 			processor = this.for(char);
 		}
 		if (overrideTemplate) {
-			return processor.process(overrideTemplate);
+			return processor.processStatBlocks(overrideTemplate);
 		}
 		return processor.processTemplate(templateKey).value;
 	}

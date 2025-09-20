@@ -103,7 +103,7 @@ function getMacrosFromChar(char: Optional<GameCharacter>, userId?: Snowflake, ov
 }
 
 export class StatMacroProcessor extends StatBlockProcessor {
-	public constructor(chars: StatMacroCharacters, public macros: DiceMacroBase[]) {
+	protected constructor(chars: StatMacroCharacters, public macros: DiceMacroBase[]) {
 		super(chars);
 	}
 

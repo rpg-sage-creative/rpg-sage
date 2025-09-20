@@ -1,4 +1,4 @@
-import { errorReturnEmptyArray, errorReturnNull, RenderableContent, warnReturnNull, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnEmptyArray, errorReturnUndefined, RenderableContent, warnReturnNull, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
 import { AttachmentBuilder, type Message } from "discord.js";
 import type { TDiceOutput } from "../../../../sage-dice/common.js";
@@ -11,8 +11,8 @@ import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
 import { logPostCurrency } from "../admin/PostCurrency.js";
 import { parseDiceMatches, sendDice, type TDiceMatch } from "../dice.js";
-import { StatMacroProcessor } from "../dice/stats/StatMacroProcessor.js";
 import type { ChatOptions } from "./chat/ChatOptions.js";
+import { DialogProcessor } from "./chat/DialogProcessor.js";
 import { sendDialogRenderable } from "./sendDialogRenderable.js";
 
 type DialogPostData = {
@@ -27,7 +27,7 @@ type DialogPostData = {
 	title?: string;
 };
 
-export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, isFirst }: ChatOptions, statProcessor: StatMacroProcessor): Promise<Message[]> {
+export async function sendDialogPost(sageMessage: SageMessage, postData: DialogPostData, { doAttachment, isFirst }: ChatOptions): Promise<Message[]> {
 	const character = postData?.character;
 	if (!character) {
 		return Promise.reject("Invalid TDialogPostData");
@@ -36,7 +36,9 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const webhook = true; //sageMessage.dialogType === "Webhook";
 	const renderableContent = new RenderableContent();
 
-	const authorName = statProcessor.process(character.toDisplayName({ processor:statProcessor, overrideTemplate:postData.authorName }));
+	const processor = DialogProcessor.from(sageMessage).for(character);
+
+	const authorName = processor.processAuthorName(postData.authorName);
 	const title = postData.title || authorName;
 	if (!webhook || title !== authorName) {
 		renderableContent.setTitle(title);
@@ -45,7 +47,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const color = postData.embedColor ?? character.embedColor ?? sageMessage.toHexColorString(postData.colorType);
 	renderableContent.setColor(color);
 
-	let content = postData.content;
+	let content = await processor.processMentions(postData.content);
 
 	//#region dice lists
 	const diceMatches = await parseDiceMatches(sageMessage, content);
@@ -79,22 +81,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	}
 	//#endregion
 
-	//#region footer / sheet link
-	let dialogFooter = character.toDialogFooterLine({ processor:statProcessor });
-	const sheetLink = character.toSheetLink();
-	if (sheetLink) {
-		if (dialogFooter) {
-			if (!dialogFooter.includes(sheetLink.slice(5, -2))) {
-				dialogFooter += ` ${sheetLink}`;
-			}
-		}else {
-			content += ` ${sheetLink}`;
-		}
-	}
-	//#endregion
-
 	renderableContent.append(content);
-	if (dialogFooter) renderableContent.append(dialogFooter);
 
 	const thumbnailUrl = postData.embedImageUrl ?? character.avatarUrl;
 	renderableContent.setThumbnailUrl(thumbnailUrl);
@@ -121,7 +108,8 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 
 	const skipDelete = !isFirst;
 	const skipReplyingTo = !isFirst;
-	const messages = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete, skipReplyingTo })
+	const formatter = processor.getFormatter();
+	const messages = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, formatter, skipDelete, skipReplyingTo })
 		.catch(errorReturnEmptyArray);
 	if (messages.length) {
 		await logPostCurrency(sageMessage, "dialog");
@@ -134,7 +122,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 			if (diceResults.allSecret && diceResults.hasGmChannel) {
 				const emoji = sageMessage.getEmoji(EmojiType.Die);
 				if (emoji) {
-					await last.react(emoji).catch(errorReturnNull);
+					await last.react(emoji).catch(errorReturnUndefined);
 				}
 			}
 		}

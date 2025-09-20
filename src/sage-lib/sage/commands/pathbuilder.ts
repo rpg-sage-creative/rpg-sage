@@ -183,8 +183,8 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: Pathbuilde
 
 /** posts the imported character to the channel */
 export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
-	const { sageCache } = sageCommand;
-	setMacroUser(character, sageCache.user);
+	const { eventCache } = sageCommand;
+	setMacroUser(character, eventCache.user);
 	const saved = await character.save();
 	if (saved) {
 		const macros = await getMacros(sageCommand, character)
@@ -197,7 +197,7 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 			}
 		}
 	}else {
-		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
+		const output = { embeds:resolveToEmbeds(character.toHtml(), eventCache.getFormatter()) };
 		const message = await channel?.send(output).catch(errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();
@@ -418,8 +418,8 @@ function createComponents(character: PathbuilderCharacter, macros: TLabeledMacro
 }
 
 type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
-function prepareOutput({ sageCache }: SageCommand, character: PathbuilderCharacter, macros: TLabeledMacro[]): TOutput {
-	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character)));
+function prepareOutput({ eventCache }: SageCommand, character: PathbuilderCharacter, macros: TLabeledMacro[]): TOutput {
+	const embeds = resolveToEmbeds(character.toHtml(getActiveSections(character)), eventCache.getFormatter());
 	const components = createComponents(character, macros);
 	return { embeds, components };
 }

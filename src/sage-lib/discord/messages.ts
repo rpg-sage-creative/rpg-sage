@@ -1,6 +1,7 @@
 import { error, RenderableContent, warn, warnReturnNull, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { addInvalidWebhookUsername, DiscordKey, isDMBased, isGuildBased, isMessage, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
+import type { SyncDialogContentFormatter } from "../sage/commands/dialog/chat/DialogProcessor.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
 import { DialogMessageRepository } from "../sage/repo/DialogMessageRepository.js";
@@ -38,6 +39,7 @@ type WebhookOptions = {
 	authorOptions: AuthorOptions;
 	dialogType: DialogType;
 	files?: AttachmentResolvable[];
+	formatter: SyncDialogContentFormatter;
 	renderableContent: RenderableContentResolvable;
 	sageCache: SageCache;
 	skipDelete?: boolean;
@@ -49,7 +51,7 @@ type WebhookOptions = {
  * If we cannot find a webhook, we return a Promise.reject.
  */
 export async function sendWebhook(targetChannel: Channel, webhookOptions: WebhookOptions): Promise<Message[] | undefined> {
-	const { authorOptions, renderableContent, dialogType, files, sageCache } = webhookOptions;
+	const { authorOptions, renderableContent, dialogType, files, formatter, sageCache } = webhookOptions;
 
 	if (isDMBased(targetChannel)) {
 		const actor = await sageCache.validateActor();
@@ -64,7 +66,7 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-dialog`);
 	}
 
-	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel as MessageTarget), renderableContent);
+	const embeds = resolveToEmbeds(renderableContent, formatter);
 	const contentToEmbeds = dialogType === DialogType.Embed;
 	const embedsToContent = dialogType === DialogType.Post;
 	// const content = dialogType === DialogType.Post ? resolveToTexts(sageCache.cloneForChannel(targetChannel), renderableContent).join("\n") : undefined;
@@ -81,7 +83,7 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 }
 
 export async function replaceWebhook(originalMessage: SMessageOrPartial, webhookOptions: WebhookOptions): Promise<Message[]> {
-	const { authorOptions, renderableContent, dialogType, files, sageCache, skipDelete, skipReplyingTo } = webhookOptions;
+	const { authorOptions, renderableContent, dialogType, files, formatter, sageCache, skipDelete, skipReplyingTo } = webhookOptions;
 
 	if (!skipDelete && !originalMessage.deletable) {
 		return Promise.reject(`Cannot Delete Message: ${messageToDetails(originalMessage)}`);
@@ -111,7 +113,7 @@ export async function replaceWebhook(originalMessage: SMessageOrPartial, webhook
 		replyingTo = `*replying to* ${displayName} ${userMention} ${toMessageUrl(originalMessage.reference)}`.replace(/\s+/g, " ");
 	}
 
-	const embeds = resolveToEmbeds(sageCache.cloneForChannel(originalMessage.channel), renderableContent);
+	const embeds = resolveToEmbeds(renderableContent, formatter);
 	if (embeds.length === 1 && !embeds[0].length && files?.length) {
 		embeds.length = 0;
 	}
@@ -182,7 +184,7 @@ export async function send(sageCache: SageCache, targetChannel: MessageTarget, r
 
 async function sendRenderableContent(sageCache: SageCache, renderableContent: RenderableContentResolvable, targetChannel: MessageTarget, originalAuthor: Optional<User>): Promise<SMessage[]> {
 	const messages: Message[] = [];
-	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
+	const embeds = resolveToEmbeds(renderableContent, sageCache.cloneForChannel(targetChannel).getFormatter());
 	if (embeds.length > 2) {
 		if (isGuildBased(targetChannel)) {
 			const embed = createMessageEmbed({ description:"*Long reply sent via direct message!*" });

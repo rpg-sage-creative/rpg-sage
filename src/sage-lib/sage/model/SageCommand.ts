@@ -562,9 +562,10 @@ export abstract class SageCommand<
 
 	/** @todo figure out where splitMessageOptions comes into this workflow */
 	public resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, _ephemeral?: boolean): T {
+		const formatter = this.eventCache.getFormatter();
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
-				embeds: resolveToEmbeds(this.eventCache, renderableOrArgs),
+				embeds: resolveToEmbeds(renderableOrArgs, formatter),
 				ephemeral: false
 				// ephemeral: ephemeral
 			} as T;
@@ -574,12 +575,12 @@ export abstract class SageCommand<
 		if (renderableOrArgs.content) {
 			options.content = typeof(renderableOrArgs.content) === "string"
 				? renderableOrArgs.content
-				: resolveToContent(this.eventCache, renderableOrArgs.content).join("\n");
+				: resolveToContent(renderableOrArgs.content, formatter).join("\n");
 		}
 		if (renderableOrArgs.embeds) {
 			options.embeds = Array.isArray(renderableOrArgs.embeds)
 				? renderableOrArgs.embeds
-				: resolveToEmbeds(this.eventCache, renderableOrArgs.embeds);
+				: resolveToEmbeds(renderableOrArgs.embeds, formatter);
 		}
 		if (renderableOrArgs.components) {
 			options.components = renderableOrArgs.components;

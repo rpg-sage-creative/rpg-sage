@@ -1,6 +1,6 @@
 import type { RenderableContentResolvable } from "@rsc-utils/core-utils";
 import { resolveEmbed, type EmbedResolvable } from "@rsc-utils/discord-utils";
-import type { SageCache } from "../../sage/model/SageCache.js";
+import type { SyncDialogContentFormatter } from "../../sage/commands/dialog/chat/DialogProcessor.js";
 import { getValueToAppend } from "./getValueToAppend.js";
 import { resolveToEmbeds } from "./resolveToEmbeds.js";
 
@@ -21,7 +21,7 @@ function embedsToTexts(embeds: EmbedResolvable[]): string[] {
 }
 
 /** Converts RenderableContent to embeds and then to lines of simple text with markup. */
-export function resolveToContent(caches: SageCache, renderableContent: RenderableContentResolvable): string[] {
-	const embeds = resolveToEmbeds(caches, renderableContent);
+export function resolveToContent(resolvable: RenderableContentResolvable, formatter: SyncDialogContentFormatter): string[] {
+	const embeds = resolveToEmbeds(resolvable, formatter);
 	return embedsToTexts(embeds);
 }

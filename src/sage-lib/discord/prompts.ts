@@ -77,16 +77,18 @@ async function sendPromptMessage(args: PromptArgs): Promise<PromptMessageSentDat
 	const { sageCommand } = args;
 
 	// ensure channel before going further (should never be a problem, but just in case)
-	const { dChannel, sageCache } = sageCommand;
+	const { dChannel } = sageCommand;
 	if (!dChannel) {
 		return undefined;
 	}
 
+	const formatter = sageCommand.eventCache.getFormatter();
+
 	// format content
-	const content = args.content ? resolveToContent(sageCache, args.content).join("\n") : undefined;
+	const content = args.content ? resolveToContent(args.content, formatter).join("\n") : undefined;
 
 	// create embeds
-	const embeds = args.embeds?.map(embed => resolveToEmbeds(sageCache, embed)).flat() ?? [];
+	const embeds = args.embeds?.map(embed => resolveToEmbeds(embed, formatter)).flat() ?? [];
 
 	// create buttons/components
 	const messageButtons = createButtons(args.buttons);

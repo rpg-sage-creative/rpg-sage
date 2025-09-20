@@ -57,7 +57,7 @@ async function parseDiscordDice(sageCommand: SageCommand, diceString: string, ov
 
 	const statMacroProcessor = StatMacroProcessor.from(sageCommand);
 	if (statMacroProcessor.hasChars) {
-		diceString = statMacroProcessor.process(diceString);
+		diceString = statMacroProcessor.processStatBlocks(diceString);
 	}
 
 	return DiscordDice.parse({

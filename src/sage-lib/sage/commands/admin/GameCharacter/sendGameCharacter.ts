@@ -8,6 +8,7 @@ import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
+import { DialogProcessor } from "../../dialog/chat/DialogProcessor.js";
 import { toReadableOwner } from "./toReadableOwner.js";
 
 function orNone(text: Optional<string>): string {
@@ -130,6 +131,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 			username: character.toDisplayName()
 		},
 		dialogType: sageMessage.dialogPostType,
+		formatter: DialogProcessor.from(sageMessage).for(character).getFormatter(false),
 		renderableContent,
 		sageCache: sageMessage.sageCache,
 	};
