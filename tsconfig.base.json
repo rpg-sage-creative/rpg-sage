@@ -41,7 +41,7 @@
 
 		"skipLibCheck": true,
 
-		// "sourceMap": true,
+		"sourceMap": true,
 		"strict": true,
 		"strictBindCallApply": true,
 		"strictFunctionTypes": true,
