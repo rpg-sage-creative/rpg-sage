@@ -47,7 +47,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const color = postData.embedColor ?? character.embedColor ?? sageMessage.toHexColorString(postData.colorType);
 	renderableContent.setColor(color);
 
-	let content = await processor.processMentions(postData.content);
+	let content = await processor.processDialog(postData.content);
 
 	//#region dice lists
 	const diceMatches = await parseDiceMatches(sageMessage, content);
@@ -108,8 +108,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 
 	const skipDelete = !isFirst;
 	const skipReplyingTo = !isFirst;
-	const formatter = processor.getFormatter();
-	const messages = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, formatter, skipDelete, skipReplyingTo })
+	const messages = await sendDialogRenderable({ sageMessage, renderableContent, authorOptions, dialogTypeOverride, files, skipDelete, skipReplyingTo })
 		.catch(errorReturnEmptyArray);
 	if (messages.length) {
 		await logPostCurrency(sageMessage, "dialog");

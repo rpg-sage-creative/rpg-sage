@@ -7,13 +7,11 @@ import type { AttachmentResolvable } from "../../../discord/sendTo.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { includeDeleteButton } from "../../model/utils/deleteButton.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
-import type { SyncDialogContentFormatter } from "./chat/DialogProcessor.js";
 
 type DialogRenderableOptions = {
 	authorOptions: AuthorOptions;
 	dialogTypeOverride?: DialogType;
 	files?: AttachmentResolvable[];
-	formatter: SyncDialogContentFormatter;
 	renderableContent: RenderableContent;
 	sageMessage: SageMessage;
 	skipDelete?: boolean;
@@ -23,7 +21,7 @@ type DialogRenderableOptions = {
 /**
  * @todo sort out why i am casting caches to <any>
  */
-export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, formatter, renderableContent, sageMessage, skipDelete, skipReplyingTo }: DialogRenderableOptions): Promise<Message[]> {
+export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, files, renderableContent, sageMessage, skipDelete, skipReplyingTo }: DialogRenderableOptions): Promise<Message[]> {
 	if (authorOptions.username) {
 		const invalidName = isInvalidWebhookUsername(authorOptions.username);
 		if (invalidName) {
@@ -40,10 +38,10 @@ export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, 
 
 	const targetChannel = await sageCache.fetchChannel(sageMessage.channel?.sendDialogTo);
 	if (targetChannel) {
-		const sent = await sendWebhook(targetChannel, { authorOptions, dialogType, files, formatter, renderableContent, sageCache }).catch(errorReturnEmptyArray);
+		const sent = await sendWebhook(targetChannel, { authorOptions, dialogType, files, renderableContent, sageCache }).catch(errorReturnEmptyArray);
 		return sent?.filter(msg => msg) ?? [];
 	}
 
-	const replaced = await replaceWebhook(sageMessage.message, { authorOptions, dialogType, files, formatter, renderableContent, sageCache, skipDelete, skipReplyingTo }).catch(errorReturnEmptyArray);
+	const replaced = await replaceWebhook(sageMessage.message, { authorOptions, dialogType, files, renderableContent, sageCache, skipDelete, skipReplyingTo }).catch(errorReturnEmptyArray);
 	return replaced.filter(msg => msg);
 }

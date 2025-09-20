@@ -39,7 +39,7 @@ type WebhookOptions = {
 	authorOptions: AuthorOptions;
 	dialogType: DialogType;
 	files?: AttachmentResolvable[];
-	formatter: SyncDialogContentFormatter;
+	formatter?: SyncDialogContentFormatter;
 	renderableContent: RenderableContentResolvable;
 	sageCache: SageCache;
 	skipDelete?: boolean;
@@ -66,7 +66,7 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-dialog`);
 	}
 
-	const embeds = resolveToEmbeds(renderableContent, formatter);
+	const embeds = resolveToEmbeds(renderableContent, formatter ?? sageCache.getFormatter());
 	const contentToEmbeds = dialogType === DialogType.Embed;
 	const embedsToContent = dialogType === DialogType.Post;
 	// const content = dialogType === DialogType.Post ? resolveToTexts(sageCache.cloneForChannel(targetChannel), renderableContent).join("\n") : undefined;
@@ -113,7 +113,7 @@ export async function replaceWebhook(originalMessage: SMessageOrPartial, webhook
 		replyingTo = `*replying to* ${displayName} ${userMention} ${toMessageUrl(originalMessage.reference)}`.replace(/\s+/g, " ");
 	}
 
-	const embeds = resolveToEmbeds(renderableContent, formatter);
+	const embeds = resolveToEmbeds(renderableContent, formatter ?? sageCache.getFormatter());
 	if (embeds.length === 1 && !embeds[0].length && files?.length) {
 		embeds.length = 0;
 	}

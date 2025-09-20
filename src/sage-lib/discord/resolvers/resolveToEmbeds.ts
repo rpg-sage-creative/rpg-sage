@@ -1,6 +1,5 @@
-import { RenderableContent, type RenderableContentResolvable, type RenderableContentSection } from "@rsc-utils/core-utils";
+import { chunk, RenderableContent, type RenderableContentResolvable, type RenderableContentSection } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, getEmbedFieldCount, getEmbedLength } from "@rsc-utils/discord-utils";
-import { chunk } from "@rsc-utils/string-utils";
 import type { SyncDialogContentFormatter } from "../../sage/commands/dialog/chat/DialogProcessor.js";
 import { createMessageEmbed } from "../createMessageEmbed.js";
 
