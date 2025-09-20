@@ -27,28 +27,32 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 		return super.for(char) as DialogProcessor<true>;
 	}
 
-	public getFormatter(withMentions: true):AsyncDialogContentFormatter;
+	public getFormatter(withMentions: true): AsyncDialogContentFormatter;
 	public getFormatter(withMentions?: false): SyncDialogContentFormatter;
 	public getFormatter(withMentions?: boolean) {
-		if (withMentions) return async (content: string) => this.processDialog(content);
-		return (content: string) => this.processDialogWithoutMentions(content);
+		if (withMentions) return async (content: Optional<string>) => this.processDialog(content);
+		return (content: Optional<string>) => this.processDialogWithoutMentions(content);
 	}
 
 	public processAuthorName(authorName?: string): HasActingCharacter extends true ? string : string | undefined {
 		return this.actingCharacter?.toDisplayName({ processor:this, overrideTemplate:authorName }) as string;
 	}
 
-	public async processDialog(content: string): Promise<string> {
+	public async processDialog(content: Optional<string>): Promise<string> {
+		if (!content) return "";
+
 		// process character and table mentions
 		content = await this.processMentions(content);
 
 		// proccess content
 		content = this.processDialogWithoutMentions(content);
 
-		return content;
+		return content.trim();
 	}
 
-	public processDialogWithoutMentions(content: string): string {
+	public processDialogWithoutMentions(content: Optional<string>): string {
+		if (!content) return "";
+
 		//#region footer / sheet link
 		let dialogFooter = this.actingCharacter?.toDialogFooterLine({ processor:this });
 		const sheetLink = this.actingCharacter?.toSheetLink();
@@ -82,17 +86,19 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 
 		//#endregion
 
-		return content;
+		return content.trim();
 	}
 
-	public async processMentions(content: string): Promise<string> {
+	public async processMentions(content: Optional<string>): Promise<string> {
+		if (!content) return "";
+
 		// process character mentions
 		content = await replaceCharacterMentions(this.sageCommand, content);
 
 		// process table mentions
 		content = await replaceTableMentions(this.sageCommand, content);
 
-		return content;
+		return content.trim();
 	}
 
 	public static from(sageCommand: SageCommand): DialogProcessor {

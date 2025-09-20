@@ -147,7 +147,8 @@ export class StatBlockProcessor {
 		return { aliasOrName:value, stackValue:value };
 	}
 
-	public processStatBlocks(value: string): string {
+	public processStatBlocks(value: Optional<string>): string {
+		if (!value) return "";
 		return this._process(value, { matches:new Set(), stack:[] });
 	}
 
@@ -166,7 +167,8 @@ export class StatBlockProcessor {
 		};
 	}
 
-	protected _process(value: string, options: ProcessOptions): string {
+	protected _process(value: Optional<string>, options: ProcessOptions): string {
+		if (!value) return "";
 		const statBlockRegex = (this.constructor as typeof StatBlockProcessor).getStatBlockRegex();
 		const parsers = {
 			ticks: getCodeBlockRegex(),
@@ -311,7 +313,7 @@ export class StatBlockProcessor {
 	}
 
 	public static for(char: StatsCharacter) { return new StatBlockProcessor({actingCharacter:char}); }
-	public static process(char: StatsCharacter, value: string) { return new StatBlockProcessor({actingCharacter:char}).processStatBlocks(value); }
+	public static process(char: StatsCharacter, value: Optional<string>) { return new StatBlockProcessor({actingCharacter:char}).processStatBlocks(value); }
 	public static processTemplate(char: StatsCharacter, templateKey: string) { return new StatBlockProcessor({actingCharacter:char}).processTemplate(templateKey); }
 
 	/** @todo merge this and process and processTemplate somehow .. maybe just use these args in those two */
