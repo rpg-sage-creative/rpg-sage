@@ -1,6 +1,7 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
 import type { Optional } from "@rsc-utils/core-utils";
 import { error } from "@rsc-utils/core-utils";
+import { doStatMath } from "@rsc-utils/dice-utils";
 import { xRegExp } from "@rsc-utils/dice-utils/build/internal/xRegExp.js";
 import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
 import { createKeyValueArgRegex, isWrapped, redactCodeBlocks, tokenize, unwrap, wrap } from '@rsc-utils/string-utils';
@@ -59,6 +60,9 @@ async function parseDiscordDice(sageCommand: SageCommand, diceString: string, ov
 	if (statMacroProcessor.hasChars) {
 		diceString = statMacroProcessor.processStatBlocks(diceString);
 	}
+
+	// final math pass
+	diceString = doStatMath(diceString);
 
 	return DiscordDice.parse({
 		diceString: diceString,
