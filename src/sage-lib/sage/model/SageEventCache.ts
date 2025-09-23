@@ -6,7 +6,7 @@ import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message }
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
-import type { SyncDialogContentFormatter } from "../commands/dialog/chat/DialogProcessor.js";
+import { MoveDirection } from "../commands/map/MoveDirection.js";
 import { globalCacheFilter, globalCacheRead, type GameCacheItem, type GlobalCacheItem } from "../repo/base/globalCache.js";
 import { JsonRepo } from "../repo/base/JsonRepo.js";
 import { ActiveBot } from "./ActiveBot.js";
@@ -659,9 +659,14 @@ export class SageEventCache {
 	}
 
 	public format(text: string): string {
+		// process move direction emoji before handing off to the emojify function
+		const moveDirectionOutputType = this.game?.moveDirectionOutputType ?? this.user?.moveDirectionOutputType ?? 0;
+		text = MoveDirection.replaceAll(text, moveDirectionOutputType);
+
 		return toMarkdown(this.emojify(text));
 	}
-	public getFormatter(): SyncDialogContentFormatter {
+
+	public getFormatter(): (content?: Optional<string>) => string {
 		return (value: Optional<string>) => this.format(value ?? "").trim();
 	}
 
