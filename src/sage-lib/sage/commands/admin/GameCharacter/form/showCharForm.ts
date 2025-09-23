@@ -74,7 +74,7 @@ function buildFormEmbed(sageCommand: SageCommand, char: GameCharacter): EmbedBui
 	embed.appendDescription(`**Nickname (aka)** ${char.aka ?? "*none*"}`, "\n");
 	embed.appendDescription(`**Alias** ${char.alias ?? "*none*"}`, "\n");
 	const displayNameTemplate = char.getTemplate("displayName");
-	const displayName = char.toDisplayName({ processor:StatMacroProcessor.from(sageCommand) });
+	const displayName = char.toDisplayName({ processor:StatMacroProcessor.withStats(sageCommand) });
 	if (displayNameTemplate) {
 		embed.appendDescription(`**Display Name**`, "\n");
 		embed.appendDescription(`- Template: ${"`" + displayNameTemplate + "`"}`, "\n");

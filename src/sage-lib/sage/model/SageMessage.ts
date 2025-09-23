@@ -4,7 +4,6 @@ import type { User } from "discord.js";
 import XRegExp from "xregexp";
 import { ArgsManager } from "../../discord/ArgsManager.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
-import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { sendTo } from "../../discord/sendTo.js";
 import { type TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
@@ -126,7 +125,7 @@ export class SageMessage
 		const sendArgs = {
 			sageCache: this.eventCache,
 			target,
-			content: resolveToContent(renderableContentResolvable, this.eventCache.getFormatter()).join("\n")
+			content: this.eventCache.resolveToContent(renderableContentResolvable).join("\n")
 		};
 		const catchHandler = (err: unknown) => {
 			error(`${toHumanReadable(target)}: SageMessage.sendPost`, err);

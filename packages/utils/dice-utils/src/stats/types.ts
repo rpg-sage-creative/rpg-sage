@@ -4,7 +4,7 @@ export type StatsCharacter = {
 	name: string;
 	/** @deprecated use getString or getNumber */
 	getStat(key: string): string | null;
-	getStat(key: string, bool?: boolean): {
+	getStat(key: string, bool: true): {
 		isDefined: boolean;
 		key: string;
 		keyLower: Lowercase<string>;

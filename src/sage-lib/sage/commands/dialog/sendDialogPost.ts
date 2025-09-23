@@ -36,9 +36,9 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const webhook = true; //sageMessage.dialogType === "Webhook";
 	const renderableContent = new RenderableContent();
 
-	const processor = DialogProcessor.from(sageMessage).for(character);
+	const processor = await DialogProcessor.forDialog(sageMessage, character);
 
-	const authorName = processor.processAuthorName(postData.authorName);
+	const authorName = processor.processDisplayName(postData.authorName);
 	const title = postData.title || authorName;
 	if (!webhook || title !== authorName) {
 		renderableContent.setTitle(title);
@@ -47,7 +47,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const color = postData.embedColor ?? character.embedColor ?? sageMessage.toHexColorString(postData.colorType);
 	renderableContent.setColor(color);
 
-	let content = await processor.processDialog(postData.content);
+	let content = processor.process(postData.content, { footer:true, mentions:true, stats:true });
 
 	//#region dice lists
 	const diceMatches = await parseDiceMatches(sageMessage, content);

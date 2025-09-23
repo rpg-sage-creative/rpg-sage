@@ -1,17 +1,31 @@
-import { toMarkdown, type Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { GuildMember } from "discord.js";
+import type { Game } from "../../../model/Game.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { DiceMacroBase } from "../../../model/Macro.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
+import type { User } from "../../../model/User.js";
 import { StatMacroProcessor, type StatMacroCharacters } from "../../dice/stats/StatMacroProcessor.js";
-import { MoveDirection } from "../../map/MoveDirection.js";
 import { replaceCharacterMentions } from "./replaceCharacterMentions.js";
 import { replaceTableMentions } from "./replaceTableMentions.js";
 
-export type SyncDialogContentFormatter = (content: Optional<string>) => string;
-export type AsyncDialogContentFormatter = (content: Optional<string>) => Promise<string>;
+type MentionArgs = {
+	game?: Game;
+	gameMasters?: GuildMember[];
+	players?: GuildMember[];
+	mentionPrefix?: string;
+	sageUser: User;
+};
+
+type ProcessArgs = {
+	basic?: boolean;
+	footer?: boolean;
+	mentions?: boolean;
+	stats?: boolean;
+};
 
 export class DialogProcessor<HasActingCharacter extends boolean = false> extends StatMacroProcessor {
-	protected constructor(chars: StatMacroCharacters, macros: DiceMacroBase[], public sageCommand: SageCommand) {
+	protected constructor(chars: StatMacroCharacters, macros: DiceMacroBase[], public sageCommand: SageCommand, public mentionArgs: MentionArgs) {
 		super(chars, macros);
 	}
 
@@ -20,41 +34,62 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 	}
 
 	public clone(): DialogProcessor {
-		return new DialogProcessor({ ...this.chars } as StatMacroCharacters, this.macros.slice(), this.sageCommand);
+		return new DialogProcessor({ ...this.chars } as StatMacroCharacters, this.macros.slice(), this.sageCommand, { ...this.mentionArgs });
 	}
 
 	public for(char: GameCharacter): DialogProcessor<true> {
 		return super.for(char) as DialogProcessor<true>;
 	}
 
-	public getFormatter(withMentions: true): AsyncDialogContentFormatter;
-	public getFormatter(withMentions?: false): SyncDialogContentFormatter;
-	public getFormatter(withMentions?: boolean) {
-		if (withMentions) return async (content: Optional<string>) => this.processDialog(content);
-		return (content: Optional<string>) => this.processDialogWithoutMentions(content);
+	public getFormatter(args: ProcessArgs) {
+		return (content: Optional<string>) => this.process(content, args);
 	}
 
-	public processAuthorName(authorName?: string): HasActingCharacter extends true ? string : string | undefined {
+	/** processesses only the acting character's toDisplayName */
+	public processDisplayName(authorName?: string): HasActingCharacter extends true ? string : string | undefined {
 		return this.actingCharacter?.toDisplayName({ processor:this, overrideTemplate:authorName }) as string;
 	}
 
-	public async processDialog(content: Optional<string>): Promise<string> {
+	public process(content: Optional<string>, { basic, footer, mentions, stats }: ProcessArgs): string {
 		if (!content) return "";
 
-		// process character and table mentions
-		content = await this.processMentions(content);
+		// footer can have stats, do it before stats
+		if (footer) {
+			content = this.processFooter(content);
+		}
 
-		// proccess content
-		content = this.processDialogWithoutMentions(content);
+		// might have emoji in stats, do it before basic
+		if (stats) {
+			content = this.processStatBlocks(content);
+		}
+
+		// this shouldn't have anything that needs processing ...
+		if (mentions) {
+			content = this.processMentions(content);
+		}
+
+		// this is the last to go
+		if (basic) {
+			content = this.processBasic(content);
+		}
 
 		return content.trim();
 	}
 
-	public processDialogWithoutMentions(content: Optional<string>): string {
+	/** processes basic replacement used in all sage posts: sage custom emoji tags and html to markdown */
+	public processBasic(content: Optional<string>): string {
 		if (!content) return "";
 
-		//#region footer / sheet link
+		content = this.sageCommand.eventCache.format(content);
+
+		return content.trim();
+	}
+
+	public processFooter(content: Optional<string>): string {
+		if (!content) return "";
+
 		let dialogFooter = this.actingCharacter?.toDialogFooterLine({ processor:this });
+
 		const sheetLink = this.actingCharacter?.toSheetLink();
 		if (sheetLink) {
 			if (dialogFooter) {
@@ -65,45 +100,39 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 				content += ` ${sheetLink}`;
 			}
 		}
+
 		if (dialogFooter && !content.includes(dialogFooter)) {
 			content += `\n${dialogFooter}`;
 		}
-		//#endregion
-
-		// process stats in content
-		content = this.processStatBlocks(content);
-
-		// process movement directions (belongs with SageEventCache.format() logic)
-		content = MoveDirection.replaceAll(content, this.sageCommand.moveDirectionOutputType);
-
-		//#region sage emoji and html to markdown are part of SageEventCache.format()
-
-		// sage emoji
-		content = this.sageCommand.eventCache.emojify(content);
-
-		// convert html to markdown
-		content = toMarkdown(content);
-
-		//#endregion
 
 		return content.trim();
 	}
 
-	public async processMentions(content: Optional<string>): Promise<string> {
+	public processMentions(content: Optional<string>): string {
 		if (!content) return "";
 
 		// process character mentions
-		content = await replaceCharacterMentions(this.sageCommand, content);
+		content = replaceCharacterMentions(content, this.mentionArgs);
 
 		// process table mentions
-		content = await replaceTableMentions(this.sageCommand, content);
+		content = replaceTableMentions(content, this.mentionArgs);
 
 		return content.trim();
 	}
 
-	public static from(sageCommand: SageCommand): DialogProcessor {
-		const { chars, macros } = StatMacroProcessor.from(sageCommand);
-		return new DialogProcessor(chars as StatMacroCharacters, macros, sageCommand);
+	public static async forDialog(sageCommand: SageCommand): Promise<DialogProcessor>;
+	public static async forDialog(sageCommand: SageCommand, char: GameCharacter): Promise<DialogProcessor<true>>;
+	public static async forDialog(sageCommand: SageCommand, char?: GameCharacter): Promise<DialogProcessor<boolean>> {
+		const { chars, macros } = StatMacroProcessor.withMacros(sageCommand);
+		const { game, mentionPrefix, sageUser } = sageCommand;
+		const gameMasters = await game?.gmGuildMembers();
+		const players = await game?.pGuildMembers();
+		const mentionArgs = { game, gameMasters, players, mentionPrefix, sageUser };
+		const processor = new DialogProcessor(chars as StatMacroCharacters, macros, sageCommand, mentionArgs);
+		if (char) {
+			return processor.for(char);
+		}
+		return processor;
 	}
 
 }

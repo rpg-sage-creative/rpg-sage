@@ -4,8 +4,6 @@ import type { DInteraction, DiscordCache, DRepliableInteraction, EmbedBuilder } 
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, PartialGroupDMChannel, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
-import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
-import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { IChannel } from "../repo/base/IdRepository.js";
 import type { Bot } from "./Bot.js";
@@ -563,10 +561,9 @@ export abstract class SageCommand<
 
 	/** @todo figure out where splitMessageOptions comes into this workflow */
 	public resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, _ephemeral?: boolean): T {
-		const formatter = this.eventCache.getFormatter();
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
-				embeds: resolveToEmbeds(renderableOrArgs, formatter),
+				embeds: this.eventCache.resolveToEmbeds(renderableOrArgs),
 				ephemeral: false
 				// ephemeral: ephemeral
 			} as T;
@@ -576,12 +573,12 @@ export abstract class SageCommand<
 		if (renderableOrArgs.content) {
 			options.content = typeof(renderableOrArgs.content) === "string"
 				? renderableOrArgs.content
-				: resolveToContent(renderableOrArgs.content, formatter).join("\n");
+				: this.eventCache.resolveToContent(renderableOrArgs.content).join("\n");
 		}
 		if (renderableOrArgs.embeds) {
 			options.embeds = Array.isArray(renderableOrArgs.embeds)
 				? renderableOrArgs.embeds
-				: resolveToEmbeds(renderableOrArgs.embeds, formatter);
+				: this.eventCache.resolveToEmbeds(renderableOrArgs.embeds);
 		}
 		if (renderableOrArgs.components) {
 			options.components = renderableOrArgs.components;

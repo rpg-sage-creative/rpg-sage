@@ -5,7 +5,6 @@ import { sendWebhook } from "../../../../discord/messages.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";
-import { DialogProcessor } from "../../dialog/chat/DialogProcessor.js";
 
 export async function sendGameCharacterMods(sageMessage: SageMessage, character: GameCharacter, updatedKeys: StringSet): Promise<Message[]> {
 	const renderableContent = createAdminRenderableContent(sageMessage.getHasColors(), character.name);
@@ -80,7 +79,6 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 	const { sageCache } = sageMessage;
 	const authorOptions = { avatarURL: avatarUrl, username: character.toDisplayName() };
 	const dialogType = sageMessage.dialogPostType;
-	const formatter = DialogProcessor.from(sageMessage).for(character).getFormatter();
-	const messages = await sendWebhook(targetChannel, { authorOptions, dialogType, formatter, renderableContent, sageCache });
+	const messages = await sendWebhook(targetChannel, { authorOptions, dialogType, renderableContent, sageCache });
 	return messages ?? [];
 }

@@ -9,7 +9,6 @@ import { type PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e
 import { type PlayerCharacterCorePR, PlayerCharacterPR, type TCharacterSectionType, type TCharacterViewType, type TSkillZord, type TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";
 import { type PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
-import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
@@ -54,7 +53,7 @@ export function loadCharacterCore(core: Optional<TPlayerCharacterCore>): TPlayer
 
 type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
 function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutput {
-	const embeds = resolveToEmbeds(character.toHtml(getActiveSections(character) as any), sageCache.getFormatter());
+	const embeds = sageCache.resolveToEmbeds(character.toHtml(getActiveSections(character) as any));
 	const components = createComponents(character);
 	return { embeds, components };
 }
@@ -124,7 +123,7 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 			}
 		}
 	}else {
-		const output = { embeds:resolveToEmbeds(character.toHtml(), eventCache.getFormatter()) };
+		const output = { embeds:eventCache.resolveToEmbeds(character.toHtml()) };
 		const message = await channel?.send(output).catch(errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();

@@ -49,10 +49,12 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		return sageMessage.replyStack.whisper(localize("CANNOT_FIND_WEBHOOK"));
 	}
 
+	const processor = await DialogProcessor.forDialog(sageMessage, character);
+
 	const embed = message.embeds[0];
 	const originalContent = embed?.description ?? message.content;
 	const updatedImageUrl = dialogContent.embedImageUrl;
-	const updatedContent = await DialogProcessor.from(sageMessage).for(character).processDialog(dialogContent.content);
+	const updatedContent = processor.process(dialogContent.content, { basic:true, footer:true, mentions:true, stats:true });
 	const updatedEmbed = updateEmbed(embed, updatedImageUrl, updatedContent);
 	const threadId = sageMessage.threadDid;
 

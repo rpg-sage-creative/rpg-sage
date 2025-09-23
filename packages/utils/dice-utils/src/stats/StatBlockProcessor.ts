@@ -110,14 +110,40 @@ type ProcessTemplateResults = {
 export class StatBlockProcessor {
 	public constructor(public chars: StatCharacters) { }
 
-	public get hasChars(): boolean {
+	public get hasActingChar(): boolean {
+		return !!this.chars.actingCharacter;
+	}
+
+	public get isEmpty(): boolean {
 		const { chars } = this;
 		const keys = Object.keys(chars) as (keyof StatCharacters)[];
 		for (const key of keys) {
-			if (chars[key]) return true;
+			if (chars[key]) return false;
 		}
-		return false;
+		return true;
 	}
+
+	/** Gets stat for the given key as a number from the acting character. */
+	public getNumber(key: string): number | undefined {
+		return this.chars.actingCharacter?.getNumber(key);
+	}
+
+	public getStat(key: string) {
+		const stat = this.chars.actingCharacter?.getStat(key, true);
+		if (!stat?.isDefined) return undefined;
+
+		const processed = this.processStatBlocks(`{${key}}`);
+		if (processed !== stat.value) {
+			return { key:stat.key, processed:true, raw:stat.value, value:processed };
+		}
+		return { key:stat.key, value:stat.value };
+	}
+
+	/** Gets stat for the given key as a string from the acting character. */
+	public getString(key: string): string | undefined {
+		return this.chars.actingCharacter?.getString(key);
+	}
+
 
 	/** Parses the given value to see if it has a CharReference. */
 	protected parseCharReference(value: Optional<string>): CharReference {
@@ -305,6 +331,7 @@ export class StatBlockProcessor {
 	public clone(): StatBlockProcessor {
 		return new StatBlockProcessor({ ...this.chars });
 	}
+
 	public for(char: StatsCharacter): StatBlockProcessor {
 		if (this.chars.actingCharacter === char) return this;
 		const clone = this.clone();
@@ -312,9 +339,13 @@ export class StatBlockProcessor {
 		return clone;
 	}
 
-	public static for(char: StatsCharacter) { return new StatBlockProcessor({actingCharacter:char}); }
-	public static process(char: StatsCharacter, value: Optional<string>) { return new StatBlockProcessor({actingCharacter:char}).processStatBlocks(value); }
-	public static processTemplate(char: StatsCharacter, templateKey: string) { return new StatBlockProcessor({actingCharacter:char}).processTemplate(templateKey); }
+	public static for(char: StatsCharacter) {
+		return new StatBlockProcessor({actingCharacter:char});
+	}
+
+	public static process(char: StatsCharacter, value: Optional<string>) {
+		return StatBlockProcessor.for(char).processStatBlocks(value);
+	}
 
 	/** @todo merge this and process and processTemplate somehow .. maybe just use these args in those two */
 	public static doIt({ char, processor, overrideTemplate, templateKey }: { char: StatsCharacter; processor?:StatBlockProcessor; overrideTemplate?:string; templateKey:string; }) {

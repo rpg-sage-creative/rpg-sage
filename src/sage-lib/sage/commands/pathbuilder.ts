@@ -1,11 +1,10 @@
-import { errorReturnNull, isDefined, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, isDefined, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
-import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { GameCharacter } from "../model/GameCharacter.js";
 import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import { MacroOwner } from "../model/MacroOwner.js";
@@ -189,7 +188,7 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 	if (saved) {
 		const macros = await getMacros(sageCommand, character)
 		const output = prepareOutput(sageCommand, character, macros);
-		const message = await channel?.send(output).catch(errorReturnNull);
+		const message = await channel?.send(output).catch(errorReturnUndefined);
 		if (message) {
 			await addOrUpdateCharacter(sageCommand, character, message);
 			if (pin && message.pinnable) {
@@ -197,8 +196,8 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 			}
 		}
 	}else {
-		const output = { embeds:resolveToEmbeds(character.toHtml(), eventCache.getFormatter()) };
-		const message = await channel?.send(output).catch(errorReturnNull);
+		const output = { embeds:eventCache.resolveToEmbeds(character.toHtml()) };
+		const message = await channel?.send(output).catch(errorReturnUndefined);
 		if (pin && message?.pinnable) {
 			await message.pin();
 		}
@@ -419,7 +418,7 @@ function createComponents(character: PathbuilderCharacter, macros: TLabeledMacro
 
 type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
 function prepareOutput({ eventCache }: SageCommand, character: PathbuilderCharacter, macros: TLabeledMacro[]): TOutput {
-	const embeds = resolveToEmbeds(character.toHtml(getActiveSections(character)), eventCache.getFormatter());
+	const embeds = eventCache.resolveToEmbeds(character.toHtml(getActiveSections(character)));
 	const components = createComponents(character, macros);
 	return { embeds, components };
 }

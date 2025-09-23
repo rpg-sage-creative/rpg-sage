@@ -1,9 +1,10 @@
 import { chunk, RenderableContent, type RenderableContentResolvable, type RenderableContentSection } from "@rsc-utils/core-utils";
-import { DiscordMaxValues, EmbedBuilder, getEmbedFieldCount, getEmbedLength } from "@rsc-utils/discord-utils";
-import type { SyncDialogContentFormatter } from "../../sage/commands/dialog/chat/DialogProcessor.js";
+import { DiscordMaxValues, EmbedBuilder, getEmbedFieldCount, getEmbedLength, resolveEmbed, type EmbedResolvable } from "@rsc-utils/discord-utils";
 import { createMessageEmbed } from "../createMessageEmbed.js";
+import { getValueToAppend } from "./getValueToAppend.js";
+import type { ContentFormatter } from "../../sage/model/SageEventCache.js";
 
-type ResolveSectionOptions = { embeds:EmbedBuilder[]; formatter:SyncDialogContentFormatter; renderableContent:RenderableContent; section:RenderableContentSection; };
+type ResolveSectionOptions = { embeds:EmbedBuilder[]; formatter:ContentFormatter; renderableContent:RenderableContent; section:RenderableContentSection; };
 
 /** Resolves a simple text section. */
 function resolveSection({ embeds, formatter, renderableContent, section }: ResolveSectionOptions): void {
@@ -67,7 +68,7 @@ function resolveColumnedSection({ embeds, formatter, renderableContent:{ color }
 }
 
 /** Converts the given renderableContent to MessageEmbed objects, using the given SageCache. */
-export function resolveToEmbeds(resolvable: RenderableContentResolvable, formatter: SyncDialogContentFormatter): EmbedBuilder[] {
+function resolveToEmbeds(resolvable: RenderableContentResolvable, formatter: ContentFormatter): EmbedBuilder[] {
 	const renderableContent = RenderableContent.resolve(resolvable);
 	if (!renderableContent) {
 		return [];
@@ -84,4 +85,28 @@ export function resolveToEmbeds(resolvable: RenderableContentResolvable, formatt
 		resolver({ embeds, formatter, renderableContent, section });
 	}
 	return embeds;
+}
+
+function embedsToTexts(embeds: EmbedResolvable[]): string[] {
+	return embeds.map(embedResolvable => {
+		const embed = resolveEmbed(embedResolvable);
+		let text = "";
+		text += getValueToAppend(embed.title, !!text);
+		text += getValueToAppend(embed.description, !!text);
+		if (embed.fields?.length) {
+			embed.fields.forEach(field => {
+				text += getValueToAppend(field.name, !!text);
+				text += getValueToAppend(field.value, !!text);
+			});
+		}
+		return text;
+	});
+}
+
+export function resolveContent(resolvable: RenderableContentResolvable, formatter: ContentFormatter, target: "embed"): EmbedBuilder[];
+export function resolveContent(resolvable: RenderableContentResolvable, formatter: ContentFormatter, target: "text"): string[];
+export function resolveContent(resolvable: RenderableContentResolvable, formatter: ContentFormatter, target: "embed" | "text") {
+	const embeds = resolveToEmbeds(resolvable, formatter);
+	if (target === "embed") return embeds;
+	return embedsToTexts(embeds);
 }

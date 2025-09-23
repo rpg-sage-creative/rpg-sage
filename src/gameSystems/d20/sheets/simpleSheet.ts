@@ -1,14 +1,13 @@
-import { StatBlockProcessor } from "@rsc-utils/dice-utils";
-import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
+import type { StatBlockProcessor } from "@rsc-utils/dice-utils";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { toModifier } from "../../utils/toModifier.js";
 import { Ability } from "../lib/Ability.js";
 
-function abilitiesToHtml(char: GameCharacter): string | undefined {
+function abilitiesToHtml(char: StatBlockProcessor): string | undefined {
 	let hasStats = false;
 	const stats = Ability.all().map(({ abbr, name }) => {
-		const values = getAbilityScoreAndModifierD20(char.getStat(name));
+		const values = getAbilityScoreAndModifierD20(char.getString(name));
 		if (values) {
 			hasStats = true;
 			return `<b>${abbr}</b> ${values.score} (${toModifier(values.modifier)})`;
@@ -21,15 +20,15 @@ function abilitiesToHtml(char: GameCharacter): string | undefined {
 	return undefined;
 }
 
-function acToHtml(char: GameCharacter): string | undefined {
-	const stat = char.getStat("ac");
+function acToHtml(char: StatBlockProcessor): string | undefined {
+	const stat = char.getString("ac");
 	return stat ? `<b>AC</b> ${stat}` : undefined;
 }
 
-function savesToHtml(char: GameCharacter): string | undefined {
+function savesToHtml(char: StatBlockProcessor): string | undefined {
 	let hasSaves = false;
 	const saves = [["Fortitude","Fort"], ["Reflex","Ref"], ["Willpower","Will"]].map(([saveName, saveCode]) => {
-		const stat = char.getStat(`mod.${saveName}`) ?? char.getStat(saveCode) ?? char.getStat(saveName);
+		const stat = char.getString(`mod.${saveName}`) ?? char.getString(saveCode) ?? char.getString(saveName);
 		const value = numberOrUndefined(stat);
 		if (value !== undefined) {
 			hasSaves = true;
@@ -43,7 +42,7 @@ function savesToHtml(char: GameCharacter): string | undefined {
 	return undefined;
 }
 
-function acSavesToHtml(char: GameCharacter): string | undefined {
+function acSavesToHtml(char: StatBlockProcessor): string | undefined {
 	const ac = acToHtml(char);
 	const saves = savesToHtml(char);
 	return ac && saves
@@ -51,28 +50,28 @@ function acSavesToHtml(char: GameCharacter): string | undefined {
 		: ac ?? saves;
 }
 
-function hpToHtml(char: GameCharacter): string | undefined {
+function hpToHtml(char: StatBlockProcessor): string | undefined {
 	const hp = char.getNumber("hp");
 	const maxHp = char.getNumber("maxHp");
 	const tempHp = char.getNumber("tempHp");
 
 	if (tempHp) {
-		return StatBlockProcessor.processTemplate(char, "hp.tempHp").value
+		return char.processTemplate("hp.tempHp").value
 			?? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}; <b>Temp HP</b> ${tempHp ?? "0"}`;
 	}
 
 	if (hp || maxHp) {
-		return StatBlockProcessor.processTemplate(char, "hp").value
+		return char.processTemplate("hp").value
 			?? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}`;
 	}
 
 	return undefined;
 }
 
-function coinsToHtml(char: GameCharacter): string | undefined {
-	const raw = char.getStat("currency.raw");
+function coinsToHtml(char: StatBlockProcessor): string | undefined {
+	const raw = char.getString("currency.raw");
 	if (raw) {
-		const simple = char.getStat("currency");
+		const simple = char.getString("currency");
 		if (raw !== simple) {
 			return `<b>Coins</b> ${raw}  <i>(${simple})</i>`;
 		}
@@ -81,7 +80,7 @@ function coinsToHtml(char: GameCharacter): string | undefined {
 	return undefined;
 }
 
-export function statsToHtml(char: GameCharacter): string[] {
+export function statsToHtml(char: StatBlockProcessor): string[] {
 	const out: (string | undefined)[] = [];
 	out.push(abilitiesToHtml(char));
 	out.push(acSavesToHtml(char));

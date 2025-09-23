@@ -119,7 +119,12 @@ export class StatMacroProcessor extends StatBlockProcessor {
 		return super.for(char) as StatMacroProcessor;
 	}
 
-	public static from(sageCommand: SageCommand): StatMacroProcessor {
+	public static withStats(sageCommand: SageCommand): StatBlockProcessor {
+		const chars = getStatMacroCharacters(sageCommand);
+		return new StatBlockProcessor(chars);
+	}
+
+	public static withMacros(sageCommand: SageCommand): StatMacroProcessor {
 		const chars = getStatMacroCharacters(sageCommand);
 		const macros = getMacrosFromChars(chars, sageCommand.actor);
 		return new StatMacroProcessor(chars, macros);

@@ -56,8 +56,8 @@ async function parseDiscordDice(sageCommand: SageCommand, diceString: string, ov
 		return null;
 	}
 
-	const statMacroProcessor = StatMacroProcessor.from(sageCommand);
-	if (statMacroProcessor.hasChars) {
+	const statMacroProcessor = StatMacroProcessor.withMacros(sageCommand);
+	if (!statMacroProcessor.isEmpty) {
 		diceString = statMacroProcessor.processStatBlocks(diceString);
 	}
 
@@ -98,7 +98,7 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 	const tieredMacros = getTieredMacros(sageCommand);
 
 	// collect all the characters and their macros
-	const statMacroProcessor = StatMacroProcessor.from(sageCommand);
+	const statMacroProcessor = StatMacroProcessor.withMacros(sageCommand);
 
 	// if we have more macros, unshift them to give them first priority
 	if (statMacroProcessor.hasMacros) {

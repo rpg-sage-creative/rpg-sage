@@ -472,7 +472,7 @@ export class GameCharacter {
 	 *   npcs will return ["descriptor", "gender", "ancestry", "background"]
 	 */
 	public toNameDescriptors(): string[] {
-		const template = StatBlockProcessor.processTemplate(this, "nameDescriptors");
+		const template = StatBlockProcessor.for(this).processTemplate("nameDescriptors");
 		if (template.value) {
 			return template.value
 				.split(",")
@@ -606,8 +606,10 @@ export class GameCharacter {
 			};
 		};
 
-		const { keys: simpleKeys, title: simpleTitle, lines: simpleLines } = processSimpleSheet(this);
-		const { keys: customKeys, title: customTitle, lines: customLines } = StatBlockProcessor.processTemplate(this, "customSheet");
+		const processor = StatBlockProcessor.for(this);
+
+		const { keys: simpleKeys, title: simpleTitle, lines: simpleLines } = processSimpleSheet({ char:this, processor });
+		const { keys: customKeys, title: customTitle, lines: customLines } = processor.processTemplate("customSheet");
 		const { keys: templateKeys, title: templateTitle, lines: templateLines } = processTemplateKeys();
 
 		const usedKeys = new Set<Lowercase<string>>([...simpleKeys, ...customKeys, ...templateKeys]);
