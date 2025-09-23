@@ -351,6 +351,8 @@ export class GameCharacter {
 	public get type(): TGameCharacterType { return this.owner?.characterType ?? "gm"; }
 
 	/** The character's user's Discord ID */
+	public get userId(): Snowflake | undefined { return this.core.userDid; }
+	/** @deprecated use .userId */
 	public get userDid(): Snowflake | undefined { return this.core.userDid; }
 	public set userDid(userDid: Snowflake | undefined) { this.core.userDid = userDid; }
 
