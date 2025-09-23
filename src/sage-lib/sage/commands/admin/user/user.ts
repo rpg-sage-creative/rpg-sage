@@ -26,7 +26,7 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("User Update", "You cannot manage your settings here.");
 	}
 
-	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogDiceBehavior", "dialogPostType", "dmOnDelete", "dmOnEdit", "sagePostType", "orgPlayId", "moveDirectionOutputType"]);
+	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogDiceBehavior", "dialogPostType", "dmOnDelete", "dmOnEdit", "sagePostType", "orgPlayId", "mentionPrefix", "moveDirectionOutputType"]);
 	if (!hasValidKeys || hasInvalidKeys) {
 		const details = [
 			"The command for updating your User settings is:",
@@ -43,10 +43,12 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 
 	let opUpdated = false;
 	let ptUpdated = false;
-	const { sageUser } = sageMessage;
+	const { args, sageUser } = sageMessage;
 
-	if (validKeys.includes("orgPlayId")) {
-		const orgPlayId = sageMessage.args.getString("orgPlayId");
+	const anyValid = (...keys: string[]) => keys.some(key => validKeys.includes(key));
+
+	if (anyValid("orgPlayId")) {
+		const orgPlayId = args.getString("orgPlayId");
 		if (orgPlayId) {
 			opUpdated = sageUser.notes.setCategorizedNote("Uncategorized", "orgPlayId", orgPlayId);
 		}else {
@@ -55,14 +57,15 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		if (opUpdated) await sageUser.save();
 	}
 
-	if (validKeys.includes("dialogDiceBehavior") || validKeys.includes("dialogPostType") || validKeys.includes("sagePostType") || validKeys.includes("dmOnDelete") || validKeys.includes("dmOnEdit") || validKeys.includes("moveDirectionOutputType")) {
-		const dialogDiceBehaviorType = sageMessage.args.getEnum(DialogDiceBehaviorType, "dialogDiceBehavior");
-		const dialogPostType = sageMessage.args.getEnum(DialogPostType, "dialogPostType");
-		const sagePostType = sageMessage.args.getEnum(DialogPostType, "sagePostType");
-		const dmOnDelete = sageMessage.args.getBoolean("dmOnDelete");
-		const dmOnEdit = sageMessage.args.getBoolean("dmOnEdit");
-		const moveDirectionOutputType = sageMessage.args.getEnum(MoveDirectionOutputType, "moveDirectionOutputType")
-		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType });
+	if (anyValid("dialogDiceBehavior", "dialogPostType", "sagePostType", "dmOnDelete", "dmOnEdit", "mentionPrefix", "moveDirectionOutputType")) {
+		const dialogDiceBehaviorType = args.getEnum(DialogDiceBehaviorType, "dialogDiceBehavior");
+		const dialogPostType = args.getEnum(DialogPostType, "dialogPostType");
+		const sagePostType = args.getEnum(DialogPostType, "sagePostType");
+		const dmOnDelete = args.getBoolean("dmOnDelete");
+		const dmOnEdit = args.getBoolean("dmOnEdit");
+		const moveDirectionOutputType = args.getEnum(MoveDirectionOutputType, "moveDirectionOutputType")
+		const mentionPrefix = args.getString("mentionPrefix");
+		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType, mentionPrefix });
 	}
 
 	if (opUpdated || ptUpdated) {
@@ -113,6 +116,9 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 
 	const moveDirectionOutputType = MoveDirectionOutputType[sageUser.moveDirectionOutputType!] ?? `<i>unset (Compact)</i>`;
 	renderableContent.append(`<b>Preferred Move Direction Output Type</b> ${moveDirectionOutputType}`);
+
+	const mentionPrefix = sageUser.mentionPrefix ?? `<i>unset (@)</i>`;
+	renderableContent.append(`<b>Mention Prefix</b> ${mentionPrefix}`);
 
 	const sagePostType = DialogPostType[sageUser.sagePostType!] ?? `<i>unset (Embed)</i>`;
 	renderableContent.append(`<b>Preferred Sage Post Type</b> ${sagePostType}`);

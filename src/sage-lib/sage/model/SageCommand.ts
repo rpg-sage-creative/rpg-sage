@@ -558,6 +558,7 @@ export abstract class SageCommand<
 	/** @deprecated use actor.isGamePlayer */
 	public get isPlayer() { return this.eventCache.actor.isGamePlayer === true; }
 
+	public get mentionPrefix(): string | undefined { return this.sageUser.mentionPrefix ?? this.game?.mentionPrefix; }
 	//#endregion
 
 	/** @todo figure out where splitMessageOptions comes into this workflow */

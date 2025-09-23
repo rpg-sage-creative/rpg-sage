@@ -1,5 +1,5 @@
 import { getSuperAdminId, getSuperUserId } from "@rsc-sage/env";
-import { applyChanges, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, stringOrUndefined, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import type { DialogType } from "../repo/base/IdRepository.js";
@@ -50,6 +50,8 @@ export interface UserCore extends IdCore<"User"> {
 	patronTier?: number;
 
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
+
+	mentionPrefix?: string;
 }
 
 //#region Core Updates
@@ -79,6 +81,7 @@ type UpdateArgs = Args<{
 	dialogPostType: DialogType;
 	dmOnDelete: boolean;
 	dmOnEdit: boolean;
+	mentionPrefix: string;
 	moveDirectionOutputType: MoveDirectionOutputType;
 	sagePostType: DialogType;
 }>;
@@ -132,6 +135,9 @@ export class User extends HasSageCacheCore<UserCore> {
 
 	public get sagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
 
+	public get mentionPrefix(): string | undefined { return this.core.mentionPrefix; }
+	public set mentionPrefix(mentionPrefix: string | undefined) { this.core.mentionPrefix = stringOrUndefined(mentionPrefix); }
+
 	//#endregion
 
 	public findCharacterOrCompanion(name: string): GameCharacter | undefined {
@@ -152,13 +158,14 @@ export class User extends HasSageCacheCore<UserCore> {
 		return undefined;
 	}
 
-	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType }: UpdateArgs): Promise<boolean> {
+	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType, mentionPrefix }: UpdateArgs): Promise<boolean> {
 		const changed = applyChanges(this.core, {
 			dialogDiceBehaviorType,
 			defaultDialogType:dialogPostType,
 			defaultSagePostType:sagePostType,
 			dmOnDelete,
 			dmOnEdit,
+			mentionPrefix,
 			moveDirectionOutputType
 		});
 		return changed ? this.save() : false;
