@@ -8,9 +8,9 @@ let charReferenceRegex: RegExp;
 function getCharReferenceRegex() {
 	return charReferenceRegex ??= regex("i")`
 		^
-		(?<gm> gm )?
-		(?<pcOrStat> pc | stat )?
-		(?<alt> companion | hireling | alt | familiar )?
+		(?<gm> \bgm\b )?
+		(?<pcOrStat> \bpc\b | \bstat\b )?
+		(?<alt> \bcompanion\b | \bhireling\b | \balt\b | \bfamiliar\b )?
 		$
 	`;
 }
