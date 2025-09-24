@@ -1,4 +1,3 @@
-import { LogQueue } from "@rsc-utils/core-utils";
 import { xRegExp } from "../internal/xRegExp.js";
 import { getNumberRegex } from "./getNumberRegex.js";
 import { unpipe } from "./unpipe.js";
@@ -49,7 +48,6 @@ export function hasSimple(value: string, options?: Omit<Options, "globalFlag">):
  * Returns null if an error occurred during eval().
  */
 export function doSimple(input: string, options?: Omit<Options, "globalFlag">): string {
-	const logQueue = new LogQueue("doSimple", input);
 	let output = input;
 	const regex = getSimpleRegex({ globalFlag:true, allowSpoilers:options?.allowSpoilers });
 	while (regex.test(output)) {
@@ -57,7 +55,6 @@ export function doSimple(input: string, options?: Omit<Options, "globalFlag">): 
 			const { hasPipes, unpiped } = unpipe(value);
 
 			const retVal = (result: string) => {
-				logQueue.add({label:"retVal",value,result});
 				return hasPipes ? `||${result}||` : result;
 			};
 
@@ -93,8 +90,6 @@ export function doSimple(input: string, options?: Omit<Options, "globalFlag">): 
 				return retVal(`(ERR)`);
 			}
 		});
-		logQueue.add({label:"while",input,output});
 	}
-	// logQueue.logDiff(output);
 	return output;
 }

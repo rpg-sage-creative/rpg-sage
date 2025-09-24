@@ -1,4 +1,3 @@
-import { LogQueue } from "@rsc-utils/core-utils";
 import { xRegExp } from "../internal/xRegExp.js";
 import { doSimple, getSimpleRegex } from "./doSimple.js";
 import { getNumberRegex } from "./getNumberRegex.js";
@@ -77,7 +76,6 @@ const SageMath = {
 
 /** Checks the value for min/max/floor/ceil/round and replaces it with the result. */
 export function doComplex(input: string, options?: Omit<Options, "globalFlag">): string {
-	const logQueue = new LogQueue("doComplex", input);
 	let output = input;
 	const regex = getComplexRegex({ globalFlag:true, ...options });
 	while (regex.test(output)) {
@@ -85,7 +83,6 @@ export function doComplex(input: string, options?: Omit<Options, "globalFlag">):
 			const { hasPipes, unpiped } = unpipe(_args);
 
 			const retVal = (result: string | number) => {
-				logQueue.add({label:"retVal",_,result});
 				return hasPipes ? `||${result}||` : String(result);
 			};
 
@@ -109,8 +106,6 @@ export function doComplex(input: string, options?: Omit<Options, "globalFlag">):
 
 			return retVal(`${args[0]}`);
 		});
-		logQueue.add({label:"while",input,output});
 	}
-	// logQueue.logDiff(output);
 	return output;
 }
