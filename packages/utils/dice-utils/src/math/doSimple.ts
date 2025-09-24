@@ -11,14 +11,15 @@ type Options = {
 export function getSimpleRegex(options?: Options): RegExp {
 	const flags = options?.globalFlag ? "xgi" : "xi";
 	const numberRegex = getNumberRegex({ allowSpoilers:options?.allowSpoilers }).source;
+	const orWrappedRegex = `(?:\\(\\s*${numberRegex}\\s*\\)|${numberRegex})`;
 	const simpleRegex = `
 		(?:
-			${numberRegex}        # pos/neg decimal number
+			${orWrappedRegex}        # pos/neg decimal number
 			(?:                   # open group for operands/numbers
 				\\s*              # optional whitespace
 				[-+/*%^]          # operator
 				[-+\\s]*          # possible extra pos/neg signs
-				${numberRegex}    # pos/neg decimal number
+				${orWrappedRegex}    # pos/neg decimal number
 			)+                    # close group for operands/numbers
 			|
 			(?:[-+]\\s*){2,}      # extra pos/neg signs
@@ -41,6 +42,11 @@ export function hasSimple(value: string, options?: Omit<Options, "globalFlag">):
 	return getSimpleRegex(options).test(value);
 }
 
+const unwrapper = /\(\s*\d+\s*\)/g;
+function unwrapNumbers(input: string): string {
+	return input.replace(unwrapper, match => match.slice(1, -1));
+}
+
 /**
  * Ensures the value has only mathematical characters before performing an eval to get the math results.
  * Valid math symbols: [-+/*%^] and spaces and numbers.
@@ -52,7 +58,7 @@ export function doSimple(input: string, options?: Omit<Options, "globalFlag">): 
 	const regex = getSimpleRegex({ globalFlag:true, allowSpoilers:options?.allowSpoilers });
 	while (regex.test(output)) {
 		output = output.replace(regex, value => {
-			const { hasPipes, unpiped } = unpipe(value);
+			const { hasPipes, unpiped } = unpipe(unwrapNumbers(value));
 
 			const retVal = (result: string) => {
 				return hasPipes ? `||${result}||` : result;
