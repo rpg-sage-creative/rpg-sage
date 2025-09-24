@@ -1,27 +1,43 @@
-import { getCodeBlockRegex, tokenize, type Optional } from "@rsc-utils/core-utils";
+import { getCodeBlockRegex, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
 import { unquote } from "../internal/unquote.js";
 import { doStatMath } from "./doStatMath.js";
 import type { StatsCharacter, StatsCharacterManager, StatsEncounterManager } from "./types.js";
 
-let charReferenceRegex: RegExp;
-function getCharReferenceRegex() {
+type CharReferenceGroups = {
+	gm?: "gm";
+	pc?: "pc";
+	stat?: "stat";
+	alt?: "alt"|"companion"|"familiar"|"hireling";
+};
+let charReferenceRegex: TypedRegExp<CharReferenceGroups>;
+function getCharReferenceRegex(): TypedRegExp<CharReferenceGroups> {
 	return charReferenceRegex ??= regex("i")`
 		^
 		(?<gm> \bgm\b )?
-		(?<pcOrStat> \bpc\b | \bstat\b )?
-		(?<alt> \bcompanion\b | \bhireling\b | \balt\b | \bfamiliar\b )?
+		(?<pc> \bpc\b )?
+		(?<stat> \bstat\b )?
+		(?<alt> \balt\b | \bcompanion\b | \bfamiliar\b | \bhireling\b )?
 		$
-	`;
+	` as TypedRegExp<CharReferenceGroups>;
 }
 
-let statBlockRegex: RegExp;
-function getStatBlockRegex() {
+type StatBlockGroups = {
+	implicit?: "::";
+	charReference?: string;
+	statKey: string;
+	defaultValue?: string;
+};
+let statBlockRegex: TypedRegExp<StatBlockGroups>;
+function getStatBlockRegex(): TypedRegExp<StatBlockGroups> {
 	return statBlockRegex ??= regex("i")`
 		(?!<\{)\{
 			(
+				(?<implicit> :: )
+				|
 				(?<charReference> [\w\s]+ | "[\w\s]+" )
 				::
+
 			)?
 			(?<statKey> [\w\-.]+ )
 			(
@@ -29,7 +45,7 @@ function getStatBlockRegex() {
 				(?<defaultValue> [^\{\}]+ )
 			)?
 		\}(?!=\})
-	`;
+	` as TypedRegExp<StatBlockGroups>;
 }
 
 // let statBlockTestRegex: RegExp;
@@ -54,16 +70,25 @@ type AltType = "alt" | "companion" | "familiar" | "hireling";
 type CharReference = {
 	/** if the value represents an alias or name, this is that value */
 	aliasOrName?: string;
+
 	/** if isAlt, then this is: "alt" | "companion" | "familiar" | "hireling" */
 	altType?: AltType;
+
 	/** value was null, undefined, empty, or only whitespace */
 	isEmpty?: boolean;
+
 	/** value was "alt" | "companion" | "familiar" | "hireling" */
 	isAlt?: boolean;
+
 	/** value was "gm" */
 	isGM?: boolean;
-	/** value was "pc" | "stat" */
+
+	/** value was "stat" or ""; this means use the current character as context for the stat */
+	isImplicit?: boolean;
+
+	/** value was "pc"; this means use the "primary player character" */
 	isPC?: boolean;
+
 	/** used with statKey to avoid recursion */
 	stackValue?: string;
 };
@@ -155,15 +180,18 @@ export class StatBlockProcessor {
 		value = unquote(value).trim();
 		if (!value) return { isEmpty:true };
 
-		const { gm, pcOrStat, alt } = (this.constructor as typeof StatBlockProcessor).getCharReferenceRegex().exec(value)?.groups
-			?? {} as { gm?:string; pcOrStat?:string; alt?:string; };
+		const { gm, pc, stat, alt } = (this.constructor as typeof StatBlockProcessor).getCharReferenceRegex().exec(value)?.groups ?? {};
 
 		if (gm) {
 			return { isGM:true, stackValue:"gm" };
 		}
 
-		if (pcOrStat) {
+		if (pc) {
 			return { isPC:true, stackValue:"pc" };
+		}
+
+		if (stat) {
+			return { isImplicit:true }
 		}
 
 		if (alt) {
@@ -227,13 +255,13 @@ export class StatBlockProcessor {
 	}
 
 	protected getCharAndStatVal(statBlock: StatBlock, actingCharacter?: StatsCharacter): { char?:StatsCharacter; statVal?:string; } {
-		const { aliasOrName, isAlt, isEmpty, isGM, isPC } = statBlock.char;
+		const { aliasOrName, isAlt, isEmpty, isGM, isImplicit, isPC } = statBlock.char;
 
 		const { chars } = this;
 
 		let char: StatsCharacter | undefined;
 
-		if (isEmpty) {
+		if (isEmpty || isImplicit) {
 			char = actingCharacter ?? chars.actingCharacter;
 
 		}if (isPC) {
@@ -244,14 +272,20 @@ export class StatBlockProcessor {
 			char = chars.primaryCompanionCharacter;
 
 		}else if (aliasOrName) {
-			char = chars.playerCharacters?.findByName(aliasOrName)
-				?? chars.playerCharacters?.findCompanion(aliasOrName)
-				?? chars.nonPlayerCharacters?.findByName(aliasOrName)
-				?? chars.nonPlayerCharacters?.findCompanion(aliasOrName)
-				?? chars.encounters?.findActiveChar(aliasOrName)
-				?? chars.gmCharacters?.[0]?.companions?.findByName(aliasOrName)
-				?? chars.gmCharacters?.[1]?.companions?.findByName(aliasOrName)
-				?? undefined;
+			if (actingCharacter?.matches(aliasOrName)) {
+				char = actingCharacter;
+			}else if (chars.actingCharacter?.matches(aliasOrName)) {
+				char = chars.actingCharacter;
+			}else {
+				char = chars.playerCharacters?.findByName(aliasOrName)
+					?? chars.playerCharacters?.findCompanion(aliasOrName)
+					?? chars.nonPlayerCharacters?.findByName(aliasOrName)
+					?? chars.nonPlayerCharacters?.findCompanion(aliasOrName)
+					?? chars.encounters?.findActiveChar(aliasOrName)
+					?? chars.gmCharacters?.[0]?.companions?.findByName(aliasOrName)
+					?? chars.gmCharacters?.[1]?.companions?.findByName(aliasOrName)
+					?? undefined;
+			}
 
 		}
 
@@ -283,11 +317,10 @@ export class StatBlockProcessor {
 		statBlock = statBlock?.trim();
 		if (!statBlock) return undefined;
 
-		const { charReference, statKey, defaultValue } = (this.constructor as typeof StatBlockProcessor).getStatBlockRegex().exec(statBlock)?.groups
-			?? {} as { charReference?:string; statKey?:string; defaultValue?:string; };
+		const { implicit, charReference, statKey, defaultValue } = (this.constructor as typeof StatBlockProcessor).getStatBlockRegex().exec(statBlock)?.groups ?? {};
 		if (!statKey) return undefined;
 
-		const char = this.parseCharReference(charReference);
+		const char = implicit ? { isImplicit:true } : this.parseCharReference(charReference);
 		const stackValue = `${char.stackValue ?? ""}::${statKey}`.toLowerCase();
 
 		return {
