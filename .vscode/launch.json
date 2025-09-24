@@ -12,7 +12,8 @@
 			"args": ["codeName=dev","--getFromEnvJson"],
 			"outFiles": [
 				"${workspaceFolder}/**/*.js"
-			]
+			],
+			"preLaunchTask": "run-build"
 		}
 	]
 }
