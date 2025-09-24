@@ -7,7 +7,6 @@ import type { StatsCharacter, StatsCharacterManager, StatsEncounterManager } fro
 type CharReferenceGroups = {
 	gm?: "gm";
 	pc?: "pc";
-	stat?: "stat";
 	alt?: "alt"|"companion"|"familiar"|"hireling";
 };
 let charReferenceRegex: TypedRegExp<CharReferenceGroups>;
@@ -16,7 +15,6 @@ function getCharReferenceRegex(): TypedRegExp<CharReferenceGroups> {
 		^
 		(?<gm> \bgm\b )?
 		(?<pc> \bpc\b )?
-		(?<stat> \bstat\b )?
 		(?<alt> \balt\b | \bcompanion\b | \bfamiliar\b | \bhireling\b )?
 		$
 	` as TypedRegExp<CharReferenceGroups>;
@@ -75,16 +73,13 @@ type CharReference = {
 	altType?: AltType;
 
 	/** value was null, undefined, empty, or only whitespace */
-	isEmpty?: boolean;
+	isImplicit?: boolean;
 
 	/** value was "alt" | "companion" | "familiar" | "hireling" */
 	isAlt?: boolean;
 
 	/** value was "gm" */
 	isGM?: boolean;
-
-	/** value was "stat" or ""; this means use the current character as context for the stat */
-	isImplicit?: boolean;
 
 	/** value was "pc"; this means use the "primary player character" */
 	isPC?: boolean;
@@ -174,13 +169,13 @@ export class StatBlockProcessor {
 	protected parseCharReference(value: Optional<string>): CharReference {
 		// make sure we have a usable value
 		value = value?.trim();
-		if (!value) return { isEmpty:true };
+		if (!value) return { isImplicit:true };
 
 		// if quoted, make sure the unquoted value is usable
 		value = unquote(value).trim();
-		if (!value) return { isEmpty:true };
+		if (!value) return { isImplicit:true };
 
-		const { gm, pc, stat, alt } = (this.constructor as typeof StatBlockProcessor).getCharReferenceRegex().exec(value)?.groups ?? {};
+		const { gm, pc, alt } = (this.constructor as typeof StatBlockProcessor).getCharReferenceRegex().exec(value)?.groups ?? {};
 
 		if (gm) {
 			return { isGM:true, stackValue:"gm" };
@@ -188,10 +183,6 @@ export class StatBlockProcessor {
 
 		if (pc) {
 			return { isPC:true, stackValue:"pc" };
-		}
-
-		if (stat) {
-			return { isImplicit:true }
 		}
 
 		if (alt) {
@@ -255,13 +246,13 @@ export class StatBlockProcessor {
 	}
 
 	protected getCharAndStatVal(statBlock: StatBlock, actingCharacter?: StatsCharacter): { char?:StatsCharacter; statVal?:string; } {
-		const { aliasOrName, isAlt, isEmpty, isGM, isImplicit, isPC } = statBlock.char;
+		const { aliasOrName, isAlt, isGM, isImplicit, isPC } = statBlock.char;
 
 		const { chars } = this;
 
 		let char: StatsCharacter | undefined;
 
-		if (isEmpty || isImplicit) {
+		if (isImplicit) {
 			char = actingCharacter ?? chars.actingCharacter;
 
 		}if (isPC) {
