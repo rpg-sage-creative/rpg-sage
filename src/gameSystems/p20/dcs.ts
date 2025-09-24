@@ -2,13 +2,13 @@ import { GameSystemType, parseEnum } from "@rsc-sage/types";
 import { nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
-import { toMod } from "../../sage-dice/common.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton, createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { boundNumber, type BoundedOptions } from "../utils/boundNumber.js";
+import { toModifier } from "../utils/toModifier.js";
 
 type Table = "Simple" | "Level" | "Rank";
 type Proficiency = "Untrained" | "Trained" | "Expert" | "Master" | "Legendary";
@@ -110,7 +110,7 @@ function getAdjustmentTable(): AdjustmentItem[] {
 }
 
 function adjustmentToString(row: AdjustmentItem, key: "difficulty" | "rarity"): string {
-	return `${row[key]} (${toMod(row.adjustment)})`;
+	return `${row[key]} (${toModifier(row.adjustment)})`;
 }
 
 /** Generates the renderable content for Character Wealth for the given system and level. */

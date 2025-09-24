@@ -1,16 +1,15 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
-import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath, processMath, StatBlockProcessor } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
-import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
+import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
 import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
@@ -776,6 +775,20 @@ export class GameCharacter {
 				}
 				const fn = halfUp ? Math.ceil : Math.floor;
 				return ret(retKey, fn(numberValue / 2));
+			}
+		}
+
+		if (keyLower.startsWith("signed.")) {
+			const statKey = key.slice(7);
+			const { key:casedKey, value:statValue } = this.getStat(statKey, true);
+			if (statValue) {
+				const retKey = `signed.${casedKey}`;
+				const numberValue = numberOrUndefined(statValue);
+				if (numberValue === undefined) {
+					return ret(retKey, `isNaN(${statValue})`);
+				}
+				const signed = toModifier(numberValue);
+				return ret(retKey, signed);
 			}
 		}
 
