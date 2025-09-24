@@ -768,7 +768,7 @@ export class GameCharacter {
 			const { key:casedKey, value:statValue } = this.getStat(statKey, true);
 			if (statValue) {
 				const retKey = `half.${halfUp ? "up" : "dn"}.${casedKey}`;
-				const mathedValue = doStatMath(`(${statValue})`);
+				const mathedValue = doStatMath(statValue);
 				const numberValue = numberOrUndefined(mathedValue);
 				if (numberValue === undefined) {
 					return ret(retKey, `isNaN(${statValue})`);
