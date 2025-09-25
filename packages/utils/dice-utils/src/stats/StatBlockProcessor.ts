@@ -98,6 +98,7 @@ type StatBlock = {
 
 	/** used to avoid recursion */
 	stackValue: Lowercase<string>;
+	isTemplate: boolean;
 };
 
 type StatCharacters = {
@@ -117,6 +118,7 @@ type ProcessOptions = {
 	actingCharacter?: StatsCharacter;
 	matches: Set<Lowercase<string>>;
 	stack: Lowercase<string>[];
+	templatesOnly?: boolean;
 };
 
 type ProcessTemplateResults = {
@@ -200,10 +202,10 @@ export class StatBlockProcessor {
 		return this._process(value, { matches:new Set(), stack:[] });
 	}
 
-	public processTemplate(templateKey: string): ProcessTemplateResults {
+	public processTemplate(templateKey: string, { templatesOnly }: { templatesOnly?:boolean; } = {}): ProcessTemplateResults {
 		const matchKeys = new Set<Lowercase<string>>();
 		const initialValue = `{${templateKey.replace(/\.template$/i, "")}.template}`;
-		const processedValue = this._process(initialValue, { matches:matchKeys, stack:[] });
+		const processedValue = this._process(initialValue, { matches:matchKeys, stack:[], templatesOnly });
 		const processed = processedValue !== `\`${initialValue}\``;
 		const titleValue = processed ? this.chars.actingCharacter?.getString(`${templateKey}.template.title`) : undefined;
 		const lines = processed ? processedValue.split(/[\r\n]/) : [];
@@ -230,7 +232,11 @@ export class StatBlockProcessor {
 					const statBlock = this.parseStatBlock(token);
 					let result: string | undefined;
 					if (statBlock && !options.stack.includes(statBlock.stackValue)) {
-						result = this.processStatBlock(statBlock, options);
+						if (!options.templatesOnly || statBlock.isTemplate) {
+							result = this.processStatBlock(statBlock, options);
+						}else {
+							result = token;
+						}
 					}
 					return result ?? `\`${token}\``;
 				}
@@ -315,18 +321,18 @@ export class StatBlockProcessor {
 		if (!statKey) return undefined;
 
 		const char = implicitChar ? { isImplicit:true } : this.parseCharReference(explicitChar);
-		const stackValue = `${char.stackValue ?? ""}::${statKey}`.toLowerCase();
 
 		return {
 			char,
 			statKey,
 			defaultValue: implicitDefault ? "" : explicitDefault?.trim(),
 
-			stackValue,
+			stackValue: `${char.stackValue ?? ""}::${statKey}`.toLowerCase(),
+			isTemplate: statKey.toLowerCase().endsWith(".template"),
 		};
 	}
 
-	protected processStatBlock(statBlock: StatBlock, { actingCharacter, matches, stack }: ProcessOptions): string | undefined {
+	protected processStatBlock(statBlock: StatBlock, { actingCharacter, matches, stack, templatesOnly }: ProcessOptions): string | undefined {
 		const { statKey, stackValue, defaultValue } = statBlock;
 
 		const { char, statVal } = this.getCharAndStatVal(statBlock, actingCharacter);
@@ -340,7 +346,7 @@ export class StatBlockProcessor {
 			// we need a way to default to empty string
 			if (statValue === "") return "";
 
-			const processed = this._process(statValue, { actingCharacter:char, matches, stack:stack.concat([stackValue]) });
+			const processed = this._process(statValue, { actingCharacter:char, matches, stack:stack.concat([stackValue]), templatesOnly });
 
 			const mathed = doStatMath(processed);
 			if (mathed !== processed) return mathed;

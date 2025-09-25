@@ -8,6 +8,7 @@ import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
+import { StatMacroProcessor } from "../../dice/stats/StatMacroProcessor.js";
 import { toReadableOwner } from "./toReadableOwner.js";
 
 function orNone(text: Optional<string>): string {
@@ -114,7 +115,14 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 			renderableContent.appendTitledSection(`<b>Stats</b>`, `<i>NPC stats viewable in GM channel ...</i>`);
 
 		}else {
-			const sections = character.toStatsOutput();
+			const custom = sageMessage.args.nonKeyValuePairs().includes("--custom");
+			const simple = sageMessage.args.nonKeyValuePairs().includes("--simple");
+			const raw = sageMessage.args.nonKeyValuePairs().includes("--raw");
+			const stats = sageMessage.args.nonKeyValuePairs().includes("--stats");
+			const templates = sageMessage.args.nonKeyValuePairs().includes("--templates");
+			const processor = StatMacroProcessor.withStats(sageMessage).for(character);
+
+			const sections = character.toStatsOutput({ simple, custom, processor, raw, stats, templates });
 			sections.forEach(({ title, lines }) => {
 				if (lines.length) {
 					renderableContent.appendTitledSection(`<b>${title}</b>`, ...lines);

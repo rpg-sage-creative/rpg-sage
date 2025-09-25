@@ -588,7 +588,7 @@ export class GameCharacter {
 			|| !!this.essence20;
 	}
 
-	public toStatsOutput() {
+	public toStatsOutput(options?: { custom?:boolean; processor?:StatBlockProcessor, raw?:boolean; simple?:boolean; stats?:boolean; templates?:boolean; }) {
 		// get full list of stats
 		let statsToMap = this.getNoteStats();
 
@@ -606,20 +606,40 @@ export class GameCharacter {
 			};
 		};
 
-		const processor = StatBlockProcessor.for(this);
+		const processor = options?.processor ?? StatBlockProcessor.for(this);
 
-		const { keys: simpleKeys, title: simpleTitle, lines: simpleLines } = processSimpleSheet({ char:this, processor });
-		const { keys: customKeys, title: customTitle, lines: customLines } = processor.processTemplate("customSheet");
-		const { keys: templateKeys, title: templateTitle, lines: templateLines } = processTemplateKeys();
+		const emptyOptions = !options?.simple && !options?.custom && !options?.stats && !options?.templates;
+		const raw = options?.raw;
+
+		const doSimple = emptyOptions || options.simple;
+		const { keys: simpleKeys = [], title: simpleTitle, lines: simpleLines = [] } = doSimple ? processSimpleSheet({ char:this, processor }) : {};
+
+		const doCustom = emptyOptions || options.custom;
+		const { keys: customKeys = [], title: customTitle, lines: customLines = [] } = doCustom ? processor.processTemplate("customSheet", raw ? { templatesOnly:true } : undefined) : {};
+
+		const doTemplates = emptyOptions || options.templates;
+		const { keys: templateKeys = [], title: templateTitle, lines: templateLines = [] } = doTemplates ? processTemplateKeys() : {};
 
 		const usedKeys = new Set<Lowercase<string>>([...simpleKeys, ...customKeys, ...templateKeys]);
+
+		const doStats = emptyOptions || options.stats;
+		if (!doStats) {
+			return [
+				{ title: simpleTitle, lines: simpleLines },
+				{ title: customTitle, lines: customLines },
+				{ title: templateTitle, lines: templateLines },
+			];
+		}
 
 		// remove keys used in simple sheet, custom sheet, or template stats
 		statsToMap = statsToMap.filter(note => !usedKeys.has(note.title.toLowerCase() as Lowercase<string>));
 		statsToMap.sort(sorter);
 
 		const otherTitle = simpleLines.length || customLines.length ? `Other Stats` : `Stats`;
-		const otherLines = statsToMap.map(note => `<b>${note.title}</b> ${note.note}`);
+		const otherLines = statsToMap.map(({ title, note }) => {
+			const value = raw ? note : processor.processStatBlocks(note);
+			return `<b>${title}</b> ${value}`;
+		});
 
 		return [
 			{ title: simpleTitle, lines: simpleLines },
