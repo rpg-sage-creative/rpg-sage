@@ -471,6 +471,7 @@ export class GameCharacter {
 	 *   npcs will return ["descriptor", "gender", "ancestry", "background"]
 	 */
 	public toNameDescriptors(): string[] {
+		if (this.getString("nameDescriptors.template")?.toLowerCase() === "off") return [];
 		const template = StatBlockProcessor.for(this).processTemplate("nameDescriptors");
 		if (template.value) {
 			return template.value
