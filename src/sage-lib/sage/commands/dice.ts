@@ -28,11 +28,9 @@ import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
 
 type TGmChannel = Optional<MessageTarget>;
 
-type TDiscordDiceParseOptions = {
-	gameSystemType?: GameSystemType;
-	diceOutputType?: DiceOutputType;
-	diceCritMethodType?: DiceCritMethodType;
-	diceSecretMethodType?: DiceSecretMethodType;
+type BaseParseOptions = {
+	processor: StatMacroProcessor;
+	sageCommand: SageCommand;
 };
 
 export type TDiceMatch = {
@@ -51,14 +49,24 @@ function getBasicBracketRegex(): RegExp {
 	return /\[{2}[^\]]+\]{2}|\[[^\]]+\]/ig;
 }
 
-async function parseDiscordDice(sageCommand: SageCommand, diceString: string, overrides?: TDiscordDiceParseOptions): Promise<DiscordDice | null> {
+type DiscordDiceOverrides = {
+	gameSystemType?: GameSystemType;
+	diceOutputType?: DiceOutputType;
+	diceCritMethodType?: DiceCritMethodType;
+	diceSecretMethodType?: DiceSecretMethodType;
+};
+type ParseDiscordDiceOptions = BaseParseOptions & {
+	overrides?: DiscordDiceOverrides;
+};
+async function parseDiscordDice(diceString: string, options: ParseDiscordDiceOptions): Promise<DiscordDice | null> {
 	if (!diceString) {
 		return null;
 	}
 
-	const statMacroProcessor = StatMacroProcessor.withMacros(sageCommand);
-	if (!statMacroProcessor.isEmpty) {
-		diceString = statMacroProcessor.processStatBlocks(diceString);
+	const { overrides, processor, sageCommand } = options;
+
+	if (!processor.isEmpty) {
+		diceString = processor.processStatBlocks(diceString);
 	}
 
 	// final math pass
@@ -88,21 +96,18 @@ function getTieredMacros(sageCommand: SageCommand): DiceMacroBase[][] {
 	return stack;
 }
 
-async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, macroStack: string[] = []): Promise<TDiceOutput[] | null> {
-	// allow SageMessage and SageInteraction, but not SageReaction
-	if (sageCommand.isSageReaction()) {
-		return null;
-	}
+type ParseDiscordMacroOptions = BaseParseOptions & {
+	macroStack?: string[];
+};
+async function parseDiscordMacro(macroString: string, options: ParseDiscordMacroOptions): Promise<TDiceOutput[] | null> {
+	const { macroStack = [], processor, sageCommand } = options;
 
 	// get tiered macros
 	const tieredMacros = getTieredMacros(sageCommand);
 
-	// collect all the characters and their macros
-	const statMacroProcessor = StatMacroProcessor.withMacros(sageCommand);
-
 	// if we have more macros, unshift them to give them first priority
-	if (statMacroProcessor.hasMacros) {
-		tieredMacros.unshift(statMacroProcessor.macros);
+	if (processor.hasMacros) {
+		tieredMacros.unshift(processor.macros);
 	}
 
 	// find the macro
@@ -111,7 +116,7 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
 			error(`Macro Recursion`, { macroString, macroStack });
-			const parsedDice = await parseDiscordDice(sageCommand, `[0d0 Recursion!]`);
+			const parsedDice = await parseDiscordDice(`[0d0 Recursion!]`, { processor, sageCommand });
 			return parsedDice?.roll().toStrings() ?? [];
 		}
 
@@ -120,13 +125,13 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 		const outputs: TDiceOutput[] = [];
 		for (const dice of diceToParse) {
 			if (!isRandomItem(dice)) {
-				const diceMacroOutputs = await parseDiscordMacro(sageCommand, dice, macroStack.concat([macro.name]));
+				const diceMacroOutputs = await parseDiscordMacro(dice, { sageCommand, processor, macroStack:macroStack.concat([macro.name]) });
 				if (diceMacroOutputs?.length) {
 					outputs.push(...diceMacroOutputs);
 					continue;
 				}
 			}
-			const matchOutputs = await parseMatch(sageCommand, dice, { diceOutputType: DiceOutputType.XXL });
+			const matchOutputs = await parseMatch(dice, { sageCommand, processor, overrides:{ diceOutputType: DiceOutputType.XXL } });
 			if (matchOutputs?.length) {
 				outputs.push(...matchOutputs);
 			}
@@ -136,7 +141,12 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 	return null;
 }
 
-async function parseMatch(sageCommand: SageCommand, match: string, overrides?: TDiscordDiceParseOptions, tableIterations = 0): Promise<TDiceOutput[]> {
+type ParseMatchOptions = BaseParseOptions & {
+	overrides?: DiscordDiceOverrides;
+	tableIterations?: number;
+};
+async function parseMatch(match: string, options: ParseMatchOptions): Promise<TDiceOutput[]> {
+	const { processor, sageCommand, tableIterations = 0 } = options;
 	const noBraces = unwrap(match, "[]");
 
 	const table = await fetchTableFromUrl(match) ?? parseTable(match);
@@ -145,13 +155,13 @@ async function parseMatch(sageCommand: SageCommand, match: string, overrides?: T
 		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(getBasicBracketRegex()) ?? []).flat() ?? [];
 		// debug({tableResults,tableResultsDice})
 		for (const diceToParse of childDice) {
-			const childMatches = await parseMatch(sageCommand, diceToParse, overrides, tableIterations + 1);
+			const childMatches = await parseMatch(diceToParse, { processor, sageCommand, tableIterations:tableIterations + 1 });
 			tableResults.push(...childMatches.flat());
 		}
 		return tableResults;
 	}
 
-	const dice = await parseDiscordDice(sageCommand, `[${noBraces}]`, overrides);
+	const dice = await parseDiscordDice(`[${noBraces}]`, { processor, sageCommand });
 	if (dice) {
 		// debug("dice", match);
 		const diceSort = sageCommand.diceSortType === 2 ? "noSort" : sageCommand.diceSortType === 1 ? "sort" : undefined; // NOSONAR
@@ -197,17 +207,32 @@ function redactContent(content: string): string {
 	return redacted;
 }
 
-export async function parseDiceMatches(sageCommand: SageCommand, content: string): Promise<TDiceMatch[]> {
+type ParseDiceMatchesOptions = {
+	processor?: StatMacroProcessor;
+	sageCommand: SageCommand;
+};
+export async function parseDiceMatches(content: string, { processor, sageCommand }: ParseDiceMatchesOptions): Promise<TDiceMatch[]> {
+	/** @todo there was a check in parseDiscordMacro; we should never get here from a reaction ... do we need to find out why this check exists? */
+	if (sageCommand.isSageReaction()) return [];
+
 	const diceMatches: TDiceMatch[] = [];
+
+	let parseOptions: BaseParseOptions;
+
 	const redacted = redactContent(content);
+
 	const regex = getBasicBracketRegex();
 	let execArray: RegExpExecArray | null;
 	while (execArray = regex.exec(redacted)) {
+		// we only need to ensure the processor and options *IF* we have something to parse
+		processor ??= StatMacroProcessor.withMacros(sageCommand);
+		parseOptions ??= { processor, sageCommand };
+
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = isWrapped(match, "[[]]");
-		const output = await parseDiscordMacro(sageCommand, content.slice(index, index + match.length))
-			?? await parseMatch(sageCommand, content.slice(index, index + match.length));
+		const output = await parseDiscordMacro(content.slice(index, index + match.length), parseOptions)
+			?? await parseMatch(content.slice(index, index + match.length), parseOptions);
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}
@@ -230,7 +255,7 @@ async function hasUnifiedDiceCommand(sageCommand: SageCommand): Promise<TCommand
 		return undefined;
 	}
 
-	const matches = await parseDiceMatches(sageCommand, sageCommand.slicedContent);
+	const matches = await parseDiceMatches(sageCommand.slicedContent, { sageCommand });
 	if (matches.length > 0) {
 		const output = matches.map(m => m.output).flat();
 		return { command: "unified-dice", data: output };

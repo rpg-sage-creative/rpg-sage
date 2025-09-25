@@ -115,7 +115,7 @@ export class StatMacroProcessor extends StatBlockProcessor {
 		return new StatMacroProcessor({ ...this.chars } as StatMacroCharacters, this.macros.slice());
 	}
 
-	public for(char: GameCharacter): StatMacroProcessor {
+	public for(char: Optional<GameCharacter>): StatMacroProcessor {
 		return super.for(char) as StatMacroProcessor;
 	}
 

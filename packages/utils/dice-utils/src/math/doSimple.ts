@@ -1,31 +1,33 @@
+import { getOrCreateRegex } from "@rsc-utils/core-utils";
 import { xRegExp } from "../internal/xRegExp.js";
 import { getNumberRegex } from "./getNumberRegex.js";
 import { unpipe } from "./unpipe.js";
 
 type Options = {
 	allowSpoilers?: boolean;
-	globalFlag?: boolean;
+	gFlag?: "g"|"";
 };
 
 /** Returns a regular expression that finds tests for only simple math operations. */
-export function getSimpleRegex(options?: Options): RegExp {
-	const flags = options?.globalFlag ? "xgi" : "xi";
+function createSimpleRegex(options?: Options): RegExp {
+	const flags = options?.gFlag ? "xgi" : "xi";
 	const numberRegex = getNumberRegex({ allowSpoilers:options?.allowSpoilers }).source;
-	const orWrappedRegex = `(?:\\(\\s*${numberRegex}\\s*\\)|${numberRegex})`;
+	const orWrappedNumberRegex = `(?:\\(\\s*${numberRegex}\\s*\\)|${numberRegex})`;
 	const simpleRegex = `
 		(?:
-			${orWrappedRegex}        # pos/neg decimal number
+			${orWrappedNumberRegex}        # pos/neg decimal number
 			(?:                   # open group for operands/numbers
 				\\s*              # optional whitespace
 				[-+/*%^]          # operator
 				[-+\\s]*          # possible extra pos/neg signs
-				${orWrappedRegex}    # pos/neg decimal number
+				${orWrappedNumberRegex}    # pos/neg decimal number
 			)+                    # close group for operands/numbers
 			|
 			(?:[-+]\\s*){2,}      # extra pos/neg signs
 			${numberRegex}        # pos/neg decimal number
 		)
 	`;
+	// const wrapped
 	const spoilered = options?.allowSpoilers
 		? `(?:${simpleRegex}|\\|\\|${simpleRegex}\\|\\|)`
 		: `(?:${simpleRegex})`;
@@ -37,9 +39,13 @@ export function getSimpleRegex(options?: Options): RegExp {
 	`, flags);
 }
 
+export function getSimpleRegex(options?: Options): RegExp {
+	return getOrCreateRegex(createSimpleRegex, options);
+}
+
 /** Attempts to do the math and returns true if the result was not null. */
-export function hasSimple(value: string, options?: Omit<Options, "globalFlag">): boolean {
-	return getSimpleRegex(options).test(value);
+export function hasSimple(value: string, { allowSpoilers }: Omit<Options, "globalFlag"> = { }): boolean {
+	return getSimpleRegex({ allowSpoilers }).test(value);
 }
 
 const unwrapper = /\(\s*\d+\s*\)/g;
@@ -55,7 +61,7 @@ function unwrapNumbers(input: string): string {
  */
 export function doSimple(input: string, options?: Omit<Options, "globalFlag">): string {
 	let output = input;
-	const regex = getSimpleRegex({ globalFlag:true, allowSpoilers:options?.allowSpoilers });
+	const regex = getSimpleRegex({ gFlag:"g", allowSpoilers:options?.allowSpoilers });
 	while (regex.test(output)) {
 		output = output.replace(regex, value => {
 			const { hasPipes, unpiped } = unpipe(unwrapNumbers(value));

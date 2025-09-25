@@ -14,6 +14,7 @@ import type { SageCommand } from "../model/SageCommand.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
+import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
 
 export type TEssence20Character = TPlayerCharacter;
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
@@ -471,7 +472,8 @@ async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, 
 			dice = `[${label} ${charName} ${skillName}${specName}${shiftArrow}]`;
 		}
 	}
-	const matches = await parseDiceMatches(sageInteraction, dice);
+	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(character.characterId)!);
+	const matches = await parseDiceMatches(dice, { processor, sageCommand:sageInteraction });
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {

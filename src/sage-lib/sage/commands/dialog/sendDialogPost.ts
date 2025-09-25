@@ -50,7 +50,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	let content = processor.process(postData.content, { footer:true, mentions:true, stats:true });
 
 	//#region dice lists
-	const diceMatches = await parseDiceMatches(sageMessage, content);
+	const diceMatches = await parseDiceMatches(content, { processor, sageCommand:sageMessage });
 	const reverseInline = sageMessage.sageUser.dialogDiceBehaviorType === DialogDiceBehaviorType.Inline;
 	const inlineDiceMatches: TDiceMatch[] = [];
 	const diceOutputs: TDiceOutput[] = [];

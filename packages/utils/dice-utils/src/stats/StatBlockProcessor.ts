@@ -1,4 +1,4 @@
-import { getCodeBlockRegex, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
+import { getCodeBlockRegex, stringOrUndefined, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
 import { unquote } from "../internal/unquote.js";
 import { doStatMath } from "./doStatMath.js";
@@ -21,26 +21,29 @@ function getCharReferenceRegex(): TypedRegExp<CharReferenceGroups> {
 }
 
 type StatBlockGroups = {
-	implicit?: "::";
-	charReference?: string;
+	implicitChar?: "::";
+	implicitDefault?: ":";
+	explicitChar?: string;
+	explicitDefault?: string;
 	statKey: string;
-	defaultValue?: string;
 };
 let statBlockRegex: TypedRegExp<StatBlockGroups>;
 function getStatBlockRegex(): TypedRegExp<StatBlockGroups> {
 	return statBlockRegex ??= regex("i")`
 		(?!<\{)\{
 			(
-				(?<implicit> :: )
+				(?<implicitChar> :: )
 				|
-				(?<charReference> [\w\s]+ | "[\w\s]+" )
+				(?<explicitChar> [\w\s]+ | "[\w\s]+" )
 				::
 
 			)?
 			(?<statKey> [\w\-.]+ )
 			(
 				:
-				(?<defaultValue> [^\{\}]+ )
+				(?<explicitDefault> [^\{\}]+ )
+				|
+				(?<implicitDefault> : )
 			)?
 		\}(?!=\})
 	` as TypedRegExp<StatBlockGroups>;
@@ -308,16 +311,16 @@ export class StatBlockProcessor {
 		statBlock = statBlock?.trim();
 		if (!statBlock) return undefined;
 
-		const { implicit, charReference, statKey, defaultValue } = (this.constructor as typeof StatBlockProcessor).getStatBlockRegex().exec(statBlock)?.groups ?? {};
+		const { implicitChar, implicitDefault, explicitChar, explicitDefault, statKey } = (this.constructor as typeof StatBlockProcessor).getStatBlockRegex().exec(statBlock)?.groups ?? {};
 		if (!statKey) return undefined;
 
-		const char = implicit ? { isImplicit:true } : this.parseCharReference(charReference);
+		const char = implicitChar ? { isImplicit:true } : this.parseCharReference(explicitChar);
 		const stackValue = `${char.stackValue ?? ""}::${statKey}`.toLowerCase();
 
 		return {
 			char,
 			statKey,
-			defaultValue: defaultValue?.trim(),
+			defaultValue: implicitDefault ? "" : explicitDefault?.trim(),
 
 			stackValue,
 		};
@@ -327,11 +330,16 @@ export class StatBlockProcessor {
 		const { statKey, stackValue, defaultValue } = statBlock;
 
 		const { char, statVal } = this.getCharAndStatVal(statBlock, actingCharacter);
+		if (!char) return undefined;
 
 		// process stat or default
-		const statValue = statVal ?? defaultValue ?? "";
-		if (char && statValue.length) {
+		const statValue = stringOrUndefined(statVal) ?? defaultValue;
+		if (statValue !== undefined) {
 			matches.add(statKey.toLowerCase());
+
+			// we need a way to default to empty string
+			if (statValue === "") return "";
+
 			const processed = this._process(statValue, { actingCharacter:char, matches, stack:stack.concat([stackValue]) });
 
 			const mathed = doStatMath(processed);
@@ -356,15 +364,15 @@ export class StatBlockProcessor {
 		return new StatBlockProcessor({ ...this.chars });
 	}
 
-	public for(char: StatsCharacter): StatBlockProcessor {
+	public for(char: Optional<StatsCharacter>): StatBlockProcessor {
 		if (this.chars.actingCharacter === char) return this;
 		const clone = this.clone();
-		clone.chars.actingCharacter = char;
+		clone.chars.actingCharacter = char ?? undefined;
 		return clone;
 	}
 
-	public static for(char: StatsCharacter) {
-		return new StatBlockProcessor({actingCharacter:char});
+	public static for(char: Optional<StatsCharacter>) {
+		return new StatBlockProcessor({ actingCharacter:char??undefined });
 	}
 
 	public static process(char: StatsCharacter, value: Optional<string>) {

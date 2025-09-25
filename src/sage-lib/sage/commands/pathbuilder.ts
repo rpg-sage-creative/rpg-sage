@@ -14,6 +14,7 @@ import type { SageInteraction } from "../model/SageInteraction.js";
 import type { User } from "../model/User.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
+import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
 
 type SageButtonInteraction = SageInteraction<ButtonInteraction>;
 type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
@@ -526,7 +527,8 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 	const scoutMod = character.getSheetValue("activeExploration") === "Scout" ? 1 : 0;
 	const initMod = init ? Math.max(incredibleMod, scoutMod) : 0;
 	const dice = `[1d20+${skillMod+initMod} ${character.name}${secret ? " Secret" : ""} ${skill}${init ? " (Initiative)" : ""}]`;
-	const matches = await parseDiceMatches(sageInteraction, dice);
+	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(character.characterId));
+	const matches = await parseDiceMatches(dice, { processor, sageCommand:sageInteraction });
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
@@ -548,7 +550,9 @@ async function macroRollHandler(sageInteraction: SageButtonInteraction, characte
 	const macro = macros.find(m => m.id === activeMacro) ?? macros.find(m => m.name === activeMacro);
 
 	if (macro) {
-		const matches = await parseDiceMatches(sageInteraction, macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? ""));
+		const dice = macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? "");
+		const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(character.characterId));
+		const matches = await parseDiceMatches(dice, { processor, sageCommand:sageInteraction });
 		const output = matches.map(match => match.output).flat();
 		await sendDice(sageInteraction, output);
 
