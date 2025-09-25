@@ -449,8 +449,8 @@ export class GameCharacter {
 		return recursive && this.companions.hasMatching(value, true);
 	}
 
-	public toDisplayName({ processor, overrideTemplate }: { processor?:StatBlockProcessor; overrideTemplate?: string; } = { }): string {
-		const templatedValue = StatBlockProcessor.doIt({ char:this, processor, overrideTemplate, templateKey:"displayName" });
+	public toDisplayName({ processor, overrideTemplate, raw }: { overrideTemplate?: string; processor?:StatBlockProcessor; raw?:boolean; } = { }): string {
+		const templatedValue = StatBlockProcessor.doIt({ char:this, processor, overrideTemplate, templateKey:"displayName", templatesOnly:raw });
 		if (templatedValue) {
 			return templatedValue;
 		}
@@ -602,28 +602,33 @@ export class GameCharacter {
 			return {
 				keys: new Set<Lowercase<string>>(templateStats.map(({ title }) => title.toLowerCase() as Lowercase<string>)),
 				title: "Templates",
-				lines: templateStats.map(note => `<b>${note.title}</b> ${note.note}`)
+				lines: templateStats.map(note => `<b>${note.title}</b> \`\`\`${note.note}\`\`\``)
 			};
 		};
 
 		const processor = options?.processor ?? StatBlockProcessor.for(this);
 
-		const emptyOptions = !options?.simple && !options?.custom && !options?.stats && !options?.templates;
+		const sections = ["simple","custom","stats","templates"] as const;
+		const isSection = (value: string): value is typeof sections[number] => sections.includes(value as any);
+		const explicitSections = options?.simple || options?.custom || options?.stats || options?.templates;
+		const defaultSections = !explicitSections ? this.getString("details.defaultSections")?.toLowerCase().split(",").filter(isSection) : [];
+		const showSection = (section: typeof sections[number]) => explicitSections ? options[section] : !defaultSections?.length ? true : defaultSections.includes(section);
+
 		const raw = options?.raw;
 
-		const doSimple = emptyOptions || options.simple;
-		const { keys: simpleKeys = [], title: simpleTitle, lines: simpleLines = [] } = doSimple ? processSimpleSheet({ char:this, processor }) : {};
+		const showSimple = showSection("simple");
+		const { keys: simpleKeys = [], title: simpleTitle, lines: simpleLines = [] } = showSimple ? processSimpleSheet({ char:this, processor }) : {};
 
-		const doCustom = emptyOptions || options.custom;
-		const { keys: customKeys = [], title: customTitle, lines: customLines = [] } = doCustom ? processor.processTemplate("customSheet", raw ? { templatesOnly:true } : undefined) : {};
+		const showCustom = showSection("custom");
+		const { keys: customKeys = [], title: customTitle, lines: customLines = [] } = showCustom ? processor.processTemplate("customSheet", raw ? { templatesOnly:true } : undefined) : {};
 
-		const doTemplates = emptyOptions || options.templates;
-		const { keys: templateKeys = [], title: templateTitle, lines: templateLines = [] } = doTemplates ? processTemplateKeys() : {};
+		const showTemplates = showSection("templates");
+		const { keys: templateKeys = [], title: templateTitle, lines: templateLines = [] } = showTemplates ? processTemplateKeys() : {};
 
 		const usedKeys = new Set<Lowercase<string>>([...simpleKeys, ...customKeys, ...templateKeys]);
 
-		const doStats = emptyOptions || options.stats;
-		if (!doStats) {
+		const showStats = showSection("stats");
+		if (!showStats) {
 			return [
 				{ title: simpleTitle, lines: simpleLines },
 				{ title: customTitle, lines: customLines },
@@ -631,8 +636,11 @@ export class GameCharacter {
 			];
 		}
 
-		// remove keys used in simple sheet, custom sheet, or template stats
-		statsToMap = statsToMap.filter(note => !usedKeys.has(note.title.toLowerCase() as Lowercase<string>));
+		// remove keys used in simple sheet, custom sheet, or template stats; always remove templates
+		statsToMap = statsToMap.filter(({ title }) => {
+			const lower = title.toLowerCase();
+			return !usedKeys.has(lower) && !lower.endsWith(".template") && !lower.endsWith(".template.title");
+		});
 		statsToMap.sort(sorter);
 
 		const otherTitle = simpleLines.length || customLines.length ? `Other Stats` : `Stats`;

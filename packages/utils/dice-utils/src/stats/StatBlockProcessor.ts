@@ -386,7 +386,7 @@ export class StatBlockProcessor {
 	}
 
 	/** @todo merge this and process and processTemplate somehow .. maybe just use these args in those two */
-	public static doIt({ char, processor, overrideTemplate, templateKey }: { char: StatsCharacter; processor?:StatBlockProcessor; overrideTemplate?:string; templateKey:string; }) {
+	public static doIt({ char, processor, overrideTemplate, templateKey, templatesOnly }: { char: StatsCharacter; overrideTemplate?:string; processor?:StatBlockProcessor; templateKey:string; templatesOnly?:boolean; }) {
 		if (processor) {
 			processor.for(char);
 		}else {
@@ -395,6 +395,6 @@ export class StatBlockProcessor {
 		if (overrideTemplate) {
 			return processor.processStatBlocks(overrideTemplate);
 		}
-		return processor.processTemplate(templateKey).value;
+		return processor.processTemplate(templateKey, { templatesOnly }).value;
 	}
 }

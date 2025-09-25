@@ -88,6 +88,8 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`<b>Auto Dialog</b> <i>none</i>`);
 	}
 
+	const processor = StatMacroProcessor.withStats(sageMessage).for(character);
+
 	if (character.hasStats) {
 		let isGmChannel = false;
 		let hasGmChannels = false;
@@ -116,11 +118,10 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 
 		}else {
 			const custom = sageMessage.args.nonKeyValuePairs().includes("--custom");
-			const simple = sageMessage.args.nonKeyValuePairs().includes("--simple");
 			const raw = sageMessage.args.nonKeyValuePairs().includes("--raw");
+			const simple = sageMessage.args.nonKeyValuePairs().includes("--simple");
 			const stats = sageMessage.args.nonKeyValuePairs().includes("--stats");
 			const templates = sageMessage.args.nonKeyValuePairs().includes("--templates");
-			const processor = StatMacroProcessor.withStats(sageMessage).for(character);
 
 			const sections = character.toStatsOutput({ simple, custom, processor, raw, stats, templates });
 			sections.forEach(({ title, lines }) => {
@@ -135,7 +136,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	const webhookOptions = {
 		authorOptions: {
 			avatarURL: character.tokenUrl ?? sageMessage.bot.tokenUrl,
-			username: character.toDisplayName()
+			username: character.toDisplayName({ processor })
 		},
 		dialogType: sageMessage.dialogPostType,
 		renderableContent,
