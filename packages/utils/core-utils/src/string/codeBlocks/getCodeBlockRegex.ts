@@ -15,7 +15,9 @@ export type CodeBlockRegexGroups = {
 type GetOptions = RegExpFlagOptions & { ticks?:1|2|3; };
 
 function createSource(ticks: 1 | 2 | 3): string {
-	return `(?<ticks${ticks}>(?:(?<!\\\\)\`){${ticks}})(?<content${ticks}>(?:.|\n)*?)(?:(?:(?<!\\\\)\`){${ticks}})`;
+	// we only include new lines when 3 ticks are used
+	const content = ticks === 3 ? `(?:.|\n)` : `.`;
+	return `(?<ticks${ticks}>(?:(?<!\\\\)\`){${ticks}})(?<content${ticks}>${content}*?)(?:(?:(?<!\\\\)\`){${ticks}})`;
 }
 
 function createCodeBlockRegex({ gFlag = "", iFlag = "", ticks }: GetOptions = {}): RegExp {
