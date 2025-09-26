@@ -1,4 +1,4 @@
-import type { TypedRegExpStringIterator } from "../../types/generics.js";
+import type { TypedRegExpStringIterator } from "../../types/TypedRegExp.js";
 import { getCodeBlockRegex } from "./getCodeBlockRegex.js";
 
 type CodeBlockMatch = {
