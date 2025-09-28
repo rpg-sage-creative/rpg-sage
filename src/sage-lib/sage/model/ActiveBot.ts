@@ -48,7 +48,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	public static async sendToSuperUser(...args: unknown[]): Promise<void> {
 		const user = await ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false }).catch(DiscordApiError.process);
 		if (user) {
-			const contents = chunk(args.map(formatArg).join("\n"), 2000);
+			const contents = chunk(args.map(formatArg).join("\n"), { maxChunkLength:2000 });
 			for (const content of contents) {
 				await user.send(wrapUrl(content, true));
 			}

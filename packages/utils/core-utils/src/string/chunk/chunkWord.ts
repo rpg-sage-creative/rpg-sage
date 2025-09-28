@@ -1,13 +1,21 @@
-import type { ChunkData } from "./ChunkData.js";
-import type { ChunkOptions } from "./ChunkOptions.js";
+import type { ChunkData, ChunkOptions } from "./types.js";
+
+type Args = {
+	data: ChunkData;
+	options?: ChunkOptions;
+	word: string;
+	wordIndex: number
+};
 
 /** @internal Creates a new chunk if adding the word would cause the current chunk to become too long. */
-export function chunkWord(data: ChunkData, options: ChunkOptions, word: string, wordIndex: number): void {
+export function chunkWord({ data, options, word, wordIndex }: Args): void {
+	const { spaceCharacter = " " } = options ?? {};
+
 	// Treat undefined as empty string for length and concatenation
 	const currentChunk = data.currentChunk ?? "";
 
 	// We don't want a leading space
-	const space = 0 < wordIndex ? options.spaceCharacter : "";
+	const space = 0 < wordIndex ? spaceCharacter : "";
 
 	// Test if the word would put the chunk over the maxChunkLength
 	if (currentChunk.length + space.length + word.length < data.maxChunkLength(data.currentIndex)) {

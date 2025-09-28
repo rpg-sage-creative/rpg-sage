@@ -1,5 +1,5 @@
-import { type Optional } from "@rsc-utils/core-utils";
-import { chunk, ELLIPSIS, isNotBlank } from "@rsc-utils/string-utils";
+import { type Optional, chunk } from "@rsc-utils/core-utils";
+import { ELLIPSIS, isNotBlank } from "@rsc-utils/string-utils";
 import { type APIEmbed, type ColorResolvable, type Embed, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
 import { EmbedBuilder } from "../embed/EmbedBuilder.js";
 import { type EmbedResolvable } from "../embed/EmbedResolvable.js";
@@ -66,7 +66,7 @@ function embedsToContent(embeds?: Optional<MsgEmbed[]>): string | undefined {
 function contentToEmbeds(content?: Optional<string>, colorResolvable?: ColorResolvable): EmbedBuilder[] | undefined {
 	const trimmedContent = content?.trim();
 	if (trimmedContent?.length) {
-		const chunks = chunk(trimmedContent, DiscordMaxValues.embed.descriptionLength);
+		const chunks = chunk(trimmedContent, { maxChunkLength:DiscordMaxValues.embed.descriptionLength });
 		if (chunks.length) {
 			const color = colorResolvable ? resolveColor(colorResolvable) : undefined;
 			return chunks.map(description => new EmbedBuilder({ color, description }));
@@ -163,7 +163,7 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 	const payloads: T[] = [];
 
 	// chunk content into valid lengths
-	const contentChunks = chunk(contentToChunk?.trim() ?? "", DiscordMaxValues.message.contentLength);
+	const contentChunks = chunk(contentToChunk?.trim() ?? "", { maxChunkLength:DiscordMaxValues.message.contentLength });
 
 	// create a payload for each chunk
 	contentChunks.forEach(contentChunk => {

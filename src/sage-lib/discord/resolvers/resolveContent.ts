@@ -27,7 +27,7 @@ function resolveSection({ embeds, formatter, renderableContent, section }: Resol
 	}
 
 	// chunk content
-	const chunkedContent = chunk(formattedContent, maxChunkLengthCallback);
+	const chunkedContent = chunk(formattedContent, { maxChunkLength:maxChunkLengthCallback });
 
 	// append to previous embeds or add new ones
 	chunkedContent.forEach((description, index) => {

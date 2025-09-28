@@ -1,17 +1,27 @@
-import type { ChunkData } from "./ChunkData.js";
-import type { ChunkOptions } from "./ChunkOptions.js";
+import { codeBlockSafeSplit } from "../codeBlocks/codeBlockSafeSplit.js";
 import { chunkWord } from "./chunkWord.js";
+import type { ChunkData, ChunkOptions } from "./types.js";
+
+type Args = {
+	data: ChunkData;
+	line: string;
+	lineIndex: number
+	options?: ChunkOptions;
+};
 
 /** @internal Breaks down a line if adding it would cause the current chunk to become too long. */
-export function chunkLine(data: ChunkData, options: ChunkOptions, line: string, _lineIndex: number): void {
+export function chunkLine({ data, line, options }: Args): void {
+	const { newLineCharacter = "\n", wordSplitter = " " } = options ?? {};
+
 	// Treat undefined as empty string for length and concatenation
 	const currentChunk = data.currentChunk ?? "";
 
 	// We don't want a leading newLine
-	const newLine = data.currentChunk !== undefined ? options.newLineCharacter : "";
+	const newLine = data.currentChunk !== undefined ? newLineCharacter : "";
 
 	// Test if the line would put the chunk over the maxChunkLength
-	if (currentChunk.length + newLine.length + line.length < data.maxChunkLength(data.currentIndex)) {
+	const maxChunkLength = data.maxChunkLength(data.currentIndex);
+	if (currentChunk.length + newLine.length + line.length < maxChunkLength) {
 		// If not, simply add it, including newLine since we split on that
 		data.currentChunk = currentChunk + newLine + line;
 
@@ -38,10 +48,10 @@ export function chunkLine(data: ChunkData, options: ChunkOptions, line: string, 
 			data.currentChunk = "";
 
 			// Split the line into words (generally splitting on " ")
-			const words = line.split(options.wordSplitter);
+			const words = codeBlockSafeSplit(line, wordSplitter);
 
 			// Iterate the words
-			words.forEach((word, wordIndex) => chunkWord(data, options, word, wordIndex));
+			words.forEach((word, wordIndex) => chunkWord({ data, options, word, wordIndex }));
 
 			// Include the last, trailing chunk
 			data.currentIndex = data.chunks.push(data.currentChunk);
