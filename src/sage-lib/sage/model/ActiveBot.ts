@@ -51,7 +51,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		if (user) {
 			const maxLength = DiscordMaxValues.message.contentLength;
 			const formattedContent = wrapUrl(args.map(formatArg).join("\n"), true);
-			const chunks = chunk(formattedContent, maxLength);
+			const chunks = chunk(formattedContent, { maxChunkLength:maxLength });
 			for (const chunk of chunks) {
 				if (chunk.length && chunk.length < maxLength) {
 					await user.send(chunk);
