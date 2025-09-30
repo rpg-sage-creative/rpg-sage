@@ -1,5 +1,3 @@
-import { wrapIterableIterator } from "../iterator/wrapIterableIterator.js";
-
 /**
  * Provides the basic functionality for removing elements on a timer.
  * Also provides basic functions common to both Map and Set.
@@ -39,15 +37,7 @@ export abstract class EphemeralBase<K, V = K> {
 		return deleted;
 	}
 
-	/** iterate the entries as [key, value] */
-	public entries(): IterableIterator<[K, V]> {
-		return wrapIterableIterator(this.map.keys(), key => {
-			return {
-				value: [key, this.map.get(key)?.value!],
-				skip: !this.map.has(key)
-			};
-		});
-	}
+	// entries
 
 	// public abstract forEach(fn: (value: V, value2: K, set: EphemeralBase<K, V>) => unknown, thisArg?: any): void;
 
@@ -57,14 +47,8 @@ export abstract class EphemeralBase<K, V = K> {
 		return this.map.has(key);
 	}
 
-	public keys(): IterableIterator<K> {
-		return wrapIterableIterator(this.map.keys(), key => {
-			return {
-				value: key,
-				skip: !this.map.has(key)
-			};
-		});
-	}
+	// keys
+	public abstract keys(): IterableIterator<K>;
 
 	protected set(key: K, value: V): this {
 		this.map.set(key, { ts:Date.now(), value });
@@ -76,14 +60,7 @@ export abstract class EphemeralBase<K, V = K> {
 		return this.map.size;
 	}
 
-	public values(): IterableIterator<V> {
-		return wrapIterableIterator(this.map.keys(), key => {
-			return {
-				value: this.map.get(key)?.value!,
-				skip: !this.has(key)
-			};
-		});
-	}
+	// values
 
 	/** timeout reference */
 	private _timer?: NodeJS.Timeout;
