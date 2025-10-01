@@ -9,14 +9,14 @@ type TableOutput = TDiceOutput & { children?:string[]; };
 
 type _Options = {
 	input: string;
-	xs?: boolean;
+	size?: "xxs" | "xs" | "s";
 };
 
 function _rollTable(table: SimpleRollableTable, options: _Options): TableOutput | undefined {
 	const roll = randomInt(table.min, table.max);
 	const item = table.items.find(item => item.min <= roll && roll <= item.max);
 	if (item) {
-		const result = options.xs ? item.text : `<b>${roll}</b> - ${item.text}`;
+		const result = ["xxs","xs","s"].includes(options.size ?? "") ? item.text : `<b>${roll}</b> - ${item.text}`;
 		return {
 			hasSecret: false,
 			inlineOutput: result,
@@ -28,7 +28,7 @@ function _rollTable(table: SimpleRollableTable, options: _Options): TableOutput 
 	return undefined;
 }
 
-type Options = { times?:number; xs?:boolean; slots?:boolean; };
+type Options = { times?:number; size?:"xxs"|"xs"|"s"; };
 
 /**
  * Rolls on the given table.
@@ -42,8 +42,8 @@ export async function rollTable(_: SageCommand, input: string, table?: SimpleRol
 
 	const results: TableOutput[] = [];
 
-	const xs = options?.xs || options?.slots;
-	const opts = { input, xs };
+	const size = options?.size;
+	const opts = { input, size };
 
 	const times = options?.times ?? 1;
 	for (let i = 0; i < times; i++) {
@@ -53,12 +53,15 @@ export async function rollTable(_: SageCommand, input: string, table?: SimpleRol
 		}
 	}
 
-	if (options?.slots && results.length > 1) {
-		return [results.slice(1).reduce((out, result) => {
-			out.inlineOutput += result.inlineOutput;
-			out.output += result.output;
-			return out;
-		}, results[0])];
+	if (results.length > 1) {
+		const spacer = options?.size === "xxs" ? "" : options?.size === "xs" ? ", " : undefined;
+		if (spacer !== undefined) {
+			return [results.slice(1).reduce((out, result) => {
+				out.inlineOutput += spacer + result.inlineOutput;
+				out.output += spacer + result.output;
+				return out;
+			}, results[0])];
+		}
 	}
 
 	return results;

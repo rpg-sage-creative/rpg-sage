@@ -151,7 +151,7 @@ async function parseMatch(match: string, options: ParseMatchOptions): Promise<TD
 
 	const table = await fetchTableFromUrl(match) ?? parseTable(match);
 	if (table) {
-		const tableResults = await rollTable(sageCommand, noBraces, table, { times:table.times, xs:table.xs, slots:table.slots });
+		const tableResults = await rollTable(sageCommand, noBraces, table, { times:table.times, size:table.size });
 		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(getBasicBracketRegex()) ?? []).flat() ?? [];
 		// debug({tableResults,tableResultsDice})
 		for (const diceToParse of childDice) {

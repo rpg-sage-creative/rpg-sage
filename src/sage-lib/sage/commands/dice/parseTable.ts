@@ -51,8 +51,7 @@ function lineToTableItem(line: string): SimpleRollableTableItem | undefined {
 
 type ParsedTable = SimpleRollableTable & {
 	times?: number;
-	xs?: boolean;
-	slots?: boolean;
+	size?: "xxs" | "xs" | "s";
 };
 
 /**
@@ -62,8 +61,8 @@ type ParsedTable = SimpleRollableTable & {
  */
 export function parseTable(value?: string | null): ParsedTable | undefined {
 	const unwrapped = unwrap(value?.trim() ?? "", "[]");
-	const groups = /^(?<times>\d+)?(?<xs>xs)?(?<slots>slots)?#(?<content>(?:.|\n)*?$)/.exec(unwrapped)?.groups as { times?:`${number}`; xs?:"xs"; slots?:"slots"; content:string; } | undefined;
-	const { times, xs, slots, content } = groups ?? {};
+	const groups = /^(?<times>\d+)?(?<size>xxs|xs|s)?#(?<content>(?:.|\n)*?$)/.exec(unwrapped)?.groups as { times?:`${number}`; size?:"xxs"|"xs"|"s"; content:string; } | undefined;
+	const { times, size, content } = groups ?? {};
 	const lines = normalizeDashes(content ?? unwrapped).split(/\n/);
 
 	// by definition, a table is multiple lines
@@ -72,11 +71,10 @@ export function parseTable(value?: string | null): ParsedTable | undefined {
 		return undefined;
 	}
 
-	const table: ParsedTable = { min:undefined!, max:undefined!, count:0, items:[], times:undefined!, xs:undefined! };
+	const table: ParsedTable = { min:undefined!, max:undefined!, count:0, items:[], times:undefined!, size:undefined! };
 
 	if (times) table.times = +times;
-	if (xs) table.xs = true;
-	if (slots) table.slots = true;
+	if (size) table.size = size;
 
 	for (const line of lines) {
 		const tableItem = lineToTableItem(line);
