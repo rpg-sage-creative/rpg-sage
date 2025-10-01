@@ -49,21 +49,34 @@ function lineToTableItem(line: string): SimpleRollableTableItem | undefined {
 	return { min:minMax[0], max:minMax[1], text, children };
 }
 
+type ParsedTable = SimpleRollableTable & {
+	times?: number;
+	xs?: boolean;
+	slots?: boolean;
+};
+
 /**
  * Parses a table from the given input.
  * Checks TSV and simple lines with numbers at the beginning.
  * Returns undefined if there are any duplicated or missing numbers.
  */
-export function parseTable(value?: string | null): SimpleRollableTable | undefined {
-	const table: SimpleRollableTable = { min:undefined!, max:undefined!, count:0, items:[] };
-
-	const lines = normalizeDashes(unwrap(value?.trim() ?? "", "[]")).split(/\n/);
+export function parseTable(value?: string | null): ParsedTable | undefined {
+	const unwrapped = unwrap(value?.trim() ?? "", "[]");
+	const groups = /^(?<times>\d+)?(?<xs>xs)?(?<slots>slots)?#(?<content>(?:.|\n)*?$)/.exec(unwrapped)?.groups as { times?:`${number}`; xs?:"xs"; slots?:"slots"; content:string; } | undefined;
+	const { times, xs, slots, content } = groups ?? {};
+	const lines = normalizeDashes(content ?? unwrapped).split(/\n/);
 
 	// by definition, a table is multiple lines
 	// also, grabbing a one line table of math means simple math no longer works
 	if (lines.length === 1) {
 		return undefined;
 	}
+
+	const table: ParsedTable = { min:undefined!, max:undefined!, count:0, items:[], times:undefined!, xs:undefined! };
+
+	if (times) table.times = +times;
+	if (xs) table.xs = true;
+	if (slots) table.slots = true;
 
 	for (const line of lines) {
 		const tableItem = lineToTableItem(line);
