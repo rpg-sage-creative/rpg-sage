@@ -71,7 +71,7 @@ async function gameUpdate(sageCommand: SageCommand): Promise<boolean | undefined
 
 	sageCommand.replyStack.stopThinking();
 
-	const update = await discordPromptYesNo(sageCommand, `Update Game?`, true);
+	const update = sageCommand.args.hasSkipConfirmationFlag ? true : await discordPromptYesNo(sageCommand, `Update Game?`, true);
 
 	if (update) {
 		const gameSaved = game ? await game.save() : false;
