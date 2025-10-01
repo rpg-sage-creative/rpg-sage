@@ -10,7 +10,7 @@ import { sendGameCharacterMods } from "./sendGameCharacterMods.js";
 export async function promptModsConfirm(sageMessage: SageMessage, character: GameCharacter, updatedKeys: StringSet, action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
 	let yes: boolean;
 	const details = await sendGameCharacterMods(sageMessage, character, updatedKeys);
-	if (sageMessage.args.nonKeyValuePairs().includes("-y")) {
+	if (sageMessage.args.hasSkipConfirmationFlag) {
 		yes = true;
 	}else {
 		const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
@@ -33,7 +33,7 @@ export async function promptModsConfirm(sageMessage: SageMessage, character: Gam
 export async function promptCharConfirm(sageMessage: SageMessage, character: GameCharacter, prompt: string, action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
 	let yes: boolean;
 	const details = await sendGameCharacter(sageMessage, character);
-	if (sageMessage.args.nonKeyValuePairs().includes("-y")) {
+	if (sageMessage.args.hasSkipConfirmationFlag) {
 		yes = true;
 	}else {
 		const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
