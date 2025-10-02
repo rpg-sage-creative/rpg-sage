@@ -204,16 +204,26 @@ export class StatBlockProcessor {
 
 	public processTemplate(templateKey: string, { templatesOnly }: { templatesOnly?:boolean; } = {}): ProcessTemplateResults {
 		const matchKeys = new Set<Lowercase<string>>();
-		const initialValue = `{${templateKey.replace(/\.template$/i, "")}.template}`;
-		const processedValue = this._process(initialValue, { matches:matchKeys, stack:[], templatesOnly });
-		const processed = processedValue !== `\`${initialValue}\``;
-		const titleValue = processed ? this.chars.actingCharacter?.getString(`${templateKey}.template.title`) : undefined;
-		const lines = processed ? processedValue.split(/[\r\n]/) : [];
+		const templateValue = `{${templateKey.replace(/\.template$/i, "")}.template}`;
+		const templateStatBlock = this.parseStatBlock(templateValue);
+		if (templateStatBlock?.isTemplate) {
+			const templateResult = this.processStatBlock(templateStatBlock, { matches:matchKeys, stack:[], templatesOnly:true });
+			const processedResult = templatesOnly ? templateResult : this.processStatBlocks(templateResult);
+			if (processedResult) {
+				const titleValue = this.chars.actingCharacter?.getString(`${templateKey}.template.title`);
+				return {
+					keys: matchKeys,
+					title: titleValue,
+					value: processedResult,
+					lines: processedResult.split(/[\r\n]/)
+				};
+			}
+		}
 		return {
 			keys: matchKeys,
-			title: titleValue,
-			value: processed ? processedValue : undefined,
-			lines
+			title: undefined,
+			value: `\`${templateValue}\``,
+			lines: []
 		};
 	}
 
