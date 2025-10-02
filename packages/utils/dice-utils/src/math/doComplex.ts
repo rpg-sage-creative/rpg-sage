@@ -22,11 +22,15 @@ export function getComplexRegex(options?: Options): RegExp {
 	const simpleRegex = getSimpleRegex({ allowSpoilers:options?.allowSpoilers }).source;
 	const numberOrSimple = `(?:${numberRegex}|${simpleRegex})`;
 	return xRegExp(`
+		(?<!\\d*d\\d+)                  # ignore the entire thing if preceded by dY or XdY
 
-		( min | max | floor | ceil | round | hypot )  # capture a math function
+		(?:                             # open non-capture group for multiplier/function
+			(${numberRegex})\\s*        # capture a multiplier, ex: 3(4-2) <-- 3 is the multiplier
+			|
+			(min|max|floor|ceil|round|hypot)  # capture a math function
+		)?                              # close non-capture group for multiplier/function; make it optional
 
 		\\(\\s*                         # open parentheses, optional spaces
-
 		(                               # open capture group
 			${numberOrSimple}           # first number/simple match
 			(?:                         # open non-capture group
@@ -34,9 +38,9 @@ export function getComplexRegex(options?: Options): RegExp {
 				${numberOrSimple}       # additional number/simple matches
 			)*                          # close non-capture group, allow any number of them
 		)                               # close capture group
-
 		\\s*\\)                         # close parentheses, optional spaces
 
+		(?!\\d*d\\d)                    # ignore the entire thing if followed by dY or XdY
 	`, flags);
 }
 
@@ -70,25 +74,20 @@ const SageMath = {
 	},
 }
 
-const unwrapper = /\(\s*\d+\s*\)/g;
-function unwrapNumbers(input: string): string {
-	return input.replace(unwrapper, match => match.slice(1, -1));
-}
-
 /** Checks the value for min/max/floor/ceil/round and replaces it with the result. */
 export function doComplex(input: string, options?: Omit<Options, "globalFlag">): string {
 	let output = input;
 	const regex = getComplexRegex({ globalFlag:true, ...options });
 	while (regex.test(output)) {
-		output = output.replace(regex, (_, _functionName: string | undefined, _args: string) => {
-			const { hasPipes, unpiped } = unpipe(unwrapNumbers(_args));
+		output = output.replace(regex, (_, _multiplier: string | undefined, _functionName: string | undefined, _args: string) => {
+			const { hasPipes, unpiped } = unpipe(_args);
 
 			const retVal = (result: string | number) => {
 				return hasPipes ? `||${result}||` : String(result);
 			};
 
 			// split on space,space and convert to numbers
-			const args = unpiped.split(",").map(s => +doSimple(s)!);
+			const args = unpiped.split(/\s*,\s*/).map(s => +doSimple(s)!);
 
 			// handle a math function
 			if (_functionName !== undefined) {
@@ -98,6 +97,11 @@ export function doComplex(input: string, options?: Omit<Options, "globalFlag">):
 				const result = SageMath[functionName](...args);
 				// return a string
 				return retVal(result);
+			}
+
+			if (_multiplier !== undefined) {
+				// return the new math so that it can be reprocessed
+				return retVal(`${_multiplier}*${args[0]}`);
 			}
 
 			return retVal(`${args[0]}`);
