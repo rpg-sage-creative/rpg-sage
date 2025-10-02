@@ -450,16 +450,18 @@ export class GameCharacter {
 	}
 
 	public toDisplayName({ processor, overrideTemplate, raw }: { overrideTemplate?: string; processor?:StatBlockProcessor; raw?:boolean; } = { }): string {
-		const templatedValue = StatBlockProcessor.doIt({ char:this, processor, overrideTemplate, templateKey:"displayName", templatesOnly:raw });
-		if (templatedValue && templatedValue !== `\`{displayName.template}\``) {
+		const templatedValue = StatBlockProcessor.processTemplate({ char:this, processor, overrideTemplate, templateKey:"displayName", templatesOnly:raw });
+		if (templatedValue) {
 			return templatedValue;
 		}
+
 		if (this.isGmOrNpcOrMinion) {
 			const descriptors = this.toNameDescriptors();
 			if (descriptors.length) {
 				return `${this.name} (${descriptors.join(" ")})`;
 			}
 		}
+
 		return this.name;
 	}
 
@@ -472,9 +474,9 @@ export class GameCharacter {
 	 */
 	public toNameDescriptors(): string[] {
 		if (this.getString("nameDescriptors.template")?.toLowerCase() === "off") return [];
-		const template = StatBlockProcessor.for(this).processTemplate("nameDescriptors");
-		if (template.value) {
-			return template.value
+		const templatedValue = StatBlockProcessor.for(this).processTemplate("nameDescriptors").value;
+		if (templatedValue) {
+			return templatedValue
 				.split(",")
 				.filter(isNotBlank)
 				.map(s => s.trim());
@@ -531,8 +533,8 @@ export class GameCharacter {
 	}
 
 	public toDialogFooterLine({ processor, overrideTemplate }: { processor?:StatBlockProcessor; overrideTemplate?: string; } = { }): string | undefined {
-		const dialogFooter = StatBlockProcessor.doIt({ char:this, processor, overrideTemplate, templateKey:"dialogFooter" });
-		return dialogFooter !== `\`{dialogFooter.template}\`` ? dialogFooter : undefined;
+		const dialogFooter = StatBlockProcessor.processTemplate({ char:this, processor, overrideTemplate, templateKey:"dialogFooter" });
+		return dialogFooter;
 	}
 
 	public toJSON(): GameCharacterCore {
@@ -646,7 +648,7 @@ export class GameCharacter {
 
 		const otherTitle = simpleLines.length || customLines.length ? `Other Stats` : `Stats`;
 		const otherLines = statsToMap.map(({ title, note }) => {
-			const value = raw ? note : processor.processStatBlocks(note);
+			const value = raw ? note : processMath(processor.processStatBlocks(note));
 			return `<b>${title}</b> ${value}`;
 		});
 

@@ -60,7 +60,7 @@ function hpToHtml(char: StatBlockProcessor): string | undefined {
 		if (value || maxValue) {
 			hasHealth = true;
 		}
-		return char.processTemplate(`${label}.template`).value
+		return char.processTemplate(label).value
 			?? `<b>${label}</b> ${value ?? "??"}/${maxValue ?? "??"}`;
 	});
 

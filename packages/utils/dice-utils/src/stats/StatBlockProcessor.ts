@@ -132,6 +132,18 @@ type ProcessTemplateResults = {
 	lines: string[];
 };
 
+type ProcessTemplateArgs = {
+	char: StatsCharacter;
+	overrideTemplate?: string;
+	processor?: StatBlockProcessor;
+	templateKey: string;
+	templatesOnly?: boolean;
+};
+
+type ProcessTemplateOptions = {
+	templatesOnly?: boolean;
+};
+
 export class StatBlockProcessor {
 	public constructor(public chars: StatCharacters) { }
 
@@ -202,7 +214,7 @@ export class StatBlockProcessor {
 		return this._process(value, { matches:new Set(), stack:[] });
 	}
 
-	public processTemplate(templateKey: string, { templatesOnly }: { templatesOnly?:boolean; } = {}): ProcessTemplateResults {
+	public processTemplate(templateKey: string, { templatesOnly }: ProcessTemplateOptions = {}): ProcessTemplateResults {
 		const matchKeys = new Set<Lowercase<string>>();
 		const templateValue = `{${templateKey.replace(/\.template$/i, "")}.template}`;
 		const templateStatBlock = this.parseStatBlock(templateValue);
@@ -222,7 +234,7 @@ export class StatBlockProcessor {
 		return {
 			keys: matchKeys,
 			title: undefined,
-			value: `\`${templateValue}\``,
+			value: undefined,
 			lines: []
 		};
 	}
@@ -358,12 +370,14 @@ export class StatBlockProcessor {
 
 			const processed = this._process(statValue, { actingCharacter:char, matches, stack:stack.concat([stackValue]), templatesOnly });
 
-			const mathed = doStatMath(processed);
-			if (mathed !== processed) return mathed;
+			if (!statBlock.isTemplate) {
+				const mathed = doStatMath(processed);
+				if (mathed !== processed) return mathed;
 
-			const wrapped = `(${processed})`;
-			const wrappedAndMathed = doStatMath(wrapped);
-			if (wrappedAndMathed !== wrapped) return wrappedAndMathed;
+				// const wrapped = `(${processed})`;
+				// const wrappedAndMathed = doStatMath(wrapped);
+				// if (wrappedAndMathed !== wrapped) return wrappedAndMathed;
+			}
 
 			return processed;
 		}
@@ -396,7 +410,7 @@ export class StatBlockProcessor {
 	}
 
 	/** @todo merge this and process and processTemplate somehow .. maybe just use these args in those two */
-	public static doIt({ char, processor, overrideTemplate, templateKey, templatesOnly }: { char: StatsCharacter; overrideTemplate?:string; processor?:StatBlockProcessor; templateKey:string; templatesOnly?:boolean; }) {
+	public static processTemplate({ char, processor, overrideTemplate, templateKey, templatesOnly }: ProcessTemplateArgs): string | undefined {
 		if (processor) {
 			processor.for(char);
 		}else {
