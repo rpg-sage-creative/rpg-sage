@@ -531,7 +531,8 @@ export class GameCharacter {
 	}
 
 	public toDialogFooterLine({ processor, overrideTemplate }: { processor?:StatBlockProcessor; overrideTemplate?: string; } = { }): string | undefined {
-		return StatBlockProcessor.doIt({ char:this, processor, overrideTemplate, templateKey:"dialogFooter" });
+		const dialogFooter = StatBlockProcessor.doIt({ char:this, processor, overrideTemplate, templateKey:"dialogFooter" });
+		return dialogFooter !== `\`{dialogFooter.template}\`` ? dialogFooter : undefined;
 	}
 
 	public toJSON(): GameCharacterCore {
