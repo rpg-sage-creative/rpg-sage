@@ -31,7 +31,10 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public toArray(): string[] { return this.argsManager; }
 	//#endregion
 
-	public get hasSkipConfirmationFlag(): boolean { return this.nonKeyValuePairs().includes("-y"); }
+	public get hasSkipConfirmationFlag(): boolean {
+		const skipConfirmationFlag = this.sageCommand.sageUser.skipConfirmationFlag ?? "-y";
+		return this.nonKeyValuePairs().includes(skipConfirmationFlag);
+	}
 
 	//#region Old
 

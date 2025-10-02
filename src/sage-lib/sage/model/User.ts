@@ -52,6 +52,8 @@ export interface UserCore extends IdCore<"User"> {
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
 
 	mentionPrefix?: string;
+
+	skipConfirmationFlag?: string;
 }
 
 //#region Core Updates
@@ -84,6 +86,7 @@ type UpdateArgs = Args<{
 	mentionPrefix: string;
 	moveDirectionOutputType: MoveDirectionOutputType;
 	sagePostType: DialogType;
+	skipConfirmationFlag: string;
 }>;
 
 export class User extends HasSageCacheCore<UserCore> {
@@ -138,6 +141,9 @@ export class User extends HasSageCacheCore<UserCore> {
 	public get mentionPrefix(): string | undefined { return this.core.mentionPrefix; }
 	public set mentionPrefix(mentionPrefix: string | undefined) { this.core.mentionPrefix = stringOrUndefined(mentionPrefix); }
 
+	public get skipConfirmationFlag(): string | undefined { return this.core.skipConfirmationFlag; }
+	public set skipConfirmationFlag(skipConfirmationFlag: string | undefined) { this.core.skipConfirmationFlag = stringOrUndefined(skipConfirmationFlag); }
+
 	//#endregion
 
 	public findCharacterOrCompanion(name: string): GameCharacter | undefined {
@@ -158,7 +164,7 @@ export class User extends HasSageCacheCore<UserCore> {
 		return undefined;
 	}
 
-	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType, mentionPrefix }: UpdateArgs): Promise<boolean> {
+	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, mentionPrefix, moveDirectionOutputType, sagePostType, skipConfirmationFlag }: UpdateArgs): Promise<boolean> {
 		const changed = applyChanges(this.core, {
 			dialogDiceBehaviorType,
 			defaultDialogType:dialogPostType,
@@ -166,7 +172,8 @@ export class User extends HasSageCacheCore<UserCore> {
 			dmOnDelete,
 			dmOnEdit,
 			mentionPrefix,
-			moveDirectionOutputType
+			moveDirectionOutputType,
+			skipConfirmationFlag,
 		});
 		return changed ? this.save() : false;
 	}

@@ -26,7 +26,18 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("User Update", "You cannot manage your settings here.");
 	}
 
-	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys(["dialogDiceBehavior", "dialogPostType", "dmOnDelete", "dmOnEdit", "sagePostType", "orgPlayId", "mentionPrefix", "moveDirectionOutputType"]);
+	const { validKeys, hasValidKeys, hasInvalidKeys } = sageMessage.args.validateKeys([
+		"dialogDiceBehavior",
+		"dialogPostType",
+		"dmOnDelete",
+		"dmOnEdit",
+		"mentionPrefix",
+		"moveDirectionOutputType",
+		"orgPlayId",
+		"sagePostType",
+		"skipConfirmationFlag",
+	]);
+
 	if (!hasValidKeys || hasInvalidKeys) {
 		const details = [
 			"The command for updating your User settings is:",
@@ -57,7 +68,7 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		if (opUpdated) await sageUser.save();
 	}
 
-	if (anyValid("dialogDiceBehavior", "dialogPostType", "sagePostType", "dmOnDelete", "dmOnEdit", "mentionPrefix", "moveDirectionOutputType")) {
+	if (anyValid("dialogDiceBehavior", "dialogPostType", "dmOnDelete", "dmOnEdit", "mentionPrefix", "moveDirectionOutputType", "sagePostType", "skipConfirmationFlag")) {
 		const dialogDiceBehaviorType = args.getEnum(DialogDiceBehaviorType, "dialogDiceBehavior");
 		const dialogPostType = args.getEnum(DialogPostType, "dialogPostType");
 		const sagePostType = args.getEnum(DialogPostType, "sagePostType");
@@ -65,7 +76,9 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		const dmOnEdit = args.getBoolean("dmOnEdit");
 		const moveDirectionOutputType = args.getEnum(MoveDirectionOutputType, "moveDirectionOutputType")
 		const mentionPrefix = args.getString("mentionPrefix");
-		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType, mentionPrefix });
+		let skipConfirmationFlag = args.getString("skipConfirmationFlag");
+		if (skipConfirmationFlag !== null && (!skipConfirmationFlag?.startsWith("-") || skipConfirmationFlag?.includes("="))) skipConfirmationFlag = null;
+		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType, mentionPrefix, skipConfirmationFlag });
 	}
 
 	if (opUpdated || ptUpdated) {
@@ -128,6 +141,9 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 
 	const dmOnEdit = sageUser.dmOnEdit === true ? `Yes` : `No`;
 	renderableContent.append(`<b>Receive DMs on Dialog Edit</b> ${dmOnEdit}`);
+
+	const skipConfirmationFlag = sageUser.skipConfirmationFlag ?? `-y`;
+	renderableContent.append(`<b>Skip Confirmation Flag</b> ${skipConfirmationFlag}`);
 
 	// TODO: List any games, gameRoles, servers, serverRoles!
 
