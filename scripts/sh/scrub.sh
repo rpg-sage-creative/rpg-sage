@@ -66,6 +66,7 @@ echo "Cleaning: $ROOT_NAME ..."
 # scrub node_modules folder
 echo "  Deleting node_modules folder ..."
 rm -rf node_modules
+rm -f package-lock.json
 
 # scrub build folders
 echo "  Deleting build folders ..."
