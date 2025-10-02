@@ -451,7 +451,7 @@ export class GameCharacter {
 
 	public toDisplayName({ processor, overrideTemplate, raw }: { overrideTemplate?: string; processor?:StatBlockProcessor; raw?:boolean; } = { }): string {
 		const templatedValue = StatBlockProcessor.doIt({ char:this, processor, overrideTemplate, templateKey:"displayName", templatesOnly:raw });
-		if (templatedValue) {
+		if (templatedValue && templatedValue !== `\`{displayName.template}\``) {
 			return templatedValue;
 		}
 		if (this.isGmOrNpcOrMinion) {
