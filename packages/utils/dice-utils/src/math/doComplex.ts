@@ -27,7 +27,7 @@ export function getComplexRegex(options?: Options): RegExp {
 		(?:                             # open non-capture group for multiplier/function
 			(${numberRegex})\\s*        # capture a multiplier, ex: 3(4-2) <-- 3 is the multiplier
 			|
-			(min|max|floor|ceil|round|hypot)  # capture a math function
+			(min|max|floor|ceil|round|hypot|sign)  # capture a math function
 		)?                              # close non-capture group for multiplier/function; make it optional
 
 		\\(\\s*                         # open parentheses, optional spaces
@@ -49,7 +49,7 @@ export function hasComplex(value: string, options?: Omit<Options, "globalFlag">)
 	return getComplexRegex(options).test(value);
 }
 
-type SageMathFunction = "min" | "max" | "floor" | "ceil" | "round" | "hypot";
+type SageMathFunction = keyof typeof SageMath;
 
 const SageMath = {
 	min: (...args: number[]) => Math.min(...args),
@@ -71,6 +71,13 @@ const SageMath = {
 			return Math.hypot(xy, z);;
 		}
 		return xy;
+	},
+	sign: (...args: number[]) => {
+		const [n] = args;
+		if (n < 0) {
+			return n;
+		}
+		return `+${n}`;
 	},
 }
 
