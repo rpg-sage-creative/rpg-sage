@@ -818,7 +818,7 @@ export class GameCharacter {
 				const mathed = processMath(statValue, { allowSpoilers:true });
 				const numberValue = numberOrUndefined(mathed);
 				if (numberValue === undefined) {
-					return ret(retKey, `isNaN(${statValue})`);
+					return ret(retKey, `sign(${statValue})`);
 				}
 				const signed = toModifier(numberValue);
 				return ret(retKey, signed);
