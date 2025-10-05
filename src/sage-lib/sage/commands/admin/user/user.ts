@@ -145,10 +145,10 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 	const dmOnEdit = sageUser.dmOnEdit === true ? `Yes` : `No`;
 	renderableContent.append(`<b>Receive DMs on Dialog Edit</b> ${dmOnEdit}`);
 
-	const confirmationPrompts = sageUser.confirmationPrompts === false ? `No` : sageUser.confirmationPrompts ? `Yes` : `<i>unset (Yes)</i>`;
+	const confirmationPrompts = sageUser.confirmationPrompts === false ? `Off` : sageUser.confirmationPrompts ? `On` : `<i>unset (On)</i>`;
 	renderableContent.append(`<b>Use Confirmation Prompts</b> ${confirmationPrompts}`);
 
-	const forceConfirmationFlag = sageUser.forceConfirmationFlag ?? `<i>unset (-f)</i>`;
+	const forceConfirmationFlag = sageUser.forceConfirmationFlag ?? `<i>unset (-p)</i>`;
 	renderableContent.append(`[spacer]<b>Force Confirmation Flag</b> ${forceConfirmationFlag}`);
 
 	const skipConfirmationFlag = sageUser.skipConfirmationFlag ?? `<i>unset (-y)</i>`;

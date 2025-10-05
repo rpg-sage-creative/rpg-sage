@@ -32,7 +32,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	//#endregion
 
 	public get hasForceConfirmationFlag(): boolean {
-		const forceConfirmationFlag = this.sageCommand.sageUser.forceConfirmationFlag ?? "-f";
+		const forceConfirmationFlag = this.sageCommand.sageUser.forceConfirmationFlag ?? "-p";
 		return this.nonKeyValuePairs().includes(forceConfirmationFlag);
 	}
 
