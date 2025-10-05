@@ -53,6 +53,11 @@ export interface UserCore extends IdCore<"User"> {
 
 	mentionPrefix?: string;
 
+	/** "on" (true) by default */
+	confirmationPrompts?: boolean;
+	/** "-prompt" by default */
+	forceConfirmationFlag?: string;
+	/** "-y" by default */
 	skipConfirmationFlag?: string;
 }
 
@@ -86,6 +91,8 @@ type UpdateArgs = Args<{
 	mentionPrefix: string;
 	moveDirectionOutputType: MoveDirectionOutputType;
 	sagePostType: DialogType;
+	confirmationPrompts: boolean;
+	forceConfirmationFlag: string;
 	skipConfirmationFlag: string;
 }>;
 
@@ -141,6 +148,12 @@ export class User extends HasSageCacheCore<UserCore> {
 	public get mentionPrefix(): string | undefined { return this.core.mentionPrefix; }
 	public set mentionPrefix(mentionPrefix: string | undefined) { this.core.mentionPrefix = stringOrUndefined(mentionPrefix); }
 
+	public get confirmationPrompts(): boolean | undefined { return this.core.confirmationPrompts; }
+	public set confirmationPrompts(confirmationPrompts: boolean | undefined) { this.core.confirmationPrompts = confirmationPrompts; }
+
+	public get forceConfirmationFlag(): string | undefined { return this.core.forceConfirmationFlag; }
+	public set forceConfirmationFlag(forceConfirmationFlag: string | undefined) { this.core.forceConfirmationFlag = stringOrUndefined(forceConfirmationFlag); }
+
 	public get skipConfirmationFlag(): string | undefined { return this.core.skipConfirmationFlag; }
 	public set skipConfirmationFlag(skipConfirmationFlag: string | undefined) { this.core.skipConfirmationFlag = stringOrUndefined(skipConfirmationFlag); }
 
@@ -164,7 +177,7 @@ export class User extends HasSageCacheCore<UserCore> {
 		return undefined;
 	}
 
-	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, mentionPrefix, moveDirectionOutputType, sagePostType, skipConfirmationFlag }: UpdateArgs): Promise<boolean> {
+	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, mentionPrefix, moveDirectionOutputType, sagePostType, confirmationPrompts, forceConfirmationFlag, skipConfirmationFlag }: UpdateArgs): Promise<boolean> {
 		const changed = applyChanges(this.core, {
 			dialogDiceBehaviorType,
 			defaultDialogType:dialogPostType,
@@ -173,6 +186,8 @@ export class User extends HasSageCacheCore<UserCore> {
 			dmOnEdit,
 			mentionPrefix,
 			moveDirectionOutputType,
+			confirmationPrompts,
+			forceConfirmationFlag,
 			skipConfirmationFlag,
 		});
 		return changed ? this.save() : false;

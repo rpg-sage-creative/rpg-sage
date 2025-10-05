@@ -31,6 +31,11 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public toArray(): string[] { return this.argsManager; }
 	//#endregion
 
+	public get hasForceConfirmationFlag(): boolean {
+		const forceConfirmationFlag = this.sageCommand.sageUser.forceConfirmationFlag ?? "-f";
+		return this.nonKeyValuePairs().includes(forceConfirmationFlag);
+	}
+
 	public get hasSkipConfirmationFlag(): boolean {
 		const skipConfirmationFlag = this.sageCommand.sageUser.skipConfirmationFlag ?? "-y";
 		return this.nonKeyValuePairs().includes(skipConfirmationFlag);
@@ -180,6 +185,19 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Gets the named option as a flag that starts with a "-" and doesn't include a "=".
+	 * Returns undefined if not found.
+	 * Returns null if not a valid flag, example: -y
+	 */
+	public getFlag<U extends string = string>(name: string): Optional<U> {
+		const value = this.getString<U>(name);
+		if (value && (!value.startsWith("-") || value.includes("="))) {
+			return null;
+		}
+		return value;
 	}
 
 	public findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V> {

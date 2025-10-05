@@ -10,12 +10,12 @@ import { sendGameCharacterMods } from "./sendGameCharacterMods.js";
 export async function promptModsConfirm(sageMessage: SageMessage, character: GameCharacter, updatedKeys: StringSet, action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
 	let yes: boolean;
 	const details = await sendGameCharacterMods(sageMessage, character, updatedKeys);
-	if (sageMessage.args.hasSkipConfirmationFlag) {
-		yes = true;
-	}else {
+	if (sageMessage.showConfirmationPrompts) {
 		const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
 		promptRenderable.append(`Update ${character.name}?`);
 		yes = await discordPromptYesNo(sageMessage, promptRenderable, true) ?? false;
+	}else {
+		yes = true;
 	}
 	if (yes === true) {
 		const updated = await action(character);
@@ -33,12 +33,12 @@ export async function promptModsConfirm(sageMessage: SageMessage, character: Gam
 export async function promptCharConfirm(sageMessage: SageMessage, character: GameCharacter, prompt: string, action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
 	let yes: boolean;
 	const details = await sendGameCharacter(sageMessage, character);
-	if (sageMessage.args.hasSkipConfirmationFlag) {
-		yes = true;
-	}else {
+	if (sageMessage.showConfirmationPrompts) {
 		const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
 		promptRenderable.append(prompt);
 		yes = await discordPromptYesNo(sageMessage, promptRenderable, true) ?? false;
+	}else {
+		yes = true;
 	}
 	if (yes === true) {
 		const updated = await action(character);

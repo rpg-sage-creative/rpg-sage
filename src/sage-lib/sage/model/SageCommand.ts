@@ -225,6 +225,12 @@ export abstract class SageCommand<
 		});
 	}
 
+	public get showConfirmationPrompts(): boolean {
+		return this.sageUser.confirmationPrompts ?? true
+			? !this.args.hasSkipConfirmationFlag
+			: this.args.hasForceConfirmationFlag;
+	}
+
 	// #endregion
 
 	// #region Permission Flags

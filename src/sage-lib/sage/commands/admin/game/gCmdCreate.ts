@@ -60,7 +60,7 @@ async function gameCreate(sageCommand: SageCommand): Promise<boolean | undefined
 
 	sageCommand.replyStack.stopThinking();
 
-	const create = sageCommand.args.hasSkipConfirmationFlag ? true : await discordPromptYesNo(sageCommand, `Create Game?`, true);
+	const create = sageCommand.showConfirmationPrompts ? await discordPromptYesNo(sageCommand, `Create Game?`, true) : true;
 
 	if (create) {
 		const gameSaved = game ? await game.save() : false;

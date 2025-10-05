@@ -482,7 +482,7 @@ export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 	const invalidKey = await isInvalid(macros, newMacro, false);
 	if (invalidKey === "INVALID_MACRO_DUPLICATE") {
 		const oldMacro = macros.find(newMacro.name)!;
-		if (sageMessage.args.hasSkipConfirmationFlag) {
+		if (!sageMessage.showConfirmationPrompts) {
 			const saved = await macros.updateAndSave({ oldMacro, newMacro });
 			if (saved) {
 				args.macro = newMacro;
@@ -493,7 +493,7 @@ export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 		return promptEditMacro(sageMessage, args, { oldMacro, newMacro });
 	}
 
-	if (sageMessage.args.hasSkipConfirmationFlag) {
+	if (!sageMessage.showConfirmationPrompts) {
 		const saved = await macros.addAndSave(newMacro);
 		if (saved) {
 			args.macro = newMacro;

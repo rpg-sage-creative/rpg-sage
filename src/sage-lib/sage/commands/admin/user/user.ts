@@ -35,6 +35,8 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		"moveDirectionOutputType",
 		"orgPlayId",
 		"sagePostType",
+		"confirmationPrompts",
+		"forceConfirmationFlag",
 		"skipConfirmationFlag",
 	]);
 
@@ -68,7 +70,7 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		if (opUpdated) await sageUser.save();
 	}
 
-	if (anyValid("dialogDiceBehavior", "dialogPostType", "dmOnDelete", "dmOnEdit", "mentionPrefix", "moveDirectionOutputType", "sagePostType", "skipConfirmationFlag")) {
+	if (anyValid("dialogDiceBehavior", "dialogPostType", "dmOnDelete", "dmOnEdit", "mentionPrefix", "moveDirectionOutputType", "sagePostType", "confirmationPrompts", "forceConfirmationFlag", "skipConfirmationFlag")) {
 		const dialogDiceBehaviorType = args.getEnum(DialogDiceBehaviorType, "dialogDiceBehavior");
 		const dialogPostType = args.getEnum(DialogPostType, "dialogPostType");
 		const sagePostType = args.getEnum(DialogPostType, "sagePostType");
@@ -76,9 +78,10 @@ async function userUpdate(sageMessage: SageMessage): Promise<void> {
 		const dmOnEdit = args.getBoolean("dmOnEdit");
 		const moveDirectionOutputType = args.getEnum(MoveDirectionOutputType, "moveDirectionOutputType")
 		const mentionPrefix = args.getString("mentionPrefix");
-		let skipConfirmationFlag = args.getString("skipConfirmationFlag");
-		if (skipConfirmationFlag !== null && (!skipConfirmationFlag?.startsWith("-") || skipConfirmationFlag?.includes("="))) skipConfirmationFlag = null;
-		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType, mentionPrefix, skipConfirmationFlag });
+		const confirmationPrompts = args.getBoolean("confirmationPrompts");
+		const forceConfirmationFlag = args.getFlag("forceConfirmationFlag");
+		const skipConfirmationFlag = args.getFlag("skipConfirmationFlag");
+		ptUpdated = await sageUser.update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType, mentionPrefix, confirmationPrompts, forceConfirmationFlag, skipConfirmationFlag });
 	}
 
 	if (opUpdated || ptUpdated) {
@@ -142,8 +145,14 @@ async function userDetails(sageMessage: SageCommand): Promise<void> {
 	const dmOnEdit = sageUser.dmOnEdit === true ? `Yes` : `No`;
 	renderableContent.append(`<b>Receive DMs on Dialog Edit</b> ${dmOnEdit}`);
 
-	const skipConfirmationFlag = sageUser.skipConfirmationFlag ?? `-y`;
-	renderableContent.append(`<b>Skip Confirmation Flag</b> ${skipConfirmationFlag}`);
+	const confirmationPrompts = sageUser.confirmationPrompts === false ? `No` : sageUser.confirmationPrompts ? `Yes` : `<i>unset (Yes)</i>`;
+	renderableContent.append(`<b>Use Confirmation Prompts</b> ${confirmationPrompts}`);
+
+	const forceConfirmationFlag = sageUser.forceConfirmationFlag ?? `<i>unset (-f)</i>`;
+	renderableContent.append(`[spacer]<b>Force Confirmation Flag</b> ${forceConfirmationFlag}`);
+
+	const skipConfirmationFlag = sageUser.skipConfirmationFlag ?? `<i>unset (-y)</i>`;
+	renderableContent.append(`[spacer]<b>Skip Confirmation Flag</b> ${skipConfirmationFlag}`);
 
 	// TODO: List any games, gameRoles, servers, serverRoles!
 
