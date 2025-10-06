@@ -669,7 +669,9 @@ export class GameCharacter {
 		if (/^\|\|\d+\|\|$/.test(maxHpStat)) maxHpStat = maxHpStat.slice(2, -2);
 		const maxHp = +maxHpStat;
 
-		return hpToGauge(hp, maxHp);
+		const whichGauge = this.getString("hpGauge.values");
+
+		return hpToGauge(hp, maxHp, whichGauge);
 	}
 
 	/** returns the value for the first key that has a defined value */
@@ -818,7 +820,7 @@ export class GameCharacter {
 				const mathed = processMath(statValue, { allowSpoilers:true });
 				const numberValue = numberOrUndefined(mathed);
 				if (numberValue === undefined) {
-					return ret(retKey, `sign(${statValue})`);
+					return ret(retKey, `signed(${statValue})`);
 				}
 				const signed = toModifier(numberValue);
 				return ret(retKey, signed);
