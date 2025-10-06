@@ -9,12 +9,14 @@ type Options = {
 };
 
 /** Returns a regular expression that finds:
- * min(...number[])
- * max(...number[])
- * floor(number)
  * ceil(number)
- * round(number, number?)
+ * floor(number)
  * hypot(number, number, number?)
+ * max(...number[])
+ * min(...number[])
+ * round(number, number?)
+ * sign(number)
+ * signed(number)
  */
 export function getComplexRegex(options?: Options): RegExp {
 	const flags = options?.globalFlag ? "xgi" : "xi";
@@ -27,7 +29,7 @@ export function getComplexRegex(options?: Options): RegExp {
 		(?:                             # open non-capture group for multiplier/function
 			(${numberRegex})\\s*        # capture a multiplier, ex: 3(4-2) <-- 3 is the multiplier
 			|
-			(min|max|floor|ceil|round|hypot|sign)  # capture a math function
+			(min|max|floor|ceil|round|hypot|sign|signed)  # capture a math function
 		)?                              # close non-capture group for multiplier/function; make it optional
 
 		\\(\\s*                         # open parentheses, optional spaces
@@ -52,18 +54,8 @@ export function hasComplex(value: string, options?: Omit<Options, "globalFlag">)
 type SageMathFunction = keyof typeof SageMath;
 
 const SageMath = {
-	min: (...args: number[]) => Math.min(...args),
-	max: (...args: number[]) => Math.max(...args),
-	floor: (...args: number[]) => Math.floor(args[0]),
 	ceil: (...args: number[]) => Math.ceil(args[0]),
-	round: (...args: number[]) => {
-		const [n, places] = args;
-		if (typeof(places) === "number") {
-			const mult = Math.pow(10, places);
-			return Math.round(n * mult) / mult;
-		}
-		return Math.round(n);
-	},
+	floor: (...args: number[]) => Math.floor(args[0]),
 	hypot: (...args: number[]) => {
 		const [x, y, z] = args;
 		const xy = Math.hypot(x, y);
@@ -72,7 +64,18 @@ const SageMath = {
 		}
 		return xy;
 	},
-	sign: (...args: number[]) => {
+	max: (...args: number[]) => Math.max(...args),
+	min: (...args: number[]) => Math.min(...args),
+	round: (...args: number[]) => {
+		const [n, places] = args;
+		if (typeof(places) === "number") {
+			const mult = Math.pow(10, places);
+			return Math.round(n * mult) / mult;
+		}
+		return Math.round(n);
+	},
+	sign: (...args: number[]) => Math.sign(args[0]),
+	signed: (...args: number[]) => {
 		const [n] = args;
 		if (n < 0) {
 			return n;
