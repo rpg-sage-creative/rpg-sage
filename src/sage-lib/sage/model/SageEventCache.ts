@@ -6,6 +6,8 @@ import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message }
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
+import { resolveContent } from "../../discord/resolvers/resolveContent.js";
+import { MoveDirection } from "../commands/map/MoveDirection.js";
 import { globalCacheFilter, globalCacheRead, type GameCacheItem, type GlobalCacheItem } from "../repo/base/globalCache.js";
 import { JsonRepo } from "../repo/base/JsonRepo.js";
 import { ActiveBot } from "./ActiveBot.js";
@@ -13,6 +15,8 @@ import type { Bot } from "./Bot.js";
 import { Game, GameUserType, type GameCore } from "./Game.js";
 import { AdminRoleType, Server } from "./Server.js";
 import { User } from "./User.js";
+
+export type ContentFormatter = (content?: Optional<string>) => string;
 
 let _userForSage: User | undefined;
 
@@ -657,9 +661,31 @@ export class SageEventCache {
 		return this.bot.emojify(text);
 	}
 
+	//#region format text and resolve content
+
 	public format(text: string): string {
+		// process move direction emoji before handing off to the emojify function
+		const moveDirectionOutputType = this.game?.moveDirectionOutputType ?? this.user?.moveDirectionOutputType ?? 0;
+		text = MoveDirection.replaceAll(text, moveDirectionOutputType);
+
 		return toMarkdown(this.emojify(text));
 	}
+
+	private formatter?: ContentFormatter;
+
+	protected getFormatter(): ContentFormatter {
+		return this.formatter ??= (value: Optional<string>) => this.format(value ?? "").trim();
+	}
+
+	public resolveToContent(resolvable: RenderableContentResolvable) {
+		return resolveContent(resolvable, this.getFormatter(), "text");
+	}
+
+	public resolveToEmbeds(resolvable: RenderableContentResolvable) {
+		return resolveContent(resolvable, this.getFormatter(), "embed");
+	}
+
+	//#endregion
 
 	public getPrefixOrDefault(): string {
 		return this.server?.sage?.getPrefixOrDefault() ?? "";

@@ -1,17 +1,15 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
-import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath, processMath } from "@rsc-utils/dice-utils";
+import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { doStatMath, processMath, StatBlockProcessor } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { wrap } from "@rsc-utils/string-utils";
 import { mkdirSync } from "fs";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
-import { processCharacterTemplate } from "../../../gameSystems/processCharacterTemplate.js";
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
-import { getExplorationModes, getSkills } from "../../../sage-pf2e/index.js";
+import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
 import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
@@ -191,7 +189,7 @@ export type StatResults<
 };
 
 export class GameCharacter {
-	public equals(other: string | GameCharacter | undefined): boolean {
+	public equals(other: Optional<string | GameCharacter>): boolean {
 		if (!other) return false;
 		if (other instanceof GameCharacter) return other.id === this.core.id;
 		return this.core.id === other;
@@ -249,10 +247,6 @@ export class GameCharacter {
 
 	/** The character's companion characters. */
 	public get companions(): CharacterManager { return this.core.companions as CharacterManager; }
-
-	/** Convenient way of getting the displayName.template stat */
-	public get displayNameTemplate(): string | undefined { return this.getNoteStat("displayName.template"); }
-	public set displayNameTemplate(displayNameTemplate: string | undefined) { this.notes.setStat("displayName.template", displayNameTemplate ?? ""); }
 
 	/** Discord compatible color: #001122 */
 	public get embedColor(): HexColorString | undefined { return this.core.embedColor; }
@@ -356,6 +350,8 @@ export class GameCharacter {
 	public get type(): TGameCharacterType { return this.owner?.characterType ?? "gm"; }
 
 	/** The character's user's Discord ID */
+	public get userId(): Snowflake | undefined { return this.core.userDid; }
+	/** @deprecated use .userId */
 	public get userDid(): Snowflake | undefined { return this.core.userDid; }
 	public set userDid(userDid: Snowflake | undefined) { this.core.userDid = userDid; }
 
@@ -453,17 +449,19 @@ export class GameCharacter {
 		return recursive && this.companions.hasMatching(value, true);
 	}
 
-	public toDisplayName(template?: string): string {
-		const templated = processCharacterTemplate(this, "displayName", template);
-		if (templated.value) {
-			return templated.value;
+	public toDisplayName({ processor, overrideTemplate, raw }: { overrideTemplate?: string; processor?:StatBlockProcessor; raw?:boolean; } = { }): string {
+		const templatedValue = StatBlockProcessor.processTemplate({ char:this, processor, overrideTemplate, templateKey:"displayName", templatesOnly:raw });
+		if (templatedValue) {
+			return templatedValue;
 		}
+
 		if (this.isGmOrNpcOrMinion) {
 			const descriptors = this.toNameDescriptors();
 			if (descriptors.length) {
 				return `${this.name} (${descriptors.join(" ")})`;
 			}
 		}
+
 		return this.name;
 	}
 
@@ -475,9 +473,10 @@ export class GameCharacter {
 	 *   npcs will return ["descriptor", "gender", "ancestry", "background"]
 	 */
 	public toNameDescriptors(): string[] {
-		const template = processCharacterTemplate(this, "nameDescriptors");
-		if (template.value) {
-			return template.value
+		if (this.getString("nameDescriptors.template")?.toLowerCase() === "off") return [];
+		const templatedValue = StatBlockProcessor.for(this).processTemplate("nameDescriptors").value;
+		if (templatedValue) {
+			return templatedValue
 				.split(",")
 				.filter(isNotBlank)
 				.map(s => s.trim());
@@ -532,8 +531,10 @@ export class GameCharacter {
 	public toSheetLink(): string | undefined {
 		return this.getString("sheet.link");
 	}
-	public toDialogFooterLine(template?: string): string | undefined {
-		return processCharacterTemplate(this, "dialogFooter", template).value;
+
+	public toDialogFooterLine({ processor, overrideTemplate }: { processor?:StatBlockProcessor; overrideTemplate?: string; } = { }): string | undefined {
+		const dialogFooter = StatBlockProcessor.processTemplate({ char:this, processor, overrideTemplate, templateKey:"dialogFooter" });
+		return dialogFooter;
 	}
 
 	public toJSON(): GameCharacterCore {
@@ -590,7 +591,7 @@ export class GameCharacter {
 			|| !!this.essence20;
 	}
 
-	public toStatsOutput() {
+	public toStatsOutput(options?: { custom?:boolean; processor?:StatBlockProcessor, raw?:boolean; simple?:boolean; stats?:boolean; templates?:boolean; }) {
 		// get full list of stats
 		let statsToMap = this.getNoteStats();
 
@@ -604,22 +605,52 @@ export class GameCharacter {
 			return {
 				keys: new Set<Lowercase<string>>(templateStats.map(({ title }) => title.toLowerCase() as Lowercase<string>)),
 				title: "Templates",
-				lines: templateStats.map(note => `<b>${note.title}</b> ${note.note}`)
+				lines: templateStats.map(note => `<b>${note.title}</b> \`\`\`${note.note}\`\`\``)
 			};
 		};
 
-		const { keys: simpleKeys, title: simpleTitle, lines: simpleLines } = processSimpleSheet(this);
-		const { keys: customKeys, title: customTitle, lines: customLines } = processCharacterTemplate(this, "customSheet");
-		const { keys: templateKeys, title: templateTitle, lines: templateLines } = processTemplateKeys();
+		const processor = options?.processor ?? StatBlockProcessor.for(this);
+
+		const sections = ["simple","custom","stats","templates"] as const;
+		const isSection = (value: string): value is typeof sections[number] => sections.includes(value as any);
+		const explicitSections = options?.simple || options?.custom || options?.stats || options?.templates;
+		const defaultSections = !explicitSections ? this.getString("details.defaultSections")?.toLowerCase().split(",").filter(isSection) : [];
+		const showSection = (section: typeof sections[number]) => explicitSections ? options[section] : !defaultSections?.length ? true : defaultSections.includes(section);
+
+		const raw = options?.raw;
+
+		const showSimple = showSection("simple");
+		const { keys: simpleKeys = [], title: simpleTitle, lines: simpleLines = [] } = showSimple ? processSimpleSheet({ char:this, processor }) : {};
+
+		const showCustom = showSection("custom");
+		const { keys: customKeys = [], title: customTitle, lines: customLines = [] } = showCustom ? processor.processTemplate("customSheet", raw ? { templatesOnly:true } : undefined) : {};
+
+		const showTemplates = showSection("templates");
+		const { keys: templateKeys = [], title: templateTitle, lines: templateLines = [] } = showTemplates ? processTemplateKeys() : {};
 
 		const usedKeys = new Set<Lowercase<string>>([...simpleKeys, ...customKeys, ...templateKeys]);
 
-		// remove keys used in simple sheet, custom sheet, or template stats
-		statsToMap = statsToMap.filter(note => !usedKeys.has(note.title.toLowerCase() as Lowercase<string>));
+		const showStats = showSection("stats");
+		if (!showStats) {
+			return [
+				{ title: simpleTitle, lines: simpleLines },
+				{ title: customTitle, lines: customLines },
+				{ title: templateTitle, lines: templateLines },
+			];
+		}
+
+		// remove keys used in simple sheet, custom sheet, or template stats; always remove templates
+		statsToMap = statsToMap.filter(({ title }) => {
+			const lower = title.toLowerCase();
+			return !usedKeys.has(lower) && !lower.endsWith(".template") && !lower.endsWith(".template.title");
+		});
 		statsToMap.sort(sorter);
 
 		const otherTitle = simpleLines.length || customLines.length ? `Other Stats` : `Stats`;
-		const otherLines = statsToMap.map(note => `<b>${note.title}</b> ${note.note}`);
+		const otherLines = statsToMap.map(({ title, note }) => {
+			const value = raw ? note : processMath(processor.processStatBlocks(note));
+			return `<b>${title}</b> ${value}`;
+		});
 
 		return [
 			{ title: simpleTitle, lines: simpleLines },
@@ -638,7 +669,9 @@ export class GameCharacter {
 		if (/^\|\|\d+\|\|$/.test(maxHpStat)) maxHpStat = maxHpStat.slice(2, -2);
 		const maxHp = +maxHpStat;
 
-		return hpToGauge(hp, maxHp);
+		const whichGauge = this.getString("hpGauge.values");
+
+		return hpToGauge(hp, maxHp, whichGauge);
 	}
 
 	/** returns the value for the first key that has a defined value */
@@ -769,13 +802,28 @@ export class GameCharacter {
 			const { key:casedKey, value:statValue } = this.getStat(statKey, true);
 			if (statValue) {
 				const retKey = `half.${halfUp ? "up" : "dn"}.${casedKey}`;
-				const mathedValue = doStatMath(`(${statValue})`);
+				const mathedValue = doStatMath(statValue);
 				const numberValue = numberOrUndefined(mathedValue);
 				if (numberValue === undefined) {
 					return ret(retKey, `isNaN(${statValue})`);
 				}
 				const fn = halfUp ? Math.ceil : Math.floor;
 				return ret(retKey, fn(numberValue / 2));
+			}
+		}
+
+		if (keyLower.startsWith("signed.")) {
+			const statKey = key.slice(7);
+			const { key:casedKey, value:statValue } = this.getStat(statKey, true);
+			if (statValue) {
+				const retKey = `signed.${casedKey}`;
+				const mathed = processMath(statValue, { allowSpoilers:true });
+				const numberValue = numberOrUndefined(mathed);
+				if (numberValue === undefined) {
+					return ret(retKey, `signed(${statValue})`);
+				}
+				const signed = toModifier(numberValue);
+				return ret(retKey, signed);
 			}
 		}
 
@@ -814,7 +862,7 @@ export class GameCharacter {
 			const isAbbr = ability.slice(0, 3) === keyLower;
 			if (isAbbr || `mod.${ability}` === keyLower) {
 				const abilityStat = this.getStat(ability, true);
-				if (abilityStat.value !== undefined) {
+				if (isDefined(abilityStat.value)) {
 					const retKey = isAbbr ? capitalize(abilityStat.key.slice(0, 3)) : `mod.${abilityStat.key}`;
 					return ret(retKey, processMath(`floor((${abilityStat.value}-10)/2)`, { allowSpoilers:true }));
 				}
@@ -906,6 +954,10 @@ export class GameCharacter {
 
 		return ret();
 	}
+
+	/** Convenient way of getting the displayName.template stat */
+	public getTemplate(baseKey: string): string | undefined { return this.getNoteStat(`${baseKey}.template`); }
+	public setTemplate(baseKey: string, template?: string): boolean { return this.notes.setStat(`${baseKey}.template`, template ?? ""); }
 
 	public getCurrency() {
 		// try getting currency from gameSystem

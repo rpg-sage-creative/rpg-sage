@@ -1,11 +1,10 @@
-import { errorReturnNull, isDefined, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, isDefined, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
-import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { GameCharacter } from "../model/GameCharacter.js";
 import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import { MacroOwner } from "../model/MacroOwner.js";
@@ -15,6 +14,7 @@ import type { SageInteraction } from "../model/SageInteraction.js";
 import type { User } from "../model/User.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
+import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
 
 type SageButtonInteraction = SageInteraction<ButtonInteraction>;
 type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
@@ -183,13 +183,13 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: Pathbuilde
 
 /** posts the imported character to the channel */
 export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
-	const { sageCache } = sageCommand;
-	setMacroUser(character, sageCache.user);
+	const { eventCache } = sageCommand;
+	setMacroUser(character, eventCache.user);
 	const saved = await character.save();
 	if (saved) {
 		const macros = await getMacros(sageCommand, character)
 		const output = prepareOutput(sageCommand, character, macros);
-		const message = await channel?.send(output).catch(errorReturnNull);
+		const message = await channel?.send(output).catch(errorReturnUndefined);
 		if (message) {
 			await addOrUpdateCharacter(sageCommand, character, message);
 			if (pin && message.pinnable) {
@@ -197,8 +197,8 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 			}
 		}
 	}else {
-		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
-		const message = await channel?.send(output).catch(errorReturnNull);
+		const output = { embeds:eventCache.resolveToEmbeds(character.toHtml()) };
+		const message = await channel?.send(output).catch(errorReturnUndefined);
 		if (pin && message?.pinnable) {
 			await message.pin();
 		}
@@ -418,8 +418,8 @@ function createComponents(character: PathbuilderCharacter, macros: TLabeledMacro
 }
 
 type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
-function prepareOutput({ sageCache }: SageCommand, character: PathbuilderCharacter, macros: TLabeledMacro[]): TOutput {
-	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character)));
+function prepareOutput({ eventCache }: SageCommand, character: PathbuilderCharacter, macros: TLabeledMacro[]): TOutput {
+	const embeds = eventCache.resolveToEmbeds(character.toHtml(getActiveSections(character)));
 	const components = createComponents(character, macros);
 	return { embeds, components };
 }
@@ -527,7 +527,8 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: Pa
 	const scoutMod = character.getSheetValue("activeExploration") === "Scout" ? 1 : 0;
 	const initMod = init ? Math.max(incredibleMod, scoutMod) : 0;
 	const dice = `[1d20+${skillMod+initMod} ${character.name}${secret ? " Secret" : ""} ${skill}${init ? " (Initiative)" : ""}]`;
-	const matches = await parseDiceMatches(sageInteraction, dice);
+	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(character.characterId));
+	const matches = await parseDiceMatches(dice, { processor, sageCommand:sageInteraction });
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {
@@ -549,7 +550,9 @@ async function macroRollHandler(sageInteraction: SageButtonInteraction, characte
 	const macro = macros.find(m => m.id === activeMacro) ?? macros.find(m => m.name === activeMacro);
 
 	if (macro) {
-		const matches = await parseDiceMatches(sageInteraction, macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? ""));
+		const dice = macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? "");
+		const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(character.characterId));
+		const matches = await parseDiceMatches(dice, { processor, sageCommand:sageInteraction });
 		const output = matches.map(match => match.output).flat();
 		await sendDice(sageInteraction, output);
 

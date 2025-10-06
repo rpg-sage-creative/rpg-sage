@@ -1,5 +1,5 @@
 import { getSuperAdminId, getSuperUserId } from "@rsc-sage/env";
-import { applyChanges, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, stringOrUndefined, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import type { DialogType } from "../repo/base/IdRepository.js";
@@ -50,6 +50,15 @@ export interface UserCore extends IdCore<"User"> {
 	patronTier?: number;
 
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
+
+	mentionPrefix?: string;
+
+	/** "on" (true) by default */
+	confirmationPrompts?: boolean;
+	/** "-prompt" by default */
+	forceConfirmationFlag?: string;
+	/** "-y" by default */
+	skipConfirmationFlag?: string;
 }
 
 //#region Core Updates
@@ -79,8 +88,12 @@ type UpdateArgs = Args<{
 	dialogPostType: DialogType;
 	dmOnDelete: boolean;
 	dmOnEdit: boolean;
+	mentionPrefix: string;
 	moveDirectionOutputType: MoveDirectionOutputType;
 	sagePostType: DialogType;
+	confirmationPrompts: boolean;
+	forceConfirmationFlag: string;
+	skipConfirmationFlag: string;
 }>;
 
 export class User extends HasSageCacheCore<UserCore> {
@@ -132,6 +145,18 @@ export class User extends HasSageCacheCore<UserCore> {
 
 	public get sagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
 
+	public get mentionPrefix(): string | undefined { return this.core.mentionPrefix; }
+	public set mentionPrefix(mentionPrefix: string | undefined) { this.core.mentionPrefix = stringOrUndefined(mentionPrefix); }
+
+	public get confirmationPrompts(): boolean | undefined { return this.core.confirmationPrompts; }
+	public set confirmationPrompts(confirmationPrompts: boolean | undefined) { this.core.confirmationPrompts = confirmationPrompts; }
+
+	public get forceConfirmationFlag(): string | undefined { return this.core.forceConfirmationFlag; }
+	public set forceConfirmationFlag(forceConfirmationFlag: string | undefined) { this.core.forceConfirmationFlag = stringOrUndefined(forceConfirmationFlag); }
+
+	public get skipConfirmationFlag(): string | undefined { return this.core.skipConfirmationFlag; }
+	public set skipConfirmationFlag(skipConfirmationFlag: string | undefined) { this.core.skipConfirmationFlag = stringOrUndefined(skipConfirmationFlag); }
+
 	//#endregion
 
 	public findCharacterOrCompanion(name: string): GameCharacter | undefined {
@@ -152,14 +177,18 @@ export class User extends HasSageCacheCore<UserCore> {
 		return undefined;
 	}
 
-	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, sagePostType, moveDirectionOutputType }: UpdateArgs): Promise<boolean> {
+	public async update({ dialogDiceBehaviorType, dialogPostType, dmOnDelete, dmOnEdit, mentionPrefix, moveDirectionOutputType, sagePostType, confirmationPrompts, forceConfirmationFlag, skipConfirmationFlag }: UpdateArgs): Promise<boolean> {
 		const changed = applyChanges(this.core, {
 			dialogDiceBehaviorType,
 			defaultDialogType:dialogPostType,
 			defaultSagePostType:sagePostType,
 			dmOnDelete,
 			dmOnEdit,
-			moveDirectionOutputType
+			mentionPrefix,
+			moveDirectionOutputType,
+			confirmationPrompts,
+			forceConfirmationFlag,
+			skipConfirmationFlag,
 		});
 		return changed ? this.save() : false;
 	}

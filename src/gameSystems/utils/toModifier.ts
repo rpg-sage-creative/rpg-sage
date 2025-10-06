@@ -1,3 +1,3 @@
-export function toModifier(value: number): string {
-	return (value < 0 ? "" : "+") + String(value);
+export function toModifier(value: number, spaced = false): string {
+	return `${value < 0 ? "-" : "+"}${spaced ? " " : ""}${Math.abs(value)}`;
 }

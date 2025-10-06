@@ -96,6 +96,7 @@ export class CharacterShell {
 		return getCharWealth(this, summaryTemplate);
 	}
 
+	/** @todo why did i put this here and then not implement it? */
 	public matches(_name: string): boolean {
 		// return this.game?.matches(name) ?? false;
 		return false;

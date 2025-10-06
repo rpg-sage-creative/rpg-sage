@@ -31,6 +31,16 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public toArray(): string[] { return this.argsManager; }
 	//#endregion
 
+	public get hasForceConfirmationFlag(): boolean {
+		const forceConfirmationFlag = this.sageCommand.sageUser.forceConfirmationFlag ?? "-p";
+		return this.nonKeyValuePairs().includes(forceConfirmationFlag);
+	}
+
+	public get hasSkipConfirmationFlag(): boolean {
+		const skipConfirmationFlag = this.sageCommand.sageUser.skipConfirmationFlag ?? "-y";
+		return this.nonKeyValuePairs().includes(skipConfirmationFlag);
+	}
+
 	//#region Old
 
 	/** @deprecated */
@@ -91,22 +101,6 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		}
 
 		return undefined;
-	}
-
-	/** @deprecated */
-	public removeAndReturnNames(defaultJoinRemaining = false, defaultJoinSeparator = " "): Names {
-		const names = {
-			charName: this.argsManager.findKeyValueArgIndex("charName")?.ret?.value,
-			oldName: this.argsManager.findKeyValueArgIndex("oldName")?.ret?.value,
-			name: this.argsManager.findKeyValueArgIndex("name")?.ret?.value,
-			newName: this.argsManager.findKeyValueArgIndex("newName")?.ret?.value,
-			count: 0
-		} as Names;
-		names.count = (names.charName ? 1 : 0) + (names.oldName ? 1 : 0) + (names.name ? 1 : 0) + (names.newName ? 1 : 0);
-		if (!names.count) {
-			names.name = this.removeAndReturnName(defaultJoinRemaining, defaultJoinSeparator);
-		}
-		return names;
 	}
 
 	//#endregion
@@ -191,6 +185,19 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Gets the named option as a flag that starts with a "-" and doesn't include a "=".
+	 * Returns undefined if not found.
+	 * Returns null if not a valid flag, example: -y
+	 */
+	public getFlag<U extends string = string>(name: string): Optional<U> {
+		const value = this.getString<U>(name);
+		if (value && (!value.startsWith("-") || value.includes("="))) {
+			return null;
+		}
+		return value;
 	}
 
 	public findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V> {

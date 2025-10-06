@@ -9,48 +9,57 @@ type Options = {
 };
 
 /** Returns a regular expression that finds tests for only simple math operations. */
-function createSimpleRegex(options?: Options): RegExp {
+function createWrappedMathRegex(options?: Options): RegExp {
 	const flags = options?.gFlag ? "xgi" : "xi";
 	const numberRegex = getNumberRegex({ allowSpoilers:options?.allowSpoilers }).source;
 	const orWrappedNumberRegex = `(?:\\(\\s*${numberRegex}\\s*\\)|${numberRegex})`;
-	const simpleRegex = `
+	const regex = `
 		(?:
-			${orWrappedNumberRegex}        # pos/neg decimal number
-			(?:                   # open group for operands/numbers
-				\\s*              # optional whitespace
-				[-+/*%^]          # operator
-				[-+\\s]*          # possible extra pos/neg signs
-				${orWrappedNumberRegex}    # pos/neg decimal number
-			)+                    # close group for operands/numbers
+
+			(?<= [-+/*%^] \\s* )
+			\\(\\s*
+			${numberRegex}
+			\\s*\\)
+
 			|
-			(?:[-+]\\s*){2,}      # extra pos/neg signs
-			${numberRegex}        # pos/neg decimal number
+
+			(?<! min | max | floor | ceil | round | hypot )  # do NOT capture a math function
+
+			\\(\\s*                         # open parentheses, optional spaces
+
+				${orWrappedNumberRegex}     # pos/neg decimal number
+				(?:                         # open group for operands/numbers
+					\\s*                    # optional whitespace
+					[-+/*%^]                # operator
+					[-+\\s]*                # possible extra pos/neg signs
+					${orWrappedNumberRegex} # pos/neg decimal number
+				)+                          # close group for operands/numbers
+
+			\\s*\\)                         # close parentheses, optional spaces
+
 		)
 	`;
-	// const wrapped
-	const spoilered = options?.allowSpoilers
-		? `(?:${simpleRegex}|\\|\\|${simpleRegex}\\|\\|)`
-		: `(?:${simpleRegex})`;
 
-	return xRegExp(`
-		(?<!d\\d*)                # ignore the entire thing if preceded by dY or XdY
-		${spoilered}
-		(?!\\d*d\\d)              # ignore the entire thing if followed by dY or XdY
-	`, flags);
+	return xRegExp(regex, flags);
 }
 
-export function getSimpleRegex(options?: Options): RegExp {
-	return getOrCreateRegex(createSimpleRegex, options);
+export function getWrappedMathRegex(options?: Options): RegExp {
+	return getOrCreateRegex(createWrappedMathRegex, options);
 }
 
 /** Attempts to do the math and returns true if the result was not null. */
-export function hasSimple(value: string, { allowSpoilers }: Omit<Options, "globalFlag"> = { }): boolean {
-	return getSimpleRegex({ allowSpoilers }).test(value);
+export function hasWrappedMath(value: string, { allowSpoilers }: Omit<Options, "globalFlag"> = { }): boolean {
+	return getWrappedMathRegex({ allowSpoilers }).test(value);
 }
 
 const unwrapper = /\(\s*\d+\s*\)/g;
 function unwrapNumbers(input: string): string {
 	return input.replace(unwrapper, match => match.slice(1, -1));
+}
+
+const simpleWrappedNumberRegex = /^\(\s*\d+\s*\)$/;
+function isSimpleWrappedNumber(input: string): boolean {
+	return simpleWrappedNumberRegex.test(input);
 }
 
 /**
@@ -59,19 +68,22 @@ function unwrapNumbers(input: string): string {
  * Returns undefined if the value isn't simple math.
  * Returns null if an error occurred during eval().
  */
-export function doSimple(input: string, options?: Omit<Options, "globalFlag">): string {
+export function doWrappedMath(input: string, options?: Omit<Options, "globalFlag">): string {
+	if (isSimpleWrappedNumber(input)) {
+		return input.slice(1, -1).trim();
+	}
+
 	let output = input;
-	const regex = getSimpleRegex({ gFlag:"g", allowSpoilers:options?.allowSpoilers });
+	const regex = getWrappedMathRegex({ gFlag:"g", allowSpoilers:options?.allowSpoilers });
 	while (regex.test(output)) {
 		output = output.replace(regex, value => {
-			const { hasPipes, unpiped } = unpipe(unwrapNumbers(value));
+			const { hasPipes, unpiped } = unpipe(unwrapNumbers(value.slice(1, -1)));
 
 			const retVal = (result: string) => {
 				return hasPipes ? `||${result}||` : result;
 			};
 
 			try {
-
 				const prepped = unpiped
 
 					// by spacing the -- or ++ characters, the eval can properly process them

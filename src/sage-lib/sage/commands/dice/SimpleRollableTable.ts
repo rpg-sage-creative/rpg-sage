@@ -24,6 +24,6 @@ export type SimpleRollableTableItem = {
 	/** text of the item */
 	text: string;
 
-	/** child rolls to be made whent his result is rolled */
+	/** child rolls to be made whent this result is rolled */
 	children?: string[];
 };

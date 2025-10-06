@@ -1,5 +1,6 @@
 import type { GameSystem } from "@rsc-sage/types";
 import type { Optional } from "@rsc-utils/core-utils";
+import type { StatBlockProcessor } from "@rsc-utils/dice-utils";
 import type { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";
 import { isStatsKey as isStatsKeyD20, statsToHtml as statsToHtmlD20 } from "./d20/sheets/simpleSheet.js";
 import { isStatsKey as isStatsKeyP20, statsToHtml as statsToHtmlP20 } from "./p20/sheets/simpleSheet.js";
@@ -12,8 +13,7 @@ function hasSimpleSheet(gameSystem: Optional<GameSystem>): gameSystem is GameSys
 	return false;
 }
 
-function isStatsKey(key: string, gameSystem: Optional<GameSystem>): boolean {
-	if (!gameSystem) return false;
+function isStatsKey(key: string, gameSystem: GameSystem): boolean {
 	switch(gameSystem.code) {
 		case "D20": return isStatsKeyD20(key);
 		case "DnD5e": return isStatsKeyD20(key);
@@ -25,16 +25,14 @@ function isStatsKey(key: string, gameSystem: Optional<GameSystem>): boolean {
 	}
 }
 
-function statsToHtml(character: GameCharacter, gameSystem?: Optional<GameSystem>): string[] {
-	gameSystem ??= character.gameSystem;
-	if (!gameSystem) return [];
+function statsToHtml(processor: StatBlockProcessor, gameSystem: GameSystem): string[] {
 	switch(gameSystem.code) {
-		case "D20": return statsToHtmlD20(character);
-		case "DnD5e": return statsToHtmlD20(character);
-		case "PF1e": return statsToHtmlD20(character);
-		case "PF2e": return statsToHtmlP20(character);
-		case "SF1e": return statsToHtmlSF1e(character);
-		case "SF2e": return statsToHtmlP20(character);
+		case "D20": return statsToHtmlD20(processor);
+		case "DnD5e": return statsToHtmlD20(processor);
+		case "PF1e": return statsToHtmlD20(processor);
+		case "PF2e": return statsToHtmlP20(processor);
+		case "SF1e": return statsToHtmlSF1e(processor);
+		case "SF2e": return statsToHtmlP20(processor);
 		default: return [];
 	}
 }
@@ -48,11 +46,28 @@ type Results = {
 	lines: string[];
 };
 
-export function processSimpleSheet(character: GameCharacter, gameSystem?: Optional<GameSystem>): Results {
-	gameSystem ??= character.gameSystem;
+type Args = {
+	char: GameCharacter;
+	processor: StatBlockProcessor;
+	gameSystem?: Optional<GameSystem>;
+};
 
-	const lines = hasSimpleSheet(gameSystem) ? statsToHtml(character, gameSystem) : [];
+export function processSimpleSheet({ char, processor, gameSystem }: Args): Results {
+	gameSystem ??= char.gameSystem;
 
+	// if not a valid game system, stop processing here
+	if (!hasSimpleSheet(gameSystem)) {
+		return {
+			keys: new Set(),
+			title: undefined as string | undefined,
+			lines: []
+		};
+	}
+
+	// process the stats
+	const lines = statsToHtml(processor, gameSystem);
+
+	// if we got nothing back, stop processing here
 	if (!lines?.length) {
 		return {
 			keys: new Set(),
@@ -61,14 +76,16 @@ export function processSimpleSheet(character: GameCharacter, gameSystem?: Option
 		};
 	}
 
+	// track all the keys used
 	const keys = new Set<Lowercase<string>>();
-	character.notes.getStats().forEach(note => {
+	char.notes.getStats().forEach(note => {
 		if (isStatsKey(note.title, gameSystem)) {
 			keys.add(note.title.toLowerCase() as Lowercase<string>);
 		}
 	});
 
-	const title = character.getStat(`simpleSheet.template.title`) ?? `Stats ${gameSystem?.code}`;
+	// get the custom title if one exists
+	const title = char.getString(`simpleSheet.template.title`) ?? `Stats ${gameSystem?.code}`;
 
 	return { keys, title, lines };
 }

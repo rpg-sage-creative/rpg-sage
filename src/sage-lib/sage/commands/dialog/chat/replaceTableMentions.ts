@@ -1,45 +1,51 @@
+import { escapeRegex } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
-import type { GuildMember, User } from "discord.js";
-import { SageMessage } from "../../../model/SageMessage.js";
+import type { GuildMember } from "discord.js";
 
 const AtGameMastersRegex = /@(?:gms?|gamemasters?)/i;
-const AtPlayersRegex = /@(?:pcs?|players?)/i;
+const AtPlayersRegex = /@(?:pcs?|players?|party)/i;
 const AtTableRegex = /@table/i;
 
-type GuildMemberOrUser = GuildMember | User;
-
-async function fetchGameMasters(sageMessage: SageMessage): Promise<GuildMemberOrUser[]> {
-	const gameMasters = await sageMessage.game?.gmGuildMembers();
-	return gameMasters ?? [];
+function updatePrefix(regexp: RegExp, prefix: string): RegExp {
+	if (prefix !== "@") {
+		return new RegExp(`${escapeRegex(prefix)}${regexp.source.slice(1)}`, "i");
+	}
+	return regexp;
 }
 
-async function fetchPlayers(sageMessage: SageMessage): Promise<GuildMemberOrUser[]> {
-	const players = await sageMessage.game?.pGuildMembers();
-	return players ?? [];
+function getAtGameMastersRegex(prefix: string): RegExp {
+	return updatePrefix(AtGameMastersRegex, prefix);
 }
 
-async function fetchTable(sageMessage: SageMessage): Promise<GuildMemberOrUser[]> {
-	return [
-		...await fetchGameMasters(sageMessage),
-		...await fetchPlayers(sageMessage),
-	];
+function getAtPlayersRegex(prefix: string): RegExp {
+	return updatePrefix(AtPlayersRegex, prefix);
 }
 
-export async function replaceTableMentions(sageMessage: SageMessage, content: string): Promise<string> {
-	if (!sageMessage.game) {
+function getAtTableRegex(prefix: string): RegExp {
+	return updatePrefix(AtTableRegex, prefix);
+}
+
+type Args = {
+	gameMasters?: GuildMember[];
+	players?: GuildMember[];
+	/** @todo add .tableMentionPrefix to Game and Server */
+	mentionPrefix?: string;
+};
+
+export function replaceTableMentions(content: string, { gameMasters = [], players = [], mentionPrefix = "@" }: Args): string {
+	if (!gameMasters.length && !players.length) {
 		return content;
 	}
 
 	const groups = [
-		{ regex:AtGameMastersRegex, fetcher:fetchGameMasters, label:"GameMasters" },
-		{ regex:AtPlayersRegex, fetcher:fetchPlayers, label:"Players" },
-		{ regex:AtTableRegex, fetcher:fetchTable, label:"Table" },
+		{ regex:getAtGameMastersRegex(mentionPrefix), members:gameMasters, label:"GameMasters" },
+		{ regex:getAtPlayersRegex(mentionPrefix), members:players, label:"Players" },
+		{ regex:getAtTableRegex(mentionPrefix), members:gameMasters.concat(players), label:"Table" },
 	];
 
-	for (const { regex, fetcher, label } of groups) {
+	for (const { regex, members, label } of groups) {
 		const match = regex.exec(content);
 		if (match) {
-			const members = await fetcher(sageMessage);
 			const mentions = members.map(toUserMention);
 			const replacement = `@${label} (${mentions.join(", ")})`;
 			const left = content.slice(0, match.index);

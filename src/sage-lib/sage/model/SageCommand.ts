@@ -4,8 +4,6 @@ import type { DInteraction, DiscordCache, DRepliableInteraction, EmbedBuilder } 
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, PartialGroupDMChannel, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
-import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
-import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { IChannel } from "../repo/base/IdRepository.js";
 import type { Bot } from "./Bot.js";
@@ -21,6 +19,7 @@ import type { SageMessage } from "./SageMessage.js";
 import type { SageReaction } from "./SageReaction.js";
 import { GameCreatorType, type Server } from "./Server.js";
 import type { User } from "./User.js";
+import { findActiveCharacter } from "./utils/findActiveCharacter.js";
 
 export interface SageCommandCore {
 	eventCache: SageEventCache;
@@ -226,6 +225,12 @@ export abstract class SageCommand<
 		});
 	}
 
+	public get showConfirmationPrompts(): boolean {
+		return this.sageUser.confirmationPrompts ?? true
+			? !this.args.hasSkipConfirmationFlag
+			: this.args.hasForceConfirmationFlag;
+	}
+
 	// #endregion
 
 	// #region Permission Flags
@@ -417,6 +422,19 @@ export abstract class SageCommand<
 		});
 	}
 
+	private activeCharacterId?: Snowflake;
+	private activeCharacter?: GameCharacter;
+	public getActiveCharacter(): GameCharacter | undefined {
+		let { activeCharacter, activeCharacterId } = this;
+
+		// go look if we have no character or the ids don't match
+		if (!activeCharacter || (activeCharacterId && activeCharacterId !== activeCharacter?.id)) {
+			this.activeCharacter = activeCharacter = findActiveCharacter(this, activeCharacterId);
+		}
+
+		return activeCharacter;
+	}
+
 	public get gmCharacter(): GameCharacter | undefined {
 		return this.cache.getOrSet("gmCharacter", () =>
 			this.game?.gmCharacter ?? this.server?.gmCharacter
@@ -434,19 +452,25 @@ export abstract class SageCommand<
 				?? nonPlayerCharacters.findByName(value)
 				?? nonPlayerCharacters.findCompanion(value);
 		};
+		const gmFind = (gmChar: GameCharacter) => {
+			if (gmChar.matches(value)) return gmChar;
+			return gmChar.companions.findByName(value);
+		};
 
 		const { game, server } = this;
 		if (game) {
-			if (game.gmCharacter.matches(value)) {
-				return game.gmCharacter;
-			}
+			// check game chars/npcs
 			const gameChar = find(game);
 			if (gameChar) return gameChar;
 
+			// check gm
+			const gmChar = gmFind(game.gmCharacter);
+			if (gmChar) return gmChar;
+
 		}else if (server) {
-			if (server.gmCharacter.matches(value)) {
-				return server.gmCharacter;
-			}
+			const gmChar = gmFind(server.gmCharacter);
+			if (gmChar) return gmChar;
+
 		}
 		return this.sageUser ? find(this.sageUser) : undefined;
 	}
@@ -538,13 +562,14 @@ export abstract class SageCommand<
 	/** @deprecated use actor.isGamePlayer */
 	public get isPlayer() { return this.eventCache.actor.isGamePlayer === true; }
 
+	public get mentionPrefix(): string | undefined { return this.sageUser.mentionPrefix ?? this.game?.mentionPrefix; }
 	//#endregion
 
 	/** @todo figure out where splitMessageOptions comes into this workflow */
 	public resolveToOptions<T extends TSendOptions>(renderableOrArgs: RenderableContentResolvable | TSendArgs, _ephemeral?: boolean): T {
 		if ((typeof(renderableOrArgs) === "string") || ("toRenderableContent" in renderableOrArgs)) {
 			return {
-				embeds: resolveToEmbeds(this.eventCache, renderableOrArgs),
+				embeds: this.eventCache.resolveToEmbeds(renderableOrArgs),
 				ephemeral: false
 				// ephemeral: ephemeral
 			} as T;
@@ -554,12 +579,12 @@ export abstract class SageCommand<
 		if (renderableOrArgs.content) {
 			options.content = typeof(renderableOrArgs.content) === "string"
 				? renderableOrArgs.content
-				: resolveToContent(this.eventCache, renderableOrArgs.content).join("\n");
+				: this.eventCache.resolveToContent(renderableOrArgs.content).join("\n");
 		}
 		if (renderableOrArgs.embeds) {
 			options.embeds = Array.isArray(renderableOrArgs.embeds)
 				? renderableOrArgs.embeds
-				: resolveToEmbeds(this.eventCache, renderableOrArgs.embeds);
+				: this.eventCache.resolveToEmbeds(renderableOrArgs.embeds);
 		}
 		if (renderableOrArgs.components) {
 			options.components = renderableOrArgs.components;

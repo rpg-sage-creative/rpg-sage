@@ -1,5 +1,12 @@
-import { wrapIterableIterator } from "../iterator/wrapIterableIterator.js";
+import { wrapSetIterator } from "../iterator/wrapSetIterator.js";
 import type { Optional } from "../types/generics.js";
+
+type SetLike<T> = {
+	size: number;
+	has(value: T): boolean;
+	keys(): SetIterator<T>;
+	[Symbol.iterator](): SetIterator<T>;
+};
 
 /**
  * A case insensitive string Set.
@@ -15,7 +22,7 @@ export class StringSet implements Set<string> {
 		}
 	}
 
-	[Symbol.iterator](): IterableIterator<string> {
+	[Symbol.iterator](): SetIterator<string> {
 		return this.values();
 	}
 
@@ -29,7 +36,7 @@ export class StringSet implements Set<string> {
 			throw new TypeError("string expected");
 		}
 
-		this._values[value.toLowerCase()] = value;
+		this._values[value.toLowerCase()] ??= value;
 
 		return this;
 	}
@@ -48,27 +55,135 @@ export class StringSet implements Set<string> {
 		return false;
 	}
 
-	public entries(): IterableIterator<[Lowercase<string>, string]> {
-		return wrapIterableIterator(Object.keys(this._values) as Lowercase<string>[], key => {
+	/** values in this but not in other */
+	public difference(other: SetLike<string>): StringSet {
+		const difference = new StringSet();
+
+		const otherSet = other instanceof StringSet ? other : new StringSet(other);
+
+		if (this.size > otherSet.size) {
+			for (const [key, value] of otherSet.entries()) {
+				if (!this.hasKey(key)) {
+					difference.add(value);
+				}
+			}
+
+		}else {
+			for (const [key, value] of this.entries()) {
+				if (!otherSet.hasKey(key)) {
+					difference.add(value);
+				}
+			}
+		}
+
+		return difference;
+	}
+
+	public entries(): SetIterator<[Lowercase<string>, string]> {
+		return wrapSetIterator(Object.keys(this._values) as Lowercase<string>[], key => {
 			return {
-				value: [key, this._values[key]],
+				value: [key, this._values[key]!],
 				skip: false
 			};
 		});
 	}
 
 	public forEach(fn: (value: string, value2: Lowercase<string>, set: StringSet) => unknown, thisArg?: any): void {
-		for (const entry of this.entries()) {
-			fn.call(thisArg, entry[1], entry[0], this);
+		for (const [key, value] of this.entries()) {
+			fn.call(thisArg, value, key, this);
 		}
 	}
 
-	public has(key: string): boolean {
-		return key.toLowerCase() in this._values;
+	public has(value: string): boolean {
+		return value.toLowerCase() in this._values;
 	}
 
-	public keys(): IterableIterator<Lowercase<string>> {
-		return wrapIterableIterator(Object.keys(this._values) as Lowercase<string>[], key => {
+	protected hasKey(key: Lowercase<string>): boolean {
+		return key in this._values;
+	}
+
+	/** values in this and in other */
+	public intersection(other: SetLike<string>): StringSet {
+		const intersection = new StringSet();
+
+		const otherSet = other instanceof StringSet ? other : new StringSet(other);
+
+		if (this.size > otherSet.size) {
+			for (const [key, value] of otherSet.entries()) {
+				if (this.hasKey(key)) {
+					intersection.add(value);
+				}
+			}
+
+		}else {
+			for (const [key, value] of this.entries()) {
+				if (otherSet.hasKey(key)) {
+					intersection.add(value);
+				}
+			}
+
+		}
+
+		return intersection;
+	}
+
+	/** true if this set has no elements in common with the other set, and false otherwise. */
+	public isDisjointFrom(other: SetLike<string>): boolean {
+		if (this.size > other.size) {
+			for (const value of other) {
+				if (this.has(value)) {
+					return false;
+				}
+			}
+
+		}else {
+			const otherSet = other instanceof StringSet ? other : new StringSet(other);
+			for (const key of this.keys()) {
+				if (otherSet.hasKey(key)) {
+					return false;
+				}
+			}
+
+		}
+		return true;
+	}
+
+	/** true if all elements in this set are also in the other set, and false otherwise. */
+	public isSubsetOf(other: SetLike<string>): boolean {
+		if (this.size > other.size) {
+			return false;
+		}
+
+		const otherSet = other instanceof StringSet ? other : new StringSet(other);
+
+		for (const key of this.keys()) {
+			if (!otherSet.hasKey(key)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/** true if all elements in the other set are also in this set, and false otherwise. */
+	public isSupersetOf(other: SetLike<string>) {
+		if (this.size < other.size) {
+			return false;
+		}
+
+		const otherSet = other instanceof StringSet ? other : new StringSet(other);
+
+		for (const key of otherSet.keys()) {
+			if (!this.hasKey(key)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public keys(): SetIterator<Lowercase<string>> {
+		return wrapSetIterator(Object.keys(this._values) as Lowercase<string>[], key => {
 			return {
 				value: key,
 				skip: false
@@ -80,12 +195,48 @@ export class StringSet implements Set<string> {
 		return Object.keys(this._values).length;
 	}
 
-	public values(): IterableIterator<string> {
-		return wrapIterableIterator(Object.keys(this._values) as Lowercase<string>[], key => {
+	/** A new StringSet object containing elements which are in either this set or the other set, but not in both. */
+	public symmetricDifference(other: SetLike<string>): StringSet {
+		const symmetricDifference = new StringSet();
+
+		const otherSet = other instanceof StringSet ? other : new StringSet(other);
+
+		for (const [key, value] of this.entries()) {
+			if (!otherSet.has(key)) {
+				symmetricDifference.add(value);
+			}
+		}
+
+		for (const [key, value] of otherSet.entries()) {
+			if (!this.has(key)) {
+				symmetricDifference.add(value);
+			}
+		}
+
+		return symmetricDifference;
+	}
+
+	/** A new StringSet object containing elements which are in either or both of this set and the other set. */
+	public union(other: SetLike<string>) {
+		const union = new StringSet(this);
+
+		for (const value of other) {
+			union.add(value);
+		}
+
+		return union;
+	}
+
+	public values(): SetIterator<string> {
+		return wrapSetIterator(Object.keys(this._values) as Lowercase<string>[], key => {
 			return {
-				value: this._values[key],
+				value: this._values[key]!,
 				skip: false
 			};
 		});
+	}
+
+	public static from(setLike: SetLike<string>): StringSet {
+		return new StringSet(setLike);
 	}
 }

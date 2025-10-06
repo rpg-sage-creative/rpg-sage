@@ -20,7 +20,7 @@ async function toRenderableContent(sageCommand: SageCommand, { macro }: Args): P
 }
 
 /** args is true when coming in the first time from post/slash ... */
-export async function mCmdDetails(sageCommand: SageCommand, args?: Args | boolean): Promise<void> {
+export async function mCmdDetails(sageCommand: SageCommand, args?: Args | boolean, noComponents?: boolean): Promise<void> {
 	sageCommand.replyStack.defer();
 
 	const localize = sageCommand.getLocalizer();
@@ -35,7 +35,7 @@ export async function mCmdDetails(sageCommand: SageCommand, args?: Args | boolea
 
 	const content = toUserMention(sageCommand.actorId);
 	const embeds = await toRenderableContent(sageCommand, args);
-	const components = await createMacroComponents(sageCommand, args);
+	const components = noComponents ? [] : await createMacroComponents(sageCommand, args);
 
 	const message = await sageCommand.fetchMessage(args.customIdArgs?.messageId).catch(() => undefined);
 	if (message && message?.author.id !== sageCommand.actorId) {

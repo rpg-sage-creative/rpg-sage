@@ -8,10 +8,15 @@ import { sendGameCharacter } from "./sendGameCharacter.js";
 import { sendGameCharacterMods } from "./sendGameCharacterMods.js";
 
 export async function promptModsConfirm(sageMessage: SageMessage, character: GameCharacter, updatedKeys: StringSet, action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
-	await sendGameCharacterMods(sageMessage, character, updatedKeys);
-	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
-	promptRenderable.append(`Update ${character.name}?`);
-	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
+	let yes: boolean;
+	const details = await sendGameCharacterMods(sageMessage, character, updatedKeys);
+	if (sageMessage.showConfirmationPrompts) {
+		const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
+		promptRenderable.append(`Update ${character.name}?`);
+		yes = await discordPromptYesNo(sageMessage, promptRenderable, true) ?? false;
+	}else {
+		yes = true;
+	}
 	if (yes === true) {
 		const updated = await action(character);
 		if (updated) {
@@ -21,14 +26,20 @@ export async function promptModsConfirm(sageMessage: SageMessage, character: Gam
 		}
 	}else {
 		await sageMessage.replyStack.editLast(`Character ***NOT*** Updated.`);
+		await deleteMessages(details);
 	}
 }
 
 export async function promptCharConfirm(sageMessage: SageMessage, character: GameCharacter, prompt: string, action: (char: GameCharacter) => Promise<boolean>): Promise<void> {
+	let yes: boolean;
 	const details = await sendGameCharacter(sageMessage, character);
-	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
-	promptRenderable.append(prompt);
-	const yes = await discordPromptYesNo(sageMessage, promptRenderable, true);
+	if (sageMessage.showConfirmationPrompts) {
+		const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors());
+		promptRenderable.append(prompt);
+		yes = await discordPromptYesNo(sageMessage, promptRenderable, true) ?? false;
+	}else {
+		yes = true;
+	}
 	if (yes === true) {
 		const updated = await action(character);
 		if (updated) {

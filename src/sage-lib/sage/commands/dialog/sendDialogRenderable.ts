@@ -38,10 +38,10 @@ export async function sendDialogRenderable({ authorOptions, dialogTypeOverride, 
 
 	const targetChannel = await sageCache.fetchChannel(sageMessage.channel?.sendDialogTo);
 	if (targetChannel) {
-		const sent = await sendWebhook(targetChannel, { sageCache, renderableContent, authorOptions, dialogType, files }).catch(errorReturnEmptyArray);
+		const sent = await sendWebhook(targetChannel, { authorOptions, dialogType, files, renderableContent, sageCache }).catch(errorReturnEmptyArray);
 		return sent?.filter(msg => msg) ?? [];
 	}
 
-	const replaced = await replaceWebhook(sageMessage.message, { sageCache, renderableContent, authorOptions, dialogType, files, skipDelete, skipReplyingTo }).catch(errorReturnEmptyArray);
+	const replaced = await replaceWebhook(sageMessage.message, { authorOptions, dialogType, files, renderableContent, sageCache, skipDelete, skipReplyingTo }).catch(errorReturnEmptyArray);
 	return replaced.filter(msg => msg);
 }

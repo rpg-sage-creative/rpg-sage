@@ -1,6 +1,8 @@
 import { tokenize } from "../internal/tokenize.js";
 import { getComplexRegex } from "../math/doComplex.js";
 import { doPosNeg, getPosNegRegex } from "../math/doPosNeg.js";
+import { getSimpleRegex } from "../math/doSimple.js";
+// import { getWrappedMathRegex } from "../math/doWrappedMath.js";
 import { processMath } from "../math/processMath.js";
 
 /**
@@ -14,6 +16,8 @@ export function doStatMath(value: string): string {
 	const options = { allowSpoilers:true };
 	const parsers = {
 		complex: getComplexRegex(options),
+		// wrapped: getWrappedMathRegex(options),
+		simple: getSimpleRegex(options),
 		posNeg: getPosNegRegex(options),
 	};
 	const tokens = tokenize(value, parsers);
@@ -21,6 +25,8 @@ export function doStatMath(value: string): string {
 	const processed = tokens.map(({ token, key }) => {
 		switch(key) {
 			case "complex": return processMath(token, options);
+			// case "wrapped": return processMath(token, options);
+			case "simple": return processMath(token, options);
 			case "posNeg": return doPosNeg(token, options);
 			default: return token;
 		}

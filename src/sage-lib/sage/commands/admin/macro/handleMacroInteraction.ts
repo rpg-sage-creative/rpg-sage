@@ -8,6 +8,7 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { parseDiceMatches, sendDice } from "../../dice.js";
+import { StatMacroProcessor } from "../../dice/stats/StatMacroProcessor.js";
 import { createMacroArgsModal, createMacroModal } from "./createMacroModal.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
 import { getArgs, getArgValues, isInvalidActorError, type Args, type InteractionArgs, type MacroState } from "./getArgs.js";
@@ -169,7 +170,8 @@ async function showNewMacroModal(sageInteraction: SageInteraction<ButtonInteract
 async function rollMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 	const macro = args.macro;
-	const matches = await parseDiceMatches(sageInteraction, `[${macro.name}]`);
+	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(macro.owner.id));
+	const matches = await parseDiceMatches(`[${macro.name}]`, { processor, sageCommand:sageInteraction });
 	const outputs = matches.map(m => m.output).flat();
 	await sendDice(sageInteraction, outputs);
 }
@@ -217,7 +219,8 @@ async function rollMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>
 	});
 
 	const macro = args.macro;
-	const matches = await parseDiceMatches(sageInteraction, `[${macro.name} ${macroArgs.join(" ")}]`);
+	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(macro.owner.id));
+	const matches = await parseDiceMatches(`[${macro.name} ${macroArgs.join(" ")}]`, { processor, sageCommand:sageInteraction });
 	const outputs = matches.map(m => m.output).flat();
 	await sendDice(sageInteraction, outputs);
 }
@@ -479,7 +482,24 @@ export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 	const invalidKey = await isInvalid(macros, newMacro, false);
 	if (invalidKey === "INVALID_MACRO_DUPLICATE") {
 		const oldMacro = macros.find(newMacro.name)!;
+		if (!sageMessage.showConfirmationPrompts) {
+			const saved = await macros.updateAndSave({ oldMacro, newMacro });
+			if (saved) {
+				args.macro = newMacro;
+				await mCmdDetails(sageMessage, args, true);
+				return
+			}
+		}
 		return promptEditMacro(sageMessage, args, { oldMacro, newMacro });
+	}
+
+	if (!sageMessage.showConfirmationPrompts) {
+		const saved = await macros.addAndSave(newMacro);
+		if (saved) {
+			args.macro = newMacro;
+			await mCmdDetails(sageMessage, args, true);
+			return
+		}
 	}
 
 	return promptNewMacro(sageMessage, args, newMacro);

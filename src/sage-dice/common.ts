@@ -65,10 +65,6 @@ export function sumDicePartRolls(dicePartRolls: THasSignAndTotal[]): number {
 	}, 0);
 }
 
-export function toMod(mod: number, spaced = false): string {
-	return `${mod < 0 ? "-" : "+"}${spaced ? " " : ""}${Math.abs(mod)}`;
-}
-
 //#endregion
 
 //#region DropKeep

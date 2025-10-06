@@ -1,3 +1,4 @@
+import { wrapSetIterator } from "../iterator/wrapSetIterator.js";
 import { EphemeralBase } from "./EphemeralBase.js";
 
 export class EphemeralSet<V>
@@ -6,7 +7,7 @@ export class EphemeralSet<V>
 
 	// public constructor(msToLive: number)
 
-	[Symbol.iterator](): IterableIterator<V> {
+	[Symbol.iterator](): SetIterator<V> {
 		return this.values();
 	}
 
@@ -25,7 +26,15 @@ export class EphemeralSet<V>
 
 	// public delete(key: K): boolean
 
-	// public entries(): IterableIterator<[K, V]>
+	/** iterate the entries as [key, value] */
+	public entries(): SetIterator<[V, V]> {
+		return wrapSetIterator(this.map.keys(), key => {
+			return {
+				value: [key, this.map.get(key)?.value!],
+				skip: !this.map.has(key)
+			};
+		});
+	}
 
 	public forEach(fn: (value: V, value2: V, set: EphemeralSet<V>) => unknown, thisArg?: any): void {
 		for (const entry of this.entries()) {
@@ -35,9 +44,23 @@ export class EphemeralSet<V>
 
 	// public has(key: K): boolean
 
-	// public keys(): IterableIterator<K>
+	public keys(): SetIterator<V> {
+		return wrapSetIterator(this.map.keys(), key => {
+			return {
+				value: key,
+				skip: !this.map.has(key)
+			};
+		});
+	}
 
 	// public get size(): number
 
-	// public values(): IterableIterator<V>
+	public values(): SetIterator<V> {
+		return wrapSetIterator(this.map.keys(), key => {
+			return {
+				value: this.map.get(key)?.value!,
+				skip: !this.has(key)
+			};
+		});
+	}
 }

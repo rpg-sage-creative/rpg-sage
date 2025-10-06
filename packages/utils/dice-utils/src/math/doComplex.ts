@@ -1,4 +1,3 @@
-import { LogQueue } from "@rsc-utils/core-utils";
 import { xRegExp } from "../internal/xRegExp.js";
 import { doSimple, getSimpleRegex } from "./doSimple.js";
 import { getNumberRegex } from "./getNumberRegex.js";
@@ -10,12 +9,15 @@ type Options = {
 };
 
 /** Returns a regular expression that finds:
- * min(...number[])
- * max(...number[])
- * floor(number)
+ * abs(number)
  * ceil(number)
- * round(number, number?)
+ * floor(number)
  * hypot(number, number, number?)
+ * max(...number[])
+ * min(...number[])
+ * round(number, number?)
+ * sign(number)
+ * signed(number)
  */
 export function getComplexRegex(options?: Options): RegExp {
 	const flags = options?.globalFlag ? "xgi" : "xi";
@@ -28,7 +30,7 @@ export function getComplexRegex(options?: Options): RegExp {
 		(?:                             # open non-capture group for multiplier/function
 			(${numberRegex})\\s*        # capture a multiplier, ex: 3(4-2) <-- 3 is the multiplier
 			|
-			(min|max|floor|ceil|round|hypot)  # capture a math function
+			(abs|ceil|floor|hypot|max|min|round|sign|signed)  # capture a math function
 		)?                              # close non-capture group for multiplier/function; make it optional
 
 		\\(\\s*                         # open parentheses, optional spaces
@@ -50,21 +52,12 @@ export function hasComplex(value: string, options?: Omit<Options, "globalFlag">)
 	return getComplexRegex(options).test(value);
 }
 
-type SageMathFunction = "min" | "max" | "floor" | "ceil" | "round" | "hypot";
+type SageMathFunction = keyof typeof SageMath;
 
 const SageMath = {
-	min: (...args: number[]) => Math.min(...args),
-	max: (...args: number[]) => Math.max(...args),
-	floor: (...args: number[]) => Math.floor(args[0]),
+	abs: (...args: number[]) => Math.abs(args[0]),
 	ceil: (...args: number[]) => Math.ceil(args[0]),
-	round: (...args: number[]) => {
-		const [n, places] = args;
-		if (typeof(places) === "number") {
-			const mult = Math.pow(10, places);
-			return Math.round(n * mult) / mult;
-		}
-		return Math.round(n);
-	},
+	floor: (...args: number[]) => Math.floor(args[0]),
 	hypot: (...args: number[]) => {
 		const [x, y, z] = args;
 		const xy = Math.hypot(x, y);
@@ -73,11 +66,28 @@ const SageMath = {
 		}
 		return xy;
 	},
+	max: (...args: number[]) => Math.max(...args),
+	min: (...args: number[]) => Math.min(...args),
+	round: (...args: number[]) => {
+		const [n, places] = args;
+		if (typeof(places) === "number") {
+			const mult = Math.pow(10, places);
+			return Math.round(n * mult) / mult;
+		}
+		return Math.round(n);
+	},
+	sign: (...args: number[]) => Math.sign(args[0]),
+	signed: (...args: number[]) => {
+		const [n] = args;
+		if (n < 0) {
+			return n;
+		}
+		return `+${n}`;
+	},
 }
 
 /** Checks the value for min/max/floor/ceil/round and replaces it with the result. */
 export function doComplex(input: string, options?: Omit<Options, "globalFlag">): string {
-	const logQueue = new LogQueue("doComplex", input);
 	let output = input;
 	const regex = getComplexRegex({ globalFlag:true, ...options });
 	while (regex.test(output)) {
@@ -85,7 +95,6 @@ export function doComplex(input: string, options?: Omit<Options, "globalFlag">):
 			const { hasPipes, unpiped } = unpipe(_args);
 
 			const retVal = (result: string | number) => {
-				logQueue.add({label:"retVal",_,result});
 				return hasPipes ? `||${result}||` : String(result);
 			};
 
@@ -109,8 +118,6 @@ export function doComplex(input: string, options?: Omit<Options, "globalFlag">):
 
 			return retVal(`${args[0]}`);
 		});
-		logQueue.add({label:"while",input,output});
 	}
-	// logQueue.logDiff(output);
 	return output;
 }
