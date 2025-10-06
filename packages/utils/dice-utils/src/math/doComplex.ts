@@ -9,6 +9,7 @@ type Options = {
 };
 
 /** Returns a regular expression that finds:
+ * abs(number)
  * ceil(number)
  * floor(number)
  * hypot(number, number, number?)
@@ -29,7 +30,7 @@ export function getComplexRegex(options?: Options): RegExp {
 		(?:                             # open non-capture group for multiplier/function
 			(${numberRegex})\\s*        # capture a multiplier, ex: 3(4-2) <-- 3 is the multiplier
 			|
-			(min|max|floor|ceil|round|hypot|sign|signed)  # capture a math function
+			(abs|ceil|floor|hypot|max|min|round|sign|signed)  # capture a math function
 		)?                              # close non-capture group for multiplier/function; make it optional
 
 		\\(\\s*                         # open parentheses, optional spaces
@@ -54,6 +55,7 @@ export function hasComplex(value: string, options?: Omit<Options, "globalFlag">)
 type SageMathFunction = keyof typeof SageMath;
 
 const SageMath = {
+	abs: (...args: number[]) => Math.abs(args[0]),
 	ceil: (...args: number[]) => Math.ceil(args[0]),
 	floor: (...args: number[]) => Math.floor(args[0]),
 	hypot: (...args: number[]) => {
