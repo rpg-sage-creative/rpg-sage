@@ -1,3 +1,4 @@
+import { nth } from "@rsc-utils/core-utils";
 import { xRegExp } from "../internal/xRegExp.js";
 import { doSimple, getSimpleRegex } from "./doSimple.js";
 import { getNumberRegex } from "./getNumberRegex.js";
@@ -15,6 +16,7 @@ type Options = {
  * hypot(number, number, number?)
  * max(...number[])
  * min(...number[])
+ * nth(number)
  * round(number, number?)
  * sign(number)
  * signed(number)
@@ -30,7 +32,7 @@ export function getComplexRegex(options?: Options): RegExp {
 		(?:                             # open non-capture group for multiplier/function
 			(${numberRegex})\\s*        # capture a multiplier, ex: 3(4-2) <-- 3 is the multiplier
 			|
-			(abs|ceil|floor|hypot|max|min|round|sign|signed)  # capture a math function
+			(abs|ceil|floor|hypot|max|min|nth|round|sign|signed)  # capture a math function
 		)?                              # close non-capture group for multiplier/function; make it optional
 
 		\\(\\s*                         # open parentheses, optional spaces
@@ -68,6 +70,7 @@ const SageMath = {
 	},
 	max: (...args: number[]) => Math.max(...args),
 	min: (...args: number[]) => Math.min(...args),
+	nth: (...args: number[]) => nth(args[0]),
 	round: (...args: number[]) => {
 		const [n, places] = args;
 		if (typeof(places) === "number") {
