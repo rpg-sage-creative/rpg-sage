@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.11.8",
+"version":"1.12.0",
 "branch":"v1.x.x",
-"commit":"2c5d56bf2f8b77f9781f98a814fb1025b36eed7a",
-"commitSubject":"implement stats and minions for game and server gm characters",
-"commitTs":1757630535000,
-"commitDate":"2025-09-11-1542",
-"buildTs":1757630894000,
-"buildDate":"2025-09-11-1548",
+"commit":"9bc027f86a43b04300a003a3b59879a9ea995cfb",
+"commitSubject":"Merge pull request #142 from rpg-sage-creative/improved-stat-template-processing",
+"commitTs":1759775308000,
+"commitDate":"2025-10-06-1128",
+"buildTs":1759775462000,
+"buildDate":"2025-10-06-1131",
 "author":"Randal"
 }
