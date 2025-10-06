@@ -83,7 +83,7 @@ const SageMath = {
 	signed: (...args: number[]) => {
 		const [n] = args;
 		if (n < 0) {
-			return n;
+			return `–${n}`;
 		}
 		return `+${n}`;
 	},
