@@ -19,7 +19,7 @@ import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
-import { hpToGauge } from "./utils/hpToGauge.js";
+import { hpToBar } from "./utils/hpToBar.js";
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -660,7 +660,7 @@ export class GameCharacter {
 		];
 	}
 
-	public getHpGauge(): string {
+	public getHpBar(): string {
 		let hpStat = this.getString("hp") ?? "0";
 		if (/^\|\|\d+\|\|$/.test(hpStat)) hpStat = hpStat.slice(2, -2);
 		const hp = +hpStat;
@@ -669,9 +669,9 @@ export class GameCharacter {
 		if (/^\|\|\d+\|\|$/.test(maxHpStat)) maxHpStat = maxHpStat.slice(2, -2);
 		const maxHp = +maxHpStat;
 
-		const whichGauge = this.getString("hpGauge.values");
+		const whichGauge = this.getString("hpBar.values");
 
-		return hpToGauge(hp, maxHp, whichGauge);
+		return hpToBar(hp, maxHp, whichGauge);
 	}
 
 	/** returns the value for the first key that has a defined value */
@@ -767,8 +767,8 @@ export class GameCharacter {
 			return ret("nickOrName", this.aka ?? this.name);
 		}
 
-		if (keyLower === "hpgauge") {
-			return ret("hpGauge", this.getHpGauge());
+		if (keyLower === "hpgauge" || keyLower === "hpbar") {
+			return ret("hpBar", this.getHpBar());
 		}
 
 		// enforce sheet.url and stop using sheeturl

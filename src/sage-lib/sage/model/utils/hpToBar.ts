@@ -36,7 +36,7 @@ function parseTracker(value: string): HitPointTracker {
 	return { increments, unknown };
 }
 
-export function hpToGauge(hp: number, maxHp: number, which?: string): string {
+export function hpToBar(hp: number, maxHp: number, which?: string): string {
 	const { increments, unknown } = parseTracker(which ?? "verticalbar");
 
 	if (isNaN(hp) || isNaN(maxHp)) return unknown;
