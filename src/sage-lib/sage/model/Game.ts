@@ -1,5 +1,5 @@
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, SageChannelType, updateGame, type GameOptions, type SageChannel } from "@rsc-sage/types";
-import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, warn, type Args, type Comparable, type IdCore, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, stringOrUndefined, warn, type Args, type Comparable, type IdCore, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
 import { parseGameSystem, type DiceCriticalMethodType, type DiceOutputType, type DiceSecretMethodType, type DiceSortType, type GameSystem, type GameSystemType } from "@rsc-utils/game-utils";
 import type { GuildMember, HexColorString, Role } from "discord.js";
@@ -50,6 +50,8 @@ export interface GameCore extends IdCore<"Game">, IHasColors, IHasEmoji, Partial
 	encounters?: EncounterCore[] | EncounterManager;
 
 	macros?: MacroBase[];
+
+	mentionPrefix?: string;
 }
 
 /** Cleans up the users from the time we weren't correctly validating duplicate users when adding them. */
@@ -120,6 +122,9 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
 	public get moveDirectionOutputType(): MoveDirectionOutputType | undefined { return this.core.moveDirectionOutputType; }
+
+	public get mentionPrefix(): string | undefined { return this.core.mentionPrefix; }
+	public set mentionPrefix(mentionPrefix: string | undefined) { this.core.mentionPrefix = stringOrUndefined(mentionPrefix); }
 
 	public get serverDid(): Snowflake { return this.core.serverDid; }
 	public get serverId(): UUID { return this.core.serverId; }

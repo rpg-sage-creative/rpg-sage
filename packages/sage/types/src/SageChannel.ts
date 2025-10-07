@@ -6,6 +6,7 @@ import type { DicePostType } from "./DicePostType.js";
 export type DialogOptions = {
 	dialogPostType: DialogPostType;
 	gmCharacterName: string;
+	mentionPrefix?: string;
 	moveDirectionOutputType?: number;
 	sendDialogTo: Snowflake;
 };

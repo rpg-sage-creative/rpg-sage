@@ -5,8 +5,6 @@ import type { SageCommand } from "../sage/model/SageCommand.js";
 import type { SageButtonInteraction, SageInteraction } from "../sage/model/SageInteraction.js";
 import { deleteMessage } from "./deletedMessages.js";
 import { registerInteractionListener } from "./handlers.js";
-import { resolveToContent } from "./resolvers/resolveToContent.js";
-import { resolveToEmbeds } from "./resolvers/resolveToEmbeds.js";
 
 const TIMEOUT_MILLI = 60 * 1000;
 
@@ -74,19 +72,18 @@ type PromptMessageSentData = {
 
 /** Creates and sends the prompt message. */
 async function sendPromptMessage(args: PromptArgs): Promise<PromptMessageSentData | undefined> {
-	const { sageCommand } = args;
+	const { sageCommand: { dChannel, eventCache } } = args;
 
 	// ensure channel before going further (should never be a problem, but just in case)
-	const { dChannel, sageCache } = sageCommand;
 	if (!dChannel) {
 		return undefined;
 	}
 
 	// format content
-	const content = args.content ? resolveToContent(sageCache, args.content).join("\n") : undefined;
+	const content = args.content ? eventCache.resolveToContent(args.content).join("\n") : undefined;
 
 	// create embeds
-	const embeds = args.embeds?.map(embed => resolveToEmbeds(sageCache, embed)).flat() ?? [];
+	const embeds = args.embeds?.map(embed => eventCache.resolveToEmbeds(embed)).flat() ?? [];
 
 	// create buttons/components
 	const messageButtons = createButtons(args.buttons);

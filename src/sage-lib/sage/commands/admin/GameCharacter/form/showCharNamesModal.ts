@@ -27,7 +27,7 @@ export function showCharNamesModal(sageInteraction: SageButtonInteraction, char:
 			["name", "Character Name", char.name, maxLength, true],
 			["aka", "Character Nickname (aka)", char.aka ?? "", maxLength],
 			["alias", "Character Alias (used for RPG Sage commands)", char.alias ?? "", maxLength],
-			["displayNameTemplate", "Display Name Template", char.displayNameTemplate ?? "", maxLength]
+			["displayNameTemplate", "Display Name Template", char.getTemplate("displayName") ?? "", maxLength]
 		]
 	});
 	return sageInteraction.interaction.showModal(modal);
@@ -46,7 +46,7 @@ async function handleCharNamesSubmit(sageInteraction: SageInteraction, idParts: 
 		char.name = form.name;
 		char.aka = form.aka;
 		char.alias = form.alias;
-		char.displayNameTemplate = form.displayNameTemplate;
+		char.setTemplate("displayName", form.displayNameTemplate);
 	}
 	return showCharForm(sageInteraction, idParts.charId);
 }

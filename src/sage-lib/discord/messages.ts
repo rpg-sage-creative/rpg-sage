@@ -6,7 +6,6 @@ import { DialogType } from "../sage/repo/base/IdRepository.js";
 import { DialogMessageRepository } from "../sage/repo/DialogMessageRepository.js";
 import { createMessageEmbed } from "./createMessageEmbed.js";
 import { deleteMessage, deleteMessages } from "./deletedMessages.js";
-import { resolveToEmbeds } from "./resolvers/resolveToEmbeds.js";
 import { sendTo, type AttachmentResolvable } from "./sendTo.js";
 import type { IMenuRenderable } from "./types.js";
 
@@ -64,7 +63,8 @@ export async function sendWebhook(targetChannel: SupportedMessagesChannel, webho
 		return Promise.reject(`Cannot Find Webhook: ${targetChannel.guild?.id}-${targetChannel.id}-dialog`);
 	}
 
-	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
+	const embeds = sageCache.resolveToEmbeds(renderableContent);
+
 	const contentToEmbeds = dialogType === DialogType.Embed;
 	const embedsToContent = dialogType === DialogType.Post;
 	// const content = dialogType === DialogType.Post ? resolveToTexts(sageCache.cloneForChannel(targetChannel), renderableContent).join("\n") : undefined;
@@ -111,7 +111,7 @@ export async function replaceWebhook(originalMessage: SMessageOrPartial, webhook
 		replyingTo = `*replying to* ${displayName} ${userMention} ${toMessageUrl(originalMessage.reference)}`.replace(/\s+/g, " ");
 	}
 
-	const embeds = resolveToEmbeds(sageCache.cloneForChannel(originalMessage.channel), renderableContent);
+	const embeds = sageCache.resolveToEmbeds(renderableContent);
 	if (embeds.length === 1 && !embeds[0].length && files?.length) {
 		embeds.length = 0;
 	}
@@ -182,7 +182,7 @@ export async function send(sageCache: SageCache, targetChannel: SupportedTarget,
 
 async function sendRenderableContent(sageCache: SageCache, renderableContent: RenderableContentResolvable, targetChannel: SupportedTarget, originalAuthor: Optional<User>): Promise<SMessage[]> {
 	const messages: Message[] = [];
-	const embeds = resolveToEmbeds(sageCache.cloneForChannel(targetChannel), renderableContent);
+	const embeds = sageCache.cloneForChannel(targetChannel).resolveToEmbeds(renderableContent);
 	if (embeds.length > 2) {
 		if (isSupportedGameChannel(targetChannel)) {
 			const embed = createMessageEmbed({ description:"*Long reply sent via direct message!*" });

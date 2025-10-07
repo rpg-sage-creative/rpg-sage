@@ -58,6 +58,9 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 	/** Returns true if the argument matching the given key has the value "unset". */
 	public abstract hasUnset(key: string): boolean;
 
+	public get hasForceConfirmationFlag(): boolean { return false; }
+	public get hasSkipConfirmationFlag(): boolean { return false; }
+
 	/**
 	 * Gets the named option as an attachment.
 	 * Returns undefined if not found.

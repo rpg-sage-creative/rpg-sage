@@ -1,16 +1,13 @@
 import { DicePostType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
-import { DiceOutputType, DiceSecretMethodType, processStatBlocks, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
+import { DiceOutputType, DiceSecretMethodType, doStatMath, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
 import type { TCommandAndArgsAndData } from "../../discord/index.js";
-import type { CharacterManager } from "../model/CharacterManager.js";
-import type { GameCharacter } from "../model/GameCharacter.js";
 import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import type { SageCommand } from "../model/SageCommand.js";
-import type { User } from "../model/User.js";
 import { logPostCurrency } from "./admin/PostCurrency.js";
 import { registerDiceTest } from "./dice/diceTest.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
@@ -24,12 +21,11 @@ import { rollRandomItem } from "./dice/rollRandomItem.js";
 import { rollTable } from "./dice/rollTable.js";
 import { sendDiceToMultiple } from "./dice/sendDiceToMultiple.js";
 import { sendDiceToSingle } from "./dice/sendDiceToSingle.js";
+import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
 
-type TDiscordDiceParseOptions = {
-	gameSystemType?: GameSystemType;
-	diceOutputType?: DiceOutputType;
-	diceCritMethodType?: DiceCriticalMethodType;
-	diceSecretMethodType?: DiceSecretMethodType;
+type BaseParseOptions = {
+	processor: StatMacroProcessor;
+	sageCommand: SageCommand;
 };
 
 export type TDiceMatch = {
@@ -48,83 +44,30 @@ function getBasicBracketRegex(): RegExp {
 	return /\[{2}[^\]]+\]{2}|\[[^\]]+\]/ig;
 }
 
-/** Used to prefetch stats and macros for characters so that the dice/macro logic can run synchronously */
-async function prepStatsAndMacros(sageCommand: SageCommand) {
-	const { game, server, isGameMaster, isPlayer, sageUser } = sageCommand;
-	if (!game || isGameMaster || isPlayer) {
-		const gameGm = game?.gmCharacter;
-		const serverGm = server?.gmCharacter;
-		const npcs = game?.nonPlayerCharacters ?? sageUser.nonPlayerCharacters;
-		const pcs = game?.playerCharacters ?? sageUser.playerCharacters;
-		/** @todo replace pc with "active character" */
-		const pc = isPlayer && game ? sageCommand.playerCharacter : undefined;
-		const encounters = game?.encounters;
-		const macros = await fetchAllStatsAndMacros(npcs, pcs, pc, sageUser);
-		return { gameGm, serverGm, npcs, pcs, pc, encounters, macros };
-	}
-	return undefined;
-}
+type DiscordDiceOverrides = {
+	gameSystemType?: GameSystemType;
+	diceOutputType?: DiceOutputType;
+	diceCritMethodType?: DiceCriticalMethodType;
+	diceSecretMethodType?: DiceSecretMethodType;
+};
 
-/** Iterates all the given characters to fetch their stats (dynamic tsv) and macros (dynamic tsv or dynamic pathbuilder); used only by prepStatsAndMacros() */
-async function fetchAllStatsAndMacros(npcs: CharacterManager, pcs: CharacterManager, pc: Optional<GameCharacter>, sageUser: User): Promise<DiceMacroBase[]> {
-	const out: DiceMacroBase[] = [];
+type ParseDiscordDiceOptions = BaseParseOptions & {
+	overrides?: DiscordDiceOverrides;
+};
 
-	// active character first
-	out.push(...await fetchStatsAndMacros(pc, sageUser));
-
-	// other pcs next
-	for (const _pc of pcs) {
-		out.push(...await fetchStatsAndMacros(_pc, sageUser));
-	}
-
-	// npcs last
-	for (const _npc of npcs) {
-		out.push(...await fetchStatsAndMacros(_npc, sageUser));
-	}
-
-	return out;
-}
-
-/** Reusable logic used only by fetchAllStatsAndMacros() */
-async function fetchStatsAndMacros(char: Optional<GameCharacter>, sageUser: User): Promise<DiceMacroBase[]> {
-	const out: DiceMacroBase[] = [];
-	if (!char) return out;
-
-	const macros = [
-		...(char.pathbuilder?.getAttackMacros() ?? []),
-		...(char.pathbuilder?.getSpellMacros() ?? []),
-	];
-
-	// if the char belongs to the active user
-	if (char.userDid === sageUser.did) {
-		// check all the macros
-		for (const macro of macros) {
-			if (macro.dice) {
-				// grab the macro if it has a unique name/category combo
-				if (!out.some(m => macro.name.toLowerCase() === m.name.toLowerCase() && m.category === char.name)) {
-					out.push({ name:macro.name, category:char.name, dice:macro.dice });
-				}
-			}
-		}
-	}
-
-	// fetch from companions as well
-	for (const companion of char.companions) {
-		out.push(...await fetchStatsAndMacros(companion, sageUser));
-	}
-
-	return out;
-}
-
-async function parseDiscordDice(sageCommand: SageCommand, diceString: string, overrides?: TDiscordDiceParseOptions): Promise<DiscordDice | null> {
+async function parseDiscordDice(diceString: string, options: ParseDiscordDiceOptions): Promise<DiscordDice | null> {
 	if (!diceString) {
 		return null;
 	}
 
-	const allCharacters = await prepStatsAndMacros(sageCommand);
-	if (allCharacters) {
-		diceString = processStatBlocks(diceString, allCharacters);
+	const { overrides, processor, sageCommand } = options;
+
+	if (!processor.isEmpty) {
+		diceString = processor.processStatBlocks(diceString);
 	}
+
+	// final math pass
+	diceString = doStatMath(diceString);
 
 	return DiscordDice.parse({
 		diceString: diceString,
@@ -150,7 +93,12 @@ function getTieredMacros(sageCommand: SageCommand): DiceMacroBase[][] {
 	return stack;
 }
 
-async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, macroStack: string[] = []): Promise<TDiceOutput[] | null> {
+type ParseDiscordMacroOptions = BaseParseOptions & {
+	macroStack?: string[];
+};
+
+async function parseDiscordMacro(macroString: string, options: ParseDiscordMacroOptions): Promise<TDiceOutput[] | null> {
+	const { macroStack = [], processor, sageCommand } = options;
 	// allow SageMessage and SageInteraction, but not SageReaction
 	if (sageCommand.isSageReaction()) {
 		return null;
@@ -159,12 +107,9 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 	// get tiered macros
 	const tieredMacros = getTieredMacros(sageCommand);
 
-	// prep stats and fetch dynamic macros
-	const statsAndMacros = await prepStatsAndMacros(sageCommand);
-
 	// if we have more macros, unshift them to give them first priority
-	if (statsAndMacros?.macros.length) {
-		tieredMacros.unshift(statsAndMacros?.macros);
+	if (processor.hasMacros) {
+		tieredMacros.unshift(processor.macros);
 	}
 
 	// find the macro
@@ -173,7 +118,7 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
 			error(`Macro Recursion`, { macroString, macroStack });
-			const parsedDice = await parseDiscordDice(sageCommand, `[0d0 Recursion!]`);
+			const parsedDice = await parseDiscordDice(`[0d0 Recursion!]`, { processor, sageCommand });
 			return parsedDice?.roll().toStrings() ?? [];
 		}
 
@@ -182,13 +127,13 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 		const outputs: TDiceOutput[] = [];
 		for (const dice of diceToParse) {
 			if (!isRandomItem(dice)) {
-				const diceMacroOutputs = await parseDiscordMacro(sageCommand, dice, macroStack.concat([macro.name]));
+				const diceMacroOutputs = await parseDiscordMacro(dice, { sageCommand, processor, macroStack:macroStack.concat([macro.name]) });
 				if (diceMacroOutputs?.length) {
 					outputs.push(...diceMacroOutputs);
 					continue;
 				}
 			}
-			const matchOutputs = await parseMatch(sageCommand, dice, { diceOutputType: DiceOutputType.XXL });
+			const matchOutputs = await parseMatch(dice, { sageCommand, processor, overrides:{ diceOutputType: DiceOutputType.XXL } });
 			if (matchOutputs?.length) {
 				outputs.push(...matchOutputs);
 			}
@@ -198,22 +143,28 @@ async function parseDiscordMacro(sageCommand: SageCommand, macroString: string, 
 	return null;
 }
 
-async function parseMatch(sageCommand: SageCommand, match: string, overrides?: TDiscordDiceParseOptions, tableIterations = 0): Promise<TDiceOutput[]> {
+type ParseMatchOptions = BaseParseOptions & {
+	overrides?: DiscordDiceOverrides;
+	tableIterations?: number;
+};
+
+async function parseMatch(match: string, options: ParseMatchOptions): Promise<TDiceOutput[]> {
+	const { processor, sageCommand, tableIterations = 0 } = options;
 	const noBraces = unwrap(match, "[]");
 
 	const table = await fetchTableFromUrl(match) ?? parseTable(match);
 	if (table) {
-		const tableResults = await rollTable(sageCommand, noBraces, table);
+		const tableResults = await rollTable(sageCommand, noBraces, table, { times:table.times, size:table.size });
 		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(getBasicBracketRegex()) ?? []).flat() ?? [];
 		// debug({tableResults,tableResultsDice})
 		for (const diceToParse of childDice) {
-			const childMatches = await parseMatch(sageCommand, diceToParse, overrides, tableIterations + 1);
+			const childMatches = await parseMatch(diceToParse, { processor, sageCommand, tableIterations:tableIterations + 1 });
 			tableResults.push(...childMatches.flat());
 		}
 		return tableResults;
 	}
 
-	const dice = await parseDiscordDice(sageCommand, `[${noBraces}]`, overrides);
+	const dice = await parseDiscordDice(`[${noBraces}]`, { processor, sageCommand });
 	if (dice) {
 		// debug("dice", match);
 		const diceSort = sageCommand.diceSortType === 2 ? "noSort" : sageCommand.diceSortType === 1 ? "sort" : undefined; // NOSONAR
@@ -230,17 +181,33 @@ async function parseMatch(sageCommand: SageCommand, match: string, overrides?: T
 	return [];
 }
 
-export async function parseDiceMatches(sageCommand: SageCommand, content: string): Promise<TDiceMatch[]> {
+type ParseDiceMatchesOptions = {
+	processor?: StatMacroProcessor;
+	sageCommand: SageCommand;
+};
+
+export async function parseDiceMatches(content: string, { processor, sageCommand }: ParseDiceMatchesOptions): Promise<TDiceMatch[]> {
+	/** @todo there was a check in parseDiscordMacro; we should never get here from a reaction ... do we need to find out why this check exists? */
+	if (sageCommand.isSageReaction()) return [];
+
 	const diceMatches: TDiceMatch[] = [];
-	const redacted = redactContent(content, { codeBlocks:true, keyValuePairs:/^!+(\s*[\w-]+)+/i.test(content), mdLinks:true });
+
+	let parseOptions: BaseParseOptions;
+
+	const redacted = redactContent(content);
+
 	const regex = getBasicBracketRegex();
 	let execArray: RegExpExecArray | null;
 	while (execArray = regex.exec(redacted)) {
+		// we only need to ensure the processor and options *IF* we have something to parse
+		processor ??= StatMacroProcessor.withMacros(sageCommand);
+		parseOptions ??= { processor, sageCommand };
+
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = isWrapped(match, "[[]]");
-		const output = await parseDiscordMacro(sageCommand, content.slice(index, index + match.length))
-			?? await parseMatch(sageCommand, content.slice(index, index + match.length));
+		const output = await parseDiscordMacro(content.slice(index, index + match.length), parseOptions)
+			?? await parseMatch(content.slice(index, index + match.length), parseOptions);
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}
@@ -263,7 +230,7 @@ async function hasUnifiedDiceCommand(sageCommand: SageCommand): Promise<TCommand
 		return undefined;
 	}
 
-	const matches = await parseDiceMatches(sageCommand, sageCommand.slicedContent);
+	const matches = await parseDiceMatches(sageCommand.slicedContent, { sageCommand });
 	if (matches.length > 0) {
 		const output = matches.map(m => m.output).flat();
 		return { command: "unified-dice", data: output };

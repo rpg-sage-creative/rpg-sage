@@ -2,7 +2,6 @@ import { ArgsManager, Cache, debug, error, errorReturnUndefined, escapeRegex, Re
 import { DiscordApiError, DiscordKey, safeMentions, toChannelName, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
-import { resolveToContent } from "../../discord/resolvers/resolveToContent.js";
 import { sendTo } from "../../discord/sendTo.js";
 import { type TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
@@ -124,7 +123,7 @@ export class SageMessage
 		const sendArgs = {
 			sageCache: this.eventCache,
 			target,
-			content: resolveToContent(this.eventCache, renderableContentResolvable).join("\n")
+			content: this.eventCache.resolveToContent(renderableContentResolvable).join("\n")
 		};
 		const catchHandler = (err: unknown) => {
 			error(`${toHumanReadable(target)}: SageMessage.sendPost`, err);

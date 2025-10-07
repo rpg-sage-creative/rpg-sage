@@ -7,6 +7,7 @@ import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
+import { StatMacroProcessor } from "../../dice/stats/StatMacroProcessor.js";
 
 function orNone(text: Optional<string>): string {
 	return stringOrUndefined(text) ?? "<i>none</i>";
@@ -85,6 +86,8 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`<b>Auto Dialog</b> <i>none</i>`);
 	}
 
+	const processor = StatMacroProcessor.withStats(sageMessage).for(character);
+
 	if (character.hasStats) {
 		let isGmChannel = false;
 		let hasGmChannels = false;
@@ -104,7 +107,13 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 			renderableContent.appendTitledSection(`<b>Stats</b>`, `<i>NPC stats viewable in GM channel ...</i>`);
 
 		}else {
-			const sections = character.toStatsOutput();
+			const custom = sageMessage.args.hasFlag("--custom");
+			const raw = sageMessage.args.hasFlag("--raw");
+			const simple = sageMessage.args.hasFlag("--simple");
+			const stats = sageMessage.args.hasFlag("--stats");
+			const templates = sageMessage.args.hasFlag("--templates");
+
+			const sections = character.toStatsOutput({ simple, custom, processor, raw, stats, templates });
  			sections.forEach(({ title, lines }) => {
  				if (lines.length) {
  					renderableContent.appendTitledSection(`<b>${title}</b>`, ...lines);
@@ -117,7 +126,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	const webhookOptions = {
 		authorOptions: {
 			avatarURL: character.tokenUrl ?? sageMessage.bot.tokenUrl,
-			username: character.toDisplayName()
+			username: character.toDisplayName({ processor })
 		},
 		dialogType: sageMessage.dialogPostType,
 		renderableContent,

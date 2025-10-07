@@ -250,6 +250,9 @@ async function createDetails(sageCommand: SageCommand, _game?: Game): Promise<Re
 	const moveDirectionOutputType = MoveDirectionOutputType[game.moveDirectionOutputType!] ?? `<i>unset (Compact)</i>`;
 	renderableContent.append(`<b>Move Direction Output Type</b> ${moveDirectionOutputType}`);
 
+	const mentionPrefix = game.mentionPrefix ?? `<i>unset (@)</i>`;
+	renderableContent.append(`<b>Mention Prefix</b> ${mentionPrefix}`);
+
 	await showGameRenderServer(renderableContent, sageCommand, game);
 
 	renderPostCurrency(game, renderableContent, players);

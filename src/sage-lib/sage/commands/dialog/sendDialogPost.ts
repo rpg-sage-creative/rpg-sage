@@ -1,4 +1,4 @@
-import { errorReturnEmptyArray, errorReturnNull, RenderableContent, warnReturnNull, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnEmptyArray, errorReturnUndefined, RenderableContent, warnReturnNull, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
 import { AttachmentBuilder, type Message } from "discord.js";
 import type { TDiceOutput } from "../../../../sage-dice/common.js";
@@ -11,9 +11,9 @@ import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
 import { logPostCurrency } from "../admin/PostCurrency.js";
 import { parseDiceMatches, sendDice, type TDiceMatch } from "../dice.js";
-import { MoveDirection } from "../map/MoveDirection.js";
 import type { ChatOptions } from "./chat/ChatOptions.js";
 import { sendDialogRenderable } from "./sendDialogRenderable.js";
+import { DialogProcessor } from "./chat/DialogProcessor.js";
 
 type DialogPostData = {
 	authorName?: string;
@@ -36,7 +36,9 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const webhook = true; //sageMessage.dialogType === "Webhook";
 	const renderableContent = new RenderableContent();
 
-	const authorName = character.toDisplayName(postData.authorName);
+	const processor = await DialogProcessor.forDialog(sageMessage, character);
+
+	const authorName = processor.processDisplayName(postData.authorName);
 	const title = postData.title || authorName;
 	if (!webhook || title !== authorName) {
 		renderableContent.setTitle(title);
@@ -45,10 +47,10 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const color = postData.embedColor ?? character.embedColor ?? sageMessage.toHexColorString(postData.colorType);
 	renderableContent.setColor(color);
 
-	let content = postData.content;
+	let content = processor.process(postData.content, { footer:true, mentions:true, stats:true });
 
 	//#region dice lists
-	const diceMatches = await parseDiceMatches(sageMessage, content);
+	const diceMatches = await parseDiceMatches(content, { processor, sageCommand:sageMessage });
 	const reverseInline = sageMessage.sageUser.dialogDiceBehaviorType === DialogDiceBehaviorType.Inline;
 	const inlineDiceMatches: TDiceMatch[] = [];
 	const diceOutputs: TDiceOutput[] = [];
@@ -79,26 +81,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	}
 	//#endregion
 
-	//#region map/movement arrows
-	content = MoveDirection.replaceAll(content, sageMessage.moveDirectionOutputType);
-	//#endregion
-
-	//#region footer / sheet link
- 	let dialogFooter = character.toDialogFooterLine();
- 	const sheetLink = character.toSheetLink();
- 	if (sheetLink) {
- 		if (dialogFooter) {
- 			if (!dialogFooter.includes(sheetLink.slice(5, -2))) {
- 				dialogFooter += ` ${sheetLink}`;
- 			}
- 		}else {
- 			content += ` ${sheetLink}`;
- 		}
- 	}
- 	//#endregion
-
 	renderableContent.append(content);
-	if (dialogFooter) renderableContent.append(dialogFooter);
 
 	const thumbnailUrl = postData.embedImageUrl ?? character.avatarUrl;
 	renderableContent.setThumbnailUrl(thumbnailUrl);
@@ -138,7 +121,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 			if (diceResults.allSecret && diceResults.hasGmChannel) {
 				const emoji = sageMessage.getEmoji(EmojiType.Die);
 				if (emoji) {
-					await last.react(emoji).catch(errorReturnNull);
+					await last.react(emoji).catch(errorReturnUndefined);
 				}
 			}
 		}

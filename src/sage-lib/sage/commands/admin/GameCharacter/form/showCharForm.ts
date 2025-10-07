@@ -12,6 +12,7 @@ import { showCharImagesModal } from "./showCharImagesModal.js";
 import { showCharNamesModal } from "./showCharNamesModal.js";
 import { showCharStatsModal } from "./showCharStatsModal.js";
 import type { CharId, CharModalAction, CustomIdParts } from "./types.js";
+import { StatMacroProcessor } from "../../../dice/stats/StatMacroProcessor.js";
 
 const SelectChar = "SelectChar";
 const SelectComp = "SelectComp";
@@ -64,12 +65,12 @@ function buildCharForm(sageCommand: SageCommand, charId?: CharId, compId?: CharI
 	return components;
 }
 
-function buildFormEmbed(char: GameCharacter): EmbedBuilder {
+function buildFormEmbed(sageCommand: SageCommand, char: GameCharacter): EmbedBuilder {
 	const embed = createMessageEmbed({ title:char.name, thumbnailUrl:char.avatarUrl });
 	embed.appendDescription(`**Nickname (aka)** ${char.aka ?? "*none*"}`, "\n");
 	embed.appendDescription(`**Alias** ${char.alias ?? "*none*"}`, "\n");
-	const { displayNameTemplate } = char;
-	const displayName = char.toDisplayName();
+	const displayNameTemplate = char.getTemplate("displayName");
+	const displayName = char.toDisplayName({ processor:StatMacroProcessor.withStats(sageCommand) });
 	if (displayNameTemplate) {
 		embed.appendDescription(`**Display Name**`, "\n");
 		embed.appendDescription(`- Template: ${"`" + displayNameTemplate + "`"}`, "\n");
@@ -100,7 +101,7 @@ export async function showCharForm(sageCommand: SageCommand, charId?: CharId): P
 	let options: MessagePayloadOption | undefined;
 	if (char) {
 		if (char.tokenUrl) options = { avatarURL:char.tokenUrl };
-		embeds.push(buildFormEmbed(char));
+		embeds.push(buildFormEmbed(sageCommand, char));
 	}
 
 	const exists = getActionRows(message).find(row => row.components.find(comp => parseCustomId(comp.customId)))

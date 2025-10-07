@@ -9,12 +9,12 @@ import { type PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e
 import { type PlayerCharacterCorePR, PlayerCharacterPR, type TCharacterSectionType, type TCharacterViewType, type TSkillZord, type TStatZord, getCharacterSections } from "../../../sage-e20/pr/PlayerCharacterPR.js";
 import { type PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from "../../../sage-e20/transformer/PlayerCharacterTransformer.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
-import { resolveToEmbeds } from "../../discord/resolvers/resolveToEmbeds.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageButtonInteraction, SageStringSelectInteraction } from "../model/SageInteraction.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
+import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
 
 export type TEssence20Character = TPlayerCharacter;
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
@@ -54,7 +54,7 @@ export function loadCharacterCore(core: Optional<TPlayerCharacterCore>): TPlayer
 
 type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
 function prepareOutput(sageCache: SageCache, character: TPlayerCharacter): TOutput {
-	const embeds = resolveToEmbeds(sageCache, character.toHtml(getActiveSections(character) as any));
+	const embeds = sageCache.resolveToEmbeds(character.toHtml(getActiveSections(character) as any));
 	const components = createComponents(character);
 	return { embeds, components };
 }
@@ -111,10 +111,10 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, eChar: TPlayerChar
  * @todo implement or stub macro logic from pathbuilder and then use shared/reusable code.
  */
 export async function postCharacter(sageCommand: SageCommand, channel: Optional<SupportedTarget>, character: TPlayerCharacter, pin: boolean): Promise<void> {
-	const { sageCache } = sageCommand;
+	const { eventCache } = sageCommand;
 	const saved = await character.save();
 	if (saved) {
-		const output = prepareOutput(sageCache, character);
+		const output = prepareOutput(eventCache, character);
 		const message = await channel?.send(output).catch(errorReturnNull);
 		if (message) {
 			await addOrUpdateCharacter(sageCommand, character, message);
@@ -123,7 +123,7 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 			}
 		}
 	}else {
-		const output = { embeds:resolveToEmbeds(sageCache, character.toHtml()) };
+		const output = { embeds:eventCache.resolveToEmbeds(character.toHtml()) };
 		const message = await channel?.send(output).catch(errorReturnNull);
 		if (pin && message?.pinnable) {
 			await message.pin();
@@ -471,7 +471,8 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: TP
 			dice = `[${label} ${charName} ${skillName}${specName}${shiftArrow}]`;
 		}
 	}
-	const matches = await parseDiceMatches(sageInteraction, dice);
+	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(character.characterId)!);
+	const matches = await parseDiceMatches(dice, { processor, sageCommand:sageInteraction });
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
 	if (sendResults.allSecret && sendResults.hasGmChannel) {

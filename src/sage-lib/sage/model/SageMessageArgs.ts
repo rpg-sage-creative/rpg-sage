@@ -48,6 +48,21 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		return /^\s*unset\s*$/i.test(this.argsManager.findKeyValueArg(name)?.value ?? "");
 	}
 
+	/** Returns true if the underlying args contains the given flag. */
+	public hasFlag(flag: string): boolean {
+		return this.argsManager.hasFlag(flag);
+	}
+
+	/** Returns true if the conmmand includes the force confirmation flag. */
+	public get hasForceConfirmationFlag(): boolean {
+		return this.hasFlag(this.sageCommand.sageUser.forceConfirmationFlag ?? "-p");
+	}
+
+	/** Returns true if the conmmand includes the skip confirmation flag. */
+	public get hasSkipConfirmationFlag(): boolean {
+		return this.hasFlag(this.sageCommand.sageUser.skipConfirmationFlag ?? "-y");
+	}
+
 	/**
 	 * Gets the named option as an attachment.
 	 * Returns undefined if not found.
@@ -92,6 +107,19 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Gets the named option as a flag that starts with a "-".
+	 * Returns undefined if not found.
+	 * Returns null if not a valid flag,; valid example: -y
+	 */
+	public getFlag<U extends string = string>(name: string): Optional<U> {
+		const value = this.getString<U>(name);
+		if (value && !value.startsWith("-")) {
+			return null;
+		}
+		return value;
 	}
 
 	/**

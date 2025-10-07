@@ -8,6 +8,7 @@ import { DialogType } from "../../../repo/base/IdRepository.js";
 import { DialogMessageRepository } from "../../../repo/DialogMessageRepository.js";
 import type { DialogContent } from "../DialogContent.js";
 import { updateEmbed } from "../updateEmbed.js";
+import { DialogProcessor } from "./DialogProcessor.js";
 
 export async function editChat(sageMessage: SageMessage, dialogContent: DialogContent): Promise<void> {
 	const localize = sageMessage.getLocalizer();
@@ -19,6 +20,11 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 	const dialogMessage = await DialogMessageRepository.read(sageMessage.message.reference);
 	if (!dialogMessage) {
 		return sageMessage.replyStack.whisper(localize("SORRY_DIALOG_NOT_FOUND"));
+	}
+
+	const character = sageMessage.findCharacter(dialogMessage.characterId);
+	if (!character) {
+		return sageMessage.replyStack.whisper(`Sorry, invalid Dialog Character.`);
 	}
 
 	/** @todo allow GMs to edit other GM dialog, but send the edit info to both */
@@ -42,10 +48,12 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		return sageMessage.replyStack.whisper(localize("CANNOT_FIND_WEBHOOK"));
 	}
 
+	const processor = await DialogProcessor.forDialog(sageMessage, character);
+
 	const embed = message.embeds[0];
 	const originalContent = embed?.description ?? message.content;
 	const updatedImageUrl = dialogContent.embedImageUrl;
-	const updatedContent = sageMessage.sageCache.format(dialogContent.content);
+	const updatedContent = processor.process(dialogContent.content, { basic:true, footer:true, mentions:true, stats:true });
 	const updatedEmbed = updateEmbed(embed, updatedImageUrl, updatedContent);
 	const threadId = sageMessage.threadDid;
 
