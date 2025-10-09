@@ -3,7 +3,7 @@ import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/chara
 import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath, processMath, StatBlockProcessor } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
-import { fileExistsSync, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
@@ -648,7 +648,7 @@ export class GameCharacter {
 
 		const otherTitle = simpleLines.length || customLines.length ? `Other Stats` : `Stats`;
 		const otherLines = statsToMap.map(({ title, note }) => {
-			const value = raw ? note : processMath(processor.processStatBlocks(note));
+			const value = raw || isUrl(note) ? note : processMath(processor.processStatBlocks(note));
 			return `<b>${title}</b> ${value}`;
 		});
 
