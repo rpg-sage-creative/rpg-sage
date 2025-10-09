@@ -11,6 +11,6 @@ export const BasicBracketsRegExp = /\[{2}[^\[\]]+\]{2}|\[[^\[\]]+\]/i;
 export const BasicBracketsRegExpG = /\[{2}[^\[\]]+\]{2}|\[[^\[\]]+\]/ig;
 
 /** Creates a unique BasicBracketsRegExpG regular expression. Used when you need to respect .lastIndex. */
-export function getBasicBracketsRegExpG(): RegExp {
+export function createBasicBracketsRegExpG(): RegExp {
 	return /\[{2}[^\[\]]+\]{2}|\[[^\[\]]+\]/ig;
 }

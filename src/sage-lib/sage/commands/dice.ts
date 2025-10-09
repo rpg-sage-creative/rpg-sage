@@ -1,6 +1,6 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
 import { error, redactCodeBlocks, type Optional } from "@rsc-utils/core-utils";
-import { BasicBracketsRegExpG, getBasicBracketsRegExpG } from "@rsc-utils/dice-utils";
+import { BasicBracketsRegExpG, createBasicBracketsRegExpG } from "@rsc-utils/dice-utils";
 import { xRegExp } from "@rsc-utils/dice-utils/build/internal/xRegExp.js";
 import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
 import { createKeyValueArgRegex, isWrapped, tokenize, unwrap, wrap } from '@rsc-utils/string-utils';
@@ -215,7 +215,7 @@ export async function parseDiceMatches(content: string, { processor, sageCommand
 
 	const redacted = redactContent(content);
 
-	const regex = getBasicBracketsRegExpG();
+	const regex = createBasicBracketsRegExpG();
 	let execArray: RegExpExecArray | null;
 	while (execArray = regex.exec(redacted)) {
 		// we only need to ensure the processor and options *IF* we have something to parse
