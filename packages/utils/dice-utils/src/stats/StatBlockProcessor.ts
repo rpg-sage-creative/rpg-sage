@@ -1,5 +1,6 @@
-import { getCodeBlockRegex, stringOrUndefined, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
+import { AllCodeBlocksRegExp, stringOrUndefined, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
+import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
 import { unquote } from "../internal/unquote.js";
 import { doStatMath } from "./doStatMath.js";
 import type { StatsCharacter, StatsCharacterManager, StatsEncounterManager } from "./types.js";
@@ -9,16 +10,14 @@ type CharReferenceGroups = {
 	pc?: "pc";
 	alt?: "alt"|"companion"|"familiar"|"hireling";
 };
-let charReferenceRegex: TypedRegExp<CharReferenceGroups>;
-function getCharReferenceRegex(): TypedRegExp<CharReferenceGroups> {
-	return charReferenceRegex ??= regex("i")`
-		^
-		(?<gm> \bgm\b )?
-		(?<pc> \bpc\b )?
-		(?<alt> \balt\b | \bcompanion\b | \bfamiliar\b | \bhireling\b )?
-		$
-	` as TypedRegExp<CharReferenceGroups>;
-}
+
+const CharReferenceRegExp = regex("i")`
+	^
+	(?<gm> \bgm\b )?
+	(?<pc> \bpc\b )?
+	(?<alt> \balt\b | \bcompanion\b | \bfamiliar\b | \bhireling\b )?
+	$
+` as TypedRegExp<CharReferenceGroups>;
 
 type StatBlockGroups = {
 	implicitChar?: "::";
@@ -27,27 +26,24 @@ type StatBlockGroups = {
 	explicitDefault?: string;
 	statKey: string;
 };
-let statBlockRegex: TypedRegExp<StatBlockGroups>;
-function getStatBlockRegex(): TypedRegExp<StatBlockGroups> {
-	return statBlockRegex ??= regex("i")`
-		(?!<\{)\{
-			(
-				(?<implicitChar> :: )
-				|
-				(?<explicitChar> [\w\s]+ | "[\w\s]+" )
-				::
+const StatBlockRegExp = regex("i")`
+	(?!<\{)\{
+		(
+			(?<implicitChar> :: )
+			|
+			(?<explicitChar> [\w\s]+ | "[\w\s]+" )
+			::
 
-			)?
-			(?<statKey> [\w\-.]+ )
-			(
-				:
-				(?<explicitDefault> [^\{\}]+ )
-				|
-				(?<implicitDefault> : )
-			)?
-		\}(?!=\})
-	` as TypedRegExp<StatBlockGroups>;
-}
+		)?
+		(?<statKey> [\w\-.]+ )
+		(
+			:
+			(?<explicitDefault> [^\{\}]+ )
+			|
+			(?<implicitDefault> : )
+		)?
+	\}(?!=\})
+` as TypedRegExp<StatBlockGroups>;
 
 // let statBlockTestRegex: RegExp;
 // function getStatBlockTestRegex() {
@@ -117,6 +113,8 @@ type StatCharacters = {
 type ProcessOptions = {
 	actingCharacter?: StatsCharacter;
 	matches: Set<Lowercase<string>>;
+	redactSpoilers?: boolean;
+	skipBrackets?: boolean;
 	stack: Lowercase<string>[];
 	templatesOnly?: boolean;
 };
@@ -142,6 +140,11 @@ type ProcessTemplateArgs = {
 
 type ProcessTemplateOptions = {
 	templatesOnly?: boolean;
+};
+
+type ProcessStatBlockOptions = {
+	redactSpoilers?: boolean;
+	skipBrackets?: boolean;
 };
 
 export class StatBlockProcessor {
@@ -192,7 +195,7 @@ export class StatBlockProcessor {
 		value = unquote(value).trim();
 		if (!value) return { isImplicit:true };
 
-		const { gm, pc, alt } = (this.constructor as typeof StatBlockProcessor).getCharReferenceRegex().exec(value)?.groups ?? {};
+		const { gm, pc, alt } = (this.constructor as typeof StatBlockProcessor).CharReferenceRegExp.exec(value)?.groups ?? {};
 
 		if (gm) {
 			return { isGM:true, stackValue:"gm" };
@@ -209,9 +212,10 @@ export class StatBlockProcessor {
 		return { aliasOrName:value, stackValue:value };
 	}
 
-	public processStatBlocks(value: Optional<string>): string {
+	public processStatBlocks(value: Optional<string>, options?: ProcessStatBlockOptions): string {
 		if (!value) return "";
-		return this._process(value, { matches:new Set(), stack:[] });
+		const { redactSpoilers, skipBrackets } = options ?? {};
+		return this._process(value, { matches:new Set(), redactSpoilers, skipBrackets, stack:[] });
 	}
 
 	public processTemplate(templateKey: string, { templatesOnly }: ProcessTemplateOptions = {}): ProcessTemplateResults {
@@ -241,12 +245,22 @@ export class StatBlockProcessor {
 
 	protected _process(value: Optional<string>, options: ProcessOptions): string {
 		if (!value) return "";
-		const statBlockRegex = (this.constructor as typeof StatBlockProcessor).getStatBlockRegex();
-		const parsers = {
-			ticks: getCodeBlockRegex(),
-			statBlock: statBlockRegex,
+
+		// storing as a var here gives us direct access for the while (avoids overhead of referencing this.contructor or parsers)
+		const statBlockRegExp = (this.constructor as typeof StatBlockProcessor).StatBlockRegExp;
+
+		// by default we want to parse statBlocks but ignore content in codeBlocks
+		const parsers: Record<string, RegExp> = {
+			codeBlocks: AllCodeBlocksRegExp,
+			statBlock: statBlockRegExp,
 		};
-		while (statBlockRegex.test(value)) {
+
+		// simply adding this regexp to the parsers causes stat blocks inside brackets to get skipped
+		if (options.skipBrackets) {
+			parsers["brackets"] = BasicBracketsRegExp;
+		}
+
+		while (statBlockRegExp.test(value)) {
 			// tokens allow us better escape testing
 			const tokens = tokenize(value, parsers);
 			const values = tokens.map(({ key, token }) => {
@@ -339,7 +353,7 @@ export class StatBlockProcessor {
 		statBlock = statBlock?.trim();
 		if (!statBlock) return undefined;
 
-		const { implicitChar, implicitDefault, explicitChar, explicitDefault, statKey } = (this.constructor as typeof StatBlockProcessor).getStatBlockRegex().exec(statBlock)?.groups ?? {};
+		const { implicitChar, implicitDefault, explicitChar, explicitDefault, statKey } = (this.constructor as typeof StatBlockProcessor).StatBlockRegExp.exec(statBlock)?.groups ?? {};
 		if (!statKey) return undefined;
 
 		const char = implicitChar ? { isImplicit:true } : this.parseCharReference(explicitChar);
@@ -385,9 +399,10 @@ export class StatBlockProcessor {
 		return undefined;
 	}
 
-	/** Returns the RegExp instance used to match a StatBlock. */
-	public static getCharReferenceRegex = getCharReferenceRegex;
-	public static getStatBlockRegex = getStatBlockRegex;
+	/** RegExp instance used to match a Character Reference in a StatBlock. */
+	public static CharReferenceRegExp = CharReferenceRegExp;
+	/** RegExp instance used to match a StatBlock. */
+	public static StatBlockRegExp = StatBlockRegExp;
 	// public static getStatBlockTestRegex = getStatBlockTestRegex;
 
 	public clone(): StatBlockProcessor {
