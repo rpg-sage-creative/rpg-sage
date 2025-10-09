@@ -51,7 +51,6 @@ export function hpToBar(hp: number, maxHp: number, which?: string): string {
 	const { min, increments, max, unknown } = parseTracker(which ?? "verticalbar");
 
 	if (hp === null || isNaN(hp) || maxHp === null || isNaN(maxHp)) return unknown;
-console.log({hp,maxHp,percent:hp / maxHp})
 
 	if (hp <= 0) return min;
 	if (hp >= maxHp) return max;
@@ -61,7 +60,7 @@ console.log({hp,maxHp,percent:hp / maxHp})
 	const fraction = percent * 100 / indexDivisor;
 
 	// Math.max ensures that a low, but non-zero value shows as having value and not 0
-	const index = Math.max(Math.floor(fraction), 1);
+	const index = Math.floor(fraction);
 
 	return increments[index];
 }
