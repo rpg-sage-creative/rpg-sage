@@ -11,7 +11,7 @@ import type { SageCommandArgs } from "../model/SageCommandArgs.js";
 import type { SageButtonInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createMessageDeleteButton } from "../model/utils/deleteButton.js";
-import { hpToBar } from "../model/utils/hpToBar.js";
+import { valuesToTrackerBar } from "../model/utils/valuesToTrackerBar.js";
 
 function getStringArg({ args }: SageCommand, ...keys: string[]): string | undefined {
 	for (const key of keys) {
@@ -90,7 +90,7 @@ function xCards(cards: number | ArrayLike<any>): string {
 }
 
 function renderState(label: string, deck: Deck, opts?: { showHand?:boolean; showSpread?:boolean; auditMode?:boolean; }): string {
-	const visualize = (count: number) => hpToBar(Math.max(count, Math.ceil(0.125 * deck.cardCount)), deck.cardCount).slice(1);
+	const visualize = (count: number) => valuesToTrackerBar(Math.max(count, Math.ceil(0.125 * deck.cardCount)), deck.cardCount).slice(1);
 	const drawGauge = deck.drawPileCount ? visualize(deck.drawPileCount) : "";
 	const discardGauge = deck.discardPileCount ? visualize(deck.discardPileCount) : "";
 	const unshuffled = deck.isClean ? `***UNSHUFFLED***` : ``;

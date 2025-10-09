@@ -14,7 +14,7 @@ import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMes
 import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
-import { hpToBar } from "./utils/hpToBar.js";
+import { valuesToTrackerBar } from "./utils/valuesToTrackerBar.js";
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -653,18 +653,23 @@ export class GameCharacter {
 		];
 	}
 
-	public getHpBar(): string {
-		let hpStat = this.getString("hp") ?? "0";
-		if (/^\|\|\d+\|\|$/.test(hpStat)) hpStat = hpStat.slice(2, -2);
-		const hp = +hpStat;
+	public getTrackerBar(key: string): string {
+		const SpoileredNumberRegExp = /^\|\|\d+\|\|$/;
+		let valueStat = this.getString(key) ?? "0";
+		if (SpoileredNumberRegExp.test(valueStat)) valueStat = valueStat.slice(2, -2);
+		const value = +valueStat;
 
-		let maxHpStat = this.getString("maxHp") ?? "0";
-		if (/^\|\|\d+\|\|$/.test(maxHpStat)) maxHpStat = maxHpStat.slice(2, -2);
-		const maxHp = +maxHpStat;
+		let maxValueStat = this.getString(`max${key}`) ?? "0";
+		if (SpoileredNumberRegExp.test(maxValueStat)) maxValueStat = maxValueStat.slice(2, -2);
+		const maxValue = +maxValueStat;
 
-		const whichGauge = this.getString("hpBar.values");
+		const trackerBarValues = this.getString(`${key}.bar.values`);
 
-		return hpToBar(hp, maxHp, whichGauge);
+		return valuesToTrackerBar(value, maxValue, trackerBarValues);
+	}
+
+	public hasTrackerBar(key: string): boolean {
+		return this.getString(`${key}.bar.values`) !== undefined;
 	}
 
 	/** returns the value for the first key that has a defined value */
@@ -760,9 +765,23 @@ export class GameCharacter {
 			return ret("nickOrName", this.aka ?? this.name);
 		}
 
-		if (keyLower === "hpgauge" || keyLower === "hpbar") {
-			return ret("hpBar", this.getHpBar());
+		//#region tracker bars
+
+		const isDeprecatedHpBar = ["hpgauge", "hpbar"].includes(keyLower);
+		if (keyLower.endsWith(".bar") || isDeprecatedHpBar) {
+			const statKey = isDeprecatedHpBar ? "hp" : keyLower.slice(0, -4);
+			if (this.getNumber(statKey) !== undefined || this.getNumber(`max${statKey}`) !== undefined) {
+				/** @todo do i wanna try to case this key? */
+				return ret(key, this.getTrackerBar(statKey));
+			}
 		}
+
+		if (keyLower.endsWith(".bar.values")) {
+			const hpShim = keyLower === "hp.bar.values" ? "hpbar.values" : undefined;
+			return ret(key, this.getNoteStat(key, hpShim as string));
+		}
+
+		//#endregion
 
 		// enforce sheet.url and stop using sheeturl
 		if (keyLower === "sheet.url" || keyLower === "sheeturl") {
