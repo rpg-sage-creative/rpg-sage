@@ -1,4 +1,4 @@
-import { AllCodeBlocksRegExp, stringOrUndefined, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
+import { AllCodeBlocksRegExp, isUrl, stringOrUndefined, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
 import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
 import { unquote } from "../internal/unquote.js";
@@ -381,6 +381,8 @@ export class StatBlockProcessor {
 
 			// we need a way to default to empty string
 			if (statValue === "") return "";
+
+			if (isUrl(statValue)) return statValue;
 
 			const processed = this._process(statValue, { actingCharacter:char, matches, stack:stack.concat([stackValue]), templatesOnly });
 
