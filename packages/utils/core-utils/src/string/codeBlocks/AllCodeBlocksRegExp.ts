@@ -28,6 +28,6 @@ export const AllCodeBlocksRegExp = regex()`
 
 export const AllCodeBlocksRegExpG = new RegExp(AllCodeBlocksRegExp, "g") as TypedRegExp<CodeBlockRegexGroups>;
 
-export function getAllCodeBlocksRegExpG(): TypedRegExp<CodeBlockRegexGroups> {
+export function createAllCodeBlocksRegExpG(): TypedRegExp<CodeBlockRegexGroups> {
 	return new RegExp(AllCodeBlocksRegExp, "g") as TypedRegExp<CodeBlockRegexGroups>;
 }
