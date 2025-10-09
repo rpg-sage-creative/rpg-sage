@@ -3,7 +3,12 @@ const HitPointTrackers = {
 	verticalbar: [ `▕ `, `▕▁`, `▕▂`, `▕▃`, `▕▄`, `▕▅`, `▕▆`, `▕▇`, `▕█`, , `▕?` ]
 };
 
-type HitPointTracker = { increments:string[]; unknown:string; };
+type HitPointTracker = {
+	min: string;
+	increments: string[];
+	max: string;
+	unknown: string;
+};
 
 function parseTracker(value: string): HitPointTracker {
 	let array: (string | undefined)[] | undefined;
@@ -27,28 +32,36 @@ function parseTracker(value: string): HitPointTracker {
 		array = HitPointTrackers["verticalbar"];
 	}
 
-	// get unknown from last index
-	const unknown = array.pop() as string;
+	// get a copy of the array without any blank values
+	const increments = array.filter(s => s?.trim()) as string[];
 
-	// get increments by removing the empty value before unknown
-	const increments = array.slice(0, -1) as string[];
+	// get min from the start
+	const min = increments.shift() as string;
 
-	return { increments, unknown };
+	// get unknown the last element
+	const unknown = increments.pop() as string;
+
+	// get max from the right (2nd to last element)
+	const max = increments.pop() as string;
+
+	return { min, increments, max, unknown };
 }
 
 export function hpToBar(hp: number, maxHp: number, which?: string): string {
-	const { increments, unknown } = parseTracker(which ?? "verticalbar");
+	const { min, increments, max, unknown } = parseTracker(which ?? "verticalbar");
 
-	if (isNaN(hp) || isNaN(maxHp)) return unknown;
+	if (hp === null || isNaN(hp) || maxHp === null || isNaN(maxHp)) return unknown;
+console.log({hp,maxHp,percent:hp / maxHp})
 
-
-	const nonZeroIncrements = increments.length - 1;
-	const indexDivisor = 100 / nonZeroIncrements;
+	if (hp <= 0) return min;
+	if (hp >= maxHp) return max;
 
 	const percent = hp / maxHp;
+	const indexDivisor = 100 / increments.length;
 	const fraction = percent * 100 / indexDivisor;
 
-	const index = Math.floor(fraction);
+	// Math.max ensures that a low, but non-zero value shows as having value and not 0
+	const index = Math.max(Math.floor(fraction), 1);
 
 	return increments[index];
 }
