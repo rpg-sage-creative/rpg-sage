@@ -1,7 +1,7 @@
 import { DicePostType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
-import { DiceOutputType, DiceSecretMethodType, doStatMath, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
+import { BasicBracketsRegExpG, createBasicBracketsRegExpG, DiceOutputType, DiceSecretMethodType, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -39,11 +39,6 @@ export type TDiceMatch = {
 
 //#region parse and map
 
-function getBasicBracketRegex(): RegExp {
-	// first regex takes priority, so it will find 2 or 1, but not 1 on left and 2 on right
-	return /\[{2}[^\]]+\]{2}|\[[^\]]+\]/ig;
-}
-
 type DiscordDiceOverrides = {
 	gameSystemType?: GameSystemType;
 	diceOutputType?: DiceOutputType;
@@ -67,7 +62,8 @@ async function parseDiscordDice(diceString: string, options: ParseDiscordDiceOpt
 	}
 
 	// final math pass
-	diceString = doStatMath(diceString);
+	/** @todo this is a wishy/washy thing; should go away after we fully tokenize dice */
+	// diceString = doStatMath(diceString);
 
 	return DiscordDice.parse({
 		diceString: diceString,
@@ -122,7 +118,7 @@ async function parseDiscordMacro(macroString: string, options: ParseDiscordMacro
 			return parsedDice?.roll().toStrings() ?? [];
 		}
 
-		const diceToParse = output.match(getBasicBracketRegex()) ?? [];
+		const diceToParse = output.match(BasicBracketsRegExpG) ?? [];
 
 		const outputs: TDiceOutput[] = [];
 		for (const dice of diceToParse) {
@@ -155,7 +151,7 @@ async function parseMatch(match: string, options: ParseMatchOptions): Promise<TD
 	const table = await fetchTableFromUrl(match) ?? parseTable(match);
 	if (table) {
 		const tableResults = await rollTable(sageCommand, noBraces, table, { times:table.times, size:table.size });
-		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(getBasicBracketRegex()) ?? []).flat() ?? [];
+		const childDice = tableResults[0]?.children?.map(child => wrap(unwrap(child, "[]"), "[]").match(BasicBracketsRegExpG) ?? []).flat() ?? [];
 		// debug({tableResults,tableResultsDice})
 		for (const diceToParse of childDice) {
 			const childMatches = await parseMatch(diceToParse, { processor, sageCommand, tableIterations:tableIterations + 1 });
@@ -196,7 +192,7 @@ export async function parseDiceMatches(content: string, { processor, sageCommand
 
 	const redacted = redactContent(content);
 
-	const regex = getBasicBracketRegex();
+	const regex = createBasicBracketsRegExpG();
 	let execArray: RegExpExecArray | null;
 	while (execArray = regex.exec(redacted)) {
 		// we only need to ensure the processor and options *IF* we have something to parse
