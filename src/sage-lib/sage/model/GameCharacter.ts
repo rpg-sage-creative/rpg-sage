@@ -2,7 +2,7 @@ import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType, type KeyValuePair, type
 import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, Deck, doStatMath, parseGameSystem, processMath, StatBlockProcessor, type CurrencyPf2e, type DeckCore, type DeckType, type DenominationsCore, type GameSystem } from "@rsc-utils/game-utils";
-import { fileExistsSync, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { fileExistsSync, isUrl, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
@@ -641,7 +641,7 @@ export class GameCharacter {
 
 		const otherTitle = simpleLines.length || customLines.length ? `Other Stats` : `Stats`;
 		const otherLines = statsToMap.map(({ title, note }) => {
-			const value = raw ? note : processMath(processor.processStatBlocks(note));
+			const value = raw || isUrl(note) ? note : processMath(processor.processStatBlocks(note));
 			return `<b>${title}</b> ${value}`;
 		});
 
