@@ -21,6 +21,7 @@ type ProcessArgs = {
 	basic?: boolean;
 	footer?: boolean;
 	mentions?: boolean;
+	skipBrackets?: boolean;
 	stats?: boolean;
 };
 
@@ -50,7 +51,7 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 		return this.actingCharacter?.toDisplayName({ processor:this, overrideTemplate:authorName }) as string;
 	}
 
-	public process(content: Optional<string>, { basic, footer, mentions, stats }: ProcessArgs): string {
+	public process(content: Optional<string>, { basic, footer, mentions, skipBrackets, stats }: ProcessArgs): string {
 		if (!content) return "";
 
 		// footer can have stats, do it before stats
@@ -60,7 +61,7 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 
 		// might have emoji in stats, do it before basic
 		if (stats) {
-			content = this.processStatBlocks(content);
+			content = this.processStatBlocks(content, { skipBrackets });
 		}
 
 		// this shouldn't have anything that needs processing ...
