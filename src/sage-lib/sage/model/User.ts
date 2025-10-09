@@ -55,7 +55,7 @@ export interface UserCore extends IdCore<"User"> {
 
 	/** "on" (true) by default */
 	confirmationPrompts?: boolean;
-	/** "-prompt" by default */
+	/** "-p" by default */
 	forceConfirmationFlag?: string;
 	/** "-y" by default */
 	skipConfirmationFlag?: string;
