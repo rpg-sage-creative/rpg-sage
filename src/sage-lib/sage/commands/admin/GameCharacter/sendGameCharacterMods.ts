@@ -49,7 +49,8 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 				// toggled conditions don't need to show their "on" value
 				renderableContent.append(`<b>${key}</b>`);
 			}else {
-				renderableContent.append(`<b>${key}</b> ${value}`);
+				const hpBar = keyLower === "hp" && character.getString("hpBar.values") ? character.getHpBar() : "";
+				renderableContent.append(`<b>${key}</b> ${value} ${hpBar}`.trim());
 			}
 
 		}else {
