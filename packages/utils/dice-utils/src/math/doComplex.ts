@@ -81,9 +81,10 @@ const SageMath = {
 	},
 	sign: (...args: number[]) => Math.sign(args[0]),
 	signed: (...args: number[]) => {
+		// https://en.wikipedia.org/wiki/Plus_and_minus_signs
 		const [n] = args;
 		if (n < 0) {
-			return `–${n}`;
+			return `−${n}`;
 		}
 		return `+${n}`;
 	},
