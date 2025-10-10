@@ -1,6 +1,6 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
 import { error, redactCodeBlocks, type Optional } from "@rsc-utils/core-utils";
-import { BasicBracketsRegExpG, createBasicBracketsRegExpG } from "@rsc-utils/dice-utils";
+import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath } from "@rsc-utils/dice-utils";
 import { xRegExp } from "@rsc-utils/dice-utils/build/internal/xRegExp.js";
 import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
 import { createKeyValueArgRegex, isWrapped, tokenize, unwrap, wrap } from '@rsc-utils/string-utils';
@@ -64,7 +64,7 @@ async function parseDiscordDice(diceString: string, options: ParseDiscordDiceOpt
 	}
 
 	// final math pass
-	// diceString = doStatMath(diceString);
+	diceString = doStatMath(diceString);
 
 	return DiscordDice.parse({
 		diceString: diceString,
