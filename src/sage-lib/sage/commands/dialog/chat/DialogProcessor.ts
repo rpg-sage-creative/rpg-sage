@@ -25,6 +25,10 @@ type ProcessArgs = {
 	stats?: boolean;
 };
 
+const SortTagRegExp = /<sort>((.|\n)*?)<\/sort>/i;
+const SortTagRegExpG = new RegExp(SortTagRegExp, "gi");
+const HiddenInitRegExp = /^\|\|-?\d+\|\|/;
+
 export class DialogProcessor<HasActingCharacter extends boolean = false> extends StatMacroProcessor {
 	protected constructor(chars: StatMacroCharacters, macros: DiceMacroBase[], public sageCommand: SageCommand, public mentionArgs: MentionArgs) {
 		super(chars, macros);
@@ -49,6 +53,25 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 	/** processesses only the acting character's toDisplayName */
 	public processDisplayName(authorName?: string): HasActingCharacter extends true ? string : string | undefined {
 		return this.actingCharacter?.toDisplayName({ processor:this, overrideTemplate:authorName }) as string;
+	}
+
+	protected processDialogSort(content: Optional<string>): string {
+		if (!content) return "";
+
+		return content.replace(SortTagRegExpG, (_, inner: string) => {
+			const lines = inner.split("\n").filter(s => s.trim());
+			lines.sort((a, b) => {
+				if (HiddenInitRegExp.test(a)) a = a.replace(HiddenInitRegExp, _ => _.slice(2, -2));
+				if (HiddenInitRegExp.test(b)) b = b.replace(HiddenInitRegExp, _ => _.slice(2, -2));
+				return a < b ? -1 : a > b ? 1 : 0;
+			});
+			lines.forEach((line, index) => {
+				if (HiddenInitRegExp.test(line)) {
+					lines[index] = line.replace(HiddenInitRegExp, "?")
+				}
+			});
+			return lines.join("\n");
+		});
 	}
 
 	public process(content: Optional<string>, { basic, footer, mentions, skipBrackets, stats }: ProcessArgs): string {
@@ -80,6 +103,8 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 	/** processes basic replacement used in all sage posts: sage custom emoji tags and html to markdown */
 	public processBasic(content: Optional<string>): string {
 		if (!content) return "";
+
+		content = this.processDialogSort(content);
 
 		content = this.sageCommand.eventCache.format(content);
 
