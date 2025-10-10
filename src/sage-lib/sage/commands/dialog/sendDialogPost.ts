@@ -81,7 +81,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	}
 	//#endregion
 
-	content = processor.process(postData.content, { sorts:true });
+	content = processor.process(content, { sorts:true });
 
 	renderableContent.append(content);
 
