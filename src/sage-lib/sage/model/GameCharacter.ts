@@ -19,7 +19,9 @@ import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
-import { valuesToTrackerBar } from "./utils/valuesToTrackerBar.js";
+import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
+
+const SpoileredNumberRegExp = /^\|\|\d+\|\|$/;
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -661,7 +663,6 @@ export class GameCharacter {
 	}
 
 	public getTrackerBar(key: string): string {
-		const SpoileredNumberRegExp = /^\|\|\d+\|\|$/;
 		let valueStat = this.getString(key) ?? "0";
 		if (SpoileredNumberRegExp.test(valueStat)) valueStat = valueStat.slice(2, -2);
 		const value = +valueStat;
@@ -670,12 +671,24 @@ export class GameCharacter {
 		if (SpoileredNumberRegExp.test(maxValueStat)) maxValueStat = maxValueStat.slice(2, -2);
 		const maxValue = +maxValueStat;
 
-		const trackerBarValues = this.getString(`${key}.bar.values`);
+		const barValues = this.getString(`${key}.bar.values`);
 
-		return valuesToTrackerBar(value, maxValue, trackerBarValues);
+		return toTrackerBar(value, maxValue, barValues);
 	}
+
 	public hasTrackerBar(key: string): boolean {
 		return this.getString(`${key}.bar.values`) !== undefined;
+	}
+
+	public getTrackerDots(key: string): string {
+		const value = this.getNumber(key);
+		const maxValue = this.getNumber(`max${key}`);
+		const dotValues = this.getString(`${key}.dots.values`);
+		return toTrackerDots(value, maxValue, dotValues);
+	}
+
+	public hasTrackerDots(key: string): boolean {
+		return this.getString(`${key}.dots.values`) !== undefined;
 	}
 
 	/** returns the value for the first key that has a defined value */
@@ -782,9 +795,16 @@ export class GameCharacter {
 			}
 		}
 
-		if (keyLower.endsWith(".bar.values")) {
-			const hpShim = keyLower === "hp.bar.values" ? "hpbar.values" : undefined;
-			return ret(key, this.getNoteStat(key, hpShim as string));
+		if (keyLower.endsWith(".dots")) {
+			const statKey = keyLower.slice(0, -5);
+			if (this.getNumber(statKey) !== undefined) {
+				return ret(key, this.getTrackerDots(statKey));
+			}
+		}
+
+		// shim for initial offering
+		if (keyLower === "hp.bar.values") {
+			return ret(key, this.getNoteStat(key, "hpbar.values"));
 		}
 
 		//#endregion
