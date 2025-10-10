@@ -26,8 +26,7 @@ type ProcessArgs = {
 	stats?: boolean;
 };
 
-const SortTagRegExp = /<sort(\s[^\]]+)?\s*>((.|\n)*?)<\/sort>/i;
-const SortTagRegExpG = new RegExp(SortTagRegExp, "gi");
+const SortTagRegExpG = /<sort(\s[^\]]+)?\s*>((.|\n)*?)<\/sort>/gi;
 // const LineParseRegExp = regex()`
 // 	^
 // 	(?<num>
@@ -46,31 +45,64 @@ const SortTagRegExpG = new RegExp(SortTagRegExp, "gi");
 // 	)
 // `;
 const LineParseRegExp = /^(?<num>(?:[\-\+−]?\d+(?:\.\d+)?)|\|\|\s*(?:[\-\+−]?\d+(?:\.\d+)?)\s*\|\|)\s+(?<val>.*?)$/v;
+const HtmlTagRegExpG = /<\/?\w+[^>]*>/g;
 
 type Line = { line:string; num?:number; spoiler?:boolean; val?:string; };
 function parseSortLine(line: string): Line | undefined {
+	// trim line just in case
 	line = line.trim();
+
+	// no line, nothing to do
 	if (!line) return undefined;
+
+	// inline dice use <b> and <i> for formatting
+	line = line.replace(HtmlTagRegExpG, "");
+
+	// run regex
 	const groups = LineParseRegExp.exec(line)?.groups;
 	if (groups) {
+		// get num and val as strings
 		let { num, val } = groups;
+
+		// check for spoiler
 		const spoiler = num.startsWith("||");
+
+		// slice num if spoiler
 		if (spoiler) num = num.slice(2, -2).trim();
+
+		// correct a mathematical minus character
 		if (num.startsWith("−")) num = "-" + num.slice(1);
-		return { line:`${num} ${val}`, num:+num, spoiler, val };
+
+		// return the sort data and updated line
+		return {
+			line: `${spoiler ? "?" : num} ${val}`,
+			num: +num,
+			spoiler,
+			val
+		};
 	}
+
+	// return just the line
 	return { line };
 }
 
 function sortLineSorter(a: Line, b: Line, one: 1 | -1): number {
+	// ensure unsorted lines are always at the top
 	if (a.num === undefined) return -1;
 	else if (b.num === undefined) return 1;
+
+	// sort by number
 	if (a.num < b.num) return one;
-	if (a.num > b.num) return -one;
+	else if (a.num > b.num) return -one;
+
+	// sort by val if same number
 	if (a.val! < b.val!) return one;
 	if (a.val! > b.val!) return -one;
+
+	// sort by line as fallback
 	if (a.line < b.line) return one;
 	if (a.line > b.line) return -one;
+
 	return 0;
 }
 
