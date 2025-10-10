@@ -47,7 +47,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const color = postData.embedColor ?? character.embedColor ?? sageMessage.toHexColorString(postData.colorType);
 	renderableContent.setColor(color);
 
-	let content = processor.process(postData.content, { footer:true, mentions:true, stats:true, skipBrackets:true });
+	let content = processor.process(postData.content, { footer:true, mentions:true, sorts:true, stats:true, skipBrackets:true });
 
 	//#region dice lists
 	const diceMatches = await parseDiceMatches(content, { processor, sageCommand:sageMessage });

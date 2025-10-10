@@ -22,12 +22,57 @@ type ProcessArgs = {
 	footer?: boolean;
 	mentions?: boolean;
 	skipBrackets?: boolean;
+	sorts?: boolean;
 	stats?: boolean;
 };
 
-const SortTagRegExp = /<sort>((.|\n)*?)<\/sort>/i;
+const SortTagRegExp = /<sort(\s[^\]]+)?\s*>((.|\n)*?)<\/sort>/i;
 const SortTagRegExpG = new RegExp(SortTagRegExp, "gi");
-const HiddenInitRegExp = /^\|\|-?\d+\|\|/;
+// const LineParseRegExp = regex()`
+// 	^
+// 	(?<num>
+// 		\g<number>
+// 		|
+// 		\|\| \s* \g<number> \s* \|\|
+// 	)
+// 	\s+
+// 	(?<val>
+// 		.*?
+// 	)
+// 	$
+
+// 	(?(DEFINE)
+// 		(?<number> [\-\+−]? \d+ (\.\d+)? )
+// 	)
+// `;
+const LineParseRegExp = /^(?<num>(?:[\-\+−]?\d+(?:\.\d+)?)|\|\|\s*(?:[\-\+−]?\d+(?:\.\d+)?)\s*\|\|)\s+(?<val>.*?)$/v;
+
+type Line = { line:string; num?:number; spoiler?:boolean; val?:string; };
+function parseSortLine(line: string): Line | undefined {
+	line = line.trim();
+	if (!line) return undefined;
+	const groups = LineParseRegExp.exec(line)?.groups;
+	if (groups) {
+		let { num, val } = groups;
+		const spoiler = num.startsWith("||");
+		if (spoiler) num = num.slice(2, -2).trim();
+		if (num.startsWith("−")) num = "-" + num.slice(1);
+		return { line:`${num} ${val}`, num:+num, spoiler, val };
+	}
+	return { line };
+}
+
+function sortLineSorter(a: Line, b: Line, one: 1 | -1): number {
+	if (a.num === undefined) return -1;
+	else if (b.num === undefined) return 1;
+	if (a.num < b.num) return one;
+	if (a.num > b.num) return -one;
+	if (a.val! < b.val!) return one;
+	if (a.val! > b.val!) return -one;
+	if (a.line < b.line) return one;
+	if (a.line > b.line) return -one;
+	return 0;
+}
 
 export class DialogProcessor<HasActingCharacter extends boolean = false> extends StatMacroProcessor {
 	protected constructor(chars: StatMacroCharacters, macros: DiceMacroBase[], public sageCommand: SageCommand, public mentionArgs: MentionArgs) {
@@ -55,26 +100,7 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 		return this.actingCharacter?.toDisplayName({ processor:this, overrideTemplate:authorName }) as string;
 	}
 
-	protected processDialogSort(content: Optional<string>): string {
-		if (!content) return "";
-
-		return content.replace(SortTagRegExpG, (_, inner: string) => {
-			const lines = inner.split("\n").filter(s => s.trim());
-			lines.sort((a, b) => {
-				if (HiddenInitRegExp.test(a)) a = a.replace(HiddenInitRegExp, _ => _.slice(2, -2));
-				if (HiddenInitRegExp.test(b)) b = b.replace(HiddenInitRegExp, _ => _.slice(2, -2));
-				return a < b ? -1 : a > b ? 1 : 0;
-			});
-			lines.forEach((line, index) => {
-				if (HiddenInitRegExp.test(line)) {
-					lines[index] = line.replace(HiddenInitRegExp, "?")
-				}
-			});
-			return lines.join("\n");
-		});
-	}
-
-	public process(content: Optional<string>, { basic, footer, mentions, skipBrackets, stats }: ProcessArgs): string {
+	public process(content: Optional<string>, { basic, footer, mentions, skipBrackets, sorts, stats }: ProcessArgs): string {
 		if (!content) return "";
 
 		// footer can have stats, do it before stats
@@ -92,6 +118,10 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 			content = this.processMentions(content);
 		}
 
+		if (sorts) {
+			content = this.processSorts(content);
+		}
+
 		// this is the last to go
 		if (basic) {
 			content = this.processBasic(content);
@@ -104,11 +134,20 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 	public processBasic(content: Optional<string>): string {
 		if (!content) return "";
 
-		content = this.processDialogSort(content);
-
 		content = this.sageCommand.eventCache.format(content);
 
 		return content.trim();
+	}
+
+	protected processSorts(content: Optional<string>): string {
+		if (!content) return "";
+
+		return content.replace(SortTagRegExpG, (_, dir: string | undefined, inner: string) => {
+			const sortOne = dir?.toLowerCase().includes("asc") ? -1 : 1;
+			const lines = inner.split("\n").map(parseSortLine).filter((line?: Line): line is Line => !!line);
+			lines.sort((a, b) => sortLineSorter(a, b, sortOne));
+			return lines.map(({ line }) => line).join("\n");
+		});
 	}
 
 	public processFooter(content: Optional<string>): string {
