@@ -372,7 +372,7 @@ export class StatBlockProcessor {
 		const { statKey, stackValue, defaultValue } = statBlock;
 
 		const { char, statVal } = this.getCharAndStatVal(statBlock, actingCharacter);
-		if (!char) return undefined;
+		if (!char) return defaultValue;
 
 		// process stat or default
 		const statValue = stringOrUndefined(statVal) ?? defaultValue;
