@@ -1,4 +1,4 @@
-import { sortPrimitive, StringSet } from "@rsc-utils/core-utils";
+import { partition, sortPrimitive, StringSet } from "@rsc-utils/core-utils";
 import type { Message } from "discord.js";
 import { Condition } from "../../../../../gameSystems/p20/lib/Condition.js";
 import { sendWebhook } from "../../../../discord/messages.js";
@@ -16,8 +16,6 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 		renderableContent.setThumbnailUrl(character.avatarUrl);
 	}
 
-	renderableContent.appendTitledSection(`<b>Stats Updated</b>`);
-
 	const isD20 = character.gameSystem?.code === "D20";
 	const is5e = character.gameSystem?.code === "DnD5e";
 	const isP20 = character.gameSystem?.isP20;
@@ -26,38 +24,60 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 	let showCurrency = false;
 
 	const sortedKeys = [...updatedKeys].sort(sortPrimitive);
-	sortedKeys.forEach(key => {
-		const keyLower = key.toLowerCase();
+	const [statKeys, templateKeys] = partition(sortedKeys, key =>
+		key.toLowerCase().endsWith(".template") ? 1 : 0
+	);
 
-		const currencyType = isP20 ? ["cp","sp","gp","pp","credits","upb"].includes(keyLower)
-			: isD20 ? ["cp","sp","gp","pp"].includes(keyLower)
-			: is5e ? ["cp","sp","ep","gp","pp"].includes(keyLower)
-			: false;
-		if (currencyType) {
-			showCurrency = true;
-		}
+	if (statKeys?.length) {
+		renderableContent.appendTitledSection(`<b>Stats Updated</b>`);
 
-		// check if we are dealing with a isP20 condition
-		const conditionType = isP20 ? Condition.isConditionKey(key) : false;
-		if (conditionType) {
-			showConditions = true;
-		}
+		statKeys.forEach(key => {
+			const keyLower = key.toLowerCase();
 
-		const value = character.getString(key);
-		if (value) {
-			if (conditionType === "toggled") {
-				// toggled conditions don't need to show their "on" value
-				renderableContent.append(`<b>${key}</b>`);
-			}else {
-				const trackerBar = character.hasTrackerBar(key) ? character.getTrackerBar(key) : "";
-				const trackerDots = character.hasTrackerDots(key) ? character.getTrackerDots(key) : "";
-				renderableContent.append(`<b>${key}</b> ${value} ${trackerBar}${trackerDots}`.trim());
+			const currencyType = isP20 ? ["cp","sp","gp","pp","credits","upb"].includes(keyLower)
+				: isD20 ? ["cp","sp","gp","pp"].includes(keyLower)
+				: is5e ? ["cp","sp","ep","gp","pp"].includes(keyLower)
+				: false;
+			if (currencyType) {
+				showCurrency = true;
 			}
 
-		}else {
-			renderableContent.append(`<s><b>${key}</b></s>`);
-		}
-	});
+			// check if we are dealing with a isP20 condition
+			const conditionType = isP20 ? Condition.isConditionKey(key) : false;
+			if (conditionType) {
+				showConditions = true;
+			}
+
+			const value = character.getString(key);
+			if (value) {
+				if (conditionType === "toggled") {
+					// toggled conditions don't need to show their "on" value
+					renderableContent.append(`<b>${key}</b>`);
+
+				}else {
+					const trackerBar = character.hasTrackerBar(key) ? character.getTrackerBar(key) : "";
+					const trackerDots = character.hasTrackerDots(key) ? character.getTrackerDots(key) : "";
+					renderableContent.append(`<b>${key}</b> ${value} ${trackerBar}${trackerDots}`.trim());
+				}
+
+			}else {
+				renderableContent.append(`<s><b>${key}</b></s>`);
+			}
+		});
+	}
+
+	if (templateKeys?.length) {
+		renderableContent.appendTitledSection(`<b>Templates Updated</b>`);
+
+		templateKeys.forEach(key => {
+			const value = character.getString(key);
+			if (value) {
+				renderableContent.append(`<b>${key}</b>\`\`\`${value}\`\`\``);
+			}else {
+				renderableContent.append(`<s><b>${key}</b></s>`);
+			}
+		});
+	}
 
 	if (showCurrency) {
 		const currency = character.getString("currency");
