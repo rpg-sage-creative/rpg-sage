@@ -1,4 +1,4 @@
-import { AllCodeBlocksRegExp, isUrl, stringOrUndefined, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
+import { AllCodeBlocksRegExp, isUrl, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
 import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
 import { unquote } from "../internal/unquote.js";
@@ -375,7 +375,7 @@ export class StatBlockProcessor {
 		if (!char) return defaultValue;
 
 		// process stat or default
-		const statValue = stringOrUndefined(statVal) ?? defaultValue;
+		const statValue = statVal ?? defaultValue;
 		if (statValue !== undefined) {
 			matches.add(statKey.toLowerCase());
 

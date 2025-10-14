@@ -707,7 +707,7 @@ export class GameCharacter {
 		for (const key of keys) {
 			const stat = this.getStat(key, true);
 			if (stat.isDefined) {
-				return stringOrUndefined(String(stat.value));
+				return String(stat.value);
 			}
 		}
 		return undefined;
