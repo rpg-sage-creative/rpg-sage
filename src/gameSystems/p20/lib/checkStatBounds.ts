@@ -12,16 +12,18 @@ import { Condition } from "./Condition.js";
  */
 export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair): string | undefined {
 	const keyLower = pair.key.toLowerCase();
+	const isMax = pair.value?.toLowerCase() === "max";
 	const numberValue = numberOrUndefined(pair.value);
-	const isZeroOrLess = !numberValue || numberValue < 0;
+	const isZeroOrLess = !isMax && (!numberValue || numberValue < 0);
 
 	if (keyLower === "hp") {
+
 		// check min hp
 		if (isZeroOrLess) return "0";
 
 		// check max hp
-		const maxHp = numberOrUndefined(character.getStat("maxHp"));
-		if (maxHp && numberValue > maxHp) return String(maxHp);
+		const maxHp = character.getNumber("maxHp");
+		if (maxHp && (isMax || numberValue! > maxHp)) return String(maxHp);
 
 		// return no change
 		return undefined;
