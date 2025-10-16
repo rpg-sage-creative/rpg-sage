@@ -3,7 +3,7 @@ import { isFiniteNumber } from "@rsc-utils/core-utils";
 const GlobalTrackerBars = {
 	/** 8 different bars, 0% -> 100% */
 	verticalbar: { min:`▕ `, increments:[`▕▁`, `▕▂`, `▕▃`, `▕▄`, `▕▅`, `▕▆`, `▕▇`], max:`▕█`, unknown:`▕?` },
-	horizontalbar: { min:`┋┉┉┉┉┋`, increments:[`┃┉┉┉┉┋`, `┃━┉┉┉┋`, `┃━━┉┉┋`, `┃━━━┉┋`, `┃━━━━┋`], max:`┃━━━━┃`, unknown:`┋┉?┉┋` },
+	horizontalbar: { min:`┆┈┈┈┈┆`, increments:[`┃┈┈┈┈┆`, `┃━┈┈┈┆`, `┃━━┈┈┆`, `┃━━━┈┆`, `┃━━━━┆`], max:`┃━━━━┃`, unknown:`┆┈?┈┆` },
 };
 
 // const GlobalTrackerDots = {
