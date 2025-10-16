@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.12.0",
+"version":"1.12.1",
 "branch":"v1.x.x",
-"commit":"9bc027f86a43b04300a003a3b59879a9ea995cfb",
-"commitSubject":"Merge pull request #142 from rpg-sage-creative/improved-stat-template-processing",
-"commitTs":1759775308000,
-"commitDate":"2025-10-06-1128",
-"buildTs":1759775462000,
-"buildDate":"2025-10-06-1131",
+"commit":"c31f82f646e0646fe35c66d3b584d847b04c8693",
+"commitSubject":"cleaner min/max test logic",
+"commitTs":1760657278000,
+"commitDate":"2025-10-16-1627",
+"buildTs":1760658125000,
+"buildDate":"2025-10-16-1642",
 "author":"Randal"
 }
