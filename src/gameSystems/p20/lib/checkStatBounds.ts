@@ -10,11 +10,10 @@ import { Condition } from "./Condition.js";
  * If the value is out of bounds, return the correct value.
  * If the value is acceptable, or we don't have a test for it, return undefined so that the calling logic knows to use the original value.
  */
-export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair): string | undefined {
+export function checkStatBounds(_character: GameCharacter, pair: TKeyValuePair): string | undefined {
 	const keyLower = pair.key.toLowerCase();
-	const isMax = pair.value?.toLowerCase() === "max";
 	const numberValue = numberOrUndefined(pair.value);
-	const isZeroOrLess = !isMax && (!numberValue || numberValue < 0);
+	const isZeroOrLess = !numberValue || numberValue < 0;
 
 	if (keyLower === "hp") {
 
@@ -22,8 +21,7 @@ export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair): 
 		if (isZeroOrLess) return "0";
 
 		// check max hp
-		const maxHp = character.getNumber("maxHp");
-		if (maxHp && (isMax || numberValue! > maxHp)) return String(maxHp);
+		// handled by generic checkStatBounds
 
 		// return no change
 		return undefined;
