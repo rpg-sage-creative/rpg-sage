@@ -48,7 +48,7 @@ const LineParseRegExp = /^(?<num>(?:[\-\+−]?\d+(?:\.\d+)?)|\|\|\s*(?:[\-\+−]
 const HtmlTagRegExpG = /<\/?\w+[^>]*>/g;
 
 type Line = { line:string; num?:number; spoiler?:boolean; val?:string; };
-function parseSortLine(line: string): Line | undefined {
+function parseSortLine(line: string, hideNumbers?: boolean): Line | undefined {
 	// trim line just in case
 	line = line.trim();
 
@@ -75,7 +75,7 @@ function parseSortLine(line: string): Line | undefined {
 
 		// return the sort data and updated line
 		return {
-			line: `${spoiler ? "?" : num} ${val}`,
+			line: hideNumbers ? val : `${spoiler ? "?" : num} ${val}`,
 			num: +num,
 			spoiler,
 			val
@@ -174,10 +174,20 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 	protected processSorts(content: Optional<string>): string {
 		if (!content) return "";
 
-		return content.replace(SortTagRegExpG, (_, dir: string | undefined, inner: string) => {
-			const sortOne = dir?.toLowerCase().includes("asc") ? -1 : 1;
-			const lines = inner.split("\n").map(parseSortLine).filter((line?: Line): line is Line => !!line);
-			lines.sort((a, b) => sortLineSorter(a, b, sortOne));
+		return content.replace(SortTagRegExpG, (_, attr: string | undefined, inner: string) => {
+			const attrLower = attr?.toLowerCase();
+
+			const hideNumbers = attrLower?.includes("hide");
+
+			// parse the lines
+			const lines = inner.split("\n").map(line => parseSortLine(line, hideNumbers)).filter((line?: Line): line is Line => !!line);
+
+			// default sort is descending; ascMultiplier reverses the sort order
+			const ascMultiplier = attrLower?.includes("asc") ? -1 : 1;
+
+			// sort the lines
+			lines.sort((a, b) => sortLineSorter(a, b, ascMultiplier));
+
 			return lines.map(({ line }) => line).join("\n");
 		});
 	}
