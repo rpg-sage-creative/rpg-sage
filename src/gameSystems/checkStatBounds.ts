@@ -18,6 +18,7 @@ export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair): 
 	if (minValue !== undefined) {
 		if (!numberValue) return String(minValue);
 		if (numberValue < minValue) return String(minValue);
+		if (pair.value?.toLowerCase() === "min") return String(minValue);
 	}
 
 	// handle explicitly given max
