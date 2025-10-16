@@ -16,16 +16,15 @@ export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair): 
 	// handle explicitly given min
 	const minValue = character.getNumber(`min${pair.key}`);
 	if (minValue !== undefined) {
-		if (!numberValue) return String(minValue);
+		if (pair.value?.toLowerCase() === "min" || numberValue === undefined) return String(minValue);
 		if (numberValue < minValue) return String(minValue);
-		if (pair.value?.toLowerCase() === "min") return String(minValue);
 	}
 
 	// handle explicitly given max
 	const maxValue = character.getNumber(`max${pair.key}`);
 	if (maxValue) {
-		if (numberValue! > maxValue) return String(maxValue);
 		if (pair.value?.toLowerCase() === "max") return String(maxValue);
+		if (numberValue && numberValue > maxValue) return String(maxValue);
 	}
 
 	if (character.gameSystem?.isP20) return checkStatBoundsP20(character, pair);
