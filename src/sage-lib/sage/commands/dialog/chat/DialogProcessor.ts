@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import { AllCodeBlocksRegExp, numberOrUndefined, tokenize, type Optional } from "@rsc-utils/core-utils";
 import type { GuildMember } from "discord.js";
 import type { Game } from "../../../model/Game.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
@@ -26,7 +26,8 @@ type ProcessArgs = {
 	stats?: boolean;
 };
 
-const SortTagRegExpG = /<sort(\s[^\]]+)?\s*>((.|\n)*?)<\/sort>/gi;
+const SortTagRegExp = /<sort(\s[^\>]+)?\s*>((.|\n)*?)<\/sort>/i;
+// const SortTagRegExpG = /<sort(\s[^\>]+)?\s*>((.|\n)*?)<\/sort>/gi;
 // const LineParseRegExp = regex()`
 // 	^
 // 	(?<num>
@@ -174,22 +175,34 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 	protected processSorts(content: Optional<string>): string {
 		if (!content) return "";
 
-		return content.replace(SortTagRegExpG, (_, attr: string | undefined, inner: string) => {
-			const attrLower = attr?.toLowerCase();
+		const TopRegExp = /top="(\d+)"|top=(\d+)/;
 
-			const hideNumbers = attrLower?.includes("hide");
+		return tokenize(content, { codeBlock:AllCodeBlocksRegExp, sortTag:SortTagRegExp })
+			.map(({ key, matches, token }) => {
+				if (key !== "sortTag") return token;
+				const [attr, inner] = matches as [string | undefined, string];
 
-			// parse the lines
-			const lines = inner.split("\n").map(line => parseSortLine(line, hideNumbers)).filter((line?: Line): line is Line => !!line);
+				// default sort is descending; ascMultiplier reverses the sort order
+				let ascMultiplier: 1 | -1 = 1;
+				let hideNumbers = false;
+				let top: number | undefined;
+				if (attr) {
+					const attrLower = attr.toLowerCase();
+					hideNumbers = attrLower.includes("hide");
+					ascMultiplier = attrLower.includes("asc") ? -1 : 1;
+					top = numberOrUndefined(TopRegExp.exec(attrLower)?.slice(1, 3).find(val => val));
+				}
 
-			// default sort is descending; ascMultiplier reverses the sort order
-			const ascMultiplier = attrLower?.includes("asc") ? -1 : 1;
+				// parse the lines
+				const lines = inner.split("\n")
+					.map(line => parseSortLine(line, hideNumbers))
+					.filter((line?: Line): line is Line => !!line);
 
-			// sort the lines
-			lines.sort((a, b) => sortLineSorter(a, b, ascMultiplier));
+				// sort the lines
+				lines.sort((a, b) => sortLineSorter(a, b, ascMultiplier));
 
-			return lines.map(({ line }) => line).join("\n");
-		});
+				return lines.slice(0, top).map(({ line }) => line).join("\n");
+			}).join("");
 	}
 
 	public processFooter(content: Optional<string>): string {
