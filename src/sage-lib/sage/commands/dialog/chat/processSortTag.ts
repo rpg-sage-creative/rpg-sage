@@ -1,4 +1,4 @@
-import { AllCodeBlocksRegExp, numberOrUndefined, tokenize } from "@rsc-utils/core-utils";
+import { AllCodeBlocksRegExp, tokenize, type TypedRegExp } from "@rsc-utils/core-utils";
 
 const SortTagRegExp = /<sort(\s[^\>]+)?\s*>((?:(?<!<sort)(?:.|\n))*?)<\/sort>/i;
 // const SortTagRegExpG = /<sort(\s[^\>]+)?\s*>((.|\n)*?)<\/sort>/gi;
@@ -21,7 +21,7 @@ const SortTagRegExp = /<sort(\s[^\>]+)?\s*>((?:(?<!<sort)(?:.|\n))*?)<\/sort>/i;
 // `;
 const LineParseRegExp = /^(?<num>(?:[\-\+−]?\d+(?:\.\d+)?)|\|\|\s*(?:[\-\+−]?\d+(?:\.\d+)?)\s*\|\|)\s+(?<val>.*?)$/v;
 const HtmlTagRegExpG = /<\/?\w+[^>]*>/g;
-const TopRegExp = /top="(\d+)"|top=(\d+)/;
+const SliceRegExp = /(?<from>top|bottom)=(?:"(?<count>\d+)"|(?<count>\d+))/ as TypedRegExp<{ from:"top"|"bottom", count:`${number}` }>;
 
 type Line = { line:string; num?:number; spoiler?:boolean; val?:string; };
 function parseSortLine(line: string, hideNumbers?: boolean): Line | undefined {
@@ -82,41 +82,40 @@ function sortLineSorter(a: Line, b: Line, one: 1 | -1): number {
 	return 0;
 }
 
-function process(content: string): string {
-	let match: RegExpExecArray | null;
-	while (match = SortTagRegExp.exec(content)) {
-		const [_, attr, inner] = match;
-
-		// default sort is descending; ascMultiplier reverses the sort order
-		let ascMultiplier: 1 | -1 = 1;
-		let hideNumbers = false;
-		let top: number | undefined;
-		if (attr) {
-			const attrLower = attr.toLowerCase();
-			hideNumbers = attrLower.includes("hide");
-			ascMultiplier = attrLower.includes("asc") ? -1 : 1;
-			top = numberOrUndefined(TopRegExp.exec(attrLower)?.slice(1, 3).find(val => val));
-		}
-
-		// parse the lines
-		const lines = inner.split("\n")
-			.map(line => parseSortLine(line, hideNumbers))
-			.filter((line?: Line): line is Line => !!line);
-
-		// sort the lines
-		lines.sort((a, b) => sortLineSorter(a, b, ascMultiplier));
-
-		const replacement = lines.slice(0, top).map(({ line }) => line).join("\n");
-
-		content = content.slice(0, match.index) + replacement + content.slice(match.index + match[0].length);
+function process(attr: string, inner: string): string {
+	// default sort is descending; ascMultiplier reverses the sort order
+	let ascMultiplier: 1 | -1 = 1;
+	let hideNumbers = false;
+	let slice: { from:"top"|"bottom", count:`${number}` } | undefined;
+	if (attr) {
+		const attrLower = attr.toLowerCase();
+		hideNumbers = attrLower.includes("hide");
+		ascMultiplier = attrLower.includes("asc") ? -1 : 1;
+		slice = SliceRegExp.exec(attrLower)?.groups;
 	}
-	return content;
+
+	// parse the lines
+	const lines = inner.split("\n")
+		.map(line => parseSortLine(line, hideNumbers))
+		.filter((line?: Line): line is Line => !!line);
+
+	// sort the lines
+	lines.sort((a, b) => sortLineSorter(a, b, ascMultiplier));
+
+	if (slice && +slice?.count!) {
+		if (slice!.from === "bottom") {
+			return lines.slice(-+slice.count).map(({ line }) => line).join("\n");
+		}
+		return lines.slice(0, +slice.count).map(({ line }) => line).join("\n");
+	}
+
+	return lines.map(({ line }) => line).join("\n");
 }
 
 export function processSortTag(content: string): string {
 	if (!content) return "";
 
-	return tokenize(content, { codeBlock:AllCodeBlocksRegExp }).map(({ key, token }) => {
-		return key === "codeBlock" ? token : process(token);
+	return tokenize(content, { codeBlock:AllCodeBlocksRegExp, statBlock:SortTagRegExp }).map(({ key, matches, token }) => {
+		return key !== "statBlock" ? token : process(matches[0], matches[1]);
 	}).join("");
 }
