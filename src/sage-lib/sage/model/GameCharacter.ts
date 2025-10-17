@@ -23,6 +23,14 @@ import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
 
 const SpoileredNumberRegExp = /^\|\|\d+\|\|$/;
 
+/** In addition to returning "maxhp" for "hp", this returns "alt.maxhp" for "alt.hp" */
+function getMetaKey(key: string, prefix: "min" | "max"): string {
+	const parts = key.split(".");
+	const last = parts.pop();
+	parts.push(prefix + last);
+	return parts.join(".");
+}
+
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
 Character will save snapshots .snapshots[... { ts, core }]
@@ -667,7 +675,7 @@ export class GameCharacter {
 		if (SpoileredNumberRegExp.test(valueStat)) valueStat = valueStat.slice(2, -2);
 		const value = +valueStat;
 
-		let maxValueStat = this.getString(`max${key}`) ?? "0";
+		let maxValueStat = this.getString(getMetaKey(key, "max")) ?? "0";
 		if (SpoileredNumberRegExp.test(maxValueStat)) maxValueStat = maxValueStat.slice(2, -2);
 		const maxValue = +maxValueStat;
 
@@ -682,7 +690,7 @@ export class GameCharacter {
 
 	public getTrackerDots(key: string): string {
 		const value = this.getNumber(key);
-		const maxValue = this.getNumber(`max${key}`);
+		const maxValue = this.getNumber(getMetaKey(key, "max"));
 		const dotValues = this.getString(`${key}.dots.values`);
 		return toTrackerDots(value, maxValue, dotValues);
 	}
@@ -789,7 +797,7 @@ export class GameCharacter {
 		const isDeprecatedHpBar = ["hpgauge", "hpbar"].includes(keyLower);
 		if (keyLower.endsWith(".bar") || isDeprecatedHpBar) {
 			const statKey = isDeprecatedHpBar ? "hp" : keyLower.slice(0, -4);
-			if (this.getNumber(statKey) !== undefined || this.getNumber(`max${statKey}`) !== undefined) {
+			if (this.getNumber(statKey) !== undefined || this.getNumber(getMetaKey(statKey, "max")) !== undefined) {
 				/** @todo do i wanna try to case this key? */
 				return ret(key, this.getTrackerBar(statKey));
 			}
