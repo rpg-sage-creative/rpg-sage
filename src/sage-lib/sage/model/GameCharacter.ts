@@ -1158,9 +1158,8 @@ export class GameCharacter {
 				}
 
 				if (["cp","sp","gp","pp","credits","upb"].includes(keyLower)) {
-					const keyLower = key.toLowerCase() as keyof TPathbuilderCharacterMoney;
 					const money = { } as TPathbuilderCharacterMoney;
-					money[keyLower] = +value;
+					money[keyLower as keyof TPathbuilderCharacterMoney] = +value;
 					const updatedMoney = await p20.setMoney(money, save);
 					if (updatedMoney) {
 						this.notes.setStat(keyLower, "");
