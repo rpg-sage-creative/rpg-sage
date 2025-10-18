@@ -1,4 +1,4 @@
-import { getNumberRegex, unwrap } from "@rsc-utils/core-utils";
+import { NumberRegExp, unwrap } from "@rsc-utils/core-utils";
 import { hasMath, processMath } from "@rsc-utils/game-utils";
 
 /**
@@ -9,5 +9,5 @@ import { hasMath, processMath } from "@rsc-utils/game-utils";
 export function isMath(value: string): boolean {
 	const unwrapped = unwrap(value, "[]");
 	return hasMath(unwrapped)
-		&& getNumberRegex({ anchored:true }).test(processMath(unwrapped).trim());
+		&& NumberRegExp.test(processMath(unwrapped).trim());
 }

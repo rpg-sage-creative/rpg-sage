@@ -1,4 +1,4 @@
-import { debug, dequote, escapeRegex, getKeyValueArgRegex, getQuotedRegex, getWhitespaceRegex, isWrapped, parseKeyValueArg, tokenize, warn, type KeyValueArg, type Optional } from "@rsc-utils/core-utils";
+import { debug, dequote, escapeRegex, isWrapped, KeyValueArgRegExp, parseKeyValueArg, QuotedContentRegExp, tokenize, warn, WhitespaceRegExp, type KeyValueArg, type Optional } from "@rsc-utils/core-utils";
 import type { DiceMacroBase } from "../../model/Macro.js";
 import { getMacroArgRegex, getMacroRemainingArgRegex, parseMacroArgMatch } from "../admin/macro/getMacroArgRegex.js";
 
@@ -26,10 +26,12 @@ type TPrefix = {
 	/** "-" | "+"; */
 	fortune?: string;
 };
+const PrefixRegExp = /^(?:(?:(\d*)#)|(?:(\d*k[hl]\d*)#)|([\+\-]))/i;
+const PrefixKeepRegExp = /^(\d*)(k[hl])(\d*)$/;
 function parsePrefix(prefix: string): TPrefix {
-	const [_, count, keepDirty, fortune] = prefix.match(/^(?:(?:(\d*)#)|(?:(\d*k[hl]\d*)#)|([\+\-]))/i) ?? ["1"];
+	const [_, count, keepDirty, fortune] = prefix.match(PrefixRegExp) ?? ["1"];
 	if (keepDirty) {
-		const [__, keepRolls, keep, keepCount] = keepDirty.match(/^(\d*)(k[hl])(\d*)$/)!;
+		const [__, keepRolls, keep, keepCount] = keepDirty.match(PrefixKeepRegExp)!;
 		return {
 			count: 1,
 			keepRolls: keepRolls ? keepRolls : undefined,
@@ -71,9 +73,9 @@ function findPrefixMacroArgs(macroTiers: DiceMacroBase[][], input: string): Find
 type TArgs = { indexed:string[]; named:KeyValueArg[] };
 function parseMacroArgs(argString: string): TArgs {
 	const parsers = {
-		spaces: getWhitespaceRegex(),
-		named: getKeyValueArgRegex({ allowDashes:true, allowPeriods:true }),
-		quotes: getQuotedRegex({ contents:"*" })
+		spaces: WhitespaceRegExp,
+		named: KeyValueArgRegExp,
+		quotes: QuotedContentRegExp
 	};
 	const tokens = tokenize(argString.trim(), parsers);
 	const named = tokens

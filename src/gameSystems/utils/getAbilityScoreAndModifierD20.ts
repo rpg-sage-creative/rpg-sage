@@ -1,5 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { numberOrUndefined } from "./numberOrUndefined.js";
+import { numberOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import { calcStatModifierD20 } from "./calcStatModifierD20.js";
 
 export function getAbilityScoreAndModifierD20(value: Optional<string>) {

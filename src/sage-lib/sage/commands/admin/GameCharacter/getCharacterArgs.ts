@@ -1,4 +1,4 @@
-import { Color, debug, error, isBlank, warn, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Arg, Color, debug, error, isBlank, warn, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { GameUserType } from "../../../model/Game.js";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";
@@ -138,7 +138,7 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpda
 	}
 
 	// only do mods on an update
-	const mods = isUpdate ? args.manager.incrementArgs() : [];
+	const mods = isUpdate ? args.manager.incrementArgs() as IncrementArg[] : [];
 
 	const stats = args.manager.keyValueArgs().filter(pair => !isValidCoreKey(pair.key));
 
@@ -200,7 +200,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						default: debug({key,value}); break;
 					}
 				}else {
-					(stats ??= []).push({ arg:`${key}="${value}"`, index, isKeyValue:true, key, keyRegex:new RegExp(`^${key}$`, "i"), value:valueOrNull });
+					(stats ??= []).push(Arg.from({ raw:`${key}="${value}"`, index, isKeyValue:true, key, value:valueOrNull }));
 				}
 			});
 

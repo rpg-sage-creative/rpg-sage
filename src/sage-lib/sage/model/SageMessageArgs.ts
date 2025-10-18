@@ -4,6 +4,8 @@ import type { Attachment, Role, User } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
 
+const UnsetRegExp = /^\s*unset\s*$/i;
+
 export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public constructor(sageMessage: SageMessage, private argsManager: ArgsManager) {
 		super(sageMessage);
@@ -15,7 +17,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	//#region SageCommandArgs
 
 	private getKeyValueArg(key: string) {
-		const keyValueArg = this.argsManager.findKeyValueArg(key);
+		const keyValueArg = this.argsManager.findKeyValueArg(key.toLowerCase());
 
 		const hasKey = !!keyValueArg;
 		if (!hasKey) {
@@ -28,7 +30,7 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		}
 
 		const value = keyValueArg.value!;
-		const hasUnset = /^\s*unset\s*$/i.test(value);
+		const hasUnset = UnsetRegExp.test(value);
 
 		return { hasKey, hasUnset, hasValue, value };
 	}
@@ -40,17 +42,17 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean {
-		return !!this.argsManager.findKeyValueArg(name);
+		return !!this.argsManager.findKeyValueArg(name.toLowerCase());
 	}
 
 	/** Returns true if the argument matching the given key has the value "unset". */
 	public hasUnset(name: string): boolean {
-		return /^\s*unset\s*$/i.test(this.argsManager.findKeyValueArg(name)?.value ?? "");
+		return this.getKeyValueArg(name).hasUnset === true;
 	}
 
 	/** Returns true if the underlying args contains the given flag. */
 	public hasFlag(flag: string): boolean {
-		return this.argsManager.hasFlag(flag);
+		return this.argsManager.hasFlag(flag.toLowerCase());
 	}
 
 	/** Returns true if the conmmand includes the force confirmation flag. */

@@ -38,6 +38,9 @@ function scrubModule() {
 	echo "  Deleting package-lock file ..."
 	rm -f package-lock.json
 
+	echo "  Updating from repo ..."
+	git pull
+
 	echo "  Installing node_modules ..."
 	npm i
 

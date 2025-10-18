@@ -1,25 +1,20 @@
 import { escapeRegex, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
-import { dequote, getQuotedRegex } from "@rsc-utils/core-utils";
+import { dequote, QuotedContentRegExp } from "@rsc-utils/core-utils";
 import type { GuildMember } from "discord.js";
 import type { Game } from "../../../model/Game.js";
 import type { User as SageUser } from "../../../model/User.js";
+import { regex } from "regex";
 
 /** holds the baseline char mention regex */
-let CharMentionRegex: RegExp;
-
-/** creates the baseline char mention regex */
-function createCharMentionRegex(): RegExp {
-	return CharMentionRegex ??= new RegExp(`@\\w+|@${getQuotedRegex().source}`);
-}
+const CharMentionRegExp = regex`@(\w+|${QuotedContentRegExp})`;
 
 /** gets the char mention regex as determined by the args */
 function getCharMentionRegex({ gFlag, mentionPrefix = "@" }: { gFlag?:"g"; mentionPrefix?:string; } ): RegExp {
-	const regexp = createCharMentionRegex();
 	if (mentionPrefix !== "@" || gFlag === "g") {
-		return new RegExp(`${escapeRegex(mentionPrefix)}${regexp.source.slice(1)}`, gFlag);
+		return new RegExp(`${escapeRegex(mentionPrefix)}${CharMentionRegExp.source.slice(1)}`, gFlag);
 	}
-	return regexp;
+	return CharMentionRegExp;
 }
 
 /** gets a char mention regex w/o global flag but for the specified prefix (if given) and tests the content */

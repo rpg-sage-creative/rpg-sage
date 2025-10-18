@@ -18,6 +18,14 @@ import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
 
 const SpoileredNumberRegExp = /^\|\|\d+\|\|$/;
 
+/** In addition to returning "maxhp" for "hp", this returns "alt.maxhp" for "alt.hp" */
+function getMetaKey(key: string, prefix: "min" | "max"): string {
+	const parts = key.split(".");
+	const last = parts.pop();
+	parts.push(prefix + last);
+	return parts.join(".");
+}
+
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
 Character will save snapshots .snapshots[... { ts, core }]
@@ -598,7 +606,7 @@ export class GameCharacter {
 			const templateStats = statsToMap.filter(({ title }) => templateKeyTester.test(title));
 			templateStats.sort(sorter);
 			return {
-				keys: new Set(templateStats.map(({ title }) => title.toLowerCase())),
+				keys: new Set<Lowercase<string>>(templateStats.map(({ title }) => title.toLowerCase() as Lowercase<string>)),
 				title: "Templates",
 				lines: templateStats.map(note => `<b>${note.title}</b> \`\`\`${note.note}\`\`\``)
 			};
@@ -660,7 +668,7 @@ export class GameCharacter {
 		if (SpoileredNumberRegExp.test(valueStat)) valueStat = valueStat.slice(2, -2);
 		const value = +valueStat;
 
-		let maxValueStat = this.getString(`max${key}`) ?? "0";
+		let maxValueStat = this.getString(getMetaKey(key, "max")) ?? "0";
 		if (SpoileredNumberRegExp.test(maxValueStat)) maxValueStat = maxValueStat.slice(2, -2);
 		const maxValue = +maxValueStat;
 
@@ -675,7 +683,7 @@ export class GameCharacter {
 
 	public getTrackerDots(key: string): string {
 		const value = this.getNumber(key);
-		const maxValue = this.getNumber(`max${key}`);
+		const maxValue = this.getNumber(getMetaKey(key, "max"));
 		const dotValues = this.getString(`${key}.dots.values`);
 		return toTrackerDots(value, maxValue, dotValues);
 	}
@@ -700,7 +708,7 @@ export class GameCharacter {
 		for (const key of keys) {
 			const stat = this.getStat(key, true);
 			if (stat.isDefined) {
-				return stringOrUndefined(String(stat.value));
+				return String(stat.value);
 			}
 		}
 		return undefined;
@@ -782,15 +790,22 @@ export class GameCharacter {
 		const isDeprecatedHpBar = ["hpgauge", "hpbar"].includes(keyLower);
 		if (keyLower.endsWith(".bar") || isDeprecatedHpBar) {
 			const statKey = isDeprecatedHpBar ? "hp" : keyLower.slice(0, -4);
-			if (this.getNumber(statKey) !== undefined || this.getNumber(`max${statKey}`) !== undefined) {
+			if (this.getNumber(statKey) !== undefined || this.getNumber(getMetaKey(statKey, "max")) !== undefined) {
 				/** @todo do i wanna try to case this key? */
 				return ret(key, this.getTrackerBar(statKey));
 			}
 		}
 
-		if (keyLower.endsWith(".bar.values")) {
-			const hpShim = keyLower === "hp.bar.values" ? "hpbar.values" : undefined;
-			return ret(key, this.getNoteStat(key, hpShim as string));
+		if (keyLower.endsWith(".dots")) {
+			const statKey = keyLower.slice(0, -5);
+			if (this.getNumber(statKey) !== undefined) {
+				return ret(key, this.getTrackerDots(statKey));
+			}
+		}
+
+		// shim for initial offering
+		if (keyLower === "hp.bar.values") {
+			return ret(key, this.getNoteStat(key, "hpbar.values"));
 		}
 
 		//#endregion
@@ -841,7 +856,7 @@ export class GameCharacter {
 			const { key:casedKey, value:statValue } = this.getStat(statKey, true);
 			if (statValue) {
 				const retKey = `signed.${casedKey}`;
-				const mathed = processMath(statValue, { spoilers:"optional" });
+				const mathed = processMath(statValue);
 				const numberValue = numberOrUndefined(mathed);
 				if (numberValue === undefined) {
 					return ret(retKey, `signed(${statValue})`);
@@ -888,7 +903,7 @@ export class GameCharacter {
 				const abilityStat = this.getStat(ability, true);
 				if (isDefined(abilityStat.value)) {
 					const retKey = isAbbr ? capitalize(abilityStat.key.slice(0, 3)) : `mod.${abilityStat.key}`;
-					return ret(retKey, processMath(`floor((${abilityStat.value}-10)/2)`, { spoilers:"optional" }));
+					return ret(retKey, processMath(`floor((${abilityStat.value}-10)/2)`));
 				}
 			}
 		}
@@ -1022,6 +1037,15 @@ export class GameCharacter {
 			keysUpdated.forEach(key => keysModdedAndUpdated.add(key));
 		};
 
+		// get game specific conditions and unset all when conditions=""
+		if (stats?.length && this.gameSystem?.isP20) {
+			const conditions = stats?.find(stat => stat.key.toLowerCase() === "conditions");
+			if (conditions?.value === null) {
+				await updateStats(Condition.ToggledConditions.map(key => ({ key, value:null })));
+				await updateStats(Condition.ValuedConditions.map(key => ({ key, value:null })));
+			}
+		}
+
 		if (stats?.length) {
 			await updateStats(stats);
 		}
@@ -1030,7 +1054,7 @@ export class GameCharacter {
 			const curr = this.getCurrency();
 			let currModded = false;
 
-			const processPair = async (pair: KeyValuePair<string, null> & { operator:"+"|"-" }) => {
+			const processPair = async (pair: IncrementArg) => {
 				const oldValue = this.getString(pair.key) ?? 0;
 				await updateStats([{
 					key: pair.key,
@@ -1058,11 +1082,11 @@ export class GameCharacter {
 						if (!tempHp) {
 							await processPair(pair);
 						}else if (tempHp >= hpDelta) {
-							await processPair({ key:"tempHp", operator:"-", value:String(hpDelta) });
+							await processPair({ key:"tempHp", operator:"-", value:hpDelta } as IncrementArg);
 						}else {
 							hpDelta -= tempHp;
-							await processPair({ key:"tempHp", operator:"-", value:String(tempHp) });
-							await processPair({ key:"hp", operator:"-", value:String(hpDelta) });
+							await processPair({ key:"tempHp", operator:"-", value:tempHp } as IncrementArg);
+							await processPair({ key:"hp", operator:"-", value:hpDelta } as IncrementArg);
 						}
 					}
 				}

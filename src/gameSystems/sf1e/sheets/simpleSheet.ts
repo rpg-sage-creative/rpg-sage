@@ -1,7 +1,7 @@
+import { numberOrUndefined } from "@rsc-utils/core-utils";
 import type { StatBlockProcessor } from "@rsc-utils/game-utils";
 import { Ability } from "../../d20/lib/Ability.js";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
-import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { toModifier } from "../../utils/toModifier.js";
 
 function abilitiesToHtml(char: StatBlockProcessor): string | undefined {

@@ -1,6 +1,6 @@
+import { numberOrUndefined } from "@rsc-utils/core-utils";
 import type { StatBlockProcessor } from "@rsc-utils/game-utils";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
-import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { toModifier } from "../../utils/toModifier.js";
 import { Ability } from "../lib/Ability.js";
 
