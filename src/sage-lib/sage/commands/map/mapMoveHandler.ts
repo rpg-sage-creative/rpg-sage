@@ -307,8 +307,7 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 		const directionsContent = missingDirections.length ? [
 			localize("INCLUDE_MOVE_DIRECTIONS"),
 			localize("FOR_EXAMPLE:"),
-			`> sage! map move [NW N NE W E SW S SE]`,
-			`> sage! map move token="GoblinA" [N 2NW W]`,
+			"```sage! map move [NW N NE W E SW S SE]\nsage! map move token=\"GoblinA\" [N 2NW W]```",
 			] : [];
 		const content = imagesContent.concat(directionsContent).join("\n");
 		return stack.whisper(content);

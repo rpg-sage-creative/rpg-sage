@@ -6,6 +6,7 @@ import type { DiceMacroBase } from "../../../model/Macro.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { User } from "../../../model/User.js";
 import { StatMacroProcessor, type StatMacroCharacters } from "../../dice/stats/StatMacroProcessor.js";
+import { processSortTag } from "./processSortTag.js";
 import { replaceCharacterMentions } from "./replaceCharacterMentions.js";
 import { replaceTableMentions } from "./replaceTableMentions.js";
 
@@ -22,12 +23,9 @@ type ProcessArgs = {
 	footer?: boolean;
 	mentions?: boolean;
 	skipBrackets?: boolean;
+	sorts?: boolean;
 	stats?: boolean;
 };
-
-const SortTagRegExp = /<sort>((.|\n)*?)<\/sort>/i;
-const SortTagRegExpG = new RegExp(SortTagRegExp, "gi");
-const HiddenInitRegExp = /^\|\|-?\d+\|\|/;
 
 export class DialogProcessor<HasActingCharacter extends boolean = false> extends StatMacroProcessor {
 	protected constructor(chars: StatMacroCharacters, macros: DiceMacroBase[], public sageCommand: SageCommand, public mentionArgs: MentionArgs) {
@@ -55,26 +53,7 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 		return this.actingCharacter?.toDisplayName({ processor:this, overrideTemplate:authorName }) as string;
 	}
 
-	protected processDialogSort(content: Optional<string>): string {
-		if (!content) return "";
-
-		return content.replace(SortTagRegExpG, (_, inner: string) => {
-			const lines = inner.split("\n").filter(s => s.trim());
-			lines.sort((a, b) => {
-				if (HiddenInitRegExp.test(a)) a = a.replace(HiddenInitRegExp, _ => _.slice(2, -2));
-				if (HiddenInitRegExp.test(b)) b = b.replace(HiddenInitRegExp, _ => _.slice(2, -2));
-				return a < b ? -1 : a > b ? 1 : 0;
-			});
-			lines.forEach((line, index) => {
-				if (HiddenInitRegExp.test(line)) {
-					lines[index] = line.replace(HiddenInitRegExp, "?")
-				}
-			});
-			return lines.join("\n");
-		});
-	}
-
-	public process(content: Optional<string>, { basic, footer, mentions, skipBrackets, stats }: ProcessArgs): string {
+	public process(content: Optional<string>, { basic, footer, mentions, skipBrackets, sorts, stats }: ProcessArgs): string {
 		if (!content) return "";
 
 		// footer can have stats, do it before stats
@@ -92,6 +71,10 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 			content = this.processMentions(content);
 		}
 
+		if (sorts) {
+			content = this.processSorts(content);
+		}
+
 		// this is the last to go
 		if (basic) {
 			content = this.processBasic(content);
@@ -104,11 +87,15 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 	public processBasic(content: Optional<string>): string {
 		if (!content) return "";
 
-		content = this.processDialogSort(content);
-
 		content = this.sageCommand.eventCache.format(content);
 
 		return content.trim();
+	}
+
+	protected processSorts(content: Optional<string>): string {
+		if (!content) return "";
+
+		return processSortTag(content);
 	}
 
 	public processFooter(content: Optional<string>): string {

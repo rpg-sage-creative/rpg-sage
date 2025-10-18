@@ -3,7 +3,7 @@ import { isFiniteNumber } from "@rsc-utils/core-utils";
 const GlobalTrackerBars = {
 	/** 8 different bars, 0% -> 100% */
 	verticalbar: { min:`▕ `, increments:[`▕▁`, `▕▂`, `▕▃`, `▕▄`, `▕▅`, `▕▆`, `▕▇`], max:`▕█`, unknown:`▕?` },
-	horizontalbar: { min:`┋┉┉┉┉┋`, increments:[`┃┉┉┉┉┋`, `┃━┉┉┉┋`, `┃━━┉┉┋`, `┃━━━┉┋`, `┃━━━━┋`], max:`┃━━━━┃`, unknown:`┋┉?┉┋` },
+	horizontalbar: { min:`┆┈┈┈┈┆`, increments:[`┃┈┈┈┈┆`, `┃━┈┈┈┆`, `┃━━┈┈┆`, `┃━━━┈┆`, `┃━━━━┆`], max:`┃━━━━┃`, unknown:`┆┈?┈┆` },
 };
 
 // const GlobalTrackerDots = {
@@ -56,8 +56,14 @@ function parseTrackerBar(trackerBarValues?: string): TrackerBarValues {
 	// min is first value
 	const min = increments.shift();
 
+	// default unknown value
+	let unknown = "?";
+
 	// unknown is last ... if we have a blank before it
-	const unknown = !increments[increments.length - 2] && increments[increments.length - 1] ? increments.pop()! : "?";
+	if (!increments[increments.length - 2] && increments[increments.length - 1]) {
+		unknown = increments.pop()!; // pop unknown
+		increments.pop();            // pop blank
+	}
 
 	// max is last value
 	const max = increments.pop();

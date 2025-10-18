@@ -1,7 +1,7 @@
 import { DicePostType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
-import { BasicBracketsRegExpG, createBasicBracketsRegExpG, DiceOutputType, DiceSecretMethodType, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
+import { BasicBracketsRegExpG, createBasicBracketsRegExpG, DiceOutputType, DiceSecretMethodType, doStatMath, type DiceCriticalMethodType, type GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -63,7 +63,7 @@ async function parseDiscordDice(diceString: string, options: ParseDiscordDiceOpt
 
 	// final math pass
 	/** @todo this is a wishy/washy thing; should go away after we fully tokenize dice */
-	// diceString = doStatMath(diceString);
+	diceString = doStatMath(diceString);
 
 	return DiscordDice.parse({
 		diceString: diceString,

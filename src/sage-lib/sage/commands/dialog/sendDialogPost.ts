@@ -81,6 +81,8 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	}
 	//#endregion
 
+	content = processor.process(content, { sorts:true });
+
 	renderableContent.append(content);
 
 	const thumbnailUrl = postData.embedImageUrl ?? character.avatarUrl;

@@ -1046,6 +1046,15 @@ export class GameCharacter {
 			}
 		}
 
+		// get game specific conditions and unset all when conditions=""
+		if (stats?.length && this.gameSystem?.isP20) {
+			const conditions = stats?.find(stat => stat.key.toLowerCase() === "conditions");
+			if (conditions?.value === null) {
+				await updateStats(Condition.ToggledConditions.map(key => ({ key, value:null })));
+				await updateStats(Condition.ValuedConditions.map(key => ({ key, value:null })));
+			}
+		}
+
 		if (stats?.length) {
 			await updateStats(stats);
 		}
