@@ -303,7 +303,7 @@ function isChannelWeCanIgnore(channel: Optional<Channel>): boolean {
 		ChannelType.GuildDirectory,
 		ChannelType.GuildMedia,
 		ChannelType.GuildStageVoice,
-		ChannelType.GuildVoice,
+		// ChannelType.GuildVoice,
 	].includes(channel.type);
 	if (isInvalidChannel) return true;
 
