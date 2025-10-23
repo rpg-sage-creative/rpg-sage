@@ -73,16 +73,18 @@ function replaceSpoiler(value: string): string {
 // count: (?:\s*(\d+)\s*|\s+|\b)
 // sides: d\s*(\d+)
 
+const _parsers = {
+	dice: /([-+*/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\s+|\b)d\s*(\d+)/i,
+	dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
+	noSort: /(ns)/i,
+	mod: /([-+*/])\s*(\d+)(?!d\d)/i,
+	quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
+	test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i,
+};
+
 /** Returns a new object with the default dice parsers for use with Tokenizer */
 export function getParsers(): TokenParsers {
-	return {
-		dice: /([-+*/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\s+|\b)d\s*(\d+)/i,
-		dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i,
-		noSort: /(ns)/i,
-		mod: /([-+*/])\s*(\d+)(?!d\d)/i,
-		quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
-		test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i
-	};
+	return _parsers;
 }
 
 //#region Token Reduce Helpers
@@ -167,6 +169,10 @@ export function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token
 }
 
 //#endregion
+
+const SECRET_REGEX = /secret/i;
+const BOLD_ITALIC_HTML_REGEX_G = /<\/?(b|em|i|strong)>/ig;
+const ROLLEM_STRIP_EMOJI_REGEX = /^(?:(.*?)\s+)(\d+)$/;
 
 //#region dicePartRollToString
 
@@ -346,7 +352,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 
 	//#region DiceBase
 	public get hasSecret(): boolean {
-		return this.description.match(/secret/i) !== null;
+		return this.description.match(SECRET_REGEX) !== null;
 	}
 	public roll(): U {
 		const _constructor = <typeof DicePart>this.constructor;
@@ -613,8 +619,8 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
 		const description = this.rolls.map((roll, index) => renderer(roll, index, hideRolls, rollem, diceSort)).join(" ");
 		if (rollem) {
-			const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "").trim();
-			const [_, emoji, total] = stripped.match(/^(?:(.*?)\s+)(\d+)$/) ?? ["","",stripped];
+			const stripped = xxs.replace(BOLD_ITALIC_HTML_REGEX_G, "").trim();
+			const [_, emoji, total] = stripped.match(ROLLEM_STRIP_EMOJI_REGEX) ?? ["","",stripped];
 			const escapedTotal = `\` ${total} \``;
 
 			const output = desc

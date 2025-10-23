@@ -33,28 +33,31 @@ import type {
 } from "../base/types.js";
 
 //#region Tokenizer
-function getParsers(): TokenParsers {
-	const parsers = baseGetParsers();
-	// used to make sure we tokenize deadly as a description and not another die to roll
-	parsers["special"] = /(deadly|fatal)\s*\d?d\d+/i;
-	parsers["target"] = /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+|\|\|\d+\|\|)/i;
+
+const Pf2eParsers = {
+	"special": /(deadly|fatal)\s*\d?d\d+/i,
+	"target": /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+|\|\|\d+\|\|)/i,
 
 	// vs type
-	parsers["concealed"] = /(vs\s*conceal(?:ed|ment)?)/i;
-	parsers["deafened"] = /(vs\s*deaf(?:ened)?)/i;
-	parsers["hidden"] = /(vs\s*hidden)/i;
-	parsers["stupefied"] = /(vs\s*stup[ie]fied)\s*(\d+)/i;
-	parsers["undetected"] = /(vs\s*undetected)/i;
+	"concealed": /(vs\s*conceal(?:ed|ment)?)/i,
+	"deafened": /(vs\s*deaf(?:ened)?)/i,
+	"hidden": /(vs\s*hidden)/i,
+	"stupefied": /(vs\s*stup[ie]fied)\s*(\d+)/i,
+	"undetected": /(vs\s*undetected)/i,
 
 	// vs or just type
-	// parsers["concealed"] = /((?:vs\s*)?conceal(?:ed|ment)?)/i;
-	// parsers["deafened"] = /((?:vs\s*)?deaf(?:ened)?)/i;
-	// parsers["hidden"] = /((?:vs\s*)?hidden)/i;
-	// parsers["stupefied"] = /(vs\s*stup(?:i|e)fied|stup(?:i|e)fied)\s*(\d+)/i;
-	// parsers["undetected"] = /((?:vs\s*)?undetected)/i;
+	// "concealed": /((?:vs\s*)?conceal(?:ed|ment)?)/i,
+	// "deafened": /((?:vs\s*)?deaf(?:ened)?)/i,
+	// "hidden": /((?:vs\s*)?hidden)/i,
+	// "stupefied": /(vs\s*stup(?:i|e)fied|stup(?:i|e)fied)\s*(\d+)/i,
+	// "undetected": /((?:vs\s*)?undetected)/i,
+};
 
-	return parsers;
+let _parsers: TokenParsers;
+function getParsers(): TokenParsers {
+	return _parsers ??= { ...baseGetParsers(), ...Pf2eParsers };
 }
+
 const FORTUNE = "Fortune";
 const MISFORTUNE = "Misfortune";
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
@@ -71,6 +74,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
 }
+
 //#endregion
 
 //#region Targets/Tests
@@ -155,9 +159,10 @@ function gradeValue(value: number, target: number): DieRollGrade {
 	return DieRollGrade.Failure;
 }
 
+const AC_DC_VS_REGEX = /ac|dc|vs/i;
 function gradeResults(roll: DiceRoll): DieRollGrade {
 	const test = roll.dice.test;
-	if (test?.alias?.match(/ac|dc|vs/i)) {
+	if (test?.alias?.match(AC_DC_VS_REGEX)) {
 		const grade = gradeValue(roll.total, test.value);
 		if (roll.isMax) {
 			return increaseGrade(grade);
@@ -382,16 +387,20 @@ DicePart.Roll = <typeof baseDicePartRoll>DicePartRoll;
 //#endregion
 
 //#region Dice
+const DEADLY_REGEX = /deadly\s*\d?d(\d+)/i;
+const FATAL_REGEX = /fatal\s*\d?d(\d+)/i;
+const STRIKING_REGEX = /striking/i;
+const GREATER_STRIKING_REGEX = /greater\s*striking/i
+const MAJOR_STRIKING_REGEX = /major\s*striking/i
+const GREATER_OR_MAJOR_STRIKING_REGEX = /(greater|major)\s*striking/i
 type DiceCore = baseDiceCore;
 export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	//#region calculated
 	public get deadlyDie(): OrNull<number> {
-		const DEADLY_REGEX = /deadly\s*\d?d(\d+)/i;
 		const deadlyDieMatch = mapFirst(this.diceParts, dicePart => dicePart.description.match(DEADLY_REGEX)) ?? [];
 		return +deadlyDieMatch[1] || null;
 	}
 	public get fatalDie(): OrNull<number> {
-		const FATAL_REGEX = /fatal\s*\d?d(\d+)/i;
 		const fatalDieMatch = mapFirst(this.diceParts, dicePart => dicePart.description.match(FATAL_REGEX)) ?? [];
 		return +fatalDieMatch[1] || null;
 	}
@@ -414,16 +423,16 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 		return this.diceParts.some(({description}) => posRegex.test(description) && !negRegex?.test(description));
 	}
 	public get hasStriking(): boolean {
-		return this._hasStriking(/striking/i);
+		return this._hasStriking(STRIKING_REGEX);
 	}
 	public get isStriking(): boolean {
-		return this._hasStriking(/striking/i, /(greater|major)\s*striking/i);
+		return this._hasStriking(STRIKING_REGEX, GREATER_OR_MAJOR_STRIKING_REGEX);
 	}
 	public get isGreaterStriking(): boolean {
-		return this._hasStriking(/greater\s*striking/i);
+		return this._hasStriking(GREATER_STRIKING_REGEX);
 	}
 	public get isMajorStriking(): boolean {
-		return this._hasStriking(/major\s*striking/i);
+		return this._hasStriking(MAJOR_STRIKING_REGEX);
 	}
 	public get strikingType(): StrikingType {
 		return this.isMajorStriking && StrikingType.Major
