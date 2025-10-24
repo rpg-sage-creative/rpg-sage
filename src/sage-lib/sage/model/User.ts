@@ -42,8 +42,6 @@ export interface UserCore extends IdCore<"User"> {
 
 	moveDirectionOutputType?: MoveDirectionOutputType;
 
-	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
-
 	notes?: TNote[];
 
 	/** @deprecated */
@@ -106,7 +104,6 @@ export class User extends HasSageCacheCore<UserCore> {
 
 		this.core.aliases = NamedCollection.from(this.core.aliases ?? [], this);
 
-		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
@@ -117,7 +114,7 @@ export class User extends HasSageCacheCore<UserCore> {
 
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
 	public get macros() { return this.core.macros ?? (this.core.macros = []); }
-	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
+	public nonPlayerCharacters = CharacterManager.from([], this, "npc");
 	public notes: NoteManager;
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
 
@@ -161,17 +158,14 @@ export class User extends HasSageCacheCore<UserCore> {
 
 	public findCharacterOrCompanion(name: string): GameCharacter | undefined {
 		return this.playerCharacters.findByName(name)
-			?? this.playerCharacters.findCompanionByName(name)
-			?? this.nonPlayerCharacters.findByName(name)
-			?? this.nonPlayerCharacters.findCompanionByName(name);
+			?? this.playerCharacters.findCompanion(name);
 	}
 
 	public getAutoCharacterForChannel(...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {
 		for (const channelDid of channelDids) {
 			if (channelDid) {
 				const autoChannelData = { channelDid, userDid:this.did };
-				return this.playerCharacters.getAutoCharacter(autoChannelData)
-					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData);
+				return this.playerCharacters.getAutoCharacter(autoChannelData);
 			}
 		}
 		return undefined;
