@@ -71,14 +71,14 @@ export class Skill {
 		return Skill.all({ includeLore:true, includePerception:true }).find(skill => skill.key === key);
 	}
 
-	public static forLore(topic: string): Skill {
-		return new Lore(topic);
+	public static forLore(topic: string, abilityAbbr?: AbilityAbbr): Skill {
+		return new Lore(topic, abilityAbbr);
 	}
 }
 
 class Lore extends Skill {
-	public constructor(public topic: string) {
-		super("Lore", "Int");
+	public constructor(public topic: string, abilityAbbr: AbilityAbbr = "Int") {
+		super("Lore", abilityAbbr);
 	}
 
 	public isLore(): this is Lore { return true; }

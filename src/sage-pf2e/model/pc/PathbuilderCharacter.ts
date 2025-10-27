@@ -1,7 +1,7 @@
 import { CharacterBase } from "@rsc-utils/character-utils";
-import { addCommas, capitalize, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, randomSnowflake, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, randomSnowflake, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
-import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
+import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import type { IHasAbilities } from "../../../gameSystems/p20/lib/Abilities.js";
 import { Check } from "../../../gameSystems/p20/lib/Check.js";
@@ -59,15 +59,19 @@ function calculateSpeed(char: PathbuilderCharacter): number {
 
 //#region skill / lore
 
-function getLoreRegexp(): RegExp {
-	return /(^lore(?!master)\W*)|(\W*lore$)/ig;
-}
+const SkillRegExps = {
+	bardic: /bardic/i,
+	esoteric: /esoteric/i,
+	lore: /(^lore(?!master)\W*)|(\W*lore$)/i,
+	loreG: /(^lore(?!master)\W*)|(\W*lore$)/ig,
+	loremaster: /loremaster/i,
+	perception: /^perc(eption)?$/i,
+};
 
 function loreToHtml(char: PathbuilderCharacter): string {
-	const NAME = 0, PROFMOD = 1;
-	return char.lores.map(l => {
-		const profMod = l[PROFMOD];
-		return `${l[NAME]} ${toModifier(char.getLevelMod(profMod) + profMod + char.abilities.intMod)}`;
+	return char.lores.map(([loreName, profMod]) => {
+		const statMod = SkillRegExps.esoteric.test(loreName) ? char.abilities.chaMod : char.abilities.intMod;
+		return `${loreName} ${toModifier(char.getLevelMod(profMod) + profMod + statMod)}`;
 	}).join(", ");
 }
 
@@ -91,15 +95,18 @@ function skillsToHtml(char: PathbuilderCharacter): string {
 
 //#region spellCaster
 
+const ArcaneSenseRegExp = /^(caster )?arcane sense$/i;
 function isArcaneSense(spellCaster: TPathbuilderCharacterSpellCaster): boolean {
-	return /^(caster )?arcane sense$/i.test(spellCaster.name);
+	return ArcaneSenseRegExp.test(spellCaster.name);
 }
 
+const TraditionPreparationSpellsRegExp = /^(arcane|divine|occult|primal) (prepared|spontaneous) spells$/i;
+const WandScrollStaffDeckRegExp = /(^(wand|scroll|staff|cantrip deck) of)|((staff|wand)$)/i;
 function spellCasterToLabel(spellCaster: TPathbuilderCharacterSpellCaster): string {
-	if (/^(arcane|divine|occult|primal) (prepared|spontaneous) spells$/i.test(spellCaster.name)) {
+	if (TraditionPreparationSpellsRegExp.test(spellCaster.name)) {
 		return spellCaster.name;
 	}
-	if (/(^(wand|scroll|staff|cantrip deck) of)|((staff|wand)$)/i.test(spellCaster.name)) {
+	if (WandScrollStaffDeckRegExp.test(spellCaster.name)) {
 		return spellCaster.name;
 	}
 	if (isArcaneSense(spellCaster)) {
@@ -388,13 +395,14 @@ function getWeaponDamageDie({ grade, str }: TPathbuilderCharacterWeapon): number
 	}
 }
 
+const WeaponDamageDieRegExp = /d\d+/;
 function weaponToDamage(char: PathbuilderCharacter, weapon: TPathbuilderCharacterWeapon, weaponItem: Weapon): string {
 	const modNumber =
 		weaponToDamageStrMod(weaponItem, char.abilities.strMod)
 		+ getWeaponSpecMod(char, weapon);
 	const modString = modNumber ? toModifier(modNumber) : "";
-	return weaponItem.damage?.replace(/1d/, `${getWeaponDamageDie(weapon)}d`)
-		.replace(/d\d+/, match => `${match}${modString}`)
+	return weaponItem.damage?.replace("1d", `${getWeaponDamageDie(weapon)}d`)
+		.replace(WeaponDamageDieRegExp, match => `${match}${modString}`)
 		?? "";
 }
 
@@ -423,10 +431,11 @@ function getWeaponSpecMod(char: PathbuilderCharacter, weapon: TPathbuilderCharac
 	return 0;
 }
 
+const XdRegExp = /\dd/;
 /** Creates the XdY part of a weapon's damage. */
 function getWeaponDamageDice(weapon: TPathbuilderCharacterWeapon): string {
 	const dmgDieCount = getWeaponDamageDie(weapon);
-	const dmgDieSize = weapon.die?.replace(/\dd/, "d") ?? "d?";
+	const dmgDieSize = weapon.die?.replace(XdRegExp, "d") ?? "d?";
 	return `${dmgDieCount}${dmgDieSize}`;
 }
 
@@ -436,7 +445,7 @@ function getWeaponDamageDicePart(weapon: TPathbuilderCharacterWeapon): string {
 	const dmgBonus = weapon.damageBonus ? toModifier(weapon.damageBonus) : "";
 	const dmgType = weapon.damageType ?? "";
 	const damage = `${dmgDice} ${dmgBonus} ${dmgType}`;
-	return damage.replace(/\s+/, " ").trim();
+	return cleanWhitespace(damage);
 }
 
 /** Get's the weapon's item bonus to attack from a potency crystal or weapon grade. */
@@ -490,7 +499,7 @@ type WeaponMacroDiceArgs = { name:string; atkDice?:string; atkMod:number; dmg:st
 function buildWeaponMacroDice({ name, atkDice, atkMod, dmg, dmgNote }: WeaponMacroDiceArgs): DiceMacroBase {
 	const attack = `${atkDice ?? "1d20"} ${atkMod ? toModifier(atkMod) : ""} "${name}" {atkBonus:+0} {ac}`;
 	const damage = `${dmg} {dmgBonus:+0} ${dmgNote ?? ""}`;
-	const dice = `[${attack}; ${damage}]`.replace(/\s+/, " ").trim();
+	const dice = cleanWhitespace(`[${attack}; ${damage}]`);
 	return { name, dice };
 }
 
@@ -565,7 +574,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 	public get exportJsonId(): number | undefined { return this.core.exportJsonId; }
 
 	public createCheck(key: string): Check | undefined {
-		if (/^perc(eption)?$/i.test(key)) {
+		if (SkillRegExps.perception.test(key)) {
 			return Check.forSkill(this, Skill.findByName("Perception"));
 		}
 
@@ -579,23 +588,30 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		}
 
 		const lore = this.getLore(key);
-		const loreRegex = getLoreRegexp();
-		if (lore || loreRegex.test(key)) {
-			const check = lore ? Check.forSkill(this, Skill.forLore(lore[0])) : undefined;
+		if (lore || SkillRegExps.lore.test(key)) {
+			const isBardic = SkillRegExps.bardic.test(key);
+			const isEsoteric = SkillRegExps.esoteric.test(key);
+			const isLoremaster = SkillRegExps.loremaster.test(key);
 
-			const isBardic = /bardic/i.test(key);
-			const isLoremaster = /loremaster/i.test(key);
+			const checkAbil: AbilityAbbr = isEsoteric ? "Cha" : "Int";
+			const check = lore ? Check.forSkill(this, Skill.forLore(lore[0], checkAbil)) : undefined;
 
 			const bLore = this.getLore("Bardic");
 			const bCheck = bLore ? Check.forSkill(this, Skill.forLore(bLore[0])) : undefined;
 			if (bCheck && !isBardic) {
-				bCheck.subject = `Bardic Lore (${capitalize(key.replace(loreRegex, ""))})`;
+				bCheck.subject = `Bardic Lore (${capitalize(key.replace(SkillRegExps.loreG, ""))})`;
+			}
+
+			const eLore = this.getLore("Esoteric");
+			const eCheck = eLore ? Check.forSkill(this, Skill.forLore(eLore[0], "Cha")) : undefined;
+			if (eCheck && !isEsoteric) {
+				eCheck.subject = `Esoteric Lore (${capitalize(key.replace(SkillRegExps.loreG, ""))})`;
 			}
 
 			const lLore = this.getLore("Loremaster");
 			const lCheck = lLore ? Check.forSkill(this, Skill.forLore(lLore[0])) : undefined;
 			if (lCheck && !isLoremaster) {
-				lCheck.subject = `Loremaster Lore (${capitalize(key.replace(loreRegex, ""))})`;
+				lCheck.subject = `Loremaster Lore (${capitalize(key.replace(SkillRegExps.loreG, ""))})`;
 			}
 
 			if (bCheck && lCheck) {
@@ -605,9 +621,15 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			const loreMod = check?.modifier ?? 0;
 			const loremasterMod = lCheck?.modifier ?? 0;
 			const bardicMod = bCheck?.modifier ?? 0;
+			const esotericMod = eCheck?.modifier ?? 0;
 
-			const bestMod = Math.max(loreMod, loremasterMod, bardicMod);
-			const best = [check, isLoremaster ? undefined : bCheck, isBardic ? undefined : lCheck].find(check => check?.modifier === bestMod);
+			const bestMod = Math.max(loreMod, loremasterMod, bardicMod, esotericMod);
+			const best = [
+				check,
+				isLoremaster ? undefined : bCheck,
+				isBardic ? undefined : lCheck,
+				eCheck
+			].find(check => check?.modifier === bestMod);
 			return best ?? check;
 		}
 
@@ -615,8 +637,8 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			return this.abilities.getCheck(key);
 		}
 
-		const profKeyRegex = new RegExp(`^${key}$`, "i");
-		const profKey = Object.keys(this.getCoreProficiencies()).find(profKey => profKeyRegex.test(profKey)) as TPathbuilderCharacterProficienciesKey;
+		const keyLower = key.toLowerCase();
+		const profKey = Object.keys(this.getCoreProficiencies()).find(profKey => keyLower === profKey.toLowerCase()) as TPathbuilderCharacterProficienciesKey;
 		if (profKey) {
 			const check = new Check(this, profKey);
 			check.addProficiency(profKey);
@@ -914,8 +936,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			return undefined;
 		}
 
-		const loreRegex = getLoreRegexp();
-		const clean = (name: string) => name?.replace(loreRegex, "").toLowerCase();
+		const clean = (name: string) => name?.replace(SkillRegExps.loreG, "").toLowerCase();
 
 		loreName = clean(loreName);
 
@@ -927,9 +948,9 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		lore[0] = `${capitalize(loreName)} Lore`;
 
 		const isLegendary = (skill: string) => this.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey) === ProficiencyType.Legendary;
-		if (/bardic/i.test(loreName)) {
+		if (SkillRegExps.bardic.test(loreName)) {
 			lore[1] = isLegendary("Occultism") ? ProficiencyType.Expert : ProficiencyType.Trained;
-		}else if (/loremaster/i.test(loreName)) {
+		}else if (SkillRegExps.loremaster.test(loreName)) {
 			lore[1] = ["Arcana", "Occultism", "Religion", "Society"].some(isLegendary) ? ProficiencyType.Expert : ProficiencyType.Trained;
 		}
 
