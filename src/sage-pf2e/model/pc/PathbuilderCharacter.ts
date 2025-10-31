@@ -1,5 +1,5 @@
 import { CharacterBase } from "@rsc-utils/character-utils";
-import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, randomSnowflake, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
@@ -570,7 +570,18 @@ export const CharacterViewTypes: TCharacterViewType[] = ["All", "Combat", "Equip
 
 export type TPathbuilderCharacter = PathbuilderCharacterCore;
 
-export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore, TCharacterSectionType, TCharacterViewType> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
+	public get gameSystem(): "PF2e" | "SF2e" {
+		/** @todo check a manually set value somewhere? */
+		if (this.core.proficiencies.computers) return "SF2e";
+		if (this.core.proficiencies.piloting) return "SF2e";
+		const sfClasses = ["envoy", "mystic", "operative", "solarian", "soldier", "witchwarper", "mechanic", "technomancer"];
+		if (sfClasses.includes(this.core.class.toLowerCase())) return "SF2e";
+		if (sfClasses.includes(this.core.dualClass?.toLowerCase() ?? "")) return "SF2e";
+		return "PF2e";
+	}
+	public importedFrom: "Pathbuilder" = "Pathbuilder";
+
 	public get exportJsonId(): number | undefined { return this.core.exportJsonId; }
 
 	public createCheck(key: string): Check | undefined {
@@ -779,9 +790,6 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 
 	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super(core);
-		if (!core.id) {
-			core.id = randomSnowflake();
-		}
 		Object.keys(flags).forEach(key => {
 			core[key as keyof TPathbuilderCharacterCustomFlags] = flags[key as keyof TPathbuilderCharacterCustomFlags];
 		});

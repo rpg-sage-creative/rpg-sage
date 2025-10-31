@@ -9,6 +9,8 @@ import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
+import { HephaistosCharacterSF1e } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";
+import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/import/types.js";
 import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
@@ -89,6 +91,8 @@ export type GameCharacterCore = {
 	pathbuilderId?: string;
 	essence20?: TEssence20CharacterCore;
 	essence20Id?: string;
+	hephaistos?: HephaistosCharacterCoreSF1e;
+	hephaistosId?: string;
 	/** The image used to represent the character to the left of the post */
 	tokenUrl?: string;
 	/** The character's user's Discord ID */
@@ -335,6 +339,23 @@ export class GameCharacter {
 	/** @todo figure out what this id is and what it represents */
 	public get essence20Id(): string | undefined { return this.core.essence20Id; }
 	public set essence20Id(essence20Id: Optional<string>) { this.core.essence20Id = essence20Id ?? undefined; }
+
+	private _hephaistos: HephaistosCharacterSF1e | null | undefined;
+	public get hephaistos(): HephaistosCharacterSF1e | null {
+		if (this._hephaistos === undefined) {
+			if (this.core.hephaistos) {
+				this._hephaistos = new HephaistosCharacterSF1e(this.core.hephaistos);
+			}
+			if (this.core.hephaistosId) {
+				this._hephaistos = HephaistosCharacterSF1e.loadCharacterSync(this.core.hephaistosId) ?? null;
+			}
+		}
+		return this._hephaistos ?? null;
+	}
+
+	/** @todo figure out what this id is and what it represents */
+	public get hephaistosId(): string | undefined { return this.core.hephaistosId; }
+	public set hephaistosId(hephaistosId: Optional<string>) { this.core.hephaistosId = hephaistosId ?? undefined; }
 
 	private _pathbuilder: PathbuilderCharacter | null | undefined;
 	public get pathbuilder(): PathbuilderCharacter | null {
@@ -584,6 +605,11 @@ export class GameCharacter {
 			return parseGameSystem("PF2E");
 		}
 
+		// ensure a hephaistos import uses sf1e
+		if (this.hephaistos) {
+			return parseGameSystem("SF1E")
+		}
+
 		// ensure an essence20 import uses a e20 system
 		if (this.essence20) {
 			if (gameSystem?.code === "E20") {
@@ -598,6 +624,7 @@ export class GameCharacter {
 	public get hasStats(): boolean {
 		return this.getNoteStats().length > 0
 			|| !!this.pathbuilder
+			|| !!this.hephaistos
 			|| !!this.essence20;
 	}
 
@@ -821,7 +848,7 @@ export class GameCharacter {
 		if (keyLower === "sheet.url" || keyLower === "sheeturl") {
 			let sheetUrl = this.getNoteStat("sheet.url", "sheeturl");
 			if (sheetUrl === "on") {
-				const { sheetRef } = this.essence20 ?? this.pathbuilder ?? { };
+				const { sheetRef } = this.essence20 ?? this.pathbuilder ?? this.hephaistos ?? { };
 				if (sheetRef?.channelId) {
 					sheetUrl = toMessageUrl(sheetRef);
 				}
@@ -1118,14 +1145,25 @@ export class GameCharacter {
 
 		const forNotes: TKeyValuePair[] = [];
 		const p20 = this.pathbuilder;
+		const h1e = this.hephaistos;
 		const e20 = this.essence20;
 		for (const { key, value:valueOrNull } of pairs) {
 			const keyLower = key.toLowerCase();
 
 			const value = valueOrNull ?? "";
-			if (keyLower === "name" && value.trim() && (this.name !== value || (p20 && p20.name !== value) || (e20 && e20.name !== value))) {
+			if (
+				keyLower === "name"
+				&& value.trim()
+				&& (
+					this.name !== value
+					|| (p20 && p20.name !== value)
+					|| (h1e && h1e.name !== value)
+					|| (e20 && e20.name !== value)
+					)
+				) {
 				this.name = value;
 				if (p20) p20.name = value;
+				if (h1e) h1e.name = value;
 				if (e20) e20.name = value;
 				keysUpdated.add(keyLower);
 				continue;
@@ -1147,6 +1185,7 @@ export class GameCharacter {
 				}
 			}
 
+			/** @todo duplicate some of the following for h1e */
 			if (p20) {
 				if (keyLower === "level" && +value) {
 					const updatedLevel = await p20.setLevel(+value, save);
@@ -1229,6 +1268,9 @@ export class GameCharacter {
 		if (ownerSaved && saveImported) {
 			if (this.pathbuilderId) {
 				return await this.pathbuilder?.save() ?? false;
+			}
+			if (this.hephaistosId) {
+				return await this.hephaistos?.save() ?? false;
 			}
 			if (this.essence20Id) {
 				return await this.essence20?.save() ?? false;

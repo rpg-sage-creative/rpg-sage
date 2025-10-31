@@ -1,4 +1,5 @@
-import { HasIdCore, type IdCore, type Optional } from "@rsc-utils/core-utils";
+import { HasIdCore, randomSnowflake, StringMatcher, type IdCore, type Optional } from "@rsc-utils/core-utils";
+import type { GameSystemCode } from "./currency/internal/GameSystemCode.js";
 
 type MessageReference = { channelId:string; guildId:string|undefined; messageId:string|undefined; };
 
@@ -38,8 +39,43 @@ function updateCore<T extends CharacterBaseCore>(core: OldCore): T {
 	return core as T;
 }
 
-export abstract class CharacterBase<T extends CharacterBaseCore<U> = CharacterBaseCore<any>, U extends string = string> extends HasIdCore<T, U> {
-	public constructor(core: T) { super(updateCore(core)); }
+interface HasSheet<SectionType extends string = string, ViewType extends string = string> {
+	getActiveSections(): SectionType[];
+
+	/** Returns a list of sections that have data to render. */
+	getValidSections(): SectionType[];
+
+	/** Returns a list of views that have sections with data to render. */
+	getValidViews(): ViewType[];
+}
+
+type MacroBase<Category extends string = string> = {
+	/** the name of the macro */
+	name: string;
+	/** optional category for the macro */
+	category?: Category;
+	dialog?: string;
+	dice?: string;
+}
+export type DiceMacroBase<Category extends string = string> = MacroBase<Category> & {
+	/** ensure we aren't a dialog macro */
+	dialog?: never;
+	/** the dice to roll */
+	dice: string;
+};
+
+export abstract class CharacterBase<
+			Core extends CharacterBaseCore<ObjectType> = CharacterBaseCore<any>,
+			SectionType extends string = string,
+			ViewType extends string = string,
+			ObjectType extends string = string
+		> extends HasIdCore<Core, ObjectType> implements HasSheet<SectionType, ViewType> {
+	public constructor(core: Core) {
+		super(updateCore(core));
+		if (!core.id) {
+			core.id = randomSnowflake();
+		}
+	}
 
 	public get name(): string { return this.core.name ?? ""; }
 	public set name(name: string) { this.core.name = name; }
@@ -96,20 +132,52 @@ export abstract class CharacterBase<T extends CharacterBaseCore<U> = CharacterBa
 	}
 	//#endregion
 
+	public static getCharacterSections<SectionType extends string = string, ViewType extends string = string>(_view: Optional<ViewType>): SectionType[] | undefined {
+		return undefined;
+	}
+
+	public getActiveSections(): SectionType[] {
+		const PlayerCharacter = this.constructor as typeof CharacterBase;
+		return PlayerCharacter.getCharacterSections(this.getSheetValue<SectionType>("activeView"))
+			?? this.getSheetValue<SectionType[]>("activeSections")
+			?? PlayerCharacter.getCharacterSections("Combat") ?? [];
+	}
+
+	public getSheetMacros(type: "attack" | "spell"): DiceMacroBase[];
+	public getSheetMacros<User extends { id:string; macros: MacroBase[]; }>(type: "user", macroUser: Optional<User>): DiceMacroBase[];
+	public getSheetMacros<User extends { id:string; macros: MacroBase[]; }>(type: "attack" | "spell" | "user", macroUser?: Optional<User>): DiceMacroBase[] {
+		if (type === "user" && macroUser) {
+			const matcher = new StringMatcher(this.name);
+			return (macroUser.macros as DiceMacroBase[])
+				.filter(macro => matcher.matches(macro.category) && macro.dice)
+				.map((macro, index) => ({ id:`usr-${index}`, prefix:"Macro Roll", ...macro }));
+		}
+		return [];
+	}
+	public setSheetMacroUser<User extends { id:string; macros: MacroBase[]; }>(macroUser: User): void {
+		if (this.getSheetMacros("user", macroUser).length > 0) {
+			this.setSheetValue("macroUserId", macroUser.id);
+		}else {
+			this.setSheetValue("macroUserId", null);
+		}
+	}
+
+	public abstract get gameSystem(): GameSystemCode;
+	public abstract get importedFrom(): "Hephaistos" | "JSON" | "Pathbuilder" | "PDF";
+
 	/** Returns a list of sections that have data to render. */
-	public abstract getValidSections<V extends string>(): V[];
+	public abstract getValidSections(): SectionType[];
 
 	/** Returns a list of views that have sections with data to render. */
-	public abstract getValidViews<V extends string>(): V[];
+	public abstract getValidViews(): ViewType[];
 
 	/** Returns the character name used in toHtml(). */
 	public abstract toHtmlName(): string;
 
 	/** Returns the character "sheet" formatted in HTML. */
-	public abstract toHtml(): string;
+	public abstract toHtml(sections?: SectionType[]): string;
 
-	/** Returns the character "sheet" formatted in HTML. */
-	public abstract toHtml<V>(sections: V[]): string;
+	public toActiveHtml(): string { return this.toHtml(this.getActiveSections()); }
 
 	public abstract save(): Promise<boolean>;
 }
