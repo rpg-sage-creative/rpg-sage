@@ -56,8 +56,9 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 
 	renderableContent.append("");
 
-	if (character.pathbuilder?.hasSheetRef) {
-		renderableContent.append(`<b>Char Sheet</b> ${toMessageUrl(character.pathbuilder.sheetRef!)}`);
+	const { sheetRef } = character.essence20 ?? character.pathbuilder ?? character.hephaistos ?? { };
+	if (sheetRef) {
+		renderableContent.append(`<b>Char Sheet</b> ${toMessageUrl(sheetRef)}`);
 	}
 
 	if (character.isCompanion || character.isMinion) {

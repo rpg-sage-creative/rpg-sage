@@ -12,6 +12,7 @@ import { registerDialogLookup } from "./dialogLookup.js";
 import { registerDice } from "./dice.js";
 import { registerE20 } from "./e20.js";
 import { registerHelpCommands } from "./help.js";
+import { registerHephaistos } from "./hephaistos.js";
 import { registerImport } from "./import.js";
 import { registerMap } from "./map.js";
 import { registerPathbuilder } from "./pathbuilder.js";
@@ -34,6 +35,7 @@ export function registerCommandHandlers(): void {
 	registerE20();
 	registerGameSystems();
 	registerHelpCommands();
+	registerHephaistos();
 	registerImport();
 	registerMap();
 	registerParty();
