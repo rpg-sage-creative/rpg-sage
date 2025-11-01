@@ -1,15 +1,15 @@
 import { CharacterBase, type DiceMacroBase } from "@rsc-utils/character-utils";
 import { addCommas, errorReturnFalse, errorReturnUndefined, getDataRoot, type Optional } from "@rsc-utils/core-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
+import type { MacroBase } from "../../../sage-lib/sage/model/Macro.js";
 import { Ability } from "../../d20/lib/Ability.js";
 import { Check } from "../../d20/lib/Check.js";
 import { SavingThrow } from "../../d20/lib/SavingThrow.js";
 import { toModifier } from "../../utils/toModifier.js";
-import type { HephaistosCharacterCoreSF1e, HephaistosCharacterSF1eInventoryItem } from "../import/types.js";
+import type { HephaistosCharacterCoreSF1e, HephaistosCharacterSF1eInventoryItem, WeaponDamage } from "../import/types.js";
 import { Abilities } from "../lib/Abilities.js";
 import { HAbilities } from "../lib/HAbilities.js";
 import { Skill } from "../lib/Skill.js";
-import type { MacroBase } from "../../../sage-lib/sage/model/Macro.js";
 
 export type CharacterSectionType = "All" | "Armor" | "Attacks" | "Equipment" | "Feats" | "Formulas" | "Languages" | "Perception" | "Pets" | "Skills" | "Speed" | "Spells" | "SpellsKnown" | "Stats" | "Traits" | "Weapons";
 
@@ -97,14 +97,22 @@ function vitalsToHtml(char: HephaistosCharacterSF1e): string {
 	return out.join("; ");
 }
 
-function weaponToHtml(_char: HephaistosCharacterSF1e, { name, toHit, damage, damageBonus }: HephaistosCharacterSF1eInventoryItem): string {
-	// return `<b>${weapon.display}</b> ${toModifier(weapon.attack)} <b>Damage</b> ${damage}`;
-	const dmg = [
-		`${damage.dice.count}d${damage.dice.sides}`,
-		damageBonus ? toModifier(damageBonus) : ``,
-		damage.damage.length > 1 ? `(${damage.damage.join(", ")})` : damage.damage[0]
-	].filter(s => s).join(" ");
-	return `<b>${name}</b> ${toModifier(toHit)} <b>Damage</b> ${dmg}`;
+function weaponToHtml(_char: HephaistosCharacterSF1e, weapon: Weapon): string {
+	if (isWeaponWithDamage(weapon)) {
+		const { damage:{ damage:types, dice:{ count, sides } }, damageBonus, name, range, toHit } = weapon;
+		const damageTypes = types.map(s => s?.trim()).map(s => s);
+		const rangeFt = range ? ` (${range} ft)` : ``;
+		const dmg = [
+			`${count}d${sides}`,
+			damageBonus ? toModifier(damageBonus) : ``,
+			damageTypes.length > 1 ? `(${damageTypes.join(",")})` : damageTypes[0] ?? "",
+		].filter(s => s).join(" ");
+		return `<b>${name}</b> ${toModifier(toHit)}${rangeFt} <b>Damage</b> ${dmg}`;
+	}else {
+		const { name, range, toHit } = weapon;
+		const rangeFt = range ? ` (${range} ft)` : ``;
+		return `<b>${name}</b> ${toModifier(toHit)}${rangeFt}`;
+	}
 }
 
 function moneyToHtml(money: HephaistosCharacterCoreSF1e): string {
@@ -147,13 +155,34 @@ function doEquipmentMoney(char: HephaistosCharacterSF1e) {
 	return out;
 }
 
-function weaponToMacro(_char: HephaistosCharacterSF1e, weapon: HephaistosCharacterSF1eInventoryItem): DiceMacroBase {
-	const { damage:{ damage:types, dice:{ count, sides } }, damageBonus, name, toHit } = weapon;
-	const damageDice = [`${count}d${sides}`,damageBonus ? toModifier(damageBonus) : 0].filter(s => s).join(" ");
-	const damageTypes = types.map(s => s?.trim()).map(s => s);
-	const damageType = damageTypes.length > 1 ? `(${damageTypes.join(",")})` : damageTypes[0] ?? "";
-	const dice = `[1d20 ${toModifier(toHit)} ${name}; ${damageDice} ${damageType}]`;
-	return { name, dice };
+type Weapon = HephaistosCharacterSF1eInventoryItem & {
+	type: "Weapon";
+};
+function isWeapon(weapon: HephaistosCharacterSF1eInventoryItem): weapon is Weapon {
+	return weapon.type === "Weapon";
+}
+type WeaponWithDamage = Weapon & {
+	damage: WeaponDamage;
+};
+function isWeaponWithDamage(weapon: HephaistosCharacterSF1eInventoryItem): weapon is WeaponWithDamage {
+	return isWeapon(weapon) && !!weapon.damage;
+}
+
+function weaponToMacro(_char: HephaistosCharacterSF1e, weapon: Weapon): DiceMacroBase {
+	if (isWeaponWithDamage(weapon)) {
+		const { damage:{ damage:types, dice:{ count, sides } }, damageBonus, name, range, toHit } = weapon;
+		const damageDice = [`${count}d${sides}`, damageBonus ? toModifier(damageBonus) : 0].filter(s => s).join(" ");
+		const damageTypes = types.map(s => s?.trim()).map(s => s);
+		const damageType = damageTypes.length > 1 ? `(${damageTypes.join(",")})` : damageTypes[0] ?? "";
+		const rangeFt = range ? ` (${range} ft)` : ``;
+		const dice = `[1d20 ${toModifier(toHit)} ${name}${rangeFt}; ${damageDice} ${damageType}]`;
+		return { name, dice };
+	}else {
+		const { name, range, toHit } = weapon;
+		const rangeFt = range ? ` (${range} ft)` : ``;
+		const dice = `[1d20 ${toModifier(toHit)} ${name}${rangeFt}]`;
+		return { name, dice };
+	}
 }
 
 export class HephaistosCharacterSF1e extends CharacterBase<HephaistosCharacterCoreSF1e, CharacterSectionType, CharacterViewType> {
@@ -223,7 +252,7 @@ export class HephaistosCharacterSF1e extends CharacterBase<HephaistosCharacterCo
 		).map(s => s.senseType);
 	}
 
-	public getWeapons() { return this.core.inventory.filter(item => item.type === "Weapon"); }
+	public getWeapons() { return this.core.inventory.filter(isWeapon); }
 	public getArmor() { return this.core.inventory.filter(item => item.type === "Armor"); }
 	public getSpellCasters() { return []; }
 	public getSpellsKnown() { return []; }

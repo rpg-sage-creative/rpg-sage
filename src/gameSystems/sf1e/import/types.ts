@@ -213,7 +213,7 @@ export type HephaistosCharacterSF1eInventoryItem = {
 	handedness: number;
 	category: string | null;
 	toHit: number;
-	damage: WeaponDamage;
+	damage?: WeaponDamage;
 	damageBonus: number;
 	critical: {name:string;additionalInfo:string;} | null;
 	special: {
