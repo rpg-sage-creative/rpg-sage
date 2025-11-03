@@ -1,12 +1,14 @@
-import { regex, type InterpolatedValue } from "regex";
 import { parseKeyValueArgs } from "../../args/parseKeyValueArgs.js";
+import { getSimpleHtmlElementRegex, type SimpleHtmlRegExpExecGroup } from "../html/getSimpleHtmlElementRegex.js";
 
 type HtmlToMarkdownHandler = (innerHtml: string, attributes: Map<string, string>, nodeName: Lowercase<string>, outerHtml: string) => string;
 
+const RegExpMap: Record<string, RegExp> = { };
+
 /** @internal Handles nested html tags */
-export function htmlToMarkdown(text: string, element: string | InterpolatedValue, openMarkdown: string): string;
-export function htmlToMarkdown(text: string, element: string | InterpolatedValue, handler: HtmlToMarkdownHandler): string;
-export function htmlToMarkdown(text: string, element: string | InterpolatedValue, handlerOrOpenMarkdown: string | HtmlToMarkdownHandler): string {
+export function htmlToMarkdown(text: string, element: string, openMarkdown: string): string;
+export function htmlToMarkdown(text: string, element: string, handler: HtmlToMarkdownHandler): string;
+export function htmlToMarkdown(text: string, element: string, handlerOrOpenMarkdown: string | HtmlToMarkdownHandler): string {
 	// if we don't have text to convert, just return what we got
 	if (!text) {
 		return text;
@@ -27,17 +29,29 @@ export function htmlToMarkdown(text: string, element: string | InterpolatedValue
 	}
 
 	// create the html element regex
-	const regexp = regex("gi")`<(?<nodeName>${element})(?<attributes>\s[^>]+)?>(?<inner>(.|\n)*?)</\k<nodeName>>`;
+	const regexp = RegExpMap[element] ??= getSimpleHtmlElementRegex({ element, gFlag:"g", iFlag:"i" });
 
 	// search/replace all
-	return text.replace(regexp, (outer: string, nodeName: string, attributes: string, inner: string) => {
+	return text.replace(regexp, (...values: unknown[]) => {
+		const groups = values[values.length - 1] as SimpleHtmlRegExpExecGroup;
+
+		if (groups.comment) return "";
+
 		// create attribute map
-		const attributeMap = parseKeyValueArgs(attributes).reduce((map, arg) => {
-			map.set(arg.key, arg.value ?? "");
-			return map;
-		}, new Map<string, string>());
+		const attributeMap = new Map<string, string>();
+		const attributes = groups.fullTagAttributes ?? groups.selfCloseAttributes;
+		if (attributes) {
+			parseKeyValueArgs(attributes).forEach(arg => {
+				attributeMap.set(arg.key, arg.value ?? "");
+			});
+		}
+
+		const elementName = groups.fullTagName ?? groups.selfCloseName;
+		const elementNameLower = elementName?.toLowerCase();
+
+		if (!elementNameLower) return "";
 
 		// handle output
-		return handler(inner, attributeMap, nodeName.toLowerCase(), outer);
+		return handler(groups.inner ?? "", attributeMap, elementNameLower, values[0] as string);
 	});
 }

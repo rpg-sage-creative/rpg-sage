@@ -13,6 +13,7 @@ export function toMarkdown(html: string): string {
 		.formatNewLine()
 		.formatTable()
 
+		.formatAsciiEscape()
 		.formatBold()
 		.formatCode()
 		.formatFooter()
@@ -23,6 +24,8 @@ export function toMarkdown(html: string): string {
 		.formatLists()
 		.formatParagraph()
 		.formatStrikethrough()
+		.formatSub()
+		.formatSup()
 		.formatUnderline()
 
 		.formatBlockQuote()
