@@ -1,6 +1,7 @@
 import { partition, type RenderableContent } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, toUserMention } from "@rsc-utils/discord-utils";
 import type { StringSelectMenuInteraction } from "discord.js";
+import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { Macro } from "../../../model/Macro.js";
 import { MacroOwner } from "../../../model/MacroOwner.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
@@ -105,13 +106,14 @@ export async function mCmdList(sageCommand: SageCommand, args?: Args | boolean):
 	const embeds = await toRenderableContent(sageCommand, args);
 	const components = await createListComponents(sageCommand, args);
 
-	const message = sageCommand.isSageInteraction()
-		? await sageCommand.fetchMessage()
-		: undefined;
-	if (message) {
+	const message = await sageCommand.fetchMessage();
+	if (message && sageCommand.isSageInteraction()) {
 		await message.edit(sageCommand.resolveToOptions({ content, embeds, components }));
 	}else {
-		await sageCommand.replyStack.send({ content, embeds, components });
+		const listMessage = await sageCommand.replyStack.send({ content, embeds, components });
+		if (listMessage && message) {
+			await deleteMessage(message);
+		}
 	}
 }
 
