@@ -7,6 +7,19 @@ import { HephaistosCharacterSF1e } from "../characters/HephaistosCharacter.js";
 import { validCoreOrUndefined } from "./hephaistos/validCoreOrUndefined.js";
 import type { HephaistosCharacterCoreSF1e } from "./types.js";
 
+/*
+All of these begin with `https://hephaistos.azurewebsites.net/character/`, just append the numbers after that. All of these are level 1.
+
+- **Navasi, Human Outlaw Envoy:** 1750278754
+- **Quig, Ysoki Bounty Hunter Mechanic:** 1241025656
+- **Keskodai, Shirren Priest Mystic:** 2037614502
+- **Iseph, Android Ace Pilot Operative:** 490769591
+- **Altronus, Kasatha Scholar Solarian:** 1628066886
+- **Obozaya, Vesk Mercenary Soldier:** 2139833824
+- **Raia, Lashunta Xenoseeker Technomancer:** 1282313074
+
+*/
+
 function createHandlers(): ImportHandlers<HephaistosCharacterCoreSF1e> {
 	return {
 		char: (core: HephaistosCharacterCoreSF1e) => new HephaistosCharacterSF1e(core),
