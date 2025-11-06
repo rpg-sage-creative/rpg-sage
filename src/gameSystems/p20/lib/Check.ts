@@ -292,13 +292,12 @@ export class Check {
 		check.addProficiency(skill.isLore()? skill.topic : skill.name);
 		check.setAbility(skill.ability.name);
 
-		// "Potency Bonus"
-		const potencyMod = char.getMods(skill.name, "Potency");
-		if (potencyMod) check.addModifier("Potency", potencyMod);
-
-		// "Untyped Bonus"
-		const untypedMod = char.getMods(skill.name, "Untyped");
-		if (untypedMod) check.addModifier("Untyped", untypedMod);
+		// Pathbuilder "mods"
+		const modTypes = ["Item", "Potency", "Untyped"] as const;
+		modTypes.forEach(type => {
+			const typedMod = char.getMods(skill.name, type);
+			if (typedMod) check.addModifier(type, typedMod);
+		});
 
 		return check;
 	}
