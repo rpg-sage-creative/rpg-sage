@@ -81,6 +81,8 @@
 		"prestart-dev": "npm run build",
 		"start-dev": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
 		"start-dev-and-services": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices",
-		"app-commands": "node ./build/app-commands.mjs codeName=dev dataRoot='./docker-volumes/rpg-sage-mono'"
+		"app-commands": "node ./build/app-commands.mjs codeName=dev dataRoot='./docker-volumes/rpg-sage-mono'",
+		"preupdate-dialog-messages": "npm run build",
+		"update-dialog-messages": "node ./build/updates/messages.js codeName=dev --getFromEnvJson"
 	}
 }
