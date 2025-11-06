@@ -444,7 +444,17 @@ function getWeaponDamageDicePart(weapon: TPathbuilderCharacterWeapon): string {
 	const dmgDice = getWeaponDamageDice(weapon);
 	const dmgBonus = weapon.damageBonus ? toModifier(weapon.damageBonus) : "";
 	const dmgType = weapon.damageType ?? "";
-	const extraDamage = weapon.extraDamage?.join(" ") ?? "";
+	const extraDamage = weapon.extraDamage?.map(s => {
+		if (s.includes("bludgeoning")) {
+			s = s.replace("bludgeoning", dmgType.includes("B") ? "" : "B");
+		}
+		if (s.includes("piercing")) {
+			s = s.replace("piercing", dmgType.includes("P") ? "" : "P");
+		}
+		if (s.includes("slashing")) {
+			s = s.replace("slashing", dmgType.includes("S") ? "" : "S");
+		}
+	}).join(" ") ?? "";
 	const damage = `${dmgDice} ${dmgBonus} ${dmgType} ${extraDamage}`;
 	return cleanWhitespace(damage);
 }
