@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.12.1",
+"version":"1.12.2",
 "branch":"v1.x.x",
-"commit":"c31f82f646e0646fe35c66d3b584d847b04c8693",
-"commitSubject":"cleaner min/max test logic",
-"commitTs":1760657278000,
-"commitDate":"2025-10-16-1627",
-"buildTs":1760658125000,
-"buildDate":"2025-10-16-1642",
+"commit":"501858dee2da64893d2ca0af97f3a0c200275c5b",
+"commitSubject":"update dependecies",
+"commitTs":1762448994000,
+"commitDate":"2025-11-06-0909",
+"buildTs":1762449006000,
+"buildDate":"2025-11-06-0910",
 "author":"Randal"
 }
