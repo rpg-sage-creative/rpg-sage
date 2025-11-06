@@ -1,4 +1,4 @@
-import { error, errorReturnFalse, errorReturnNull, getDataRoot, isNonNilSnowflake, orNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { error, errorReturnFalse, errorReturnUndefined, getDataRoot, isNonNilSnowflake, orNilSnowflake, snowflakeToDate, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteFile, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import type { Message, MessageReference, PartialMessage } from "discord.js";
 
@@ -27,15 +27,19 @@ export type DialogMessageDataCore = {
 	id: Snowflake;
 	/** the ids of the messages from a dialog that was too long and split over multiple messages */
 	messageIds: Snowflake[];
+	/** All SageCore objects include id, objectType, and ver */
+	objectType: "Message";
 	/** the timestamp of the message */
 	timestamp: number;
 	/** the id of the user that posted the dialog */
 	userId: Snowflake;
+	/** All SageCore objects include id, objectType, and ver */
+	ver: number;
 };
 
-type CoreResolvable = DialogMessageDataCore | TDialogMessage;
+export type SageMessageResolvable = DialogMessageDataCore | TDialogMessage;
 
-function updateCore(core: CoreResolvable): DialogMessageDataCore {
+export function updateSageMessage(core: SageMessageResolvable): DialogMessageDataCore {
 	if ("messageDid" in core) {
 		return {
 			channelId: isNonNilSnowflake(core.threadDid) ? core.threadDid : core.channelDid,
@@ -44,9 +48,16 @@ function updateCore(core: CoreResolvable): DialogMessageDataCore {
 			guildId: core.serverDid,
 			id: core.messageDid,
 			messageIds: [core.messageDid],
-			timestamp: core.timestamp,
-			userId: core.userDid
+			objectType: "Message",
+			timestamp: snowflakeToDate(core.messageDid).getTime(),
+			userId: core.userDid,
+			ver: 1
 		};
+	}
+
+	const timestamp = snowflakeToDate(core.id).getTime();
+	if (core.objectType !== "Message" || !core.ver || core.timestamp !== timestamp) {
+		return { ...core as any, objectType:"Message", timestamp, ver:1 };
 	}
 	return core;
 }
@@ -69,23 +80,25 @@ export class DialogMessageData {
 	public get guildId(): Snowflake { return this.core.guildId; }
 	public get id(): Snowflake { return this.core.id; }
 	public get messageIds(): Snowflake[] { return this.core.messageIds; }
+	public get objectType(): "Message" { return this.core.objectType; }
 	public get timestamp(): number { return this.core.timestamp; }
 	public get userId(): Snowflake { return this.core.userId; }
+	public get ver(): number { return this.core.ver; }
 
-	public matchesChannel(resolvable: Optional<CoreResolvable | MessageResolvable | string>): boolean {
+	public matchesChannel(resolvable: Optional<SageMessageResolvable | MessageResolvable | string>): boolean {
 		// we got an undefined somehow, somewhere, so handle it
 		if (!resolvable) {
 			return false;
 		}
 
 		// handle string
-		if (typeof(resolvable) === "string") {
+		if (typeof (resolvable) === "string") {
 			return this.channelId === resolvable;
 		}
 
 		// old cores might still exist, so lets update them
 		if ("messageDid" in resolvable) {
-			resolvable = updateCore(resolvable);
+			resolvable = updateSageMessage(resolvable);
 		}
 
 		return this.channelId === resolvable.channelId;
@@ -108,26 +121,35 @@ export class DialogMessageData {
 		return this.core;
 	}
 
-	public static fromCore(core: CoreResolvable): DialogMessageData {
-		return new DialogMessageData(updateCore(core));
+	public static fromCore(core: SageMessageResolvable): DialogMessageData {
+		return new DialogMessageData(updateSageMessage(core));
 	}
 
 }
 
 type WriteArgs = {
-	messages: Message[],
-	characterId: Snowflake,
-	gameId?: Snowflake,
-	userId: Snowflake
+	messages: Message[];
+	characterId: Snowflake;
+	gameId?: Snowflake;
+	userId: Snowflake;
 };
 
-function createFilePath(messageId: string, guildId?: string): string {
+function createFilePathV2(messageId: string): string {
+	const root = getDataRoot("sage/messages");
+	const year = snowflakeToDate(messageId as Snowflake).getFullYear();
+	return `${root}/${year}/${messageId}.json`;
+}
+function createFilePathV1(messageId: string): string {
+	const root = getDataRoot("sage/messages");
+	return `${root}/${messageId}.json`;
+}
+function createFilePathV0(messageId: string, guildId?: string): string {
 	const root = getDataRoot("sage/messages");
 	if (guildId) {
-		// old format
+		// v0 format
 		return `${root}/${orNilSnowflake(guildId)}-${messageId}.json`;
-	}else {
-		// new format
+	} else {
+		// v1 format
 		return `${root}/${messageId}.json`;
 	}
 }
@@ -148,46 +170,61 @@ export class DialogMessageRepository {
 			return undefined;
 		}
 
-		// try reading the new file format that is just messageId
-		const filePath = createFilePath(messageId);
-		core = await readJsonFile<DialogMessageDataCore>(filePath).catch(returnUndefined) ?? undefined;
+		// try reading the v2 file format that uses year
+		const filePathV2 = createFilePathV2(messageId);
+		core = await readJsonFile<DialogMessageDataCore>(filePathV2).catch(returnUndefined) ?? undefined;
 
-		// we didn't get one from the new file format, so let's fallback on the old
+		// flag to update old data or not
+		let update = false;
+		let filePathV1: string | undefined;
+		let filePathV0: string | undefined;
+
+		// we didn't get one from v2 file format, so let's fallback on the v1
 		if (!core) {
+			filePathV1 = createFilePathV1(messageId);
+			core = await readJsonFile<DialogMessageDataCore>(filePathV1).catch(returnUndefined) ?? undefined;
+			update = core !== undefined;
+		}
+
+		// we didn't get one from v2 nor v1 file format, so let's fallback on the old v0
+		if (!core) {
+			// see if we already have a guildId
+			let guildId = messageReference.guildId ?? resolvable.guildId;
+
 			// if we get here with a partial, fetch it so that we can get the valid guildId
-			if ("partial" in resolvable && resolvable.partial) {
+			if (!guildId && "partial" in resolvable && resolvable.partial) {
 				resolvable = await resolvable.fetch();
 				messageReference = toMessageReference(resolvable);
+				guildId = messageReference.guildId;
 			}
-
-			// get guildId now that we are sure we have a valid result
-			const { guildId } = messageReference;
 
 			if (!guildId) {
 				error(`DialogMessageRepository.read(): resolvable doesn't have guildId`);
 				return undefined;
 			}
 
-			// try reading the old file format using guildId-messageId
-			const oldFilePath = createFilePath(messageId, guildId);
-			core = await readJsonFile<DialogMessageDataCore>(oldFilePath).catch(options?.ignoreMissingFile ? returnUndefined : errorReturnNull) ?? undefined;
+			filePathV0 = createFilePathV0(messageId, guildId);
+			core = await readJsonFile<DialogMessageDataCore>(filePathV0).catch(options?.ignoreMissingFile ? returnUndefined : errorReturnUndefined) ?? undefined;
+			update = core !== undefined;
+		}
 
-			if (core) {
+		// we have found the data
+		if (core) {
+			if (update) {
 				// update the old core
-				core = updateCore(core);
+				core = updateSageMessage(core);
 
 				// write the updated core to the new file
-				const success = await writeFile(filePath, core).catch(errorReturnFalse);
+				const success = await writeFile(filePathV2, core).catch(errorReturnFalse);
 
 				// delete the old file
 				if (success) {
-					await deleteFile(oldFilePath);
+					if (filePathV0) await deleteFile(filePathV0);
+					if (filePathV1) await deleteFile(filePathV1);
 				}
 			}
-		}
 
-		// we have found the data, return the instance
-		if (core) {
+			// return the instance
 			return DialogMessageData.fromCore(core);
 		}
 
@@ -215,12 +252,15 @@ export class DialogMessageRepository {
 				id: message.id as Snowflake,
 				guildId: message.guild?.id as Snowflake,
 				messageIds,
+				objectType: "Message",
 				timestamp: message.createdTimestamp,
-				userId
+				userId,
+				ver: 1
 			};
 
 			// attempt to save and track the last core
-			const success = await writeFile(createFilePath(message.id), core).catch(errorReturnFalse);
+			const filePath = createFilePathV2(message.id);
+			const success = await writeFile(filePath, core).catch(errorReturnFalse);
 			if (success) {
 				lastCore = core;
 			}
