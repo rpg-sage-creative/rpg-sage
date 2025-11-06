@@ -439,21 +439,26 @@ function getWeaponDamageDice(weapon: TPathbuilderCharacterWeapon): string {
 	return `${dmgDieCount}${dmgDieSize}`;
 }
 
+const BludgeoningRegExp = /Bludgeoning/i;
+const PiercingRegExp = /Piercing/i;
+const SlashingRegExp = /Slashing/i;
+
 /** Creates the weapon's damage DicePart of format "dice bonus type". */
 function getWeaponDamageDicePart(weapon: TPathbuilderCharacterWeapon): string {
 	const dmgDice = getWeaponDamageDice(weapon);
 	const dmgBonus = weapon.damageBonus ? toModifier(weapon.damageBonus) : "";
 	const dmgType = weapon.damageType ?? "";
 	const extraDamage = weapon.extraDamage?.map(s => {
-		if (s.includes("bludgeoning")) {
-			s = s.replace("bludgeoning", dmgType.includes("B") ? "" : "B");
+		if (BludgeoningRegExp.test(s)) {
+			s = s.replace(BludgeoningRegExp, dmgType.includes("B") ? "" : "B");
 		}
-		if (s.includes("piercing")) {
-			s = s.replace("piercing", dmgType.includes("P") ? "" : "P");
+		if (PiercingRegExp.test(s)) {
+			s = s.replace(PiercingRegExp, dmgType.includes("P") ? "" : "P");
 		}
-		if (s.includes("slashing")) {
-			s = s.replace("slashing", dmgType.includes("S") ? "" : "S");
+		if (SlashingRegExp.test(s)) {
+			s = s.replace(SlashingRegExp, dmgType.includes("S") ? "" : "S");
 		}
+		return s;
 	}).join(" ") ?? "";
 	const damage = `${dmgDice} ${dmgBonus} ${dmgType} ${extraDamage}`;
 	return cleanWhitespace(damage);
