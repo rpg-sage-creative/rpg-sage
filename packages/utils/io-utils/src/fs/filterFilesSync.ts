@@ -5,21 +5,23 @@ import { listFilesSync } from "./listFilesSync.js";
 type DirFilterFn = (dirName: string, dirPath: string) => boolean;
 type FileFilterFn = (fileName: string, filePath: string) => boolean;
 
-type BothOptions = {
+type DirOptions = {
+	dirFilter?: DirFilterFn;
+	recursive?: boolean;
+};
+
+type FileOptions = {
 	fileExt: string;
 	fileFilter: FileFilterFn;
-};
-type ExtOptions = {
+} | {
 	fileExt: string;
-	fileFilter?: FileFilterFn;
-};
-type FilterOptions = {
-	fileExt?: string;
+	fileFilter?: never;
+} | {
+	fileExt?: never;
 	fileFilter: FileFilterFn;
 };
 
-type Options = { dirFilter?:DirFilterFn; recursive?: boolean; }
-	& (BothOptions | ExtOptions | FilterOptions);
+type Options = DirOptions & FileOptions;
 
 function createOptions(input: string | FileFilterFn | Options, recursive?: boolean): Options {
 	switch(typeof(input)) {
@@ -83,7 +85,8 @@ export function filterFilesSync(path: string, extOrFilterOrOpts: string | FileFi
 			if (options.recursive) {
 				// process if no dirFilter or if dirFilter returns truthy
 				if (options.dirFilter ? options.dirFilter(fileName, filePath) : true) {
-					output.push(...filterFilesSync(filePath, options));
+					const children = filterFilesSync(filePath, options);
+					children.forEach(child => output.push(child));
 				}
 			}
 
