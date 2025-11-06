@@ -583,7 +583,9 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 	public importedFrom: "Pathbuilder" = "Pathbuilder";
 
 	public get exportJsonId(): number | undefined { return this.core.exportJsonId; }
-
+	public getMods(key: string, type: "Potency" | "Untyped"): number {
+		return this.core.mods?.[key]?.[`${type} Bonus`] ?? 0;
+	}
 	public createCheck(key: string): Check | undefined {
 		if (SkillRegExps.perception.test(key)) {
 			return Check.forSkill(this, Skill.findByName("Perception"));

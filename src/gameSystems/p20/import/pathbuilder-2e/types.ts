@@ -319,7 +319,7 @@ export type PathbuilderCharacterCore = CharacterBaseCore<"PathbuilderCharacter" 
 	attributes: TPathbuilderCharacterAttributes;
 	abilities: TPathbuilderCharacterAbilities;
 	proficiencies: TPathbuilderCharacterProficiencies;
-	mods?: {},
+	mods?: Record<string, { "Untyped Bonus"?:number; "Potency Bonus"?:number; }>,
 	feats: TPathbuilderCharacterFeat[];
 	specials: string[];
 	lores: TPathbuilderCharacterLore[];
