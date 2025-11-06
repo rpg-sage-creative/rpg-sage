@@ -444,7 +444,8 @@ function getWeaponDamageDicePart(weapon: TPathbuilderCharacterWeapon): string {
 	const dmgDice = getWeaponDamageDice(weapon);
 	const dmgBonus = weapon.damageBonus ? toModifier(weapon.damageBonus) : "";
 	const dmgType = weapon.damageType ?? "";
-	const damage = `${dmgDice} ${dmgBonus} ${dmgType}`;
+	const extraDamage = weapon.extraDamage?.join(" ") ?? "";
+	const damage = `${dmgDice} ${dmgBonus} ${dmgType} ${extraDamage}`;
 	return cleanWhitespace(damage);
 }
 

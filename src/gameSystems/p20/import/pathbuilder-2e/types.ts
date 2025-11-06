@@ -222,7 +222,8 @@ export type TPathbuilderCharacterWeapon = {
 	/** attack mod */
 	attack: number;
 	damageBonus: number;
-	extraDamage: [];
+	/** [ "+3 Spirit", ... ] */
+	extraDamage: string[];
 	increasedDice: boolean;
 	isInventor: boolean;
 	/** [1d20 +mod atk; XdY dmg] */
