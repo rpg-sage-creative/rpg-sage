@@ -1,7 +1,7 @@
 import { isSageId, isTupperBoxId } from "@rsc-sage/env";
 import { errorReturnUndefined, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
-import type { Guild, GuildMember, Message } from "discord.js";
+import type { Guild, Message, TextChannel } from "discord.js";
 import { ReactionType } from "../../discord/enums.js";
 import { registerReactionListener } from "../../discord/handlers.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
@@ -41,47 +41,97 @@ async function whisper(sageCommand: SageCommand, content: string | RenderableCon
 	}
 }
 
-async function getAuthorId(message: Message): Promise<Snowflake> {
-	const { author, channel, webhookId } = message;
-	if (webhookId && "fetchWebhooks" in channel) {
+/** webhookOwnerId should be Sage's userId; authorId could be a user or it could be a proxied character! */
+async function getAuthorOwnerIds(message: Message) {
+	const { author:{ id:authorId }, webhookId } = message;
+	let webhookOwnerId: string | undefined;
+
+	// start with channel
+	let channel = message.channel;
+
+	// if it doesn't have webhooks, grab parent
+	if (!("fetchWebhooks" in channel) && ("parent" in channel)) {
+		channel = channel.parent as TextChannel;
+	}
+
+	// if we have webhooks, fetch em and test
+	if ("fetchWebhooks" in channel) {
 		const webhooks = await channel.fetchWebhooks();
-		const webhook = webhooks.get(webhookId);
-		if (webhook?.owner) {
-			return webhook.owner.id as Snowflake;
+
+		// start with webhook id
+		if (webhookId) {
+			webhookOwnerId = webhooks.get(webhookId)?.owner?.id;
+		}
+
+		// check the author id ... just in case
+		if (!webhookOwnerId) {
+			/** @todo find time to run down what that authorId represents when webhookId and authorId don't link back to Sage */
+			webhookOwnerId = webhooks.get(authorId)?.owner?.id;
 		}
 	}
-	return author.id as Snowflake;
+
+	// const isClyde = isClydeId(authorId) || isClydeId(webhookOwnerId);
+
+	const isSage = isSageId(authorId) || isSageId(webhookOwnerId);
+
+	const isTupperBox = isTupperBoxId(authorId) || isTupperBoxId(webhookOwnerId);
+
+	return {
+		// authorId,
+		// isClyde,
+		isSage,
+		isTupperBox,
+		// webhookOwnerId
+	};
 }
 
 function getMessageLink(message: Message): string {
 	return `<b>Message:</b> ${toMessageUrl(message)}`;
 }
 
-function getCharacterName(character?: Optional<GameCharacter>): string {
+/** null means no messageInfo, undefined means not found */
+function getCharacterName(character: Optional<GameCharacter>): string {
+	if (character === null) {
+		return "<b>Character:</b> <i>no character</i>";
+	}
+
+	if (character === undefined) {
+		return "<b>Character:</b> <i>unable to find character</i>";
+	}
+
 	let type: string;
-	switch(character?.type) {
+	switch(character.type) {
 		case "gm": type = "(GM)"; break; // NOSONAR
 		case "npc": case "minion": type = "(NPC)"; break; // NOSONAR
 		default: type = ""; break; // NOSONAR
 	}
-	return `<b>Character:</b> ${character?.name ?? "<i>no character</i>"} ${type}`;
+	return `<b>Character:</b> ${character.name} ${type}`.trim();
 }
 
-async function getUserName({ discord }: SageCommand, guildMember: Optional<GuildMember>, userId: Snowflake, game: Optional<Game>): Promise<string> {
-	const parts: string[] = [];
+function isClydeId(id?: string): id is "1187126825042858149" {
+	return id === "1187126825042858149";
+}
 
-	parts.push(`<b>User:</b>`);
+async function getUserName(game: Optional<Game>, ...ids: Optional<string>[]): Promise<string> {
+	const ret = (id: string) => {
+		const userName = toUserMention(id as Snowflake);
+		const gm = game?.getUser(id)?.type === GameUserType.GameMaster ? " (GM)" : "";
+		return `<b>User:</b> ${userName}${gm}`;
+	};
 
-	const discordUser = guildMember?.user ?? await discord.fetchUser(userId);
-	const userName = toUserMention(guildMember ?? discordUser ?? userId);
-	parts.push(userName ?? "<i>Unknown User</i>");
-
-	const gameUser = game?.getUser(userId);
-	if (gameUser?.type === GameUserType.GameMaster) {
-		parts.push(`(GM)`);
+	for (const id of ids) {
+		if (id && !isClydeId(id) && !isSageId(id)) {
+			return ret(id);
+		}
 	}
 
-	return parts.join(" ");
+	for (const id of ids) {
+		if (id && !isClydeId(id)) {
+			return ret(id);
+		}
+	}
+
+	return `<b>User:</b> <i>Unknown User</i>`;
 }
 
 function getGameName(game: Optional<Game>): string {
@@ -97,21 +147,41 @@ function getServerName(guild: Optional<Guild>): string {
 }
 
 async function processSageDialog(sageCommand: SageCommand, message: Message): Promise<void> {
+	const sendLookup = async (game?: Game, character?: Optional<GameCharacter>, userId?: Snowflake) => {
+		const renderable = createRenderableContent(sageCommand.getHasColors(), ColorType.Command, "RPG Sage Dialog Lookup");
+		renderable.append(getMessageLink(message));
+		renderable.append(getCharacterName(character));
+		renderable.append(await getUserName(game, userId, message.author.id));
+		renderable.append(getGameName(game));
+		if (character) {
+			renderable.setThumbnailUrl(character.tokenUrl ?? character.avatarUrl);
+			if (game && !game?.findCharacterOrCompanion(character.id)) {
+				renderable.append(`> *NOTE: This character is a User Character, **NOT** a Game Character.*`);
+			}
+		}
+		renderable.append(getServerName(sageCommand.discord.guild));
+
+		await whisper(sageCommand, renderable);
+	};
+
 	const messageInfo = await DialogMessageRepository.read(message, { ignoreMissingFile:true });
 	if (!messageInfo) {
+		if (sageCommand.game) {
+			await sendLookup(sageCommand.game, null);
+			return;
+		}
+
 		await whisper(sageCommand, `Sorry, we could't find any RPG Sage Dialog info for that message.`);
 		return;
 	}
 
 	const { characterId, gameId, userId } = messageInfo;
 
-	const sageUser = await sageCommand.sageCache.getOrFetchUser(userId);
-	const guildMember = await sageCommand.discord.fetchGuildMember(userId);
+	// get game to lookup character
+	const game = await sageCommand.eventCache.getOrFetchGame(gameId);
 
-	let { game } = sageCommand;
-	if (game && gameId && !game.equals(gameId)) {
-		game = await sageCommand.sageCache.getOrFetchGame(gameId);
-	}
+	// get user to lookup character
+	const sageUser = await sageCommand.eventCache.getOrFetchUser(userId);
 
 	/** we can't use sageCommand.findCharacter because the game and user aren't linked to the command */
 	const character = game?.playerCharacters.findById(characterId)
@@ -121,45 +191,12 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 		?? sageUser?.playerCharacters.findById(characterId)
 		?? sageUser?.nonPlayerCharacters.findById(characterId);
 
-	if (!character) {
-		await whisper(sageCommand, `Sorry, we could't find the RPG Sage Character.`);
-		return;
-	}
-
-	const isGameChar = game?.findCharacterOrCompanion(character.id);
-
-	const renderable = createRenderableContent(sageCommand.getHasColors(), ColorType.Command, "RPG Sage Dialog Lookup");
-	renderable.setThumbnailUrl(character.tokenUrl ?? character.avatarUrl);
-	renderable.append(getMessageLink(message));
-	renderable.append(getCharacterName(character));
-	renderable.append(await getUserName(sageCommand, guildMember, userId, game));
-	renderable.append(getGameName(game));
-	if (game && !isGameChar) {
-		renderable.append(`> *NOTE: This character is a User Character, **NOT** a Game Character.*`);
-	}
-	renderable.append(getServerName(sageCommand.discord.guild));
-
-	await whisper(sageCommand, renderable);
+	await sendLookup(game, character, userId);
 }
 
 async function processTupperDialog(sageCommand: SageCommand): Promise<void> {
 	const content = `That message was posted by [Tupperbox](<https://tupperbox.app>). React to it with :question: to get a response from Tupperbox.`;
 	return whisper(sageCommand, content);
-}
-
-async function processGameDialog(sageCommand: SageCommand): Promise<void> {
-	const { game } = sageCommand;
-	const message = await sageCommand.fetchMessage();
-	const guildMember = message?.member;
-
-	const renderable = createRenderableContent(sageCommand.getHasColors(), ColorType.Command, "RPG Sage Dialog Lookup");
-	renderable.append(getMessageLink(message!));
-	renderable.append(getCharacterName());
-	renderable.append(await getUserName(sageCommand, guildMember, message?.author.id as Snowflake, game));
-	renderable.append(getGameName(game));
-	renderable.append(getServerName(sageCommand.discord.guild));
-
-	await whisper(sageCommand, renderable);
 }
 
 async function isDialogLookup(sageReaction: SageReaction): Promise<TCommand | null> {
@@ -175,11 +212,13 @@ async function isDialogLookup(sageReaction: SageReaction): Promise<TCommand | nu
 		return null;
 	}
 
-	const authorId = await getAuthorId(message);
-	if (isSageId(authorId)) {
+	const { isSage, isTupperBox } = await getAuthorOwnerIds(message);
+
+	if (isSage) {
 		return { command: "CommandLookup|Add" };
 	}
-	if (!isTupperBoxId(authorId) || sageReaction.game) {
+
+	if (!isTupperBox || sageReaction.game) {
 		return { command: "CommandLookup|Add" };
 	}
 
@@ -194,9 +233,13 @@ async function dialogLookup(sageCommand: SageCommand): Promise<void> {
 	}
 
 	if (message) {
-		const authorId = await getAuthorId(message);
+		const { isSage, isTupperBox } = await getAuthorOwnerIds(message);
 
-		if (isSageId(authorId)) {
+		if (isTupperBox && !sageCommand.isSageReaction()) {
+			return processTupperDialog(sageCommand);
+		}
+
+		if (isSage || sageCommand.game) {
 			if (sageCommand.isSageReaction()) {
 				const reaction = await sageCommand.fetchMessageReaction();
 				reaction.remove();
@@ -204,18 +247,8 @@ async function dialogLookup(sageCommand: SageCommand): Promise<void> {
 			return processSageDialog(sageCommand, message);
 		}
 
-		if (isTupperBoxId(authorId) && !sageCommand.isSageReaction()) {
-			return processTupperDialog(sageCommand);
-		}
-
-		if (sageCommand.game) {
-			if (sageCommand.isSageReaction()) {
-				const reaction = await sageCommand.fetchMessageReaction();
-				reaction.remove();
-			}
-			return processGameDialog(sageCommand);
-		}
 	}
+
 	return whisper(sageCommand, `Sorry, we could't find any RPG Sage Dialog info for that message.`);
 }
 
