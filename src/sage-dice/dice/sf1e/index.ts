@@ -1,4 +1,4 @@
-import { randomSnowflake, tokenize, type Optional, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { mapFirst, numberOrUndefined, randomSnowflake, tokenize, type Optional, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { cleanDicePartDescription, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, DieRollGrade, GameSystemType, gradeRoll, isGradeSuccess, type DiceTargetData, type DiceTestData, type SimpleDice } from "@rsc-utils/game-utils";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
@@ -12,12 +12,17 @@ import type {
 } from "../base/types.js";
 
 //#region Tokenizer
+
+const Sf1eParsers = {
+	crits: /crit\s*(?:(\d+)\+?)?\s*(?:x(\d+))?/i,
+	target: /(ac|eac|kac|dc)\s*(\d+|\|\|\d+\|\|)/i,
+};
+
+let _parsers: TokenParsers;
 function getParsers(): TokenParsers {
-	return {
-		...baseGetParsers(),
-		target: /(ac|eac|kac|dc)\s*(\d+|\|\|\d+\|\|)/i
-	};
+	return _parsers ??= { ...baseGetParsers(), ...Sf1eParsers };
 }
+
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
 	if (token.key === "target") {
 		core.target = DiceTest.parseTargetData(token, parseTargetType)
@@ -25,6 +30,7 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens);
 }
+
 //#endregion
 
 //#region Targets/Tests
@@ -49,22 +55,24 @@ function parseTargetType(targetType: Optional<string>): TargetType {
 
 //#region Grades
 
+const AC_REGEX = /ac/i;
+const DC_REGEX = /dc/i;
 function gradeResults(roll: DiceRoll): DieRollGrade {
 	const successOrFailure = gradeRoll(roll);
 
 	const alias = roll.dice.test?.alias;
 
-	if (alias?.match(/ac/i)) {
+	if (alias?.match(AC_REGEX)) {
 		const d20 = roll.rolls.find(dpr => dpr.dice.sides === 20);
-		if (d20?.isMin) {
-			return DieRollGrade.CriticalFailure;
-		}else if (d20?.isMax) {
+		if (d20?.isMin) return DieRollGrade.CriticalFailure;
+		const critMin = roll.dice.critData?.min ?? 20;
+		if (d20?.rolls[0]! >= critMin) {
 			if (successOrFailure === DieRollGrade.Success) return DieRollGrade.CriticalSuccess;
 			return DieRollGrade.Success;
 		}
 	}
 
-	if (alias?.match(/dc/i)) {
+	if (alias?.match(DC_REGEX)) {
 		if (roll.hasSave) {
 			if (roll.isMax) {
 				return DieRollGrade.CriticalSuccess;
@@ -122,6 +130,7 @@ interface DicePartCore extends baseDicePartCore {
 type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 	testOrTarget?: DiceTestData | DiceTargetData<TargetType>;
 };
+const SAVE_REGEX = /\b(fort(itude)?|ref(flex)?|will(power)?|save)\b/i;
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
 	public get hasAcTarget(): boolean {
@@ -130,7 +139,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			|| this.core.target?.type === TargetType.AC;
 	}
 	public get hasSave(): boolean {
-		return this.description.match(/\b(fort(itude)?|ref(flex)?|will(power)?|save)\b/i) !== null;
+		return this.description.match(SAVE_REGEX) !== null;
 	}
 	//#endregion
 
@@ -184,6 +193,15 @@ DicePart.Roll = <typeof baseDicePartRoll>DicePartRoll;
 //#region Dice
 type DiceCore = baseDiceCore;
 export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
+	public get critData() {
+		const match = mapFirst(this.diceParts, dicePart => dicePart.description.match(Sf1eParsers.crits));
+		if (!match) return null;
+
+		const [_, minRoll, multiplier] = match;
+		const min = numberOrUndefined(minRoll) ?? 20;
+		const multi = numberOrUndefined(multiplier) ?? 2;
+		return { min, multi };
+	}
 	public get hasAcTarget(): boolean {
 		return this.diceParts.some(dicePart => dicePart.hasAcTarget);
 	}

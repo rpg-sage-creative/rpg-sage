@@ -1,4 +1,4 @@
-import { randomSnowflake, tokenize, type Optional, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { mapFirst, numberOrUndefined, randomSnowflake, tokenize, type Optional, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { cleanDicePartDescription, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, DiceTest, DiceTestType, DieRollGrade, GameSystemType, gradeRoll, isGradeSuccess, type DiceTargetData, type DiceTestData, type SimpleDice } from "@rsc-utils/game-utils";
 import {
 	Dice as baseDice, DiceGroup as baseDiceGroup,
@@ -12,11 +12,15 @@ import type {
 } from "../base/types.js";
 
 //#region Tokenizer
+
+const D20Parsers = {
+	crits: /crit\s*(?:(\d+)\+?)?\s*(?:x(\d+))?\s*(?:conf(?:irm(?:ation)?)?\s*([\-\+]\d+))?/i,
+	target: /(ac|dc)\s*(\d+|\|\|\d+\|\|)/i,
+};
+
+let _parsers: TokenParsers;
 function getParsers(): TokenParsers {
-	return {
-		...baseGetParsers(),
-		target: /(ac|dc)\s*(\d+|\|\|\d+\|\|)/i
-	};
+	return _parsers ??= { ...baseGetParsers(), ...D20Parsers };
 }
 
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
@@ -46,14 +50,17 @@ function parseTargetType(targetType: Optional<string>): TargetType {
 
 //#region Grades
 
+const AC_OR_DC_REGEX = /ac|dc/i;
 function gradeResults(roll: DiceRoll): DieRollGrade {
 	const test = roll.dice.test;
-	if (test?.alias?.match(/ac|dc/i)) {
-		if (roll.isMax) {
+	if (test?.alias?.match(AC_OR_DC_REGEX)) {
+		const d20 = roll.rolls.find(dpr => dpr.dice.sides === 20);
+		if (d20?.isMin) return DieRollGrade.CriticalFailure;
+		const critMin = roll.dice.critData?.min ?? 20;
+		if (d20?.rolls[0]! >= critMin) {
 			return DieRollGrade.CriticalSuccess;
-		}else if (roll.isMin) {
-			return DieRollGrade.CriticalFailure;
 		}
+
 		return roll.total >= test.value ? DieRollGrade.Success : DieRollGrade.Failure;
 	}
 	return gradeRoll(roll);
@@ -161,6 +168,17 @@ DicePart.Roll = <typeof baseDicePartRoll>DicePartRoll;
 //#region Dice
 type DiceCore = baseDiceCore;
 export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
+	public get critData() {
+		const match = mapFirst(this.diceParts, dicePart => dicePart.description.match(D20Parsers.crits));
+		if (!match) return null;
+
+		const [_, minRoll, multiplier, confirmationModifier] = match;
+		const min = numberOrUndefined(minRoll) ?? 20;
+		const multi = numberOrUndefined(multiplier) ?? 2;
+		const confMod = numberOrUndefined(confirmationModifier) ?? 0;
+		return { min, multi, confMod };
+	}
+
 	public get hasAcTarget(): boolean {
 		return this.diceParts.some(dicePart => dicePart.hasAcTarget);
 	}
@@ -349,27 +367,52 @@ function manipulateDamage(diceGroupRoll: DiceGroupRoll): void {
 }
 
 function critByTimesTwo(diceGroupRoll: DiceGroupRoll): void {
-	const critDicePart = DicePart.create({ modifier: 2, sign: "*", description: "<i>(crit)</i>" });
+	const modifier = diceGroupRoll.dice.dice.find(dice => dice.critData)?.critData?.multi ?? 2;
+	const critDicePart = DicePart.create({ modifier, sign: "*", description: `<i>(crit x${modifier})</i>` });
 	diceGroupRoll.dice.attackDamageDice?.damage.diceParts.push(critDicePart);
 	diceGroupRoll.attackDamageRoll?.damage.toJSON().rolls.push(critDicePart.roll().toJSON());
 }
 function critByRollingTwice(diceGroupRoll: DiceGroupRoll): void {
+	const modifier = diceGroupRoll.dice.dice.find(dice => dice.critData)?.critData?.multi ?? 2;
 	const damageDice = diceGroupRoll.dice.attackDamageDice?.damage!;
 	const damageRoll = diceGroupRoll.attackDamageRoll?.damage!;
 	damageDice.diceParts.forEach((dicePart, index) => {
 		if (dicePart.hasDie) {
-			damageRoll.toJSON().rolls[index].rolls.push(...dicePart.roll().rolls);
-			dicePart.toJSON().count *= 2;
+			const newRolls: number[] = [];
+			for (let i = 0; i < modifier - 1; i++) {
+				newRolls.push(...dicePart.roll().rolls);
+			}
+			damageRoll.toJSON().rolls[index].rolls.push(...newRolls);
+			dicePart.toJSON().count *= modifier;
 		}else if (dicePart.modifier) {
-			dicePart.toJSON().modifier! *= 2;
+			dicePart.toJSON().modifier! *= modifier;
 		}
 	});
 
-	const critDicePart = DicePart.create({ description: "<i>(crit; roll 2x)</i>" });
+	const critDicePart = DicePart.create({ description: `<i>(crit; roll ${modifier}x)</i>` });
 	damageDice.diceParts.push(critDicePart);
 	damageRoll.toJSON().rolls.push(critDicePart.roll().toJSON());
 }
 function critByAddingMax(diceGroupRoll: DiceGroupRoll): void {
+	const modifier = diceGroupRoll.dice.dice.find(dice => dice.critData)?.critData?.multi ?? 2;
+	// the whole point of addMax is to ensure x2 doesn't result in less than Max
+	// let's add max and if modifier is greater than two we just roll the rest (multiply would multiply the initial "addMax")
+	if (modifier > 2) {
+		const damageDice = diceGroupRoll.dice.attackDamageDice?.damage!;
+		const damageRoll = diceGroupRoll.attackDamageRoll?.damage!;
+		damageDice.diceParts.forEach((dicePart, index) => {
+			if (dicePart.hasDie) {
+				const newRolls: number[] = [];
+				for (let i = 0; i < modifier - 2; i++) {
+					newRolls.push(...dicePart.roll().rolls);
+				}
+				damageRoll.toJSON().rolls[index].rolls.push(...newRolls);
+				dicePart.toJSON().count *= modifier - 1;
+			}else if (dicePart.modifier) {
+				dicePart.toJSON().modifier! *= modifier - 1;
+			}
+		});
+	}
 	const critDicePart = DicePart.create({ modifier: diceGroupRoll.attackDamageRoll?.damage!.dice.max, sign: "+", description: "<i>(crit; add max)</i>" });
 	diceGroupRoll.dice.attackDamageDice!.damage.diceParts.push(critDicePart);
 	diceGroupRoll.attackDamageRoll!.damage.toJSON().rolls.push(critDicePart.roll().toJSON());
