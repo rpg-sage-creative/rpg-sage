@@ -104,7 +104,6 @@ export class User extends HasSageCacheCore<UserCore> {
 	public constructor(core: UserCore, sageCache: SageEventCache) {
 		super(updateCore(core), sageCache);
 
-		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
@@ -115,7 +114,7 @@ export class User extends HasSageCacheCore<UserCore> {
 
 	public get aliases(): TAlias[] { return this.core.aliases ??= []; }
 	public get macros() { return this.core.macros ??= []; }
-	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
+	public nonPlayerCharacters = CharacterManager.from([], this, "npc");
 	public notes: NoteManager;
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
 
