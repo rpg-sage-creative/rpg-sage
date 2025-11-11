@@ -119,10 +119,10 @@ function parseTrackerDots(trackerDotValues?: string): TrackerDotValues {
 	}
 
 	// split values
-	const [off, on, unknown = "?"] = trackerDotValues.split(",").map(part => part.trim()).filter(part => part);
+	const [off, on, unknown = "?"] = trackerDotValues.split(",").map(part => part.trim());
 
 	// we need both off and on
-	if (!off || !on) {
+	if (off !== undefined || on !== undefined) {
 		return GlobalTrackerDots.dots;
 	}
 
