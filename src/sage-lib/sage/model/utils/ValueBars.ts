@@ -121,8 +121,8 @@ function parseTrackerDots(trackerDotValues?: string): TrackerDotValues {
 	// split values
 	const [off, on, unknown = "?"] = trackerDotValues.split(",").map(part => part.trim());
 
-	// we need an "on" value (allow "off" to be empty string)
-	if (!on) {
+	// we need an "on" or an "off" value, but we can allow one of them to be "empty"
+	if (!on && !off) {
 		return GlobalTrackerDots.dots;
 	}
 
