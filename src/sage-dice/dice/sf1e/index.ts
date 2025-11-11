@@ -30,7 +30,7 @@ import type {
 
 const Sf1eParsers = {
 	crits: /crit\s*(?:(\d+)\+?)?\s*(?:x(\d+))?/i,
-	target: /(ac|eac|kac|dc)\s*(\d+|\|\|\d+\|\|)/i,
+	target: /(eac|kac|ac|dc)\s*(\d+|\|\|\d+\|\|)/i,
 };
 
 let _parsers: TokenParsers;
