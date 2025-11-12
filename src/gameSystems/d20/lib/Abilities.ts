@@ -1,6 +1,6 @@
-import { Ability, type AbilityName } from "./Ability.js";
+import { Ability, type AbilityNameResolvable } from "./Ability.js";
 
-export interface IHasAbilities { abilities: Abilities; }
+export type HasAbilities<T extends Abilities = Abilities> = { abilities: T; };
 
 export abstract class Abilities {
 
@@ -29,11 +29,15 @@ export abstract class Abilities {
 	//#region Instance Methods
 
 	/** Gets the Ability Score for the given Ability. */
-	public abstract getAbilityScore(ability: AbilityName): number;
+	public abstract getAbilityScore(ability: AbilityNameResolvable): number;
 
 	/** Gets the Ability Score Modifier for the given Ability. */
-	public getAbilityScoreModifier(ability: AbilityName): number {
-		return ability ? Ability.scoreToMod(this.getAbilityScore(ability)) : 0;
+	public getAbilityScoreModifier(ability: AbilityNameResolvable): number {
+		if (ability) {
+			const abilityScore = this.getAbilityScore(ability);
+			return Ability.scoreToMod(abilityScore);
+		}
+		return 0;
 	}
 
 	//#endregion

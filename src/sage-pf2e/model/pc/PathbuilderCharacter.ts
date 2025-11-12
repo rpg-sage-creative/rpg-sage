@@ -1,4 +1,4 @@
-import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, randomSnowflake, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { CharacterBase } from "@rsc-utils/game-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
@@ -440,12 +440,28 @@ function getWeaponDamageDice(weapon: TPathbuilderCharacterWeapon): string {
 	return `${dmgDieCount}${dmgDieSize}`;
 }
 
+const BludgeoningRegExp = /Bludgeoning/i;
+const PiercingRegExp = /Piercing/i;
+const SlashingRegExp = /Slashing/i;
+
 /** Creates the weapon's damage DicePart of format "dice bonus type". */
 function getWeaponDamageDicePart(weapon: TPathbuilderCharacterWeapon): string {
 	const dmgDice = getWeaponDamageDice(weapon);
 	const dmgBonus = weapon.damageBonus ? toModifier(weapon.damageBonus) : "";
 	const dmgType = weapon.damageType ?? "";
-	const damage = `${dmgDice} ${dmgBonus} ${dmgType}`;
+	const extraDamage = weapon.extraDamage?.map(s => {
+		if (BludgeoningRegExp.test(s)) {
+			s = s.replace(BludgeoningRegExp, dmgType.includes("B") ? "" : "B");
+		}
+		if (PiercingRegExp.test(s)) {
+			s = s.replace(PiercingRegExp, dmgType.includes("P") ? "" : "P");
+		}
+		if (SlashingRegExp.test(s)) {
+			s = s.replace(SlashingRegExp, dmgType.includes("S") ? "" : "S");
+		}
+		return s;
+	}).join(" ") ?? "";
+	const damage = `${dmgDice} ${dmgBonus} ${dmgType} ${extraDamage}`;
 	return cleanWhitespace(damage);
 }
 
@@ -572,9 +588,22 @@ export const CharacterViewTypes: TCharacterViewType[] = ["All", "Combat", "Equip
 export type TPathbuilderCharacter = PathbuilderCharacterCore;
 
 export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore> implements IHasAbilities, IHasProficiencies, IHasSavingThrows {
-	public get exportJsonId(): number | undefined { return this.core.exportJsonId; }
+	public get gameSystem(): "PF2e" | "SF2e" {
+		/** @todo check a manually set value somewhere? */
+		if (this.core.proficiencies.computers) return "SF2e";
+		if (this.core.proficiencies.piloting) return "SF2e";
+		const sfClasses = ["envoy", "mystic", "operative", "solarian", "soldier", "witchwarper", "mechanic", "technomancer"];
+		if (sfClasses.includes(this.core.class.toLowerCase())) return "SF2e";
+		if (sfClasses.includes(this.core.dualClass?.toLowerCase() ?? "")) return "SF2e";
+		return "PF2e";
+	}
+	public importedFrom: "Pathbuilder" = "Pathbuilder";
 
-public createCheck(key: string): Check | undefined {
+	public get exportJsonId(): number | undefined { return this.core.exportJsonId; }
+	public getMods(key: string, type: "Item" | "Potency" | "Untyped"): number {
+		return this.core.mods?.[key]?.[`${type} Bonus`] ?? 0;
+	}
+	public createCheck(key: string): Check | undefined {
 		if (SkillRegExps.perception.test(key)) {
 			return Check.forSkill(this, Skill.findByName("Perception"));
 		}
@@ -780,9 +809,6 @@ public createCheck(key: string): Check | undefined {
 
 	public constructor(core: TPathbuilderCharacter, flags: TPathbuilderCharacterCustomFlags = { }) {
 		super(core);
-		if (!core.id) {
-			core.id = randomSnowflake();
-		}
 		Object.keys(flags).forEach(key => {
 			core[key as keyof TPathbuilderCharacterCustomFlags] = flags[key as keyof TPathbuilderCharacterCustomFlags];
 		});

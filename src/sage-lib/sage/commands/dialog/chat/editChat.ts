@@ -5,7 +5,7 @@ import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { includeDeleteButton } from "../../../model/utils/deleteButton.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
-import { DialogMessageRepository } from "../../../repo/DialogMessageRepository.js";
+import { SageMessageReference } from "../../../repo/SageMessageReference.js";
 import type { DialogContent } from "../DialogContent.js";
 import { updateEmbed } from "../updateEmbed.js";
 import { DialogProcessor } from "./DialogProcessor.js";
@@ -17,7 +17,7 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 		return sageMessage.replyStack.whisper(localize("TO_EDIT_DIALOG"));
 	}
 
-	const dialogMessage = await DialogMessageRepository.read(sageMessage.message.reference);
+	const dialogMessage = await SageMessageReference.read(sageMessage.message.reference);
 	if (!dialogMessage) {
 		return sageMessage.replyStack.whisper(localize("SORRY_DIALOG_NOT_FOUND"));
 	}

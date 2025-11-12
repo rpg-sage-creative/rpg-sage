@@ -101,3 +101,9 @@ export interface DiceGroupRollCore extends DieCore<"DiceGroupRoll"> {
 export type TDiceGroupRoll = DiceGroupRoll<DiceGroupRollCore, TDiceGroup, TDiceRoll>;
 
 //#endregion
+
+/*
+SWADE - Savage World Adventure Edition
+https://www.reddit.com/r/rpg/comments/1yg1uu/savage_worlds_dice_stats_lets_discuss_probability/
+https://www.uptofourplayers.com/ready-to-roll/savage-worlds-rules/
+*/

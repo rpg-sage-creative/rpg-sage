@@ -48,7 +48,9 @@ export async function handleImport
 			await attachCharacter(sageCommand, channel ?? user, char, pin);
 
 		}else {
-			await handlers.postCharacter(sageCommand, channel ?? user, char, pin);
+			await handlers.postCharacter(sageCommand, channel ?? user, char, pin).catch(ex => {
+				result.error = ex;
+			});
 		}
 	}
 

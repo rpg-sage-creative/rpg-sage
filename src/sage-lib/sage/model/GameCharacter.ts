@@ -7,10 +7,12 @@ import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
+import { HephaistosCharacterSF1e } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";
+import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/import/types.js";
 import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
-import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMessageRepository.js";
+import { SageMessageReference, type SageMessageReferenceCore } from "../repo/SageMessageReference.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
@@ -72,7 +74,7 @@ export type GameCharacterCore = {
 	/** Unique ID of this character */
 	id: Snowflake;
 	/** A list of the character's last messages by channel. */
-	lastMessages?: (DialogMessageData | DialogMessageDataCore)[];
+	lastMessages?: (SageMessageReference | SageMessageReferenceCore)[];
 	/** Character tier macros */
 	macros?: MacroBase[];
 	/** The character's name */
@@ -85,6 +87,9 @@ export type GameCharacterCore = {
 	/** The character's Essence20 build. */
 	essence20?: TEssence20CharacterCore;
 	essence20Id?: string;
+	/** The character's Hephaistos build. */
+	hephaistos?: HephaistosCharacterCoreSF1e;
+	hephaistosId?: string;
 	/** The image used to represent the character to the left of the post */
 	tokenUrl?: string;
 	/** The character's user's Discord ID */
@@ -164,7 +169,7 @@ function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
 
 /** @deprecated An initial attempt at the global in memory cache caused character lastMessages cores to become crazily nested! */
 function fixLastMessages(core: GameCharacterCore): void {
-	core.lastMessages = core.lastMessages?.map((lm: DialogMessageDataCore | { core:DialogMessageDataCore }) => {
+	core.lastMessages = core.lastMessages?.map((lm: SageMessageReferenceCore | { core:SageMessageReferenceCore }) => {
 		while("core" in lm) {
 			lm = lm.core;
 		}
@@ -204,7 +209,7 @@ export class GameCharacter {
 
 		const companionType = this.isPcOrCompanion ? "companion" : "minion";
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
-		this.core.lastMessages = this.core.lastMessages?.map(DialogMessageData.fromCore) ?? [];
+		this.core.lastMessages = this.core.lastMessages?.map(SageMessageReference.fromCore) ?? [];
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
 
@@ -270,7 +275,7 @@ export class GameCharacter {
 	public get isCompanionOrMinion(): boolean { return this.isCompanion || this.isMinion; }
 
 	/** A list of the character's last messages by channel. */
-	public get lastMessages(): DialogMessageData[] { return this.core.lastMessages as DialogMessageData[]; }
+	public get lastMessages(): SageMessageReference[] { return this.core.lastMessages as SageMessageReference[]; }
 
 	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 
@@ -329,6 +334,23 @@ export class GameCharacter {
 	/** @todo figure out what this id is and what it represents */
 	public get essence20Id(): string | undefined { return this.core.essence20Id; }
 	public set essence20Id(essence20Id: Optional<string>) { this.core.essence20Id = essence20Id ?? undefined; }
+
+	private _hephaistos: HephaistosCharacterSF1e | null | undefined;
+	public get hephaistos(): HephaistosCharacterSF1e | null {
+		if (this._hephaistos === undefined) {
+			if (this.core.hephaistos) {
+				this._hephaistos = new HephaistosCharacterSF1e(this.core.hephaistos);
+			}
+			if (this.core.hephaistosId) {
+				this._hephaistos = HephaistosCharacterSF1e.loadCharacterSync(this.core.hephaistosId) ?? null;
+			}
+		}
+		return this._hephaistos ?? null;
+	}
+
+	/** @todo figure out what this id is and what it represents */
+	public get hephaistosId(): string | undefined { return this.core.hephaistosId; }
+	public set hephaistosId(hephaistosId: Optional<string>) { this.core.hephaistosId = hephaistosId ?? undefined; }
 
 	private _pathbuilder: PathbuilderCharacter | null | undefined;
 	public get pathbuilder(): PathbuilderCharacter | null {
@@ -435,7 +457,7 @@ export class GameCharacter {
 	 * Sets the last dialog message for this character.
 	 * Last dialog messages are stored for each channel, so we filter out messages for the channel before adding the given message.
 	 */
-	public setLastMessage(dialogMessage: DialogMessageData): void {
+	public setLastMessage(dialogMessage: SageMessageReference): void {
 		this.core.lastMessages = this.lastMessages.filter(messageInfo => !dialogMessage.matchesChannel(messageInfo));
 		this.core.lastMessages.push(dialogMessage);
 	}
@@ -577,6 +599,11 @@ export class GameCharacter {
 			return parseGameSystem("PF2E");
 		}
 
+		// ensure a hephaistos import uses sf1e
+		if (this.hephaistos) {
+			return parseGameSystem("SF1E")
+		}
+
 		// ensure an essence20 import uses a e20 system
 		if (this.essence20) {
 			if (gameSystem?.code === "E20") {
@@ -591,6 +618,7 @@ export class GameCharacter {
 	public get hasStats(): boolean {
 		return this.getNoteStats().length > 0
 			|| !!this.pathbuilder
+			|| !!this.hephaistos
 			|| !!this.essence20;
 	}
 
@@ -814,7 +842,7 @@ export class GameCharacter {
 		if (keyLower === "sheet.url" || keyLower === "sheeturl") {
 			let sheetUrl = this.getNoteStat("sheet.url", "sheeturl");
 			if (sheetUrl === "on") {
-				const { sheetRef } = this.essence20 ?? this.pathbuilder ?? { };
+				const { sheetRef } = this.essence20 ?? this.pathbuilder ?? this.hephaistos ?? { };
 				if (sheetRef?.channelId) {
 					sheetUrl = toMessageUrl(sheetRef);
 				}
@@ -1046,15 +1074,6 @@ export class GameCharacter {
 			}
 		}
 
-		// get game specific conditions and unset all when conditions=""
-		if (stats?.length && this.gameSystem?.isP20) {
-			const conditions = stats?.find(stat => stat.key.toLowerCase() === "conditions");
-			if (conditions?.value === null) {
-				await updateStats(Condition.ToggledConditions.map(key => ({ key, value:null })));
-				await updateStats(Condition.ValuedConditions.map(key => ({ key, value:null })));
-			}
-		}
-
 		if (stats?.length) {
 			await updateStats(stats);
 		}
@@ -1124,14 +1143,25 @@ export class GameCharacter {
 
 		const forNotes: KeyValueTrio<string, null>[] = [];
 		const p20 = this.pathbuilder;
+		const h1e = this.hephaistos;
 		const e20 = this.essence20;
 		for (const { key, value:valueOrNull } of pairs) {
 			const keyLower = key.toLowerCase();
 
 			const value = valueOrNull ?? "";
-			if (keyLower === "name" && value.trim() && (this.name !== value || (p20 && p20.name !== value) || (e20 && e20.name !== value))) {
+			if (
+				keyLower === "name"
+				&& value.trim()
+				&& (
+					this.name !== value
+					|| (p20 && p20.name !== value)
+					|| (h1e && h1e.name !== value)
+					|| (e20 && e20.name !== value)
+					)
+				) {
 				this.name = value;
 				if (p20) p20.name = value;
+				if (h1e) h1e.name = value;
 				if (e20) e20.name = value;
 				keysUpdated.add(keyLower);
 				continue;
@@ -1142,7 +1172,6 @@ export class GameCharacter {
 			const isExplorationMode = keyLower === "explorationmode";
 			const isExplorationSkill = keyLower === "explorationskill";
 			if (isExplorationMode || isExplorationSkill) {
-				// makes the spaces in a value optional in the regex used to test the value
 				const matchValue = (val: string) => new RegExp(`^${val.replace(/(\s)/g, "$1?")}$`, "i").test(value);
 				if (isExplorationMode) {
 					correctedKey = "explorationMode";
@@ -1154,6 +1183,7 @@ export class GameCharacter {
 				}
 			}
 
+			/** @todo duplicate some of the following for h1e */
 			if (p20) {
 				if (keyLower === "level" && +value) {
 					const updatedLevel = await p20.setLevel(+value, save);
@@ -1240,6 +1270,9 @@ export class GameCharacter {
 		if (ownerSaved && saveImported) {
 			if (this.pathbuilderId) {
 				return await this.pathbuilder?.save() ?? false;
+			}
+			if (this.hephaistosId) {
+				return await this.hephaistos?.save() ?? false;
 			}
 			if (this.essence20Id) {
 				return await this.essence20?.save() ?? false;

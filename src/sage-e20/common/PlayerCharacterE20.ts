@@ -90,6 +90,9 @@ export function orQ(value: Optional<string>): string {
 }
 
 export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> extends CharacterBase<T> {
+	public gameSystem: "E20" = "E20";
+	public importedFrom: "PDF" = "PDF";
+
 	/** returns the value for the given key */
 	public getNumber(key: string): number | undefined {
 		return numberOrUndefined(this.getStat(key).value);

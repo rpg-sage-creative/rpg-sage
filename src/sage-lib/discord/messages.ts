@@ -3,7 +3,7 @@ import { addInvalidWebhookUsername, DiscordKey, isMessage, isSupportedGameChanne
 import type { Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
-import { DialogMessageRepository } from "../sage/repo/DialogMessageRepository.js";
+import { SageMessageReference } from "../sage/repo/SageMessageReference.js";
 import { createMessageEmbed } from "./createMessageEmbed.js";
 import { deleteMessage, deleteMessages } from "./deletedMessages.js";
 import { sendTo, type AttachmentResolvable } from "./sendTo.js";
@@ -105,7 +105,7 @@ export async function replaceWebhook(originalMessage: SMessageOrPartial, webhook
 		const referenceMessage = await sageCache.fetchMessage(originalMessage.reference);
 		const displayName = referenceMessage ? `*${referenceMessage.author.displayName}*` : ``;
 
-		const dialogMessage = await DialogMessageRepository.read(originalMessage.reference, { ignoreMissingFile:true });
+		const dialogMessage = await SageMessageReference.read(originalMessage.reference, { ignoreMissingFile:true });
 		const userMention = toUserMention(dialogMessage?.userId) ?? ``;
 
 		replyingTo = `*replying to* ${displayName} ${userMention} ${toMessageUrl(originalMessage.reference)}`.replace(/\s+/g, " ");

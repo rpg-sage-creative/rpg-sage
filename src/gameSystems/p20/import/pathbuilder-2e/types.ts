@@ -222,7 +222,8 @@ export type TPathbuilderCharacterWeapon = {
 	/** attack mod */
 	attack: number;
 	damageBonus: number;
-	extraDamage: [];
+	/** [ "+3 Spirit", ... ] */
+	extraDamage: string[];
 	increasedDice: boolean;
 	isInventor: boolean;
 	/** [1d20 +mod atk; XdY dmg] */
@@ -319,7 +320,7 @@ export type PathbuilderCharacterCore = CharacterBaseCore<"PathbuilderCharacter" 
 	attributes: TPathbuilderCharacterAttributes;
 	abilities: TPathbuilderCharacterAbilities;
 	proficiencies: TPathbuilderCharacterProficiencies;
-	mods?: {},
+	mods?: Record<string, { "Untyped Bonus"?:number; "Potency Bonus"?:number; "Item Bonus"?:number; }>,
 	feats: TPathbuilderCharacterFeat[];
 	specials: string[];
 	lores: TPathbuilderCharacterLore[];

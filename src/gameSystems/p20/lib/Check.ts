@@ -1,5 +1,6 @@
 import type { TBonusType } from "../../../sage-pf2e/common.js";
 import { CIRCUMSTANCE, ITEM, STATUS, UNTYPED } from "../../../sage-pf2e/common.js";
+import type { PathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import type { AbilityName } from "../../d20/lib/Ability.js";
 import { toModifier } from "../../utils/toModifier.js";
 import type { IHasAbilities } from "./Abilities.js";
@@ -284,12 +285,20 @@ export class Check {
 		return values.join("<br/>");
 	}
 
-	public static forSkill<T extends Skill>(char: TCheckPlayerCharacter, skill?: T): Check | undefined {
+	public static forSkill<T extends Skill>(char: PathbuilderCharacter, skill?: T): Check | undefined {
 		if (!skill) return undefined;
 
 		const check = new Check(char, skill.name);
 		check.addProficiency(skill.isLore()? skill.topic : skill.name);
 		check.setAbility(skill.ability.name);
+
+		// Pathbuilder "mods"
+		const modTypes = ["Item", "Potency", "Untyped"] as const;
+		modTypes.forEach(type => {
+			const typedMod = char.getMods(skill.name, type);
+			if (typedMod) check.addModifier(type, typedMod);
+		});
+
 		return check;
 	}
 
