@@ -12,7 +12,7 @@ import { ColorType } from "../model/HasColorsCore.js";
 import { EmojiType } from "../model/HasEmojiCore.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageReaction } from "../model/SageReaction.js";
-import { DialogMessageRepository } from "../repo/DialogMessageRepository.js";
+import { SageMessageReference } from "../repo/SageMessageReference.js";
 import { createRenderableContent } from "./helpers/createRenderableContent.js";
 
 async function whisper(sageCommand: SageCommand, content: string | RenderableContent): Promise<void> {
@@ -164,7 +164,7 @@ async function processSageDialog(sageCommand: SageCommand, message: Message): Pr
 		await whisper(sageCommand, renderable);
 	};
 
-	const messageInfo = await DialogMessageRepository.read(message, { ignoreMissingFile:true });
+	const messageInfo = await SageMessageReference.read(message, { ignoreMissingFile:true });
 	if (!messageInfo) {
 		if (sageCommand.game) {
 			await sendLookup(sageCommand.game, null);

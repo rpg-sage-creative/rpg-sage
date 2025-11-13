@@ -2,7 +2,7 @@ import { error, errorReturnFalse, errorReturnUndefined, getDataRoot, snowflakeTo
 import { readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import type { Message, MessageReference, PartialMessage } from "discord.js";
 
-export type SageMessageCore = {
+export type SageMessageReferenceCore = {
 	/** the id of the channel the message is in */
 	channelId: Snowflake;
 	/** the id of the character the message is from */
@@ -44,8 +44,8 @@ function createFilePath(messageId: string): string {
 	return `${root}/${year}/${messageId}.json`;
 }
 
-export class SageMessage {
-	public constructor(private readonly core: SageMessageCore) { }
+export class SageMessageReference {
+	public constructor(private readonly core: SageMessageReferenceCore) { }
 
 	public get channelId(): Snowflake { return this.core.channelId; }
 	public get characterId(): Snowflake { return this.core.characterId; }
@@ -58,7 +58,7 @@ export class SageMessage {
 	public get userId(): Snowflake { return this.core.userId; }
 	public get ver(): number { return this.core.ver; }
 
-	public matchesChannel(resolvable: Optional<SageMessageCore | MessageResolvable | string>): boolean {
+	public matchesChannel(resolvable: Optional<SageMessageReferenceCore | MessageResolvable | string>): boolean {
 		if (typeof (resolvable) === "string") {
 			return this.channelId === resolvable;
 		}
@@ -78,15 +78,15 @@ export class SageMessage {
 		};
 	}
 
-	public toJSON(): SageMessageCore {
+	public toJSON(): SageMessageReferenceCore {
 		return this.core;
 	}
 
-	public static fromCore(core: SageMessageCore): SageMessage {
-		return new SageMessage(core);
+	public static fromCore(core: SageMessageReferenceCore): SageMessageReference {
+		return new SageMessageReference(core);
 	}
 
-	public static async read(resolvable: MessageResolvable, options?: ReadOptions): Promise<SageMessage | undefined> {
+	public static async read(resolvable: MessageResolvable, options?: ReadOptions): Promise<SageMessageReference | undefined> {
 		const messageId = "id" in resolvable ? resolvable.id : resolvable.messageId;
 		if (!messageId) {
 			error(`DialogMessageRepository.read(): resolvable doesn't have message id`);
@@ -95,13 +95,13 @@ export class SageMessage {
 
 		const filePath = createFilePath(messageId);
 		const catcher = options?.ignoreMissingFile ? () => undefined : errorReturnUndefined;
-		const core = await readJsonFile<SageMessageCore>(filePath).catch(catcher) ?? undefined;
+		const core = await readJsonFile<SageMessageReferenceCore>(filePath).catch(catcher) ?? undefined;
 
-		return core ? new SageMessage(core) : undefined;
+		return core ? new SageMessageReference(core) : undefined;
 	}
 
-	public static async write({ characterId, gameId, messages, userId }: WriteArgs): Promise<SageMessage | undefined> {
-		let lastCore: SageMessageCore | undefined;
+	public static async write({ characterId, gameId, messages, userId }: WriteArgs): Promise<SageMessageReference | undefined> {
+		let lastCore: SageMessageReferenceCore | undefined;
 
 		// grab all the message ids first
 		const messageIds = messages.map(msg => msg.id as Snowflake);
@@ -114,7 +114,7 @@ export class SageMessage {
 			}
 
 			// create the core
-			const core: SageMessageCore = {
+			const core: SageMessageReferenceCore = {
 				channelId: message.channel.id as Snowflake,
 				characterId,
 				gameId,
@@ -137,7 +137,7 @@ export class SageMessage {
 
 		// return the last core
 		if (lastCore) {
-			return SageMessage.fromCore(lastCore);
+			return SageMessageReference.fromCore(lastCore);
 		}
 
 		// return nothing

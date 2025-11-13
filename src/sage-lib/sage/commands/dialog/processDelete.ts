@@ -7,7 +7,7 @@ import { ReactionType, type TCommand } from "../../../discord/index.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
 import type { SageReaction } from "../../model/SageReaction.js";
 import { includeDeleteButton } from "../../model/utils/deleteButton.js";
-import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
+import { SageMessageReference } from "../../repo/SageMessageReference.js";
 
 async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	// check the appropriate delete emoji
@@ -42,7 +42,7 @@ async function isDelete(sageReaction: SageReaction): Promise<TCommand | null> {
 	}
 
 	const userId = sageReaction.user.id;
-	const dialogMessage = await DialogMessageRepository.read(message, { ignoreMissingFile:true });
+	const dialogMessage = await SageMessageReference.read(message, { ignoreMissingFile:true });
 	if (dialogMessage?.userId === userId) {
 		// This covers PCs inside a game *AND* outside a game
 		return { command: "CommandDelete|Add" };
@@ -104,7 +104,7 @@ async function doDelete(sageReaction: SageReaction): Promise<void> {
 		if (actorUser) await sendDm(actorUser);
 	}
 
-	const dialogMessage = await DialogMessageRepository.read(message, { ignoreMissingFile:true });
+	const dialogMessage = await SageMessageReference.read(message, { ignoreMissingFile:true });
 	if (dialogMessage && !actor.equals(dialogMessage.userId)) {
 		const poster = await sageReaction.sageCache.getOrFetchUser(dialogMessage.userId);
 		if (poster?.dmOnDelete) {

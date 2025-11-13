@@ -16,7 +16,7 @@ import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-
 import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
 import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
-import { DialogMessageData, type DialogMessageDataCore } from "../repo/DialogMessageRepository.js";
+import { SageMessageReference, type SageMessageReferenceCore } from "../repo/SageMessageReference.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
@@ -79,7 +79,7 @@ export type GameCharacterCore = {
 	/** Unique ID of this character */
 	id: Snowflake;
 	/** A list of the character's last messages by channel. */
-	lastMessages?: (DialogMessageData | DialogMessageDataCore)[];
+	lastMessages?: (SageMessageReference | SageMessageReferenceCore)[];
 	/** Character tier macros */
 	macros?: MacroBase[];
 	/** The character's name */
@@ -174,7 +174,7 @@ function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
 
 /** @deprecated An initial attempt at the global in memory cache caused character lastMessages cores to become crazily nested! */
 function fixLastMessages(core: GameCharacterCore): void {
-	core.lastMessages = core.lastMessages?.map((lm: DialogMessageDataCore | { core:DialogMessageDataCore }) => {
+	core.lastMessages = core.lastMessages?.map((lm: SageMessageReferenceCore | { core:SageMessageReferenceCore }) => {
 		while("core" in lm) {
 			lm = lm.core;
 		}
@@ -214,7 +214,7 @@ export class GameCharacter {
 
 		const companionType = this.isPcOrCompanion ? "companion" : "minion";
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
-		this.core.lastMessages = this.core.lastMessages?.map(DialogMessageData.fromCore) ?? [];
+		this.core.lastMessages = this.core.lastMessages?.map(SageMessageReference.fromCore) ?? [];
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
 
@@ -280,7 +280,7 @@ export class GameCharacter {
 	public get isCompanionOrMinion(): boolean { return this.isCompanion || this.isMinion; }
 
 	/** A list of the character's last messages by channel. */
-	public get lastMessages(): DialogMessageData[] { return this.core.lastMessages as DialogMessageData[]; }
+	public get lastMessages(): SageMessageReference[] { return this.core.lastMessages as SageMessageReference[]; }
 
 	public get macros() { return this.core.macros ?? (this.core.macros = []); }
 
@@ -435,13 +435,13 @@ export class GameCharacter {
 	//#region LastMessage(s)
 
 	/** Returns the last dialog message for this character in the given channel. */
-	// public getLastMessage(channelId: Snowflake): DialogMessageData | undefined {
+	// public getLastMessage(channelId: Snowflake): SageMessageReference | undefined {
 	// 	return this.lastMessages.find(dm => dm.matchesChannel(channelId));
 	// }
 
 	/** Returns the last dialog messages for this character and all its companions in the given channel. */
-	// public getLastMessages(channelId: Snowflake): DialogMessageData[] {
-	// 	const dialogMessages: DialogMessageData[] = [];
+	// public getLastMessages(channelId: Snowflake): SageMessageReference[] {
+	// 	const dialogMessages: SageMessageReference[] = [];
 
 	// 	// grab this character's last message
 	// 	const lastMessage = this.getLastMessage(channelId);
@@ -462,7 +462,7 @@ export class GameCharacter {
 	 * Sets the last dialog message for this character.
 	 * Last dialog messages are stored for each channel, so we filter out messages for the channel before adding the given message.
 	 */
-	public setLastMessage(dialogMessage: DialogMessageData): void {
+	public setLastMessage(dialogMessage: SageMessageReference): void {
 		this.core.lastMessages = this.lastMessages.filter(messageInfo => !dialogMessage.matchesChannel(messageInfo));
 		this.core.lastMessages.push(dialogMessage);
 	}

@@ -7,8 +7,8 @@ import type { ColorType } from "../../model/HasColorsCore.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { DialogDiceBehaviorType } from "../../model/User.js";
-import { DialogMessageRepository } from "../../repo/DialogMessageRepository.js";
 import type { DialogType } from "../../repo/base/IdRepository.js";
+import { SageMessageReference } from "../../repo/SageMessageReference.js";
 import { logPostCurrency } from "../admin/PostCurrency.js";
 import { parseDiceMatches, sendDice, type TDiceMatch } from "../dice.js";
 import type { ChatOptions } from "./chat/ChatOptions.js";
@@ -133,7 +133,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 		//#region DialogMessageRepository / lastMessage
 
 		// save all the dialog messages, save last one
-		const lastMessage = await DialogMessageRepository.write({
+		const lastMessage = await SageMessageReference.write({
 			characterId: character.id,
 			gameId: sageMessage.game?.id as Snowflake,
 			messages,
