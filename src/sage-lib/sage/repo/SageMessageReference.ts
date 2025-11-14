@@ -84,8 +84,7 @@ export class SageMessageReference {
 		return this.core;
 	}
 
-	public static fromCore(core: SageMessageReferenceCore | SageMessageReferenceCore): SageMessageReference {
-		if (core instanceof SageMessageReference) return core;
+	public static fromCore(core: SageMessageReferenceCore): SageMessageReference {
 		return new SageMessageReference(core);
 	}
 
