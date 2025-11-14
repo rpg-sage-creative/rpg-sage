@@ -17,8 +17,10 @@ export type SageMessageReferenceCore = {
 	messageIds: Snowflake[];
 	/** All SageCore objects include id, objectType, and ver */
 	objectType: "Message";
+	/** @deprecated use ts */
+	timestamp?: number;
 	/** the timestamp of the message */
-	timestamp: number;
+	ts: number;
 	/** the id of the user that posted the dialog */
 	userId: Snowflake;
 	/** All SageCore objects include id, objectType, and ver */
@@ -54,7 +56,7 @@ export class SageMessageReference {
 	public get id(): Snowflake { return this.core.id; }
 	public get messageIds(): Snowflake[] { return this.core.messageIds; }
 	public get objectType(): "Message" { return this.core.objectType; }
-	public get timestamp(): number { return this.core.timestamp; }
+	public get ts(): number { return this.core.ts ?? this.core.timestamp; }
 	public get userId(): Snowflake { return this.core.userId; }
 	public get ver(): number { return this.core.ver; }
 
@@ -82,7 +84,8 @@ export class SageMessageReference {
 		return this.core;
 	}
 
-	public static fromCore(core: SageMessageReferenceCore): SageMessageReference {
+	public static fromCore(core: SageMessageReferenceCore | SageMessageReferenceCore): SageMessageReference {
+		if (core instanceof SageMessageReference) return core;
 		return new SageMessageReference(core);
 	}
 
@@ -122,7 +125,7 @@ export class SageMessageReference {
 				guildId: message.guild?.id as Snowflake,
 				messageIds,
 				objectType: "Message",
-				timestamp: message.createdTimestamp,
+				ts: snowflakeToDate(message.id as Snowflake).getTime(),
 				userId,
 				ver: 1
 			};
