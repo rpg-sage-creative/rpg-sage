@@ -17,8 +17,6 @@ export type SageMessageReferenceCore = {
 	messageIds: Snowflake[];
 	/** All SageCore objects include id, objectType, and ver */
 	objectType: "Message";
-	/** @deprecated use ts */
-	timestamp?: number;
 	/** the timestamp of the message */
 	ts: number;
 	/** the id of the user that posted the dialog */
@@ -56,7 +54,7 @@ export class SageMessageReference {
 	public get id(): Snowflake { return this.core.id; }
 	public get messageIds(): Snowflake[] { return this.core.messageIds; }
 	public get objectType(): "Message" { return this.core.objectType; }
-	public get ts(): number { return this.core.ts ?? this.core.timestamp; }
+	public get ts(): number { return this.core.ts; }
 	public get userId(): Snowflake { return this.core.userId; }
 	public get ver(): number { return this.core.ver; }
 
