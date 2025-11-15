@@ -21,7 +21,7 @@ import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
-import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
+import { toTrackerBar, toTrackerDots, toTrackerMeter } from "./utils/ValueBars.js";
 
 const SpoileredNumberRegExp = /^\|\|\d+\|\|$/;
 
@@ -726,6 +726,17 @@ export class GameCharacter {
 		return this.getString(`${key}.dots.values`) !== undefined;
 	}
 
+	public getTrackerMeter(key: string): string {
+		const value = this.getNumber(key);
+		const minValue = this.getNumber(getMetaKey(key, "min"));
+		const meterValues = this.getString(`${key}.meter.values`);
+		return toTrackerMeter({ meterValues, minValue, value })
+	}
+
+	public hasTrackerMeter(key: string): boolean {
+		return this.getString(`${key}.meter.values`) !== undefined;
+	}
+
 	/** returns the value for the first key that has a defined value */
 	public getNumber(...keys: string[]): number | undefined {
 		for (const key of keys) {
@@ -834,6 +845,13 @@ export class GameCharacter {
 			const statKey = keyLower.slice(0, -5);
 			if (this.getNumber(statKey) !== undefined) {
 				return ret(key, this.getTrackerDots(statKey));
+			}
+		}
+
+		if (keyLower.endsWith(".meter")) {
+			const statKey = keyLower.slice(0, -6);
+			if (this.getNumber(statKey) !== undefined) {
+				return ret(key, this.getTrackerMeter(statKey));
 			}
 		}
 

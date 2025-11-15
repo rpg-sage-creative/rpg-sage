@@ -2,33 +2,25 @@ import { isFiniteNumber } from "@rsc-utils/core-utils";
 
 const GlobalTrackerBars = {
 	/** 8 different bars, 0% -> 100% */
-	verticalbar: { min:`▕ `, increments:[`▕▁`, `▕▂`, `▕▃`, `▕▄`, `▕▅`, `▕▆`, `▕▇`], max:`▕█`, unknown:`▕?` },
-	horizontalbar: { min:`┆┈┈┈┈┆`, increments:[`┃┈┈┈┈┆`, `┃━┈┈┈┆`, `┃━━┈┈┆`, `┃━━━┈┆`, `┃━━━━┆`], max:`┃━━━━┃`, unknown:`┆┈?┈┆` },
+	verticalbar: { min:"▕ ", increments:["▕▁", "▕▂", "▕▃", "▕▄", "▕▅", "▕▆", "▕▇"], max:"▕█", unknown:"▕?" },
+	horizontalbar: { min:"┆┈┈┈┈┆", increments:["┃┈┈┈┈┆", "┃━┈┈┈┆", "┃━━┈┈┆", "┃━━━┈┆", "┃━━━━┆"], max:"┃━━━━┃", unknown:"┆┈?┈┆" },
 };
 
-// const GlobalTrackerDots = {
-// 	heropoints: { off:"\u{24bd}", on:"\u{1F157}", unknown:"?" },
-// 	focuspoints: { off:"\u{24bb}", on:"\u{1F155}", unknown:"?" },
-// 	manapoints: { off:"\u{24c2}", on:"\u{1F15C}", unknown:"?" },
-// 	staminapoints: { off:"\u{24c8}", on:"\u{1F162}", unknown:"?" },
-// 	diamonds: { off:"◇", on:"◆", unknown:"?" },
-// 	dots: { off:"○", on:"●", unknown:"?" },
-// 	hearts: { off:"♡", on:"♥", unknown:"?" },
-// 	hexes: { off:"⬡", on:"⬢", unknown:"?" },
-// 	squares: { off:"▫", on:"▪", unknown:"?" },
-// 	triangles: { off:"△", on:"▲", unknown:"?" },
-// };
 const GlobalTrackerDots = {
-	heropoints: { off: 'Ⓗ', on: '🅗', unknown: '?' },
-	focuspoints: { off: 'Ⓕ', on: '🅕', unknown: '?' },
-	manapoints: { off: 'Ⓜ', on: '🅜', unknown: '?' },
-	staminapoints: { off: 'Ⓢ', on: '🅢', unknown: '?' },
-	diamonds: { off: '◇', on: '◆', unknown: '?' },
-	dots: { off: '○', on: '●', unknown: '?' },
-	hearts: { off: '♡', on: '♥', unknown: '?' },
-	hexes: { off: '⬡', on: '⬢', unknown: '?' },
-	squares: { off: '▫', on: '▪', unknown: '?' },
-	triangles: { off: '△', on: '▲', unknown: '?' }
+	heropoints: { off: "Ⓗ", on: "🅗", unknown: "?" },
+	focuspoints: { off: "Ⓕ", on: "🅕", unknown: "?" },
+	manapoints: { off: "Ⓜ", on: "🅜", unknown: "?" },
+	staminapoints: { off: "Ⓢ", on: "🅢", unknown: "?" },
+	diamonds: { off: "◇", on: "◆", unknown: "?" },
+	dots: { off: "○", on: "●", unknown: "?" },
+	hearts: { off: "♡", on: "♥", unknown: "?" },
+	hexes: { off: "⬡", on: "⬢", unknown: "?" },
+	squares: { off: "▫", on: "▪", unknown: "?" },
+	triangles: { off: "△", on: "▲", unknown: "?" }
+};
+
+const GlobalTrackerMeters = {
+	default: { values:[], unknown:"?" },
 };
 
 type TrackerBarValues = {
@@ -158,4 +150,65 @@ export function toTrackerDots(value?: number, maxValue?: number, trackerDotValue
 
 	// just show the dots
 	return values.join("");
+}
+
+type TrackerMeterValues = {
+	values: string[];
+	unknown: string;
+};
+
+function parseTrackerMeter(trackerMeterValues?: string): TrackerMeterValues {
+	// don't waste time if we don't have anything to work with
+	if (!trackerMeterValues) {
+		return GlobalTrackerMeters.default;
+	}
+
+	// start by trying to grab a predefined dots
+	const key = trackerMeterValues.toLowerCase();
+	if (key in GlobalTrackerMeters) {
+		return GlobalTrackerMeters[key as keyof typeof GlobalTrackerMeters];
+	}
+
+	// split values
+	const values = trackerMeterValues.split(",").map(part => part.trim());
+
+	// if we have only empty values, return default
+	if (values.every(value => !value)) {
+		return GlobalTrackerMeters.default;
+	}
+
+	// default unknown value
+	let unknown = "?";
+
+	// unknown is last ... if we have a blank before it
+	if (!values[values.length - 2] && values[values.length - 1]) {
+		unknown = values.pop()!; // pop unknown
+		values.pop();            // pop blank
+	}
+
+	return { values, unknown };
+}
+
+type TrackerMeterArgs = {
+	meterValues?: string;
+	minValue?: number;
+	value?: number;
+};
+
+export function toTrackerMeter({ meterValues, minValue, value }: TrackerMeterArgs): string {
+	const { values, unknown } = parseTrackerMeter(meterValues);
+
+	if (!isFiniteNumber(value)) {
+		return unknown;
+	}
+
+	// the value is the index of the values
+	let valueIndex = value;
+
+	// adjust the valueIndex so that we are 0-based for the values array
+	if (isFiniteNumber(minValue)) {
+		valueIndex -= minValue;
+	}
+
+	return values[valueIndex] ?? unknown;
 }

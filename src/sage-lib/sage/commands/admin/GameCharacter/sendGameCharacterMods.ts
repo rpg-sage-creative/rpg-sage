@@ -57,7 +57,8 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 				}else {
 					const trackerBar = character.hasTrackerBar(key) ? character.getTrackerBar(key) : "";
 					const trackerDots = character.hasTrackerDots(key) ? character.getTrackerDots(key) : "";
-					renderableContent.append(`<b>${key}</b> ${value} ${trackerBar}${trackerDots}`.trim());
+					const trackerMeter = character.hasTrackerMeter(key) ? character.getTrackerMeter(key) : "";
+					renderableContent.append(`<b>${key}</b> ${value} ${trackerBar}${trackerDots}${trackerMeter}`.trim());
 				}
 
 			}else {
