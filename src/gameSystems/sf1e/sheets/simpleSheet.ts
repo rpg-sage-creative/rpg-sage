@@ -59,10 +59,11 @@ function hpToHtml(char: StatBlockProcessor): string | undefined {
 		const maxValue = char.getString(`max${label}`);
 		if (value || maxValue) {
 			hasHealth = true;
+			return char.processTemplate(label).value
+				?? `<b>${label}</b> ${value ?? "??"}/${maxValue ?? "??"}`;
 		}
-		return char.processTemplate(label).value
-			?? `<b>${label}</b> ${value ?? "??"}/${maxValue ?? "??"}`;
-	});
+		return undefined;
+	}).filter(s => s);
 
 	if (hasHealth) {
 		return out.join("; ");
@@ -96,5 +97,5 @@ export function isStatsKey(key: string): boolean {
 	const lower = key.toLowerCase();
 	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower)
 		|| ["mod.fortitude", "fortitude", "fort", "mod.reflex", "reflex", "ref", "mod.will", "will"].includes(lower)
-		|| ["eac", "kac", "hp", "maxhp", "stamina", "maxstamina", "resolve", "maxresolve"].includes(lower);
+		|| ["eac", "kac", "hp", "maxhp", "stamina", "maxstamina", "resolve", "maxresolve", "credits", "upb"].includes(lower);
 }
