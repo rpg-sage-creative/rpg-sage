@@ -35,7 +35,7 @@ const StatBlockRegExp = regex("i")`
 			::
 
 		)?
-		(?<statKey> [\w\-.]+ )
+		(?<statKey> [ \w\-.]+ )
 		(
 			:
 			(?<explicitDefault> [^\{\}]+ )
