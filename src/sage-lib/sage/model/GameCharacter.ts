@@ -720,6 +720,10 @@ export class GameCharacter {
 		return this.getString(`${key}.dots.values`) !== undefined;
 	}
 
+	public hasIndexedValues(key: string): boolean {
+		return this.getString(`${key}.indexed.values`) !== undefined;
+	}
+
 	/** returns the value for the first key that has a defined value */
 	public getNumber(...keys: string[]): number | undefined {
 		for (const key of keys) {
@@ -828,6 +832,16 @@ export class GameCharacter {
 			const statKey = keyLower.slice(0, -5);
 			if (this.getNumber(statKey) !== undefined) {
 				return ret(key, this.getTrackerDots(statKey));
+			}
+		}
+
+		if (keyLower.endsWith(".indexed")) {
+			const statKey = keyLower.slice(0, -8);
+			if (this.getNumber(statKey) !== undefined) {
+				const value = this.getNumber(statKey);
+				const valuesString = this.getString(`${statKey}.indexed.values`);
+				const values = valuesString?.split(",").map(s => s.trim()) ?? [];
+				return ret(key, values[value!] ?? "?");
 			}
 		}
 
