@@ -259,7 +259,7 @@ export class PlayerCharacterTransformer extends PlayerCharacterE20<PlayerCharact
 
 		//#region gear
 		if (includes("All", "Gear") && this.core.gear) {
-			push("<b>Powers</b> " + this.core.gear);
+			push("<b>Gear</b> " + this.core.gear);
 		}
 		//#endregion
 
