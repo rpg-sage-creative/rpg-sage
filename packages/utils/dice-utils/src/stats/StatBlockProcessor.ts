@@ -31,11 +31,11 @@ const StatBlockRegExp = regex("i")`
 		(
 			(?<implicitChar> :: )
 			|
-			(?<explicitChar> [\w\s]+ | "[\w\s]+" )
+			(?<explicitChar> [\w\ ]+ | "[\w\ ]+" )
 			::
 
 		)?
-		(?<statKey> [ \w\-.]+ )
+		(?<statKey> [\w\ \-.]+ )
 		(
 			:
 			(?<explicitDefault> [^\{\}]+ )
@@ -61,6 +61,8 @@ const StatBlockRegExp = regex("i")`
 // 		\}{2}
 // 	`;
 // }
+
+const EndsInTemplateRegExp = /\.template$/i;
 
 type AltType = "alt" | "companion" | "familiar" | "hireling";
 
@@ -220,7 +222,7 @@ export class StatBlockProcessor {
 
 	public processTemplate(templateKey: string, { templatesOnly }: ProcessTemplateOptions = {}): ProcessTemplateResults {
 		const matchKeys = new Set<Lowercase<string>>();
-		const templateValue = `{${templateKey.replace(/\.template$/i, "")}.template}`;
+		const templateValue = `{${templateKey.replace(EndsInTemplateRegExp, "")}.template}`;
 		const templateStatBlock = this.parseStatBlock(templateValue);
 		if (templateStatBlock?.isTemplate) {
 			const templateResult = this.processStatBlock(templateStatBlock, { matches:matchKeys, stack:[], templatesOnly:true });
@@ -231,7 +233,7 @@ export class StatBlockProcessor {
 					keys: matchKeys,
 					title: titleValue,
 					value: processedResult,
-					lines: processedResult.split(/[\r\n]/)
+					lines: processedResult.split("\n")
 				};
 			}
 		}
@@ -364,7 +366,7 @@ export class StatBlockProcessor {
 			defaultValue: implicitDefault ? "" : explicitDefault?.trim(),
 
 			stackValue: `${char.stackValue ?? ""}::${statKey}`.toLowerCase(),
-			isTemplate: statKey.toLowerCase().endsWith(".template"),
+			isTemplate: EndsInTemplateRegExp.test(statKey),
 		};
 	}
 
