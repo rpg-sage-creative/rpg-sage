@@ -1,4 +1,4 @@
-import { error, info, stringify, verbose } from "@rsc-utils/core-utils";
+import { captureProcessExit, error, info, stringify, verbose, type Awaitable } from "@rsc-utils/core-utils";
 import { createServer, type IncomingMessage, type Server } from "http";
 import type { BufferHandler, BufferHandlerJsonError, BufferHandlerResponse } from "./types.js";
 
@@ -26,11 +26,19 @@ function ensureOutput<T>(output: T): Buffer | string {
 	return stringify(output);
 }
 
+type Handlers<T> = {
+	createdHandler?: (app: AppServer<T>) => Awaitable<void>;
+	bufferHandler: BufferHandler<T>;
+	startHandler?: (app: AppServer<T>) => Awaitable<void>;
+	destroyHandler?: (app: AppServer<T>) => Awaitable<void>;
+};
+
 /**
  * A simple, reusable app server for offloading tasks from a process.
  */
 export class AppServer<T> {
-	public constructor(public name: string, public handler: BufferHandler<T>) { }
+
+	public constructor(public name: string, public handlers?: Handlers<T>) { }
 
 	protected log(level: "info" | "verbose", ...args: (IncomingMessage | string)[]): void {
 		const req = args.find(arg => typeof(arg) !== "string") as IncomingMessage | undefined;
@@ -49,7 +57,7 @@ export class AppServer<T> {
 		this.log("verbose", ...args);
 	}
 
-	public server?: Server;
+	public server: Server | undefined;
 	public create(): this {
 		if (this.server) {
 			return this;
@@ -65,19 +73,33 @@ export class AppServer<T> {
 				req.once("end", (async () => {
 					this.verbose(req, `once("end")`);
 					const buffer = Buffer.concat(chunks);
-					const handlerResponse = await this.handler(buffer).catch(errorReturn500);
-					res.writeHead(handlerResponse.statusCode, { 'Content-type':handlerResponse.contentType });
-					res.end(ensureOutput(handlerResponse.body));
-					this.verbose(req, `once("end").res.end(${handlerResponse.statusCode})`);
+					if (this.handlers?.bufferHandler) {
+						const handlerResponse = await this.handlers.bufferHandler(buffer).catch(errorReturn500);
+						res.writeHead(handlerResponse.statusCode, { "Content-Type":handlerResponse.contentType });
+						res.end(ensureOutput(handlerResponse.body));
+						this.verbose(req, `once("end").res.end(${handlerResponse.statusCode})`);
+					}else {
+						res.end();
+						this.verbose(req, `once("end").res.end()`);
+					}
 				}) as () => void);
 			}else {
-				res.writeHead(405, { 'Content-type':'application/json' });
+				res.writeHead(405, { "Content-Type":"application/json" });
 				res.write(stringify({ error: "Method not allowed!" }));
 				res.end();
 				this.verbose(req, `res.end(405)`);
 			}
 		});
+		this.handlers?.createdHandler?.(this);
 		return this;
+	}
+
+	public destroy(): void {
+		this.handlers?.destroyHandler?.(this);
+		this.server?.closeAllConnections();
+		this.server?.removeAllListeners();
+		delete this.handlers;
+		delete this.server;
 	}
 
 	public port?: number;
@@ -89,10 +111,12 @@ export class AppServer<T> {
 		this.port = port;
 		this.server?.listen(port);
 		this.log("info", `listen(${port})`);
+		this.handlers?.startHandler?.(this);
+		captureProcessExit(() => this.destroy());
 		return this;
 	}
 
-	public static start<T>(name: string, port: number, handler: BufferHandler<T>): AppServer<T> {
-		return new AppServer(name, handler).listen(port);
+	public static start<T>(name: string, port: number, handlers: Handlers<T>): AppServer<T> {
+		return new AppServer(name, handlers).listen(port);
 	}
 }

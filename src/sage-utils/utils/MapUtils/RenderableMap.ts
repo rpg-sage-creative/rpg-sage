@@ -112,6 +112,6 @@ export abstract class RenderableMap implements GameMap {
 	}
 
 	public static startServer(port: number): AppServer<MapRenderResponse> {
-		return AppServer.start("Map", port, serverHandler);
+		return AppServer.start("Map", port, { bufferHandler:serverHandler });
 	}
 }
