@@ -12,7 +12,13 @@ type SignalEventName =
 	/** Hangup detected on controlling terminal or death of controlling process: ?? */
 	| "SIGHUP";
 
+// when running via node, SIGINT can trigger twice, so we can't .once("SIGINT"), we need to .on("SIGINT") and only process it once
+let processed = false;
+
 async function onSignal(eventName: SignalEventName, code?: number): Promise<void> {
+	if (processed) return;
+	processed = true;
+
 	try {
 		// log the event
 		info(`process.on("${eventName}") = ${code}`);
