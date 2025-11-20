@@ -442,6 +442,7 @@ function getWeaponDamageDice(weapon: TPathbuilderCharacterWeapon): string {
 const BludgeoningRegExp = /Bludgeoning/i;
 const PiercingRegExp = /Piercing/i;
 const SlashingRegExp = /Slashing/i;
+const LeadingPlusMinusRegExp = /^\s*[\+\-]/;
 
 /** Creates the weapon's damage DicePart of format "dice bonus type". */
 function getWeaponDamageDicePart(weapon: TPathbuilderCharacterWeapon): string {
@@ -457,6 +458,9 @@ function getWeaponDamageDicePart(weapon: TPathbuilderCharacterWeapon): string {
 		}
 		if (SlashingRegExp.test(s)) {
 			s = s.replace(SlashingRegExp, dmgType.includes("S") ? "" : "S");
+		}
+		if (!LeadingPlusMinusRegExp.test(s)) {
+			s = `+${s}`;
 		}
 		return s;
 	}).join(" ") ?? "";
