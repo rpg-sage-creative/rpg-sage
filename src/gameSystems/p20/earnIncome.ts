@@ -1,11 +1,13 @@
 import { GameSystemType, parseGameSystem } from "@rsc-sage/types";
 import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { findComponent } from "@rsc-utils/discord-utils";
+import { findComponent, toUserMention } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { Dice } from "../../sage-dice/dice/pf2e/index.js";
 import { DieRollGrade } from "../../sage-dice/index.js";
+import { deleteMessage } from "../../sage-lib/discord/deletedMessages.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
+import type { GameCharacter } from "../../sage-lib/sage/model/GameCharacter.js";
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton.js";
@@ -18,7 +20,7 @@ import { getPaizoGameSystems } from "./lib/PaizoGameSystem.js";
 import type { ProficiencyName } from "./lib/Proficiency.js";
 import { ProficiencyType } from "./lib/types.js";
 
-type Control = "gameSystem" | "taskLevel" | "charLevel" | "proficiency" | "modifier" | `rollCheck` | `verboseToggle`;
+type Control = "gameSystem" | "taskLevel" | "charLevel" | "proficiency" | "modifier" | `rollCheck` | `rollAndClose` | `verboseToggle`;
 function createCustomId(control: Control, userId: Snowflake): `p20|earnIncome|${Control}|${Snowflake}` {
 	return `p20|earnIncome|${control}|${userId}`;
 }
@@ -26,7 +28,14 @@ function getUserId(customId: string): Snowflake {
 	return customId.split("|").pop() as Snowflake;
 }
 
-type RawEarnIncomeItem = { level:number; failure:string; trained:string; expert:string; master:string; legendary:string; };
+type RawEarnIncomeItem = {
+	level: number;
+	failure: string;
+	trained: string;
+	expert: string;
+	master: string;
+	legendary: string;
+};
 
 function getEarnIncomeTablePf2e(): RawEarnIncomeItem[] {
 	return [
@@ -135,12 +144,12 @@ function createGameSystemSelect(userId: Snowflake, selected?: GameSystemType): S
 		.setPlaceholder(`Please Select a Game System ...`);
 	getPaizoGameSystems().forEach(gameSystem => {
 		if (gameSystem.is2e) {
-		selectBuilder.addOptions(
-			new StringSelectMenuOptionBuilder()
-				.setLabel(gameSystem.name)
-				.setValue(gameSystem.code)
+			selectBuilder.addOptions(
+				new StringSelectMenuOptionBuilder()
+					.setLabel(gameSystem.name)
+					.setValue(gameSystem.code)
 					.setDefault(gameSystem.type === selected || (!selected && gameSystem.isPf && gameSystem.is2e))
-	);
+			);
 		}
 	});
 	return selectBuilder;
@@ -186,7 +195,7 @@ function createProficiencySelect(userId: Snowflake, selected?: ProficiencyName):
 				.setLabel(`Proficiency: ${proficiencyName}`)
 				.setValue(proficiencyName)
 				.setDefault(proficiencyName === selected)
-				// .setDefault(proficiencyName === selected || (selected === undefined && proficiencyName === "Trained"))
+			// .setDefault(proficiencyName === selected || (selected === undefined && proficiencyName === "Trained"))
 		);
 	});
 	return selectBuilder;
@@ -219,14 +228,19 @@ function createButtonRow({ userId, verbose }: Args): ActionRowBuilder<ButtonBuil
 		.setCustomId(createCustomId(`rollCheck`, userId))
 		.setLabel(`Roll Check`)
 		.setStyle(ButtonStyle.Primary);
+	const rollAndCloseButton = new ButtonBuilder()
+		.setCustomId(createCustomId(`rollAndClose`, userId))
+		.setLabel(`Roll & Close`)
+		.setStyle(ButtonStyle.Primary);
 	const verboseButton = new ButtonBuilder()
 		.setCustomId(createCustomId(`verboseToggle`, userId))
 		.setLabel(verbose ? `Compact` : `Verbose`)
 		.setStyle(ButtonStyle.Secondary);
 	return new ActionRowBuilder<ButtonBuilder>().setComponents(
 		rollButton,
+		rollAndCloseButton,
 		verboseButton,
-		createMessageDeleteButton(userId, { label:"Delete" })
+		createMessageDeleteButton(userId, { label:"Close" })
 	);
 }
 
@@ -276,7 +290,16 @@ export function getEarnIncomeByTaskLevel(selected: Args): RenderableContent {
 	const criticalSuccessTaskItem = taskTable[selected.taskLevel + 1];
 
 	const renderable = createCommandRenderableContent();
-	renderable.append(`<h2>Earn Income</h2>`);
+	if (selected.gameCharacter) {
+		renderable.append(
+			selected.gameCharacter.toDisplayName()
+			+ " " +
+			toUserMention(selected.gameCharacter.userId)!
+		);
+	}else {
+		renderable.append(toUserMention(selected.userId)!);
+	}
+	renderable.appendTitledSection(`Earn Income`);
 	renderable.appendBlock(
 		parseGameSystem(selected.gameSystemType)?.name ?? "Pathfinder 2e"
 	);
@@ -324,6 +347,7 @@ type Args = {
 	byCharLevel: boolean;
 	charLevelArg?: number;
 	charLevel: number;
+	gameCharacter?: GameCharacter;
 	gameSystemType: GameSystemType;
 	modifier?: number;
 	proficiency: ProficiencyName;
@@ -336,7 +360,7 @@ type Args = {
 function getVerbose(sageCommand: SageCommand, userId: Snowflake): boolean | undefined {
 	const message = sageCommand.isSageInteraction("MESSAGE") ? sageCommand.interaction.message
 		: sageCommand.isSageMessage() ? sageCommand.message
-		: undefined;
+			: undefined;
 	const customId = createCustomId("verboseToggle", userId);
 	const component = findComponent<ButtonComponent>(message, customId);
 	if (component) {
@@ -348,6 +372,8 @@ function getVerbose(sageCommand: SageCommand, userId: Snowflake): boolean | unde
 
 function getArgs(sageCommand: SageCommand): Args {
 	const userId = sageCommand.isSageInteraction("MESSAGE") ? getUserId(sageCommand.interaction.customId) : sageCommand.actorId;
+	const gameCharacters = sageCommand.game?.playerCharacters.filter(pc => pc.userId === userId);
+	const gameCharacter = gameCharacters?.length === 1 ? gameCharacters[0] : undefined;
 	const taskLevelArg = getSelectedOrDefaultNumber(sageCommand, createCustomId("taskLevel", userId), "taskLevel");
 	const charLevelArg = getSelectedOrDefaultNumber(sageCommand, createCustomId("charLevel", userId), "charLevel");
 	const modifier = getSelectedOrDefaultNumber(sageCommand, createCustomId("modifier", userId), "modifier");
@@ -355,10 +381,10 @@ function getArgs(sageCommand: SageCommand): Args {
 	const gameSystemType = getSelectedOrDefaultEnum<GameSystemType>(sageCommand, GameSystemType, createCustomId("gameSystem", userId), "game") ?? sageCommand.gameSystemType ?? GameSystemType.PF2e;
 	const verbose = getVerbose(sageCommand, userId) ?? false;
 	const byCharLevel = !!charLevelArg;
-	const charLevel = boundNumber(+(charLevelArg ?? 1), { min:1, max:20, default:1 });
+	const charLevel = boundNumber(+(charLevelArg ?? 1), { min:1, max:20, default:gameCharacter?.getNumber("level") ?? 1 });
 	const taskLevelValue = charLevelArg ? Math.max(charLevel - 2, 0) : +(taskLevelArg ?? 1);
 	const taskLevel = boundNumber(taskLevelValue, { min:0, max:20, default:1 });
-	return { taskLevelArg, charLevelArg, gameSystemType, byCharLevel, charLevel, taskLevel, proficiency, modifier, userId, verbose };
+	return { byCharLevel, charLevelArg, charLevel, gameCharacter, gameSystemType, modifier, proficiency, taskLevelArg, taskLevel, userId, verbose };
 }
 
 async function showEarnIncome(sageCommand: SageCommand): Promise<void> {
@@ -367,7 +393,10 @@ async function showEarnIncome(sageCommand: SageCommand): Promise<void> {
 	const components = args.byCharLevel
 		? buildCharForm(args)
 		: buildTaskForm(args);
-	await sageCommand.replyStack.reply({ content, components });
+	const sent = await sageCommand.replyStack.send({ content, components });
+	if (sent) {
+		await deleteMessage(await sageCommand.fetchMessage());
+	}
 }
 
 async function changeEarnIncome(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
@@ -405,11 +434,20 @@ async function rollEarnIncome(sageInteraction: SageInteraction<ButtonInteraction
 	const isSuccess = roll.grade === DieRollGrade.Success || roll.grade === DieRollGrade.CriticalSuccess;
 	const incomePerDay = isCrit && isSuccess ? criticalSuccessTaskItem[args.proficiency.toLowerCase() as "trained"]
 		: isSuccess ? taskItem[args.proficiency.toLowerCase() as "trained"]
-		: !isSuccess && !isCrit ? taskItem.failure
-		: args.gameSystemType === GameSystemType.SF2e ? "0 credits"
-		: "0 sp";
+			: !isSuccess && !isCrit ? taskItem.failure
+				: args.gameSystemType === GameSystemType.SF2e ? "0 credits"
+					: "0 sp";
 
 	const renderable = createCommandRenderableContent();
+	if (args.gameCharacter) {
+		renderable.append(
+			args.gameCharacter.toDisplayName()
+			+ " " +
+			toUserMention(args.gameCharacter.userId)!
+		);
+	}else {
+		renderable.append(toUserMention(args.userId)!);
+	}
 	renderable.append(`<b>Earn Income</b>`);
 	renderable.appendBlock(
 		parseGameSystem(args.gameSystemType)?.name ?? "Pathfinder 2e"
@@ -428,7 +466,7 @@ async function rollEarnIncome(sageInteraction: SageInteraction<ButtonInteraction
 	);
 	renderable.append(`<b>Check Result</b>`);
 	renderable.appendBlock(
-		`<b>${roll.rolls[0].rolls[0]}</b> ${toModifier(args.modifier??0)} = ${roll.total}`,
+		`<b>${roll.rolls[0].rolls[0]}</b> ${toModifier(args.modifier ?? 0)} = ${roll.total}`,
 	);
 	renderable.append(`<b>${isCrit ? "Critical " : ""}${isSuccess ? "Success" : "Failure"}</b>`);
 	renderable.appendBlock(
@@ -445,7 +483,10 @@ async function rollEarnIncome(sageInteraction: SageInteraction<ButtonInteraction
 		);
 	}
 
-	await sageInteraction.replyStack.send({ content:renderable });
+	const sent = await sageInteraction.replyStack.send({ content:renderable });
+	if (sent && sageInteraction.interaction.customId.includes("rollAndClose")) {
+		await deleteMessage(await sageInteraction.fetchMessage());
+	}
 }
 
 async function pfsIncome(sageCommand: SageCommand): Promise<void> {
@@ -456,5 +497,5 @@ export function registerEarnIncome(): void {
 	registerListeners({ commands:["pfs|income"], handler:pfsIncome });
 	registerListeners({ commands:["earn|income", "income|earned"], handler:showEarnIncome });
 	registerListeners({ commands:[/p20\|earnIncome\|(gameSystem|taskLevel|charLevel|proficiency|modifier|verboseToggle)\|\d{16,}/], interaction:changeEarnIncome });
-	registerListeners({ commands:[/p20\|earnIncome\|rollCheck\|\d{16,}/], interaction:rollEarnIncome });
+	registerListeners({ commands:[/p20\|earnIncome\|(rollCheck|rollAndClose)\|\d{16,}/], interaction:rollEarnIncome });
 }
