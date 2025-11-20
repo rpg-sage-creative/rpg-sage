@@ -1,4 +1,4 @@
-import { isDefined } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/core-utils";
 import type { DialogOptions } from "../SageChannel.js";
 
 export type OldDialogOptions = DialogOptions & {
@@ -9,12 +9,16 @@ export type OldDialogOptions = DialogOptions & {
 };
 
 export function updateDialogOptions(options: OldDialogOptions): void {
-	if (isDefined(options.defaultDialogType)) {
-		options.dialogPostType = options.defaultDialogType;
+	if ("defaultDialogType" in options) {
+		if (options.defaultDialogType === 0 || options.defaultDialogType === 1) {
+			options.dialogPostType = options.defaultDialogType;
+		}
 		delete options.defaultDialogType;
 	}
-	if (isDefined(options.defaultGmCharacterName)) {
-		options.gmCharacterName = options.defaultGmCharacterName;
+	if ("defaultGmCharacterName" in options) {
+		if (isNotBlank(options.defaultGmCharacterName)) {
+			options.gmCharacterName = options.defaultGmCharacterName;
+		}
 		delete options.defaultGmCharacterName;
 	}
 }
