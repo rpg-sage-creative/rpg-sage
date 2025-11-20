@@ -47,10 +47,7 @@ export class RenderableContent implements Renderable {
 	/** Prepends <blockquote> to the first content given, appends </blockquote> to the last content given, then passes to .append(...) */
 	public appendBlock(...content: string[]): void {
 		if (content.length) {
-			content[0] = `<blockquote>${content[0]}`;
-			const lastIndex = content.length - 1;
-			content[lastIndex] = `${content[lastIndex]}</blockquote>`;
-			this.append(...content);
+			this.append(...content.map(s => "> " + s));
 		}
 	}
 
@@ -109,9 +106,9 @@ export class RenderableContent implements Renderable {
 
 	/** The default renderer for a section. */
 	protected renderSection(section: RenderableContentSection): string {
-		const title = section.title ? `<h2>${section.title}</h2>` : ``;
-		const contents = section.content.map(s => `<p>${s}</p>`).join("");
-		return `${title}<div>${contents}</div>`;
+		const title = section.title ? `## ${section.title}\n` : ``;
+		const contents = section.content.join("");
+		return title + contents;
 	}
 
 	/** Required to implement Renderable. By default returns "this". */
@@ -121,7 +118,7 @@ export class RenderableContent implements Renderable {
 
 	/** Renders all contents to html. */
 	public toString(): string {
-		const title = this.title ? `<h1>${this.title}</h1>` : ``;
+		const title = this.title ? `# ${this.title}\n` : ``;
 		const sections = this.sections.map(section => this.renderSection(section)).join("");
 		return title + sections;
 	}
