@@ -1,7 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
 import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath, processMath, StatBlockProcessor } from "@rsc-utils/dice-utils";
+import { doStatMath, processMath, StatBlockProcessor, unpipe } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
@@ -193,6 +193,8 @@ export type StatResults<
 	key: string;
 	keyLower: Lowercase<string>;
 	value: Value;
+	hasPipes: boolean;
+	unpiped: string;
 }
 |
 {
@@ -200,6 +202,8 @@ export type StatResults<
 	key: string;
 	keyLower: Lowercase<string>;
 	value: Nil;
+	hasPipes?: never;
+	unpiped?: never;
 };
 
 export class GameCharacter {
@@ -787,12 +791,14 @@ export class GameCharacter {
 		const keyLower = key.toLowerCase() as Lowercase<string>;
 
 		// shortcut to easily return as the args request
-		const ret = (casedKey = key, value: Optional<number | string> = null) => {
+		const ret = (casedKey = key, value: Optional<number | string> = null): StatResults<string> | string | null => {
 			const _isDefined = isDefined(value);
 			const _value = _isDefined && !isString(value) ? String(value) : value ?? null;
-			return includeKey
-				? { isDefined:_isDefined, key:casedKey, keyLower, value:_value } as StatResults<string>
-				: _value;
+			if (includeKey) {
+				const unpiped = _isDefined ? unpipe(_value!) : undefined;
+				return { isDefined:_isDefined, key:casedKey, keyLower, value:_value, ...unpiped } as StatResults<string>;
+			}
+			return _value;
 		};
 
 		// no key, no value

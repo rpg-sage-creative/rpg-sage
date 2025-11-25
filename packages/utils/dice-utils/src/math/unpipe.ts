@@ -1,6 +1,7 @@
-/** @internal */
+const pipeRegex = /\|{2}[^|]+\|{2}/g;
+
+/** Checks the value for piped ||spoilered|| text and returns the value without pipes along with the boolean for if pipes were found. */
 export function unpipe(value: string) {
-	const pipeRegex = /\|{2}[^|]+\|{2}/g;
 
 	// check for piped "hidden" values
 	const hasPipes = pipeRegex.test(value);
