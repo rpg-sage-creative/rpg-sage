@@ -8,9 +8,11 @@ export type StatsCharacter = {
 
 	/** Returns the stat for the given key (as meta about the stat). */
 	getStat(key: string, bool: true): {
+		hasPipes?: boolean;
 		isDefined: boolean;
 		key: string;
 		keyLower: Lowercase<string>;
+		unpiped?: string;
 		value: string | null;
 	};
 
