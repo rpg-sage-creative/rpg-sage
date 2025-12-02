@@ -23,14 +23,36 @@ import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
 
-const SpoileredNumberRegExp = /^\|\|\d+\|\|$/;
-
 /** In addition to returning "maxhp" for "hp", this returns "alt.maxhp" for "alt.hp" */
-function getMetaKey(key: string, prefix: "min" | "max"): string {
+function getOldMetaKey(key: string, prefix: "min" | "max" | "tmp" | "temp"): string {
 	const parts = key.split(".");
 	const last = parts.pop();
 	parts.push(prefix + last);
 	return parts.join(".");
+}
+
+/** Reusable function to declutter getNumbers() */
+function getMetaStat(char: GameCharacter, key: string, metaKey: "min" | "max" | "tmp") {
+	// the old way adds {meta} to the beginning of the last key: hp >> maxhp OR alt.hp >> al.maxhp
+	let metaValue = char.getStat(getOldMetaKey(key, metaKey), true);
+
+	// the new way adds .{meta} to the end of the key: hp >> hp.max
+	if (!metaValue.isDefined) {
+		metaValue = char.getStat(key + "." + metaKey, true);
+	}
+
+	// this allows for folks to use temp OR tmp
+	if (!metaValue.isDefined && metaKey === "tmp") {
+		// old way
+		metaValue = char.getStat(getOldMetaKey(key, "temp"), true);
+		// new way
+		if (!metaValue.isDefined) {
+			metaValue = char.getStat(key + ".temp", true);
+		}
+	}
+
+	// finally return it
+	return metaValue;
 }
 
 /*
@@ -702,17 +724,9 @@ export class GameCharacter {
 	}
 
 	public getTrackerBar(key: string): string {
-		let valueStat = this.getString(key) ?? "0";
-		if (SpoileredNumberRegExp.test(valueStat)) valueStat = valueStat.slice(2, -2);
-		const value = +valueStat;
-
-		let maxValueStat = this.getString(getMetaKey(key, "max")) ?? "0";
-		if (SpoileredNumberRegExp.test(maxValueStat)) maxValueStat = maxValueStat.slice(2, -2);
-		const maxValue = +maxValueStat;
-
+		const { val, max } = this.getNumbers(key, { val:true, max:true });
 		const barValues = this.getString(`${key}.bar.values`);
-
-		return toTrackerBar(value, maxValue, barValues);
+		return toTrackerBar(val, max, barValues);
 	}
 
 	public hasTrackerBar(key: string): boolean {
@@ -720,10 +734,9 @@ export class GameCharacter {
 	}
 
 	public getTrackerDots(key: string): string {
-		const value = this.getNumber(key);
-		const maxValue = this.getNumber(getMetaKey(key, "max"));
+		const { val, max } = this.getNumbers(key, { val:true, max:true });
 		const dotValues = this.getString(`${key}.dots.values`);
-		return toTrackerDots(value, maxValue, dotValues);
+		return toTrackerDots(val, max, dotValues);
 	}
 
 	public hasTrackerDots(key: string): boolean {
@@ -739,10 +752,52 @@ export class GameCharacter {
 		for (const key of keys) {
 			const stat = this.getStat(key, true);
 			if (stat.isDefined) {
-				return numberOrUndefined(stat.value)
+				return stat.hasPipes
+					? numberOrUndefined(stat.unpiped)
+					: numberOrUndefined(stat.value);
 			}
 		}
 		return undefined;
+	}
+
+	/**
+	 * Gets the value and meta data for the meta keys as numbers.
+	 * For each meta key: .xKey, .x, .xDefined, and .xPipes are returned.
+	 * .hasPipes and .isEmpty are also included as tests against all meta keys.
+	 * If no meta keys are specified, then all meta keys are returned.
+	 */
+	public getNumbers(key: string, opts?: { max?:boolean; min?:boolean; tmp?:boolean; val?:boolean; }) {
+		const allOpts = !opts || (opts.val && opts.min && opts.max && opts.tmp);
+
+		const val = allOpts || opts?.val ? this.getStat(key, true) : undefined;
+		const min = allOpts || opts?.min ? getMetaStat(this, key, "min") : undefined;
+		const max = allOpts || opts?.max ? getMetaStat(this, key, "max") : undefined;
+		const tmp = allOpts || opts?.tmp ? getMetaStat(this, key, "tmp") : undefined;
+
+		return {
+			hasPipes: val?.hasPipes || min?.hasPipes || max?.hasPipes || tmp?.hasPipes,
+			isEmpty: !val?.isDefined && !min?.isDefined && !max?.isDefined && !tmp?.isDefined,
+
+			valKey: val?.key,
+			val: val?.isDefined ? numberOrUndefined(val.hasPipes ? val.unpiped : val.value) : undefined,
+			valDefined: val?.isDefined,
+			valPipes: val?.hasPipes,
+
+			minKey: min?.key,
+			min: min?.isDefined ? numberOrUndefined(min.hasPipes ? min.unpiped : min.value) : undefined,
+			minDefined: min?.isDefined,
+			minPipes: min?.hasPipes,
+
+			maxKey: max?.key,
+			max: max?.isDefined ? numberOrUndefined(max.hasPipes ? max.unpiped : max.value) : undefined,
+			maxDefined: max?.isDefined,
+			maxPipes: max?.hasPipes,
+
+			tmpKey: tmp?.key,
+			tmp: tmp?.isDefined ? numberOrUndefined(tmp.hasPipes ? tmp.unpiped : tmp.value) : undefined,
+			tmpDefined: tmp?.isDefined,
+			tmpPipes: tmp?.hasPipes,
+		};
 	}
 
 	/** returns the value for the first key that has a defined value */
@@ -833,8 +888,9 @@ export class GameCharacter {
 
 		const isDeprecatedHpBar = ["hpgauge", "hpbar"].includes(keyLower);
 		if (keyLower.endsWith(".bar") || isDeprecatedHpBar) {
-			const statKey = isDeprecatedHpBar ? "hp" : keyLower.slice(0, -4);
-			if (this.getNumber(statKey) !== undefined || this.getNumber(getMetaKey(statKey, "max")) !== undefined) {
+			const statKey = isDeprecatedHpBar ? this.getKey("hitPoints") : keyLower.slice(0, -4);
+			const { val, max } = this.getNumbers(statKey);
+			if (val !== undefined || max !== undefined) {
 				/** @todo do i wanna try to case this key? */
 				return ret(key, this.getTrackerBar(statKey));
 			}
@@ -849,8 +905,8 @@ export class GameCharacter {
 
 		if (keyLower.endsWith(".indexed")) {
 			const statKey = keyLower.slice(0, -8);
-			if (this.getNumber(statKey) !== undefined) {
-				const value = this.getNumber(statKey);
+			const value = this.getNumber(statKey);
+			if (value !== undefined) {
 				const valuesString = this.getString(`${statKey}.indexed.values`);
 				const values = valuesString?.split(",").map(s => s.trim()) ?? [];
 				return ret(key, values[value!] ?? "?");
@@ -1083,6 +1139,22 @@ export class GameCharacter {
 		return constr.parse(raw) as CurrencyPf2e;
 	}
 
+	/** This allows Sage to have a set key for things but users can re-key their stats. */
+	private keyMap?: Map<string, string>;
+	public getKey(key: "hitPoints" | "staminaPoints"): string {
+		if (!this.keyMap) {
+			const keyMap = new Map();
+			const pairs = this.getNoteStat("char.stat.key.map")?.split(";") ?? [];
+			pairs.unshift("hitPoints=hp");
+			this.keyMap = pairs.reduce((map, pair) => {
+				const [key, value] = pair.split("=");
+				map.set(key.toLowerCase(), value);
+				return map;
+			}, keyMap);
+		}
+		return this.keyMap.get(key) ?? key;
+	}
+
 	public async processStatsAndMods(stats?: TKeyValuePair[], mods?:StatModPair[]): Promise<StringSet> {
 		const keysModdedAndUpdated = new StringSet();
 
@@ -1115,6 +1187,7 @@ export class GameCharacter {
 				await updateStats([{ key:pair.key, value:newValue }]);
 			};
 
+			const hpKeyLower = this.getKey("hitPoints").toLowerCase();
 			for (const pair of mods) {
 				const keyLower = pair.key.toLowerCase();
 
@@ -1128,19 +1201,41 @@ export class GameCharacter {
 				}
 
 				// if subtracting hp, check to see if we need to also subtract from temphp
-				else if (keyLower === "hp" && pair.modifier === "-") {
-					let hpDelta = numberOrUndefined(pair.value);
+				else if (keyLower === hpKeyLower && pair.modifier === "-") {
+					// get initial hp delta
+					let hpDelta = numberOrUndefined(unpipe(pair.value).unpiped);
+
+					// process against temp hp: most d20 games ... find list and validate game system ???
 					if (hpDelta) {
-						const tempHp = this.getNumber("temphp") ?? 0;
-						if (!tempHp) {
-							await processPair(pair);
-						}else if (tempHp >= hpDelta) {
-							await processPair({ key:"tempHp", modifier:"-", value:String(hpDelta) });
-						}else {
-							hpDelta -= tempHp;
-							await processPair({ key:"tempHp", modifier:"-", value:String(tempHp) });
-							await processPair({ key:"hp", modifier:"-", value:String(hpDelta) });
+						// get temp hp
+						const { tmpKey, tmp:tmpHp, tmpPipes } = this.getNumbers(hpKeyLower, { tmp:true });
+						// calculate temp hp delta
+						const tmpHpDelta = tmpHp ? Math.min(tmpHp, hpDelta) : 0;
+						// subtract from hp delta and process temp hp
+						if (tmpHpDelta) {
+							hpDelta -= tmpHpDelta;
+							await processPair({ key:tmpKey!, modifier:"-", value:tmpPipes?`||${tmpHpDelta}||`:String(tmpHpDelta) });
 						}
+					}
+
+					// process against stamina: starfinder 1e
+					if (hpDelta && this.gameSystem?.code === "SF1e") {
+						// get stamina key
+						const staminaKey = this.getKey("staminaPoints");
+						// get stamina
+						const { val:stamina, valPipes:stamPipes } = this.getNumbers(staminaKey, { val:true });
+						// calc stamina delta
+						const staminaDelta = stamina ? Math.min(stamina, hpDelta) : 0;
+						// subtract from hp delta and process stamina
+						if (staminaDelta) {
+							hpDelta -= staminaDelta;
+							await processPair({ key:staminaKey, modifier:"-", value:stamPipes?`||${staminaDelta}||`:String(staminaDelta) });
+						}
+					}
+
+					// process the remaining delta against hp
+					if (hpDelta) {
+						await processPair({ key:hpKeyLower, modifier:"-", value:String(hpDelta) });
 					}
 				}
 
