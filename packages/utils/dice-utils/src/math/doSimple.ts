@@ -13,18 +13,22 @@ function createSimpleRegex(options?: Options): RegExp {
 	const flags = options?.gFlag ? "xgi" : "xi";
 	const numberRegex = getNumberRegex({ allowSpoilers:options?.allowSpoilers }).source;
 	const orWrappedNumberRegex = `(?:\\(\\s*${numberRegex}\\s*\\)|${numberRegex})`;
+	const additionalMathRegex = `
+		(?:                          # open group for operands/numbers
+			\\s*                     # optional whitespace
+			[-+/*%^]                 # operator
+			[-+\\s]*                 # possible extra pos/neg signs
+			${orWrappedNumberRegex}  # pos/neg decimal number
+		)                            # close group for operands/numbers
+	`;
 	const simpleRegex = `
 		(?:
-			${orWrappedNumberRegex}        # pos/neg decimal number
-			(?:                   # open group for operands/numbers
-				\\s*              # optional whitespace
-				[-+/*%^]          # operator
-				[-+\\s]*          # possible extra pos/neg signs
-				${orWrappedNumberRegex}    # pos/neg decimal number
-			)+                    # close group for operands/numbers
+			${orWrappedNumberRegex}  # pos/neg decimal number
+			${additionalMathRegex}+  # required additional math
 			|
-			(?:[-+]\\s*){2,}      # extra pos/neg signs
-			${numberRegex}        # pos/neg decimal number
+			(?:[-+]\\s*){2,}         # extra pos/neg signs
+			${numberRegex}           # pos/neg decimal number
+			${additionalMathRegex}*  # optional additional math
 		)
 	`;
 	// const wrapped
@@ -33,9 +37,9 @@ function createSimpleRegex(options?: Options): RegExp {
 		: `(?:${simpleRegex})`;
 
 	return xRegExp(`
-		(?<!d\\d*)                # ignore the entire thing if preceded by dY or XdY
+		(?<!\\w)       # ignore the entire thing if preceded by dY or XdY
 		${spoilered}
-		(?!\\d*d\\d)              # ignore the entire thing if followed by dY or XdY
+		(?!\\w)        # ignore the entire thing if followed by dY or XdY
 	`, flags);
 }
 
