@@ -27,7 +27,7 @@ export function getComplexRegex(options?: Options): RegExp {
 	const simpleRegex = getSimpleRegex({ allowSpoilers:options?.allowSpoilers }).source;
 	const numberOrSimple = `(?:${numberRegex}|${simpleRegex})`;
 	return xRegExp(`
-		(?<!\\d*d\\d+)                  # ignore the entire thing if preceded by dY or XdY
+		(?<!\\w)       # ignore the entire thing if preceded by dY or XdY
 
 		(?:                             # open non-capture group for multiplier/function
 			(${numberRegex})\\s*        # capture a multiplier, ex: 3(4-2) <-- 3 is the multiplier
@@ -45,7 +45,7 @@ export function getComplexRegex(options?: Options): RegExp {
 		)                               # close capture group
 		\\s*\\)                         # close parentheses, optional spaces
 
-		(?!\\d*d\\d)                    # ignore the entire thing if followed by dY or XdY
+		(?!\\w)                    # ignore the entire thing if followed by dY or XdY
 	`, flags);
 }
 
