@@ -271,7 +271,7 @@ export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMa
 		languages: getArray("languages"),
 		attributes: {
 			ancestryhp: 0,
-			bonushp: mgr.getNumber("maxHp", 0),
+			bonushp: mgr.getNumber("maxHp", 0) - abilities.con * level,
 			bonushpPerLevel: 0,
 			classhp: 0,
 			speed: mgr.getNumber("speed", 0),
