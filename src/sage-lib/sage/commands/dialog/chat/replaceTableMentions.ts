@@ -8,7 +8,7 @@ const AtTableRegex = /@table/i;
 
 function updatePrefix(regexp: RegExp, prefix: string): RegExp {
 	if (prefix !== "@") {
-		return new RegExp(`${escapeRegex(prefix)}${regexp.source.slice(1)}`, "i");
+		return new RegExp(escapeRegex(prefix) + regexp.source.slice(1), "i");
 	}
 	return regexp;
 }
@@ -43,14 +43,29 @@ export function replaceTableMentions(content: string, { gameMasters = [], player
 		{ regex:getAtTableRegex(mentionPrefix), members:gameMasters.concat(players), label:"Table" },
 	];
 
-	for (const { regex, members, label } of groups) {
+	for (const { regex, members, label } of groups) {5
 		const match = regex.exec(content);
 		if (match) {
+			// map the mentions
 			const mentions = members.map(toUserMention);
+
+			// create the replacement content
 			const replacement = `@${label} (${mentions.join(", ")})`;
-			const left = content.slice(0, match.index);
-			const right = content.slice(match.index + match[0].length);
-			content = `${left}${replacement}${right}`;
+
+			// slice the content where the match is to compare against the replacement
+			const comparisonSection = content.slice(match.index, match.index + replacement.length);
+
+			// only do the replacement if we don't already have the mentions
+			if (comparisonSection !== replacement) {
+				// get left of the match
+				const left = content.slice(0, match.index);
+
+				// get right of the match
+				const right = content.slice(match.index + match[0].length);
+
+				// splice the content
+				content = left + replacement + right;
+			}
 		}
 	}
 
