@@ -1,4 +1,5 @@
 import { partition, sortPrimitive, StringSet } from "@rsc-utils/core-utils";
+import { unpipe } from "@rsc-utils/dice-utils";
 import type { Message } from "discord.js";
 import { Condition } from "../../../../../gameSystems/p20/lib/Condition.js";
 import { sendWebhook } from "../../../../discord/messages.js";
@@ -58,7 +59,8 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 					const trackerBar = character.hasTrackerBar(key) ? character.getTrackerBar(key) : "";
 					const trackerDots = character.hasTrackerDots(key) ? character.getTrackerDots(key) : "";
 					const trackerMeter = character.hasIndexedValues(key) ? character.getString(`${key}.indexed`) : "";
-					renderableContent.append(`<b>${key}</b> ${value} ${trackerBar}${trackerDots}${trackerMeter}`.trim());
+					const spoileredValue = unpipe(value).hasPipes ? "??" : value;
+					renderableContent.append(`<b>${key}</b> ${spoileredValue} ${trackerBar}${trackerDots}${trackerMeter}`.trim());
 				}
 
 			}else {
