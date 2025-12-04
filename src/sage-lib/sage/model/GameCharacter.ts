@@ -1140,19 +1140,63 @@ export class GameCharacter {
 	}
 
 	/** This allows Sage to have a set key for things but users can re-key their stats. */
-	private keyMap?: Map<string, string>;
+	private keyMap?: Map<string, string[]>;
+	/**
+	 * @todo This code currently requires parsing the keys every time we load the character.
+	 * If they use multiple key options, it means testing the values every time we fetch the key.
+	 * If we instead store the map as a map/object/record, we will only need to recreate it when they update this key map.
+	 * If we also store wether each mapped key is defined, then we would only need to check if it is defined when they update stats.
+	 * Thus the proposed solution would be:
+	 *   1. move the key mapping logic to "setKeyMap"
+	 *   2. move the isDefined test to "updateStats"
+	 *   3. update the getKey logic simply read the map and return the first key with isDefined === true
+	 */
 	public getKey(key: "hitPoints" | "staminaPoints"): string {
+		// initialize the map
 		if (!this.keyMap) {
-			const keyMap = new Map();
+			// split the key/value pairs
 			const pairs = this.getNoteStat("char.stat.key.map")?.split(";") ?? [];
+
+			// include built in pairs
 			pairs.unshift("hitPoints=hp");
+
+			// create the map
 			this.keyMap = pairs.reduce((map, pair) => {
-				const [key, value] = pair.split("=");
-				map.set(key.toLowerCase(), value);
+				// split pair by "=": key=value
+				const [pairKey, pairValue] = pair.split("=");
+
+				// split value into values by ",": map each value to a trimmed string, filter out blank
+				const values = pairValue.split(",").map(s => stringOrUndefined(s.trim())).filter(isDefined);
+
+				// only add the key if we actually have value(s)
+				if (values.length) {
+					// trim the key in case they had extra spaces
+					map.set(pairKey.trim().toLowerCase(), values);
+				}
 				return map;
-			}, keyMap);
+			}, new Map<string, string[]>());
 		}
-		return this.keyMap.get(key) ?? key;
+
+		// get the mapped key(s)
+		const keys = this.keyMap.get(key);
+
+		// if we have any mapped key(s), do not use the default
+		if (keys?.length) {
+			// if we have more than one, return the first to be defined
+			if (keys.length > 1) {
+				for (const _key of keys) {
+					if (this.getStat(_key, true).isDefined) {
+						return _key;
+					}
+				}
+			}
+
+			// default to the first
+			return keys[0];
+		}
+
+		// use the default
+		return key;
 	}
 
 	public async processStatsAndMods(stats?: TKeyValuePair[], mods?:StatModPair[]): Promise<StringSet> {
