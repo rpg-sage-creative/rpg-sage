@@ -78,17 +78,16 @@ function acSavesDcToHtml(char: StatBlockProcessor): string | undefined {
 }
 
 function hpToHtml(char: StatBlockProcessor): string | undefined {
-	const hp = char.getString("hp");
-	const maxHp = char.getString("maxHp");
-	const tempHp = char.getString("tempHp");
+	const { val:hp, valKey, max:maxHp, tmp:tempHp, tmpKey } = char.getNumbers("hitPoints");
 
 	if (tempHp) {
-		return char.processTemplate("hp.tempHp").value
+		/** @todo this should probably simply be `${valKey}.tmp` */
+		return char.processTemplate(`${valKey}.${tmpKey}`).value
 			?? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}; <b>Temp HP</b> ${tempHp ?? "0"}`;
 	}
 
 	if (hp || maxHp) {
-		return char.processTemplate("hp").value
+		return char.processTemplate(valKey ?? char.getKey("hitPoints")).value
 			?? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}`;
 	}
 
@@ -126,11 +125,12 @@ export function statsToHtml(char: StatBlockProcessor): string[] {
 	return out.filter(s => s !== undefined) as string[];
 }
 
+/** @todo make the statsToHtml function return keys used that this function can validate against. */
 export function isStatsKey(key: string): boolean {
 	const lower = key.toLowerCase();
 	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower)
 		|| ["mod.fortitude", "fortitude", "fort", "mod.reflex", "reflex", "ref", "mod.will", "will"].includes(lower)
-		|| ["ac", "hp", "maxhp", "temphp"].includes(lower)
+		|| ["ac", "hp", "maxhp", "hp.max", "temphp", "hp.temp", "hp.tmp"].includes(lower)
 		|| !!Condition.isConditionKey(lower)
 		;
 }

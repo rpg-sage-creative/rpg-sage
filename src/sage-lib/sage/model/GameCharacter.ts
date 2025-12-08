@@ -1,11 +1,12 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
-import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath, processMath, StatBlockProcessor, unpipe } from "@rsc-utils/dice-utils";
+import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatNumbersOptions, type StatNumbersResults } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
+import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
@@ -22,38 +23,8 @@ import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
-
-/** In addition to returning "maxhp" for "hp", this returns "alt.maxhp" for "alt.hp" */
-function getOldMetaKey(key: string, prefix: "min" | "max" | "tmp" | "temp"): string {
-	const parts = key.split(".");
-	const last = parts.pop();
-	parts.push(prefix + last);
-	return parts.join(".");
-}
-
-/** Reusable function to declutter getNumbers() */
-function getMetaStat(char: GameCharacter, key: string, metaKey: "min" | "max" | "tmp") {
-	// the old way adds {meta} to the beginning of the last key: hp >> maxhp OR alt.hp >> al.maxhp
-	let metaValue = char.getStat(getOldMetaKey(key, metaKey), true);
-
-	// the new way adds .{meta} to the end of the key: hp >> hp.max
-	if (!metaValue.isDefined) {
-		metaValue = char.getStat(key + "." + metaKey, true);
-	}
-
-	// this allows for folks to use temp OR tmp
-	if (!metaValue.isDefined && metaKey === "tmp") {
-		// old way
-		metaValue = char.getStat(getOldMetaKey(key, "temp"), true);
-		// new way
-		if (!metaValue.isDefined) {
-			metaValue = char.getStat(key + ".temp", true);
-		}
-	}
-
-	// finally return it
-	return metaValue;
-}
+import { getStatNumbers } from "./utils/getStatNumbers.js";
+import { processCharStatsAndMods } from "./utils/processCharStatsAndMods.js";
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -677,7 +648,7 @@ export class GameCharacter {
 		const sections = ["simple","custom","stats","templates"] as const;
 		const isSection = (value: string): value is typeof sections[number] => sections.includes(value as any);
 		const explicitSections = options?.simple || options?.custom || options?.stats || options?.templates;
-		const defaultSections = !explicitSections ? this.getString("details.defaultSections")?.toLowerCase().split(",").filter(isSection) : [];
+		const defaultSections = !explicitSections ? this.getString("details.defaultSections")?.toLowerCase().split(",").map(s => s.trim()).filter(isSection) : [];
 		const showSection = (section: typeof sections[number]) => explicitSections ? options[section] : !defaultSections?.length ? true : defaultSections.includes(section);
 
 		const raw = options?.raw;
@@ -766,38 +737,8 @@ export class GameCharacter {
 	 * .hasPipes and .isEmpty are also included as tests against all meta keys.
 	 * If no meta keys are specified, then all meta keys are returned.
 	 */
-	public getNumbers(key: string, opts?: { max?:boolean; min?:boolean; tmp?:boolean; val?:boolean; }) {
-		const allOpts = !opts || (opts.val && opts.min && opts.max && opts.tmp);
-
-		const val = allOpts || opts?.val ? this.getStat(key, true) : undefined;
-		const min = allOpts || opts?.min ? getMetaStat(this, key, "min") : undefined;
-		const max = allOpts || opts?.max ? getMetaStat(this, key, "max") : undefined;
-		const tmp = allOpts || opts?.tmp ? getMetaStat(this, key, "tmp") : undefined;
-
-		return {
-			hasPipes: val?.hasPipes || min?.hasPipes || max?.hasPipes || tmp?.hasPipes,
-			isEmpty: !val?.isDefined && !min?.isDefined && !max?.isDefined && !tmp?.isDefined,
-
-			valKey: val?.key,
-			val: val?.isDefined ? numberOrUndefined(val.hasPipes ? val.unpiped : val.value) : undefined,
-			valDefined: val?.isDefined,
-			valPipes: val?.hasPipes,
-
-			minKey: min?.key,
-			min: min?.isDefined ? numberOrUndefined(min.hasPipes ? min.unpiped : min.value) : undefined,
-			minDefined: min?.isDefined,
-			minPipes: min?.hasPipes,
-
-			maxKey: max?.key,
-			max: max?.isDefined ? numberOrUndefined(max.hasPipes ? max.unpiped : max.value) : undefined,
-			maxDefined: max?.isDefined,
-			maxPipes: max?.hasPipes,
-
-			tmpKey: tmp?.key,
-			tmp: tmp?.isDefined ? numberOrUndefined(tmp.hasPipes ? tmp.unpiped : tmp.value) : undefined,
-			tmpDefined: tmp?.isDefined,
-			tmpPipes: tmp?.hasPipes,
-		};
+	public getNumbers(key: string, opts?: StatNumbersOptions): StatNumbersResults {
+		return getStatNumbers({ char:this, key, ...opts });
 	}
 
 	/** returns the value for the first key that has a defined value */
@@ -1006,14 +947,15 @@ export class GameCharacter {
 		}
 
 		// provide a temp shortcut for calculating stat modifiers for d20 games
-		const abilities = ["strength","dexterity","constitution","intelligence","wisdom","charisma"];
-		for (const ability of abilities) {
-			const isAbbr = ability.slice(0, 3) === keyLower;
+
+		for (const ability of Ability.all()) {
+			const isAbbr = ability.abbrKey === keyLower;
 			if (isAbbr || `mod.${ability}` === keyLower) {
-				const abilityStat = this.getStat(ability, true);
-				if (isDefined(abilityStat.value)) {
-					const retKey = isAbbr ? capitalize(abilityStat.key.slice(0, 3)) : `mod.${abilityStat.key}`;
-					return ret(retKey, processMath(`floor((${abilityStat.value}-10)/2)`, { allowSpoilers:true }));
+				// just use getNumber ...
+				const abilityValue = this.getString(ability.key);
+				if (isDefined(abilityValue)) {
+					const retKey = isAbbr ? ability.abbr : `mod.${ability.name}`;
+					return ret(retKey, processMath(`floor((${abilityValue}-10)/2)`, { allowSpoilers:true }));
 				}
 			}
 		}
@@ -1150,6 +1092,7 @@ export class GameCharacter {
 	 *   1. move the key mapping logic to "setKeyMap"
 	 *   2. move the isDefined test to "updateStats"
 	 *   3. update the getKey logic simply read the map and return the first key with isDefined === true
+	 * This solution should also be implemented on CharacterShell, or in a reusable fashion.
 	 */
 	public getKey(key: "hitPoints" | "staminaPoints"): string {
 		// initialize the map
@@ -1200,102 +1143,7 @@ export class GameCharacter {
 	}
 
 	public async processStatsAndMods(stats?: TKeyValuePair[], mods?:StatModPair[]): Promise<StringSet> {
-		const keysModdedAndUpdated = new StringSet();
-
-		const updateStats = async (pairs: TKeyValuePair[]) => {
-			const keysUpdated = await this.updateStats(pairs, false);
-			keysUpdated.forEach(key => keysModdedAndUpdated.add(key));
-		};
-
-		// get game specific conditions and unset all when conditions=""
-		if (stats?.length && this.gameSystem?.isP20) {
-			const conditions = stats?.find(stat => stat.key.toLowerCase() === "conditions");
-			if (conditions?.value === null) {
-				await updateStats(Condition.ToggledConditions.map(key => ({ key, value:null })));
-				await updateStats(Condition.ValuedConditions.map(key => ({ key, value:null })));
-			}
-		}
-
-		if (stats?.length) {
-			await updateStats(stats);
-		}
-
-		if (mods?.length) {
-			const curr = this.getCurrency();
-			let currModded = false;
-
-			const processPair = async (pair: StatModPair) => {
-				const oldValue = this.getString(pair.key) ?? 0;
-				const math = `(${oldValue}${pair.modifier}${pair.value})`;
-				const newValue = doStatMath(math);
-				await updateStats([{ key:pair.key, value:newValue }]);
-			};
-
-			const hpKeyLower = this.getKey("hitPoints").toLowerCase();
-			for (const pair of mods) {
-				const keyLower = pair.key.toLowerCase();
-
-				// if denomination, handle it separately
-				if (curr.hasDenomination(keyLower)) {
-					const number = numberOrUndefined(pair.value);
-					if (number) {
-						curr.math(pair.modifier!, number, keyLower);
-						currModded = true;
-					}
-				}
-
-				// if subtracting hp, check to see if we need to also subtract from temphp
-				else if (keyLower === hpKeyLower && pair.modifier === "-") {
-					// get initial hp delta
-					let hpDelta = numberOrUndefined(unpipe(pair.value).unpiped);
-
-					// process against temp hp: most d20 games ... find list and validate game system ???
-					if (hpDelta) {
-						// get temp hp
-						const { tmpKey, tmp:tmpHp, tmpPipes } = this.getNumbers(hpKeyLower, { tmp:true });
-						// calculate temp hp delta
-						const tmpHpDelta = tmpHp ? Math.min(tmpHp, hpDelta) : 0;
-						// subtract from hp delta and process temp hp
-						if (tmpHpDelta) {
-							hpDelta -= tmpHpDelta;
-							await processPair({ key:tmpKey!, modifier:"-", value:tmpPipes?`||${tmpHpDelta}||`:String(tmpHpDelta) });
-						}
-					}
-
-					// process against stamina: starfinder 1e
-					if (hpDelta && this.gameSystem?.code === "SF1e") {
-						// get stamina key
-						const staminaKey = this.getKey("staminaPoints");
-						// get stamina
-						const { val:stamina, valPipes:stamPipes } = this.getNumbers(staminaKey, { val:true });
-						// calc stamina delta
-						const staminaDelta = stamina ? Math.min(stamina, hpDelta) : 0;
-						// subtract from hp delta and process stamina
-						if (staminaDelta) {
-							hpDelta -= staminaDelta;
-							await processPair({ key:staminaKey, modifier:"-", value:stamPipes?`||${staminaDelta}||`:String(staminaDelta) });
-						}
-					}
-
-					// process the remaining delta against hp
-					if (hpDelta) {
-						await processPair({ key:hpKeyLower, modifier:"-", value:String(hpDelta) });
-					}
-				}
-
-				// finally do basic processing
-				else {
-					await processPair(pair);
-				}
-			}
-
-			// if we modded the currency data, we still gotta update the stats themselves
-			if (currModded) {
-				await updateStats(curr.denominationKeys.map(denom => ({ key:denom, value:String(curr[denom]) })));
-			}
-		}
-
-		return keysModdedAndUpdated;
+		return processCharStatsAndMods(this, stats, mods);
 	}
 
 	/** returns keys (lowercased) updated */

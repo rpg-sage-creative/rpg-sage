@@ -55,8 +55,7 @@ function acSavesToHtml(char: StatBlockProcessor): string | undefined {
 function hpToHtml(char: StatBlockProcessor): string | undefined {
 	let hasHealth = false;
 	const out = ["Stamina", "HP", "Resolve"].map(label => {
-		const value = char.getString(label);
-		const maxValue = char.getString(`max${label}`);
+		const { val:value, max:maxValue } = char.getNumbers(label, { val:true, max:true });
 		if (value || maxValue) {
 			hasHealth = true;
 			return char.processTemplate(label).value
@@ -93,9 +92,10 @@ export function statsToHtml(char: StatBlockProcessor): string[] {
 	return out.filter(s => s !== undefined) as string[];
 }
 
+/** @todo make the statsToHtml function return keys used that this function can validate against. */
 export function isStatsKey(key: string): boolean {
 	const lower = key.toLowerCase();
 	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower)
 		|| ["mod.fortitude", "fortitude", "fort", "mod.reflex", "reflex", "ref", "mod.will", "will"].includes(lower)
-		|| ["eac", "kac", "hp", "maxhp", "stamina", "maxstamina", "resolve", "maxresolve", "credits", "upb"].includes(lower);
+		|| ["eac", "kac", "hp", "maxhp", "hp.max", "stamina", "maxstamina", "stamina.max", "resolve", "maxresolve", "resolve.max", "credits", "upb"].includes(lower);
 }

@@ -3,7 +3,7 @@ import { regex } from "regex";
 import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
 import { unquote } from "../internal/unquote.js";
 import { doStatMath } from "./doStatMath.js";
-import type { StatsCharacter, StatsCharacterManager, StatsEncounterManager } from "./types.js";
+import type { StatNumbersOptions, StatNumbersResults, StatsCharacter, StatsCharacterManager, StatsEncounterManager } from "./types.js";
 
 type CharReferenceGroups = {
 	gm?: "gm";
@@ -165,9 +165,17 @@ export class StatBlockProcessor {
 		return true;
 	}
 
+	public getKey(key: "hitPoints" | "staminaPoints"): string {
+		return this.chars.actingCharacter?.getKey(key) ?? key;
+	}
+
 	/** Gets stat for the given key as a number from the acting character. */
 	public getNumber(key: string): number | undefined {
 		return this.chars.actingCharacter?.getNumber(key);
+	}
+
+	public getNumbers(key: string, opts?: StatNumbersOptions): StatNumbersResults {
+		return this.chars.actingCharacter?.getNumbers(key, opts) ?? { isEmpty:true };
 	}
 
 	public getStat(key: string) {
@@ -185,7 +193,6 @@ export class StatBlockProcessor {
 	public getString(key: string): string | undefined {
 		return this.chars.actingCharacter?.getString(key);
 	}
-
 
 	/** Parses the given value to see if it has a CharReference. */
 	protected parseCharReference(value: Optional<string>): CharReference {
