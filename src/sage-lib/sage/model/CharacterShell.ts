@@ -1,9 +1,11 @@
 import { isDefined, isString, numberOrUndefined, StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { StatNumbersOptions, StatNumbersResults } from "@rsc-utils/dice-utils";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, StatResults, TGameCharacterType } from "./GameCharacter.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
+import { getStatNumbers } from "./utils/getStatNumbers.js";
 
 export type CharacterShellCore = {
 	/** id of the GameCharacter */
@@ -47,8 +49,17 @@ export class CharacterShell {
 		return this.game?.userDid;
 	}
 
+	/** @todo implement this on the shell *and* as passthrough */
+	public getKey(key: "hitPoints" | "staminaPoints"): string {
+		return this.game?.getKey(key) ?? key;
+	}
+
 	public getNumber(key: string): number | undefined {
 		return numberOrUndefined(this.getString(key));
+	}
+
+	public getNumbers(key: string, opts?: StatNumbersOptions): StatNumbersResults {
+		return getStatNumbers({ char:this, key, ...opts });
 	}
 
 	public getString(key: string): string | undefined {
