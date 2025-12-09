@@ -1,6 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
 import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { stringArrayOrEmpty } from "@rsc-utils/core-utils/src/array/typed/stringArrayOrEmpty.js";
 import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatNumbersOptions, type StatNumbersResults } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -23,9 +24,9 @@ import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
+import { getMetaStat } from "./utils/getMetaStat.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
 import { processCharStatsAndMods } from "./utils/processCharStatsAndMods.js";
-import { getMetaStat } from "./utils/getMetaStat.js";
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -753,6 +754,11 @@ export class GameCharacter {
 			}
 		}
 		return undefined;
+	}
+
+	/** Convenience for: .getString(key)?.split(",").map(stringOrUndefined).filter(isDefined) ?? [] */
+	public getStringArray(key: string): string[] {
+		return stringArrayOrEmpty(this.getString(key));
 	}
 
 	/** returns all notes that are stats */

@@ -8,4 +8,5 @@ export * from "./or.js";
 export * from "./partition.js";
 export * from "./remove.js";
 export * from "./removeAt.js";
+export * from "./typed/index.js";
 export * from "./without.js";
