@@ -264,7 +264,7 @@ function mapDicePartRollToString(dicePartRoll: TDicePartRoll, includeSign: boole
 		const { alias, value, hidden } = dice.test!;
 		dicePartRollOutput += ` ${alias} ${hidden ? "??" : value}`;
 	}
-	return dicePartRollOutput.replace(/ +/g, " ").trim();
+	return cleanWhitespace(dicePartRollOutput, { horizontalOnly:true });
 }
 
 type TDicePartRollToString = (dicePartRoll: TDicePartRoll, index: number, hideRolls: boolean, rollem: boolean, diceSort?: "noSort" | "sort") => string;
