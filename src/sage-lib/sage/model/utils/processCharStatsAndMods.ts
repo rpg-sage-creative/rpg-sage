@@ -2,7 +2,7 @@ import { numberOrUndefined, StringSet } from "@rsc-utils/core-utils";
 import type { StatModPair } from "../../commands/admin/GameCharacter/getCharacterArgs.js";
 import type { TKeyValuePair } from "../SageMessageArgs.js";
 import type { GameCharacter } from "../GameCharacter.js";
-import { Condition } from "../../../../gameSystems/p20/lib/Condition.js";
+import { Condition } from "../../../../gameSystems/Condition.js";
 import { doStatMath, unpipe } from "@rsc-utils/dice-utils";
 
 export type ProcessPair = Omit<TKeyValuePair, "value"> & { modifier?:"+"|"-"; value:string|number; };
@@ -15,16 +15,18 @@ export async function processCharStatsAndMods(char: GameCharacter, stats?: TKeyV
 		keysUpdated.forEach(key => keysModdedAndUpdated.add(key));
 	};
 
-	// get game specific conditions and unset all when conditions=""
-	if (stats?.length && char.gameSystem?.isP20) {
-		const conditions = stats?.find(stat => stat.key.toLowerCase() === "conditions");
-		if (conditions?.value === null) {
-			await updateStats(Condition.ToggledConditions.map(key => ({ key, value:null })));
-			await updateStats(Condition.ValuedConditions.map(key => ({ key, value:null })));
-		}
-	}
-
 	if (stats?.length) {
+		// get game specific conditions and unset all when conditions=""
+		const gameSystem = char.gameSystem;
+		if (Condition.hasConditions(gameSystem)) {
+			const conditions = stats?.find(stat => stat.key.toLowerCase() === "conditions");
+			if (conditions?.value === null) {
+				await updateStats(Condition.getToggledConditions(gameSystem).map(key => ({ key, value:null })));
+				await updateStats(Condition.getValuedConditions(gameSystem).map(key => ({ key, value:null })));
+			}
+		}
+
+		// basic stats processing
 		await updateStats(stats);
 	}
 

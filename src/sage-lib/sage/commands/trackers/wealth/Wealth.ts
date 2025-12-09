@@ -4,6 +4,7 @@ export type Wealth = {
 
 	/** starfinder (pew pew) = 1 sp */
 	credits: number;
+	upbs: number;
 
 	/** platinum = 10 gold */
 	pp: number;

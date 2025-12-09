@@ -78,6 +78,7 @@ export class Party {
 		const totalWealth = {
 			name: this.getTemplate("lootSummaryName", "Total"),
 			credits: 0,
+			upbs: 0,
 			pp: 0,
 			gp: 0,
 			ep: 0,

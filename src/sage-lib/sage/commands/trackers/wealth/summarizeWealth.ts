@@ -3,7 +3,7 @@ import type { Wealth } from "./Wealth.js";
 type WealthWithoutSummary = Omit<Wealth, "summary"> & { summary?:string; };
 
 export function summarizeWealth(wealth: WealthWithoutSummary, summaryTemplate?: string | null): Wealth {
-	const denominations = ["credits", "pp", "gp", "ep", "sp", "cp"] as (keyof Wealth)[];
+	const denominations = ["credits", "pp", "gp", "ep", "sp", "cp", "upbs"] as (keyof Wealth)[];
 	if (summaryTemplate) {
 		wealth.summary = summaryTemplate;
 		denominations.forEach(denom => wealth.summary?.replace(new RegExp(`{${denom}}`, "ig"), String(wealth[denom] ?? "0")));
