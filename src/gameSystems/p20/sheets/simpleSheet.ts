@@ -108,7 +108,7 @@ function coinsToHtml(char: StatBlockProcessor): string | undefined {
 
 
 function conditionsToHtml(char: StatBlockProcessor): string | undefined {
-	const conditions = char.getString("conditions")?.split(/\s*,\s*/).filter(s => s);
+	const conditions = char.getStringArray("conditions");
 	if (conditions?.length) {
 		return `<b>Conditions</b> ${conditions.join(", ")}`;
 	}

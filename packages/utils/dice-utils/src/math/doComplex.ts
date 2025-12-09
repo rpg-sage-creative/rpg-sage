@@ -103,7 +103,7 @@ export function doComplex(input: string, options?: Omit<Options, "globalFlag">):
 			};
 
 			// split on space,space and convert to numbers
-			const args = unpiped.split(/\s*,\s*/).map(s => +doSimple(s)!);
+			const args = unpiped.split(",").map(s => +doSimple(s.trim()));
 
 			// handle a math function
 			if (_functionName !== undefined) {

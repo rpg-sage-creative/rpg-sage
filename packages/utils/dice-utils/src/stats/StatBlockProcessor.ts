@@ -1,4 +1,4 @@
-import { AllCodeBlocksRegExp, isUrl, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
+import { AllCodeBlocksRegExp, isUrl, stringArrayOrEmpty, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
 import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
 import { unquote } from "../internal/unquote.js";
@@ -192,6 +192,11 @@ export class StatBlockProcessor {
 	/** Gets stat for the given key as a string from the acting character. */
 	public getString(key: string): string | undefined {
 		return this.chars.actingCharacter?.getString(key);
+	}
+
+	/** Convenience for: .getString(key)?.split(",").map(stringOrUndefined).filter(isDefined) ?? [] */
+	public getStringArray(key: string): string[] {
+		return stringArrayOrEmpty(this.getString(key));
 	}
 
 	/** Parses the given value to see if it has a CharReference. */

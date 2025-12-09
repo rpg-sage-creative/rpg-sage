@@ -1,4 +1,5 @@
 import { isDefined, isString, numberOrUndefined, StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { stringArrayOrEmpty } from "@rsc-utils/core-utils/src/array/typed/stringArrayOrEmpty.js";
 import type { StatNumbersOptions, StatNumbersResults } from "@rsc-utils/dice-utils";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
@@ -54,8 +55,16 @@ export class CharacterShell {
 		return this.game?.getKey(key) ?? key;
 	}
 
-	public getNumber(key: string): number | undefined {
-		return numberOrUndefined(this.getString(key));
+	public getNumber(...keys: string[]): number | undefined {
+		for (const key of keys) {
+			const stat = this.getStat(key, true);
+			if (stat.isDefined) {
+				return stat.hasPipes
+					? numberOrUndefined(stat.unpiped)
+					: numberOrUndefined(stat.value);
+			}
+		}
+		return undefined;
 	}
 
 	public getNumbers(key: string, opts?: StatNumbersOptions): StatNumbersResults {
@@ -64,6 +73,11 @@ export class CharacterShell {
 
 	public getString(key: string): string | undefined {
 		return this.getStat(key) ?? undefined;
+	}
+
+	/** Convenience for: .getString(key)?.split(",").map(stringOrUndefined).filter(isDefined) ?? [] */
+	public getStringArray(key: string): string[] {
+		return stringArrayOrEmpty(this.getString(key));
 	}
 
 	/** @deprecated start using getNumber or getString */

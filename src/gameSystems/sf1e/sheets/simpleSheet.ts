@@ -84,12 +84,21 @@ function currencyToHtml(char: StatBlockProcessor): string | undefined {
 	return undefined;
 }
 
+function conditionsToHtml(char: StatBlockProcessor): string | undefined {
+	const conditions = char.getStringArray("conditions");
+	if (conditions?.length) {
+		return `<b>Conditions</b> ${conditions.join(", ")}`;
+	}
+	return undefined;
+}
+
 export function statsToHtml(char: StatBlockProcessor): string[] {
 	const out: (string | undefined)[] = [];
 	out.push(abilitiesToHtml(char));
 	out.push(acSavesToHtml(char));
 	out.push(hpToHtml(char));
 	out.push(currencyToHtml(char));
+	out.push(conditionsToHtml(char));
 	return out.filter(s => s !== undefined) as string[];
 }
 

@@ -89,7 +89,7 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 	}
 
 	if (showConditions) {
-		const conditions = character.getString("conditions")?.split(/\s*,\s*/).filter(s => s) ?? [];
+		const conditions = character.getStringArray("conditions");
 		const conditionsString = conditions.length ? conditions.join(", ") : `<i>no conditions</i>`;
 		renderableContent.appendTitledSection(`<b>Updated Conditions</b>`, conditionsString);
 	}
