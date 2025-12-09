@@ -758,7 +758,9 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 					return ret("size", this.core.sizeName ?? SizeType[this.core.size ?? 2]);
 				case "xp":
 					return ret("xp", this.core.xp);
-				case "pp": case "gp": case "sp": case "cp": case "upb": case "credits":
+				case "upbs":
+					return ret(statLower, this.core.money["upb"]);
+				case "pp": case "gp": case "sp": case "cp": case "credits":
 					return ret(statLower, this.core.money[statLower as keyof TPathbuilderCharacterMoney]);
 				default:
 					const check = this.createCheck(statLower);
@@ -878,8 +880,11 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		const coreString = moneyToJsonString(coreMoney);
 		const moneyString = moneyToJsonString(money);
 		if (coreString !== moneyString) {
-			const keys = ["cp", "sp", "gp", "pp", "credits", "upb"] as (keyof TPathbuilderCharacterMoney)[];
-			keys.forEach(key => coreMoney[key] = money[key] ?? coreMoney[key] ?? 0);
+			const keys = ["cp", "sp", "gp", "pp", "credits", "upbs"];
+			keys.forEach(_key => {
+				const key = _key === "upbs" ? "upb" : _key as keyof TPathbuilderCharacterMoney;
+				coreMoney[key] = money[key] ?? coreMoney[key] ?? 0;
+			});
 			if (save) {
 				return this.save();
 			}

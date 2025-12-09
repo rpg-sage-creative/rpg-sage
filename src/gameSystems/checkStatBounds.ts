@@ -2,6 +2,7 @@ import { unpipe } from "@rsc-utils/dice-utils";
 import type { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";
 import type { TKeyValuePair } from "../sage-lib/sage/model/SageMessageArgs.js";
 import { checkStatBounds as checkStatBoundsP20 } from "./p20/lib/checkStatBounds.js";
+import { checkStatBounds as checkStatBoundsSF1e } from "./sf1e/lib/checkStatBounds.js";
 import { numberOrUndefined } from "./utils/numberOrUndefined.js";
 
 /**
@@ -32,6 +33,8 @@ export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair): 
 		if (numberValue && numberValue > maxValue) return ret(maxValue);
 	}
 
-	if (character.gameSystem?.isP20) return checkStatBoundsP20(character, pair, pipeInfo);
+	const { gameSystem } = character;
+	if (gameSystem?.isP20) return checkStatBoundsP20(character, pair, pipeInfo);
+	if (gameSystem?.code === "SF1e") return checkStatBoundsSF1e(character, pair, pipeInfo);
 	return undefined;
 }

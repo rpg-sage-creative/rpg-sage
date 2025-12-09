@@ -1,7 +1,8 @@
+import { Currency } from "@rsc-utils/character-utils";
 import { partition, sortPrimitive, StringSet } from "@rsc-utils/core-utils";
 import { unpipe } from "@rsc-utils/dice-utils";
 import type { Message } from "discord.js";
-import { Condition } from "../../../../../gameSystems/p20/lib/Condition.js";
+import { Condition } from "../../../../../gameSystems/Condition.js";
 import { sendWebhook } from "../../../../discord/messages.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -17,10 +18,6 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 		renderableContent.setThumbnailUrl(character.avatarUrl);
 	}
 
-	const isD20 = character.gameSystem?.code === "D20";
-	const is5e = character.gameSystem?.code === "DnD5e";
-	const isP20 = character.gameSystem?.isP20;
-
 	let showConditions = false;
 	let showCurrency = false;
 
@@ -32,19 +29,18 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 	if (statKeys?.length) {
 		renderableContent.appendTitledSection(`<b>Stats Updated</b>`);
 
+		const { gameSystem } = character;
+
 		statKeys.forEach(key => {
 			const keyLower = key.toLowerCase();
 
-			const currencyType = isP20 ? ["cp","sp","gp","pp","credits","upb"].includes(keyLower)
-				: isD20 ? ["cp","sp","gp","pp"].includes(keyLower)
-				: is5e ? ["cp","sp","ep","gp","pp"].includes(keyLower)
-				: false;
+			const currencyType = Currency.isDenominationKey(gameSystem, keyLower);
 			if (currencyType) {
 				showCurrency = true;
 			}
 
 			// check if we are dealing with a isP20 condition
-			const conditionType = isP20 ? Condition.isConditionKey(key) : false;
+			const conditionType = Condition.isConditionKey(gameSystem, key);
 			if (conditionType) {
 				showConditions = true;
 			}

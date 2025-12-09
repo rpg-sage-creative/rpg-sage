@@ -1,5 +1,5 @@
-import { applyChanges, debug, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type SortResult } from "@rsc-utils/core-utils";
-import type { GameSystemCode } from "./internal/GameSystemCode.js";
+import { applyChanges, debug, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type Optional, type SortResult } from "@rsc-utils/core-utils";
+import type { GameSystemCode, GameSystem as GameSystemObj } from "./internal/GameSystemCode.js";
 import { addValues } from "./internal/addValues.js";
 import { convertCurrency } from "./internal/convertCurrency.js";
 import { coreFrom } from "./internal/coreFrom.js";
@@ -503,5 +503,14 @@ implements Comparable<AnyCurrency> {
 		return undefined;
 	}
 
+	public static isDenominationKey(gameSystem: Optional<GameSystemObj>, denomLower: Lowercase<string>): boolean {
+		if (!gameSystem) return false;
+		for (const [_gameSystem, currency] of currencies.entries()) {
+			if (_gameSystem === gameSystem.code) {
+				return currency.CurrencyData.denominations.some(({ denom }) => denom.toLowerCase() === denomLower);
+			}
+		}
+		return false;
+	}
 }
 const currencies = new Map<GameSystemCode, typeof Currency<any, any, any>>();

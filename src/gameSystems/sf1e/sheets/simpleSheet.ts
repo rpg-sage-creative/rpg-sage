@@ -3,6 +3,7 @@ import { Ability } from "../../d20/lib/Ability.js";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { toModifier } from "../../utils/toModifier.js";
+import { Condition } from "../lib/Condition.js";
 
 function abilitiesToHtml(char: StatBlockProcessor): string | undefined {
 	let hasStats = false;
@@ -73,11 +74,11 @@ function hpToHtml(char: StatBlockProcessor): string | undefined {
 
 function currencyToHtml(char: StatBlockProcessor): string | undefined {
 	const credits = char.getString("credits");
-	const upb = char.getString("upb");
-	if (credits || upb) {
+	const upbs = char.getString("upbs");
+	if (credits || upbs) {
 		const out = [];
 		if (credits) out.push(`<b>Credits</b> ${credits}`);
-		if (upb) out.push(`<b>UPB</b> ${upb}`);
+		if (upbs) out.push(`<b>UPBs</b> ${upbs}`);
 		return out.join("; ");
 	}
 	return undefined;
@@ -97,5 +98,7 @@ export function isStatsKey(key: string): boolean {
 	const lower = key.toLowerCase();
 	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower)
 		|| ["mod.fortitude", "fortitude", "fort", "mod.reflex", "reflex", "ref", "mod.will", "will"].includes(lower)
-		|| ["eac", "kac", "hp", "maxhp", "hp.max", "stamina", "maxstamina", "stamina.max", "resolve", "maxresolve", "resolve.max", "credits", "upb"].includes(lower);
+		|| ["eac", "kac", "hp", "maxhp", "hp.max", "stamina", "maxstamina", "stamina.max", "resolve", "maxresolve", "resolve.max", "credits", "upbs"].includes(lower)
+		|| !!Condition.isConditionKey(lower)
+		;
 }

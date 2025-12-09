@@ -5,10 +5,10 @@ import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatNumbersOp
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
+import { Condition } from "../../../gameSystems/Condition.js";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
-import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
 import { HephaistosCharacterSF1e } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";
 import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/import/types.js";
@@ -25,6 +25,7 @@ import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
 import { processCharStatsAndMods } from "./utils/processCharStatsAndMods.js";
+import { getMetaStat } from "./utils/getMetaStat.js";
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -45,6 +46,8 @@ EncounterCharacter will store a reference to original Character as .original = {
 EncounterCharacter will save snapshots as .snapshots[... { ts, core }]
 EncounterCharacter snapshots will be created at the start of every round.
 */
+
+const MatchSpaceRegExp = /(\s)/g;
 
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
 
@@ -934,6 +937,14 @@ export class GameCharacter {
 			}
 		}
 
+		const { hephaistos } = this;
+		// if (hephaistos) {
+		// 	const hephStat = hephaistos.getStat(key, keyLower);
+		// 	if (hephaistos.isDefined) {
+		// 		return ret(hephStat.key, String(hephStat.value));
+		// 	}
+		// }
+
 		// get stats from underlying pathbuilder character
 		const { pathbuilder } = this;
 		if (pathbuilder) {
@@ -973,14 +984,25 @@ export class GameCharacter {
 		}
 
 		// if we don't have hp, let's try using maxHp
-		if (keyLower === "hp") {
-			return ret("hp", this.getNumber("maxHp"));
+		const hpKey = this.getKey("hitPoints");
+		if (keyLower === hpKey.toLowerCase()) {
+			return ret("hp", getMetaStat(this, hpKey, "max").value);
+		}
+
+		// instead of importing each Condition class and running them in their getStatXXX, let's just use a single entry point for Condition
+		if (keyLower === "conditions") {
+			return ret(keyLower, Condition.getCharacterConditions(this));
 		}
 
 		const { gameSystem } = this;
 		if (pathbuilder || gameSystem?.isP20) {
 			const p20Stat = this.getStatP20(key, keyLower);
 			return ret(p20Stat.key, p20Stat.value);
+		}
+
+		if (hephaistos || gameSystem?.code === "SF1e") {
+			const sf1eStat = this.getStatSF1e(key, keyLower);
+			return ret(sf1eStat.key, sf1eStat.value);
 		}
 
 		/** @todo by doing this we are ensuring that users are able to keep using these functions that they may not have known were specific to pf2e */
@@ -1020,27 +1042,21 @@ export class GameCharacter {
 			}
 		}
 
-		if (keyLower === "conditions") {
-			const conditions: string[] = [];
+		return ret();
+	}
 
-			Condition.ToggledConditions.forEach(condition => {
-				if (this.getString(condition) !== undefined) {
-					const riders = Condition.getConditionRiders(condition);
-					const riderText = riders.length ? ` (${riders.join(", ")})` : ``;
-					conditions.push(condition + riderText);
-				}
-			});
+	protected getStatSF1e(key: string, keyLower = key.toLowerCase() as Lowercase<string>): StatResults<string | number, undefined> {
+		// return value creator
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => (
+			{ isDefined:isDefined(value), key:casedKey, keyLower, value:value??undefined } as StatResults<string | number, undefined>
+		);
 
-			Condition.ValuedConditions.forEach(condition => {
-				const value = this.getString(condition);
-				if (value !== undefined) {
-					conditions.push(`${condition} ${value}`);
-				}
-			});
-
-			conditions.sort();
-
-			return ret(keyLower, conditions.join(", "));
+		// provide a shortcut for flat-footed ac
+		if (keyLower === "ffac") {
+			const acStat = this.getStat("ac", true);
+			if (acStat.isDefined) {
+				return ret(keyLower, doStatMath(`(${acStat.value}-2)`));
+			}
 		}
 
 		return ret();
@@ -1055,7 +1071,7 @@ export class GameCharacter {
 		let currency = Currency.new<CurrencyPf2e>(this.gameSystem?.code);
 
 		// otherwise see if we are SF2e
-		if (!currency && (this.getNumber("credits") || this.getNumber("upb"))) {
+		if (!currency && (this.getNumber("credits") || this.getNumber("upbs"))) {
 			currency = Currency.new("SF2e");
 		}
 
@@ -1151,9 +1167,7 @@ export class GameCharacter {
 		const keysUpdated = new StringSet();
 
 		const forNotes: TKeyValuePair[] = [];
-		const p20 = this.pathbuilder;
-		const h1e = this.hephaistos;
-		const e20 = this.essence20;
+		const { gameSystem, pathbuilder:p20, hephaistos:h1e, essence20:e20 } = this;
 		for (const { key, value:valueOrNull } of pairs) {
 			const keyLower = key.toLowerCase();
 
@@ -1181,7 +1195,7 @@ export class GameCharacter {
 			const isExplorationMode = keyLower === "explorationmode";
 			const isExplorationSkill = keyLower === "explorationskill";
 			if (isExplorationMode || isExplorationSkill) {
-				const matchValue = (val: string) => new RegExp(`^${val.replace(/(\s)/g, "$1?")}$`, "i").test(value);
+				const matchValue = (val: string) => new RegExp(`^${val.replace(MatchSpaceRegExp, "$1?")}$`, "i").test(value);
 				if (isExplorationMode) {
 					correctedKey = "explorationMode";
 					correctedValue = getExplorationModes().find(matchValue);
@@ -1203,7 +1217,7 @@ export class GameCharacter {
 					continue;
 				}
 
-				if (["cp","sp","gp","pp","credits","upb"].includes(keyLower)) {
+				if (Currency.isDenominationKey(gameSystem, keyLower)) {
 					const money = { } as TPathbuilderCharacterMoney;
 					money[keyLower as keyof TPathbuilderCharacterMoney] = +value;
 					const updatedMoney = await p20.setMoney(money, save);
