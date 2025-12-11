@@ -3,6 +3,7 @@ import type { StatBlockProcessor } from "@rsc-utils/game-utils";
 import { Ability } from "../../d20/lib/Ability.js";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
 import { toModifier } from "../../utils/toModifier.js";
+import { Condition } from "../lib/Condition.js";
 
 function abilitiesToHtml(char: StatBlockProcessor): string | undefined {
 	let hasStats = false;
@@ -55,8 +56,7 @@ function acSavesToHtml(char: StatBlockProcessor): string | undefined {
 function hpToHtml(char: StatBlockProcessor): string | undefined {
 	let hasHealth = false;
 	const out = ["Stamina", "HP", "Resolve"].map(label => {
-		const value = char.getString(label);
-		const maxValue = char.getString(`max${label}`);
+		const { val:value, max:maxValue } = char.getNumbers(label, { val:true, max:true });
 		if (value || maxValue) {
 			hasHealth = true;
 			return char.processTemplate(label).value
@@ -74,12 +74,20 @@ function hpToHtml(char: StatBlockProcessor): string | undefined {
 
 function currencyToHtml(char: StatBlockProcessor): string | undefined {
 	const credits = char.getString("credits");
-	const upb = char.getString("upb");
-	if (credits || upb) {
+	const upbs = char.getString("upbs");
+	if (credits || upbs) {
 		const out = [];
 		if (credits) out.push(`<b>Credits</b> ${credits}`);
-		if (upb) out.push(`<b>UPB</b> ${upb}`);
+		if (upbs) out.push(`<b>UPBs</b> ${upbs}`);
 		return out.join("; ");
+	}
+	return undefined;
+}
+
+function conditionsToHtml(char: StatBlockProcessor): string | undefined {
+	const conditions = char.getStringArray("conditions");
+	if (conditions?.length) {
+		return `<b>Conditions</b> ${conditions.join(", ")}`;
 	}
 	return undefined;
 }
@@ -90,12 +98,16 @@ export function statsToHtml(char: StatBlockProcessor): string[] {
 	out.push(acSavesToHtml(char));
 	out.push(hpToHtml(char));
 	out.push(currencyToHtml(char));
+	out.push(conditionsToHtml(char));
 	return out.filter(s => s !== undefined) as string[];
 }
 
+/** @todo make the statsToHtml function return keys used that this function can validate against. */
 export function isStatsKey(key: string): boolean {
 	const lower = key.toLowerCase();
 	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower)
 		|| ["mod.fortitude", "fortitude", "fort", "mod.reflex", "reflex", "ref", "mod.will", "will"].includes(lower)
-		|| ["eac", "kac", "hp", "maxhp", "stamina", "maxstamina", "resolve", "maxresolve", "credits", "upb"].includes(lower);
+		|| ["eac", "kac", "hp", "maxhp", "hp.max", "stamina", "maxstamina", "stamina.max", "resolve", "maxresolve", "resolve.max", "credits", "upbs"].includes(lower)
+		|| !!Condition.isConditionKey(lower)
+		;
 }

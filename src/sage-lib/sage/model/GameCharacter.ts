@@ -1,11 +1,12 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType, type KeyValuePair, type KeyValueTrio } from "@rsc-sage/types";
-import { applyChanges, capitalize, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
-import { Currency, Deck, doStatMath, parseGameSystem, processMath, StatBlockProcessor, type CurrencyPf2e, type DeckCore, type DeckType, type DenominationsCore, type GameSystem } from "@rsc-utils/game-utils";
+import { Currency, Deck, doStatMath, parseGameSystem, processMath, StatBlockProcessor, unpipe, type CurrencyPf2e, type DeckCore, type DeckType, type DenominationsCore, type GameSystem, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { fileExistsSync, isUrl, makeDir, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { Condition } from "../../../gameSystems/Condition.js";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
+import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
 import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
-import { Condition } from "../../../gameSystems/p20/lib/Condition.js";
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
 import { HephaistosCharacterSF1e } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";
 import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/import/types.js";
@@ -17,16 +18,9 @@ import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
-
-const SpoileredNumberRegExp = /^\|\|\d+\|\|$/;
-
-/** In addition to returning "maxhp" for "hp", this returns "alt.maxhp" for "alt.hp" */
-function getMetaKey(key: string, prefix: "min" | "max"): string {
-	const parts = key.split(".");
-	const last = parts.pop();
-	parts.push(prefix + last);
-	return parts.join(".");
-}
+import { getMetaStat } from "./utils/getMetaStat.js";
+import { getStatNumbers } from "./utils/getStatNumbers.js";
+import { processCharStatsAndMods } from "./utils/processCharStatsAndMods.js";
 
 /*
 Character will get stored in /users/USER_ID/characters/CHARACTER_ID.
@@ -47,6 +41,8 @@ EncounterCharacter will store a reference to original Character as .original = {
 EncounterCharacter will save snapshots as .snapshots[... { ts, core }]
 EncounterCharacter snapshots will be created at the start of every round.
 */
+
+const MatchSpaceRegExp = /(\s)/g;
 
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
 
@@ -178,24 +174,6 @@ function fixLastMessages(core: GameCharacterCore): void {
 }
 
 //#endregion
-
-export type StatResults<
-			Value extends string | number = string | number,
-			Nil extends null | undefined = null
-		> =
-{
-	isDefined: true;
-	key: string;
-	keyLower: Lowercase<string>;
-	value: Value;
-}
-|
-{
-	isDefined: false;
-	key: string;
-	keyLower: Lowercase<string>;
-	value: Nil;
-};
 
 export class GameCharacter {
 	public equals(other: Optional<string | GameCharacter>): boolean {
@@ -645,7 +623,7 @@ export class GameCharacter {
 		const sections = ["simple","custom","stats","templates"] as const;
 		const isSection = (value: string): value is typeof sections[number] => sections.includes(value as any);
 		const explicitSections = options?.simple || options?.custom || options?.stats || options?.templates;
-		const defaultSections = !explicitSections ? this.getString("details.defaultSections")?.toLowerCase().split(",").filter(isSection) : [];
+		const defaultSections = !explicitSections ? this.getStringArray("details.defaultSections", { lower:true }).filter(isSection) : [];
 		const showSection = (section: typeof sections[number]) => explicitSections ? options[section] : !defaultSections?.length ? true : defaultSections.includes(section);
 
 		const raw = options?.raw;
@@ -692,17 +670,9 @@ export class GameCharacter {
 	}
 
 	public getTrackerBar(key: string): string {
-		let valueStat = this.getString(key) ?? "0";
-		if (SpoileredNumberRegExp.test(valueStat)) valueStat = valueStat.slice(2, -2);
-		const value = +valueStat;
-
-		let maxValueStat = this.getString(getMetaKey(key, "max")) ?? "0";
-		if (SpoileredNumberRegExp.test(maxValueStat)) maxValueStat = maxValueStat.slice(2, -2);
-		const maxValue = +maxValueStat;
-
+		const { val, max } = this.getNumbers(key, { val:true, max:true });
 		const barValues = this.getString(`${key}.bar.values`);
-
-		return toTrackerBar(value, maxValue, barValues);
+		return toTrackerBar(val, max, barValues);
 	}
 
 	public hasTrackerBar(key: string): boolean {
@@ -710,10 +680,9 @@ export class GameCharacter {
 	}
 
 	public getTrackerDots(key: string): string {
-		const value = this.getNumber(key);
-		const maxValue = this.getNumber(getMetaKey(key, "max"));
+		const { val, max } = this.getNumbers(key, { val:true, max:true });
 		const dotValues = this.getString(`${key}.dots.values`);
-		return toTrackerDots(value, maxValue, dotValues);
+		return toTrackerDots(val, max, dotValues);
 	}
 
 	public hasTrackerDots(key: string): boolean {
@@ -729,10 +698,22 @@ export class GameCharacter {
 		for (const key of keys) {
 			const stat = this.getStat(key, true);
 			if (stat.isDefined) {
-				return numberOrUndefined(stat.value)
+				return stat.hasPipes
+					? numberOrUndefined(stat.unpiped)
+					: numberOrUndefined(stat.value);
 			}
 		}
 		return undefined;
+	}
+
+	/**
+	 * Gets the value and meta data for the meta keys as numbers.
+	 * For each meta key: .xKey, .x, .xDefined, and .xPipes are returned.
+	 * .hasPipes and .isEmpty are also included as tests against all meta keys.
+	 * If no meta keys are specified, then all meta keys are returned.
+	 */
+	public getNumbers(key: string, opts?: StatNumbersOptions): StatNumbersResults {
+		return getStatNumbers({ char:this, key, ...opts });
 	}
 
 	/** returns the value for the first key that has a defined value */
@@ -744,6 +725,12 @@ export class GameCharacter {
 			}
 		}
 		return undefined;
+	}
+
+	/** Convenience for: .getString(key)?.split(",").map(stringOrUndefined).filter(isDefined) ?? [] */
+	public getStringArray(key: string, opts?: { lower?:boolean; }): string[] {
+		const value = this.getString(key);
+		return stringArrayOrEmpty(opts?.lower ? value?.toLowerCase() : value);
 	}
 
 	/** returns all notes that are stats */
@@ -781,12 +768,14 @@ export class GameCharacter {
 		const keyLower = key.toLowerCase();
 
 		// shortcut to easily return as the args request
-		const ret = (casedKey = key, value: Optional<number | string> = null) => {
+		const ret = (casedKey = key, value: Optional<number | string> = null): StatResults<string> | string | null => {
 			const _isDefined = isDefined(value);
 			const _value = _isDefined && !isString(value) ? String(value) : value ?? null;
-			return includeKey
-				? { isDefined:_isDefined, key:casedKey, keyLower, value:_value } as StatResults<string>
-				: _value;
+			if (includeKey) {
+				const unpiped = _isDefined ? unpipe(_value!) : undefined;
+				return { isDefined:_isDefined, key:casedKey, keyLower, value:_value, ...unpiped } as StatResults<string>;
+			}
+			return _value;
 		};
 
 		// no key, no value
@@ -821,8 +810,9 @@ export class GameCharacter {
 
 		const isDeprecatedHpBar = ["hpgauge", "hpbar"].includes(keyLower);
 		if (keyLower.endsWith(".bar") || isDeprecatedHpBar) {
-			const statKey = isDeprecatedHpBar ? "hp" : keyLower.slice(0, -4);
-			if (this.getNumber(statKey) !== undefined || this.getNumber(getMetaKey(statKey, "max")) !== undefined) {
+			const statKey = isDeprecatedHpBar ? this.getKey("hitPoints") : keyLower.slice(0, -4);
+			const { val, max } = this.getNumbers(statKey);
+			if (val !== undefined || max !== undefined) {
 				/** @todo do i wanna try to case this key? */
 				return ret(key, this.getTrackerBar(statKey));
 			}
@@ -837,8 +827,8 @@ export class GameCharacter {
 
 		if (keyLower.endsWith(".indexed")) {
 			const statKey = keyLower.slice(0, -8);
-			if (this.getNumber(statKey) !== undefined) {
-				const value = this.getNumber(statKey);
+			const value = this.getNumber(statKey);
+			if (value !== undefined) {
 				const valuesString = this.getString(`${statKey}.indexed.values`);
 				const values = valuesString?.split(",").map(s => s.trim()) ?? [];
 				return ret(key, values[value!] ?? "?");
@@ -925,6 +915,14 @@ export class GameCharacter {
 			}
 		}
 
+		const { hephaistos } = this;
+		// if (hephaistos) {
+		// 	const hephStat = hephaistos.getStat(key, keyLower);
+		// 	if (hephaistos.isDefined) {
+		// 		return ret(hephStat.key, String(hephStat.value));
+		// 	}
+		// }
+
 		// get stats from underlying pathbuilder character
 		const { pathbuilder } = this;
 		if (pathbuilder) {
@@ -938,14 +936,15 @@ export class GameCharacter {
 		}
 
 		// provide a temp shortcut for calculating stat modifiers for d20 games
-		const abilities = ["strength","dexterity","constitution","intelligence","wisdom","charisma"];
-		for (const ability of abilities) {
-			const isAbbr = ability.slice(0, 3) === keyLower;
+
+		for (const ability of Ability.all()) {
+			const isAbbr = ability.abbrKey === keyLower;
 			if (isAbbr || `mod.${ability}` === keyLower) {
-				const abilityStat = this.getStat(ability, true);
-				if (isDefined(abilityStat.value)) {
-					const retKey = isAbbr ? capitalize(abilityStat.key.slice(0, 3)) : `mod.${abilityStat.key}`;
-					return ret(retKey, processMath(`floor((${abilityStat.value}-10)/2)`));
+				// just use getNumber ...
+				const abilityValue = this.getString(ability.key);
+				if (isDefined(abilityValue)) {
+					const retKey = isAbbr ? ability.abbr : `mod.${ability.name}`;
+					return ret(retKey, processMath(`floor((${abilityValue}-10)/2)`));
 				}
 			}
 		}
@@ -963,14 +962,25 @@ export class GameCharacter {
 		}
 
 		// if we don't have hp, let's try using maxHp
-		if (keyLower === "hp") {
-			return ret("hp", this.getNumber("maxHp"));
+		const hpKey = this.getKey("hitPoints");
+		if (keyLower === hpKey.toLowerCase()) {
+			return ret("hp", getMetaStat(this, hpKey, "max").value);
+		}
+
+		// instead of importing each Condition class and running them in their getStatXXX, let's just use a single entry point for Condition
+		if (keyLower === "conditions") {
+			return ret(keyLower, Condition.getCharacterConditions(this));
 		}
 
 		const { gameSystem } = this;
 		if (pathbuilder || gameSystem?.isP20) {
 			const p20Stat = this.getStatP20(key, keyLower);
 			return ret(p20Stat.key, p20Stat.value);
+		}
+
+		if (hephaistos || gameSystem?.code === "SF1e") {
+			const sf1eStat = this.getStatSF1e(key, keyLower);
+			return ret(sf1eStat.key, sf1eStat.value);
 		}
 
 		/** @todo by doing this we are ensuring that users are able to keep using these functions that they may not have known were specific to pf2e */
@@ -1010,27 +1020,21 @@ export class GameCharacter {
 			}
 		}
 
-		if (keyLower === "conditions") {
-			const conditions: string[] = [];
+		return ret();
+	}
 
-			Condition.ToggledConditions.forEach(condition => {
-				if (this.getString(condition) !== undefined) {
-					const riders = Condition.getConditionRiders(condition);
-					const riderText = riders.length ? ` (${riders.join(", ")})` : ``;
-					conditions.push(condition + riderText);
-				}
-			});
+	protected getStatSF1e(key: string, keyLower = key.toLowerCase()): StatResults<string | number, undefined> {
+		// return value creator
+		const ret = (casedKey = key, value: Optional<number | string> = undefined) => (
+			{ isDefined:isDefined(value), key:casedKey, keyLower, value:value??undefined } as StatResults<string | number, undefined>
+		);
 
-			Condition.ValuedConditions.forEach(condition => {
-				const value = this.getString(condition);
-				if (value !== undefined) {
-					conditions.push(`${condition} ${value}`);
-				}
-			});
-
-			conditions.sort();
-
-			return ret(keyLower, conditions.join(", "));
+		// provide a shortcut for flat-footed ac
+		if (keyLower === "ffac") {
+			const acStat = this.getStat("ac", true);
+			if (acStat.isDefined) {
+				return ret(keyLower, doStatMath(`(${acStat.value}-2)`));
+			}
 		}
 
 		return ret();
@@ -1045,7 +1049,7 @@ export class GameCharacter {
 		let currency = Currency.new<CurrencyPf2e>(this.gameSystem?.code);
 
 		// otherwise see if we are SF2e
-		if (!currency && (this.getNumber("credits") || this.getNumber("upb"))) {
+		if (!currency && (this.getNumber("credits") || this.getNumber("upbs"))) {
 			currency = Currency.new("SF2e");
 		}
 
@@ -1071,94 +1075,77 @@ export class GameCharacter {
 		return constr.parse(raw) as CurrencyPf2e;
 	}
 
-	public async processStatsAndMods(stats?: KeyValuePair<string, null>[], mods?:IncrementArg[]): Promise<StringSet> {
-		const keysModdedAndUpdated = new StringSet();
+	/** This allows Sage to have a set key for things but users can re-key their stats. */
+	private keyMap?: Map<string, string[]>;
+	/**
+	 * @todo This code currently requires parsing the keys every time we load the character.
+	 * If they use multiple key options, it means testing the values every time we fetch the key.
+	 * If we instead store the map as a map/object/record, we will only need to recreate it when they update this key map.
+	 * If we also store wether each mapped key is defined, then we would only need to check if it is defined when they update stats.
+	 * Thus the proposed solution would be:
+	 *   1. move the key mapping logic to "setKeyMap"
+	 *   2. move the isDefined test to "updateStats"
+	 *   3. update the getKey logic simply read the map and return the first key with isDefined === true
+	 * This solution should also be implemented on CharacterShell, or in a reusable fashion.
+	 */
+	public getKey(key: "hitPoints" | "staminaPoints"): string {
+		// initialize the map
+		if (!this.keyMap) {
+			// split the key/value pairs
+			const pairs = this.getNoteStat("char.stat.key.map")?.split(";") ?? [];
 
-		const updateStats = async (pairs: KeyValuePair<string, null>[]) => {
-			const keysUpdated = await this.updateStats(pairs, false);
-			keysUpdated.forEach(key => keysModdedAndUpdated.add(key));
-		};
+			// include built in pairs
+			pairs.unshift("hitPoints=hp");
 
-		// get game specific conditions and unset all when conditions=""
-		if (stats?.length && this.gameSystem?.isP20) {
-			const conditions = stats?.find(stat => stat.key.toLowerCase() === "conditions");
-			if (conditions?.value === null) {
-				await updateStats(Condition.ToggledConditions.map(key => ({ key, value:null })));
-				await updateStats(Condition.ValuedConditions.map(key => ({ key, value:null })));
-			}
+			// create the map
+			this.keyMap = pairs.reduce((map, pair) => {
+				// split pair by "=": key=value
+				const [pairKey, pairValue] = pair.split("=");
+
+				// split value into values by ",": map each value to a trimmed string, filter out blank
+				const values = pairValue.split(",").map(s => stringOrUndefined(s.trim())).filter(isDefined);
+
+				// only add the key if we actually have value(s)
+				if (values.length) {
+					// trim the key in case they had extra spaces
+					map.set(pairKey.trim().toLowerCase(), values);
+				}
+				return map;
+			}, new Map<string, string[]>());
 		}
 
-		if (stats?.length) {
-			await updateStats(stats);
-		}
+		// get the mapped key(s)
+		const keys = this.keyMap.get(key);
 
-		if (mods?.length) {
-			const curr = this.getCurrency();
-			let currModded = false;
-
-			const processPair = async (pair: IncrementArg) => {
-				const oldValue = this.getString(pair.key) ?? 0;
-				await updateStats([{
-					key: pair.key,
-					value: doStatMath(`(${oldValue}${pair.operator}${pair.value})`)
-				}]);
-			};
-
-			for (const pair of mods) {
-				const keyLower = pair.key.toLowerCase();
-
-				// if denomination, handle it separately
-				if (curr.hasDenomination(keyLower)) {
-					const number = numberOrUndefined(pair.value);
-					if (number) {
-						curr.math(pair.operator, number, keyLower);
-						currModded = true;
+		// if we have any mapped key(s), do not use the default
+		if (keys?.length) {
+			// if we have more than one, return the first to be defined
+			if (keys.length > 1) {
+				for (const _key of keys) {
+					if (this.getStat(_key, true).isDefined) {
+						return _key;
 					}
 				}
-
-				// if subtracting hp, check to see if we need to also subtract from temphp
-				else if (keyLower === "hp" && pair.operator === "-") {
-					let hpDelta = numberOrUndefined(pair.value);
-					if (hpDelta) {
-						const tempHp = this.getNumber("temphp") ?? 0;
-						if (!tempHp) {
-							await processPair(pair);
-						}else if (tempHp >= hpDelta) {
-							await processPair({ key:"tempHp", operator:"-", value:hpDelta } as IncrementArg);
-						}else {
-							hpDelta -= tempHp;
-							await processPair({ key:"tempHp", operator:"-", value:tempHp } as IncrementArg);
-							await processPair({ key:"hp", operator:"-", value:hpDelta } as IncrementArg);
-						}
-					}
-				}
-
-				// finally do basic processing
-				else {
-					await processPair(pair);
-				}
 			}
 
-			// if we modded the currency data, we still gotta update the stats themselves
-			if (currModded) {
-				await updateStats(curr.denominationKeys.map(denom => ({
-					key: denom,
-					value: String(curr[denom])
-				})));
-			}
+			// default to the first
+			return keys[0];
 		}
 
-		return keysModdedAndUpdated;
+		// use the default
+		return key;
+	}
+
+	public async processStatsAndMods(stats?: KeyValuePair<string, undefined>[], mods?: IncrementArg[]): Promise<StringSet> {
+		return processCharStatsAndMods(this, stats, mods);
 	}
 
 	/** returns keys (lowercased) updated */
-	public async updateStats(pairs: KeyValuePair<string, null>[], save: boolean): Promise<StringSet> {
+	public async updateStats(pairs: KeyValuePair<string, undefined>[], save: boolean): Promise<StringSet> {
 		const keysUpdated = new StringSet();
 
 		const forNotes: KeyValueTrio<string, null>[] = [];
-		const p20 = this.pathbuilder;
-		const h1e = this.hephaistos;
-		const e20 = this.essence20;
+		const { gameSystem, pathbuilder:p20, hephaistos:h1e, essence20:e20 } = this;
 		for (const { key, value:valueOrNull } of pairs) {
 			const keyLower = key.toLowerCase();
 
@@ -1186,7 +1173,7 @@ export class GameCharacter {
 			const isExplorationMode = keyLower === "explorationmode";
 			const isExplorationSkill = keyLower === "explorationskill";
 			if (isExplorationMode || isExplorationSkill) {
-				const matchValue = (val: string) => new RegExp(`^${val.replace(/(\s)/g, "$1?")}$`, "i").test(value);
+				const matchValue = (val: string) => new RegExp(`^${val.replace(MatchSpaceRegExp, "$1?")}$`, "i").test(value);
 				if (isExplorationMode) {
 					correctedKey = "explorationMode";
 					correctedValue = getExplorationModes().find(matchValue);
@@ -1208,7 +1195,7 @@ export class GameCharacter {
 					continue;
 				}
 
-				if (["cp","sp","gp","pp","credits","upb"].includes(keyLower)) {
+				if (Currency.isDenominationKey(gameSystem, keyLower)) {
 					const money = { } as TPathbuilderCharacterMoney;
 					money[keyLower as keyof TPathbuilderCharacterMoney] = +value;
 					const updatedMoney = await p20.setMoney(money, save);
@@ -1311,7 +1298,6 @@ export class GameCharacter {
 	public async saveTemp(ids: Omit<TempIds, "charId">): Promise<boolean> {
 		const path = await createTempPath({ charId:this.id, ...ids });
 		return writeFile(path, this.core);
-
 	}
 }
 

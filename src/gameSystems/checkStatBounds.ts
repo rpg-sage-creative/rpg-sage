@@ -1,6 +1,8 @@
-import { numberOrUndefined, type KeyValueTrio } from "@rsc-utils/core-utils";
+import { numberOrUndefined, type KeyValuePair } from "@rsc-utils/core-utils";
+import { unpipe } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";
 import { checkStatBounds as checkStatBoundsP20 } from "./p20/lib/checkStatBounds.js";
+import { checkStatBounds as checkStatBoundsSF1e } from "./sf1e/lib/checkStatBounds.js";
 
 /**
  * Checks the bounds of the given key/value pair.
@@ -9,23 +11,29 @@ import { checkStatBounds as checkStatBoundsP20 } from "./p20/lib/checkStatBounds
  * If the value is out of bounds, return the correct value.
  * If the value is acceptable, or we don't have a test for it, return undefined so that the calling logic knows to use the original value.
  */
-export function checkStatBounds(character: GameCharacter, pair: KeyValueTrio<string, null>): string | undefined {
-	const numberValue = numberOrUndefined(pair.value);
+export function checkStatBounds(character: GameCharacter, pair: KeyValuePair<string, null>): string | undefined {
+	const pipeInfo = unpipe(pair.value);
+	const numberValue = numberOrUndefined(pipeInfo.unpiped);
+
+	const { min:minValue, max:maxValue, valPipes } = character.getNumbers(pair.key, { min:true, max:true, val:true });
+
+	// ensures the corrected value has pipes if appropriate
+	const ret = (value: number) => valPipes || pipeInfo.hasPipes ? `||${value}||` : String(value);
 
 	// handle explicitly given min
-	const minValue = character.getNumber(`min${pair.key}`);
 	if (minValue !== undefined) {
-		if (pair.value?.toLowerCase() === "min" || numberValue === undefined) return String(minValue);
-		if (numberValue < minValue) return String(minValue);
+		if (pair.value?.toLowerCase() === "min" || numberValue === undefined) return ret(minValue);
+		if (numberValue < minValue) return ret(minValue);
 	}
 
 	// handle explicitly given max
-	const maxValue = character.getNumber(`max${pair.key}`);
 	if (maxValue) {
-		if (pair.value?.toLowerCase() === "max") return String(maxValue);
-		if (numberValue && numberValue > maxValue) return String(maxValue);
+		if (pair.value?.toLowerCase() === "max") return ret(maxValue);
+		if (numberValue && numberValue > maxValue) return ret(maxValue);
 	}
 
-	if (character.gameSystem?.isP20) return checkStatBoundsP20(character, pair);
+	const { gameSystem } = character;
+	if (gameSystem?.isP20) return checkStatBoundsP20(character, pair, pipeInfo);
+	if (gameSystem?.code === "SF1e") return checkStatBoundsSF1e(character, pair, pipeInfo);
 	return undefined;
 }

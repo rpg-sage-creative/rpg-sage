@@ -1,8 +1,10 @@
-import { isDefined, isString, numberOrUndefined, StringSet, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isString, numberOrUndefined, stringArrayOrEmpty, StringSet, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-utils/game-utils";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
-import type { GameCharacter, StatResults, TGameCharacterType } from "./GameCharacter.js";
+import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
+import { getStatNumbers } from "./utils/getStatNumbers.js";
 
 export type CharacterShellCore = {
 	/** id of the GameCharacter */
@@ -46,12 +48,34 @@ export class CharacterShell {
 		return this.game?.userDid;
 	}
 
-	public getNumber(key: string): number | undefined {
-		return numberOrUndefined(this.getString(key));
+	/** @todo implement this on the shell *and* as passthrough */
+	public getKey(key: "hitPoints" | "staminaPoints"): string {
+		return this.game?.getKey(key) ?? key;
+	}
+
+	public getNumber(...keys: string[]): number | undefined {
+		for (const key of keys) {
+			const stat = this.getStat(key, true);
+			if (stat.isDefined) {
+				return stat.hasPipes
+					? numberOrUndefined(stat.unpiped)
+					: numberOrUndefined(stat.value);
+			}
+		}
+		return undefined;
+	}
+
+	public getNumbers(key: string, opts?: StatNumbersOptions): StatNumbersResults {
+		return getStatNumbers({ char:this, key, ...opts });
 	}
 
 	public getString(key: string): string | undefined {
 		return this.getStat(key) ?? undefined;
+	}
+
+	/** Convenience for: .getString(key)?.split(",").map(stringOrUndefined).filter(isDefined) ?? [] */
+	public getStringArray(key: string): string[] {
+		return stringArrayOrEmpty(this.getString(key));
 	}
 
 	/** @deprecated start using getNumber or getString */
@@ -59,7 +83,7 @@ export class CharacterShell {
 	/** @deprecated start using getNumber or getString */
 	public getStat(key: string, includeKey: true): StatResults<string>;
 	public getStat(key: string, includeKey?: boolean): StatResults<string> | string | null {
-		const keyLower = key.toLowerCase();
+		const keyLower = key.toLowerCase() as Lowercase<string>;
 
 		// shortcut to easily return as the args request
 		const ret = (casedKey = key, value: Optional<number | string> = null) => {
@@ -69,6 +93,7 @@ export class CharacterShell {
 				? { isDefined:_isDefined, key:casedKey, keyLower, value:_value } as StatResults<string>
 				: _value;
 		};
+
 
 		const { stats:shellStats } = this.core;
 		if (shellStats) {
@@ -100,7 +125,7 @@ export class CharacterShell {
 		return false;
 	}
 
-	public async updateStats(pairs: KeyValuePair<string, null>[], save: boolean): Promise<StringSet> {
+	public async updateStats(pairs: KeyValuePair<string, undefined>[], save: boolean): Promise<StringSet> {
 		if (this.game && ["pc","companion"].includes(this.game.type)) {
 			return this.game.updateStats(pairs, save);
 		}

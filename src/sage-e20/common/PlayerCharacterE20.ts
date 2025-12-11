@@ -1,8 +1,8 @@
 import { errorReturnFalse, getDataRoot, isDefined, numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import type { StatResults } from "@rsc-utils/game-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/game-utils";
 import { fileExistsSync, writeFile } from "@rsc-utils/io-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
-import type { StatResults } from "../../sage-lib/sage/model/GameCharacter.js";
 
 export type TArmorE20 = {
 	name?: string;
