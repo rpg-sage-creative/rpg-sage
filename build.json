@@ -1,12 +1,12 @@
 {
 "name":"rpg-sage",
-"version":"1.12.2",
+"version":"1.13.0",
 "branch":"v1.x.x",
-"commit":"501858dee2da64893d2ca0af97f3a0c200275c5b",
-"commitSubject":"update dependecies",
-"commitTs":1762448994000,
-"commitDate":"2025-11-06-0909",
-"buildTs":1762449006000,
-"buildDate":"2025-11-06-0910",
+"commit":"75eaa7b4d7ae31890db18bd6f95d6046fbba5b5a",
+"commitSubject":"move StatResults",
+"commitTs":1765434351000,
+"commitDate":"2025-12-10-2225",
+"buildTs":1765434445000,
+"buildDate":"2025-12-10-2227",
 "author":"Randal"
 }
