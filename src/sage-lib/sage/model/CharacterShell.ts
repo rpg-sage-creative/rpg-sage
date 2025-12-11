@@ -1,9 +1,9 @@
 import { isDefined, isString, numberOrUndefined, stringArrayOrEmpty, StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { StatNumbersOptions, StatNumbersResults } from "@rsc-utils/dice-utils";
+import type { StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-utils/dice-utils";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
-import type { GameCharacter, StatResults, TGameCharacterType } from "./GameCharacter.js";
+import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
 import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
 

@@ -1,7 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
 import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatNumbersOptions, type StatNumbersResults } from "@rsc-utils/dice-utils";
+import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
@@ -179,28 +179,6 @@ function fixLastMessages(core: GameCharacterCore): void {
 }
 
 //#endregion
-
-export type StatResults<
-			Value extends string | number = string | number,
-			Nil extends null | undefined = null
-		> =
-{
-	isDefined: true;
-	key: string;
-	keyLower: Lowercase<string>;
-	value: Value;
-	hasPipes: boolean;
-	unpiped: string;
-}
-|
-{
-	isDefined: false;
-	key: string;
-	keyLower: Lowercase<string>;
-	value: Nil;
-	hasPipes?: never;
-	unpiped?: never;
-};
 
 export class GameCharacter {
 	public equals(other: Optional<string | GameCharacter>): boolean {
@@ -651,7 +629,7 @@ export class GameCharacter {
 		const sections = ["simple","custom","stats","templates"] as const;
 		const isSection = (value: string): value is typeof sections[number] => sections.includes(value as any);
 		const explicitSections = options?.simple || options?.custom || options?.stats || options?.templates;
-		const defaultSections = !explicitSections ? this.getString("details.defaultSections")?.toLowerCase().split(",").map(s => s.trim()).filter(isSection) : [];
+		const defaultSections = !explicitSections ? this.getStringArray("details.defaultSections", { lower:true }).filter(isSection) : [];
 		const showSection = (section: typeof sections[number]) => explicitSections ? options[section] : !defaultSections?.length ? true : defaultSections.includes(section);
 
 		const raw = options?.raw;
@@ -756,8 +734,9 @@ export class GameCharacter {
 	}
 
 	/** Convenience for: .getString(key)?.split(",").map(stringOrUndefined).filter(isDefined) ?? [] */
-	public getStringArray(key: string): string[] {
-		return stringArrayOrEmpty(this.getString(key));
+	public getStringArray(key: string, opts?: { lower?:boolean; }): string[] {
+		const value = this.getString(key);
+		return stringArrayOrEmpty(opts?.lower ? value?.toLowerCase() : value);
 	}
 
 	/** returns all notes that are stats */

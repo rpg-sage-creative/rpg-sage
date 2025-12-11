@@ -30,6 +30,28 @@ export type StatNumbersResults = {
 	valPipes?: boolean;
 };
 
+export type StatResults<
+			Value extends string | number = string | number,
+			Nil extends null | undefined = null
+		> =
+{
+	isDefined: true;
+	key: string;
+	keyLower: Lowercase<string>;
+	value: Value;
+	hasPipes: boolean;
+	unpiped: string;
+}
+|
+{
+	isDefined: false;
+	key: string;
+	keyLower: Lowercase<string>;
+	value: Nil;
+	hasPipes?: never;
+	unpiped?: never;
+};
+
 export type StatsCharacter = {
 	companions: StatsCharacterManager<StatsCharacter> | undefined;
 	name: string;
@@ -45,14 +67,7 @@ export type StatsCharacter = {
 	getStat(key: string): string | null;
 
 	/** Returns the stat for the given key (as meta about the stat). */
-	getStat(key: string, bool: true): {
-		hasPipes?: boolean;
-		isDefined: boolean;
-		key: string;
-		keyLower: Lowercase<string>;
-		unpiped?: string;
-		value: string | null;
-	};
+	getStat(key: string, bool: true): StatResults<string>;
 
 	/** Returns the stat for the given key (as a string) */
 	getString(key: string): string | undefined;

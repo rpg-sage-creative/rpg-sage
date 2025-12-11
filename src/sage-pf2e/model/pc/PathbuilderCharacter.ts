@@ -1,5 +1,6 @@
 import { CharacterBase } from "@rsc-utils/character-utils";
 import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import type { StatResults } from "@rsc-utils/dice-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
@@ -10,7 +11,6 @@ import { Proficiency } from "../../../gameSystems/p20/lib/Proficiency.js";
 import { Skill } from "../../../gameSystems/p20/lib/Skill.js";
 import { ProficiencyType, SizeType } from "../../../gameSystems/p20/lib/types.js";
 import { toModifier } from "../../../gameSystems/utils/toModifier.js";
-import type { StatResults } from "../../../sage-lib/sage/model/GameCharacter.js";
 import type { DiceMacroBase } from "../../../sage-lib/sage/model/Macro.js";
 import type { GetStatPrefix } from "../../common.js";
 import { filter as repoFilter, findByValue as repoFind } from "../../data/Repository.js";
