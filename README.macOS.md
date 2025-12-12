@@ -34,7 +34,7 @@ The tasks.json file's build task includes a dependency that creates an index.d.t
 
 8. before cloning from github, check that your ssh key is attached to your account
   - visit `https://github.com/settings/keys`
-  - for info on creatign ssh keys visit [this github page](`https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent`)
+  - for info on creating ssh keys visit [this github page](`https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent`)
 
 9. clone the RPG Sage repo and attempt first build
   - `git clone git@github.com:rpg-sage-creative/rpg-sage.git`
