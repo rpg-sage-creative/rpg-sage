@@ -52,11 +52,13 @@ export type StatResults<
 	unpiped?: never;
 };
 
+export type StatKey = "hitPoints" | "heroPoints" | "resolvePoints" | "staminaPoints";
+
 export type StatsCharacter = {
 	companions: StatsCharacterManager<StatsCharacter> | undefined;
 	name: string;
 
-	getKey(key: "hitPoints" | "staminaPoints"): string;
+	getKey(key: StatKey): string;
 
 	/** Returns the stat for the given key (as a number) */
 	getNumber(key: string): number | undefined;

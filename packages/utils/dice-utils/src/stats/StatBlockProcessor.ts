@@ -3,7 +3,7 @@ import { regex } from "regex";
 import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
 import { unquote } from "../internal/unquote.js";
 import { doStatMath } from "./doStatMath.js";
-import type { StatNumbersOptions, StatNumbersResults, StatsCharacter, StatsCharacterManager, StatsEncounterManager } from "./types.js";
+import type { StatKey, StatNumbersOptions, StatNumbersResults, StatsCharacter, StatsCharacterManager, StatsEncounterManager } from "./types.js";
 
 type CharReferenceGroups = {
 	gm?: "gm";
@@ -165,7 +165,7 @@ export class StatBlockProcessor {
 		return true;
 	}
 
-	public getKey(key: "hitPoints" | "staminaPoints"): string {
+	public getKey(key: StatKey): string {
 		return this.chars.actingCharacter?.getKey(key) ?? key;
 	}
 

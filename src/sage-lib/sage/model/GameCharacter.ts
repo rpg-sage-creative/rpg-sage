@@ -1,7 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
 import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/dice-utils";
+import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
@@ -1094,7 +1094,7 @@ export class GameCharacter {
 	 *   3. update the getKey logic simply read the map and return the first key with isDefined === true
 	 * This solution should also be implemented on CharacterShell, or in a reusable fashion.
 	 */
-	public getKey(key: "hitPoints" | "staminaPoints"): string {
+	public getKey(key: StatKey): string {
 		// initialize the map
 		if (!this.keyMap) {
 			// split the key/value pairs
@@ -1102,6 +1102,9 @@ export class GameCharacter {
 
 			// include built in pairs
 			pairs.unshift("hitPoints=hp");
+			pairs.unshift("heroPoints=hpt");
+			pairs.unshift("resolvePoints=resolve");
+			pairs.unshift("staminaPoints=stamina");
 
 			// create the map
 			this.keyMap = pairs.reduce((map, pair) => {

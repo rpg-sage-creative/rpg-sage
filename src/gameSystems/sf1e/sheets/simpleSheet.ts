@@ -55,22 +55,40 @@ function acSavesToHtml(char: StatBlockProcessor): string | undefined {
 }
 
 function hpToHtml(char: StatBlockProcessor): string | undefined {
-	let hasHealth = false;
-	const out = ["Stamina", "HP", "Resolve"].map(label => {
-		const { val, valPipes, max, maxPipes } = char.getNumbers(label, { val:true, max:true });
-		if (val || max) {
-			hasHealth = true;
-			return char.processTemplate(label).value
-				?? `<b>${label}</b> ${prepStat(val, valPipes)}/${prepStat(max, maxPipes)}`;
-		}
-		return undefined;
-	}).filter(s => s);
+	const out: string[] = [];
 
-	if (hasHealth) {
-		return out.join("; ");
+	const hitPoints = char.getNumbers(char.getKey("hitPoints"));
+	const staminaPoints = char.getNumbers(char.getKey("staminaPoints"));
+	const resolvePoints = char.getNumbers(char.getKey("resolvePoints"));
+
+	if (hitPoints.tmpDefined) {
+		out.push(
+			char.processTemplate(hitPoints.tmpKey!).value
+				?? `<b>Temp HP</b> ${prepStat(hitPoints.tmp, hitPoints.tmpPipes)}`
+		);
+	}
+	if (staminaPoints.valDefined || staminaPoints.maxDefined) {
+		out.push(
+			char.processTemplate(staminaPoints.valKey!).value
+				?? `<b>Stamina</b> ${prepStat(staminaPoints.val, staminaPoints.valPipes)}/${prepStat(staminaPoints.max, staminaPoints.maxPipes)}`
+		);
+	}
+	if (hitPoints.valDefined || hitPoints.maxDefined) {
+		out.push(
+			char.processTemplate(hitPoints.valKey!).value
+				?? `<b>HP</b> ${prepStat(hitPoints.val, hitPoints.valPipes)}/${prepStat(hitPoints.max, hitPoints.maxPipes)}`
+		);
+	}
+	if (resolvePoints.valDefined || resolvePoints.maxDefined) {
+		out.push(
+			char.processTemplate(resolvePoints.valKey!).value
+				?? `<b>Resolve</b> ${prepStat(resolvePoints.val, resolvePoints.valPipes)}/${prepStat(resolvePoints.max, resolvePoints.maxPipes)}`
+		);
 	}
 
-	return undefined;
+	return out.length
+		? out.join("; ")
+		: undefined;
 }
 
 function currencyToHtml(char: StatBlockProcessor): string | undefined {
