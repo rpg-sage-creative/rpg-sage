@@ -5,7 +5,6 @@
 	"main": "build/index.js",
 	"type": "module",
 	"dependencies": {
-		"@rsc-utils/core-utils": "^0.0.0",
-		"@rsc-utils/discord-utils": "^0.0.0"
+		"@rsc-utils/core-utils": "^0.0.0"
 	}
 }
