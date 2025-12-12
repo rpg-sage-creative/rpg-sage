@@ -2,6 +2,7 @@ import type { StatBlockProcessor } from "@rsc-utils/dice-utils";
 import { Ability } from "../../d20/lib/Ability.js";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
+import { prepStat } from "../../utils/prepStat.js";
 import { toModifier } from "../../utils/toModifier.js";
 import { Condition } from "../lib/Condition.js";
 
@@ -56,11 +57,11 @@ function acSavesToHtml(char: StatBlockProcessor): string | undefined {
 function hpToHtml(char: StatBlockProcessor): string | undefined {
 	let hasHealth = false;
 	const out = ["Stamina", "HP", "Resolve"].map(label => {
-		const { val:value, max:maxValue } = char.getNumbers(label, { val:true, max:true });
-		if (value || maxValue) {
+		const { val, valPipes, max, maxPipes } = char.getNumbers(label, { val:true, max:true });
+		if (val || max) {
 			hasHealth = true;
 			return char.processTemplate(label).value
-				?? `<b>${label}</b> ${value ?? "??"}/${maxValue ?? "??"}`;
+				?? `<b>${label}</b> ${prepStat(val, valPipes)}/${prepStat(max, maxPipes)}`;
 		}
 		return undefined;
 	}).filter(s => s);

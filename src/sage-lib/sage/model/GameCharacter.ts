@@ -1121,7 +1121,7 @@ export class GameCharacter {
 		}
 
 		// get the mapped key(s)
-		const keys = this.keyMap.get(key);
+		const keys = this.keyMap.get(key.toLowerCase());
 
 		// if we have any mapped key(s), do not use the default
 		if (keys?.length) {

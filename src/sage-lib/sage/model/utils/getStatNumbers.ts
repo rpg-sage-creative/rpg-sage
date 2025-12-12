@@ -16,7 +16,7 @@ type Options = StatNumbersOptions & {
  * If no meta keys are specified, then all meta keys are returned.
  */
 export function getStatNumbers(opts: Options): StatNumbersResults {
-	const allOpts = !opts || (opts.val && opts.min && opts.max && opts.tmp);
+	const allOpts = !opts.val && !opts.min && !opts.max && !opts.tmp;
 
 	const max = allOpts || opts?.max ? getMetaStat(opts.char, opts.key, "max") : undefined;
 	const min = allOpts || opts?.min ? getMetaStat(opts.char, opts.key, "min") : undefined;

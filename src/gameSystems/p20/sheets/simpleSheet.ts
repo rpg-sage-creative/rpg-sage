@@ -2,6 +2,7 @@ import type { StatBlockProcessor } from "@rsc-utils/dice-utils";
 import { Ability } from "../../d20/lib/Ability.js";
 import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
+import { prepStat } from "../../utils/prepStat.js";
 import { toModifier } from "../../utils/toModifier.js";
 import { Condition } from "../lib/Condition.js";
 
@@ -78,17 +79,18 @@ function acSavesDcToHtml(char: StatBlockProcessor): string | undefined {
 }
 
 function hpToHtml(char: StatBlockProcessor): string | undefined {
-	const { val:hp, valKey, max:maxHp, tmp:tempHp, tmpKey } = char.getNumbers("hitPoints");
+	const hpKey = char.getKey("hitPoints");
+	const { val, valKey, valPipes, max, maxPipes, tmp, tmpKey, tmpPipes } = char.getNumbers(hpKey);
 
-	if (tempHp) {
+	if (tmp) {
 		/** @todo this should probably simply be `${valKey}.tmp` */
 		return char.processTemplate(`${valKey}.${tmpKey}`).value
-			?? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}; <b>Temp HP</b> ${tempHp ?? "0"}`;
+			?? `<b>HP</b> ${prepStat(val, valPipes)}/${prepStat(max, maxPipes)}; <b>Temp HP</b> ${prepStat(tmp, tmpPipes)}`;
 	}
 
-	if (hp || maxHp) {
-		return char.processTemplate(valKey ?? char.getKey("hitPoints")).value
-			?? `<b>HP</b> ${hp ?? "??"}/${maxHp ?? "??"}`;
+	if (val || max) {
+		return char.processTemplate(valKey ?? hpKey).value
+			?? `<b>HP</b> ${prepStat(val, valPipes)}/${prepStat(max, maxPipes)}`;
 	}
 
 	return undefined;
