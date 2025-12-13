@@ -464,12 +464,12 @@ export class GameCharacter {
 			return templatedValue;
 		}
 
-		if (this.isGmOrNpcOrMinion) {
-			const descriptors = this.toNameDescriptors();
-			if (descriptors.length) {
-				return `${this.name} (${descriptors.join(" ")})`;
-			}
-		}
+		// if (this.isGmOrNpcOrMinion) {
+		// 	const descriptors = this.toNameDescriptors();
+		// 	if (descriptors.length) {
+		// 		return `${this.name} (${descriptors.join(" ")})`;
+		// 	}
+		// }
 
 		return this.name;
 	}
