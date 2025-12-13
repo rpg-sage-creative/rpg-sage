@@ -1,18 +1,27 @@
 import type { StatBlockProcessor } from "@rsc-utils/dice-utils";
-import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
-import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
+import { calcStatModifierD20 } from "../../utils/calcStatModifierD20.js";
 import { prepStat } from "../../utils/prepStat.js";
 import { toModifier } from "../../utils/toModifier.js";
 import { Ability } from "../lib/Ability.js";
+import { SavingThrow } from "../lib/SavingThrow.js";
+
+function getNumbers(char: StatBlockProcessor, ...keys: string[]) {
+	for (const key of keys) {
+		const numbers = char.getNumbers(key, { val:true });
+		if (numbers.valDefined) return numbers;
+	}
+	return { isEmpty:true };
+}
 
 function abilitiesToHtml(char: StatBlockProcessor): string | undefined {
 	let hasStats = false;
 	const stats = Ability.all().map(({ abbr, name }) => {
-		const values = getAbilityScoreAndModifierD20(char.getString(name));
-		if (values) {
+		const score = char.getNumbers(name);
+		if (score.valDefined) {
 			hasStats = true;
-			return `<b>${abbr}</b> ${values.score} (${toModifier(values.modifier)})`;
+			return `<b>${abbr}</b> ${prepStat(toModifier(calcStatModifierD20(score.val)), score.valPipes)}`;
 		}
+
 		return `<b>${abbr}</b> ?? (+?)`;
 	});
 	if (hasStats) {
@@ -28,14 +37,13 @@ function acToHtml(char: StatBlockProcessor): string | undefined {
 
 function savesToHtml(char: StatBlockProcessor): string | undefined {
 	let hasSaves = false;
-	const saves = [["Fortitude","Fort"], ["Reflex","Ref"], ["Willpower","Will"]].map(([saveName, saveCode]) => {
-		const stat = char.getString(`mod.${saveName}`) ?? char.getString(saveCode) ?? char.getString(saveName);
-		const value = numberOrUndefined(stat);
-		if (value !== undefined) {
+	const saves = SavingThrow.all().map(({ abbr, name }) => {
+		const modifier = getNumbers(char, `mod.${name}`, abbr, name);
+		if (modifier.valDefined) {
 			hasSaves = true;
-			return `<b>${saveCode}</b> ${toModifier(value)}`;
+			return `<b>${abbr}</b> ${prepStat(toModifier(modifier.val!), modifier.hasPipes)}`;
 		}
-		return `<b>${saveCode}</b> +?`;
+		return `<b>${abbr}</b> +?`;
 	});
 	if (hasSaves) {
 		return saves.join(", ");
@@ -94,6 +102,6 @@ export function statsToHtml(char: StatBlockProcessor): string[] {
 export function isStatsKey(key: string): boolean {
 	const lower = key.toLowerCase();
 	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower)
-		|| ["mod.fortitude", "fortitude", "fort", "mod.reflex", "reflex", "ref", "mod.will", "will"].includes(lower)
+		|| SavingThrow.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower || `mod.${key}` === lower)
 		|| ["ac", "hp", "maxhp", "hp.max", "temphp", "hp.temp", "hp.tmp"].includes(lower);
 }

@@ -1,28 +1,36 @@
 import type { StatBlockProcessor } from "@rsc-utils/dice-utils";
 import { Ability } from "../../d20/lib/Ability.js";
-import { getAbilityScoreAndModifierD20 } from "../../utils/getAbilityScoreAndModifierD20.js";
-import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
+import { SavingThrow } from "../../d20/lib/SavingThrow.js";
+import { calcStatModifierD20 } from "../../utils/calcStatModifierD20.js";
 import { prepStat } from "../../utils/prepStat.js";
 import { toModifier } from "../../utils/toModifier.js";
 import { Condition } from "../lib/Condition.js";
 
 // hero point token: 🅗ⒽⒽ (1 of 3)
 
+function getNumbers(char: StatBlockProcessor, ...keys: string[]) {
+	for (const key of keys) {
+		const numbers = char.getNumbers(key, { val:true });
+		if (numbers.valDefined) return numbers;
+	}
+	return { isEmpty:true };
+}
+
 function abilitiesToHtml(char: StatBlockProcessor): string | undefined {
 	let hasStats = false;
 	const stats = Ability.all().map(({ abbr, name }) => {
 		// P20 should be using only modifiers on 3 letter abilities: str=+1; but mod.strength=+1 is acceptable
-		const abilityModifier = numberOrUndefined(char.getString(abbr) ?? char.getString(`mod.${name}`));
-		if (abilityModifier !== undefined) {
+		const modifier = getNumbers(char, abbr, `mod.${name}`);
+		if (modifier.valDefined) {
 			hasStats = true;
-			return `<b>${abbr}</b> ${toModifier(abilityModifier)}`;
+			return `<b>${abbr}</b> ${prepStat(toModifier(modifier.val!), modifier.valPipes)}`;
 		}
 
 		// in case they are old school or premaster: strength=12
-		const abilityScoreValues = getAbilityScoreAndModifierD20(char.getString(name));
-		if (abilityScoreValues) {
+		const score = char.getNumbers(name);
+		if (score.valDefined) {
 			hasStats = true;
-			return `<b>${abbr}</b> ${toModifier(abilityScoreValues.modifier)}`;
+			return `<b>${abbr}</b> ${prepStat(toModifier(calcStatModifierD20(score.val)), score.valPipes)}`;
 		}
 
 		return `<b>${abbr}</b> +?`;
@@ -36,26 +44,17 @@ function abilitiesToHtml(char: StatBlockProcessor): string | undefined {
 function acToHtml(char: StatBlockProcessor): string | undefined {
 	const stat = char.getString("ac");
 	return stat ? `<b>AC</b> ${stat}` : undefined;
-	// const stat = char.getStat("ac");
-	// if (stat) {
-	// 	if (stat.processed) {
-	// 		return `<b>AC</b> \`${stat.raw}\` *(${stat.value})*`;
-	// 	}
-	// 	return `<b>AC</b> ${stat.raw}`;
-	// }
-	// return undefined;
 }
 
 function savesToHtml(char: StatBlockProcessor): string | undefined {
 	let hasSaves = false;
-	const saves = [["Fortitude","Fort"], ["Reflex","Ref"], ["Willpower","Will"]].map(([saveName, saveCode]) => {
-		const stat = char.getString(`mod.${saveName}`) ?? char.getString(saveCode) ?? char.getString(saveName);
-		const value = numberOrUndefined(stat);
-		if (value !== undefined) {
+	const saves = SavingThrow.all().map(({ abbr, name }) => {
+		const modifier = getNumbers(char, `mod.${name}`, abbr, name);
+		if (modifier.valDefined) {
 			hasSaves = true;
-			return `<b>${saveCode}</b> ${toModifier(value)}`;
+			return `<b>${abbr}</b> ${prepStat(toModifier(modifier.val!), modifier.hasPipes)}`;
 		}
-		return `<b>${saveCode}</b> +?`;
+		return `<b>${abbr}</b> +?`;
 	});
 	if (hasSaves) {
 		return saves.join(", ");
@@ -130,8 +129,8 @@ export function statsToHtml(char: StatBlockProcessor): string[] {
 /** @todo make the statsToHtml function return keys used that this function can validate against. */
 export function isStatsKey(key: string): boolean {
 	const lower = key.toLowerCase();
-	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower)
-		|| ["mod.fortitude", "fortitude", "fort", "mod.reflex", "reflex", "ref", "mod.will", "will"].includes(lower)
+	return Ability.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower || `mod.${key}` === lower)
+		|| SavingThrow.all().some(({ abbrKey, key }) => abbrKey === lower || key === lower || `mod.${key}` === lower)
 		|| ["ac", "hp", "maxhp", "hp.max", "temphp", "hp.temp", "hp.tmp"].includes(lower)
 		|| !!Condition.isConditionKey(lower)
 		;
