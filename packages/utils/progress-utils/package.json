@@ -1,3 +1,10 @@
-{"name":"@rsc-utils/progress-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
-  "@rsc-utils/core-utils": "^0.0.0"
-}}
+{
+"name": "@rsc-utils/progress-utils",
+"version": "0.0.0",
+"private": true,
+"main": "build/index.js",
+"type": "module",
+"dependencies": {
+"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.13.1"
+}
+}

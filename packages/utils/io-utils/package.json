@@ -1,8 +1,0 @@
-{"name":"@rsc-utils/io-utils","version":"0.0.0","private":true,"main":"build/index.js","type":"module","dependencies":{
-  "@rsc-utils/core-utils": "^0.0.0",
-  "@rsc-utils/progress-utils": "^0.0.0",
-  "@aws-sdk/client-dynamodb": "^3.788.0",
-  "exifreader": "4.23.3",
-  "follow-redirects": "1.15.6",
-  "pdf2json": "3.0.5"
-}}
