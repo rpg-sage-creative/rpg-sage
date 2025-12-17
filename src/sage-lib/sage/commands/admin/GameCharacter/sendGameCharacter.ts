@@ -1,7 +1,7 @@
 import { SageChannelType } from "@rsc-sage/types";
 import { mapAsync, type Optional } from "@rsc-utils/core-utils";
 import { toChannelMention, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
-import { stringOrUndefined } from "@rsc-utils/string-utils";
+import { stringOrUndefined } from "@rsc-utils/core-utils";
 import type { Message } from "discord.js";
 import { sendWebhook } from "../../../../discord/messages.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";

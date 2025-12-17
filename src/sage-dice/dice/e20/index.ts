@@ -2,7 +2,7 @@ import { GameType } from "@rsc-sage/types";
 import { randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
-import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
+import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import {
 	DiceOutputType,
 	DiceSecretMethodType, DropKeepType,

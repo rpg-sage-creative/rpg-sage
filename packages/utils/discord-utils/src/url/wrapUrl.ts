@@ -1,4 +1,4 @@
-import { createUrlRegex, isWrapped, wrap } from "@rsc-utils/string-utils";
+import { createUrlRegex, isWrapped, wrap } from "@rsc-utils/core-utils";
 
 /**
  * Wraps the given content in <> if it is a url.

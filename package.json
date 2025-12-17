@@ -62,7 +62,9 @@
 		"follow-redirects": "1.15.6",
 		"image-size": "1.2.1",
 		"pdf2json": "3.0.5",
-		"xregexp": "5.1.1"
+		"xregexp": "5.1.1",
+		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.13.1",
+		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.5.2"
 	},
 	"exifreader": {
 		"include": {

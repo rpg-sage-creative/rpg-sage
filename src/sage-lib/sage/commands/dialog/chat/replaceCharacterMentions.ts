@@ -1,6 +1,6 @@
 import { escapeRegex, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
-import { dequote, getQuotedRegexSource } from "@rsc-utils/string-utils";
+import { dequote, getQuotedRegexSource } from "@rsc-utils/core-utils";
 import type { GuildMember } from "discord.js";
 import type { Game } from "../../../model/Game.js";
 import type { User as SageUser } from "../../../model/User.js";

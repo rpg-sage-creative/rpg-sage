@@ -1,6 +1,6 @@
 import { DiceOutputType, GameType } from "@rsc-sage/types";
 import { HasIdCore, sortPrimitive, warn, type IdCore } from "@rsc-utils/core-utils";
-import { cleanWhitespace, type TokenData } from "@rsc-utils/string-utils";
+import { cleanWhitespace, type TokenData } from "@rsc-utils/core-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
 /** @deprecated @todo Update imports for these enums. */

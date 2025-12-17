@@ -1,4 +1,4 @@
-import { StringMatcher } from "@rsc-utils/string-utils";
+import { StringMatcher } from "@rsc-utils/core-utils";
 import { findByValue } from "../data/Repository.js";
 import type { ArcaneSchool } from "./ArcaneSchool.js";
 import { HasSource, type SourcedCore } from "./base/HasSource.js";

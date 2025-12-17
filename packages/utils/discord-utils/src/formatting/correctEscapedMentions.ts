@@ -1,5 +1,5 @@
 import { createEmojiRegex } from "../emojiRegex/createEmojiRegex.js";
-import { tokenize } from "@rsc-utils/string-utils";
+import { tokenize } from "@rsc-utils/core-utils";
 
 
 // <@&number>  role

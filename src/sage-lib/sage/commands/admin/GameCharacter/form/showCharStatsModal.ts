@@ -1,5 +1,5 @@
 import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
-import { parseKeyValueArgs } from "@rsc-utils/string-utils";
+import { parseKeyValueArgs } from "@rsc-utils/core-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";

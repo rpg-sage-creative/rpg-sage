@@ -1,5 +1,5 @@
 import XRegExp from "xregexp";
-import { createUrlRegex, createWhitespaceRegex } from "@rsc-utils/string-utils";
+import { createUrlRegex, createWhitespaceRegex } from "@rsc-utils/core-utils";
 
 function getHWS() {
 	return createWhitespaceRegex({ horizontalOnly:true, quantifier:"*" }).source;

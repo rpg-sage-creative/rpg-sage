@@ -1,4 +1,4 @@
-import { capitalize } from "@rsc-utils/string-utils";
+import { capitalize } from "@rsc-utils/core-utils";
 import { DialogType } from "../../repo/base/IdRepository.js";
 import type { DialogContent } from "./DialogContent.js";
 import { getTypeOrAlias } from "./getTypeOrAlias.js";

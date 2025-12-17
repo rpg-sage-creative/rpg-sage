@@ -1,6 +1,6 @@
 import { error } from "@rsc-utils/core-utils";
 import { splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { AttachmentBuilder } from "discord.js";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";

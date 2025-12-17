@@ -1,4 +1,4 @@
-import { type RegExpCreateOptions } from "@rsc-utils/string-utils";
+import { type RegExpCreateOptions } from "@rsc-utils/core-utils";
 
 type MentionType = "channel" | "role" | "user";
 

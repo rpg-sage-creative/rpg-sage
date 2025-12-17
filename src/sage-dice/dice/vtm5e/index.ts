@@ -1,7 +1,7 @@
 import { GameType } from "@rsc-sage/types";
 import { getCodeName, randomSnowflake, type OrNull } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
-import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
+import { cleanWhitespace, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import {
 	DiceOutputType,
 	DiceSecretMethodType,

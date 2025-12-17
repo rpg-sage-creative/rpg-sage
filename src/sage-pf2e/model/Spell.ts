@@ -1,5 +1,5 @@
 import { debug, nth, toUnique, type Core, type SearchInfo, type SearchScore, type RenderableContent as UtilsRenderableContent, type UUID } from "@rsc-utils/core-utils";
-import { capitalize } from "@rsc-utils/string-utils";
+import { capitalize } from "@rsc-utils/core-utils";
 import { ABILITIES, NEWLINE, toModifier, type TMagicComponent, type TMagicTradition } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { find, findByValue } from "../data/Repository.js";

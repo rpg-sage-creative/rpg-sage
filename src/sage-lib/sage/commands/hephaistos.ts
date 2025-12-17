@@ -1,6 +1,6 @@
 import { errorReturnUndefined, isDefined, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
-import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
+import { isNotBlank, StringMatcher } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
 import { HephaistosCharacterSF1e, type CharacterSectionType, type CharacterViewType } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";

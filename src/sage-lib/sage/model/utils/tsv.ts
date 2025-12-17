@@ -1,6 +1,6 @@
 import { errorReturnNull, type Optional } from "@rsc-utils/core-utils";
 import { getText, type VALID_URL } from "@rsc-utils/io-utils";
-import { isWrapped, stringOrUndefined } from "@rsc-utils/string-utils";
+import { isWrapped, stringOrUndefined } from "@rsc-utils/core-utils";
 import type { MacroBase } from "../Macro.js";
 
 type StringRecord = Record<string, string>;

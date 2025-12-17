@@ -3,7 +3,7 @@ import { error, redactCodeBlocks, type Optional } from "@rsc-utils/core-utils";
 import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath } from "@rsc-utils/dice-utils";
 import { xRegExp } from "@rsc-utils/dice-utils/build/internal/xRegExp.js";
 import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
-import { createKeyValueArgRegex, isWrapped, tokenize, unwrap, wrap } from '@rsc-utils/string-utils';
+import { createKeyValueArgRegex, isWrapped, tokenize, unwrap, wrap } from '@rsc-utils/core-utils';
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";

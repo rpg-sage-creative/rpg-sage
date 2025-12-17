@@ -1,5 +1,5 @@
 import { EphemeralMap, type Snowflake } from "@rsc-utils/core-utils";
-import { quote, ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import { quote, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalSubmitInteraction, type ButtonInteraction } from "discord.js";
 import type { LocalizedTextKey, Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { Macro, type MacroBase } from "../../../model/Macro.js";

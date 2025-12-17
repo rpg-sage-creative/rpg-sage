@@ -1,6 +1,6 @@
 import { warnReturnNull } from "@rsc-utils/core-utils";
 import { getText, isUrl } from "@rsc-utils/io-utils";
-import { unwrap } from "@rsc-utils/string-utils";
+import { unwrap } from "@rsc-utils/core-utils";
 import { parseTable } from "./parseTable.js";
 
 /**

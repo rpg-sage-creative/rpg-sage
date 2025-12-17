@@ -1,6 +1,6 @@
 import { randomSnowflake, type Optional } from "@rsc-utils/core-utils";
 import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
-import { capitalize } from "@rsc-utils/string-utils";
+import { capitalize } from "@rsc-utils/core-utils";
 import { parseSize } from "../../../import/pathbuilder-2e/parseSize.js";
 import type { PathbuilderCharacterCore, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../import/pathbuilder-2e/types.js";
 import { ProficiencyType } from "../../../lib/types.js";

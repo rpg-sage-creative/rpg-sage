@@ -1,6 +1,6 @@
 import { Color, debug, error, warn, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { VALID_URL } from "@rsc-utils/io-utils";
-import { dequote, getQuotedRegexSource, getWordCharacterRegexSource, isBlank } from "@rsc-utils/string-utils";
+import { dequote, getQuotedRegexSource, getWordCharacterRegexSource, isBlank } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import { GameUserType } from "../../../model/Game.js";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";

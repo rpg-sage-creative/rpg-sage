@@ -1,5 +1,5 @@
 import { randomInt } from "@rsc-utils/dice-utils";
-import { unwrap } from "@rsc-utils/string-utils";
+import { unwrap } from "@rsc-utils/core-utils";
 import { type TDiceOutput } from "../../../../sage-dice/index.js";
 import { type SageCommand } from "../../model/SageCommand.js";
 import { type SimpleRollableTable } from "./SimpleRollableTable.js";

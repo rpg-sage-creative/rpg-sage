@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import { tokenize } from "@rsc-utils/string-utils";
+import { tokenize } from "@rsc-utils/core-utils";
 import type { EmojiType, IEmoji } from "./HasEmojiCore.js";
 
 export type TEmojiAndType = { type: EmojiType; replacement: string; };

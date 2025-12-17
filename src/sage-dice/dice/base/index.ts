@@ -2,7 +2,7 @@ import { GameType } from "@rsc-sage/types";
 import { randomSnowflake, sortPrimitive, warn, type Optional, type OrNull, type OrUndefined, type SortResult } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
-import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/string-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, tokenize, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
 import {
 	CritMethodType,

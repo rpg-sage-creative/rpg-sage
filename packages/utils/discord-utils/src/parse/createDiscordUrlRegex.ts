@@ -1,4 +1,4 @@
-import { wrap, type RegExpCreateOptions } from "@rsc-utils/string-utils";
+import { wrap, type RegExpCreateOptions } from "@rsc-utils/core-utils";
 
 // dm message
 // https://discord.com/channels/@me/654449179493400649/1199781308537262212

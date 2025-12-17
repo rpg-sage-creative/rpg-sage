@@ -1,6 +1,6 @@
 import { error, filterAndMap, info, isDefined, oneToUS, sortComparable, toUnique, toUniqueDefined, verbose, type RenderableContent } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { capitalize } from "@rsc-utils/string-utils";
+import { capitalize } from "@rsc-utils/core-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e/index.js";
 import { ArgsManager } from "../../discord/ArgsManager.js";
 import { registerMessageListener } from "../../discord/handlers.js";

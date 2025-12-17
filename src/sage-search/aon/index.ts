@@ -1,6 +1,6 @@
 import { getText } from "@rsc-utils/io-utils";
 import { stringify } from "@rsc-utils/core-utils";
-import { StringMatcher } from "@rsc-utils/string-utils";
+import { StringMatcher } from "@rsc-utils/core-utils";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import XRegExp from "xregexp";
 import type { SearchResults } from "../SearchResults.js";

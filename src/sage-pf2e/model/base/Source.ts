@@ -1,5 +1,5 @@
 import type { SearchInfo, SearchScore, RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
-import { StringMatcher } from "@rsc-utils/string-utils";
+import { StringMatcher } from "@rsc-utils/core-utils";
 import { RenderableContent } from "../../data/RenderableContent.js";
 import { findByValue, type IFile } from "../../data/Repository.js";
 import { Base, type BaseCore } from "./Base.js";
