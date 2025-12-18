@@ -15,11 +15,11 @@ function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {
 }
 
 async function spellListA(sageMessage: SageMessage): Promise<void> {
-	const [levelString, traditionString, by] = sageMessage.args.toArray();
+	const [levelString, traditionString, by] = sageMessage.args.manager.raw();
 	_spellList(sageMessage, traditionString, levelString, by as "school");
 }
 async function spellListB(sageMessage: SageMessage): Promise<void> {
-	const [traditionString, levelString, by] = sageMessage.args.toArray();
+	const [traditionString, levelString, by] = sageMessage.args.manager.raw();
 	_spellList(sageMessage, traditionString, levelString, by as "school");
 }
 async function _spellList(sageMessage: SageMessage, traditionString: string, levelString: string, by: "school"): Promise<void> {
@@ -97,7 +97,7 @@ function filterFocusSpells(archetypeName: Optional<string>, className: Optional<
 	}
 }
 async function spellListFocus(sageMessage: SageMessage): Promise<void> {
-	const archetypeOrClassOrDomain = sageMessage.args.nonKeyValuePairs()[0] ?? "";
+	const archetypeOrClassOrDomain = sageMessage.args.manager.valueArgs().map(arg => arg.value)[0] ?? "";
 	if (archetypeOrClassOrDomain.toLowerCase() === "help") {
 		//TODO: short circuit help command?
 		return;
@@ -160,7 +160,7 @@ async function spellListFocus(sageMessage: SageMessage): Promise<void> {
 type TSpecialistListModifier = "+" | "-" | "|" | "&";
 const SpecialistCommands = "+-|&";
 async function specialistLists(sageMessage: SageMessage): Promise<void> {
-	const args = sageMessage.args.toArray();
+	const args = sageMessage.args.manager.raw();
 	const levelString = args[0]
 	const traditionStrings = args.slice(1);
 

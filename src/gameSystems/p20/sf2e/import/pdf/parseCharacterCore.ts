@@ -1,6 +1,5 @@
-import { randomSnowflake, type Optional } from "@rsc-utils/core-utils";
+import { capitalize, randomSnowflake, type Optional } from "@rsc-utils/core-utils";
 import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
-import { capitalize } from "@rsc-utils/core-utils";
 import { parseSize } from "../../../import/pathbuilder-2e/parseSize.js";
 import type { PathbuilderCharacterCore, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../import/pathbuilder-2e/types.js";
 import { ProficiencyType } from "../../../lib/types.js";
@@ -130,13 +129,13 @@ function parseSpellsByName(mgr: PdfJsonFieldManager, base: string): SpellByName[
 	const spells: SpellByName[] = [];
 	const suffixes = ["spell", "ritual"].includes(base) ? ["", "2"] : [""];
 	suffixes.forEach(suffix => {
-		const names = mgr.getArray(`${base}Names${suffix}`, /[\n\r]/) ?? [];
+		const names = mgr.getArray(`${base}Names${suffix}`) ?? [];
 		if (names.length) {
-			const actions = mgr.getArray(`${base}Actions${suffix}`, /[\n\r]/) ?? [];
-			const prepared = mgr.getArray(`${base}Prepared${suffix}`, /[\n\r]/) ?? [];
-			const ranks = mgr.getArray(`${base}Ranks${suffix}`, /[\n\r]/) ?? [];
-			const costs = mgr.getArray(`${base}Costs${suffix}`, /[\n\r]/) ?? [];
-			const frequencies = mgr.getArray(`${base}Frequency${suffix}`, /[\n\r]/) ?? [];
+			const actions = mgr.getArray(`${base}Actions${suffix}`) ?? [];
+			const prepared = mgr.getArray(`${base}Prepared${suffix}`) ?? [];
+			const ranks = mgr.getArray(`${base}Ranks${suffix}`) ?? [];
+			const costs = mgr.getArray(`${base}Costs${suffix}`) ?? [];
+			const frequencies = mgr.getArray(`${base}Frequency${suffix}`) ?? [];
 			names.forEach((name, index) => spells.push({
 				name,
 				actions: actions[index],

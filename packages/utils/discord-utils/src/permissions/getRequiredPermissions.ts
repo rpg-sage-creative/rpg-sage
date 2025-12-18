@@ -13,6 +13,7 @@ const SageFlagMap: Record<PermFlagBitsKeys, PermReasonKeys[]> = {
 	"Administrator": [],
 	"AttachFiles": ["RunGame", "GameMaster", "Player"],
 	"BanMembers": [],
+	"BypassSlowmode": [],
 	"ChangeNickname": [],
 	"Connect": [],
 	"CreateEvents": [],

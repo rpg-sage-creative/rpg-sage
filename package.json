@@ -56,15 +56,16 @@
 		"@aws-sdk/client-sns": "3.787.0",
 		"@discordjs/rest": "2.5.0",
 		"@napi-rs/canvas": "0.1.53",
+		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.13.1",
+		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.5.2",
 		"discord.js": "14.21.0",
-		"emoji-regex": "10.3.0",
+		"emoji-regex-xs": "^2.0.1",
 		"exifreader": "4.23.3",
 		"follow-redirects": "1.15.6",
 		"image-size": "1.2.1",
 		"pdf2json": "3.0.5",
-		"xregexp": "5.1.1",
-		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.13.1",
-		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.5.2"
+		"regex": "^6.1.0",
+		"xregexp": "5.1.1"
 	},
 	"exifreader": {
 		"include": {

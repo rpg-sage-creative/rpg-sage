@@ -1,9 +1,9 @@
 import { matchDialogType } from "./matchDialogType.js";
-import { getDialogTypeOrAliasRegex } from "./regex.js";
+import { DialogTypeOrAliasRegExp } from "./regex.js";
 
 export function getTypeOrAlias(content: string) {
 	// make sure we have a valid start
-	const typeOrAliasMatch = getDialogTypeOrAliasRegex().exec(content);
+	const typeOrAliasMatch = DialogTypeOrAliasRegExp.exec(content);
 	if (!typeOrAliasMatch) {
 		return null;
 	}

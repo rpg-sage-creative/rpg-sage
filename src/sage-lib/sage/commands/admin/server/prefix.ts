@@ -13,7 +13,7 @@ async function prefixSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const args = sageMessage.args?.toArray();
+	const args = sageMessage.args.manager.raw();
 	if (args?.length > 1) {
 		return sageMessage.reactFailure();
 	}

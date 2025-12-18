@@ -1,117 +1,26 @@
-import { isDefined, isNonNilSnowflake, parseEnum, type EnumLike, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isNonNilSnowflake, isNotBlank, type ArgsManager, type Optional } from "@rsc-utils/core-utils";
 import { parseId, type MessageChannel } from "@rsc-utils/discord-utils";
-import { isNotBlank } from "@rsc-utils/core-utils";
 import type { Attachment, Role, User } from "discord.js";
-import type { ArgsManager } from "../../discord/ArgsManager.js";
-import type { GameCharacterCore } from "./GameCharacter.js";
-import { SageCommandArgs, type Names } from "./SageCommandArgs.js";
+import { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageMessage } from "./SageMessage.js";
 
-/** Represents an argument that was 'key=value'. If value is an empty string, it will be set as NULL. */
-export type TKeyValuePair<T extends string = string> = {
-	/** The value on the left of the first equals sign. */
-	key: string;
-	/** This value is null if they value was an empty string. */
-	value: T | null;
-};
+const UnsetRegExp = /^\s*unset\s*$/i;
 
 export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	public constructor(sageMessage: SageMessage, private argsManager: ArgsManager) {
 		super(sageMessage);
 	}
 
-	//#region deprecated passthroughs
-	/** @deprecated */
-	public keyValuePairs() { return this.argsManager.keyValuePairs(); }
-	/** @deprecated */
-	public filter(predicate: (value: string, index: number, array: string[]) => unknown, arg?: any) { return this.argsManager.filter(predicate, arg); }
-	/** @deprecated */
-	public nonKeyValuePairs() { return this.argsManager.findArgIndexNonArgs().map(non => non.arg).filter(s => s.trim()); }
-	/** @deprecated */
-	public toArray(): string[] { return this.argsManager; }
-	//#endregion
-
-	public get hasForceConfirmationFlag(): boolean {
-		const forceConfirmationFlag = this.sageCommand.sageUser.forceConfirmationFlag ?? "-p";
-		return this.nonKeyValuePairs().includes(forceConfirmationFlag);
-	}
-
-	public get hasSkipConfirmationFlag(): boolean {
-		const skipConfirmationFlag = this.sageCommand.sageUser.skipConfirmationFlag ?? "-y";
-		return this.nonKeyValuePairs().includes(skipConfirmationFlag);
-	}
-
-	//#region Old
-
-	/** @deprecated */
-	public getCharacterOptions(names: Names, userDid?: Snowflake): GameCharacterCore {
-		// get the options directly
-		const characterCore: GameCharacterCore = {
-			alias: this.getString("alias")!,
-			autoChannels: undefined,
-			avatarUrl: this.getUrl("avatar")!,
-			companions: undefined,
-			embedColor: this.getHexColorString("color")!,
-			id: undefined!,
-			tokenUrl: this.getUrl("token")!,
-			name: names.newName ?? names.name!,
-			userDid: userDid ?? undefined
-		};
-
-		// see if they simply attached an image
-		const needsToken = characterCore.tokenUrl === undefined;
-		const needsAvatar = characterCore.avatarUrl === undefined;
-		if (needsToken || needsAvatar) {
-			const { attachments } = this.sageCommand.message;
-			if (attachments.size) {
-				const first = attachments.first()?.url;
-				if (needsToken && needsAvatar) {
-					characterCore.tokenUrl = first;
-					characterCore.avatarUrl = attachments.at(1)?.url;
-				}else if (needsToken) {
-					characterCore.tokenUrl = first;
-				}else if (needsAvatar) {
-					characterCore.avatarUrl = first;
-				}
-			}
-		}
-		return characterCore;
-	}
-
-
-	/** @deprecated */
-	public removeAndReturnName(defaultJoinRemaining = false, defaultJoinSeparator = " "): string | undefined {
-		const keyValue = this.argsManager.findKeyValueArgIndex("name")?.ret;
-		if (keyValue) {
-			return keyValue.value ?? undefined;
-		}
-
-		const notKeyValue = this.argsManager.findArgIndexNonArgs().shift();
-		if (notKeyValue) {
-			this.argsManager.removeAt(notKeyValue.index);
-			return notKeyValue.arg;
-		}
-
-		if (defaultJoinRemaining) {
-			const name = this.argsManager.findArgIndexNonArgs()
-				.map(withIndex => withIndex.arg)
-				.join(defaultJoinSeparator)
-				.trim();
-			return name === "" ? undefined : name;
-		}
-
-		return undefined;
-	}
-
-	//#endregion
+	/** Returns the underlying ArgsManager. */
+	public get manager(): ArgsManager { return this.argsManager; }
 
 	//#region SageCommandArgs
 
 	private getKeyValueArg(key: string) {
-		const keyValueArg = this.argsManager.findKeyValueArgIndex(key)?.ret;
+		const keyValueArg = this.argsManager.findKeyValueArg(key.toLowerCase());
 
 		const hasKey = !!keyValueArg;
-		if (!keyValueArg) {
+		if (!hasKey) {
 			return { hasKey };
 		}
 
@@ -120,25 +29,40 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 			return { hasKey, hasValue };
 		}
 
-		const value = keyValueArg.value;
-		const hasUnset = /^\s*unset\s*$/i.test(value);
+		const value = keyValueArg.value!;
+		const hasUnset = UnsetRegExp.test(value);
 
 		return { hasKey, hasUnset, hasValue, value };
 	}
 
 	/** Returns a list of all argument keys passed to the command. */
 	public keys(): string[] {
-		return this.argsManager.keyValuePairs().map(kvp => kvp.key);
+		return this.argsManager.keyValueArgs().map(kvp => kvp.key);
 	}
 
 	/** Returns true if an argument matches the given key, regardless of value. */
 	public hasKey(name: string): boolean {
-		return !!this.argsManager.findKeyValueArgIndex(name);
+		return !!this.argsManager.findKeyValueArg(name.toLowerCase());
 	}
 
 	/** Returns true if the argument matching the given key has the value "unset". */
 	public hasUnset(name: string): boolean {
-		return /^\s*unset\s*$/i.test(this.argsManager.findKeyValueArgIndex(name)?.ret?.value ?? "");
+		return this.getKeyValueArg(name).hasUnset === true;
+	}
+
+	/** Returns true if the underlying args contains the given flag. */
+	public hasFlag(flag: string): boolean {
+		return this.argsManager.hasFlag(flag.toLowerCase());
+	}
+
+	/** Returns true if the conmmand includes the force confirmation flag. */
+	public get hasForceConfirmationFlag(): boolean {
+		return this.hasFlag(this.sageCommand.sageUser.forceConfirmationFlag ?? "-p");
+	}
+
+	/** Returns true if the conmmand includes the skip confirmation flag. */
+	public get hasSkipConfirmationFlag(): boolean {
+		return this.hasFlag(this.sageCommand.sageUser.skipConfirmationFlag ?? "-y");
 	}
 
 	/**
@@ -188,26 +112,16 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 	}
 
 	/**
-	 * Gets the named option as a flag that starts with a "-" and doesn't include a "=".
+	 * Gets the named option as a flag that starts with a "-".
 	 * Returns undefined if not found.
-	 * Returns null if not a valid flag, example: -y
+	 * Returns null if not a valid flag,; valid example: -y
 	 */
 	public getFlag<U extends string = string>(name: string): Optional<U> {
 		const value = this.getString<U>(name);
-		if (value && (!value.startsWith("-") || value.includes("="))) {
+		if (value && !value.startsWith("-")) {
 			return null;
 		}
 		return value;
-	}
-
-	public findEnum<K extends string = string, V extends number = number>(type: EnumLike<K, V>): Optional<V> {
-		for (const arg of this.argsManager) {
-			const value = parseEnum(type, arg);
-			if (value !== undefined) {
-				return value as V;
-			}
-		}
-		return undefined;
 	}
 
 	/**

@@ -1,17 +1,15 @@
-import { numberOrUndefined, StringSet } from "@rsc-utils/core-utils";
-import type { StatModPair } from "../../commands/admin/GameCharacter/getCharacterArgs.js";
-import type { TKeyValuePair } from "../SageMessageArgs.js";
-import type { GameCharacter } from "../GameCharacter.js";
+import { StringSet, type IncrementArg, type KeyValuePair } from "@rsc-utils/core-utils";
 import { Condition } from "../../../../gameSystems/Condition.js";
-import { doStatMath, unpipe } from "@rsc-utils/dice-utils";
+import type { GameCharacter } from "../GameCharacter.js";
+import { doStatMath } from "@rsc-utils/dice-utils";
 
-export type ProcessPair = Omit<TKeyValuePair, "value"> & { modifier?:"+"|"-"; value:string|number; };
+export type ProcessPair = Omit<KeyValuePair<string|number, undefined>, "value"> & { operator?:"+"|"-"; value:string|number; };
 
-export async function processCharStatsAndMods(char: GameCharacter, stats?: TKeyValuePair[], mods?:StatModPair[]): Promise<StringSet> {
+export async function processCharStatsAndMods(char: GameCharacter, stats?: KeyValuePair<string, undefined|null>[], mods?:IncrementArg[]): Promise<StringSet> {
 	const keysModdedAndUpdated = new StringSet();
 
-	const updateStats = async (pairs: TKeyValuePair[]) => {
-		const keysUpdated = await char.updateStats(pairs, false);
+	const updateStats = async (pairs: KeyValuePair<string, undefined|null>[]) => {
+		const keysUpdated = await char.updateStats(pairs.map(pair => ({ key:pair.key, value:pair.value??null })), false);
 		keysUpdated.forEach(key => keysModdedAndUpdated.add(key));
 	};
 
@@ -21,8 +19,8 @@ export async function processCharStatsAndMods(char: GameCharacter, stats?: TKeyV
 		if (Condition.hasConditions(gameSystem)) {
 			const conditions = stats?.find(stat => stat.key.toLowerCase() === "conditions");
 			if (conditions?.value === null) {
-				await updateStats(Condition.getToggledConditions(gameSystem).map(key => ({ key, value:null })));
-				await updateStats(Condition.getValuedConditions(gameSystem).map(key => ({ key, value:null })));
+				await updateStats(Condition.getToggledConditions(gameSystem).map(key => ({ key, value:undefined })));
+				await updateStats(Condition.getValuedConditions(gameSystem).map(key => ({ key, value:undefined })));
 			}
 		}
 
@@ -34,10 +32,10 @@ export async function processCharStatsAndMods(char: GameCharacter, stats?: TKeyV
 		const curr = char.getCurrency();
 		let currModded = false;
 
-		const processPair = async (pair: ProcessPair | StatModPair, pipes?: boolean) => {
+		const processPair = async (pair: ProcessPair | IncrementArg, pipes?: boolean) => {
 			const oldValue = char.getString(pair.key) ?? 0;
 			const pipedValue = pipes ? `||${pair.value}||` : pair.value;
-			const math = `(${oldValue}${pair.modifier}${pipedValue})`;
+			const math = `(${oldValue}${pair.operator}${pipedValue})`;
 			const newValue = doStatMath(math);
 			await updateStats([{ key:pair.key, value:newValue }]);
 		};
@@ -50,17 +48,19 @@ export async function processCharStatsAndMods(char: GameCharacter, stats?: TKeyV
 
 		for (const pair of mods) {
 			const keyLower = pair.key.toLowerCase();
-			const isSubtraction = pair.modifier === "-";
+			const isSubtraction = pair.operator === "-";
 
 			// get initial delta
-			const { hasPipes, unpiped } = unpipe(pair.value);
-			const delta = numberOrUndefined(unpiped);
+			// const { hasPipes, unpiped } = unpipe(pair.value);
+			// const delta = numberOrUndefined(unpiped);
+			const hasPipes = false;
+			const delta = pair.value ?? undefined;
 			// skip pair if we don't have a value
 			if (!delta) continue;
 
 			// if denomination, handle it separately
 			if (curr.hasDenomination(keyLower)) {
-				curr.math(pair.modifier!, delta, keyLower);
+				curr.math(pair.operator, delta, keyLower);
 				currModded = true;
 
 			}
@@ -77,12 +77,12 @@ export async function processCharStatsAndMods(char: GameCharacter, stats?: TKeyV
 				// subtract from hp delta and process temp hp
 				if (tmpHpDelta) {
 					hpDelta -= tmpHpDelta;
-					await processPair({ key:tmpKey!, modifier:"-", value:tmpHpDelta }, tmpPipes || hasPipes);
+					await processPair({ key:tmpKey!, operator:"-", value:tmpHpDelta }, tmpPipes || hasPipes);
 				}
 
 				// process the remaining delta against hp
 				if (hpDelta) {
-					await processPair({ key:hpKeyLower, modifier:"-", value:hpDelta }, hasPipes);
+					await processPair({ key:hpKeyLower, operator:"-", value:hpDelta }, hasPipes);
 				}
 			}
 
@@ -98,7 +98,7 @@ export async function processCharStatsAndMods(char: GameCharacter, stats?: TKeyV
 				// sub from tmpHp
 				if (tmpHpDelta) {
 					valueDelta -= tmpHpDelta;
-					await processPair({ key:tmpHpKeyLower, modifier:"-", value:tmpHpDelta, }, tmpPipes || hasPipes);
+					await processPair({ key:tmpHpKeyLower, operator:"-", value:tmpHpDelta, }, tmpPipes || hasPipes);
 				}
 
 				// process remaining delta against stamina
@@ -110,13 +110,13 @@ export async function processCharStatsAndMods(char: GameCharacter, stats?: TKeyV
 					// sub from stamina
 					if (staminaDelta) {
 						valueDelta -= staminaDelta;
-						await processPair({ key:staminaKeyLower, modifier:"-", value:staminaDelta }, staminaPipes || hasPipes);
+						await processPair({ key:staminaKeyLower, operator:"-", value:staminaDelta }, staminaPipes || hasPipes);
 					}
 				}
 
 				// process the remaining delta against hp
 				if (valueDelta) {
-					await processPair({ key:hpKeyLower, modifier:"-", value:valueDelta }, hasPipes);
+					await processPair({ key:hpKeyLower, operator:"-", value:valueDelta }, hasPipes);
 				}
 
 			}
@@ -132,12 +132,12 @@ export async function processCharStatsAndMods(char: GameCharacter, stats?: TKeyV
 				// sub from stamina
 				if (staminaDelta) {
 					valueDelta -= staminaDelta;
-					await processPair({ key:staminaKeyLower, modifier:"-", value:staminaDelta, }, staminaPipes || hasPipes);
+					await processPair({ key:staminaKeyLower, operator:"-", value:staminaDelta, }, staminaPipes || hasPipes);
 				}
 
 				// process the remaining delta against hp
 				if (valueDelta) {
-					await processPair({ key:hpKeyLower, modifier:"-", value:valueDelta }, hasPipes);
+					await processPair({ key:hpKeyLower, operator:"-", value:valueDelta }, hasPipes);
 				}
 			}
 

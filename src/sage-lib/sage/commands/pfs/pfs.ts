@@ -1,4 +1,4 @@
-import { error, warn, type RenderableContent } from "@rsc-utils/core-utils";
+import { error, isDefined, warn, type RenderableContent } from "@rsc-utils/core-utils";
 import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { registerCommandRegex } from "../cmd.js";
@@ -97,7 +97,7 @@ function calculateTierInfo(tier: string, pcLevels: number[]): TTierInfo {
 	};
 }
 function pfsTier(sageMessage: SageMessage): void {
-	const args = sageMessage.args.nonKeyValuePairs();
+	const args = sageMessage.args.manager.valueArgs().map(arg => arg.value).filter(isDefined);
 	const tierString = args.shift()!;
 	const pcLevelStrings = args;
 	//this: Discord.Message, tierString: string, ...pcLevelStrings: string[]
@@ -136,7 +136,7 @@ export function addScenario(scenarioId: string, tier: string, callback: TScenari
 }
 
 function pfsScenario(sageMessage: SageMessage): void {
-	const args = sageMessage.args.nonKeyValuePairs();
+	const args = sageMessage.args.manager.valueArgs().map(arg => arg.value).filter(isDefined);
 	const scenarioOrQuestId = args.shift();
 	const pcLevelStrings = args;
 	//this: Discord.Message, tierString: string, ...pcLevelStrings: string[]

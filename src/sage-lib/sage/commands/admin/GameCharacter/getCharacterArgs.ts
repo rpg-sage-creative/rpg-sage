@@ -1,46 +1,19 @@
-import { Color, debug, error, warn, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { VALID_URL } from "@rsc-utils/io-utils";
-import { dequote, getQuotedRegexSource, getWordCharacterRegexSource, isBlank } from "@rsc-utils/core-utils";
-import XRegExp from "xregexp";
+import { Arg, Color, debug, error, isBlank, warn, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { GameUserType } from "../../../model/Game.js";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import type { TKeyValuePair } from "../../../model/SageMessageArgs.js";
-import { fetchTsv } from "../../../model/utils/tsv.js";
+import { fetchAndParseAllDsv } from "../../../model/utils/dsv.js";
 import { getUserDid } from "./getUserDid.js";
-
-export type StatModPair = TKeyValuePair<string> & { modifier?:"+"|"-" };
 
 type Results = {
 	core?: GameCharacterCore;
-	mods?: StatModPair[];
+	mods?: IncrementArg[];
 	names: Names;
-	stats?: TKeyValuePair<string>[];
+	stats?: KeyValueArg[];
 	userId?: Snowflake;
 	type?: "pc" | "npc" | "companion" | "minion";
 };
-
-function createStatModKeyValuePairRegex(): RegExp {
-	const keySource = getWordCharacterRegexSource({ allowDashes:true, allowPeriods:true, quantifier:"+" });
-	const modSource = `\\+=|\\-=`;
-	const incrementerSource = `\\+{2}|\\-{2}`;
-	const quotedSource = getQuotedRegexSource({ lengthQuantifier:"*" });
-	return XRegExp(`(${keySource})(?:(${incrementerSource})|(${modSource})(${quotedSource}|\\S+))`, "");
-}
-
-function parseStatModKeyValuePair(arg: string): StatModPair | undefined {
-	const regex = createStatModKeyValuePairRegex();
-	const match = regex.exec(arg);
-	if (match) {
-		const [_, key, incrementer, modifier, value] = match;
-		if (incrementer) {
-			return { key, modifier: incrementer[0] as "+", value: "1" };
-		}
-		return { key, modifier: modifier[0] as "+", value: dequote(value) };
-	}
-	return undefined;
-}
 
 function getCore({ args, message }: SageMessage, names: Names, isUpdate: boolean): GameCharacterCore | undefined {
 	const useAliasAsName = isUpdate && !names.isRename && !names.name;
@@ -130,6 +103,19 @@ function isValidCoreKey(key: string): boolean {
 	return validCoreKeys.includes(key.toLowerCase());
 }
 
+function hexOrUndefined(value: Optional<string>): HexColorString | undefined {
+	if (value) {
+		try {
+			const color = Color.from(value);
+			if (color) return color.hex;
+			warn("Unable to parse color:", value, color);
+		}catch(ex) {
+			error("Error parsing color:", value, ex);
+		}
+	}
+	return undefined;
+}
+
 export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpdate: boolean): Results {
 	const { args } = sageMessage;
 
@@ -152,31 +138,27 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpda
 	}
 
 	// only do mods on an update
-	const mods = isUpdate ? args.toArray().map(parseStatModKeyValuePair).filter(pair => pair) as StatModPair[] : [];
+	const mods = isUpdate ? args.manager.incrementArgs() as IncrementArg[] : [];
 
-	const stats = args.keyValuePairs().filter(pair => !isValidCoreKey(pair.key) && !/[+-]$/.test(pair.key));
+	const stats = args.manager.keyValueArgs().filter(pair => !isValidCoreKey(pair.key));
 
 	return { core, mods, names, stats, userId };
 }
 
+const TypeRegExp = /^type$/i;
+const UserRegExp = /^user$/i;
+const UnsetRegExp = /^unset$/i;
+
 export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean, isUpdate: boolean): Promise<Results[]> {
-	// const tsvUrl = sageMessage.args.getUrl("tsv");
-	// const tsvAttachment = sageMessage.message.attachments.find(att => att.contentType?.includes("text") && att.url.includes(".tsv"));
-	// if (!tsvUrl && !tsvAttachment) return sageMessage.replyStack.whisper(`Sorry, this command is still being developed and only imports from tsv urls.`);
+	const dsvResults = await fetchAndParseAllDsv(sageMessage);
 
-	const tsvUrl = sageMessage.args.getUrl("tsv");
-	let tsvResults = tsvUrl ? await fetchTsv(tsvUrl) : undefined;
-
-	if (!tsvResults) {
-		const tsvAttachment = sageMessage.message.attachments.find(att => att.contentType?.includes("text") && att.url.includes(".tsv"));
-		if (tsvAttachment) tsvResults = await fetchTsv(tsvAttachment.url as VALID_URL);
-	}
-
-	if (!tsvResults) return [getCharacterArgs(sageMessage, isGm, isUpdate)];
+	if (!dsvResults.length) return [getCharacterArgs(sageMessage, isGm, isUpdate)];
 
 	const results: Results[] = [];
 
-	if (tsvResults?.items.length) {
+	const dsvItems = dsvResults.map(res => res.items).flat(1);
+
+	if (dsvItems.length) {
 		const playerMap = new Map<string, Snowflake>();
 		if (sageMessage.game) {
 			for (const user of sageMessage.game?.users) {
@@ -186,23 +168,20 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 				}
 			}
 		}
-		tsvResults.items.forEach(item => {
+		dsvItems.forEach(item => {
 			let core: GameCharacterCore | undefined;
 			const getCore = () => (core ?? (core = {} as GameCharacterCore));
 			let names: Names | undefined;
 			const getNames = () => (names ?? (names = {} as Names));
-			let stats: TKeyValuePair[] | undefined;
+			let stats: KeyValueArg[] | undefined;
 			let type: "pc" | "npc" | "companion" | "minion" | undefined;
-			const typeRegexp = /^type$/i;
 			let userId: Snowflake | undefined;
-			const userRegexp = /^user$/i;
-			const unsetRegexp = /^unset$/i;
 
-			Object.entries(item).forEach(([key, value]) => {
-				const valueOrNull = isBlank(value) || unsetRegexp.test(value) ? null : value;
-				if (typeRegexp.test(key)) {
+			Object.entries(item).forEach(([key, value], index) => {
+				const valueOrNull = isBlank(value) || UnsetRegExp.test(value) ? null : value;
+				if (TypeRegExp.test(key)) {
 					type = /^(gm|pc|npc|companion|minion)$/i.test(value) ? value.toLowerCase() as "pc" : undefined;
-				}else if (userRegexp.test(key)) {
+				}else if (UserRegExp.test(key)) {
 					if (valueOrNull) {
 						userId = sageMessage.game?.hasPlayer(value) ? value as Snowflake : playerMap.get(value.toLowerCase().replace(/^@/, ""));
 					}
@@ -211,7 +190,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						// core
 						case "alias": getCore().alias = valueOrNull!; break;
 						case "avatar": getCore().avatarUrl = valueOrNull!; break;
-						case "color": getCore().embedColor = hexOrNull(valueOrNull)!; break;
+						case "color": getCore().embedColor = hexOrUndefined(valueOrNull) ?? null!; break;
 						case "token": getCore().tokenUrl = valueOrNull!; break;
 						// names
 						case "charname": getNames().charName = value; break;
@@ -222,7 +201,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						default: debug({key,value}); break;
 					}
 				}else {
-					(stats ??= []).push({ key, value:valueOrNull });
+					(stats ??= []).push(Arg.from({ raw:`${key}="${value}"`, index, isKeyValue:true, key, value:valueOrNull }));
 				}
 			});
 
@@ -237,16 +216,4 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 	}
 
 	return results;
-}
-function hexOrNull(valueOrNull: string | null): HexColorString | null {
-	if (valueOrNull) {
-		try {
-			const color = Color.from(valueOrNull);
-			if (color) return color.hex;
-			warn("Unable to parse color:", valueOrNull, color);
-		}catch(ex) {
-			error("Error parsing color:", valueOrNull, ex);
-		}
-	}
-	return null;
 }

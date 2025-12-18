@@ -1,6 +1,6 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
 import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
-import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -15,13 +15,11 @@ import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/impo
 import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
-import type { StatModPair } from "../commands/admin/GameCharacter/getCharacterArgs.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { SageMessageReference, type SageMessageReferenceCore } from "../repo/SageMessageReference.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
-import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
 import { getMetaStat } from "./utils/getMetaStat.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
@@ -1145,15 +1143,15 @@ export class GameCharacter {
 		return key;
 	}
 
-	public async processStatsAndMods(stats?: TKeyValuePair[], mods?:StatModPair[]): Promise<StringSet> {
+	public async processStatsAndMods(stats?: KeyValuePair<string,null>[], mods?:IncrementArg[]): Promise<StringSet> {
 		return processCharStatsAndMods(this, stats, mods);
 	}
 
 	/** returns keys (lowercased) updated */
-	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<StringSet> {
+	public async updateStats(pairs: KeyValuePair<string,null>[], save: boolean): Promise<StringSet> {
 		const keysUpdated = new StringSet();
 
-		const forNotes: TKeyValuePair[] = [];
+		const forNotes: KeyValuePair<string,null>[] = [];
 		const { gameSystem, pathbuilder:p20, hephaistos:h1e, essence20:e20 } = this;
 		for (const { key, value:valueOrNull } of pairs) {
 			const keyLower = key.toLowerCase();

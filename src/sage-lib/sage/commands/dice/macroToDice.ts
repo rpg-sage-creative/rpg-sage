@@ -1,6 +1,4 @@
-import { debug, warn, type Optional } from "@rsc-utils/core-utils";
-import { createKeyValueArgRegex, createQuotedRegex, createWhitespaceRegex, dequote, isWrapped, parseKeyValueArg, tokenize, type KeyValueArg } from "@rsc-utils/core-utils";
-import XRegExp from "xregexp";
+import { debug, dequote, escapeRegex, isWrapped, KeyValueArgRegExp, parseKeyValueArg, QuotedContentRegExp, tokenize, warn, WhitespaceRegExp, type KeyValueArg, type Optional } from "@rsc-utils/core-utils";
 import type { DiceMacroBase } from "../../model/Macro.js";
 import { getMacroArgRegex, getMacroRemainingArgRegex, parseMacroArgMatch } from "../admin/macro/getMacroArgRegex.js";
 
@@ -15,7 +13,7 @@ function reduceToLongestMacroName(longestMacro?: DiceMacroBase, currentMacro?: D
 
 /** Used to find all macros that start with the given macro name and then return the macro with the longest name. */
 function findLongestMacroName(macros: DiceMacroBase[], cleanMacroName: string): DiceMacroBase | undefined {
-	const matchingMacros = macros.filter(macro => cleanMacroName.match(new RegExp(`^${XRegExp.escape(macro.name)}\\b`, "i")));
+	const matchingMacros = macros.filter(macro => cleanMacroName.match(new RegExp(`^${escapeRegex(macro.name)}\\b`, "i")));
 	return matchingMacros.reduce(reduceToLongestMacroName, undefined);
 }
 
@@ -73,9 +71,9 @@ function findPrefixMacroArgs(macroTiers: DiceMacroBase[][], input: string): Find
 type TArgs = { indexed:string[]; named:KeyValueArg[] };
 function parseMacroArgs(argString: string): TArgs {
 	const parsers = {
-		spaces: createWhitespaceRegex(),
-		named: createKeyValueArgRegex(),
-		quotes: createQuotedRegex({lengthQuantifier:"*"})
+		spaces: WhitespaceRegExp,
+		named: KeyValueArgRegExp,
+		quotes: QuotedContentRegExp
 	};
 	const tokens = tokenize(argString.trim(), parsers);
 	const named = tokens

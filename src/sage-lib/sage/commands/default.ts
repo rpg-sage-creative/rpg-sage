@@ -1,8 +1,6 @@
-import { error, filterAndMap, info, isDefined, oneToUS, sortComparable, toUnique, toUniqueDefined, verbose, type RenderableContent } from "@rsc-utils/core-utils";
+import { ArgsManager, capitalize, error, filterAndMap, info, isDefined, oneToUS, sortComparable, toUnique, toUniqueDefined, verbose, type RenderableContent } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
-import { capitalize } from "@rsc-utils/core-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../sage-pf2e/index.js";
-import { ArgsManager } from "../../discord/ArgsManager.js";
 import { registerMessageListener } from "../../discord/handlers.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { TCommandAndArgs } from "../../discord/types.js";
@@ -104,7 +102,7 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 // #endregion
 
 async function objectsBy(sageMessage: SageMessage): Promise<void> {
-	const args = sageMessage.args.toArray();
+	const args = sageMessage.args.manager.raw();
 	const objectTypePlural = args.shift()!,
 		objectType = Repository.parseObjectType(oneToUS(objectTypePlural.replace(/gods/i, "deities")))!,
 		traitOr = args.shift() ?? (objectType.objectType === "Deity" ? "domain" : "trait"),
@@ -151,12 +149,13 @@ async function objectsBy(sageMessage: SageMessage): Promise<void> {
 
 // #region Search / Find / Default listeners
 
+const SearchTestRegExp = /^\?[^!]\s*\w+/;
 function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	const slicedContent = sageMessage.slicedContent;
-	if (sageMessage.hasPrefix && /^\?[^!]\s*\w+/.test(slicedContent)) {
+	if (sageMessage.hasPrefix && SearchTestRegExp.test(slicedContent)) {
 		return {
 			command: "search",
-			args: new ArgsManager(slicedContent.slice(1))
+			args: ArgsManager.from(slicedContent.slice(1))
 		};
 	}
 	return null;
@@ -191,12 +190,13 @@ function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
 // 	}
 // 	return false;
 // }
+const FindTextRegExp = /^\?!\s*\w+/;
 function findTester(sageMessage: SageMessage): TCommandAndArgs | null {
 	const slicedContent = sageMessage.slicedContent;
-	if (sageMessage.hasPrefix && /^\?!\s*\w+/.test(slicedContent)) {
+	if (sageMessage.hasPrefix && FindTextRegExp.test(slicedContent)) {
 		return {
 			command: "find",
-			args: new ArgsManager(slicedContent.slice(2))
+			args: ArgsManager.from(slicedContent.slice(2))
 		};
 	}
 	return null;

@@ -1,13 +1,12 @@
 import type { Awaitable } from "@rsc-utils/core-utils";
-import { debug } from "@rsc-utils/core-utils";
-import XRegExp from "xregexp";
+import { ArgsManager, debug, escapeRegex } from "@rsc-utils/core-utils";
 import type { SageCommand } from "../../sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage/model/SageInteraction.js";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
 import type { SageReaction } from "../../sage/model/SageReaction.js";
-import { ArgsManager } from "../ArgsManager.js";
 import { registerInteractionListener, registerMessageListener } from "../handlers.js";
 import { type TCommandAndArgs } from "../types.js";
+import { DefaultPrefixRegExp } from "./DefaultPrefixRegExp.js";
 
 type SageCommandHandler = (sageCommand: SageCommand) => Awaitable<void>;
 type SageInteractionHandler = (sageInteraction: SageInteraction) => Awaitable<void>;
@@ -48,7 +47,7 @@ function commandToMatcher(command: Command): RegExp {
 	// we have to build the regexp for testing the command and getting args
 	if (typeof(command) === "string") {
 		const commandParts = command.split("|");
-		const keyRegex = commandParts.map(part => XRegExp.escape(part)).join("\\s+");
+		const keyRegex = commandParts.map(part => escapeRegex(part)).join("\\s+");
 		return createCommandRegexWithArgsCaptureGroup(keyRegex);
 
 	// the regex doesn't include command arg capture group
@@ -61,15 +60,15 @@ function commandToMatcher(command: Command): RegExp {
 
 function createMessageTester(_command: Command) {
 	return async function (sageMessage: SageMessage): Promise<TCommandAndArgs | null> {
-		if (sageMessage.hasPrefix && /^!!?/.test(sageMessage.slicedContent)) {
+		if (sageMessage.hasPrefix && DefaultPrefixRegExp.test(sageMessage.slicedContent)) {
 			const matcher = commandToMatcher(_command);
-			const match = matcher.exec(sageMessage.slicedContent.replace(/^!!?/, "").trim());
+			const match = matcher.exec(sageMessage.slicedContent.replace(DefaultPrefixRegExp, "").trim());
 			if (match) {
 				const { object, verb, args, alias } = match.groups ?? {};
 				const toCommandAndArgs = (data?: any) => {
 					return {
 						command: object && verb ? `${object}|${verb}` : String(_command),
-						args: new ArgsManager(args ?? match[match.length - 1] ?? ""),
+						args: ArgsManager.from(args ?? match[match.length - 1] ?? ""),
 						data
 					} as TCommandAndArgs;
 				};

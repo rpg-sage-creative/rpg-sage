@@ -1,10 +1,9 @@
-import { isDefined, isString, numberOrUndefined, stringArrayOrEmpty, StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isString, numberOrUndefined, stringArrayOrEmpty, StringSet, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { StatKey, StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-utils/dice-utils";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
-import type { TKeyValuePair } from "./SageMessageArgs.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
 
 export type CharacterShellCore = {
@@ -126,7 +125,7 @@ export class CharacterShell {
 		return false;
 	}
 
-	public async updateStats(pairs: TKeyValuePair[], save: boolean): Promise<StringSet> {
+	public async updateStats(pairs: KeyValuePair<string, null>[], save: boolean): Promise<StringSet> {
 		if (this.game && ["pc","companion"].includes(this.game.type)) {
 			return this.game.updateStats(pairs, save);
 		}

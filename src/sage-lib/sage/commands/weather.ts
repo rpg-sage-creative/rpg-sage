@@ -118,7 +118,7 @@ function getEnumInfo<K extends string = string, V extends number = number>(sageC
 	let nonKeyValue: V | undefined;
 	let hasNonKeyValue = false;
 	if (sageCommand.isSageMessage()) {
-		nonKeyValue = sageCommand.args.findEnum(enumType) ?? undefined;
+		nonKeyValue = sageCommand.args.manager.enumValues(enumType)[0];
 		hasNonKeyValue = nonKeyValue !== undefined;
 	}
 

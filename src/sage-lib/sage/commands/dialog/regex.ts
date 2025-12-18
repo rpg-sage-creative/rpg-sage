@@ -1,65 +1,129 @@
-import XRegExp from "xregexp";
-import { createUrlRegex, createWhitespaceRegex } from "@rsc-utils/core-utils";
+import { OptionalHorizontalWhitespaceRegExp as HWS, OptionalWhitespaceRegExp as WS } from "@rsc-utils/core-utils";
+import { getUrlRegex } from "@rsc-utils/io-utils";
+import { regex } from "regex";
 
-function getHWS() {
-	return createWhitespaceRegex({ horizontalOnly:true, quantifier:"*" }).source;
-}
-export function getDialogTypeOrAliasRegex(): RegExp {
-	const HWS = getHWS();
-	return XRegExp(`^${HWS}([\\pL\\pN]+)${HWS}::`);
-}
+export const DialogTypeOrAliasRegExp = regex`
+	^
+	${HWS}
+	(?<alias>
+		[ \w \p{L} \p{N} ]+   # letters, numbers, and underscores only
+	)
+	${HWS}
+	::
+`;
 
-export function getDialogNameAndDisplayNameRegex(): RegExp {
-	const HWS = getHWS();
-	return XRegExp(`^::${HWS}
-					((?:[^(](?!::))+) # capture the characters before the "(" that isn't followed by "::"
-					\\(([^)]+)\\)     # capture the characters in ()
-					${HWS}::`, "x");
-}
+const DialogNameAndDisplayNameRegExp = regex`
+	^
+	::
+	${HWS}
+	(?<dialogName>
+		(
+			[^\(]      # capture the characters before the "(" that isn't followed by "::"
+			(?!::)
+		)+
+	)
+	\(
+	(?<displayName>
+		[^\)]+         # capture the characters in ()
+	)
+	\)
+	${HWS}
+	::
+`;
 
-export function getDialogDisplayNameRegex(): RegExp {
-	const HWS = getHWS();
-	return XRegExp(`^::${HWS}\\(([^)]+)\\)${HWS}::`);
-}
+const DialogDisplayNameRegExp = regex`
+	^
+	::
+	${HWS}
+	\(
+	(?<displayName>
+		[^\)]+
+	)
+	\)
+	${HWS}
+	::
+`;
 
-export function getDialogPostTypeRegex(): RegExp {
-	const HWS = getHWS();
-	return XRegExp(`^::${HWS}(post|embed)${HWS}::`, "i");
-}
+const DialogPostTypeRegExp = regex("i")`
+	^
+	::
+	${HWS}
+	(?<postType>
+		post
+		|
+		embed
+	)
+	${HWS}
+	::
+`;
 
-export function getDialogEmbedColorRegex(): RegExp {
-	const HWS = getHWS();
-	return XRegExp(`^::${HWS}(?:0x|#)((?:[0-9a-f]{3}){1,2})${HWS}::`, "i");
-}
+const DialogEmbedColorRegExp = regex("i")`
+	^
+	::
+	${HWS}
+	(0x|\#)
+	(?<color>
+		( [0-9a-f]{3} ){1,2}
+	)
+	${HWS}
+	::
+`;
 
-export function getDialogUrlRegex(key?: "dialog" | "embed"): RegExp {
-	const WS = createWhitespaceRegex({ quantifier:"*" }).source;
-	const url = createUrlRegex({ wrapChars:"<>", wrapOptional:true }).source;
-	if (key) {
-		return XRegExp(`^::${WS}${key}=(${url})${WS}::`, "i");
-	}
-	return XRegExp(`^::${WS}(${url})${WS}::`, "i");
-}
+const DialogUrlRegExp = regex("i")`
+	^
+	::
+	${WS}
+	dialog=${getUrlRegex({ capture:"dialogUrl", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
+	${WS}
+	::
+`;
 
-export function getDialogOtherRegex(): RegExp {
-	const HWS = getHWS();
-	// return XRegExp(`^::${HWS}(.*?)${HWS}::`, "i");
-	return XRegExp(`^::${HWS}
-					(.*?)(?![^[]*\\]|[^{]*}) # let's not have brackets [] or braces {}
-					${HWS}::`, "x");
-}
+const EmbedUrlRegExp = regex("i")`
+	^
+	::
+	${WS}
+	embed=${getUrlRegex({ capture:"embedUrl", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
+	${WS}
+	::
+`;
 
-export type DialogRegexKey = "nameAndDisplayName" | "displayName" | "postType" | "embedColor" | "embedImageUrl" | "dialogImageUrl" | "url" | "other";
+const UrlRegExp = regex("i")`
+	^
+	::
+	${WS}
+	${getUrlRegex({ capture:"url", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
+	${WS}
+	::
+`;
+
+const DialogOtherRegExp = regex`
+	^
+	::
+	${HWS}
+	(.*?)
+	(?!
+		[^\[]*\]    # no []
+		|
+		[^\{]*\}    # no {}
+	)
+	${HWS}
+	::
+`;
+
+export type DialogRegexKey = "nameAndDisplayName" | "displayName" | "postType" | "embedColor" | "url" | "dialogImageUrl" | "embedImageUrl" | "other";
 type DialogRegexPair = { key:DialogRegexKey; regex:RegExp; };
-export function getDialogRegexPairs(): DialogRegexPair[] {
-	return [
-		{ key:"nameAndDisplayName", regex:getDialogNameAndDisplayNameRegex() },
-		{ key:"displayName", regex:getDialogDisplayNameRegex() },
-		{ key:"postType", regex:getDialogPostTypeRegex() },
-		{ key:"embedColor", regex:getDialogEmbedColorRegex() },
-		{ key:"dialogImageUrl", regex:getDialogUrlRegex("dialog") },
-		{ key:"embedImageUrl", regex:getDialogUrlRegex("embed") },
-		{ key:"url", regex:getDialogUrlRegex() },
-		{ key:"other", regex:getDialogOtherRegex() }
-	];
+
+const pairs: DialogRegexPair[] = [
+	{ key:"nameAndDisplayName", regex:DialogNameAndDisplayNameRegExp },
+	{ key:"displayName", regex:DialogDisplayNameRegExp },
+	{ key:"postType", regex:DialogPostTypeRegExp },
+	{ key:"embedColor", regex:DialogEmbedColorRegExp },
+	{ key:"dialogImageUrl", regex:DialogUrlRegExp },
+	{ key:"embedImageUrl", regex:EmbedUrlRegExp },
+	{ key:"url", regex:UrlRegExp },
+	{ key:"other", regex:DialogOtherRegExp }
+] as const;
+
+export function getDialogRegexPairs(): readonly DialogRegexPair[] {
+	return pairs;
 }

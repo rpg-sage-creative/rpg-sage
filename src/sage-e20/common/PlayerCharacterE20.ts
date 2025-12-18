@@ -354,7 +354,7 @@ export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> exten
 	}
 	public static async saveCharacter(character: PlayerCharacterE20<any> | PlayerCharacterCoreE20): Promise<boolean> {
 		const json = "toJSON" in character ? character.toJSON() : character;
-		return writeFile(PlayerCharacterE20.createFilePath(character.id), json, true).catch(errorReturnFalse);
+		return writeFile(PlayerCharacterE20.createFilePath(character.id), json, { makeDir:true }).catch(errorReturnFalse);
 	}
 	public async save(): Promise<boolean> {
 		return PlayerCharacterE20.saveCharacter(this);

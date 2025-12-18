@@ -8,9 +8,8 @@ export function getPartyArgs(sageMessage: SageMessage): Party[] {
 		return [];
 	}
 
-	const keyRegex = /^party$/i;
-	return sageMessage.args.keyValuePairs()
-		.filter(kvp => keyRegex.test(kvp.key))
-		.map(kvp => game.parties.get(kvp.value))
+	return sageMessage.args.manager.keyValueArgs()
+		.filter(arg => arg.keyLower === "party")
+		.map(arg => game.parties.get(arg.value))
 		.filter(isDefined);
 }

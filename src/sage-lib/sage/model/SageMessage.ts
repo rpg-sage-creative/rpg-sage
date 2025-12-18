@@ -1,8 +1,7 @@
-import { Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { ArgsManager, Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
 import XRegExp from "xregexp";
-import { ArgsManager } from "../../discord/ArgsManager.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { sendTo } from "../../discord/sendTo.js";
 import { type TCommandAndArgs } from "../../discord/types.js";
@@ -78,7 +77,7 @@ export class SageMessage
 	private commandAndArgs?: TCommandAndArgs;
 	public get command(): string { return this.commandAndArgs?.command ?? "INVALID COMMAND"; }
 	public commandMatches(value: string | RegExp): boolean {
-		const regex = value instanceof RegExp ? value : XRegExp(`^${value}`, "i");
+		const regex = value instanceof RegExp ? value : new RegExp(`^${value}`, "i");
 		return regex.test(this.command);
 	}
 	public args!: SageMessageArgs;

@@ -1,15 +1,20 @@
-import { addCommas } from "@rsc-utils/core-utils";
+import { addCommas, cleanWhitespace } from "@rsc-utils/core-utils";
 import { Coins } from "../../../sage-pf2e/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
 
+const CurrencyRegExp = /\s*[\-\+]?\s*\d+(?:,\d{3})*\s*(?:cp|sp|gp|pp)/gi;
+const LeadingPlusRegExp = /^\+([\-\+])/;
+
 // #region rpg.SpUtils
 async function spUtils(sageMessage: SageMessage): Promise<void> {
-	const data = sageMessage.args.toArray()[0];
+	const data = sageMessage.args.manager.raw().join(" ");
 
-	const values = data.match(/\s*[\-\+]?\s*\d+(?:,\d{3})*\s*(?:cp|sp|gp|pp)/gi)!,
-		signedAndSorted = values.map(s => ("+" + s).replace(/\s+/g, "").replace(/\+([\-\+])/, "$1").toLowerCase()).sort(),
-		coins = new Coins();
+	const values = data.match(CurrencyRegExp)!;
+	const signedAndSorted = values.map(s =>
+		cleanWhitespace("+" + s, { replacement:"" }).replace(LeadingPlusRegExp, "$1").toLowerCase()
+	).sort();
+	const coins = new Coins();
 	signedAndSorted.forEach(value => {
 		if (value.startsWith("+")) {
 			coins.add(value.slice(1));
@@ -20,7 +25,7 @@ async function spUtils(sageMessage: SageMessage): Promise<void> {
 	});
 	const content = createCommandRenderableContent(`<b>Coin Counter</b>`);
 	content.append(`${data}\n\n${coins.toString()}\n(${addCommas(coins.spValue)} sp)`);
-	return <any>sageMessage.send(content);
+	await sageMessage.send(content);
 }
 // #endregion
 

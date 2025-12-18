@@ -120,6 +120,6 @@ export class Bot extends HasIdCore<BotCore> implements IHasColorsCore, IHasEmoji
 		const botPath = `${getDataRoot("sage")}/bots/${bot.id}.json`;
 		const formatted = bot.codeName === "dev";
 		const core = "toJSON" in bot ? bot.toJSON() : bot;
-		return writeFile(botPath, core, true, formatted).catch(errorReturnFalse);
+		return writeFile(botPath, core, { makeDir:true, formatted }).catch(errorReturnFalse);
 	}
 }

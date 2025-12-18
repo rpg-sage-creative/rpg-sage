@@ -483,7 +483,7 @@ export class HephaistosCharacterSF1e extends CharacterBase<HephaistosCharacterCo
 
 	public static async saveCharacter(character: HephaistosCharacterCoreSF1e | HephaistosCharacterSF1e): Promise<boolean> {
 		const json = "toJSON" in character ? character.toJSON() : character;
-		return writeFile(HephaistosCharacterSF1e.createFilePath(character.id), json, true).catch(errorReturnFalse);
+		return writeFile(HephaistosCharacterSF1e.createFilePath(character.id), json, { makeDir:true }).catch(errorReturnFalse);
 	}
 	public save(): Promise<boolean> {
 		return HephaistosCharacterSF1e.saveCharacter(this);

@@ -118,11 +118,11 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 			renderableContent.appendTitledSection(`<b>Stats</b>`, `<i>NPC stats viewable in GM channel ...</i>`);
 
 		}else {
-			const custom = sageMessage.args.nonKeyValuePairs().includes("--custom");
-			const raw = sageMessage.args.nonKeyValuePairs().includes("--raw");
-			const simple = sageMessage.args.nonKeyValuePairs().includes("--simple");
-			const stats = sageMessage.args.nonKeyValuePairs().includes("--stats");
-			const templates = sageMessage.args.nonKeyValuePairs().includes("--templates");
+			const custom = sageMessage.args.hasFlag("custom");
+			const raw = sageMessage.args.hasFlag("raw");
+			const simple = sageMessage.args.hasFlag("simple");
+			const stats = sageMessage.args.hasFlag("stats");
+			const templates = sageMessage.args.hasFlag("templates");
 
 			const sections = character.toStatsOutput({ simple, custom, processor, raw, stats, templates });
 			sections.forEach(({ title, lines }) => {

@@ -136,9 +136,8 @@ async function notifyOfSlicedMacros({ sageCache }: SageCommand, character: Hepha
 
 /** adds the character to the game for this channel ... creating the character if need be */
 async function addOrUpdateCharacter(sageCommand: SageCommand, hChar: HephaistosCharacterSF1e, message: Message): Promise<boolean> {
-	const { tokenUrl, avatarUrl } = sageCommand.isSageMessage()
-		? sageCommand.args.getCharacterOptions({}) ?? { }
-		: { } as { tokenUrl?:string; avatarUrl?:string; };
+	const tokenUrl = sageCommand.args.getUrl("token") ?? undefined;
+	const avatarUrl = sageCommand.args.getUrl("avatar") ?? undefined;
 
 	// get or create character
 	const owner = sageCommand.game ?? sageCommand.sageUser;

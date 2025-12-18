@@ -1,7 +1,7 @@
-import { AllCodeBlocksRegExp, isUrl, stringArrayOrEmpty, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
+import { AllCodeBlocksRegExp, dequote, stringArrayOrEmpty, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
+import { isUrl } from "@rsc-utils/io-utils";
 import { regex } from "regex";
 import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
-import { unquote } from "../internal/unquote.js";
 import { doStatMath } from "./doStatMath.js";
 import type { StatKey, StatNumbersOptions, StatNumbersResults, StatsCharacter, StatsCharacterManager, StatsEncounterManager } from "./types.js";
 
@@ -206,7 +206,7 @@ export class StatBlockProcessor {
 		if (!value) return { isImplicit:true };
 
 		// if quoted, make sure the unquoted value is usable
-		value = unquote(value).trim();
+		value = dequote(value).trim();
 		if (!value) return { isImplicit:true };
 
 		const { gm, pc, alt } = (this.constructor as typeof StatBlockProcessor).CharReferenceRegExp.exec(value)?.groups ?? {};

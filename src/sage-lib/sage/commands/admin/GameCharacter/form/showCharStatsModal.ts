@@ -1,9 +1,8 @@
-import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, type KeyValuePair } from "@rsc-utils/core-utils";
 import { parseKeyValueArgs } from "@rsc-utils/core-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";
-import type { TKeyValuePair } from "../../../../model/SageMessageArgs.js";
 import { createCharModal } from "./createCharModal.js";
 import { parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
@@ -18,10 +17,10 @@ export type CharStatsForm = {
 	other: string;
 };
 
+const OtherStatsRegExp = /^(level|hp|maxhp|conditions)$/i;
 export function showCharStatsModal(sageInteraction: SageInteraction, char: GameCharacter): Promise<void> {
-	const regex = /^(level|hp|maxhp|conditions)$/i;
 	const stats = char.notes.getStats()
-		.filter(stat => !regex.test(stat.title))
+		.filter(stat => !OtherStatsRegExp.test(stat.title))
 		.map(stat => `${stat.title}="${stat.note}"`)
 		.join("\n");
 	const modal = createCharModal({
@@ -30,10 +29,10 @@ export function showCharStatsModal(sageInteraction: SageInteraction, char: GameC
 		compId: char.isCompanionOrMinion ? char.id : NIL_SNOWFLAKE,
 		action: "SubmitStats",
 		fields: [
-			["level", "Character Level", char.getStat("level") ?? ""],
-			["hp", "Current Hit Points", char.getStat("hp") ?? ""],
-			["maxHp", "Max Hit Points", char.getStat("maxHp") ?? ""],
-			["conditions", "Conditions, ex: prone, stunned 1, dying", char.getStat("conditions") ?? ""],
+			["level", "Character Level", char.getString("level") ?? ""],
+			["hp", "Current Hit Points", char.getString("hp") ?? ""],
+			["maxHp", "Max Hit Points", char.getString("maxHp") ?? ""],
+			["conditions", "Conditions, ex: prone, stunned 1, dying", char.getString("conditions") ?? ""],
 			["other", `Other Stats (as key="value" pairs)`, stats, "P"],
 		]
 	});
@@ -50,7 +49,7 @@ async function handleCharStatsSubmit(sageInteraction: SageInteraction, idParts: 
 	const form = sageInteraction.getModalForm<CharStatsForm>();
 	const char = await getCharToEdit(sageInteraction, idParts.charId);
 	if (char && form) {
-		const pairs: TKeyValuePair[] = [];
+		const pairs: KeyValuePair<string, null>[] = [];
 		pairs.push({ key:"level", value:form.level });
 		pairs.push({ key:"hp", value:form.hp });
 		pairs.push({ key:"maxHp", value:form.maxHp });

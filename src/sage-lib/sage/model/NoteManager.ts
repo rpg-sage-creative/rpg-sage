@@ -1,6 +1,4 @@
-import { StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { isBlank } from "@rsc-utils/core-utils";
-import type { TKeyValuePair } from "./SageMessageArgs.js";
+import { isBlank, StringSet, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 
 export type TNoteCategory = {
 	category: string;
@@ -37,7 +35,7 @@ export class NoteManager {
 		return this._setCategorizedNote(CategoryStats, stat, value) !== undefined;
 	}
 	/** returns keys (lowercased) updated */
-	public updateStats(pairs: TKeyValuePair[]): StringSet {
+	public updateStats(pairs: KeyValuePair<string, null>[]): StringSet {
 		const keysUpdated = new StringSet();
 		pairs.forEach(pair => {
 			const updatedNote = this._setCategorizedNote(CategoryStats, pair.key, pair.value);

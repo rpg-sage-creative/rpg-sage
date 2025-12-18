@@ -1,8 +1,8 @@
 import { isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { Collection } from "discord.js";
 import type { MessageOrPartial } from "../types/types.js";
-import { createDiscordUrlRegex } from "./createDiscordUrlRegex.js";
-import { createMentionRegex } from "./createMentionRegex.js";
+import { getDiscordUrlRegex } from "./getDiscordUrlRegex.js";
+import { getMentionRegex } from "./getMentionRegex.js";
 
 type MentionIdType = "channel" | "role" | "user";
 type UrlIdType = "channel" | "message";
@@ -49,10 +49,10 @@ type PossibleSnowflake = Snowflake | string | undefined;
 /** Parses the content for mentions of the given IdType and returns the id/snowflakes. */
 function getContentMentionIds(type: IdType, content: Optional<string>): PossibleSnowflake[] {
 	if (isMentionIdType(type) && content) {
-		const globalRegex = createMentionRegex(type, { globalFlag:true });
+		const globalRegex = getMentionRegex({ gFlag:"g", type });
 		const mentions = content.match(globalRegex) ?? []; // NOSONAR
 		if (mentions.length) {
-			const regex = createMentionRegex(type);
+			const regex = getMentionRegex({ type });
 			return mentions.map(mention => regex.exec(mention)?.groups?.[getGroupKey(type)]);
 		}
 	}
@@ -74,10 +74,10 @@ function getMessageMentionIds(type: IdType, message: MessageOrPartial): Possible
 /** Parses the content for urls of the given IdType and returns the ids/snowflakes. */
 function getContentUrlIds(type: IdType, content: Optional<string>): PossibleSnowflake[] {
 	if (isUrlIdType(type) && content) {
-		const globalRegex = createDiscordUrlRegex(type, { globalFlag:true });
+		const globalRegex = getDiscordUrlRegex({ gFlag:"g", type });
 		const urls = content.match(globalRegex) ?? []; // NOSONAR
 		if (urls.length) {
-			const regex = createDiscordUrlRegex(type);
+			const regex = getDiscordUrlRegex({ type });
 			return urls.map(url => regex.exec(url)?.groups?.[getGroupKey(type)]);
 		}
 	}

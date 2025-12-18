@@ -54,7 +54,7 @@ async function main() {
 		const hasChanges = before !== stringifyJson(updatedCore);
 
 		if (wrongPath || hasChanges) {
-			await writeFile(writeFilePath, updatedCore, true).catch(errorReturnFalse);
+			await writeFile(writeFilePath, updatedCore, { makeDir:true }).catch(errorReturnFalse);
 
 			if (wrongPath) {
 				await deleteFile(filePath).catch(errorReturnFalse);

@@ -1,4 +1,4 @@
-import { errorReturnNull, getEnumValues, isDefined, parseEnum } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, getEnumValues, isDefined } from "@rsc-utils/core-utils";
 import { splitMessageOptions } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
@@ -15,9 +15,7 @@ import { BotServerGameType } from "../helpers/BotServerGameType.js";
 function getEmojiTypes(sageMessage: SageMessage): EmojiType[] {
 
 	// get emoji by key, where key is keyof EmojiType
-	const types = sageMessage.args.toArray()
-		.map(arg => parseEnum<EmojiType>(EmojiType, arg))
-		.filter(isDefined);
+	const types = sageMessage.args.manager.enumValues(EmojiType);
 
 	if (!types.length) {
 		const type = sageMessage.args.getEnum(EmojiType, "type");
@@ -119,7 +117,7 @@ async function _emojiList(sageMessage: SageMessage, which: BotServerGameType, ca
 	if (!render) {
 		if (which !== BotServerGameType.Bot && canSync) {
 			const prompt = `**No ${getEmojiName(which)} Emoji Found!**\n> Sync with ${getOtherName(which)}?`;
-			const booleanResponse = await discordPromptYesNo(sageMessage, prompt, true).catch(errorReturnNull);
+			const booleanResponse = await discordPromptYesNo(sageMessage, prompt, true).catch(errorReturnUndefined);
 			if (booleanResponse) {
 				emoji.sync(getOtherEmoji(sageMessage, which));
 				render = await getWhichEntity(sageMessage, which)?.save() ?? false;

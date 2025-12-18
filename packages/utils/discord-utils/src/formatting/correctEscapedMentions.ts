@@ -1,14 +1,12 @@
-import { createEmojiRegex } from "../emojiRegex/createEmojiRegex.js";
+import { getEmojiRegex } from "../emoji/getEmojiRegex.js";
 import { tokenize } from "@rsc-utils/core-utils";
 
 
 // <@&number>  role
-let roleRegex: RegExp;
-function createRoleRegex() { return roleRegex ??= /<@&\d{16,}>/; }
+const RoleRegExp = /<@&\d{16,}>/;
 
 // <@number>   user
-let userRegex: RegExp;
-function createUserRegex() { return userRegex ??= /<@\d{16,}>/; }
+const UserRegExp = /<@\d{16,}>/;
 
 type Options = { emoji?:boolean; roles?:boolean; users?: boolean; };
 type Parsers = { emoji?:RegExp; role?:RegExp; user?: RegExp; };
@@ -53,6 +51,8 @@ function scrubBlankTokens(tokens: string[]): string[] {
 	return output;
 }
 
+const EscapedRegExp = /`[^`]+`/gu;
+
 /** Looks for text escaped with ` characters that contain emoji (:die: or <:die:12345> or <@1234567890123456> or <@&1234567890123456>) and unescapes them so they render correctly. */
 export function correctEscapedMentions(value: string, options: Options): string {
 	// if we managed to call this with no options, then simply bail now
@@ -66,15 +66,15 @@ export function correctEscapedMentions(value: string, options: Options): string 
 	const getParsers = () => {
 		if (!parsers) {
 			parsers = {};
-			if (options.emoji) parsers.emoji = createEmojiRegex();
-			if (options.roles) parsers.role = createRoleRegex();
-			if (options.users) parsers.user = createUserRegex();
+			if (options.emoji) parsers.emoji = getEmojiRegex();
+			if (options.roles) parsers.role = RoleRegExp;
+			if (options.users) parsers.user = UserRegExp;
 		}
 		return parsers;
 	};
 
 	// We only need to be concerned with `escaped text` substrings
-	return value.replace(/`[^`]+`/gu, escapedValue => {
+	return value.replace(EscapedRegExp, escapedValue => {
 		// Tokenize the substring so that we can iterate and toggle escaped/unescaped sections
 		const tokens = tokenize(escapedValue.slice(1, -1), getParsers());
 

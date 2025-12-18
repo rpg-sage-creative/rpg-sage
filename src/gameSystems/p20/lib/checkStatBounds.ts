@@ -1,8 +1,8 @@
 import { unpipe, type UnpipeResults } from "@rsc-utils/dice-utils";
 import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
-import type { TKeyValuePair } from "../../../sage-lib/sage/model/SageMessageArgs.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { Condition } from "./Condition.js";
+import type { KeyValuePair } from "@rsc-utils/core-utils";
 
 /**
  * Checks the bounds of the given key/value pair.
@@ -11,7 +11,7 @@ import { Condition } from "./Condition.js";
  * If the value is out of bounds, return the correct value.
  * If the value is acceptable, or we don't have a test for it, return undefined so that the calling logic knows to use the original value.
  */
-export function checkStatBounds(character: GameCharacter, pair: TKeyValuePair, pipeInfo?: UnpipeResults<any>): string | undefined {
+export function checkStatBounds(character: GameCharacter, pair: KeyValuePair<string, null>, pipeInfo?: UnpipeResults<any>): string | undefined {
 	const keyLower = pair.key.toLowerCase();
 	const { hasPipes, unpiped } = pipeInfo ?? unpipe(pair.value);
 	const numberValue = numberOrUndefined(unpiped);
