@@ -1,8 +1,7 @@
-import { type Optional, chunk } from "@rsc-utils/core-utils";
-import { ELLIPSIS, isNotBlank } from "@rsc-utils/core-utils";
+import { chunk, isNotBlank, type Optional } from "@rsc-utils/core-utils";
 import { type APIEmbed, type ColorResolvable, type Embed, type MessageCreateOptions, type MessageEditOptions, resolveColor, type WebhookMessageCreateOptions, type WebhookMessageEditOptions } from "discord.js";
 import { EmbedBuilder } from "../embed/EmbedBuilder.js";
-import { type EmbedResolvable } from "../embed/EmbedResolvable.js";
+import type { EmbedResolvable } from "../embed/EmbedResolvable.js";
 import { getEmbedLength } from "../embed/getEmbedLength.js";
 import { getTotalEmbedLength } from "../embed/getTotalEmbedLength.js";
 import { resolveEmbed } from "../embed/resolveEmbed.js";
@@ -102,7 +101,7 @@ function mergeEmbeds(content?: Optional<string>, embeds?: Optional<MsgEmbed[]>, 
 	const hasEmbeds = !!embeds?.length;
 
 	// get content embeds
-	const embedColor = hasEmbeds ? resolveEmbed(embeds[0]).color as ColorResolvable : undefined;
+	const embedColor = hasEmbeds ? resolveEmbed(embeds[0]!).color as ColorResolvable : undefined;
 	const contentEmbeds = contentToEmbeds(content, embedColor ?? color);
 	const hasContentEmbeds = !!contentEmbeds?.length;
 
@@ -129,7 +128,7 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 		const { username } = baseOptions;
 		if (typeof(username) === "string") {
 			if (username.length > DiscordMaxValues.webhook.username.maxLength) {
-				baseOptions.username = username.slice(0, 79) + ELLIPSIS;
+				baseOptions.username = `${username.slice(0, 79)}…`;
 			}
 		}
 	}
@@ -214,13 +213,13 @@ export function splitMessageOptions<T extends MessageOptions>(msgOptions: SplitM
 		}
 
 		// only include attachments in the first payload
-		// payloads[0].attachments = attachments;
+		// payloads[0]!.attachments = attachments;
 
 		// only include components in the first payload
-		payloads[0].components = components;
+		payloads[0]!.components = components;
 
 		// only include files in the first payload
-		payloads[0].files = files;
+		payloads[0]!.files = files;
 	}
 
 	return payloads;
