@@ -1,16 +1,20 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { Message, MessageActionRowComponent } from "discord.js";
-import type { SPartialMessage } from "../types/types.js";
-import { getActionRows } from "./getActionRows.js";
+import type { ActionRowComponent, ComponentInContainer, TopLevelComponent } from "discord.js";
 
-export function findComponent<T extends MessageActionRowComponent>(message: Optional<Message | SPartialMessage>, customId: string): T | undefined {
-	const actionRows = getActionRows(message);
-	if (actionRows.length) {
-		for (const row of actionRows) {
-			for (const component of row.components) {
-				if (component.customId === customId) {
-					return component as T;
-				}
+type Component = ActionRowComponent | ComponentInContainer | TopLevelComponent;
+type Owner = { components:Component[]; };
+
+export function findComponent<T extends ActionRowComponent>(owner: Optional<Owner>, customId: string): T | undefined {
+	if (!owner) return undefined;
+	const components = owner.components ?? [];
+	for (const component of components) {
+		if ("customId" in component && component.customId === customId) {
+			return component as T;
+		}
+		if ("components" in component) {
+			const found = findComponent<T>(component, customId);
+			if (found) {
+				return found;
 			}
 		}
 	}
