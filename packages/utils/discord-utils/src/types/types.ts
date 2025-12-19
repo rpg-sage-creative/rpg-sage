@@ -1,9 +1,8 @@
 import type { APIUser, CacheType, Message, MessageReaction, MessageReference, Partialize, PartialMessage, PartialMessageReaction, PartialRecipient, PartialUser, User } from "discord.js";
-import type { SupportedInteraction, SupportedMessagesChannel, SupportedRepliableInteraction } from "./typeGuards/isSupported.js";
+import type { SupportedMessagesChannel, SupportedRepliableInteraction } from "./typeGuards/isSupported.js";
 
 export type MessageReferenceOrPartial = MessageReference | Omit<MessageReference, "type">;
 
-export type DInteraction<Cached extends CacheType = CacheType> = SupportedInteraction<Cached>;
 export type DRepliableInteraction<Cached extends CacheType = CacheType> = SupportedRepliableInteraction<Cached>;
 
 /** Channel you can send a message to. */

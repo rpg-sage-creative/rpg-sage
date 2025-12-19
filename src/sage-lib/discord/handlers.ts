@@ -1,5 +1,5 @@
 import { error, isNullOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { isDiscordApiError, toHumanReadable, type DInteraction, type MessageOrPartial, type ReactionOrPartial, type SMessage, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { isDiscordApiError, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SMessage, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { ChannelType, MessageType as DMessageType, GatewayIntentBits, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
@@ -207,7 +207,7 @@ export async function handleInteraction(interaction: Interaction): Promise<THand
 	const flags = getInteractionFlags(interaction);
 	if (flags.canHandle) {
 		try {
-			const sageInteraction = await SageInteraction.fromInteraction(interaction as DInteraction);
+			const sageInteraction = await SageInteraction.fromInteraction(interaction as SupportedInteraction);
 			await handleInteractions(sageInteraction, output);
 			sageInteraction.clear();
 		}catch(ex) {

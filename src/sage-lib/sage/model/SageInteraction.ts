@@ -1,5 +1,5 @@
 import { debug, isDefined, isString, RenderableContent, type Cache, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, type DInteraction, type MessageChannel, type MessageTarget, type SupportedAutocompleteInteraction, type SupportedButtonInteraction, type SupportedMessageContextInteraction, type SupportedModalSubmitInteraction, type SupportedSlashCommandInteraction, type SupportedStringSelectInteraction, type SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
+import { DiscordKey, type MessageChannel, type MessageTarget, type SupportedAutocompleteInteraction, type SupportedButtonInteraction, type SupportedInteraction, type SupportedMessageContextInteraction, type SupportedModalSubmitInteraction, type SupportedSlashCommandInteraction, type SupportedStringSelectInteraction, type SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
@@ -10,7 +10,7 @@ import { SageEventCache } from "./SageEventCache.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
 
 interface SageInteractionCore extends SageCommandCore {
-	interaction: DInteraction;
+	interaction: SupportedInteraction;
 	type: InteractionType;
 }
 
@@ -43,7 +43,7 @@ export type SageSlashCommandInteraction = SageInteraction<SupportedSlashCommandI
 export type SageStringSelectInteraction = SageInteraction<SupportedStringSelectInteraction>;
 export type SageUserContextInteraction = SageInteraction<SupportedUserContextInteraction>;
 
-export class SageInteraction<T extends DInteraction = any>
+export class SageInteraction<T extends SupportedInteraction = any>
 	extends SageCommand<SageInteractionCore, SageInteractionArgs>
 	implements HasGame {
 
@@ -256,7 +256,7 @@ export class SageInteraction<T extends DInteraction = any>
 
 	//#endregion
 
-	public static async fromInteraction<T extends DInteraction>(interaction: T): Promise<SageInteraction<T>> {
+	public static async fromInteraction<T extends SupportedInteraction>(interaction: T): Promise<SageInteraction<T>> {
 		return new SageInteraction({
 			eventCache: await SageEventCache.fromInteraction(interaction),
 			interaction,

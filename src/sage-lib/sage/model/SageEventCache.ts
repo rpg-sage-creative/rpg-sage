@@ -1,6 +1,6 @@
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type DInteraction, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type SupportedChannel, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
@@ -732,7 +732,7 @@ export class SageEventCache {
 		return this.discord.fetchMessage(keyOrReference, this.user?.did);
 	}
 
-	public async findActiveGame(reference: Optional<Channel | DInteraction | MessageOrPartial | MessageReferenceOrPartial>): Promise<Game | undefined> {
+	public async findActiveGame(reference: Optional<Channel | SupportedInteraction | MessageOrPartial | MessageReferenceOrPartial>): Promise<Game | undefined> {
 		if (reference) {
 			if ("messageId" in reference) {
 				return this.findActiveGameByReference(reference);
@@ -846,7 +846,7 @@ export class SageEventCache {
 		return SageEventCache._fromMessage(reactionOrPartial.message, actorOrPartial, reactionOrPartial);
 	}
 
-	public static async fromInteraction(interaction: DInteraction): Promise<SageEventCache> {
+	public static async fromInteraction(interaction: SupportedInteraction): Promise<SageEventCache> {
 		const messageOrPartial = "message" in interaction ? interaction.message ?? undefined : undefined;
 		const evCache = await createSageEventCache({
 			actorOrPartial: interaction.user,

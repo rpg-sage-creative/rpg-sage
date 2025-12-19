@@ -1,6 +1,6 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType } from "@rsc-sage/types";
 import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import type { DInteraction, DiscordCache, DRepliableInteraction, EmbedBuilder, SupportedInteraction } from "@rsc-utils/discord-utils";
+import type { DiscordCache, DRepliableInteraction, EmbedBuilder, SupportedInteraction } from "@rsc-utils/discord-utils";
 import { ComponentType, InteractionType, Message, PartialGroupDMChannel, type ActionRowBuilder, type AttachmentBuilder, type ButtonBuilder, type HexColorString, type If, type StringSelectMenuBuilder, type TextBasedChannel } from "discord.js";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
@@ -94,14 +94,14 @@ export abstract class SageCommand<
 	public isSageInteraction(type: "USR_CONTEXT"): this is SageUserContextInteraction;
 	public isSageInteraction(type: "CONTEXT"): this is SageMessageContextInteraction | SageUserContextInteraction;
 	public isSageInteraction<T extends DRepliableInteraction>(type: "REPLIABLE"): this is SageInteraction<T>;
-	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T>;
+	public isSageInteraction<T extends SupportedInteraction = any>(): this is SageInteraction<T>;
 	public isSageInteraction(type?: "AUTO" | "MODAL" | "SLASH" | "BUTTON" | "SELECT" | "MESSAGE" | "TEXT" | "COMPONENT" | "REPLIABLE" | "MSG_CONTEXT" | "USR_CONTEXT" | "CONTEXT"): boolean {
 		if ("interaction" in this) {
 			if (!type) {
 				return true;
 			}
 
-			const interaction = this.interaction as DInteraction;
+			const interaction = this.interaction as SupportedInteraction;
 
 			if (type === "REPLIABLE") {
 				return interaction.isRepliable();
