@@ -17,8 +17,6 @@
 		"test"
 	],
 	"references": [
-		{ "path": "./packages/utils/discord-utils" },
-
 		{ "path": "./packages/utils/character-utils" },
 		{ "path": "./packages/utils/dice-utils" },
 
