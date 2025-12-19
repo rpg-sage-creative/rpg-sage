@@ -52,6 +52,11 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 
 	/** Returns true if the underlying args contains the given flag. */
 	public hasFlag(flag: string): boolean {
+		// remove first leading dash
+		if (flag.startsWith("-")) flag = flag.slice(1);
+		// remove second leading dash
+		if (flag.startsWith("-")) flag = flag.slice(1);
+		// test lowerCase flag
 		return this.argsManager.hasFlag(flag.toLowerCase());
 	}
 
