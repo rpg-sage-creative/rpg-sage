@@ -1,7 +1,7 @@
 import type { Optional } from "@rsc-utils/core-utils";
 import { PermissionFlagsBits, PermissionsBitField, type Channel, type GuildMember, type GuildMemberResolvable, type Role, type RoleResolvable } from "discord.js";
 import { resolveSnowflake } from "../resolve/resolveSnowflake.js";
-import { isWebhookChannel, type WebhookChannel } from "../types/types.js";
+import { isSupportedWebhookChannel, type SupportedWebhookChannel } from "../types/typeGuards/isSupported.js";
 
 type PermissionsArgs = {
 	checked?: PermFlagBitsKeys[];
@@ -10,7 +10,7 @@ type PermissionsArgs = {
 	missing?: PermFlagBitsKeys[];
 	perms?: Optional<PermissionsBitField>;
 	present?: PermFlagBitsKeys[];
-	webhookChannel?: Optional<WebhookChannel>;
+	webhookChannel?: Optional<SupportedWebhookChannel>;
 };
 class Permissions {
 	/** the perms checked */
@@ -32,7 +32,7 @@ class Permissions {
 	public present: PermFlagBitsKeys[];
 
 	/** the webhook channel (parent of a thread) */
-	public webhookChannel?: WebhookChannel;
+	public webhookChannel?: SupportedWebhookChannel;
 
 	public constructor({ checked, isInChannel, isThread, missing, perms, present, webhookChannel }: PermissionsArgs = { }) {
 		this.checked = checked ?? [];
@@ -87,7 +87,7 @@ export function getPermsFor(channel: Channel, memberOrRole?: GuildMemberOrRoleRe
 
 	const perms = channelWithPerms?.permissionsFor(memberOrRoleId);
 	const isInChannel = isThread ? channel.guildMembers.has(memberOrRoleId) : channel.members.has(memberOrRoleId);
-	const webhookChannel = isWebhookChannel(channelWithPerms) ? channelWithPerms : undefined;
+	const webhookChannel = isSupportedWebhookChannel(channelWithPerms) ? channelWithPerms : undefined;
 
 	if (arguments.length < 3) {
 		return new Permissions({ isInChannel, isThread, perms, webhookChannel });

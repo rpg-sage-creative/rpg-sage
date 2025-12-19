@@ -1,5 +1,6 @@
 import { error } from "@rsc-utils/core-utils";
-import type { GuildMember, GuildTextBasedChannel, PermissionFlagsBits } from "discord.js";
+import type { GuildMember, PermissionFlagsBits } from "discord.js";
+import type { SupportedCategoryChannel, SupportedGameChannel } from "../types/index.js";
 import { getPermsFor } from "./getPermsFor.js";
 import { getRequiredPermissions } from "./getRequiredPermissions.js";
 
@@ -33,7 +34,7 @@ type FixPermResults = {
 };
 
 /** Checks the given channel to see what perms are missing. */
-export async function fixMissingChannelPerms(botGuildMember: GuildMember, channel: GuildTextBasedChannel): Promise<FixPermResults> {
+export async function fixMissingChannelPerms(botGuildMember: GuildMember, channel: SupportedGameChannel | SupportedCategoryChannel): Promise<FixPermResults> {
 	const runGamePerms = getRequiredPermissions("RunGame");
 
 	// check the state before we do any work
