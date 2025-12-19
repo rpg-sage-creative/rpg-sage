@@ -1,7 +1,7 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath } from "@rsc-utils/dice-utils";
-import type { MessageChannel, MessageTarget } from "@rsc-utils/discord-utils";
+import type { MessageTarget, SupportedMessagesChannel } from "@rsc-utils/discord-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -264,16 +264,16 @@ export async function sendDice(sageCommand: SageCommand, outputs: TDiceOutput[])
 
 //#region Channels
 
-async function ensureTargetChannel(sageCommand: SageCommand): Promise<MessageChannel> {
+async function ensureTargetChannel(sageCommand: SageCommand): Promise<SupportedMessagesChannel> {
 	const channel = await sageCommand.sageCache.fetchChannel(sageCommand.channel?.sendDiceTo);
 	if (channel) {
-		return channel as MessageChannel;
+		return channel as SupportedMessagesChannel;
 	}
 	if (sageCommand.isSageInteraction("MESSAGE") || sageCommand.isSageInteraction("MODAL")) {
-		return sageCommand.interaction.channel as MessageChannel;
+		return sageCommand.interaction.channel as SupportedMessagesChannel;
 	}
 	const message = await sageCommand.fetchMessage();
-	return message!.channel as MessageChannel;
+	return message!.channel as SupportedMessagesChannel;
 }
 
 async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolean): Promise<TGmChannel> {
@@ -283,7 +283,7 @@ async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolea
 	if (sageCommand.diceSecretMethodType === DiceSecretMethodType.GameMasterChannel) {
 		const channel = await sageCommand.game?.gmGuildChannel();
 		if (channel) {
-			return channel as MessageChannel;
+			return channel as SupportedMessagesChannel;
 		}
 	}
 	const member = await sageCommand.game?.gmGuildMember();

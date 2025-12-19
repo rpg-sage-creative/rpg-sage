@@ -1,7 +1,5 @@
-import type { Optional } from "@rsc-utils/core-utils";
-import { debug } from "@rsc-utils/core-utils";
-import { toMessageUrl, type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { debug, isNotBlank, type Optional } from "@rsc-utils/core-utils";
+import { toMessageUrl, type MessageTarget, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
 import { sendTo } from "../../../discord/sendTo.js";
 import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
@@ -9,7 +7,7 @@ import type { FormattedDiceOutput } from "./FormattedDiceOutput.js";
 import { createMentionLine } from "./createMentionLine.js";
 
 /** This function sends all dice rolls to the channel in one post. */
-export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutputs: FormattedDiceOutput[], targetChannel: MessageChannel, gmTargetChannel: Optional<MessageTarget>): Promise<void> {
+export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutputs: FormattedDiceOutput[], targetChannel: SupportedMessagesChannel, gmTargetChannel: Optional<MessageTarget>): Promise<void> {
 	const isSageMessage = sageCommand.isSageMessage();
 	const hasSecret = formattedOutputs.filter(output => output.hasSecret).length > 0;
 	const allSecret = formattedOutputs.filter(output => output.hasSecret).length === formattedOutputs.length;

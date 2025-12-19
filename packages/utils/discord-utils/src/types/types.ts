@@ -3,9 +3,6 @@ import type { SupportedMessagesChannel } from "./typeGuards/isSupported.js";
 
 export type MessageReferenceOrPartial = MessageReference | Omit<MessageReference, "type">;
 
-/** Channel you can send a message to. */
-export type MessageChannel = SupportedMessagesChannel;
-
 export type SMessage = Message & { channel:SupportedMessagesChannel; };
 export type SPartialMessage = Partialize<SMessage, 'type' | 'system' | 'pinned' | 'tts', 'content' | 'cleanContent' | 'author'>;
 
@@ -13,7 +10,7 @@ export type SMessageOrPartial = SMessage | SPartialMessage;
 export type MessageOrPartial = Message | PartialMessage;
 
 /** User or Channel you can send a message to. */
-export type MessageTarget = User | MessageChannel;
+export type MessageTarget = User | SupportedMessagesChannel;
 
 
 export type ReactionOrPartial = MessageReaction | PartialMessageReaction;

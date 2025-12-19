@@ -1,6 +1,6 @@
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type MessageChannel, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type SupportedMessagesChannel, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
@@ -538,7 +538,7 @@ export class SageEventCache {
 		return this.canSendMessageToMap.get(key)!;
 	}
 
-	public canSendMessageToChannel(channel: MessageChannel): Promise<boolean> {
+	public canSendMessageToChannel(channel: SupportedMessagesChannel): Promise<boolean> {
 		return this.canSendMessageTo(DiscordKey.from(channel));
 	}
 

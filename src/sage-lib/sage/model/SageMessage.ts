@@ -1,5 +1,5 @@
 import { ArgsManager, Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageChannel, type MessageOrPartial, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
+import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
 import XRegExp from "xregexp";
 import { isDeleted } from "../../discord/deletedMessages.js";
@@ -98,8 +98,8 @@ export class SageMessage
 
 	public _ = new Map<"Dialog" | "Dice" | "Replacement" | "Sent", MessageOrPartial>();
 	public send(renderableContentResolvable: RenderableContentResolvable): Promise<SMessage[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageChannel): Promise<SMessage[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageChannel, originalAuthor: User): Promise<SMessage[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: SupportedMessagesChannel): Promise<SMessage[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: SupportedMessagesChannel, originalAuthor: User): Promise<SMessage[]>;
 	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.message.channel, originalAuthor = this.message.author, notifyIfBlocked = false): Promise<SMessage[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {

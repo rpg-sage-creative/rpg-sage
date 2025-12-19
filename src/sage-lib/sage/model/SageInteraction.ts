@@ -1,5 +1,5 @@
 import { debug, isDefined, isString, RenderableContent, type Cache, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, type MessageChannel, type MessageTarget, type SupportedAutocompleteInteraction, type SupportedButtonInteraction, type SupportedInteraction, type SupportedMessageContextInteraction, type SupportedModalSubmitInteraction, type SupportedSlashCommandInteraction, type SupportedStringSelectInteraction, type SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
+import { DiscordKey, type MessageTarget, type SupportedAutocompleteInteraction, type SupportedButtonInteraction, type SupportedInteraction, type SupportedMessageContextInteraction, type SupportedMessagesChannel, type SupportedModalSubmitInteraction, type SupportedSlashCommandInteraction, type SupportedStringSelectInteraction, type SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
@@ -176,8 +176,8 @@ export class SageInteraction<T extends SupportedInteraction = any>
 		return this.core.interaction as T;
 	}
 
-	public get interactionChannel(): MessageChannel | undefined {
-		return this.interaction.channel as unknown as MessageChannel ?? undefined;
+	public get interactionChannel(): SupportedMessagesChannel | undefined {
+		return this.interaction.channel as unknown as SupportedMessagesChannel ?? undefined;
 	}
 
 	/** Returns the user */
