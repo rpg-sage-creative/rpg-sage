@@ -1,6 +1,6 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType } from "@rsc-sage/types";
 import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import type { DiscordCache, DRepliableInteraction, EmbedBuilder, SupportedInteraction } from "@rsc-utils/discord-utils";
+import type { DiscordCache, EmbedBuilder, SupportedInteraction, SupportedRepliableInteraction } from "@rsc-utils/discord-utils";
 import { ComponentType, InteractionType, Message, PartialGroupDMChannel, type ActionRowBuilder, type AttachmentBuilder, type ButtonBuilder, type HexColorString, type If, type StringSelectMenuBuilder, type TextBasedChannel } from "discord.js";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
@@ -93,7 +93,7 @@ export abstract class SageCommand<
 	public isSageInteraction(type: "MSG_CONTEXT"): this is SageMessageContextInteraction;
 	public isSageInteraction(type: "USR_CONTEXT"): this is SageUserContextInteraction;
 	public isSageInteraction(type: "CONTEXT"): this is SageMessageContextInteraction | SageUserContextInteraction;
-	public isSageInteraction<T extends DRepliableInteraction>(type: "REPLIABLE"): this is SageInteraction<T>;
+	public isSageInteraction<T extends SupportedRepliableInteraction>(type: "REPLIABLE"): this is SageInteraction<T>;
 	public isSageInteraction<T extends SupportedInteraction = any>(): this is SageInteraction<T>;
 	public isSageInteraction(type?: "AUTO" | "MODAL" | "SLASH" | "BUTTON" | "SELECT" | "MESSAGE" | "TEXT" | "COMPONENT" | "REPLIABLE" | "MSG_CONTEXT" | "USR_CONTEXT" | "CONTEXT"): boolean {
 		if ("interaction" in this) {
