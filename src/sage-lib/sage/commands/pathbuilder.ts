@@ -1,7 +1,6 @@
-import { errorReturnUndefined, isDefined, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, isDefined, isNotBlank, StringMatcher, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
-import { isNotBlank, StringMatcher } from "@rsc-utils/core-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ButtonInteraction, type StringSelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
@@ -10,14 +9,11 @@ import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import { MacroOwner } from "../model/MacroOwner.js";
 import { Macros } from "../model/Macros.js";
 import type { SageCommand } from "../model/SageCommand.js";
-import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageButtonInteraction, SageInteraction, SageStringSelectInteraction } from "../model/SageInteraction.js";
 import type { User } from "../model/User.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
-
-type SageButtonInteraction = SageInteraction<ButtonInteraction>;
-type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
 
 function createActionRow<T extends ButtonBuilder | StringSelectMenuBuilder>(...components: T[]): ActionRowBuilder<T> {
 	components.forEach(comp => {
@@ -475,7 +471,7 @@ function sheetTester(sageInteraction: SageButtonInteraction): boolean {
 	return getValidPathbuilderCharacterId(customId) !== undefined;
 }
 
-async function viewHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
+async function viewHandler(sageInteraction: SageStringSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
 	if (values.includes("All")) {
@@ -494,21 +490,21 @@ async function viewHandler(sageInteraction: SageSelectInteraction, character: Pa
 	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
-async function explorationHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
+async function explorationHandler(sageInteraction: SageStringSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeExploration = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeExploration", activeExploration);
 	await character.save();
 	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
-async function skillHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
+async function skillHandler(sageInteraction: SageStringSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await character.save();
 	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
 
-async function macroHandler(sageInteraction: SageSelectInteraction, character: PathbuilderCharacter): Promise<void> {
+async function macroHandler(sageInteraction: SageStringSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const activeMacro = sageInteraction.interaction.values[0];
 	if (activeMacro === "REFRESH") {
 		setMacroUser(character, sageInteraction.sageUser);

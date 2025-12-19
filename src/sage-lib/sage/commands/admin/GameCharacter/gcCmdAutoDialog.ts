@@ -1,18 +1,18 @@
 import { DialogPostType, type SageChannel } from "@rsc-sage/types";
 import { debug, type Snowflake } from "@rsc-utils/core-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type GuildTextBasedChannel, type SelectMenuComponentOptionData } from "discord.js";
+import { toHumanReadable, type SupportedTextChannel } from "@rsc-utils/discord-utils";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type SelectMenuComponentOptionData } from "discord.js";
 import { getSelectedOrDefault } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { AutoChannelData, GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import { SageInteraction } from "../../../model/SageInteraction.js";
+import { type SageButtonInteraction, type SageStringSelectInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterTypeMeta, type TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 import { toReadableOwner } from "./toReadableOwner.js";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
 
 //#region customId
 
@@ -227,7 +227,7 @@ async function createChannelList(sageCommand: SageCommand, chars: Chars, selecte
 	};
 
 	const labelAutoChannel = async (autoChannel: AutoChannelData, force?: boolean) => {
-		const channel = await sageCommand.discord.fetchChannel<GuildTextBasedChannel>({ guildId:serverId, channelId:autoChannel.channelDid });
+		const channel = await sageCommand.discord.fetchChannel<SupportedTextChannel>({ guildId:serverId, channelId:autoChannel.channelDid });
 		if (!channel && !force) return undefined;
 		const channelLabel = channel?.name ?? `#${autoChannel.channelDid}`;
 		const userName = autoChannel.userDid ? ` ${await toUserName(autoChannel.userDid)}` : "";
@@ -300,7 +300,7 @@ async function createComponents(sageCommand: SageCommand, chars: Chars, selected
 	return [selectRow, buttonRow];
 }
 
-async function handleAction(sageInteraction: SageInteraction<ButtonInteraction|StringSelectMenuInteraction>): Promise<void> {
+async function handleAction(sageInteraction: SageButtonInteraction|SageStringSelectInteraction): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const { sageUser } = sageInteraction;
@@ -313,7 +313,7 @@ async function handleAction(sageInteraction: SageInteraction<ButtonInteraction|S
 
 	const chars = getCharsById(sageInteraction, characterId);
 	const character = chars?.byId.char;
-	let channelData = getSelectedOrDefault(sageInteraction as SageInteraction<StringSelectMenuInteraction>, createCustomId(userId, "channel", characterId)) as ChannelData;
+	let channelData = getSelectedOrDefault(sageInteraction as SageStringSelectInteraction, createCustomId(userId, "channel", characterId)) as ChannelData;
 	const autoChannel = parseAutoChannel(channelData);
 	if (!character || !autoChannel) return;
 

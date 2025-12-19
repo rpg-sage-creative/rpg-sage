@@ -1,12 +1,11 @@
 import { GameSystemType, parseGameSystem } from "@rsc-sage/types";
-import { warn, type RenderableContent, type Snowflake, type SortResult } from "@rsc-utils/core-utils";
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
+import { warn, ZERO_WIDTH_SPACE, type RenderableContent, type Snowflake, type SortResult } from "@rsc-utils/core-utils";
+import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from "discord.js";
 import { deleteMessage } from "../../sage-lib/discord/deletedMessages.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
-import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
+import type { SageButtonInteraction, SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { getPaizoGameSystems } from "./lib/PaizoGameSystem.js";
 import { fetchSelectedOrDefault, fetchSelectedOrDefaultEnum, fetchSelectedOrDefaultNumber } from "./lib/fetchSelectedOrDefault.js";
@@ -558,7 +557,7 @@ async function showEncounter(sageCommand: SageCommand): Promise<void> {
 	await updateEncounter(sageCommand, args);
 }
 
-async function changeEncounter(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
+async function changeEncounter(sageInteraction: SageStringSelectInteraction): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const args = await getArgs(sageInteraction);
@@ -603,7 +602,7 @@ async function changeEncounter(sageInteraction: SageInteraction<StringSelectMenu
 	await updateEncounter(sageInteraction, args);
 }
 
-async function resetEncounter(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
+async function resetEncounter(sageInteraction: SageButtonInteraction): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const args = await getArgs(sageInteraction);

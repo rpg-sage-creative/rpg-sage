@@ -1,6 +1,6 @@
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type GameSystem, type SageChannel } from "@rsc-sage/types";
 import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, stringOrUndefined, warn, type Args, type Comparable, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { DiscordKey, resolveUserId, type CanBeUserIdResolvable } from "@rsc-utils/discord-utils";
+import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
 import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
@@ -118,7 +118,7 @@ async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promi
 			nameTags: mapSageChannelNameTags(sChannel)
 		});
 
-		const gChannel = await sageCache.fetchChannel<GuildTextBasedChannel>(sChannel.id);
+		const gChannel = await sageCache.fetchChannel<SupportedGameMessagesChannel>(sChannel.id);
 		if (gChannel) {
 			gChannels.push({
 				id: sChannel.id,

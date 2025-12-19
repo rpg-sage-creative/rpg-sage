@@ -1,10 +1,10 @@
 import { GameSystemType, parseEnum } from "@rsc-sage/types";
 import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
-import type { SageInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
+import type { SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { boundNumber } from "../utils/boundNumber.js";
 import { getPaizoGameSystems, isStarfinder } from "./lib/PaizoGameSystem.js";
@@ -188,7 +188,7 @@ async function showWealth(sageCommand: SageCommand): Promise<void> {
 }
 
 /** Updates the form when a system or level is changed. */
-async function changeWealth(sageInteraction: SageInteraction<StringSelectMenuInteraction>): Promise<void> {
+async function changeWealth(sageInteraction: SageStringSelectInteraction): Promise<void> {
 	sageInteraction.replyStack.defer();
 	const levelArg = +(getSelectedOrDefault(sageInteraction, "p20-wealth-level") ?? 1);
 	const level = Math.min(20, Math.max(1, levelArg));

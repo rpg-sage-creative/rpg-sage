@@ -1,13 +1,12 @@
 import { getSageId } from "@rsc-sage/env";
-import { errorReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, isNotBlank, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, toChannelMention, toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
-import { isNotBlank } from "@rsc-utils/core-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";
 import { getLocalizedText, type LocalizedTextKey } from "../../../../sage-lang/getLocalizedText.js";
 import { deleteMessage, MessageDeleteResults } from "../../../discord/deletedMessages.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import type { SageCommand } from "../SageCommand.js";
-import type { SageInteraction } from "../SageInteraction.js";
+import type { SageButtonInteraction } from "../SageInteraction.js";
 
 type ButtonOptions = {
 	customId?: string;
@@ -17,9 +16,7 @@ type ButtonOptions = {
 };
 
 /** Creates regex to test if the customId is a valid delete button customId. */
-function getCustomIdRegex(): RegExp {
-	return /^rpg-sage-message-delete-button-(?<userId>\d{16,})$/;
-}
+const CustomIdRegExp = /^rpg-sage-message-delete-button-(?<userId>\d{16,})$/;
 
 /** Creates a delete button customId for the given userId. */
 function createCustomId(userId: Snowflake): string {
@@ -33,7 +30,7 @@ function createCustomId(userId: Snowflake): string {
 
 /** Extracts the userId from a valid delete button customId. */
 function getUserId(customId: string): Snowflake | undefined {
-	return getCustomIdRegex().exec(customId)?.groups?.userId as Snowflake;
+	return CustomIdRegExp.exec(customId)?.groups?.userId as Snowflake;
 }
 
 /**
@@ -115,7 +112,7 @@ export function includeDeleteButton<T extends BaseMessageOptions | InteractionRe
 }
 
 /** Checks the interaction for the customId used for deleting messages. */
-function messageDeleteButtonTester(sageInteraction: SageInteraction<ButtonInteraction>): boolean {
+function messageDeleteButtonTester(sageInteraction: SageButtonInteraction): boolean {
 	if (sageInteraction.interaction.isButton()) {
 		const customId = sageInteraction.interaction.customId;
 		const buttonUserId = getUserId(customId);
@@ -136,7 +133,7 @@ function messageDeleteButtonTester(sageInteraction: SageInteraction<ButtonIntera
 }
 
 /** Handles the interaction used for deleting messages. */
-async function messageDeleteButtonHandler(sageInteraction: SageInteraction<ButtonInteraction>): Promise<void> {
+async function messageDeleteButtonHandler(sageInteraction: SageButtonInteraction): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 
 	const customId = sageInteraction.interaction.customId;
@@ -173,7 +170,7 @@ async function messageDeleteButtonHandler(sageInteraction: SageInteraction<Butto
 				content += `\n- ${localize("SAGE_MISSING_ACCESS_TO_THAT_CHANNEL")}`;
 			}
 		}
-		const dm = await sageInteraction.user.send({ content }).catch(errorReturnNull);
+		const dm = await sageInteraction.user.send({ content }).catch(errorReturnUndefined);
 		if (!dm) {
 			content += `\n*${localize("NOTE")}: ${localize("WE_TRIED_TO_DM_YOU")}*`;
 			await sageInteraction.replyStack.whisper(content, { forceEphemeral:true });

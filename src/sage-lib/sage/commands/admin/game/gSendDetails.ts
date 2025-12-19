@@ -1,9 +1,9 @@
 import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
 import { getDateStrings, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, toHumanReadable } from "@rsc-utils/discord-utils";
+import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, toHumanReadable, type SupportedTextChannel } from "@rsc-utils/discord-utils";
 import type { GuildMember, TextChannel } from "discord.js";
-import { type Game, GameRoleType, mapSageChannelNameTags, nameTagsToType } from "../../../model/Game.js";
+import { GameRoleType, mapSageChannelNameTags, nameTagsToType, type Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { MoveDirectionOutputType } from "../../map/MoveDirection.js";
@@ -79,7 +79,7 @@ async function showGameRenderChannels(renderableContent: RenderableContent, sage
 		if (metas.length) {
 			renderableContent.append(`[spacer]<b>${nameTagsToType(metas[0].nameTags)}</b>`);
 			for (const meta of metas) {
-				const guildChannel = await sageCommand.sageCache.fetchChannel<TextChannel>(meta.sageChannel.id);
+				const guildChannel = await sageCommand.sageCache.fetchChannel<SupportedTextChannel>(meta.sageChannel.id);
 				const guildChannelName = guildChannel ? `#${guildChannel.name}` : `<i>unavailable</i>`;
 
 				const missingPerms = await checkForMissingPerms(sageCommand, guildChannel);

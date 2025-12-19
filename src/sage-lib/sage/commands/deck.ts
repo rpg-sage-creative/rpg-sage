@@ -1,6 +1,6 @@
 import { BULLET, capitalize, error, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { Deck, type CardBase, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "../../../sage-utils/utils/GameUtils/deck/index.js";
 import { deleteMessage } from "../../discord/deletedMessages.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
@@ -8,7 +8,7 @@ import type { CharacterManager } from "../model/CharacterManager.js";
 import type { GameCharacter } from "../model/GameCharacter.js";
 import { SageCommand } from "../model/SageCommand.js";
 import type { SageCommandArgs } from "../model/SageCommandArgs.js";
-import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageButtonInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createMessageDeleteButton } from "../model/utils/deleteButton.js";
 import { toTrackerBar } from "../model/utils/ValueBars.js";
@@ -586,7 +586,7 @@ function createDeckStateComponents(sageCommand: SageCommand, charId: string, dec
 	return components;
 }
 
-async function handleCardsButton(sageInteration: SageInteraction<ButtonInteraction>): Promise<void> {
+async function handleCardsButton(sageInteration: SageButtonInteraction): Promise<void> {
 	const { actorId, replyStack } = sageInteration;
 
 	const { userId, action, charId, deckId } = sageInteration.parseCustomId(customId => {

@@ -1,8 +1,7 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { errorReturnNull } from "@rsc-utils/core-utils";
+import { type Optional, type Snowflake, errorReturnUndefined } from "@rsc-utils/core-utils";
 import { EmbedBuilder, type MessageTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
 import { readJsonFile, readJsonFileSync } from "@rsc-utils/io-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/e20/index.js";
 import { PlayerCharacterE20, type TSkillE20, type TSkillSpecialization, type TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
 import { type PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../../../sage-e20/joe/PlayerCharacterJoe.js";
@@ -11,7 +10,7 @@ import { type PlayerCharacterCoreTransformer, PlayerCharacterTransformer } from 
 import { registerInteractionListener } from "../../discord/handlers.js";
 import type { SageCache } from "../model/SageCache.js";
 import type { SageCommand } from "../model/SageCommand.js";
-import type { SageInteraction } from "../model/SageInteraction.js";
+import type { SageButtonInteraction, SageInteraction, SageStringSelectInteraction } from "../model/SageInteraction.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
@@ -32,7 +31,7 @@ function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuil
 }
 
 export async function loadCharacter(characterId: string): Promise<TPlayerCharacter | null> {
-	const core = await readJsonFile<TPlayerCharacterCore>(PlayerCharacterE20.createFilePath(characterId)).catch(errorReturnNull);
+	const core = await readJsonFile<TPlayerCharacterCore>(PlayerCharacterE20.createFilePath(characterId)).catch(errorReturnUndefined);
 	return loadCharacterCore(core) ?? null;
 }
 export function loadCharacterSync(characterId: string): TPlayerCharacter | null {
@@ -115,7 +114,7 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 	const saved = await character.save();
 	if (saved) {
 		const output = prepareOutput(eventCache, character);
-		const message = await channel?.send(output).catch(errorReturnNull);
+		const message = await channel?.send(output).catch(errorReturnUndefined);
 		if (message) {
 			await addOrUpdateCharacter(sageCommand, character, message);
 			if (pin && message.pinnable) {
@@ -124,7 +123,7 @@ export async function postCharacter(sageCommand: SageCommand, channel: Optional<
 		}
 	}else {
 		const output = { embeds:eventCache.resolveToEmbeds(character.toHtml()) };
-		const message = await channel?.send(output).catch(errorReturnNull);
+		const message = await channel?.send(output).catch(errorReturnUndefined);
 		if (pin && message?.pinnable) {
 			await message.pin();
 		}
@@ -390,7 +389,7 @@ function sheetTester(sageInteraction: SageInteraction): boolean {
 	return getValidE20CharacterId(customId) !== undefined;
 }
 
-async function viewHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
+async function viewHandler(sageInteraction: SageStringSelectInteraction, character: TPlayerCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
 	if (values.includes("All")) {
@@ -409,7 +408,7 @@ async function viewHandler(sageInteraction: SageInteraction<StringSelectMenuInte
 	return updateSheet(sageInteraction, character);
 }
 
-async function skillHandler(sageInteraction: SageInteraction<StringSelectMenuInteraction>, character: TPlayerCharacter): Promise<void> {
+async function skillHandler(sageInteraction: SageStringSelectInteraction, character: TPlayerCharacter): Promise<void> {
 	const activeSkill = sageInteraction.interaction.values[0];
 	character.setSheetValue("activeSkill", activeSkill);
 	await character.save();
@@ -437,7 +436,7 @@ function testEdgeSnag<T>(testValues: TEdgeSnagShift[], outValues: { edge: T, sna
 	}
 }
 
-async function rollHandler(sageInteraction: SageInteraction<ButtonInteraction>, character: TPlayerCharacter, secret = false, init = false, untrained = false): Promise<void> {
+async function rollHandler(sageInteraction: SageButtonInteraction, character: TPlayerCharacter, secret = false, init = false, untrained = false): Promise<void> {
 	let dice = "";
 	if (untrained) {
 		dice = `[d20s ${character.name} Untrained]`;

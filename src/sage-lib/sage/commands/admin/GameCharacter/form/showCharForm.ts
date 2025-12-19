@@ -1,12 +1,11 @@
-import { debug, isNilSnowflake, NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
+import { debug, isNilSnowflake, NIL_SNOWFLAKE, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { EmbedBuilder, getActionRows } from "@rsc-utils/discord-utils";
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type MessagePayloadOption } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type MessagePayloadOption } from "discord.js";
 import { createMessageEmbed } from "../../../../../discord/createMessageEmbed.js";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../../model/SageCommand.js";
-import type { SageInteraction } from "../../../../model/SageInteraction.js";
+import type { SageButtonInteraction, SageInteraction, SageStringSelectInteraction } from "../../../../model/SageInteraction.js";
 import { StatMacroProcessor } from "../../../dice/stats/StatMacroProcessor.js";
 import { createCustomId, parseCustomId } from "./customId.js";
 import { getCharToEdit } from "./getCharToEdit.js";
@@ -14,9 +13,6 @@ import { showCharImagesModal } from "./showCharImagesModal.js";
 import { showCharNamesModal } from "./showCharNamesModal.js";
 import { showCharStatsModal } from "./showCharStatsModal.js";
 import type { CharId, CharModalAction, CustomIdParts } from "./types.js";
-
-type SageButtonInteraction = SageInteraction<ButtonInteraction>;
-type SageSelectInteraction = SageInteraction<StringSelectMenuInteraction>;
 
 const SelectChar = "SelectChar";
 const SelectComp = "SelectComp";
@@ -117,7 +113,7 @@ export async function showCharForm(sageCommand: SageCommand, charId?: CharId): P
 	}
 }
 
-async function isCharFormAction(sageInteraction: SageInteraction<ButtonInteraction | StringSelectMenuInteraction>): Promise<CustomIdParts | undefined> {
+async function isCharFormAction(sageInteraction: SageButtonInteraction|SageStringSelectInteraction): Promise<CustomIdParts | undefined> {
 	const idParts = sageInteraction.parseCustomId(parseCustomId);
 	if (idParts) {
 		const { customId } = sageInteraction.interaction;
@@ -128,7 +124,7 @@ async function isCharFormAction(sageInteraction: SageInteraction<ButtonInteracti
 	return undefined;
 }
 
-async function selectCharacter(sageInteraction: SageSelectInteraction): Promise<void> {
+async function selectCharacter(sageInteraction: SageStringSelectInteraction): Promise<void> {
 	const { interaction } = sageInteraction;
 	const charId = (interaction as StringSelectMenuInteraction).values[0];
 	const char = await getCharToEdit(sageInteraction, charId);

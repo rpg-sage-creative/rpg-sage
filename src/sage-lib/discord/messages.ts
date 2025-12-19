@@ -1,5 +1,5 @@
 import { error, RenderableContent, warn, warnReturnNull, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { addInvalidWebhookUsername, DiscordKey, isDMBased, isGuildBased, isMessage, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
+import { addInvalidWebhookUsername, DiscordKey, isMessage, isUser, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
@@ -50,7 +50,7 @@ type WebhookOptions = {
 export async function sendWebhook(targetChannel: Channel, webhookOptions: WebhookOptions): Promise<Message[] | undefined> {
 	const { authorOptions, renderableContent, dialogType, files, sageCache } = webhookOptions;
 
-	if (isDMBased(targetChannel)) {
+	if (targetChannel.isDMBased()) {
 		const actor = await sageCache.validateActor();
 		if (actor.discord) {
 			return send(sageCache, targetChannel as MessageTarget, renderableContent, actor.discord);
@@ -183,7 +183,7 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: Re
 	const messages: Message[] = [];
 	const embeds = sageCache.cloneForChannel(targetChannel).resolveToEmbeds(renderableContent);
 	if (embeds.length > 2) {
-		if (isGuildBased(targetChannel)) {
+		if (isUser(targetChannel)) {
 			const embed = createMessageEmbed({ description:"*Long reply sent via direct message!*" });
 			const sent = await sendTo({ sageCache, target:targetChannel, embeds:[embed] }, { }, (err: unknown) => error(`${toHumanReadable(targetChannel)}: Notifying of sendRenderableContent DM`, err));
 			messages.push(...sent ?? []);

@@ -45,10 +45,10 @@ export async function handleImport
 		char.userId = ownerId;
 		if (attach) {
 			const { attachCharacter = _attachCharacter } = handlers;
-			await attachCharacter(sageCommand, channel ?? user, char, pin);
+			await attachCharacter(sageCommand, (channel ?? user) as MessageTarget, char, pin);
 
 		}else {
-			await handlers.postCharacter(sageCommand, channel ?? user, char, pin).catch(ex => {
+			await handlers.postCharacter(sageCommand, (channel ?? user) as MessageTarget, char, pin).catch(ex => {
 				result.error = ex;
 			});
 		}

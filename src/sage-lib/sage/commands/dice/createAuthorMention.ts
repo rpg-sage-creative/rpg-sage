@@ -16,7 +16,7 @@ export async function createAuthorMention(sageCommand: SageCommand, isSecretMent
 	}
 
 	// create a user mention
-	let authorReference = toUserMention(gameUser.did);
+	let authorReference: string | undefined = toUserMention(gameUser.did);
 
 	// if this is being posted in secret to GM /OR/ the player doesn't want pings, use a human-readable non-mention instead
 	if (isSecretMention || gameUser.dicePing === false) {

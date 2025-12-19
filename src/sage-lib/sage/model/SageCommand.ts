@@ -1,8 +1,7 @@
 import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType } from "@rsc-sage/types";
-import { Cache, debug, HasCache, isDefined, RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import type { DInteraction, DiscordCache, DRepliableInteraction, EmbedBuilder } from "@rsc-utils/discord-utils";
-import { stringOrUndefined } from "@rsc-utils/core-utils";
-import { ComponentType, InteractionType, Message, MessageContextMenuCommandInteraction, PartialGroupDMChannel, UserContextMenuCommandInteraction, type ActionRowBuilder, type AttachmentBuilder, type AutocompleteInteraction, type ButtonBuilder, type ButtonInteraction, type CommandInteraction, type HexColorString, type If, type MessageComponentInteraction, type ModalSubmitInteraction, type StringSelectMenuBuilder, type StringSelectMenuInteraction, type TextBasedChannel } from "discord.js";
+import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import type { DInteraction, DiscordCache, DRepliableInteraction, EmbedBuilder, SupportedInteraction } from "@rsc-utils/discord-utils";
+import { ComponentType, InteractionType, Message, PartialGroupDMChannel, type ActionRowBuilder, type AttachmentBuilder, type ButtonBuilder, type HexColorString, type If, type StringSelectMenuBuilder, type TextBasedChannel } from "discord.js";
 import type { LocalizedTextKey } from "../../../sage-lang/getLocalizedText.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { IChannel } from "../repo/base/IdRepository.js";
@@ -14,7 +13,7 @@ import type { EmojiType } from "./HasEmojiCore.js";
 import { ReplyStack } from "./ReplyStack.js";
 import type { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageEventCache } from "./SageEventCache.js";
-import type { SageInteraction } from "./SageInteraction.js";
+import type { SageAutocompleteInteraction, SageButtonInteraction, SageInteraction, SageMessageContextInteraction, SageModalSubmitInteraction, SageSlashCommandInteraction, SageStringSelectInteraction, SageUserContextInteraction } from "./SageInteraction.js";
 import type { SageMessage } from "./SageMessage.js";
 import type { SageReaction } from "./SageReaction.js";
 import { GameCreatorType, type Server } from "./Server.js";
@@ -83,17 +82,17 @@ export abstract class SageCommand<
 		return undefined;
 	}
 
-	public isSageInteraction(type: "BUTTON"): this is SageInteraction<ButtonInteraction>;
-	public isSageInteraction(type: "SELECT"): this is SageInteraction<StringSelectMenuInteraction>;
-	public isSageInteraction(type: "MESSAGE"): this is SageInteraction<ButtonInteraction | StringSelectMenuInteraction>;
-	public isSageInteraction(type: "TEXT"): this is SageInteraction<MessageComponentInteraction>;
-	public isSageInteraction(type: "COMPONENT"): this is SageInteraction<MessageComponentInteraction>;
-	public isSageInteraction(type: "AUTO"): this is SageInteraction<AutocompleteInteraction>;
-	public isSageInteraction(type: "MODAL"): this is SageInteraction<ModalSubmitInteraction>;
-	public isSageInteraction(type: "SLASH"): this is SageInteraction<CommandInteraction>;
-	public isSageInteraction(type: "MSG_CONTEXT"): this is SageInteraction<MessageContextMenuCommandInteraction>;
-	public isSageInteraction(type: "USR_CONTEXT"): this is SageInteraction<UserContextMenuCommandInteraction>;
-	public isSageInteraction(type: "CONTEXT"): this is SageInteraction<MessageContextMenuCommandInteraction | UserContextMenuCommandInteraction>;
+	public isSageInteraction(type: "BUTTON"): this is SageButtonInteraction;
+	public isSageInteraction(type: "SELECT"): this is SageStringSelectInteraction;
+	public isSageInteraction(type: "MESSAGE"): this is SageButtonInteraction | SageStringSelectInteraction;
+	// public isSageInteraction(type: "TEXT"): this is SageInteraction<MessageComponentInteraction>;
+	// public isSageInteraction(type: "COMPONENT"): this is SageInteraction<MessageComponentInteraction>;
+	public isSageInteraction(type: "AUTO"): this is SageAutocompleteInteraction;
+	public isSageInteraction(type: "MODAL"): this is SageModalSubmitInteraction;
+	public isSageInteraction(type: "SLASH"): this is SageSlashCommandInteraction;
+	public isSageInteraction(type: "MSG_CONTEXT"): this is SageMessageContextInteraction;
+	public isSageInteraction(type: "USR_CONTEXT"): this is SageUserContextInteraction;
+	public isSageInteraction(type: "CONTEXT"): this is SageMessageContextInteraction | SageUserContextInteraction;
 	public isSageInteraction<T extends DRepliableInteraction>(type: "REPLIABLE"): this is SageInteraction<T>;
 	public isSageInteraction<T extends DInteraction = any>(): this is SageInteraction<T>;
 	public isSageInteraction(type?: "AUTO" | "MODAL" | "SLASH" | "BUTTON" | "SELECT" | "MESSAGE" | "TEXT" | "COMPONENT" | "REPLIABLE" | "MSG_CONTEXT" | "USR_CONTEXT" | "CONTEXT"): boolean {
@@ -345,7 +344,7 @@ export abstract class SageCommand<
 	//#region channels
 
 	public get dChannel(): Exclude<TextBasedChannel, PartialGroupDMChannel> | undefined {
-		return this.isSageInteraction<CommandInteraction>()
+		return this.isSageInteraction<SupportedInteraction>()
 			? this.interaction.channel as Exclude<TextBasedChannel, PartialGroupDMChannel> ?? undefined
 			: (this as unknown as SageMessage).message?.channel;
 	}

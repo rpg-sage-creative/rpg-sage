@@ -1,6 +1,5 @@
-import { debug, isDefined, RenderableContent, type Cache, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, type DInteraction, type MessageChannel, type MessageTarget } from "@rsc-utils/discord-utils";
-import { isString } from "@rsc-utils/core-utils";
+import { debug, isDefined, isString, RenderableContent, type Cache, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordKey, type DInteraction, type MessageChannel, type MessageTarget, type SupportedAutocompleteInteraction, type SupportedButtonInteraction, type SupportedMessageContextInteraction, type SupportedModalSubmitInteraction, type SupportedSlashCommandInteraction, type SupportedStringSelectInteraction, type SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
@@ -34,6 +33,15 @@ function defaultCustomIdParser<T extends IdParts>(customId: string): T | undefin
 		? { args, indicator, userId, action} as T
 		: undefined;
 }
+
+export type SageAutocompleteInteraction = SageInteraction<SupportedAutocompleteInteraction>;
+export type SageButtonInteraction = SageInteraction<SupportedButtonInteraction>;
+// export type SageMessageComponentInteraction = SageInteraction<SupportedMessageComponentInteraction>;
+export type SageMessageContextInteraction = SageInteraction<SupportedMessageContextInteraction>;
+export type SageModalSubmitInteraction = SageInteraction<SupportedModalSubmitInteraction>;
+export type SageSlashCommandInteraction = SageInteraction<SupportedSlashCommandInteraction>;
+export type SageStringSelectInteraction = SageInteraction<SupportedStringSelectInteraction>;
+export type SageUserContextInteraction = SageInteraction<SupportedUserContextInteraction>;
 
 export class SageInteraction<T extends DInteraction = any>
 	extends SageCommand<SageInteractionCore, SageInteractionArgs>

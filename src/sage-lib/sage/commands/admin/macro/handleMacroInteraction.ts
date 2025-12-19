@@ -1,11 +1,10 @@
-import { EphemeralMap, type Snowflake } from "@rsc-utils/core-utils";
-import { quote, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalSubmitInteraction, type ButtonInteraction } from "discord.js";
+import { EphemeralMap, quote, ZERO_WIDTH_SPACE, type Snowflake } from "@rsc-utils/core-utils";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import type { LocalizedTextKey, Localizer } from "../../../../../sage-lang/getLocalizedText.js";
 import { Macro, type MacroBase } from "../../../model/Macro.js";
 import { findCharacterOrCompanion, Macros } from "../../../model/Macros.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import type { SageInteraction } from "../../../model/SageInteraction.js";
+import type { SageButtonInteraction, SageInteraction, SageModalSubmitInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { parseDiceMatches, sendDice } from "../../dice.js";
 import { StatMacroProcessor } from "../../dice/stats/StatMacroProcessor.js";
@@ -17,7 +16,7 @@ import { mCmdDetails } from "./mCmdDetails.js";
 import { mCmdList } from "./mCmdList.js";
 
 /** Responds to the Yes/No buttons when prompting to delete a macro. */
-async function handleDeleteMacro(sageInteraction: SageInteraction<ButtonInteraction>, { customIdArgs, macros, macro }: Args<true, true>): Promise<void> {
+async function handleDeleteMacro(sageInteraction: SageButtonInteraction, { customIdArgs, macros, macro }: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const isConfirmed = customIdArgs.action === "confirmDeleteMacro";
@@ -34,7 +33,7 @@ async function handleDeleteMacro(sageInteraction: SageInteraction<ButtonInteract
 }
 
 /** Prompts the user with the details of the macro and Yes/No buttons to confirm deletion. */
-async function promptDeleteMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+async function promptDeleteMacro(sageInteraction: SageButtonInteraction, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const localize = sageInteraction.getLocalizer();
@@ -111,7 +110,7 @@ function ansiDanger(sageCommand: SageCommand): string {
 }
 
 /** Prompts the user with the count of all macros and Yes/No buttons to confirm deletion. */
-async function promptDeleteAll(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+async function promptDeleteAll(sageInteraction: SageButtonInteraction, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const localize = sageInteraction.getLocalizer();
@@ -136,7 +135,7 @@ async function promptDeleteAll(sageInteraction: SageInteraction<ButtonInteractio
 }
 
 /** Responds to the Yes/No buttons when prompting to delete all macros. */
-async function handleDeleteAll(sageInteraction: SageInteraction<ButtonInteraction>, { customIdArgs, macros }: Args<true, true>): Promise<void> {
+async function handleDeleteAll(sageInteraction: SageButtonInteraction, { customIdArgs, macros }: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const isConfirmed = customIdArgs.action === "confirmDeleteAll";
@@ -153,21 +152,21 @@ async function handleDeleteAll(sageInteraction: SageInteraction<ButtonInteractio
 }
 
 /** Creates and shows the modal for editing an existing macro. */
-async function showEditMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
+async function showEditMacroModal(sageInteraction: SageButtonInteraction, args: Args<any, any>): Promise<void> {
 	// sageInteraction.replyStack.defer();
 	const modal = await createMacroModal(sageInteraction, args, "handleEditMacroModal");
 	await sageInteraction.interaction.showModal(modal);
 }
 
 /** Creates and shows the modal for create a new macro. */
-async function showNewMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<any, any>): Promise<void> {
+async function showNewMacroModal(sageInteraction: SageButtonInteraction, args: Args<any, any>): Promise<void> {
 	// sageInteraction.replyStack.defer();
 	const modal = await createMacroModal(sageInteraction, args, "handleNewMacroModal");
 	await sageInteraction.interaction.showModal(modal);
 }
 
 /** Rolls the macro in the current channel with no args. */
-async function rollMacro(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+async function rollMacro(sageInteraction: SageButtonInteraction, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 	const macro = args.macro;
 	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(macro.owner.id));
@@ -177,7 +176,7 @@ async function rollMacro(sageInteraction: SageInteraction<ButtonInteraction>, ar
 }
 
 /** Creates and shows the modal for args for rolling a macro. */
-async function showMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+async function showMacroArgs(sageInteraction: SageButtonInteraction, args: Args<true, true>): Promise<void> {
 	// sageInteraction.replyStack.defer();
 	const modal = await createMacroArgsModal(args);
 	await sageInteraction.interaction.showModal(modal);
@@ -186,7 +185,7 @@ async function showMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>
 type MacroArgsForm = { namedPairLines:string; indexedPairLines:string; [key: string]:string|undefined; };
 
 /** Handles the roll macro args modal submission and rolls the macro in the current channel with args. */
-async function rollMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+async function rollMacroArgs(sageInteraction: SageButtonInteraction, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	let { namedPairLines, indexedPairLines, ...namedPairObj } = sageInteraction.getModalForm<MacroArgsForm>() ?? {};
@@ -225,7 +224,7 @@ async function rollMacroArgs(sageInteraction: SageInteraction<ButtonInteraction>
 	await sendDice(sageInteraction, outputs);
 }
 
-async function resetControl(sageInteraction: SageInteraction<ButtonInteraction>, args: Args): Promise<void> {
+async function resetControl(sageInteraction: SageButtonInteraction, args: Args): Promise<void> {
 	await sageInteraction.replyStack.defer();
 
 	// return to selecting the macro type / owner
@@ -320,7 +319,7 @@ type MacroPair = { oldMacro:Macro, newMacro:Macro };
 const editCache = new EphemeralMap<string, MacroSinglet | MacroPair>(60 * 1000);
 // const editCache = new Map<string, { oldMacro:Macro, newMacro:Macro }>();
 
-async function handleEditMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+async function handleEditMacroModal(sageInteraction: SageButtonInteraction, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const oldMacro = args.macro;
@@ -376,7 +375,7 @@ async function promptEditMacro(sageCommand: SageCommand, args: Args<true, true>,
 	}
 }
 
-async function handleEditMacro(sageInteraction: SageInteraction<ModalSubmitInteraction>, args: Args<true, true>): Promise<void> {
+async function handleEditMacro(sageInteraction: SageModalSubmitInteraction, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const { actorId } = sageInteraction;
@@ -505,7 +504,7 @@ export async function handleSetMacro(sageMessage: SageMessage): Promise<void> {
 	return promptNewMacro(sageMessage, args, newMacro);
 }
 
-async function handleNewMacroModal(sageInteraction: SageInteraction<ButtonInteraction>, args: Args<true, true>): Promise<void> {
+async function handleNewMacroModal(sageInteraction: SageButtonInteraction, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const macroBase = sageInteraction.getModalForm<MacroBase>();
@@ -564,7 +563,7 @@ async function promptNewMacro(sageCommand: SageCommand, args: Args<true, true>, 
 	}
 }
 
-async function handleNewMacro(sageInteraction: SageInteraction<ModalSubmitInteraction>, args: Args<true>): Promise<void> {
+async function handleNewMacro(sageInteraction: SageModalSubmitInteraction, args: Args<true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 
 	const { macros, state } = args;
