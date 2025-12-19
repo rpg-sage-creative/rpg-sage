@@ -10,7 +10,7 @@ export type SMessageOrPartial = SMessage | SPartialMessage;
 export type MessageOrPartial = Message | PartialMessage;
 
 /** User or Channel you can send a message to. */
-export type MessageTarget = User | SupportedMessagesChannel;
+// export type MessageTarget = User | SupportedMessagesChannel;
 
 
 export type ReactionOrPartial = MessageReaction | PartialMessageReaction;

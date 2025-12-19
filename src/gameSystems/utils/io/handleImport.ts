@@ -1,6 +1,6 @@
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
 import type { Optional } from "@rsc-utils/core-utils";
-import type { MessageTarget } from "@rsc-utils/discord-utils";
+import type { SupportedTarget } from "@rsc-utils/discord-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import { attachCharacter as _attachCharacter } from "./attachCharacter.js";
 import { type FetchResult } from "./fetchCores.js";
@@ -11,10 +11,10 @@ type ImportHandlers<T extends CharacterBaseCore, U extends CharacterBase<T> = Ch
 	fetchCores: (sageCommand: SageCommand) => Promise<FetchResult<T>[]>;
 
 	/** Attaches the character */
-	attachCharacter?: (sageCommand: SageCommand, channel: Optional<MessageTarget>, character: U, pin: boolean) => Promise<void>;
+	attachCharacter?: (sageCommand: SageCommand, channel: Optional<SupportedTarget>, character: U, pin: boolean) => Promise<void>;
 
 	/** Posts the character */
-	postCharacter: (sageCommand: SageCommand, channel: Optional<MessageTarget>, character: U, pin: boolean) => Promise<void>;
+	postCharacter: (sageCommand: SageCommand, channel: Optional<SupportedTarget>, character: U, pin: boolean) => Promise<void>;
 };
 
 export async function handleImport
@@ -45,10 +45,10 @@ export async function handleImport
 		char.userId = ownerId;
 		if (attach) {
 			const { attachCharacter = _attachCharacter } = handlers;
-			await attachCharacter(sageCommand, (channel ?? user) as MessageTarget, char, pin);
+			await attachCharacter(sageCommand, (channel ?? user) as SupportedTarget, char, pin);
 
 		}else {
-			await handlers.postCharacter(sageCommand, (channel ?? user) as MessageTarget, char, pin).catch(ex => {
+			await handlers.postCharacter(sageCommand, (channel ?? user) as SupportedTarget, char, pin).catch(ex => {
 				result.error = ex;
 			});
 		}

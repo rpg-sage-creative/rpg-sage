@@ -1,10 +1,10 @@
 import type { CharacterBase } from "@rsc-utils/character-utils";
-import { error, errorReturnNull, type Optional } from "@rsc-utils/core-utils";
-import type { MessageTarget } from "@rsc-utils/discord-utils";
+import { error, errorReturnUndefined, type Optional } from "@rsc-utils/core-utils";
+import type { SupportedTarget } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 
-export async function attachCharacter({ eventCache }: SageCommand, target: Optional<MessageTarget>, character: CharacterBase, pin: boolean): Promise<void> {
+export async function attachCharacter({ eventCache }: SageCommand, target: Optional<SupportedTarget>, character: CharacterBase, pin: boolean): Promise<void> {
 	if (!target) {
 		return error(`Attaching a character without a target.`);
 	}
@@ -18,7 +18,7 @@ export async function attachCharacter({ eventCache }: SageCommand, target: Optio
 	const attachment = new AttachmentBuilder(buffer, options);
 	const files = [attachment];
 
-	const message = await target.send({ content, files }).catch(errorReturnNull);
+	const message = await target.send({ content, files }).catch(errorReturnUndefined);
 
 	if (pin && message?.pinnable) {
 		await message.pin();

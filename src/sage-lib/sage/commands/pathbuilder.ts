@@ -1,5 +1,5 @@
 import { errorReturnUndefined, isDefined, isNotBlank, StringMatcher, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type SupportedTarget } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { getExplorationModes, getSavingThrows, getSkills } from "../../../sage-pf2e/index.js";
 import { getCharacterSections, PathbuilderCharacter, type TCharacterSectionType, type TCharacterViewType } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
@@ -177,7 +177,7 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: Pathbuilde
 }
 
 /** posts the imported character to the channel */
-export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
+export async function postCharacter(sageCommand: SageCommand, channel: Optional<SupportedTarget>, character: PathbuilderCharacter, pin: boolean): Promise<void> {
 	const { eventCache } = sageCommand;
 	setMacroUser(character, eventCache.user);
 	const saved = await character.save();

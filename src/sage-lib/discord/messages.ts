@@ -1,5 +1,5 @@
 import { error, RenderableContent, warn, warnReturnNull, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { addInvalidWebhookUsername, DiscordKey, isMessage, isUser, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type MessageTarget, type SMessage, type SMessageOrPartial } from "@rsc-utils/discord-utils";
+import { addInvalidWebhookUsername, DiscordKey, isMessage, isUser, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedTarget } from "@rsc-utils/discord-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
@@ -53,7 +53,7 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 	if (targetChannel.isDMBased()) {
 		const actor = await sageCache.validateActor();
 		if (actor.discord) {
-			return send(sageCache, targetChannel as MessageTarget, renderableContent, actor.discord);
+			return send(sageCache, targetChannel as SupportedTarget, renderableContent, actor.discord);
 		}
 		return [];
 	}
@@ -160,7 +160,7 @@ export async function replace(sageCache: SageCache, originalMessage: SMessage, r
 	return send(sageCache, originalMessage.channel, renderableContent, originalMessage.author);
 }
 
-export async function send(sageCache: SageCache, targetChannel: MessageTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<User>): Promise<SMessage[]> {
+export async function send(sageCache: SageCache, targetChannel: SupportedTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<User>): Promise<SMessage[]> {
 	try {
 		const menuRenderable = (<IMenuRenderable>renderableContent).toMenuRenderableContent && <IMenuRenderable>renderableContent || null,
 			menuItemCount = menuRenderable?.getMenuLength() ?? 0;
@@ -179,7 +179,7 @@ export async function send(sageCache: SageCache, targetChannel: MessageTarget, r
 	return [];
 }
 
-async function sendRenderableContent(sageCache: SageCache, renderableContent: RenderableContentResolvable, targetChannel: MessageTarget, originalAuthor: Optional<User>): Promise<SMessage[]> {
+async function sendRenderableContent(sageCache: SageCache, renderableContent: RenderableContentResolvable, targetChannel: SupportedTarget, originalAuthor: Optional<User>): Promise<SMessage[]> {
 	const messages: Message[] = [];
 	const embeds = sageCache.cloneForChannel(targetChannel).resolveToEmbeds(renderableContent);
 	if (embeds.length > 2) {
@@ -199,7 +199,7 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: Re
 	return messages as SMessage[];
 }
 
-function sendMenuRenderableContent(sageCache: SageCache, menuRenderable: IMenuRenderable, targetChannel: MessageTarget, originalAuthor: Optional<User>): void {
+function sendMenuRenderableContent(sageCache: SageCache, menuRenderable: IMenuRenderable, targetChannel: SupportedTarget, originalAuthor: Optional<User>): void {
 	const menuLength = menuRenderable.getMenuLength();
 	if (menuLength > 1) {
 		sendAndAwaitReactions(sageCache, menuRenderable, targetChannel, originalAuthor).then(index => {
@@ -217,7 +217,7 @@ function sendMenuRenderableContent(sageCache: SageCache, menuRenderable: IMenuRe
 
 const TIMEOUT = "TIMEOUT";
 const TIMEOUT_MILLI = 60 * 1000;
-function sendAndAwaitReactions(sageCache: SageCache, menuRenderable: IMenuRenderable, targetChannel: MessageTarget, originalAuthor: Optional<User>): Promise<number> {
+function sendAndAwaitReactions(sageCache: SageCache, menuRenderable: IMenuRenderable, targetChannel: SupportedTarget, originalAuthor: Optional<User>): Promise<number> {
 	return new Promise<number>(async (resolve, reject) => {
 		const menuLength = menuRenderable.getMenuLength();
 		if (menuLength < 1) {

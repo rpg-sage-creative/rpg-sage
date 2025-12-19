@@ -1,5 +1,5 @@
 import { type Optional, type Snowflake, errorReturnUndefined } from "@rsc-utils/core-utils";
-import { EmbedBuilder, type MessageTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
+import { EmbedBuilder, type SupportedTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
 import { readJsonFile, readJsonFileSync } from "@rsc-utils/io-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/e20/index.js";
@@ -109,7 +109,7 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, eChar: TPlayerChar
  * posts the imported character to the channel
  * @todo implement or stub macro logic from pathbuilder and then use shared/reusable code.
  */
-export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: TPlayerCharacter, pin: boolean): Promise<void> {
+export async function postCharacter(sageCommand: SageCommand, channel: Optional<SupportedTarget>, character: TPlayerCharacter, pin: boolean): Promise<void> {
 	const { eventCache } = sageCommand;
 	const saved = await character.save();
 	if (saved) {

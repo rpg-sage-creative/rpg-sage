@@ -1,6 +1,6 @@
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type MessageTarget, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type SupportedMessagesChannel, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type SupportedMessagesChannel, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { getLocalizedText, type Localizer } from "../../../sage-lang/getLocalizedText.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
@@ -480,8 +480,8 @@ export class SageEventCache {
 		uncache(this.core);
 	}
 
-	/** Convenience method for send(SageEventCache, MessageTarget, RenderableContentResolvable, Optional<DUser>) */
-	public send(targetChannel: MessageTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<DUser>): Promise<SMessage[]> {
+	/** Convenience method for send(SageEventCache, SupportedTarget, RenderableContentResolvable, Optional<DUser>) */
+	public send(targetChannel: SupportedTarget, renderableContent: RenderableContentResolvable, originalAuthor: Optional<DUser>): Promise<SMessage[]> {
 		return send(this, targetChannel, renderableContent, originalAuthor);
 	}
 
@@ -633,7 +633,7 @@ export class SageEventCache {
 		return new SageEventCache(core);
 	}
 
-	public cloneForChannel(channel: Optional<MessageTarget>): SageEventCache {
+	public cloneForChannel(channel: Optional<SupportedTarget>): SageEventCache {
 		const core = { ...this.core };
 		if (channel) {
 			core.discordKey = DiscordKey.from(channel);

@@ -1,5 +1,5 @@
-import { errorReturnNull, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { MessageTarget } from "@rsc-utils/discord-utils";
+import { errorReturnUndefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { SupportedTarget } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from "discord.js";
 import type { GameMap } from "./GameMap.js";
 import { getMapActionEmoji, isMapAction, type MapAction } from "./MapActions.js";
@@ -40,7 +40,7 @@ function createMapComponents(gameMap: GameMap): ActionRowBuilder<ButtonBuilder>[
 }
 
 /** Attempts to render the given map. If render was successful, GameMap.save() is returned. */
-export async function renderMap(messageOrChannel: Optional<Message | MessageTarget>, gameMap: GameMap): Promise<boolean> {
+export async function renderMap(messageOrChannel: Optional<Message | SupportedTarget>, gameMap: GameMap): Promise<boolean> {
 	if (!messageOrChannel) {
 		return false;
 	}
@@ -50,8 +50,8 @@ export async function renderMap(messageOrChannel: Optional<Message | MessageTarg
 		const files = [buffer];
 		const components = createMapComponents(gameMap);
 		const message = messageOrChannel instanceof Message
-			? await messageOrChannel.edit({ content, files, components }).catch(errorReturnNull)
-			: await messageOrChannel.send({ content, files, components }).catch(errorReturnNull);
+			? await messageOrChannel.edit({ content, files, components }).catch(errorReturnUndefined)
+			: await messageOrChannel.send({ content, files, components }).catch(errorReturnUndefined);
 		if (message) {
 			gameMap.messageId = message.id as Snowflake;
 			return gameMap.save();

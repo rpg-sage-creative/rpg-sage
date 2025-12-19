@@ -1,5 +1,5 @@
 import { error, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, splitMessageOptions, type EmbedResolvable, type MessageTarget, type SplitOptions } from "@rsc-utils/discord-utils";
+import { DiscordApiError, splitMessageOptions, type EmbedResolvable, type SplitOptions, type SupportedTarget } from "@rsc-utils/discord-utils";
 import { ActionRow, Attachment, AttachmentBuilder, Message, Webhook, type MessageActionRowComponent } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { DialogType } from "../sage/repo/base/IdRepository.js";
@@ -15,7 +15,7 @@ type SendToArgs = {
 	files?: AttachmentResolvable[];
 	replyingTo?: string;
 	sageCache: SageCache;
-	target: MessageTarget | Webhook;
+	target: SupportedTarget | Webhook;
 	threadId?: Snowflake;
 	username?: string;
 };

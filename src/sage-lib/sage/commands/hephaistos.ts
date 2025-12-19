@@ -1,5 +1,5 @@
 import { errorReturnUndefined, isDefined, isNotBlank, StringMatcher, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type MessageTarget } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type SupportedTarget } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { SavingThrow } from "../../../gameSystems/d20/lib/SavingThrow.js";
 import { HephaistosCharacterSF1e, type CharacterSectionType, type CharacterViewType } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";
@@ -178,7 +178,7 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, hChar: HephaistosC
 }
 
 /** posts the imported character to the channel */
-export async function postCharacter(sageCommand: SageCommand, channel: Optional<MessageTarget>, character: HephaistosCharacterSF1e, pin: boolean): Promise<void> {
+export async function postCharacter(sageCommand: SageCommand, channel: Optional<SupportedTarget>, character: HephaistosCharacterSF1e, pin: boolean): Promise<void> {
 	const { eventCache } = sageCommand;
 	setMacroUser(character, eventCache.user);
 	const saved = await character.save();

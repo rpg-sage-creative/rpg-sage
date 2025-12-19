@@ -1,7 +1,7 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath } from "@rsc-utils/dice-utils";
-import type { MessageTarget, SupportedMessagesChannel } from "@rsc-utils/discord-utils";
+import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -23,7 +23,7 @@ import { sendDiceToMultiple } from "./dice/sendDiceToMultiple.js";
 import { sendDiceToSingle } from "./dice/sendDiceToSingle.js";
 import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
 
-type TGmChannel = Optional<MessageTarget>;
+type TGmChannel = Optional<SupportedTarget>;
 
 type BaseParseOptions = {
 	processor: StatMacroProcessor;

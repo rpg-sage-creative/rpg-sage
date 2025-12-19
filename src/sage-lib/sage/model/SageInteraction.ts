@@ -1,5 +1,5 @@
 import { debug, isDefined, isString, RenderableContent, type Cache, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey, type MessageTarget, type SupportedAutocompleteInteraction, type SupportedButtonInteraction, type SupportedInteraction, type SupportedMessageContextInteraction, type SupportedMessagesChannel, type SupportedModalSubmitInteraction, type SupportedSlashCommandInteraction, type SupportedStringSelectInteraction, type SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
+import { DiscordKey, type SupportedAutocompleteInteraction, type SupportedButtonInteraction, type SupportedInteraction, type SupportedMessageContextInteraction, type SupportedMessagesChannel, type SupportedModalSubmitInteraction, type SupportedSlashCommandInteraction, type SupportedStringSelectInteraction, type SupportedTarget, type SupportedUserContextInteraction } from "@rsc-utils/discord-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import type { SlashCommandGameType } from "../../../app-commands/types.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
@@ -227,9 +227,9 @@ export class SageInteraction<T extends SupportedInteraction = any>
 
 	/** Sends a full message to the channel or user the interaction originated in. */
 	public send(renderableContentResolvable: RenderableContentResolvable): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageTarget): Promise<Message[]>;
-	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: MessageTarget, originalAuthor: User): Promise<Message[]>;
-	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.interaction.channel as MessageTarget, originalAuthor = this.interaction.user): Promise<Message[]> {
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: SupportedTarget): Promise<Message[]>;
+	public send(renderableContentResolvable: RenderableContentResolvable, targetChannel: SupportedTarget, originalAuthor: User): Promise<Message[]>;
+	public async send(renderableContentResolvable: RenderableContentResolvable, targetChannel = this.interaction.channel as SupportedTarget, originalAuthor = this.interaction.user): Promise<Message[]> {
 		const canSend = await this.canSend(targetChannel);
 		if (!canSend) {
 			return [];
@@ -241,7 +241,7 @@ export class SageInteraction<T extends SupportedInteraction = any>
 		}
 		return [];
 	}
-	public async canSend(targetChannel = this.interaction.channel as MessageTarget): Promise<boolean> {
+	public async canSend(targetChannel = this.interaction.channel as SupportedTarget): Promise<boolean> {
 		return this.eventCache.canSendMessageTo(DiscordKey.from(targetChannel));
 	}
 
