@@ -1,5 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import type { AutocompleteInteraction, ButtonInteraction, CategoryChannel, Channel, ChannelSelectMenuInteraction, ChannelType, ChatInputCommandInteraction, DMChannel, ForumChannel, Interaction, MentionableSelectMenuInteraction, Message, MessageContextMenuCommandInteraction, ModalSubmitInteraction, PartialUser, PrimaryEntryPointCommandInteraction, PrivateThreadChannel, PublicThreadChannel, RoleSelectMenuInteraction, StringSelectMenuInteraction, TextChannel, User, UserContextMenuCommandInteraction, UserSelectMenuInteraction, VoiceChannel } from "discord.js";
+import type { AutocompleteInteraction, ButtonInteraction, CacheType, CategoryChannel, Channel, ChannelSelectMenuInteraction, ChannelType, ChatInputCommandInteraction, DMChannel, ForumChannel, Interaction, MentionableSelectMenuInteraction, Message, MessageContextMenuCommandInteraction, ModalSubmitInteraction, PartialUser, PrimaryEntryPointCommandInteraction, PrivateThreadChannel, PublicThreadChannel, RoleSelectMenuInteraction, StringSelectMenuInteraction, TextChannel, User, UserContextMenuCommandInteraction, UserSelectMenuInteraction, VoiceChannel } from "discord.js";
 
 export type SupportedCategoryChannel = CategoryChannel & { id:Snowflake; };
 export type SupportedDMChannel = DMChannel & { id:Snowflake; };
@@ -98,30 +98,33 @@ export type HasTargetMessage = { targetMessage: Message & { channel:SupportedMes
 
 export type SupportedSlashCommandInteraction = ChatInputCommandInteraction & MightHaveChannel;
 
-export type SupportedMessageContextInteraction = MessageContextMenuCommandInteraction & MightHaveChannel & HasTargetMessage;
-export type SupportedUserContextInteraction = UserContextMenuCommandInteraction & MightHaveChannel;
+export type SupportedMessageContextInteraction<Cached extends CacheType = CacheType> = MessageContextMenuCommandInteraction<Cached> & MightHaveChannel & HasTargetMessage;
+export type SupportedUserContextInteraction<Cached extends CacheType = CacheType> = UserContextMenuCommandInteraction<Cached> & MightHaveChannel;
 
-export type SupportedChannelSelectInteraction = ChannelSelectMenuInteraction & MightHaveChannel & HasMessage;
-export type SupportedMentionableSelectInteraction = MentionableSelectMenuInteraction & MightHaveChannel & HasMessage;
-export type SupportedRoleSelectInteraction = RoleSelectMenuInteraction & MightHaveChannel & HasMessage;
-export type SupportedStringSelectInteraction = StringSelectMenuInteraction & MightHaveChannel & HasMessage;
-export type SupportedUserSelectInteraction = UserSelectMenuInteraction & MightHaveChannel & HasMessage;
+export type SupportedChannelSelectInteraction<Cached extends CacheType = CacheType> = ChannelSelectMenuInteraction<Cached> & MightHaveChannel & HasMessage;
+export type SupportedMentionableSelectInteraction<Cached extends CacheType = CacheType> = MentionableSelectMenuInteraction<Cached> & MightHaveChannel & HasMessage;
+// export type SupportedMessageComponentInteraction<Cached extends CacheType = CacheType> = MessageComponentInteraction<Cached> & MightHaveChannel & HasMessage;
+export type SupportedRoleSelectInteraction<Cached extends CacheType = CacheType> = RoleSelectMenuInteraction<Cached> & MightHaveChannel & HasMessage;
+export type SupportedStringSelectInteraction<Cached extends CacheType = CacheType> = StringSelectMenuInteraction<Cached> & MightHaveChannel & HasMessage;
+export type SupportedUserSelectInteraction<Cached extends CacheType = CacheType> = UserSelectMenuInteraction<Cached> & MightHaveChannel & HasMessage;
 
-export type SupportedButtonInteraction = ButtonInteraction & MightHaveChannel & HasMessage;
+export type SupportedButtonInteraction<Cached extends CacheType = CacheType> = ButtonInteraction<Cached> & MightHaveChannel & HasMessage;
 
-export type SupportedAutocompleteInteraction = AutocompleteInteraction & MightHaveChannel;
+export type SupportedAutocompleteInteraction<Cached extends CacheType = CacheType> = AutocompleteInteraction<Cached> & MightHaveChannel;
 
-export type SupportedModalSubmitInteraction = ModalSubmitInteraction & MightHaveChannel & MightHaveMessage;
+export type SupportedModalSubmitInteraction<Cached extends CacheType = CacheType> = ModalSubmitInteraction<Cached> & MightHaveChannel & MightHaveMessage;
 
-export type SupportedEntryPointInteraction = PrimaryEntryPointCommandInteraction & MightHaveChannel;
+export type SupportedEntryPointInteraction<Cached extends CacheType = CacheType> = PrimaryEntryPointCommandInteraction<Cached> & MightHaveChannel;
 
-export type SupportedInteraction = SupportedSlashCommandInteraction
-	| SupportedMessageContextInteraction | SupportedUserContextInteraction
-	| SupportedChannelSelectInteraction | SupportedMentionableSelectInteraction | SupportedRoleSelectInteraction | SupportedStringSelectInteraction | SupportedUserSelectInteraction
-	| SupportedButtonInteraction
-	| SupportedAutocompleteInteraction
-	| SupportedModalSubmitInteraction
-	| SupportedEntryPointInteraction;
+export type SupportedInteraction<Cached extends CacheType = CacheType> = SupportedSlashCommandInteraction
+	| SupportedMessageContextInteraction<Cached> | SupportedUserContextInteraction<Cached>
+	| SupportedChannelSelectInteraction<Cached> | SupportedMentionableSelectInteraction<Cached>
+		// | SupportedMessageComponentInteraction<Cached>
+		| SupportedRoleSelectInteraction<Cached> | SupportedStringSelectInteraction<Cached> | SupportedUserSelectInteraction<Cached>
+	| SupportedButtonInteraction<Cached>
+	| SupportedAutocompleteInteraction<Cached>
+	| SupportedModalSubmitInteraction<Cached>
+	| SupportedEntryPointInteraction<Cached>;
 export function isSupportedInteraction(interaction: Optional<Interaction>): interaction is SupportedInteraction {
 	if (!interaction) return false;
 
@@ -138,7 +141,7 @@ export function isSupportedInteraction(interaction: Optional<Interaction>): inte
 	return true;
 }
 
-export type SupportedRepliableInteraction = Exclude<SupportedInteraction, SupportedAutocompleteInteraction>;
+export type SupportedRepliableInteraction<Cached extends CacheType = CacheType> = Exclude<SupportedInteraction<Cached>, SupportedAutocompleteInteraction>;
 export function isSupportedRepliableInteraction(interaction: Optional<Interaction>): interaction is SupportedRepliableInteraction {
 	return isSupportedInteraction(interaction) && interaction.isRepliable();
 }
