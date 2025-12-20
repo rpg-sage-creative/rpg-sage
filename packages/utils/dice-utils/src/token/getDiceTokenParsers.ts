@@ -5,6 +5,10 @@ import { DiceExplode } from "../manipulate/DiceExplode.js";
 import { DiceThreshold } from "../manipulate/DiceThreshold.js";
 import { getDiceRegex } from "./getDiceRegex.js";
 
+const NoSortRegExp = /(ns)/i;
+const ModRegExp = /([-+*/])\s*(\d+)(?!d\d)/i;
+const QuotesRegExp = /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/;
+
 /** Returns a new object with the default dice parsers for use with Tokenizer */
 export function getDiceTokenParsers(): TokenParsers {
 	return {
@@ -12,9 +16,9 @@ export function getDiceTokenParsers(): TokenParsers {
 		...DiceDropKeep.getParsers(),
 		...DiceThreshold.getParsers(),
 		...DiceExplode.getParsers(),
-		noSort: /(ns)/i,
-		mod: /([-+*/])\s*(\d+)(?!d\d)/i,
-		quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
+		noSort: NoSortRegExp,
+		mod: ModRegExp,
+		quotes: QuotesRegExp,
 		...DiceTest.getParsers()
 	};
 }
