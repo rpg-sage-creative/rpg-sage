@@ -60,11 +60,6 @@
 		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.5.4",
 		"@rsc-utils/discord-utils": "rpg-sage-creative/discord-utils#v0.4.4",
 		"discord.js": "^14.25.1",
-		"emoji-regex-xs": "^1.0.0",
-		"exifreader": "^4.33.1",
-		"follow-redirects": "^1.15.11",
-		"image-size": "^1.2.1",
-		"pdf2json": "^3.2.2",
 		"regex": "^6.1.0",
 		"xregexp": "5.1.1"
 	},
