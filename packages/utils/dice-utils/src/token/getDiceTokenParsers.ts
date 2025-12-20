@@ -1,3 +1,4 @@
+import { QuotedContentRegExp } from "@rsc-utils/core-utils";
 import { DiceTest } from "../DiceTest.js";
 import type { TokenParsers } from "../internal/tokenize.js";
 import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
@@ -7,7 +8,6 @@ import { getDiceRegex } from "./getDiceRegex.js";
 
 const NoSortRegExp = /(ns)/i;
 const ModRegExp = /([-+*/])\s*(\d+)(?!d\d)/i;
-const QuotesRegExp = /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/;
 
 /** Returns a new object with the default dice parsers for use with Tokenizer */
 export function getDiceTokenParsers(): TokenParsers {
@@ -18,7 +18,7 @@ export function getDiceTokenParsers(): TokenParsers {
 		...DiceExplode.getParsers(),
 		noSort: NoSortRegExp,
 		mod: ModRegExp,
-		quotes: QuotesRegExp,
+		quotes: QuotedContentRegExp,
 		...DiceTest.getParsers()
 	};
 }
