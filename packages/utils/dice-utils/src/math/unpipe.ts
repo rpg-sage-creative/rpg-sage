@@ -1,6 +1,6 @@
 import type { Optional } from "@rsc-utils/core-utils";
 
-const pipeRegex = /\|{2}[^|]+\|{2}/g;
+const pipeRegex = /\|\|[^|]+\|\|/g;
 
 export type UnpipeResults<IsOptional extends boolean = false> = {
 	hasPipes: boolean;
@@ -30,4 +30,18 @@ export function unpipe(value: Optional<string>): UnpipeResults<any> {
 		: value;
 
 	return { hasPipes, unpiped };
+}
+
+const NestedPipeRegExp = /\|\|.*?\|\|[^|]+\|\|.*?\|\|/;
+const NestedPipeRegExpG = new RegExp(NestedPipeRegExp, "g");
+
+/** Cleans instances of nested pipes by removing inner pipes. */
+export function cleanPipes(value: string): string {
+	while (NestedPipeRegExp.test(value)) {
+		value = value.replace(NestedPipeRegExpG, outer => {
+			const { unpiped } = unpipe(outer.slice(2, -2));
+			return `||${unpiped}||`;
+		});
+	}
+	return value;
 }

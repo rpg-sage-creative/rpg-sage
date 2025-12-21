@@ -1,77 +1,52 @@
-import { xRegExp } from "../internal/xRegExp.js";
-import { getNumberRegex } from "./getNumberRegex.js";
+import { regex } from "regex";
 import { unpipe } from "./unpipe.js";
+import { evalMath } from "./evalMath.js";
 
-type Options = {
-	allowSpoilers?: boolean;
-	globalFlag?: boolean;
-};
+export const PosNegNumberRegExp = regex()`
+	(
+		[\-+]  # pos/neg
+		\s*    # optional space
+	){2,}      # two or more
+	\d+        # integer
+	(\.\d+)?   # optional decimal
+`;
 
-/** Returns a regular expression that finds tests for only simple math operations. */
-export function getPosNegRegex(options?: Options): RegExp {
-	const flags = options?.globalFlag ? "xgi" : "xi";
-	const numberRegex = getNumberRegex({ allowSpoilers:options?.allowSpoilers }).source;
-	const posNegRegex = `
-		(?:
-			(?:[-+]\\s*){2,}      # extra pos/neg signs
-			${numberRegex}        # pos/neg decimal number
-		)
-	`;
-	const spoilered = options?.allowSpoilers
-		? `(?:${posNegRegex}|\\|\\|${posNegRegex}\\|\\|)`
-		: `(?:${posNegRegex})`;
+export const OrSpoileredPosNegNumberRegExp = regex()`
+	\|\| ${PosNegNumberRegExp} \|\|
+	|
+	${PosNegNumberRegExp}
+`;
 
-	return xRegExp(spoilered, flags);
-}
+const OrSpoileredPosNegNumberRegExpG = new RegExp(OrSpoileredPosNegNumberRegExp, "g");
 
-/** Attempts to do the math and returns true if the result was not null. */
-export function hasPosNeg(value: string, options?: Omit<Options, "globalFlag">): boolean {
-	return getPosNegRegex(options).test(value);
+/** for prepPosNegSigns() */
+const SpacerRegExpG = /-+|\++/g;
+
+/** by spacing the -- or ++ characters, the eval can properly process them */
+export function prepPosNegSigns(input: string): string {
+	return input.replace(SpacerRegExpG, signs => signs.split("").join(" "));
 }
 
 /**
- * Ensures the value has only mathematical characters before performing an eval to get the math results.
- * Valid math symbols: [-+/*%^] and spaces and numbers.
- * Returns undefined if the value isn't simple math.
- * Returns null if an error occurred during eval().
+ * Properly converts strings of pos / neg signs to the final (correct) sign.
+ * Any eval() resulting in null, undefined, or NaN will have "(NaN)" instead of a numeric result.
+ * Any eval() that throws an error will have "(ERR)" instead of a numeric result.
  */
-export function doPosNeg(input: string, options?: Omit<Options, "globalFlag">): string {
+export function doPosNeg(input: string): string {
 	let output = input;
-	const regex = getPosNegRegex({ globalFlag:true, allowSpoilers:options?.allowSpoilers });
-	while (regex.test(output)) {
-		output = output.replace(regex, value => {
+
+	// iterate while we have matches
+	while (OrSpoileredPosNegNumberRegExp.test(output)) {
+		// replace all matches
+		output = output.replace(OrSpoileredPosNegNumberRegExpG, value => {
 			const { hasPipes, unpiped } = unpipe(value);
 
-			const retVal = (result: string) => {
-				return hasPipes ? `||${result}||` : result;
-			};
+			// by spacing the -- or ++ characters, the eval can properly process them
+			const prepped = prepPosNegSigns(unpiped);
 
-			try {
+			const result = evalMath(prepped);
 
-				// by spacing the -- or ++ characters, the eval can properly process them
-				const prepped = unpiped.replace(/-+|\++/g, s => s.split("").join(" "));
-
-				// do the math
-				const outValue = eval(prepped);
-
-				// it is possible to eval to undefined, treat as an error
-				if (outValue === null || outValue === undefined || isNaN(outValue)) {
-					return retVal(`(NaN)`);
-				}
-
-				// if the evaluated number is a negative, it will start with -, allowing math/parsing to continue
-				// therefore, we should leave a + if a sign was present before the eval() call and the result is positive
-				const outStringValue = String(outValue);//.trim();
-				const signRegex = /^[+-]/;
-				const result = signRegex.test(prepped.trim()) && !signRegex.test(outStringValue)
-					? `+${outStringValue}`
-					: outStringValue;
-
-				return retVal(result);
-
-			}catch(ex) {
-				return retVal(`(ERR)`);
-			}
+			return hasPipes ? `||${result}||` : result;
 		});
 	}
 	return output;

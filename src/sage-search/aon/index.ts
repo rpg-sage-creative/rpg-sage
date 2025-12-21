@@ -1,8 +1,6 @@
+import { escapeRegex, stringifyJson, StringMatcher } from "@rsc-utils/core-utils";
 import { getText } from "@rsc-utils/io-utils";
-import { stringify } from "@rsc-utils/core-utils";
-import { StringMatcher } from "@rsc-utils/core-utils";
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import XRegExp from "xregexp";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import type { SearchResults } from "../SearchResults.js";
 
 export type TResultsLink = {
@@ -96,7 +94,7 @@ function parseResultsHtml(html: string, writeDevCache: boolean): TResultsLink[] 
 		});
 	});
 	if (writeDevCache) {
-		writeFileSync("../aon-results.json", stringify(results));
+		writeFileSync("../aon-results.json", stringifyJson(results));
 	}
 	return results;
 }
@@ -110,7 +108,7 @@ export async function getSearchResultsLinks(url: string, useDevCache = false): P
 
 export function sortSearchResults(searchResults: SearchResults): void {
 	const searchText = searchResults.searchInfo.searchText;
-	const escapedSearchText = XRegExp.escape(searchText);
+	const escapedSearchText = escapeRegex(searchText);
 
 	const stringMatcher = StringMatcher.from(searchText);
 	const nameMatches = searchResults.scores.filter(score => score.searchable.matches(stringMatcher));

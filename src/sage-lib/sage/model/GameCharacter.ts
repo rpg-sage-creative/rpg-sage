@@ -892,7 +892,7 @@ export class GameCharacter {
 			const { key:casedKey, value:statValue } = this.getStat(statKey, true);
 			if (statValue) {
 				const retKey = `signed.${casedKey}`;
-				const mathed = processMath(statValue, { allowSpoilers:true });
+				const mathed = processMath(statValue);
 				const numberValue = numberOrUndefined(mathed);
 				if (numberValue === undefined) {
 					return ret(retKey, `signed(${statValue})`);
@@ -948,7 +948,7 @@ export class GameCharacter {
 				const abilityValue = this.getString(ability.key);
 				if (isDefined(abilityValue)) {
 					const retKey = isAbbr ? ability.abbr : `mod.${ability.name}`;
-					return ret(retKey, processMath(`floor((${abilityValue}-10)/2)`, { allowSpoilers:true }));
+					return ret(retKey, processMath(`floor((${abilityValue}-10)/2)`));
 				}
 			}
 		}

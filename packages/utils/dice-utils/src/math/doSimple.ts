@@ -1,110 +1,86 @@
-import { getOrCreateRegex } from "@rsc-utils/core-utils";
-import { xRegExp } from "../internal/xRegExp.js";
-import { getNumberRegex } from "./getNumberRegex.js";
+import { NumberRegExp } from "@rsc-utils/core-utils";
+import { regex } from "regex";
+import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
+import { evalMath } from "./evalMath.js";
 import { unpipe } from "./unpipe.js";
 
-type Options = {
-	allowSpoilers?: boolean;
-	gFlag?: "g"|"";
-};
+export const SimpleMathRegExp = regex()`
+	(?<! \w )                    # ignore the entire thing if preceded a word character
+	(
+		\g<orWrappedNumber>      # pos/neg decimal number
+		\g<additionalMath>+      # required additional math
+		|
+		${OrSpoileredPosNegNumberRegExp} # decimal number w/ multiple +/- chars
+		\g<additionalMath>*              # optional additional math
+	)
+	(?! \w )                     # ignore the entire thing if followed a word character
 
-/** Returns a regular expression that finds tests for only simple math operations. */
-function createSimpleRegex(options?: Options): RegExp {
-	const flags = options?.gFlag ? "xgi" : "xi";
-	const numberRegex = getNumberRegex({ allowSpoilers:options?.allowSpoilers }).source;
-	const orWrappedNumberRegex = `(?:\\(\\s*${numberRegex}\\s*\\)|${numberRegex})`;
-	const additionalMathRegex = `
-		(?:                          # open group for operands/numbers
-			\\s*                     # optional whitespace
-			[-+/*%^]                 # operator
-			[-+\\s]*                 # possible extra pos/neg signs
-			${orWrappedNumberRegex}  # pos/neg decimal number
-		)                            # close group for operands/numbers
-	`;
-	const simpleRegex = `
-		(?:
-			${orWrappedNumberRegex}  # pos/neg decimal number
-			${additionalMathRegex}+  # required additional math
-			|
-			(?:[-+]\\s*){2,}         # extra pos/neg signs
-			${numberRegex}           # pos/neg decimal number
-			${additionalMathRegex}*  # optional additional math
+	(?(DEFINE)
+		(?<number> ${NumberRegExp} )
+		(?<orSpoileredNumber> \|\| \g<number> \|\| | \g<number> )
+		(?<orWrappedNumber> \( \g<orSpoileredNumber> \) | \g<orSpoileredNumber> )
+		(?<additionalMath>
+			\s*                  # optional whitespace
+			[\-+\/*%^]           # operator
+			[\-+\s]*             # possible extra pos/neg signs
+			\g<orWrappedNumber>  # pos/neg decimal number
 		)
-	`;
-	// const wrapped
-	const spoilered = options?.allowSpoilers
-		? `(?:${simpleRegex}|\\|\\|${simpleRegex}\\|\\|)`
-		: `(?:${simpleRegex})`;
+	)
+`;
 
-	return xRegExp(`
-		(?<!\\w)       # ignore the entire thing if preceded by dY or XdY
-		${spoilered}
-		(?!\\w)        # ignore the entire thing if followed by dY or XdY
-	`, flags);
+export const OrSpoileredSimpleMathRegExp = regex()`
+	\|\| ${SimpleMathRegExp} \|\|
+	|
+	${SimpleMathRegExp}
+`;
+
+const SimpleMathRegExpG = new RegExp(SimpleMathRegExp, "g");
+
+/**
+ * @internal
+ * Tests the value against a simple math regex using the given options.
+ */
+export function hasSimple(value: string): boolean {
+	return SimpleMathRegExp.test(value);
 }
 
-export function getSimpleRegex(options?: Options): RegExp {
-	return getOrCreateRegex(createSimpleRegex, options);
-}
-
-/** Attempts to do the math and returns true if the result was not null. */
-export function hasSimple(value: string, { allowSpoilers }: Omit<Options, "globalFlag"> = { }): boolean {
-	return getSimpleRegex({ allowSpoilers }).test(value);
-}
-
+/** for unwrapNumbers() */
 const unwrapper = /\(\s*\d+\s*\)/g;
+
+/** unwraps whole numbers; (4) becomes 4 */
 function unwrapNumbers(input: string): string {
 	return input.replace(unwrapper, match => match.slice(1, -1));
 }
 
+/** for prepExponents() */
+const caretMatcher = /\^/g;
+
+/** replace the caret (math exponent) with ** (code exponent) */
+function prepExponents(input: string): string {
+	return input.replace(caretMatcher, "**");
+}
+
 /**
- * Ensures the value has only mathematical characters before performing an eval to get the math results.
+ * @internal
+ * Replaces all instances of simple math with the resulting calculated value.
  * Valid math symbols: [-+/*%^] and spaces and numbers.
- * Returns undefined if the value isn't simple math.
- * Returns null if an error occurred during eval().
+ * Any math resulting in null, undefined, or NaN will have "(NaN)" instead of a numeric result.
+ * Any math that throws an error will have "(ERR)" instead of a numeric result.
  */
-export function doSimple(input: string, options?: Omit<Options, "globalFlag">): string {
+export function doSimple(input: string): string {
 	let output = input;
-	const regex = getSimpleRegex({ gFlag:"g", allowSpoilers:options?.allowSpoilers });
-	while (regex.test(output)) {
-		output = output.replace(regex, value => {
+
+	// iterate while we have matches
+	while (SimpleMathRegExp.test(output)) {
+		// replace all matches
+		output = output.replace(SimpleMathRegExpG, value => {
 			const { hasPipes, unpiped } = unpipe(unwrapNumbers(value));
 
-			const retVal = (result: string) => {
-				return hasPipes ? `||${result}||` : result;
-			};
+			const prepped = prepExponents(prepPosNegSigns(unpiped));
 
-			try {
+			const result = evalMath(prepped);
 
-				const prepped = unpiped
-
-					// by spacing the -- or ++ characters, the eval can properly process them
-					.replace(/-+|\++/g, s => s.split("").join(" "))
-
-					// replace the caret (math exponent) with ** (code exponent)
-					.replace(/\^/g, "**");
-
-				// do the math
-				const outValue = eval(prepped);
-
-				// it is possible to eval to undefined, treat as an error
-				if (outValue === null || outValue === undefined || isNaN(outValue)) {
-					return retVal(`(NaN)`);
-				}
-
-				// if the evaluated number is a negative, it will start with -, allowing math/parsing to continue
-				// therefore, we should leave a + if a sign was present before the eval() call and the result is positive
-				const outStringValue = String(outValue);//.trim();
-				const signRegex = /^[+-]/;
-				const result = signRegex.test(prepped.trim()) && !signRegex.test(outStringValue)
-					? `+${outStringValue}`
-					: outStringValue;
-
-				return retVal(result);
-
-			}catch(ex) {
-				return retVal(`(ERR)`);
-			}
+			return hasPipes ? `||${result}||` : result;
 		});
 	}
 	return output;

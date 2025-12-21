@@ -1,7 +1,6 @@
-import { debug, isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
-import { StringMatcher, dequote } from "@rsc-utils/core-utils";
+import { StringMatcher, debug, dequote, isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import type { Guild } from "discord.js";
-import XRegExp from "xregexp";
+import { regex } from "regex";
 import { COL, LayerType, ROW, type TGameMapAura, type TGameMapCore, type TGameMapImage } from "./GameMapBase.js";
 import { RenderableGameMap } from "./RenderableGameMap.js";
 
@@ -86,7 +85,7 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 
 	// look for proper tag match
 	const tag = `${username}#${discriminator ?? "0"}`;
-	const tagRegex = XRegExp(XRegExp.escape(tag), "i");
+	const tagRegex = regex("i")`${tag}`;
 	const tagMatch = guild.members.cache.find(member => tagRegex.test(member.user.tag));
 	if (tagMatch) {
 		debug(`parseUser match: tag = "${tag}"`);
@@ -94,7 +93,7 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 	}
 
 	// look for username, displayName, and nickname matches and only return a singleton
-	const usernameRegex = XRegExp(XRegExp.escape(username), "i");
+	const usernameRegex = regex("i")`${username}`;
 	const usernameMatches = Array.from(guild.members.cache.filter(member => {
 		if (usernameRegex.test(member.user.username)) {
 			debug(`parseUser match: username = "${member.user.username}"`);

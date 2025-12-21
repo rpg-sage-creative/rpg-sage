@@ -1,5 +1,5 @@
 import { isDefined, toUniqueDefined } from "@rsc-utils/core-utils";
-import XRegExp from "xregexp";
+import { regex } from "regex";
 
 export interface IHasSave {
 	save(): Promise<boolean>;
@@ -29,8 +29,8 @@ export class NamedCollection<T extends IHasName> extends Array<T> {
 		if (!name) {
 			return undefined;
 		}
-		const regex = XRegExp(`^${XRegExp.escape(name)}$`, ignoreCase ? "i" : undefined);
-		return this.find(value => regex.test(value.name));
+		const regexp = regex(ignoreCase ? "i" : undefined)`^${name}$`;
+		return this.find(value => regexp.test(value.name));
 	}
 
 	/** We likely don't want a NamedCollection if we map to a non-named value. */

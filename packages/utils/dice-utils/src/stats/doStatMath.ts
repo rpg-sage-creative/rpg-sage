@@ -1,8 +1,7 @@
 import { tokenize } from "../internal/tokenize.js";
-import { getComplexRegex } from "../math/doComplex.js";
-import { doPosNeg, getPosNegRegex } from "../math/doPosNeg.js";
-import { getSimpleRegex } from "../math/doSimple.js";
-// import { getWrappedMathRegex } from "../math/doWrappedMath.js";
+import { ComplexMathRegExp } from "../math/doComplex.js";
+import { doPosNeg, PosNegNumberRegExp } from "../math/doPosNeg.js";
+import { SimpleMathRegExp } from "../math/doSimple.js";
 import { processMath } from "../math/processMath.js";
 
 /**
@@ -13,21 +12,18 @@ import { processMath } from "../math/processMath.js";
  * (Primarily for hiding values, such as AC.)
  */
 export function doStatMath(value: string): string {
-	const options = { allowSpoilers:true };
 	const parsers = {
-		complex: getComplexRegex(options),
-		// wrapped: getWrappedMathRegex(options),
-		simple: getSimpleRegex(options),
-		posNeg: getPosNegRegex(options),
+		complex: ComplexMathRegExp,
+		simple: SimpleMathRegExp,
+		posNeg: PosNegNumberRegExp,
 	};
 	const tokens = tokenize(value, parsers);
 	// process other math functions on non-dice parts of the value
 	const processed = tokens.map(({ token, key }) => {
 		switch(key) {
-			case "complex": return processMath(token, options);
-			// case "wrapped": return processMath(token, options);
-			case "simple": return processMath(token, options);
-			case "posNeg": return doPosNeg(token, options);
+			case "complex": return processMath(token);
+			case "simple": return processMath(token);
+			case "posNeg": return doPosNeg(token);
 			default: return token;
 		}
 	});

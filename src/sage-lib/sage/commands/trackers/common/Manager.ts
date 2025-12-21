@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import XRegExp from "xregexp";
+import { regex } from "regex";
 import type { CharacterShell } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";
 import type { HasCharacters } from "./HasCharacters.js";
@@ -45,8 +45,8 @@ export abstract class Manager<Core extends Base, Class extends BaseClass> {
 		if (!value) {
 			return null;
 		}
-		const regex = new RegExp(`^${XRegExp.escape(value)}$`, "i");
-		const core = this.cores.find(core => regex.test(core.id) || regex.test(core.name));
+		const regexp = regex("i")`^${value}$`;
+		const core = this.cores.find(core => regexp.test(core.id) || regexp.test(core.name));
 		return core ? this.wrap(core) : null;
 	}
 
@@ -59,16 +59,16 @@ export abstract class Manager<Core extends Base, Class extends BaseClass> {
 
 	public has(classOrValue: string | Class): boolean {
 		const value = typeof(classOrValue) === "string" ? classOrValue : classOrValue.id;
-		const regex = new RegExp(`^${XRegExp.escape(value)}$`, "i");
-		return !!this.cores.find(core => regex.test(core.id) || regex.test(core.name));
+		const regexp = regex("i")`^${value}$`;
+		return this.cores.some(core => regexp.test(core.id) || regexp.test(core.name));
 	}
 
 	public remove(value: string): boolean {
 		if (!this.has(value)) {
 			return false;
 		}
-		const regex = new RegExp(`^${XRegExp.escape(value)}$`, "i");
-		this.cores = this.cores.filter(p => !regex.test(p.id) && !regex.test(p.name));
+		const regexp = regex("i")`^${value}$`;
+		this.cores = this.cores.filter(p => !regexp.test(p.id) && !regexp.test(p.name));
 		this.changed();
 		return true;
 	}

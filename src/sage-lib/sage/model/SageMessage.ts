@@ -1,7 +1,7 @@
 import { ArgsManager, Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
-import XRegExp from "xregexp";
+import { regex } from "regex";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { sendTo } from "../../discord/sendTo.js";
 import { type TCommandAndArgs } from "../../discord/types.js";
@@ -275,8 +275,7 @@ export class SageMessage
 	public static async fromMessage(message: SMessage): Promise<SageMessage> {
 		const eventCache = await SageEventCache.fromMessage(message);
 		const prefixOrDefault = eventCache.getPrefixOrDefault();
-		const regexOr = prefixOrDefault ? XRegExp.escape(prefixOrDefault) : `sage`;
-		const prefixRegex = XRegExp(`^\\s*(${regexOr})?[!?][!]?`, "i");
+		const prefixRegex = regex("i")`^\s*(?<prefix>${prefixOrDefault ? prefixOrDefault : "sage"})?[!?]!?`;
 		const prefixMatch = prefixRegex.exec(message.content ?? "");
 		const prefixFound = prefixMatch?.[1] ?? "";
 		const hasPrefix = [prefixOrDefault.toLowerCase(), "sage"].includes(prefixFound.toLowerCase());
