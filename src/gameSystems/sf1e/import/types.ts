@@ -1,4 +1,4 @@
-import type { CharacterBaseCore } from "@rsc-utils/character-utils";
+import type { CharacterBaseCore } from "@rsc-utils/game-utils";
 import type { SkillName } from "../lib/Skill.js";
 
 type Bonus = {

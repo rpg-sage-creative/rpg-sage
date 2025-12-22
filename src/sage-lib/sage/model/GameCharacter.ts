@@ -1,5 +1,5 @@
 import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
-import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/character-utils";
+import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/game-utils";
 import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";

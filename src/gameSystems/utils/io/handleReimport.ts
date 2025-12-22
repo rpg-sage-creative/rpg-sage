@@ -1,4 +1,4 @@
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
+import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
 import { error } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";

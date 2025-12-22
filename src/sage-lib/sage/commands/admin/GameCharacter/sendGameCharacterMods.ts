@@ -1,4 +1,4 @@
-import { Currency } from "@rsc-utils/character-utils";
+import { Currency } from "@rsc-utils/game-utils";
 import { partition, sortPrimitive, StringSet } from "@rsc-utils/core-utils";
 import { unpipe } from "@rsc-utils/dice-utils";
 import type { Message } from "discord.js";

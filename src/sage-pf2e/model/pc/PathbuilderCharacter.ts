@@ -1,4 +1,4 @@
-import { CharacterBase } from "@rsc-utils/character-utils";
+import { CharacterBase } from "@rsc-utils/game-utils";
 import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import type { StatResults } from "@rsc-utils/dice-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";

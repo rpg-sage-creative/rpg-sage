@@ -1,4 +1,4 @@
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/character-utils";
+import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
 import { isInvalidWebhookUsername, parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import { getJson, PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";

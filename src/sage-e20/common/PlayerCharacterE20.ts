@@ -1,4 +1,4 @@
-import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/character-utils";
+import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/game-utils";
 import { errorReturnFalse, getDataRoot, isDefined, numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import type { StatResults } from "@rsc-utils/dice-utils";
 import { fileExistsSync, writeFile } from "@rsc-utils/io-utils";
