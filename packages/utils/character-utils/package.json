@@ -1,10 +1,10 @@
 {
-"name": "@rsc-utils/character-utils",
-"version": "0.0.0",
-"private": true,
-"main": "build/index.js",
-"type": "module",
-"dependencies": {
-"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.13.1"
-}
+	"name": "@rsc-utils/character-utils",
+	"version": "0.0.0",
+	"private": true,
+	"main": "build/index.js",
+	"type": "module",
+	"dependencies": {
+		"@rsc-utils/core-utils": "@rsc-utils/core-utils"
+	}
 }

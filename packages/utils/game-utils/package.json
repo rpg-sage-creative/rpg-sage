@@ -1,5 +1,5 @@
 {
-	"name": "@rsc-utils/dice-utils",
+	"name": "@rsc-utils/game-utils",
 	"version": "0.0.0",
 	"private": true,
 	"main": "build/index.js",
