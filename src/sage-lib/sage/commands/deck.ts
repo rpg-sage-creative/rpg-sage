@@ -1,7 +1,7 @@
 import { BULLET, capitalize, error, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
+import { Deck, type CardBase, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { Deck, type CardBase, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "../../../sage-utils/utils/GameUtils/deck/index.js";
 import { deleteMessage } from "../../discord/deletedMessages.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { CharacterManager } from "../model/CharacterManager.js";
@@ -696,5 +696,5 @@ export function registerDeckCommands() {
 	registerListeners({ commands:[/(deck\s*play)/i], message:deckPlay });
 	registerListeners({ commands:[/(deck\s*show)/i], message:deckShow });
 	registerListeners({ commands:[/(decks\s*(show|reveal\s*(hand|spread)))/i], message:decksShowReveal });
-	registerListeners({ commands:[/^(deck\|\d+\|(shuffleDeck|drawCard|seeHand|revealHand|seeSpread|revealSpread|discardSpread)\|[\w-]+|\d+)$/], interaction:handleCardsButton });
+	registerListeners({ commands:[/^(deck\|\d+\|(shuffleDeck|drawCard|seeHand|revealHand|seeSpread|revealSpread|discardSpread)\|[\w-]+\|\d+)$/], interaction:handleCardsButton });
 }

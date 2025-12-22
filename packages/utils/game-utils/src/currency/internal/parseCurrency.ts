@@ -1,22 +1,33 @@
-import type { GameSystemCode } from "./GameSystemCode.js";
+import { regex } from "regex";
+import type { GameSystemCode } from "../../systems/GameSystem.js";
 import type { Currency, CurrencyConstructor, CurrencyCore, Denomination, DenominationsCore } from "../Currency.js";
 import { createDenomCore } from "./createDenomCore.js";
+import { OptionalHorizontalWhitespaceRegExp } from "@rsc-utils/core-utils";
 
+const RegExpMap: Record<string, RegExp> = {};
 
 /**
  * Creates a regex for matching the denominations.
  */
 function createRegex<Keys extends string>(denominations: Keys[]): RegExp {
 	const denoms = denominations.join("|");
-	const hspace = `[^\\S\\r\\n]*`;
-	return new RegExp(`(?<sign>[+-])?${hspace}(?<value>\\d+(?:[ ,.]\\d+)*)${hspace}(?<denom>${denoms})`, `gi`);
+	return RegExpMap[denoms] ??= regex("gi")`
+		(?<sign> [+-] )?
+		${OptionalHorizontalWhitespaceRegExp}
+		(?<value> \d+ ([\ ,.]\d+)* )
+		${OptionalHorizontalWhitespaceRegExp}
+		(?<denom> ${denoms} )
+	`;
 }
+
+const CommaSeparatorRegExp = /[\s,]/g;
+const PeriodSeparatorRegExp = /[\s.]/g;
 
 /**
  * Converts a string into a number by removing spaces and thousands separators and converting , decimal separator into . separator.
  */
 function parseNumber(value: string, decimal: "," | "." = "."): number {
-	const separatorRegex = decimal === "." ? /[\s,]/g : /[\s.]/g;
+	const separatorRegex = decimal === "." ? CommaSeparatorRegExp : PeriodSeparatorRegExp;
 	return +value.replace(separatorRegex, "").replace(",", ".");
 }
 

@@ -1,4 +1,4 @@
-import { error, isNullOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { error, isNullOrUndefined, stringOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { isDiscordApiError, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SMessage, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { ChannelType, MessageType as DMessageType, GatewayIntentBits, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
@@ -139,19 +139,19 @@ type RegisterMessageOptions = RegisterOptions & { type?: MessageType; };
 type RegisterReactionOptions = RegisterOptions & { type?: ReactionType; };
 
 export function registerInteractionListener(tester: TInteractionTester, handler: TInteractionHandler, { type, command, ...options }: RegisterInteractionOptions = { }): void {
-	command = (command ?? tester.name ?? handler.name).trim();
+	command = (stringOrUndefined(command) ?? stringOrUndefined(tester.name) ?? handler.name).trim();
 	registerListener({ which:"InteractionListener", tester, handler, type, command, ...options });
 }
 
 export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, { type = MessageType.Post, command, ...options }: RegisterMessageOptions = { }): void {
-	command = (command ?? tester.name ?? handler.name).trim();
+	command = (stringOrUndefined(command) ?? stringOrUndefined(tester.name) ?? handler.name).trim();
 	const keyRegex = command.toLowerCase().replace(/[-\s]+/g, "[\\-\\s]*");
 	const regex = RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
 	registerListener({ which:"MessageListener", tester, handler, type, command, regex, ...options });
 }
 
 export function registerReactionListener<T>(tester: TReactionTester<T>, handler: TReactionHandler<T>, { type = ReactionType.Both, command, ...options }: RegisterReactionOptions = { }): void {
-	command = (command ?? tester.name ?? handler.name).trim();
+	command = (stringOrUndefined(command) ?? stringOrUndefined(tester.name) ?? handler.name).trim();
 	registerListener({ which:"ReactionListener", tester, handler, type, command, ...options });
 }
 

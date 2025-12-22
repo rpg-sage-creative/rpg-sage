@@ -1,5 +1,5 @@
 import { applyChanges, debug, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type Optional, type SortResult } from "@rsc-utils/core-utils";
-import type { GameSystemCode, GameSystem as GameSystemObj } from "./internal/GameSystemCode.js";
+import type { GameSystemCode, GameSystem as GameSystemObj } from "../systems/GameSystem.js";
 import { addValues } from "./internal/addValues.js";
 import { convertCurrency } from "./internal/convertCurrency.js";
 import { coreFrom } from "./internal/coreFrom.js";

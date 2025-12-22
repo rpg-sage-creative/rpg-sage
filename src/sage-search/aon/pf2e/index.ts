@@ -1,7 +1,6 @@
-import { GameSystemType } from "@rsc-sage/types";
-import { error, oneToUS, sortPrimitive, type SearchScore, type SortResult } from "@rsc-utils/core-utils";
+import { error, oneToUS, sortPrimitive, StringMatcher, type SearchScore, type SortResult } from "@rsc-utils/core-utils";
+import { GameSystemType } from "@rsc-utils/game-utils";
 import { getJson } from "@rsc-utils/io-utils";
-import { StringMatcher } from "@rsc-utils/core-utils";
 import type { AonBase } from "../../../sage-pf2e/model/base/AonBase.js";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
 import type { TParsedSearchInfo } from "../../common.js";

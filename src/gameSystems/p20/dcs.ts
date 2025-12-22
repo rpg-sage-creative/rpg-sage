@@ -1,6 +1,7 @@
-import { GameSystemType, parseEnum } from "@rsc-sage/types";
+import { parseEnum } from "@rsc-sage/types";
 import { nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent } from "@rsc-utils/discord-utils";
+import { GameSystemType } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";

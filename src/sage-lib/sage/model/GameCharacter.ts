@@ -1,8 +1,8 @@
-import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DialogPostType, type GameSystem } from "@rsc-sage/types";
-import { Currency, CurrencyPf2e, type DenominationsCore } from "@rsc-utils/game-utils";
+import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
 import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
+import { Currency, CurrencyPf2e, Deck, parseGameSystem, type DeckCore, type DeckType, type DenominationsCore, type GameSystem } from "@rsc-utils/game-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
 import { Condition } from "../../../gameSystems/Condition.js";
@@ -14,7 +14,6 @@ import { HephaistosCharacterSF1e } from "../../../gameSystems/sf1e/characters/He
 import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/import/types.js";
 import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
-import { Deck, type DeckCore, type DeckType } from "../../../sage-utils/utils/GameUtils/deck/index.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { SageMessageReference, type SageMessageReferenceCore } from "../repo/SageMessageReference.js";
 import { CharacterManager } from "./CharacterManager.js";

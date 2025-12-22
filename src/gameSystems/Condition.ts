@@ -1,5 +1,5 @@
-import type { GameSystem } from "@rsc-sage/types";
 import type { Optional } from "@rsc-utils/core-utils";
+import type { GameSystem } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";
 import { Condition as ConditionP20 } from "./p20/lib/Condition.js";
 import { Condition as ConditionSF1e } from "./sf1e/lib/Condition.js";

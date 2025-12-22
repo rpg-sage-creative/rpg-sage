@@ -1,6 +1,7 @@
-import { DialogPostType, DicePostType, DiceSortType, GameSystemType, SageChannelType, getCritMethodText, parseGameSystem, type SageChannel } from "@rsc-sage/types";
-import { isDefined, mapAsync, stringify, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { DialogPostType, DicePostType, DiceSortType, SageChannelType, type SageChannel } from "@rsc-sage/types";
+import { isDefined, mapAsync, stringifyJson, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, isSupportedTarget, toChannelMention } from "@rsc-utils/discord-utils";
+import { GameSystemType, getCriticalMethodText, parseGameSystem } from "@rsc-utils/game-utils";
 import { GuildChannel } from "discord.js";
 import { DiceOutputType, DiceSecretMethodType } from "../../../../sage-dice/index.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
@@ -33,7 +34,7 @@ async function channelDetailsAppendDice(renderableContent: RenderableContent, se
 	renderableContent.append(`<b>Dice Options</b>`);
 
 	const gameSystemType = channel.gameSystemType ?? (game ? game.gameSystemType : server.gameSystemType) ?? GameSystemType.None;
-	const critMethodText = getCritMethodText(gameSystemType, channel.diceCritMethodType, game?.diceCritMethodType ?? server.diceCritMethodType);
+	const critMethodText = getCriticalMethodText(gameSystemType, channel.diceCritMethodType, game?.diceCritMethodType ?? server.diceCritMethodType);
 	renderableContent.append(`[spacer]<b>Crit Method</b> ${critMethodText}`);
 
 	const diceOutputType = DiceOutputType[channel.diceOutputType!];
@@ -171,7 +172,7 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 
 	const channelOptions = sageMessage.args.getChannelOptions();
 	if (!channelOptions) {
-		warn(`No or Invalid Channel Options: ${stringify(channelOptions)}`);
+		warn(`No or Invalid Channel Options: ${stringifyJson(channelOptions)}`);
 		return sageMessage.reactFailure();
 	}
 

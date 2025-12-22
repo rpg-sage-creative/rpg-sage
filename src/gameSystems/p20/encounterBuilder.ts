@@ -1,5 +1,5 @@
-import { GameSystemType, parseGameSystem } from "@rsc-sage/types";
 import { warn, ZERO_WIDTH_SPACE, type RenderableContent, type Snowflake, type SortResult } from "@rsc-utils/core-utils";
+import { GameSystemType, parseGameSystem } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from "discord.js";
 import { deleteMessage } from "../../sage-lib/discord/deletedMessages.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";

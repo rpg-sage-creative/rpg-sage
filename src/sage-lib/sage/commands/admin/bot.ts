@@ -1,6 +1,6 @@
-import { GameSystemType } from "@rsc-sage/types";
 import { getBuildInfo, isDefined } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { GameSystemType } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Bot } from "../../model/Bot.js";
 import type { SageMessage } from "../../model/SageMessage.js";

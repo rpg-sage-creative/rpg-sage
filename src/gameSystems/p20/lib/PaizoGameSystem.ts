@@ -1,4 +1,4 @@
-import { GameSystemType, getGameSystems, type GameSystem } from "@rsc-sage/types";
+import { GameSystemType, getGameSystems, type GameSystem } from "@rsc-utils/game-utils";
 
 export type PaizoGameSystem = GameSystem & {
 	isPf: boolean;

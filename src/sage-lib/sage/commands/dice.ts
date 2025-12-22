@@ -1,7 +1,8 @@
-import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType, type GameSystemType } from "@rsc-sage/types";
+import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath } from "@rsc-utils/dice-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
+import type { GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";

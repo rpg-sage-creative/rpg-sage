@@ -1,7 +1,5 @@
-import { GameType } from "@rsc-sage/types";
-import { randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-
+import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { GameSystemType } from "@rsc-utils/game-utils";
 import {
 	CritMethodType, DiceOutputType,
 	DiceSecretMethodType,
@@ -170,7 +168,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public static create({ count, sides, dropKeep, noSort, modifier, sign, description, testOrTarget, fixedRolls }: TDicePartCoreArgs = {}): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
-			gameType: GameType.DnD5e,
+			gameType: GameSystemType.DnD5e,
 			id: randomSnowflake(),
 
 			count: count ?? 0,
@@ -202,7 +200,7 @@ type DicePartRollCore = baseDicePartRollCore;
 export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 	//#region static
 	public static create(dicePart: DicePart): DicePartRoll {
-		return new DicePartRoll(this._createCore(dicePart, GameType.DnD5e));
+		return new DicePartRoll(this._createCore(dicePart, GameSystemType.DnD5e));
 	}
 	public static fromCore(core: DicePartRollCore): DicePartRoll {
 		return new DicePartRoll(core);
@@ -224,7 +222,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	public static create(diceParts: DicePart[]): Dice {
 		return new Dice({
 			objectType: "Dice",
-			gameType: GameType.DnD5e,
+			gameType: GameSystemType.DnD5e,
 			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
@@ -262,7 +260,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 	public static create(_dice: Dice): DiceRoll {
 		return new DiceRoll({
 			objectType: "DiceRoll",
-			gameType: GameType.DnD5e,
+			gameType: GameSystemType.DnD5e,
 			id: randomSnowflake(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
@@ -321,7 +319,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static create(_dice: Dice[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType = CritMethodType.Unknown): DiceGroup {
 		return new DiceGroup({
 			objectType: "DiceGroup",
-			gameType: GameType.DnD5e,
+			gameType: GameSystemType.DnD5e,
 			id: randomSnowflake(),
 			critMethodType: critMethodType,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
@@ -388,7 +386,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 function createDiceGroupRoll(diceGroup: DiceGroup): DiceGroupRoll {
 	const core: DiceGroupRollCore = {
 		objectType: "DiceGroupRoll",
-		gameType: GameType.DnD5e,
+		gameType: GameSystemType.DnD5e,
 		id: randomSnowflake(),
 		diceGroup: diceGroup.toJSON(),
 		rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())

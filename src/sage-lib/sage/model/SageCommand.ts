@@ -1,7 +1,8 @@
 import type { LocalizedTextKey } from "@rsc-sage/localization";
-import { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType } from "@rsc-sage/types";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, SageChannelType } from "@rsc-sage/types";
 import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import type { DiscordCache, EmbedBuilder, SupportedInteraction, SupportedRepliableInteraction } from "@rsc-utils/discord-utils";
+import { GameSystemType, parseGameSystem, type DiceCriticalMethodType } from "@rsc-utils/game-utils";
 import { ComponentType, InteractionType, Message, PartialGroupDMChannel, type ActionRowBuilder, type AttachmentBuilder, type ButtonBuilder, type HexColorString, type If, type StringSelectMenuBuilder, type TextBasedChannel } from "discord.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { IChannel } from "../repo/base/IdRepository.js";
@@ -520,7 +521,7 @@ export abstract class SageCommand<
 		return this.cache.getOrSet("gameType", () => this.game?.gameSystemType ?? this.serverChannel?.gameSystemType ?? this.server?.gameSystemType ?? 0);
 	}
 
-	public get diceCritMethodType(): DiceCritMethodType {
+	public get diceCritMethodType(): DiceCriticalMethodType {
 		return this.cache.getOrSet("diceCritMethodType", () => {
 			const diceCritMethodType = this.gameChannel?.diceCritMethodType
 				?? this.game?.diceCritMethodType

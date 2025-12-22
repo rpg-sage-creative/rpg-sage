@@ -1,5 +1,6 @@
-import { DicePostType, DiceSortType, getCritMethodText } from "@rsc-sage/types";
+import { DicePostType, DiceSortType } from "@rsc-sage/types";
 import { mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
+import { getCriticalMethodText } from "@rsc-utils/game-utils";
 import type { Role } from "discord.js";
 import { DiceOutputType, DiceSecretMethodType } from "../../../../../sage-dice/index.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
@@ -12,7 +13,7 @@ import { createAdminRenderableContent } from "../../cmd.js";
 function serverDetailsDefaultTypes(renderableContent: RenderableContent, server: Server): void {
 	renderableContent.append(`<b>Default Dialog Type</b> ${DialogType[server.dialogPostType!] ?? "<i>unset (Embed)</i>"}`);
 	renderableContent.append(`<b>Default Game Type</b> ${server.gameSystem?.name ?? "<i>unset (None)</i>"}`);
-	const critMethodText = getCritMethodText(server.gameSystemType, server.diceCritMethodType);
+	const critMethodText = getCriticalMethodText(server.gameSystemType, server.diceCritMethodType);
 	renderableContent.append(`<b>Default Dice Crit Method Type</b> ${critMethodText}`);
 	renderableContent.append(`<b>Default Dice Output Type</b> ${DiceOutputType[server.diceOutputType!] ?? "<i>unset (M)</i>"}`);
 	renderableContent.append(`<b>Default Dice Post Type</b> ${DicePostType[server.dicePostType!] ?? "<i>unset (Post)</i>"}`);

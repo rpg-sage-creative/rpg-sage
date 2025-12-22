@@ -1,8 +1,7 @@
-import { GameType } from "@rsc-sage/types";
-import { randomSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { rollDice } from "@rsc-utils/dice-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
-import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { GameSystemType } from "@rsc-utils/game-utils";
 import {
 	DiceOutputType,
 	DiceSecretMethodType, DropKeepType,
@@ -337,7 +336,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	public static create({ count, description, dropKeep, sides, sign, specialization, testOrTarget, downShift, upShift, shiftedDesc, skillDie }: TDicePartCoreArgs = { }): DicePart {
 		return new DicePart({
 			objectType: "DicePart",
-			gameType: GameType.E20,
+			gameType: GameSystemType.E20,
 			id: randomSnowflake(),
 
 			count: count ?? 1,
@@ -420,7 +419,7 @@ export class DicePartRoll extends baseDicePartRoll<DicePartRollCore, DicePart> {
 		const dpRolls = dp.isRollable ? rollDice(dp.count, dp.sides) : [];
 		return new DicePartRoll({
 			objectType: "DicePartRoll",
-			gameType: GameType.E20,
+			gameType: GameSystemType.E20,
 			id: randomSnowflake(),
 			dice: dp.toJSON(),
 			rolls: dpRolls
@@ -451,7 +450,7 @@ export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	public static create(diceParts: DicePart[]): Dice {
 		return new Dice({
 			objectType: "Dice",
-			gameType: GameType.E20,
+			gameType: GameSystemType.E20,
 			id: randomSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
@@ -485,7 +484,7 @@ export class DiceRoll extends baseDiceRoll<DiceRollCore, Dice, DicePartRoll> {
 	public static create(_dice: Dice): DiceRoll {
 		return new DiceRoll({
 			objectType: "DiceRoll",
-			gameType: GameType.E20,
+			gameType: GameSystemType.E20,
 			id: randomSnowflake(),
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map(dicePart => dicePart.roll().toJSON())
@@ -516,7 +515,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static create(_dice: Dice[], diceOutputType?: DiceOutputType): DiceGroup {
 		return new DiceGroup({
 			objectType: "DiceGroup",
-			gameType: GameType.E20,
+			gameType: GameSystemType.E20,
 			id: randomSnowflake(),
 			critMethodType: undefined,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
@@ -537,7 +536,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		if (skillDicePart.sides !== 20 && skillDicePart.sign === "+") {
 			const d20DicePartCore: DicePartCore = {
 				objectType: "DicePart",
-				gameType: GameType.E20,
+				gameType: GameSystemType.E20,
 				id: randomSnowflake(),
 				count: 1,
 				sides: 20,
@@ -569,7 +568,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 					const [count, sides] = stepSkillDie.split("d");
 					dice.push(Dice.create([new DicePart({
 						objectType: "DicePart",
-						gameType: GameType.E20,
+						gameType: GameSystemType.E20,
 						id: randomSnowflake(),
 						count: +count || 1,
 						sides: +sides || 0,
@@ -654,7 +653,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 	public static create(diceGroup: DiceGroup): DiceGroupRoll {
 		return new DiceGroupRoll({
 			objectType: "DiceGroupRoll",
-			gameType: GameType.E20,
+			gameType: GameSystemType.E20,
 			id: randomSnowflake(),
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map(_dice => _dice.roll().toJSON())

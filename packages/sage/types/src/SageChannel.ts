@@ -1,10 +1,10 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { GameSystemType } from "@rsc-utils/game-utils";
 import type { DialogPostType } from "./DialogPostType.js";
 import type { DiceCritMethodType } from "./DiceCritMethodType.js";
 import type { DiceOutputType } from "./DiceOutputType.js";
 import type { DicePostType } from "./DicePostType.js";
 import type { DiceSecretMethodType } from "./DiceSecretMethodType.js";
-import type { GameSystemType } from "./GameSystem.js";
 import type { DiceSortType } from "./DiceSortType.js";
 
 export type DialogOptions = {

@@ -1,8 +1,10 @@
 import { getHomeServerId } from "@rsc-sage/env";
-import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, SageChannel, ServerOptions } from "@rsc-sage/types";
-import { DiceSortType, parseGameSystem, updateServer } from "@rsc-sage/types";
+import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, SageChannel, ServerOptions } from "@rsc-sage/types";
+import { DiceSortType, updateServer } from "@rsc-sage/types";
 import { applyChanges, randomSnowflake, warn, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
+import type { GameSystemType } from "@rsc-utils/game-utils";
+import { parseGameSystem, type GameSystem } from "@rsc-utils/game-utils";
 import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";

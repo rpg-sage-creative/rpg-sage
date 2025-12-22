@@ -1,22 +1,16 @@
 import type { Optional } from "@rsc-utils/core-utils";
-
-export enum DiceCritMethodType {
-	Unknown = 0,
-	TimesTwo = 1,
-	RollTwice = 2,
-	AddMax = 3
-}
-
-export function parseDiceCritMethodType(value: Optional<string>): DiceCritMethodType | undefined {
+import { DiceCriticalMethodType } from "@rsc-utils/game-utils";
+export { DiceCriticalMethodType as DiceCritMethodType } from "@rsc-utils/game-utils";
+export function parseDiceCritMethodType(value: Optional<string>): DiceCriticalMethodType | undefined {
 	if (value) {
 		if (/x2|times[ -]?two/i.test(value)) {
-			return DiceCritMethodType.TimesTwo;
+			return DiceCriticalMethodType.TimesTwo;
 		}
 		if (/(roll[ -]?)?twice/i.test(value)) {
-			return DiceCritMethodType.RollTwice;
+			return DiceCriticalMethodType.RollTwice;
 		}
 		if (/add[ -]?max/i.test(value)) {
-			return DiceCritMethodType.AddMax;
+			return DiceCriticalMethodType.AddMax;
 		}
 	}
 	return undefined;
