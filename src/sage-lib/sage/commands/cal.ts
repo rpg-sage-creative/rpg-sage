@@ -1,8 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import { GDate } from "../../../sage-cal/pf2e/GDate.js";
-import { DaysPerMonth, Days as GDays, Months } from "../../../sage-cal/pf2e/cal.js";
-import { SDate } from "../../../sage-cal/sf1e/SDate.js";
-import { Days as SDays } from "../../../sage-cal/sf1e/cal.js";
+import { GDate, SDate } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import { createCommandRenderableContent } from "./cmd.js";
@@ -69,11 +66,11 @@ function getSDateOrToday(arg: Optional<string>, origin: TYearOrigin): SDate {
 async function calendarHandler(sageCommand: SageCommand): Promise<void> {
 	const content = createCommandRenderableContent();
 	content.appendTitledSection(`<b>Golarion's Days of the Week</b>`);
-	content.append(GDays.join(", "));
+	content.append(GDate.Days.join(", "));
 	content.appendTitledSection(`<b>Absalom Station's Days of the Week</b>`);
-	content.append(SDays.join(", "));
+	content.append(SDate.Days.join(", "));
 	content.appendTitledSection(`<b>Golarion's Months (# of Days)</b>`);
-	content.append(Months.map((m, i) => `${String(i + 1)}. ${m} (${DaysPerMonth[i]})`).join(`, `));
+	content.append(GDate.Months.map((m, i) => `${String(i + 1)}. ${m} (${GDate.DaysPerMonth[i]})`).join(`, `));
 	content.append(`<i>Absalom Station still uses these months.</i>`);
 	return sageCommand.reply(content, false);
 }

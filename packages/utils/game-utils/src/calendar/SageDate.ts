@@ -1,4 +1,4 @@
-import { type DateLike, Day, type DayName, Month, type MonthName, getDateStrings, getDayNames, getMonthNames } from "@rsc-utils/core-utils";
+import { getDateStrings, getDayNames, getDaysPerMonth, getMonthNames, type DateLike, type Day, type DayName, type Month, type MonthName } from "@rsc-utils/core-utils";
 
 const DayMS = 1000 * 60 * 60 * 24;
 
@@ -85,4 +85,8 @@ export class SageDate<
 	//#endregion
 
 	public static YearDelta = 0;
+
+	public static readonly EarthDays = getDayNames();
+	public static readonly EarthMonths = getMonthNames();
+	public static readonly DaysPerMonth = getDaysPerMonth();
 }

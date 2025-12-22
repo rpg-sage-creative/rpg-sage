@@ -1,14 +1,14 @@
 import { TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "@rsc-utils/core-utils";
-import { SageDate } from "../SageDate.js";
-import { DayType, Days, MonthType, Months, type TDayType, type TMonthType } from "./cal.js";
+import { SageDate } from "../../../../calendar/SageDate.js";
+import { DayType, Days, MonthType, Months, type DayName, type MonthName } from "./internal/types.js";
 
-export class GDate extends SageDate<GDate, DayType, TDayType, MonthType, TMonthType> {
+export class GDate extends SageDate<GDate, DayType, DayName, MonthType, MonthName> {
 
-	public get dayType(): DayType { return this._.getDay(); }
-	public get day(): TDayType { return Days[this._.getDay()]; }
+	public override get dayType(): DayType { return this._.getDay(); }
+	public override get day(): DayName { return Days[this._.getDay()]!; }
 
-	public get monthType(): MonthType { return this._.getMonth(); }
-	public get month(): TMonthType { return Months[this._.getMonth()]; }
+	public override get monthType(): MonthType { return this._.getMonth(); }
+	public override get month(): MonthName { return Months[this._.getMonth()]!; }
 
 	public get temperateSeasonType(): TemperateSeason {
 		return GDate.dateToTemperateSeason(this._);
@@ -24,7 +24,7 @@ export class GDate extends SageDate<GDate, DayType, TDayType, MonthType, TMonthT
 		return TropicalSeason[this.tropicalSeasonType] as keyof typeof TropicalSeason;
 	}
 
-	public static readonly YearDelta = 2700;
+	public static override readonly YearDelta = 2700;
 
 	public static dateToTemperateSeason(date: Date): TemperateSeason {
 		return getTemperateSeason(date);
@@ -33,4 +33,7 @@ export class GDate extends SageDate<GDate, DayType, TDayType, MonthType, TMonthT
 	public static dateToTropicalSeason(date: Date): TropicalSeason {
 		return getTropicalSeason(date);
 	}
+
+	public static readonly Days = Days;
+	public static readonly Months = Months;
 }
