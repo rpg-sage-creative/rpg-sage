@@ -1,1 +1,0 @@
-export type { Snowflake } from "@rsc-utils/core-utils";

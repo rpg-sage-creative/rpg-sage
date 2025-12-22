@@ -1,8 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
 import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { doStatMath, processMath, StatBlockProcessor, unpipe, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/dice-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
-import { Currency, CurrencyPf2e, Deck, parseGameSystem, type DeckCore, type DeckType, type DenominationsCore, type GameSystem } from "@rsc-utils/game-utils";
+import { Currency, CurrencyPf2e, Deck, doStatMath, parseGameSystem, processMath, StatBlockProcessor, unpipe, type DeckCore, type DeckType, type DenominationsCore, type GameSystem, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
 import { Condition } from "../../../gameSystems/Condition.js";

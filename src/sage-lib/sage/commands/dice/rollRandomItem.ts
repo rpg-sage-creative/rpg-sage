@@ -1,14 +1,19 @@
-import { randomItem } from "@rsc-utils/dice-utils";
+import { randomItem } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../../sage-dice/index.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 
+const MatchRegExp = /^(?:(\d*)([ usgm]*)#)?(.*?)$/i;
+const UniqueRegExp = /u/i;
+const SortRegExp = /s/i;
+const SecretRegExp = /gm/i;
+
 /** Performs the random item selection and returns the results. */
 export function rollRandomItem(_: SageCommand, input: string): TDiceOutput[] {
-	const match = /^(?:(\d*)([ usgm]*)#)?(.*?)$/i.exec(input) ?? [];
+	const match = MatchRegExp.exec(input) ?? [];
 	const count = +match[1] || 1;
-	const unique = /u/i.test(match[2] ?? "");
-	const sort = /s/i.test(match[2] ?? "");
-	const hasSecret = /gm/i.test(match[2] ?? "");
+	const unique = UniqueRegExp.test(match[2] ?? "");
+	const sort = SortRegExp.test(match[2] ?? "");
+	const hasSecret = SecretRegExp.test(match[2] ?? "");
 	const options = (match[3] ?? "").split(",").map(s => s.trim());
 	const selections: string[] = [];
 	const total = (unique ? Math.min(options.length, count) : count);

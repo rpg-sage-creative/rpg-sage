@@ -1,5 +1,5 @@
-import type { StatNumbersOptions, StatNumbersResults } from "@rsc-utils/dice-utils";
-import { numberOrUndefined } from "../../../../gameSystems/utils/numberOrUndefined.js";
+import { numberOrUndefined } from "@rsc-utils/core-utils";
+import type { StatNumbersOptions, StatNumbersResults } from "@rsc-utils/game-utils";
 import type { CharacterShell } from "../CharacterShell.js";
 import type { GameCharacter } from "../GameCharacter.js";
 import { getMetaStat } from "./getMetaStat.js";

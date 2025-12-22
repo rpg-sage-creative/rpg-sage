@@ -1,9 +1,8 @@
-import type { KeyValuePair } from "@rsc-utils/core-utils";
-import { unpipe } from "@rsc-utils/dice-utils";
+import { numberOrUndefined, type KeyValuePair } from "@rsc-utils/core-utils";
+import { unpipe } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";
 import { checkStatBounds as checkStatBoundsP20 } from "./p20/lib/checkStatBounds.js";
 import { checkStatBounds as checkStatBoundsSF1e } from "./sf1e/lib/checkStatBounds.js";
-import { numberOrUndefined } from "./utils/numberOrUndefined.js";
 
 /**
  * Checks the bounds of the given key/value pair.

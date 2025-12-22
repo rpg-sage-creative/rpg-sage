@@ -1,7 +1,6 @@
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { removeDesc, rollDice } from "@rsc-utils/dice-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
-import { GameSystemType } from "@rsc-utils/game-utils";
+import { GameSystemType, removeDesc, rollDice } from "@rsc-utils/game-utils";
 import {
 	CritMethodType,
 	DiceOutputType,

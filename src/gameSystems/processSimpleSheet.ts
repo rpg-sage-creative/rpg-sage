@@ -1,6 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import type { StatBlockProcessor } from "@rsc-utils/dice-utils";
-import type { GameSystem } from "@rsc-utils/game-utils";
+import type { GameSystem, StatBlockProcessor } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";
 import { isStatsKey as isStatsKeyD20, statsToHtml as statsToHtmlD20 } from "./d20/sheets/simpleSheet.js";
 import { isStatsKey as isStatsKeyP20, statsToHtml as statsToHtmlP20 } from "./p20/sheets/simpleSheet.js";

@@ -1,5 +1,3 @@
-import type { Optional } from "@rsc-utils/core-utils";
-
 export enum DiceCriticalMethodType {
 
 	/** Not set, use default if one exists. */
@@ -13,19 +11,4 @@ export enum DiceCriticalMethodType {
 
 	/** Roll the dice once and add that to the max possible result. */
 	AddMax = 3
-}
-
-export function parseDiceCriticalMethodType(value: Optional<string>): DiceCriticalMethodType | undefined {
-	if (value) {
-		if (/x2|times[ -]?two/i.test(value)) {
-			return DiceCriticalMethodType.TimesTwo;
-		}
-		if (/(roll[ -]?)?twice/i.test(value)) {
-			return DiceCriticalMethodType.RollTwice;
-		}
-		if (/add[ -]?max/i.test(value)) {
-			return DiceCriticalMethodType.AddMax;
-		}
-	}
-	return undefined;
 }

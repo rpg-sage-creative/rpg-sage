@@ -1,6 +1,5 @@
-import { Currency } from "@rsc-utils/game-utils";
 import { partition, sortPrimitive, StringSet } from "@rsc-utils/core-utils";
-import { unpipe } from "@rsc-utils/dice-utils";
+import { Currency, unpipe } from "@rsc-utils/game-utils";
 import type { Message } from "discord.js";
 import { Condition } from "../../../../../gameSystems/Condition.js";
 import { sendWebhook } from "../../../../discord/messages.js";

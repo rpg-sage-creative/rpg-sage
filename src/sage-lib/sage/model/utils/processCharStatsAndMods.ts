@@ -1,7 +1,7 @@
 import { StringSet, type IncrementArg, type KeyValuePair } from "@rsc-utils/core-utils";
+import { doStatMath } from "@rsc-utils/game-utils";
 import { Condition } from "../../../../gameSystems/Condition.js";
 import type { GameCharacter } from "../GameCharacter.js";
-import { doStatMath } from "@rsc-utils/dice-utils";
 
 export type ProcessPair = Omit<KeyValuePair<string|number, undefined>, "value"> & { operator?:"+"|"-"; value:string|number; };
 

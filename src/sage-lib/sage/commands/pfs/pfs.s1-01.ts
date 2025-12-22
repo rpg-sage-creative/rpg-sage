@@ -1,6 +1,5 @@
-import type { RenderableContent } from "@rsc-utils/core-utils";
-import { rollDie, shuffle } from "@rsc-utils/dice-utils";
-import { BULLET } from "@rsc-utils/core-utils";
+import { BULLET, type RenderableContent } from "@rsc-utils/core-utils";
+import { rollDie, shuffle } from "@rsc-utils/game-utils";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { addScenario, createPfsRenderableContent, type TPfsFaction, type TTierInfo } from "./pfs.js";
 

@@ -1,4 +1,4 @@
-import type { StatBlockProcessor } from "@rsc-utils/dice-utils";
+import type { StatBlockProcessor } from "@rsc-utils/game-utils";
 import { Ability } from "../../d20/lib/Ability.js";
 import { SavingThrow } from "../../d20/lib/SavingThrow.js";
 import { calcStatModifierD20 } from "../../utils/calcStatModifierD20.js";

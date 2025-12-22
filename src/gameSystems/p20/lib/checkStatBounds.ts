@@ -1,8 +1,8 @@
-import { unpipe, type UnpipeResults } from "@rsc-utils/dice-utils";
+import type { KeyValuePair } from "@rsc-utils/core-utils";
+import { unpipe, type UnpipeResults } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { Condition } from "./Condition.js";
-import type { KeyValuePair } from "@rsc-utils/core-utils";
 
 /**
  * Checks the bounds of the given key/value pair.

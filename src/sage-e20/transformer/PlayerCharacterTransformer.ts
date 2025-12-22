@@ -1,5 +1,5 @@
 import { isDefined, numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
-import type { StatResults } from "@rsc-utils/dice-utils";
+import type { StatResults } from "@rsc-utils/game-utils";
 import { PlayerCharacterE20, type PlayerCharacterCoreE20, type TWeaponE20 } from "../common/PlayerCharacterE20.js";
 
 export type TAltMode = {

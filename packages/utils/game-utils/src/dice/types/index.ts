@@ -3,7 +3,6 @@ export * from "./DiceCriticalMethodType.js";
 export * from "./DiceOperator.js";
 export * from "./DiceOutputType.js";
 export * from "./DiceSecretMethodType.js";
-export * from "./DiceSortType.js";
 export * from "./RollData.js";
 export * from "./SimpleDice.js";
 export * from "./Snowflake.js";
