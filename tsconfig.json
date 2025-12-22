@@ -19,9 +19,8 @@
 	"references": [
 		{ "path": "./packages/utils/character-utils" },
 		{ "path": "./packages/utils/dice-utils" },
-
 		{ "path": "./packages/sage/types" },
 		{ "path": "./packages/sage/env" },
-
+		{ "path": "./packages/sage/localization" }
 	]
 }

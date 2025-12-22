@@ -1,5 +1,5 @@
 {
-	"name": "@rsc-sage/types",
+	"name": "@rsc-sage/localization",
 	"version": "0.0.0",
 	"private": true,
 	"main": "build/index.js",

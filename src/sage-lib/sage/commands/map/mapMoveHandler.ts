@@ -1,6 +1,6 @@
-import { DiscordMaxValues } from "@rsc-utils/discord-utils";
+import type { LocalizedTextKey } from "@rsc-sage/localization";
 import { StringMatcher, truncate } from "@rsc-utils/core-utils";
-import type { LocalizedTextKey } from "../../../../sage-lang/getLocalizedText.js";
+import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { deleteMessage } from "../../../discord/deletedMessages.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
