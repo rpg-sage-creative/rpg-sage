@@ -1,5 +1,5 @@
 import { addCommas } from "@rsc-utils/core-utils";
-import type { GameSystemCode } from "../../systems/GameSystem.js";
+import type { GameSystemCode } from "../../system/GameSystem.js";
 import type { Currency, CurrencyCore, DenominationsCore } from "../Currency.js";
 import { getDenominations } from "./getDenominations.js";
 

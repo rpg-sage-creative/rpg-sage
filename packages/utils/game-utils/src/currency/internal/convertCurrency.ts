@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "../../systems/GameSystem.js";
+import type { GameSystemCode } from "../../system/GameSystem.js";
 import type { AnyCurrency, Currency, CurrencyConstructor, CurrencyCore } from "../Currency.js";
 
 export function convertCurrency<

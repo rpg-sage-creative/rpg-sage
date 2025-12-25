@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "../../systems/GameSystem.js";
+import type { GameSystemCode } from "../../system/GameSystem.js";
 import type { Currency, CurrencyCore, Denomination, DenominationsCore } from "../Currency.js";
 import { getDenominations } from "./getDenominations.js";
 import { getExchangeRate } from "./getExchangeRate.js";

@@ -1,5 +1,5 @@
 import { regex } from "regex";
-import type { GameSystemCode } from "../../systems/GameSystem.js";
+import type { GameSystemCode } from "../../system/GameSystem.js";
 import type { Currency, CurrencyConstructor, CurrencyCore, Denomination, DenominationsCore } from "../Currency.js";
 import { createDenomCore } from "./createDenomCore.js";
 import { OptionalHorizontalWhitespaceRegExp } from "@rsc-utils/core-utils";
