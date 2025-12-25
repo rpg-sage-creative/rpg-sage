@@ -1,6 +1,6 @@
 import { getEndpoint, getPort, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
+import { RenderableMap } from "@rsc-utils/game-utils";
 import { activate } from "./sage-lib/index.js";
-import { RenderableMap } from "./sage-utils/utils/MapUtils/index.js";
 
 initializeConsoleUtilsByEnvironment();
 

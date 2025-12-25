@@ -3,9 +3,9 @@ import { captureProcessExit, debug, errorReturnUndefined, isNonNilSnowflake, par
 import { getRegisteredIntents, toUserMention } from "@rsc-utils/discord-utils";
 import { AppServer, type BufferHandlerJsonError, type BufferHandlerResponse } from "@rsc-utils/io-utils";
 import { AttachmentBuilder, Client } from "discord.js";
-import { parseDiceMatches } from "../../../sage-lib/sage/commands/dice.js";
-import { StatMacroProcessor } from "../../../sage-lib/sage/commands/dice/stats/StatMacroProcessor.js";
-import { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
+import { parseDiceMatches } from "../sage-lib/sage/commands/dice.js";
+import { StatMacroProcessor } from "../sage-lib/sage/commands/dice/stats/StatMacroProcessor.js";
+import { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";
 
 /*
 	Assuming a valid payload:

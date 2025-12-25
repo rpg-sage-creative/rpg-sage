@@ -1,4 +1,4 @@
-import { RenderableMap, type IMapLayer, type MapRenderResponse, type THasOffset, type TMap, type TMapBackgroundImage, type TMapLayer, type TMapLayerImage } from "../../../../sage-utils/utils/MapUtils/index.js";
+import { RenderableMap, type IMapLayer, type MapRenderResponse, type THasOffset, type TMap, type TMapBackgroundImage, type TMapLayer, type TMapLayerImage } from "@rsc-utils/game-utils"
 import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase.js";
 import type { TParsedGameMapCore } from "./gameMapImporter.js";
 

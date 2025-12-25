@@ -1,5 +1,5 @@
 import { captureProcessExit, enableLogLevels, getPort } from "@rsc-utils/core-utils";
-import { PixelsRelayServer } from "./sage-utils/utils/PixelsUtils/PixelsRelayServer.js";
+import { PixelsRelayServer } from "./sage-utils/PixelsRelayServer.js";
 
 captureProcessExit();
 enableLogLevels("development");
