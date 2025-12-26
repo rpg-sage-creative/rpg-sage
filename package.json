@@ -73,6 +73,7 @@
 		}
 	},
 	"scripts": {
+		"prebuild": "cd ./packages/utils/game-utils; npm run indexTs",
 		"build": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/build.sh --skipIndexTs",
 		"release": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/release.sh",
 		"test": "echo 'no tests'",
