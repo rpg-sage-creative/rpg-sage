@@ -1,13 +1,14 @@
-const LIGHT_BULK = "L";
-const DASH = "-";
-const MDASH = "—";
+import { numberOrUndefined } from "@rsc-utils/core-utils";
 
-export class Bulk {
+const ValidBulkRegExp = /^\s*\d+\s*L?\s*$/;
+const ValidLightBulkRegExp = /^\s*(\d+)\s*L\s*$/;
+
+export class BulkP20 {
 	public constructor(bulk?: number | string) {
 		this.isNegligible = false;
 		this.isLight= false;
-		this.lightBulk = Bulk.toLightBulk(bulk!);
-		this.wholeBulk = Bulk.toWholeBulk(bulk!);
+		this.lightBulk = BulkP20.toLightBulk(bulk!);
+		this.wholeBulk = BulkP20.toWholeBulk(bulk!);
 		this.numberValue = 0;
 		this.stringValue = "";
 		this.updateValues();
@@ -24,7 +25,7 @@ export class Bulk {
 			}else if (this.lightBulk > 1) {
 				stringParts.push(`${this.lightBulk}L`);
 			}else {
-				stringParts.push(LIGHT_BULK);
+				stringParts.push("L");
 			}
 		}
 		this.isNegligible = this.wholeBulk === 0 && this.lightBulk === 0;
@@ -34,7 +35,7 @@ export class Bulk {
 		// this.wholeBulk = this.wholeBulk;
 		*/
 		this.numberValue = this.wholeBulk + this.lightBulk * 0.1;
-		this.stringValue = stringParts.join(", ") || MDASH;
+		this.stringValue = stringParts.join(", ") || "—"; // emdash
 	}
 
 	/**************************************************************************************************************************/
@@ -50,10 +51,10 @@ export class Bulk {
 	/**************************************************************************************************************************/
 	//#region Instance Methods
 
-	public add(...bulks: Bulk[]): void;
-	public add(bulk: Bulk, count: number): void;
-	public add(...args: (Bulk | number)[]): void {
-		if (typeof (args[1]) === "number" && args[0] instanceof Bulk) {
+	public add(...bulks: BulkP20[]): void;
+	public add(bulk: BulkP20, count: number): void;
+	public add(...args: (BulkP20 | number)[]): void {
+		if (typeof (args[1]) === "number" && args[0] instanceof BulkP20) {
 			const bulk = args[0],
 				count = args[1];
 			this.lightBulk += bulk.lightBulk * count;
@@ -61,7 +62,7 @@ export class Bulk {
 			this.updateValues();
 		} else {
 			args.forEach(bulk => {
-				if (Bulk.isBulk(bulk)) {
+				if (BulkP20.isBulk(bulk)) {
 					this.lightBulk += bulk.lightBulk;
 					this.wholeBulk += bulk.wholeBulk;
 				}
@@ -70,12 +71,12 @@ export class Bulk {
 		}
 	}
 
-	public clone(): Bulk {
+	public clone(): BulkP20 {
 		return this.multiply(1);
 	}
 
-	public multiply(count: number): Bulk {
-		const bulk = new Bulk();
+	public multiply(count: number): BulkP20 {
+		const bulk = new BulkP20();
 		for (let i = count; i--;) {
 			bulk.add(this);
 		}
@@ -91,52 +92,56 @@ export class Bulk {
 	/**************************************************************************************************************************/
 	//#region Static Methods
 
-	public static from(...bulks: Bulk[]): Bulk {
-		const bulk = new Bulk();
-		bulk.add(...bulks.filter(Bulk.isBulk));
+	public static from(...bulks: BulkP20[]): BulkP20 {
+		const bulk = new BulkP20();
+		bulk.add(...bulks.filter(BulkP20.isBulk));
 		return bulk;
 	}
 
-	public static isBulk(bulk: any): bulk is Bulk {
-		return bulk instanceof Bulk;
+	public static isBulk(bulk: any): bulk is BulkP20 {
+		return bulk instanceof BulkP20;
 	}
 
 	public static isLight(bulk: number | string): boolean {
-		return bulk === LIGHT_BULK || bulk === 0.1;
+		return bulk === "L" || bulk === 0.1;
 	}
 
 	public static isNegligible(bulk: number | string): boolean {
-		return bulk === DASH || bulk === MDASH || bulk === 0;
+		return bulk === "-" // dash
+			|| bulk === "—" // emdash
+			|| bulk === 0;
 	}
 
 	public static isValidBulk(bulk: number | string): boolean {
-		return Bulk.isLight(bulk) || Bulk.isNegligible(bulk) || String(bulk).match(/^\s*\d+\s*L?\s*$/) !== null;
+		return BulkP20.isLight(bulk)
+			|| BulkP20.isNegligible(bulk)
+			|| ValidBulkRegExp.test(String(bulk));
 	}
 
 	public static toLightBulk(bulk: number | string): number {
-		if (Bulk.isLight(bulk)) {
+		if (BulkP20.isLight(bulk)) {
 			return 1;
 		}
-		const match = String(bulk).match(/^\s*(\d+)\s*L\s*$/);
-		return match && +match[1] || 0;
+		const match = ValidLightBulkRegExp.exec(String(bulk));
+		return numberOrUndefined(match?.[1]) ?? 0;
 	}
 
 	public static toWholeBulk(bulk: number | string): number {
-		if (Bulk.isNegligible(bulk) || Bulk.isLight(bulk)) {
+		if (BulkP20.isNegligible(bulk) || BulkP20.isLight(bulk)) {
 			return 0;
 		}
 		return +bulk || 0;
 	}
 
 	public static toString(bulk: number | string): string {
-		if (Bulk.isNegligible(bulk)) {
-			return MDASH;
+		if (BulkP20.isNegligible(bulk)) {
+			return "—"; // emdash
 		}
-		const light = Bulk.toLightBulk(bulk);
+		const light = BulkP20.toLightBulk(bulk);
 		if (light) {
-			return light > 1 ? `${light}L` : LIGHT_BULK;
+			return light > 1 ? `${light}L` : "L";
 		}
-		return String(Bulk.toWholeBulk(bulk));
+		return String(BulkP20.toWholeBulk(bulk));
 	}
 
 	//#endregion

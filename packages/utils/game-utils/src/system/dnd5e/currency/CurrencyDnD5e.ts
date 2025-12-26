@@ -1,5 +1,4 @@
-import { round } from "@rsc-utils/core-utils";
-import { Currency, type CurrencyCore, type CurrencyData } from "./Currency.js";
+import { Currency, type CurrencyCore, type CurrencyData } from "../../../currency/Currency.js";
 
 type GameSystemKey = "DnD5e";
 
@@ -32,8 +31,9 @@ export class CurrencyDnD5e extends Currency<GameSystemKey, DenominationKeys, Cur
 
 	public static calculateWeight(coins: CurrencyDnD5e): Weight {
 		const count = coins.cp + coins.sp + coins.ep + coins.gp + coins.pp;
-		const oz = round(count / 3, 1);
-		const lb = round(count / 50, 1);
+		const pounds = count / 50;
+		const lb = Math.floor(pounds);
+		const oz = Math.floor(16 * (pounds - lb));
 		return { oz, lb };
 	}
 

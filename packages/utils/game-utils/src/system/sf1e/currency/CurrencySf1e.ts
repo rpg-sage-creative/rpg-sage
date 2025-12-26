@@ -1,4 +1,4 @@
-import { Currency, type CurrencyCore, type CurrencyData } from "./Currency.js";
+import { Currency, type CurrencyCore, type CurrencyData } from "../../../currency/Currency.js";
 // import { Bulk } from "./Bulk.js";
 
 type GameSystemKey = "SF1e";

@@ -1,11 +1,11 @@
-import { RenderableMap, type IMapLayer, type MapRenderResponse, type THasOffset, type TMap, type TMapBackgroundImage, type TMapLayer, type TMapLayerImage } from "@rsc-utils/game-utils"
+import { RenderableMap, type GameMapLayer, type MapRenderResponse, type HasOffset, type GameMapData, type GameMapBackgroundImage, type GameMapLayerData, type GameMapLayerImage } from "@rsc-utils/game-utils"
 import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase.js";
 import type { TParsedGameMapCore } from "./gameMapImporter.js";
 
-class RenderableGameMapLayer implements IMapLayer {
+class RenderableGameMapLayer implements GameMapLayer {
 	public constructor(protected images: TGameMapImage[]) { }
 
-	public getImages<T extends TMapLayerImage>(): T[] {
+	public getImages<T extends GameMapLayerImage>(): T[] {
 		return this.images.map(image => {
 			return {
 				gridOffset: image.pos,
@@ -17,11 +17,11 @@ class RenderableGameMapLayer implements IMapLayer {
 		});
 	}
 
-	public getOffset(): Partial<THasOffset> {
+	public getOffset(): Partial<HasOffset> {
 		return { };
 	}
 
-	public toJSON(): TMapLayer {
+	public toJSON(): GameMapLayerData {
 		return {
 			images: this.getImages(),
 			offset: this.getOffset()
@@ -34,7 +34,7 @@ export class RenderableGameMap extends RenderableMap {
 		super();
 	}
 
-	public getBackground(): TMapBackgroundImage {
+	public getBackground(): GameMapBackgroundImage {
 		return {
 			url: this.core.url
 		};
@@ -54,7 +54,7 @@ export class RenderableGameMap extends RenderableMap {
 		];
 	}
 
-	public toJSON(): TMap {
+	public toJSON(): GameMapData {
 		return {
 			background: this.getBackground(),
 			grid: this.getGrid(),
