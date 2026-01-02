@@ -1,4 +1,5 @@
 import { escapeRegex, type Optional } from "@rsc-utils/core-utils";
+import { toKeyValueString } from "../../../../../sage-utils/toKeyValueString.js";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -20,8 +21,8 @@ function charToDetails(character: GameCharacter): string {
 	if (character.alias) {
 		return `\`sage! ${character.alias}\``;
 	}
-	const charNameKeyValue = `name="${character.name}"`;
-	const parentNameKeyValue = character.isCompanionOrMinion ? `charName="${character.parent?.name}" ` : ``;
+	const charNameKeyValue = toKeyValueString("name", character.name);
+	const parentNameKeyValue = character.isCompanionOrMinion ? toKeyValueString("charName", character.parent?.name) + " " : ``;
 	return `\`sage! ${character.type} details ${parentNameKeyValue}${charNameKeyValue}\``;
 }
 
