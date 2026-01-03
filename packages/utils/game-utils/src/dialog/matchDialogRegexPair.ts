@@ -2,16 +2,6 @@ import { OptionalHorizontalWhitespaceRegExp as HWS, OptionalWhitespaceRegExp as 
 import { getUrlRegex } from "@rsc-utils/io-utils";
 import { regex } from "regex";
 
-export const DialogTypeOrAliasRegExp = regex`
-	^
-	${HWS}
-	(?<alias>
-		[ \w \p{L} \p{N} ]+   # letters, numbers, and underscores only
-	)
-	${HWS}
-	::
-`;
-
 const DialogNameAndDisplayNameRegExp = regex`
 	^
 	::
@@ -73,7 +63,11 @@ const DialogUrlRegExp = regex("i")`
 	^
 	::
 	${WS}
-	dialog=${getUrlRegex({ capture:"dialogUrl", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
+	dialog
+	${HWS}
+	=
+	${HWS}
+	${getUrlRegex({ capture:"dialogUrl", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
 	${WS}
 	::
 `;
@@ -82,7 +76,11 @@ const EmbedUrlRegExp = regex("i")`
 	^
 	::
 	${WS}
-	embed=${getUrlRegex({ capture:"embedUrl", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
+	embed
+	${HWS}
+	=
+	${HWS}
+	${getUrlRegex({ capture:"embedUrl", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
 	${WS}
 	::
 `;
@@ -100,7 +98,7 @@ const DialogOtherRegExp = regex`
 	^
 	::
 	${HWS}
-	(.*?)
+	(?<content> .*? )
 	(?!
 		[^\[]*\]    # no []
 		|
@@ -124,6 +122,28 @@ const pairs: DialogRegexPair[] = [
 	{ key:"other", regex:DialogOtherRegExp }
 ] as const;
 
-export function getDialogRegexPairs(): readonly DialogRegexPair[] {
-	return pairs;
+export type DialogRegExpMatch = {
+	/** which regex pair */
+	key: DialogRegexKey;
+	/** the full match */
+	value: string | undefined;
+	/** the indexed match groups */
+	values: string[];
+	/** the length to slice to remove the matched pair */
+	sliceLength: number;
+};
+
+export function matchDialogRegexPair(value: string): DialogRegExpMatch | undefined {
+	for (const pair of pairs) {
+		const match = pair.regex.exec(value);
+		if (match) {
+			const key = pair.key as DialogRegexKey;
+			const value = match[1];
+			const values = match.slice(1);
+			// .length - 2 to leave :: at the beginning of the string
+			const sliceLength = match[0].length - 2;
+			return { key, value, values, sliceLength };
+		}
+	}
+	return undefined;
 }

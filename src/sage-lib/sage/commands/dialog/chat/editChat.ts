@@ -1,13 +1,12 @@
-import { error } from "@rsc-utils/core-utils";
+import { error, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
+import type { DialogContent } from "@rsc-utils/game-utils";
 import { AttachmentBuilder } from "discord.js";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { includeDeleteButton } from "../../../model/utils/deleteButton.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { SageMessageReference } from "../../../repo/SageMessageReference.js";
-import type { DialogContent } from "../DialogContent.js";
 import { updateEmbed } from "../updateEmbed.js";
 import { DialogProcessor } from "./DialogProcessor.js";
 

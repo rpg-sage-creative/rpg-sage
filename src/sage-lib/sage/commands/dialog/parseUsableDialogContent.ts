@@ -1,7 +1,8 @@
+import { parseDialogContent, type DialogContent } from "@rsc-utils/game-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
-import type { DialogContent } from "./DialogContent.js";
 import { findAlias } from "./find/findAlias.js";
-import { parseDialogContent } from "./parseDialogContent.js";
+
+const TextRegExp = /{text}/i;
 
 /**
  * Parses dialog content.
@@ -10,6 +11,7 @@ import { parseDialogContent } from "./parseDialogContent.js";
 export function parseUsableDialogContent(sageCommand: SageCommand, content: string): DialogContent | undefined {
 	// parse original content
 	const dialogContent = parseDialogContent(content);
+
 	// we can't parse it or don't have an alias, so return now
 	if (!dialogContent?.alias) {
 		return dialogContent;
@@ -17,6 +19,7 @@ export function parseUsableDialogContent(sageCommand: SageCommand, content: stri
 
 	// look up the alias
 	const aliasFound = findAlias(sageCommand, dialogContent.alias);
+
 	// we can't find it, so return now
 	if (!aliasFound) {
 		return undefined;
@@ -27,6 +30,7 @@ export function parseUsableDialogContent(sageCommand: SageCommand, content: stri
 		// slice off the input after the alias::
 		const index = content.indexOf("::");
 		const slicedDialogContent = content.slice(index + 2);
+
 		// parse and return the updated content
 		return parseDialogContent(aliasFound.target + slicedDialogContent);
 	}
@@ -38,9 +42,8 @@ export function parseUsableDialogContent(sageCommand: SageCommand, content: stri
 	}
 
 	// properly update the content by either replacing {text} or appending
-	const textRegex = /{text}/i;
-	const updatedContent = textRegex.test(aliasContent.content)
-		? aliasContent.content.replace(textRegex, dialogContent.content)
+	const updatedContent = TextRegExp.test(aliasContent.content)
+		? aliasContent.content.replace(TextRegExp, dialogContent.content)
 		: aliasContent.content + dialogContent.content;
 
 	return {

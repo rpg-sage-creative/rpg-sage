@@ -1,7 +1,7 @@
+import type { DialogType } from "@rsc-utils/game-utils";
 import { ColorType } from "../../model/HasColorsCore.js";
-import type { TDialogType } from "./TDialogType.js";
 
-export function getColorType(dialogType?: TDialogType): ColorType | null {
+export function getColorType(dialogType?: DialogType): ColorType | null {
 	switch (dialogType) {
 		case "gm": return ColorType.GameMaster;
 

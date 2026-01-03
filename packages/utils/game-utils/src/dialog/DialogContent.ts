@@ -1,10 +1,10 @@
 import type { HexColorString } from "@rsc-utils/core-utils";
-import type { DialogType } from "../../repo/base/IdRepository.js";
-import type { TDialogType } from "./TDialogType.js";
+import type { DialogPostType } from "./DialogPostType.js";
+import type { DialogType } from "./DialogType.js";
 
 export type DialogContent = {
 	/** preset dialog prefix */
-	type?: TDialogType;
+	type?: DialogType;
 
 	/** aliased dialog prefix */
 	alias?: string;
@@ -12,7 +12,7 @@ export type DialogContent = {
 	/** if true, post the attachment with this dialog */
 	attachment?: boolean;
 
-	postType?: DialogType;
+	postType?: DialogPostType;
 
 	/** character name */
 	name?: string;

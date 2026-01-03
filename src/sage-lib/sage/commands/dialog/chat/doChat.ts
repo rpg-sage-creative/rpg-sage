@@ -1,8 +1,8 @@
 import { error } from "@rsc-utils/core-utils";
+import type { DialogContent } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { ColorType } from "../../../model/HasColorsCore.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import type { DialogContent } from "../DialogContent.js";
 import { sendDialogPost } from "../sendDialogPost.js";
 import type { ChatOptions } from "./ChatOptions.js";
 

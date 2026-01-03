@@ -1,12 +1,11 @@
 import { isNotBlank } from "@rsc-utils/core-utils";
+import { parseDialogContent, type DialogContent } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { TAlias } from "../../../model/User.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
-import type { DialogContent } from "../../dialog/DialogContent.js";
-import { parseDialogContent } from "../../dialog/parseDialogContent.js";
 
 function testGmTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
 	if (!sageMessage.game || sageMessage.isGameMaster) {

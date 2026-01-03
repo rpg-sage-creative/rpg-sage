@@ -1,9 +1,8 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import { StringMatcher, stringOrUndefined, unwrap, type Optional } from "@rsc-utils/core-utils";
+import { parseDialogContent } from "@rsc-utils/game-utils";
 import { isUrl } from "@rsc-utils/io-utils";
-import { StringMatcher, stringOrUndefined, unwrap } from "@rsc-utils/core-utils";
 import { getBasicDiceRegex } from "../../../sage-dice/getBasicDiceRegex.js";
 import { matchAllMacroArgPairs, testMacroArgRegex, testMacroRemainingArgRegex, type MacroArgPair } from "../commands/admin/macro/getMacroArgRegex.js";
-import { parseDialogContent } from "../commands/dialog/parseDialogContent.js";
 import { isMath } from "../commands/dice/isMath.js";
 import { isRandomItem } from "../commands/dice/isRandomItem.js";
 import { isValidTable } from "../commands/dice/isValidTable.js";

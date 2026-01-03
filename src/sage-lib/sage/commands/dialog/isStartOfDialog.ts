@@ -1,6 +1,6 @@
+import { getTypeOrAlias } from "@rsc-utils/game-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
 import { findAlias } from "./find/findAlias.js";
-import { getTypeOrAlias } from "./getTypeOrAlias.js";
 
 /**
  * Checks the content to ensure it starts with the proper dialog prefix.

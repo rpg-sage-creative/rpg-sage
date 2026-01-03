@@ -1,8 +1,8 @@
 import { debug } from "@rsc-utils/core-utils";
+import type { DialogContent } from "@rsc-utils/game-utils";
 import { registerMessageListener } from "../../discord/handlers.js";
 import { MessageType, type TCommandAndArgsAndData } from "../../discord/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
-import type { DialogContent } from "./dialog/DialogContent.js";
 import { companionChat } from "./dialog/chat/companionChat.js";
 import { editChat } from "./dialog/chat/editChat.js";
 import { gmChat } from "./dialog/chat/gmChat.js";
