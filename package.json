@@ -43,7 +43,13 @@
 		"type": "patreon",
 		"url": "https://www.patreon.com/rpgsage"
 	},
-	"repository": "github:rpg-sage-creative/rpg-sage",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/rpg-sage-creative/rpg-sage.git"
+	},
+	"publishConfig": {
+		"@rpg-sage-creative:registry": "https://npm.pkg.github.com"
+	},
 	"workspaces": [
 		"packages/*/*"
 	],
