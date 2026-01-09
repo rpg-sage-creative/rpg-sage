@@ -8,6 +8,6 @@
 		"@rsc-utils/core-utils": "@rsc-utils/core-utils"
 	},
 	"scripts": {
-		"indexTs": "node ../../../node_modules/@rsc-utils/core-utils/scripts/mjs/index.mjs indexTs -r"
+		"indexTs": "node ../../../node_modules/@rsc-utils/dev-scripts/mjs/index.mjs indexTs -r"
 	}
 }

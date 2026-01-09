@@ -48,17 +48,18 @@
 		"packages/*/*"
 	],
 	"devDependencies": {
+		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.1.0",
 		"@types/follow-redirects": "^1.14.4",
-		"@types/node": "^24.6.1",
-		"typescript": "^5.8.3"
+		"@types/node": "^24.10.4",
+		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"@aws-sdk/client-sns": "^3.956.0",
+		"@aws-sdk/client-sns": "^3.966.0",
 		"@discordjs/rest": "^2.6.0",
-		"@napi-rs/canvas": "^0.1.53",
-		"@rsc-utils/core-utils": "rpg-sage-creative/core-utils#v0.13.3",
-		"@rsc-utils/io-utils": "rpg-sage-creative/io-utils#v0.5.4",
-		"@rsc-utils/discord-utils": "rpg-sage-creative/discord-utils#v0.4.4",
+		"@napi-rs/canvas": "^0.1.88",
+		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.0.1",
+		"@rsc-utils/discord-utils": "github:rpg-sage-creative/discord-utils#semver:^1.0.0",
+		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.0.2",
 		"discord.js": "^14.25.1",
 		"regex": "^6.1.0"
 	},
@@ -74,8 +75,8 @@
 	},
 	"scripts": {
 		"prebuild": "cd ./packages/utils/game-utils; npm run indexTs",
-		"build": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/build.sh --skipIndexTs",
-		"release": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/release.sh",
+		"build": "bash ./node_modules/@rsc-utils/dev-scripts/sh/build.sh --skipIndexTs",
+		"release": "bash ./node_modules/@rsc-utils/dev-scripts/sh/release.sh",
 		"test": "echo 'no tests'",
 		"clean": "rm -rf node_modules; rm -f package-lock.json; npm i; npm run build",
 		"prestart-dev": "npm run build",
