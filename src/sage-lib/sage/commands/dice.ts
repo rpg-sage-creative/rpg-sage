@@ -1,7 +1,7 @@
 import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
-import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath, type GameSystemType } from "@rsc-utils/game-utils";
+import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath, processDiceMacroCall, type GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -14,7 +14,6 @@ import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
 import { isMath } from "./dice/isMath.js";
 import { isRandomItem } from "./dice/isRandomItem.js";
-import { macroToDice } from "./dice/macroToDice.js";
 import { parseTable } from "./dice/parseTable.js";
 import { rollMath } from "./dice/rollMath.js";
 import { rollRandomItem } from "./dice/rollRandomItem.js";
@@ -103,11 +102,11 @@ async function parseDiscordMacro(macroString: string, options: ParseDiscordMacro
 	}
 
 	// find the macro
-	const macroAndOutput = macroToDice(tieredMacros, unwrap(macroString, "[]"));
+	const macroAndOutput = processDiceMacroCall(macroString, tieredMacros);
 	if (macroAndOutput) {
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
-			error(`Macro Recursion`, { macroString, macroStack });
+			error(`Macro Recursion (parseDiscordMacro)`, { macroString, macroStack });
 			const parsedDice = await parseDiscordDice(`[0d0 Recursion!]`, { processor, sageCommand });
 			return parsedDice?.roll().toStrings() ?? [];
 		}

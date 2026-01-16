@@ -1,4 +1,5 @@
 export * from "./dice/index.js";
+export * from "./macro/index.js";
 export * from "./manipulate/index.js";
 export * from "./markup/index.js";
 export * from "./math/index.js";

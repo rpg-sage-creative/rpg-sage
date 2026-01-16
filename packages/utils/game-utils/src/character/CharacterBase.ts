@@ -1,4 +1,5 @@
 import { HasIdCore, randomSnowflake, StringMatcher, type IdCore, type Optional } from "@rsc-utils/core-utils";
+import type { DiceMacroBase, MacroBase } from "../dice/index.js";
 import type { GameSystemCode } from "../system/GameSystem.js";
 
 type MessageReference = { channelId:string; guildId:string|undefined; messageId:string|undefined; };
@@ -48,21 +49,6 @@ interface HasSheet<SectionType extends string = string, ViewType extends string 
 	/** Returns a list of views that have sections with data to render. */
 	getValidViews(): ViewType[];
 }
-
-type MacroBase<Category extends string = string> = {
-	/** the name of the macro */
-	name: string;
-	/** optional category for the macro */
-	category?: Category;
-	dialog?: string;
-	dice?: string;
-}
-export type DiceMacroBase<Category extends string = string> = MacroBase<Category> & {
-	/** ensure we aren't a dialog macro */
-	dialog?: never;
-	/** the dice to roll */
-	dice: string;
-};
 
 export abstract class CharacterBase<
 			Core extends CharacterBaseCore<ObjectType> = CharacterBaseCore<any>,

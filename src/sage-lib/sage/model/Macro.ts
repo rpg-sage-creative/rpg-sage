@@ -1,8 +1,7 @@
 import { StringMatcher, stringOrUndefined, unwrap, type Optional } from "@rsc-utils/core-utils";
-import { parseDialogContent } from "@rsc-utils/game-utils";
+import { hasDiceMacroArgPlaceholder, hasDiceMacroRemainingArgPlaceholder, parseDialogContent, parseDiceMacroArgPlaceholdersForModal, type DiceMacroArgPlaceholder } from "@rsc-utils/game-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { getBasicDiceRegex } from "../../../sage-dice/getBasicDiceRegex.js";
-import { matchAllMacroArgPairs, testMacroArgRegex, testMacroRemainingArgRegex, type MacroArgPair } from "../commands/admin/macro/getMacroArgRegex.js";
 import { isMath } from "../commands/dice/isMath.js";
 import { isRandomItem } from "../commands/dice/isRandomItem.js";
 import { isValidTable } from "../commands/dice/isValidTable.js";
@@ -73,14 +72,14 @@ export class Macro<Category extends string = string> {
 
 	public get hasArgs(): boolean {
 		if (this.isDice()) {
-			return testMacroArgRegex(this.base.dice);
+			return hasDiceMacroArgPlaceholder(this.base.dice);
 		}
 		return false;
 	}
 
 	public get hasRemainingArgs(): boolean {
 		if (this.isDice()) {
-			return testMacroRemainingArgRegex(this.base.dice);
+			return hasDiceMacroRemainingArgPlaceholder(this.base.dice);
 		}
 		return false;
 	}
@@ -135,9 +134,9 @@ export class Macro<Category extends string = string> {
 	}
 
 	/** parses dice for {key:defaultValue} pairs ... returns empty string for any other macro type. */
-	public getArgPairs(): MacroArgPair[] {
+	public getArgPlaceholdersForModal(): DiceMacroArgPlaceholder[] {
 		if (this.isDice()) {
-			return matchAllMacroArgPairs(this.base.dice);
+			return parseDiceMacroArgPlaceholdersForModal(this.base.dice);
 		}
 		return [];
 	}

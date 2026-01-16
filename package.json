@@ -63,7 +63,7 @@
 		"@aws-sdk/client-sns": "^3.966.0",
 		"@discordjs/rest": "^2.6.0",
 		"@napi-rs/canvas": "^0.1.88",
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.0.1",
+		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.0.6",
 		"@rsc-utils/discord-utils": "github:rpg-sage-creative/discord-utils#semver:^1.0.0",
 		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.0.2",
 		"discord.js": "^14.25.1",

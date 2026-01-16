@@ -1,5 +1,6 @@
 import { type Snowflake } from "@rsc-utils/core-utils";
 import { ModalBuilder } from "@rsc-utils/discord-utils";
+import type { DiceMacroArgPlaceholder } from "@rsc-utils/game-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";
 import type { Args } from "./getArgs.js";
@@ -11,12 +12,12 @@ export async function createMacroArgsModal(args: Args<true, true>): Promise<Moda
 	modal.setCustomId(createCustomId({ ...args.customIdArgs, action:"rollMacroArgs" }));
 
 	const macro = args.macro;
-	const pairs = macro.getArgPairs();
+	const pairs = macro.getArgPlaceholdersForModal();
 
-	const namedPairs = pairs.filter(pair => !pair.isIndexed);
+	const namedPairs = pairs.filter(pair => pair.isNamed) as (DiceMacroArgPlaceholder & { key:string; })[];
 	const showNamed = namedPairs.length > 0;
 
-	const indexedPairs = pairs.filter(pair => !!pair.isIndexed);
+	const indexedPairs = pairs.filter(pair => pair.isIndexed) as (DiceMacroArgPlaceholder & { keyIndex:number; })[];
 	const { hasRemainingArgs } = macro;
 	const showIndexed = indexedPairs.length || hasRemainingArgs;
 
