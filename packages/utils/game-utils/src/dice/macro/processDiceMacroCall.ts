@@ -10,6 +10,7 @@ type DiceMacroBaseAndOutput = {
 	output: string;
 };
 
+/** Checks to see if the diceString is a macro. If so, the macro is parsed and processed into a dice string. Otherwise, undefined is returned. */
 export function processDiceMacroCall(diceString: string, macroTiers: DiceMacroBase[][]): DiceMacroBaseAndOutput | undefined {
 	// confirm that we have a dice macro
 	const parsedMacro = parseDiceMacroCall(diceString, macroTiers);
