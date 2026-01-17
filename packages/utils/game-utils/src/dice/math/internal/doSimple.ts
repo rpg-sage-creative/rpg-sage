@@ -1,8 +1,8 @@
-import { NumberRegExp } from "@rsc-utils/core-utils";
+import { globalizeRegex, NumberRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
+import { unpipe } from "../../../utils/pipes.js";
 import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
 import { evalMath } from "./evalMath.js";
-import { unpipe } from "./unpipe.js";
 
 export const SimpleMathRegExp = regex()`
 	(?<! \w )                    # ignore the entire thing if preceded a word character
@@ -34,7 +34,7 @@ export const OrSpoileredSimpleMathRegExp = regex()`
 	${SimpleMathRegExp}
 `;
 
-const SimpleMathRegExpG = new RegExp(SimpleMathRegExp, "g");
+const SimpleMathRegExpG = globalizeRegex(SimpleMathRegExp);
 
 /**
  * @internal

@@ -1,6 +1,6 @@
-import { hypot, nth, NumberRegExp, round, signed, type TypedRegExp } from "@rsc-utils/core-utils";
+import { globalizeRegex, hypot, nth, NumberRegExp, round, signed } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { cleanPipes, unpipe } from "./unpipe.js";
+import { cleanPipes, unpipe } from "../../../utils/pipes.js";
 import { doSimple, OrSpoileredSimpleMathRegExp } from "./doSimple.js";
 
 type SageMathFunction = keyof typeof SageMath;
@@ -36,8 +36,7 @@ export const ComplexMathRegExp = regex("i")`
 		)
 		\s*\)
 
-		|
-
+	|
 		# implicit multiplication
 		(?<multiplier>
 			\g<orSpoileredNumber>
@@ -59,10 +58,9 @@ export const ComplexMathRegExp = regex("i")`
 		(?<orSpoileredNumber> \|\| \g<number> \|\| | \g<number> )
 		(?<number> ${NumberRegExp} )
 	)
-` as TypedRegExp<CompleteMathRegExpGroups>;
-type CompleteMathRegExpGroups = { functionName?:string; functionArgs?:string; multiplier?:string; simpleMath?:string; };
+`;
 
-const ComplexMathRegExpG = new RegExp(ComplexMathRegExp, "g");
+const ComplexMathRegExpG = globalizeRegex(ComplexMathRegExp);
 
 
 /** @internal Tests the value against a complex regex using the given options. */
@@ -75,9 +73,7 @@ export function doComplex(input: string): string {
 	let output = input;
 	while (ComplexMathRegExp.test(output)) {
 		// because of the way the capture groups use or "|" our array args seem to be the same regardless of the capture group names ...
-		// output = output.replace(ComplexMathRegExpG, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _simpleMath: string) => {
-		output = output.replace(ComplexMathRegExpG, (...args: any) => {
-			const groups = args.pop() as CompleteMathRegExpGroups;
+		output = output.replace(ComplexMathRegExpG, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _simpleMath: string) => {
 			// if (!allowSpoilers && unpipe(_).hasPipes) return _;
 
 			let hasPipes = false;
@@ -87,11 +83,11 @@ export function doComplex(input: string): string {
 			};
 
 			// handle a math function
-			if (groups.functionName !== undefined) {
+			if (_functionName !== undefined) {console.debug({_functionName})
 				// lower case and cast type
-				const functionName = groups.functionName.toLowerCase() as SageMathFunction;
+				const functionName = _functionName.toLowerCase() as SageMathFunction;
 				// check function args for pipes
-				const functionArgsPipeInfo = unpipe(groups.functionArgs!);
+				const functionArgsPipeInfo = unpipe(_functionArgs);
 				// update hasPips for the retVal
 				hasPipes = functionArgsPipeInfo.hasPipes;
 				// split on space,space and convert to numbers
@@ -102,14 +98,14 @@ export function doComplex(input: string): string {
 				return retVal(result);
 			}
 
-			const simpleMathPipeInfo = unpipe(groups.simpleMath!);
+			const simpleMathPipeInfo = unpipe(_simpleMath);
 
 			hasPipes = simpleMathPipeInfo.hasPipes;
 
 			// handle a multiplier
-			if (groups.multiplier !== undefined) {
+			if (_multiplier !== undefined) {
 				// return the new math so that it can be reprocessed
-				return retVal(`${groups.multiplier}*${doSimple(simpleMathPipeInfo.unpiped)}`);
+				return retVal(`${_multiplier}*${doSimple(simpleMathPipeInfo.unpiped)}`);
 			}
 
 			// handle parentheses

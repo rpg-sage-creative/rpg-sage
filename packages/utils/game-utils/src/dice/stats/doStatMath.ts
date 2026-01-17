@@ -1,7 +1,7 @@
-import { tokenize } from "../internal/tokenize.js";
-import { ComplexMathRegExp } from "../math/doComplex.js";
-import { doPosNeg, PosNegNumberRegExp } from "../math/doPosNeg.js";
-import { SimpleMathRegExp } from "../math/doSimple.js";
+import { tokenize } from "@rsc-utils/core-utils";
+import { ComplexMathRegExp } from "../math/internal/doComplex.js";
+import { doPosNeg, PosNegNumberRegExp } from "../math/internal/doPosNeg.js";
+import { SimpleMathRegExp } from "../math/internal/doSimple.js";
 import { processMath } from "../math/processMath.js";
 
 /**

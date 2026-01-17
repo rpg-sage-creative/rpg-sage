@@ -1,5 +1,6 @@
+import { globalizeRegex } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { unpipe } from "./unpipe.js";
+import { unpipe } from "../../../utils/pipes.js";
 import { evalMath } from "./evalMath.js";
 
 export const PosNegNumberRegExp = regex()`
@@ -17,7 +18,7 @@ export const OrSpoileredPosNegNumberRegExp = regex()`
 	${PosNegNumberRegExp}
 `;
 
-const OrSpoileredPosNegNumberRegExpG = new RegExp(OrSpoileredPosNegNumberRegExp, "g");
+const OrSpoileredPosNegNumberRegExpG = globalizeRegex(OrSpoileredPosNegNumberRegExp);
 
 /** for prepPosNegSigns() */
 const SpacerRegExpG = /-+|\++/g;

@@ -1,5 +1,5 @@
-import { unwrap } from "@rsc-utils/core-utils";
-import { getNumberRegex, hasMath, processMath } from "@rsc-utils/game-utils";
+import { getOrCreateRegex, NumberRegExp, unwrap } from "@rsc-utils/core-utils";
+import { hasMath, processMath } from "@rsc-utils/game-utils";
 
 /**
  * Checks the value against regex to determine if it is a simple math equation.
@@ -8,6 +8,9 @@ import { getNumberRegex, hasMath, processMath } from "@rsc-utils/game-utils";
  */
 export function isMath(value: string): boolean {
 	const unwrapped = unwrap(value, "[]");
-	return hasMath(unwrapped)
-		&& getNumberRegex({ anchored:true }).test(processMath(unwrapped).trim());
+	if (hasMath(unwrapped)) {
+		const regexp = getOrCreateRegex(() => NumberRegExp, { anchored:true });
+		return regexp.test(processMath(unwrapped).trim());
+	}
+	return false;
 }
