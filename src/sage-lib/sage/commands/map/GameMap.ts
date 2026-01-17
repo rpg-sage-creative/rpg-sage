@@ -129,8 +129,7 @@ export class GameMap extends GameMapBase {
 
 	/** returns the user's active layer values */
 	public get activeLayerValues() {
-		return this.activeLayerMap[this.userId]
-			?? (this.activeLayerMap[this.userId] = [LayerType.Token, undefined, undefined, undefined, LayerType.Token]);
+		return this.activeLayerMap[this.userId] ??= [LayerType.Token, undefined, undefined, undefined, LayerType.Token];
 	}
 
 	/** returns the user's currently active terrain */
@@ -145,6 +144,19 @@ export class GameMap extends GameMapBase {
 		const activeTokenId = this.activeLayerValues[LayerType.Token];
 		const userTokens = this.userTokens;
 		return userTokens.find(token => token.id === activeTokenId) ?? userTokens[0];
+	}
+
+	/** @todo do this without simply looping cycleActiveToken() */
+	public setActiveToken(tokenId: Snowflake): boolean {
+		const activeTokenId = this.activeLayerValues[LayerType.Token];
+		const found = this.userTokens.some(token => token.id === tokenId);
+		if (found && activeTokenId !== tokenId) {
+			while (this.activeToken.id !== tokenId) {
+				this.cycleActiveToken();
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/** returns the maps grid dimensions: [rows, cols] */
