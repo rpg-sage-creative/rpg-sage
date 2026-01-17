@@ -62,18 +62,6 @@ function parseMapTokenSelectCustomId(customId: string): { messageId:Snowflake; a
 	return { messageId, actorId };
 }
 
-async function sendTokenSelect(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
-	const tokens = gameMap.userTokens;
-	const activeTokenId = gameMap.activeToken.id;
-	const select = new StringSelectMenuBuilder().setCustomId(createMapTokenSelectCustomId(gameMap.messageId, sageInteraction.actorId));
-	tokens.forEach(token => select.addOptions(new StringSelectMenuOptionBuilder().setValue(token.id).setLabel(token.name).setDefault(token.id === activeTokenId)));
-	const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
-	await sageInteraction.dChannel?.send({
-		content: "Select Active Token",
-		components: [row, createMessageDeleteButtonRow(sageInteraction.actorId)],
-	});
-}
-
 async function handleTokenSelect(sageInteraction: SageStringSelectInteraction, gameMap: GameMap): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
 	const stack = sageInteraction.replyStack;
@@ -120,29 +108,38 @@ async function handleTokenSelect(sageInteraction: SageStringSelectInteraction, g
 }
 
 async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
-	const localize = sageInteraction.getLocalizer();
-	const stack = sageInteraction.replyStack;
-await sageInteraction.replyStack.defer();
+	await sageInteraction.replyStack.defer();
+	const tokens = gameMap.userTokens;
+	const activeTokenId = gameMap.activeToken.id;
+	const select = new StringSelectMenuBuilder().setCustomId(createMapTokenSelectCustomId(gameMap.messageId, sageInteraction.actorId));
+	tokens.forEach(token => select.addOptions(new StringSelectMenuOptionBuilder().setValue(token.id).setLabel(token.name).setDefault(token.id === activeTokenId)));
+	const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+	await sageInteraction.dChannel?.send({
+		content: "Select Active Token",
+		components: [row, createMessageDeleteButtonRow(sageInteraction.actorId)],
+	});
 
-	const ensureResults = ensurePlayerCharacter(sageInteraction, gameMap);
-	const toggled = gameMap.cycleActiveToken();
-	const activeToken = gameMap.activeToken;
-return await sendTokenSelect(sageInteraction, gameMap);
-	stack.editReply(localize("SETTING_S_AS_ACTIVE", activeToken?.name ?? localize("UNKNOWN")), true);
+	// const localize = sageInteraction.getLocalizer();
+	// const stack = sageInteraction.replyStack;
 
-	let updated = false;
+	// const ensureResults = ensurePlayerCharacter(sageInteraction, gameMap);
+	// const toggled = gameMap.cycleActiveToken();
+	// const activeToken = gameMap.activeToken;
+	// stack.editReply(localize("SETTING_S_AS_ACTIVE", activeToken?.name ?? localize("UNKNOWN")), true);
 
-	if (ensureResults.added.length) {
-		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
-	}else {
-		updated = toggled && await gameMap.save();
-	}
+	// let updated = false;
 
-	if (updated) {
-		return stack.editReply(localize("YOUR_ACTIVE_TOKEN_IS_S", activeToken?.name ?? localize("UNKNOWN")));
-	}
+	// if (ensureResults.added.length) {
+	// 	updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
+	// }else {
+	// 	updated = toggled && await gameMap.save();
+	// }
 
-	return stack.editReply(localize("ERROR_SETTING_ACTIVE_TOKEN"));
+	// if (updated) {
+	// 	return stack.editReply(localize("YOUR_ACTIVE_TOKEN_IS_S", activeToken?.name ?? localize("UNKNOWN")));
+	// }
+
+	// return stack.editReply(localize("ERROR_SETTING_ACTIVE_TOKEN"));
 }
 
 async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
