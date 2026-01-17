@@ -1,5 +1,4 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
-import type { TokenData } from "../internal/tokenize.js";
+import type { Snowflake, TokenData } from "@rsc-utils/core-utils";
 import type { DiceOutputType } from "../types/DiceOutputType.js";
 
 export type TDiceBaseCore = DiceBaseCore<any, any>;

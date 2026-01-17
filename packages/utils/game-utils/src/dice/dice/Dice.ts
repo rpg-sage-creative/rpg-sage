@@ -1,13 +1,10 @@
-import { randomSnowflake } from "@rsc-utils/core-utils";
+import { cleanWhitespace, isBoolean, randomSnowflake, sum } from "@rsc-utils/core-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
-import { cleanWhitespace } from "../internal/cleanWhitespace.js";
-import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
 import { unquoteAndDetick } from "../internal/unquoteAndDetick.js";
 import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
 import { removeDesc } from "../removeDesc.js";
-import { sum } from "../sum.js";
 import { sumDiceParts } from "../sumDiceParts.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import { UNICODE_LEFT_ARROW } from "../types/consts.js";
@@ -133,7 +130,7 @@ export class Dice<
 
 	//#region static
 
-	public static create<DiceType extends TDice, DicePartType extends TDicePart>(diceParts: DicePartType[]): DiceType {
+	public static override create<DiceType extends TDice, DicePartType extends TDicePart>(diceParts: DicePartType[]): DiceType {
 		return new this({
 			objectType: "Dice",
 			gameType: this.GameType,
@@ -142,11 +139,11 @@ export class Dice<
 		}) as DiceType;
 	}
 
-	public static fromCore<CoreType extends DiceCore, DiceType extends TDice>(core: CoreType): DiceType {
+	public static override fromCore<CoreType extends DiceCore, DiceType extends TDice>(core: CoreType): DiceType {
 		return new this(core as DiceCore) as DiceType;
 	}
 
-	public static readonly Child = DicePart as typeof DiceBase;
+	public static override readonly Child = DicePart as typeof DiceBase;
 
 	public static readonly correctEscapeForEmoji: (diceOutput: string) => string = (diceOutput: string) => diceOutput;
 

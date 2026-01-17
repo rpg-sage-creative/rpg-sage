@@ -1,8 +1,7 @@
-import { randomSnowflake } from "@rsc-utils/core-utils";
+import { randomSnowflake, type TokenData } from "@rsc-utils/core-utils";
 import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
 import { cleanDicePartDescription } from "../cleanDicePartDescription.js";
-import { hasSecretFlag } from "../internal/hasSecretFlag.js";
-import type { TokenData } from "../internal/tokenize.js";
+import { hasSecretFlag } from "../hasSecretFlag.js";
 import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
 import { DiceExplode } from "../manipulate/DiceExplode.js";
 import type { DiceManipulationData } from "../manipulate/DiceManipulationData.js";
@@ -104,8 +103,8 @@ export class DicePart<
 	public get hasDie(): boolean { return this.count > 0 && this.sides > 0; }
 	public get hasManipulation(): boolean { return this.manipulation.length > 0; }
 	public get hasRolls(): boolean { return !!this.sortedRollData; }
-	public get hasSecret(): boolean { return hasSecretFlag(this.description); }
-	public get hasTest(): boolean { return !this.test.isEmpty; }
+	public override get hasSecret(): boolean { return hasSecretFlag(this.description); }
+	public override get hasTest(): boolean { return !this.test.isEmpty; }
 	public get isEmpty(): boolean { return this.count === 0 && this.sides === 0 && this.modifier === 0; }
 	public get isMax(): boolean { return this.total === this.max; }
 	public get isMin(): boolean { return this.total === this.min; }
@@ -125,13 +124,31 @@ export class DicePart<
 	//#endregion
 
 	/** The maximum possible result. Accounts for negative numbers, thus -1d6 has max of -1 and min of -6. */
-	public get max(): number { return this.sign === "-" ? -1 * this.smallest : this.biggest; }
+	public get max(): number {
+		switch(this.sign) {
+			// not needed for min/max
+			case "*": case "/": return 0;
+			// if the value is negative, the number closest to zero is max
+			case "-": return -1 * this.smallest;
+			// assume all other values are "+"; the number furthest from zero is max
+			default: return this.biggest;
+		}
+	}
 
 	/** How many dice rolled max (value equal to .dice.sides). */
 	public get maxCount(): number { return this.rollsByIndex.filter(roll => !roll.isDropped && roll.isMax).length; }
 
 	/** The minimum possible result. Accounts for negative numbers, thus -1d6 has max of -1 and min of -6. */
-	public get min(): number { return this.sign === "-" ? -1 * this.biggest : this.smallest; }
+	public get min(): number {
+		switch(this.sign) {
+			// not needed for min/max
+			case "*": case "/": return 0;
+			// if the value is negative, then the number furthest from zero is min
+			case "-": return -1 * this.biggest;
+			// assume all other values are "+"; the number closest to zero is max
+			default: return this.smallest;
+		}
+	}
 
 	/** How many dice rolled 1. */
 	public get minCount(): number { return this.rollsByIndex.filter(roll => !roll.isDropped && roll.isMin).length; }
@@ -151,7 +168,7 @@ export class DicePart<
 		return mult * (mod + rollSum);
 	}
 
-	public roll(): this {
+	public override roll(): this {
 		if (!this.isEmpty || !this.hasRolls) {
 			this.core.sortedRollData = rollDicePart(this);
 		}
@@ -189,7 +206,7 @@ export class DicePart<
 
 	//#region static
 
-	public static create<DicePartType extends TDicePart>(args: DicePartCoreArgs = {}): DicePartType {
+	public static override create<DicePartType extends TDicePart>(args: DicePartCoreArgs = {}): DicePartType {
 		return this.fromCore({
 			objectType: "DicePart",
 			gameType: this.GameType,
@@ -209,11 +226,11 @@ export class DicePart<
 		});
 	}
 
-	public static fromCore<CoreType extends DicePartCore, DicePartType extends TDicePart>(core: CoreType): DicePartType {
+	public static override fromCore<CoreType extends DicePartCore, DicePartType extends TDicePart>(core: CoreType): DicePartType {
 		return new this(core as DicePartCore) as DicePartType;
 	}
 
-	public static fromTokens<DicePartType extends TDicePart>(tokens: TokenData[]): DicePartType {
+	public static override fromTokens<DicePartType extends TDicePart>(tokens: TokenData[]): DicePartType {
 		const core = tokens.reduce(this.reduceTokenToCore, { description:"" } as DicePartCore);
 		return this.create(core);
 	}

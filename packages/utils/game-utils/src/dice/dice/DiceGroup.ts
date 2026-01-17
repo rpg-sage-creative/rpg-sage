@@ -1,8 +1,6 @@
-import { randomSnowflake } from "@rsc-utils/core-utils";
+import { isBoolean, randomSnowflake, tokenize, type TokenData } from "@rsc-utils/core-utils";
 import { isGradeFailure } from "../grade.js";
-import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
-import { tokenize, type TokenData } from "../internal/tokenize.js";
 import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
 import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";
 import { partitionDiceParts } from "../token/partitionDiceParts.js";
@@ -64,7 +62,7 @@ export class DiceGroup<
 
 	//#region static
 
-	public static create<DiceGroupType extends TDiceGroup, DiceType extends TDice>(dice: DiceType[], args: DiceGroupCoreArgs = {}): DiceGroupType {
+	public static override create<DiceGroupType extends TDiceGroup, DiceType extends TDice>(dice: DiceType[], args: DiceGroupCoreArgs = {}): DiceGroupType {
 		return new this({
 			objectType: "DiceGroup",
 			gameType: this.GameType,
@@ -77,7 +75,7 @@ export class DiceGroup<
 		}) as DiceGroupType;
 	}
 
-	public static fromCore<CoreType extends DiceGroupCore, DiceGroupType extends TDiceGroup>(core: CoreType): DiceGroupType {
+	public static override fromCore<CoreType extends DiceGroupCore, DiceGroupType extends TDiceGroup>(core: CoreType): DiceGroupType {
 		return new this(core as DiceGroupCore) as DiceGroupType;
 	}
 
@@ -86,7 +84,7 @@ export class DiceGroup<
 		return this.fromTokens(tokens, args);
 	}
 
-	public static fromTokens<DiceGroupType extends TDiceGroup>(tokens: TokenData[], args?: DiceGroupCoreArgs): DiceGroupType {
+	public static override fromTokens<DiceGroupType extends TDiceGroup>(tokens: TokenData[], args?: DiceGroupCoreArgs): DiceGroupType {
 		const partedTokens = this.partitionDicePartTokens(tokens);
 		const diceParts = partedTokens.map(tokens => this.Child.Child.fromTokens(tokens) as TDicePart);
 		const partedDiceParts = this.partitionDiceParts(diceParts);
@@ -100,7 +98,7 @@ export class DiceGroup<
 
 	public static readonly partitionDiceParts = partitionDiceParts;
 
-	public static readonly Child = Dice as typeof DiceBase;
+	public static override readonly Child = Dice as typeof DiceBase;
 
 	//#endregion
 }
