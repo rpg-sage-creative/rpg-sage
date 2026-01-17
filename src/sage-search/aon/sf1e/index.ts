@@ -10,14 +10,16 @@ function urlRoot() {
 	return "https://www.aonsrd.com/";
 }
 
+const WS = /\s+/g;
+
 export function createSearchUrl(searchText: string): string {
-	const cleanSearchText = searchText.replace(/\s+/g, "+");
+	const cleanSearchText = searchText.replace(WS, "+");
 	return `${urlRoot()}Search.aspx?Query=${cleanSearchText}`;
 }
 
 export function createSearchResultUrl(link: TResultsLink): string {
 	const root = urlRoot();
-	const cleanUrl = link.url.replace(/\s+/g, "+").replace(new RegExp("^" + root, "i"), "");
+	const cleanUrl = link.url.replace(WS, "+").replace(new RegExp("^" + root, "i"), "");
 	return root + cleanUrl;
 }
 
