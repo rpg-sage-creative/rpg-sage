@@ -7,7 +7,7 @@ import { getCards, type CardBase, type DeckType } from "./decks/getCards.js";
 	A pile is a number array that contains the cardIds of the cards in the pile.
 	Regardless of it being "face up" or "face down" we are going to treat index 0 as the top card.
 	"unshift" represents placing a card on top of the pile.
-	"shift" represents drawing a card from the top of pile.
+	"shift" represents drawing a card from the top of the pile.
 	"push" represents placing a card on the bottom of the pile.
 	"pop" represents taking a card from the bottom of the pile.
 
@@ -191,7 +191,7 @@ export class Deck {
 			cardIds.push(...args.cardIds);
 
 		}else if (args.indexes) {
-			cardIds.push(...args.indexes.map(index => fromCards[index]));
+			cardIds.push(...args.indexes.map(index => fromCards[index]!));
 
 		} else if (args.randomCount) {
 			cardIds.push(...randomItems(fromCards, args.randomCount));

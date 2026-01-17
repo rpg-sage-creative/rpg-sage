@@ -60,17 +60,17 @@ function getEnglish54Names(): string[] {
 }
 
 function getEnglish54Code(card: string | number): string {
-	const cardName = typeof(card) === "string" ? card : getEnglish54Names()[card];
-	const [value, jokerNumber, suit] = cardName.split(" ");
+	const cardName = typeof(card) === "string" ? card : getEnglish54Names()[card]!;
+	const [value, jokerNumber, suit] = cardName.split(" ") as [string, string, string];
 	if (value === "Joker") return `j${jokerNumber}`;
-	const suitLetter = suit[0].toLowerCase();
+	const suitLetter = suit[0]!.toLowerCase();
 	if (+value) return `${value}${suitLetter}`;
-	return `${value[0].toLowerCase()}${suitLetter}`;
+	return `${value[0]!.toLowerCase()}${suitLetter}`;
 }
 
 function getEnglish54Emoji(card: string | number): string {
-	const cardName = typeof(card) === "string" ? card : getEnglish54Names()[card];
-	const [value, _of, suit] = cardName.split(" ");
+	const cardName = typeof(card) === "string" ? card : getEnglish54Names()[card]!;
+	const [value, _of, suit] = cardName.split(" ") as [string, string, string];
 	if (value === "Joker") return `:black_joker:`;
 	const suitEmoji = `:${suit.toLowerCase()}:`;
 	if (+value) return `${value}${suitEmoji}`;

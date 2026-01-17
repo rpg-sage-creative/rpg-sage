@@ -58,17 +58,17 @@ function getEnglish52Names(): string[] {
 }
 
 function getEnglish52Code(card: string | number): string {
-	const cardName = typeof(card) === "string" ? card : getEnglish52Names()[card];
-	const [value, _of, suit] = cardName.split(" ");
-	const suitLetter = suit[0].toLowerCase();
+	const cardName = typeof(card) === "string" ? card : getEnglish52Names()[card]!;
+	const [value, _of, suit] = cardName.split(" ") as [string, string, string];
+	const suitLetter = suit[0]!.toLowerCase();
 	const number = +value;
 	if (number) return `${number}${suitLetter}`;
-	return `${value[0].toLowerCase()}${suitLetter}`;
+	return `${value[0]!.toLowerCase()}${suitLetter}`;
 }
 
 function getEnglish52Emoji(card: string | number): string {
-	const cardName = typeof(card) === "string" ? card : getEnglish52Names()[card];
-	const [value, _of, suit] = cardName.split(" ");
+	const cardName = typeof(card) === "string" ? card : getEnglish52Names()[card]!;
+	const [value, _of, suit] = cardName.split(" ") as [string, string, string];
 	const suitEmoji = `:${suit.toLowerCase()}:`;
 	const number = +value;
 	if (number) return `${number}${suitEmoji}`;
