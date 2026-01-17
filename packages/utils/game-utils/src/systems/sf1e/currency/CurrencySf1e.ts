@@ -30,7 +30,7 @@ export class CurrencySF1e extends Currency<GameSystemKey, DenominationKeys, Curr
 	// 	return new Bulk(Math.floor(curr.upbs / 1000));
 	// }
 
-	public static readonly CurrencyData: CurrencyData = {
+	public static override readonly CurrencyData: CurrencyData = {
 		// names and value relative to default denomination (default has value = 1)
 		denominations: [
 			{ name:"Credit", plural:"Credits", denom:"credits", value:1 },
@@ -41,7 +41,7 @@ export class CurrencySF1e extends Currency<GameSystemKey, DenominationKeys, Curr
 		]
 	};
 
-	public static readonly GameSystem: GameSystemKey = "SF1e";
+	public static override readonly GameSystem: GameSystemKey = "SF1e";
 
 }
 
