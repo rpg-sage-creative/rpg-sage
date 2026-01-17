@@ -1,5 +1,5 @@
+import type { TokenData } from "@rsc-utils/core-utils";
 import type { DicePartCore } from "../dice/DicePart.js";
-import type { TokenData } from "../internal/tokenize.js";
 import { DiceDropKeep } from "./DiceDropKeep.js";
 import { DiceExplode } from "./DiceExplode.js";
 import { DiceThreshold } from "./DiceThreshold.js";
@@ -11,7 +11,7 @@ function notEmpty<T extends DiceManipulation>(dm: T): T | undefined {
 
 export function appendManipulationToCore(core: DicePartCore, token: TokenData, index: number, tokens: TokenData[]): boolean {
 	const lastToken = tokens[index - 1];
-	if (["dice", "dropKeep", "explode", "noSort", "threshold"].includes(lastToken?.key)) {
+	if (lastToken && ["dice", "dropKeep", "explode", "noSort", "threshold"].includes(lastToken.key)) {
 		const dropKeep = new DiceDropKeep(DiceDropKeep.parseData(token));
 
 		const explode = new DiceExplode(DiceExplode.parseData(token, core.sides));
