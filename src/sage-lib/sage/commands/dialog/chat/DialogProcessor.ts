@@ -1,8 +1,8 @@
 import type { Optional } from "@rsc-utils/core-utils";
+import type { DiceMacroBase } from "@rsc-utils/game-utils";
 import type { GuildMember } from "discord.js";
 import type { Game } from "../../../model/Game.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
-import type { DiceMacroBase } from "../../../model/Macro.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { User } from "../../../model/User.js";
 import { StatMacroProcessor, type StatMacroCharacters } from "../../dice/stats/StatMacroProcessor.js";

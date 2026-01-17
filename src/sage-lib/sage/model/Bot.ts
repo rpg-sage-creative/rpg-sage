@@ -1,11 +1,10 @@
 import { errorReturnFalse, getCodeName, getDataRoot, HasIdCore, warn, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
-import type { GameSystemType } from "@rsc-utils/game-utils";
+import type { GameSystemType, MacroBase } from "@rsc-utils/game-utils";
 import { fileExists, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { Colors } from "./Colors.js";
 import { Emoji } from "./Emoji.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
-import type { MacroBase } from "./Macro.js";
 
 export type TBotCodeName = "dev" | "beta" | "stable";
 

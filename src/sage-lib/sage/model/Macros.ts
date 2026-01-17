@@ -1,10 +1,10 @@
-import { partition, sortByKey, sortPrimitive, toUniqueDefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { partition, sortByKey, sortPrimitive, StringMatcher, toUniqueDefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
-import { StringMatcher } from "@rsc-utils/core-utils";
+import type { MacroBase } from "@rsc-utils/game-utils";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
-import { Macro, Uncategorized, type MacroBase, type MacroOrBase } from "./Macro.js";
+import { Macro, Uncategorized, type MacroOrBase } from "./Macro.js";
 import { MacroOwner, type MacroOwnerTypeKey, type TMacroOwner } from "./MacroOwner.js";
 import type { SageCommand } from "./SageCommand.js";
 import type { Server } from "./Server.js";

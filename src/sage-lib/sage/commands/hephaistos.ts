@@ -1,12 +1,12 @@
 import { errorReturnUndefined, isDefined, isNotBlank, StringMatcher, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type SupportedTarget } from "@rsc-utils/discord-utils";
+import { replaceMacroArgsWithDefaultValues, type DiceMacroBase, type MacroBase } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { SavingThrow } from "../../../gameSystems/d20/lib/SavingThrow.js";
 import { HephaistosCharacterSF1e, type CharacterSectionType, type CharacterViewType } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";
 import { Skill } from "../../../gameSystems/sf1e/lib/Skill.js";
 import { registerInteractionListener } from "../../discord/handlers.js";
 import type { GameCharacter } from "../model/GameCharacter.js";
-import type { DiceMacroBase, MacroBase } from "../model/Macro.js";
 import { MacroOwner } from "../model/MacroOwner.js";
 import { Macros } from "../model/Macros.js";
 import type { SageCommand } from "../model/SageCommand.js";
@@ -496,7 +496,7 @@ async function macroRollHandler(sageInteraction: SageButtonInteraction, characte
 	const macro = macros.find(m => m.id === activeMacro) ?? macros.find(m => m.name === activeMacro);
 
 	if (macro) {
-		const dice = macro.dice.replace(/\{.*?\}/g, match => match.slice(1,-1).split(":")[1] ?? "");
+		const dice = replaceMacroArgsWithDefaultValues(macro.dice);
 		const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(character.characterId));
 		const matches = await parseDiceMatches(dice, { processor, sageCommand:sageInteraction });
 		const output = matches.map(match => match.output).flat();

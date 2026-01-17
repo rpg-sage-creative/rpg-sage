@@ -3,7 +3,7 @@ import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, 
 import { DiceSortType, updateServer } from "@rsc-sage/types";
 import { applyChanges, randomSnowflake, warn, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
-import type { GameSystemType } from "@rsc-utils/game-utils";
+import type { GameSystemType, MacroBase } from "@rsc-utils/game-utils";
 import { parseGameSystem, type GameSystem } from "@rsc-utils/game-utils";
 import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
@@ -15,7 +15,6 @@ import type { Game } from "./Game.js";
 import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
-import type { MacroBase } from "./Macro.js";
 import type { SageCache } from "./SageCache.js";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;

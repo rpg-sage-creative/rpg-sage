@@ -1,7 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, type DialogPostType } from "@rsc-sage/types";
 import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
-import { Currency, CurrencyPf2e, Deck, doStatMath, parseGameSystem, processMath, StatBlockProcessor, unpipe, type DeckCore, type DeckType, type DenominationsCore, type GameSystem, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
+import { Currency, CurrencyPf2e, Deck, doStatMath, parseGameSystem, processMath, StatBlockProcessor, unpipe, type DeckCore, type DeckType, type DenominationsCore, type GameSystem, type MacroBase, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { mkdirSync } from "fs";
 import { Condition } from "../../../gameSystems/Condition.js";
@@ -16,7 +16,6 @@ import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { SageMessageReference, type SageMessageReferenceCore } from "../repo/SageMessageReference.js";
 import { CharacterManager } from "./CharacterManager.js";
-import type { MacroBase } from "./Macro.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
 import { getMetaStat } from "./utils/getMetaStat.js";

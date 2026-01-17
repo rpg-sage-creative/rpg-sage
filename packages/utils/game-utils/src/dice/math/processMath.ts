@@ -1,12 +1,5 @@
-import { doComplex, hasComplex } from "./internal/doComplex.js";
-import { doSimple, hasSimple } from "./internal/doSimple.js";
-
-/** Checks to see if the value it matches any of the "doMath" functions. */
-export function hasMath(value: string): boolean {
-	return hasComplex(value)
-		|| hasSimple(value)
-		;
-}
+import { doComplex } from "./internal/doComplex.js";
+import { doSimple } from "./internal/doSimple.js";
 
 /** Processes the value against the "doMath" functions until none are found. */
 export function processMath(value: string): string {

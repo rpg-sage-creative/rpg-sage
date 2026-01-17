@@ -11,6 +11,7 @@ export * from "./BasicBracketsRegExp.js";
 export * from "./cleanDicePartDescription.js";
 export * from "./DiceTest.js";
 export * from "./grade.js";
+export * from "./isRandomItem.js";
 export * from "./mapDicePartToRollString.js";
 export * from "./removeDesc.js";
 export * from "./sum.js";

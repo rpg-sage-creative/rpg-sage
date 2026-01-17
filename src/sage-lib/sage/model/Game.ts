@@ -1,7 +1,7 @@
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, SageChannelType, parseSageChannelType, updateGame, type DiceCritMethodType, type DiceOutputType, type DiceSecretMethodType, type GameOptions, type SageChannel } from "@rsc-sage/types";
 import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, stringOrUndefined, warn, type Args, type Comparable, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
-import type { GameSystemType } from "@rsc-utils/game-utils";
+import type { GameSystemType, MacroBase } from "@rsc-utils/game-utils";
 import { parseGameSystem, type GameSystem } from "@rsc-utils/game-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
 import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";
@@ -18,7 +18,6 @@ import { Emoji } from "./Emoji.js";
 import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
 import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
-import type { MacroBase } from "./Macro.js";
 import type { SageCache } from "./SageCache.js";
 import type { Server } from "./Server.js";
 

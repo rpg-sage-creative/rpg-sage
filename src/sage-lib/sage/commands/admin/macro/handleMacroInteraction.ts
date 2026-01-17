@@ -1,7 +1,8 @@
 import type { LocalizedTextKey, Localizer } from "@rsc-sage/localization";
 import { EphemeralMap, quote, ZERO_WIDTH_SPACE, type Snowflake } from "@rsc-utils/core-utils";
+import type { MacroBase } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { Macro, type MacroBase } from "../../../model/Macro.js";
+import { Macro } from "../../../model/Macro.js";
 import { findCharacterOrCompanion, Macros } from "../../../model/Macros.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageButtonInteraction, SageInteraction, SageModalSubmitInteraction } from "../../../model/SageInteraction.js";

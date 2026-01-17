@@ -6,4 +6,5 @@ export * from "./parseDiceMacroCall.js";
 export * from "./parseDiceMacroPrefix.js";
 export * from "./processDiceMacroCall.js";
 export * from "./regexp.js";
+export * from "./replaceMacroArgsWithDefaultValues.js";
 export * from "./types.js";

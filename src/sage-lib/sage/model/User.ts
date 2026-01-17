@@ -1,11 +1,11 @@
 import { getSuperAdminId, getSuperUserId } from "@rsc-sage/env";
 import { applyChanges, stringOrUndefined, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { MacroBase } from "@rsc-utils/game-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import type { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
-import type { MacroBase } from "./Macro.js";
 import { NamedCollection } from "./NamedCollection.js";
 import { NoteManager, type TNote } from "./NoteManager.js";
 import type { SageCache } from "./SageCache.js";

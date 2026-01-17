@@ -1,8 +1,7 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { StatBlockProcessor } from "@rsc-utils/game-utils";
+import { StatBlockProcessor, type DiceMacroBase } from "@rsc-utils/game-utils";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
-import type { DiceMacroBase } from "../../../model/Macro.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { EncounterManager } from "../../trackers/encounter/EncounterManager.js";
 

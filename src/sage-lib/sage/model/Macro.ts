@@ -1,9 +1,8 @@
 import { StringMatcher, stringOrUndefined, unwrap, type Optional } from "@rsc-utils/core-utils";
-import { hasDiceMacroArgPlaceholder, hasDiceMacroRemainingArgPlaceholder, parseDialogContent, parseDiceMacroArgPlaceholdersForModal, type DiceMacroArgPlaceholder } from "@rsc-utils/game-utils";
+import { hasDiceMacroArgPlaceholder, hasDiceMacroRemainingArgPlaceholder, isRandomItem, parseDialogContent, parseDiceMacroArgPlaceholdersForModal, type DiceMacroArgPlaceholder, type MacroBase } from "@rsc-utils/game-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { getBasicDiceRegex } from "../../../sage-dice/getBasicDiceRegex.js";
 import { isMath } from "../commands/dice/isMath.js";
-import { isRandomItem } from "../commands/dice/isRandomItem.js";
 import { isValidTable } from "../commands/dice/isValidTable.js";
 import { parseTable } from "../commands/dice/parseTable.js";
 import type { TMacroOwner } from "./MacroOwner.js";
@@ -12,16 +11,6 @@ export type Uncategorized = "Uncategorized";
 export const Uncategorized: Uncategorized = "Uncategorized";
 
 export type MacroOrBase<Category extends string = string> = MacroBase<Category> | Macro<Category>;
-
-export type MacroBase<Category extends string = string> = {
-	category?: Category;
-	dice?: string;
-	dialog?: string;
-	name: string;
-};
-
-// type DialogMacroBase<Category extends string = string> = MacroBase<Category> & { dice:never; };
-export type DiceMacroBase<Category extends string = string> = MacroBase<Category> & { dialog?:never; dice:string; };
 
 export type MacroType = "dialog" | "dice" | "items" | "math" | "table" | "tableUrl";
 

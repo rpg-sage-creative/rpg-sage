@@ -1,14 +1,13 @@
-import { errorReturnNull, type Optional } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, isWrapped, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import type { MacroBase } from "@rsc-utils/game-utils";
 import { getText, type VALID_URL } from "@rsc-utils/io-utils";
-import { isWrapped, stringOrUndefined } from "@rsc-utils/core-utils";
-import type { MacroBase } from "../Macro.js";
 
 type StringRecord = Record<string, string>;
 type Results<T extends StringRecord> = { keys:string[]; items:T[]; };
 
 export function parseTsv<T extends Record<string, string>>(raw: Optional<string>): Results<T> | undefined {
 	if (raw) {
-		const lines = raw.split(/[\n\r]+/).filter(s => s.trim()).map(line => line.split(/\t/).map(val => val.trim()));
+		const lines = raw.split("\n").filter(s => s.trim()).map(line => line.split("\t").map(val => val.trim()));
 		if (!lines.length) return undefined;
 
 		const keys = lines.shift() ?? [];
@@ -28,7 +27,7 @@ export function parseTsv<T extends Record<string, string>>(raw: Optional<string>
 
 /** Fetches tsv from the given (valid) url and returns keys and lines. */
 export async function fetchTsv<T extends Record<string, string>>(url: VALID_URL): Promise<Results<T> | undefined> {
-	const raw = await getText(url).catch(errorReturnNull);
+	const raw = await getText(url).catch(errorReturnUndefined);
 	return parseTsv(raw);
 }
 

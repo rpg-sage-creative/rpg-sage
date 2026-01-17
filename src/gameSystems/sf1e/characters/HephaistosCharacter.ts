@@ -1,7 +1,6 @@
-import { CharacterBase, type DiceMacroBase } from "@rsc-utils/game-utils";
 import { addCommas, errorReturnFalse, errorReturnUndefined, getDataRoot, type Optional } from "@rsc-utils/core-utils";
+import { CharacterBase, type DiceMacroBase, type MacroBase } from "@rsc-utils/game-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
-import type { MacroBase } from "../../../sage-lib/sage/model/Macro.js";
 import { Ability } from "../../d20/lib/Ability.js";
 import { Check } from "../../d20/lib/Check.js";
 import { SavingThrow } from "../../d20/lib/SavingThrow.js";
