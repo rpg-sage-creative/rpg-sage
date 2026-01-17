@@ -32,7 +32,7 @@ type GameSystemBase = {
 	/** Short code for the game system */
 	code: GameSystemCode;
 	/** Description of the game */
-	description: string;
+	desc: string;
 	/** Which dice system does the game use */
 	dice: DiceSystemCode;
 	/** Name of the game */
@@ -48,8 +48,9 @@ type GameSystemBase = {
 export type GameSystem = {
 	/** Short code for the game system */
 	code: GameSystemCode;
+	codeLower: Lowercase<GameSystemCode>;
 	/** Description of the game */
-	description: string;
+	desc: string;
 	/** Which dice system does the game use */
 	dice: DiceSystemCode;
 	/** Name of the game */
@@ -67,19 +68,24 @@ export type GameSystem = {
 /** Stores all the available Game Systems. */
 const gameSystems: GameSystem[] = ((): GameSystemBase[] => {
 	return [
-		{ code:"None",  dice:"None",  name:"None", description:"No Game System." },
-		{ code:"CnC",   dice:"CnC",   name:"Coyote & Crow", description:"" },
-		{ code:"DnD5e", dice:"DnD5e", name:"Dungeons & Dragons 5e", description:"", diceCritMethod:"TimesTwo" },
-		{ code:"E20",   dice:"E20",   name:"Essence 20", description:"", isE20:true },
-		{ code:"PF1e",  dice:"D20",  name:"Pathfinder 1e", description:"" },
-		{ code:"PF2e",  dice:"PF2e",  name:"Pathfinder 2e", description:"", diceCritMethod:"TimesTwo", isP20:true },
-		{ code:"Quest", dice:"Quest", name:"Quest RPG", description:"" },
-		{ code:"SF1e",  dice:"SF1e",  name:"Starfinder 1e", description:"", diceCritMethod:"RollTwice" },
-		{ code:"SF2e",  dice:"PF2e",  name:"Starfinder 2e", description:"", diceCritMethod:"TimesTwo", isP20:true },
-		{ code:"VtM5e", dice:"VtM5e", name:"Vampire: the Masquerade 5e", description:"" },
+		{ code:"None",  dice:"None",  name:"None",                       desc:"No Game System." },
+		{ code:"CnC",   dice:"CnC",   name:"Coyote & Crow",              desc:"" },
+		{ code:"DnD5e", dice:"DnD5e", name:"Dungeons & Dragons 5e",      desc:"", diceCritMethod:"TimesTwo" },
+		{ code:"E20",   dice:"E20",   name:"Essence 20",                 desc:"", isE20:true },
+		{ code:"PF1e",  dice:"D20",   name:"Pathfinder 1e",              desc:"" },
+		{ code:"PF2e",  dice:"PF2e",  name:"Pathfinder 2e",              desc:"", isP20:true, diceCritMethod:"TimesTwo" },
+		{ code:"Quest", dice:"Quest", name:"Quest RPG",                  desc:"" },
+		{ code:"SF1e",  dice:"SF1e",  name:"Starfinder 1e",              desc:"", diceCritMethod:"RollTwice" },
+		{ code:"SF2e",  dice:"PF2e",  name:"Starfinder 2e",              desc:"", isP20:true, diceCritMethod:"TimesTwo" },
+		{ code:"VtM5e", dice:"VtM5e", name:"Vampire: the Masquerade 5e", desc:"" },
 	];
 })().map(gameSystem => (
-	{ ...gameSystem, type: GameSystemType[gameSystem.code], diceCritMethodType: DiceCriticalMethodType[gameSystem.diceCritMethod!] }
+	{
+		...gameSystem,
+		codeLower: gameSystem.code.toLowerCase(),
+		type: GameSystemType[gameSystem.code],
+		diceCritMethodType: DiceCriticalMethodType[gameSystem.diceCritMethod!]
+	}
 ));
 
 /** Returns an array of the available Game Systems. */
@@ -99,8 +105,8 @@ export function parseGameSystem(value?: string | number | null): GameSystem | un
 		if (typeof(value) === "number") {
 			return gameSystems.find(system => system.type === value);
 		}else {
-			const regex = new RegExp(`^${value}$`, "i");
-			return gameSystems.find(system => regex.test(system.code));
+			const lower = value.toLowerCase();
+			return gameSystems.find(system => system.codeLower === lower);
 		}
 	}
 	return undefined;

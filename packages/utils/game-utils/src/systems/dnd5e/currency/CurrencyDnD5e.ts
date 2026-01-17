@@ -1,3 +1,4 @@
+import { round } from "@rsc-utils/core-utils";
 import { Currency, type CurrencyCore, type CurrencyData } from "../../../currency/Currency.js";
 
 type GameSystemKey = "DnD5e";
@@ -31,9 +32,8 @@ export class CurrencyDnD5e extends Currency<GameSystemKey, DenominationKeys, Cur
 
 	public static calculateWeight(coins: CurrencyDnD5e): Weight {
 		const count = coins.cp + coins.sp + coins.ep + coins.gp + coins.pp;
-		const pounds = count / 50;
-		const lb = Math.floor(pounds);
-		const oz = Math.floor(16 * (pounds - lb));
+		const oz = round(count / 3, 1);
+		const lb = round(count / 50, 1);
 		return { oz, lb };
 	}
 
@@ -41,7 +41,7 @@ export class CurrencyDnD5e extends Currency<GameSystemKey, DenominationKeys, Cur
 		return CurrencyDnD5e.parse(gp).toString("gp");
 	}
 
-	public static readonly CurrencyData: CurrencyData = {
+	public static override readonly CurrencyData: CurrencyData = {
 		// names and value relative to default denomination (default has value = 1)
 		denominations: [
 			{ name:"Copper Piece", plural:"Copper Pieces", denom:"cp", value:1/100 },
@@ -55,7 +55,7 @@ export class CurrencyDnD5e extends Currency<GameSystemKey, DenominationKeys, Cur
 		]
 	};
 
-	public static readonly GameSystem: GameSystemKey = "DnD5e";
+	public static override readonly GameSystem: GameSystemKey = "DnD5e";
 
 }
 

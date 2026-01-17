@@ -1,5 +1,5 @@
 import { addCommas } from "@rsc-utils/core-utils";
-import type { GameSystemCode } from "../../system/GameSystem.js";
+import type { GameSystemCode } from "../../systems/GameSystem.js";
 import type { Currency, CurrencyCore, DenominationsCore } from "../Currency.js";
 import { getDenominations } from "./getDenominations.js";
 
@@ -17,7 +17,7 @@ export function formatCurrency<
 	const denominations = getDenominations<GameSystem, DenomKeys>(currency).slice().reverse();
 
 	// get the target denomination
-	const thisDenom = denominations.find(({ denom }) => denom === denomKey) ?? denominations[0];
+	const thisDenom = denominations.find(({ denom }) => denom === denomKey) ?? denominations[0]!;
 
 	// create core for temp math
 	const newValues = { } as DenominationsCore<DenomKeys>;

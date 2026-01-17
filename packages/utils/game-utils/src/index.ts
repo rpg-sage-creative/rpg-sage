@@ -7,5 +7,5 @@ export * from "./dice/index.js";
 export * from "./map/index.js";
 export * from "./postCurrency/index.js";
 export * from "./random/index.js";
-export * from "./system/index.js";
+export * from "./systems/index.js";
 export * from "./utils/index.js";

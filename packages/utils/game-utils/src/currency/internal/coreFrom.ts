@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "../../system/GameSystem.js";
+import type { GameSystemCode } from "../../systems/GameSystem.js";
 import type { CurrencyCore } from "../Currency.js";
 
 type CoreArg<

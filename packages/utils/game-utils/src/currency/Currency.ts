@@ -1,5 +1,5 @@
 import { applyChanges, debug, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type Optional, type SortResult } from "@rsc-utils/core-utils";
-import type { GameSystemCode, GameSystem as GameSystemObj } from "../system/GameSystem.js";
+import type { GameSystemCode, GameSystem as GameSystemObj } from "../systems/GameSystem.js";
 import { addValues } from "./internal/addValues.js";
 import { convertCurrency } from "./internal/convertCurrency.js";
 import { coreFrom } from "./internal/coreFrom.js";
@@ -310,7 +310,7 @@ implements Comparable<AnyCurrency> {
 	public simplify(denomKey?: DenomKeys): this {
 		if (!denomKey) {
 			const denominations = getDenominations<GameSystem, DenomKeys>(this);
-			denomKey = denominations[denominations.length - 1].denom;
+			denomKey = denominations[denominations.length - 1]!.denom;
 		}
 		simplifyCurrency(this, denomKey);
 		return this.updateValues();
@@ -358,7 +358,7 @@ implements Comparable<AnyCurrency> {
 	}
 
 	/** Formats the currency using each denonination with a value greater than zero. */
-	public toString(denomKey?: DenomKeys): string {
+	public override toString(denomKey?: DenomKeys): string {
 		return formatCurrency(this, denomKey);
 	}
 
@@ -445,8 +445,8 @@ implements Comparable<AnyCurrency> {
 		const sub = class extends Currency<GameSystem, DenomKeys, CurrencyCore<GameSystem, DenomKeys>> {
 			constructor(core?: Partial<Omit<Core, "objectType" | "gameSystem">>) { super({ ...core, gameSystem } as Partial<Core>); }
 			handleUpdates() { /*do nothing*/ }
-			static readonly CurrencyData = currencyData;
-			static readonly GameSystem = gameSystem;
+			static override readonly CurrencyData = currencyData;
+			static override readonly GameSystem = gameSystem;
 		};
 
 		Currency.registerCurrency(sub);

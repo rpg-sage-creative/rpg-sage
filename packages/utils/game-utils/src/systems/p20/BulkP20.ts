@@ -1,7 +1,7 @@
 import { numberOrUndefined } from "@rsc-utils/core-utils";
 
-const ValidBulkRegExp = /^\s*\d+\s*L?\s*$/;
-const ValidLightBulkRegExp = /^\s*(\d+)\s*L\s*$/;
+const ValidBulkRegex = /^\s*\d+\s*L?\s*$/;
+const ValidLightBulkRegex = /^\s*(\d+)\s*L\s*$/;
 
 export class BulkP20 {
 	public constructor(bulk?: number | string) {
@@ -115,14 +115,14 @@ export class BulkP20 {
 	public static isValidBulk(bulk: number | string): boolean {
 		return BulkP20.isLight(bulk)
 			|| BulkP20.isNegligible(bulk)
-			|| ValidBulkRegExp.test(String(bulk));
+			|| ValidBulkRegex.test(String(bulk));
 	}
 
 	public static toLightBulk(bulk: number | string): number {
 		if (BulkP20.isLight(bulk)) {
 			return 1;
 		}
-		const match = ValidLightBulkRegExp.exec(String(bulk));
+		const match = ValidLightBulkRegex.exec(String(bulk));
 		return numberOrUndefined(match?.[1]) ?? 0;
 	}
 

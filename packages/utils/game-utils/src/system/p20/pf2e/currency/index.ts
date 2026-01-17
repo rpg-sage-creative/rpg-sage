@@ -1,1 +1,0 @@
-export * from "./CurrencyPf2e.js";

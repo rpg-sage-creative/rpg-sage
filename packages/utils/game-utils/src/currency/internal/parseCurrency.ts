@@ -1,33 +1,43 @@
-import { regex } from "regex";
-import type { GameSystemCode } from "../../system/GameSystem.js";
+import type { TypedRegExp } from "@rsc-utils/core-utils";
+import { OptionalHorizontalWhitespaceRegExp as HWS } from "@rsc-utils/core-utils";
+import { pattern, regex } from "regex";
+import type { GameSystemCode } from "../../systems/GameSystem.js";
 import type { Currency, CurrencyConstructor, CurrencyCore, Denomination, DenominationsCore } from "../Currency.js";
 import { createDenomCore } from "./createDenomCore.js";
-import { OptionalHorizontalWhitespaceRegExp } from "@rsc-utils/core-utils";
 
-const RegExpMap: Record<string, RegExp> = {};
+type DenominationRegExpGroups<Keys extends string> = { denom:Keys; sign:"+"|"-"; value:string; };
+
+type DenominationRegExp<Keys extends string> = TypedRegExp<DenominationRegExpGroups<Keys>>;
+
+const DenominationRegExpCache: Record<string, DenominationRegExp<any>> = { };
 
 /**
  * Creates a regex for matching the denominations.
  */
-function createRegex<Keys extends string>(denominations: Keys[]): RegExp {
+function getOrCreateRegex<Keys extends string>(denominations: Keys[]): DenominationRegExp<Keys> {
 	const denoms = denominations.join("|");
-	return RegExpMap[denoms] ??= regex("gi")`
-		(?<sign> [+-] )?
-		${OptionalHorizontalWhitespaceRegExp}
-		(?<value> \d+ ([\ ,.]\d+)* )
-		${OptionalHorizontalWhitespaceRegExp}
-		(?<denom> ${denoms} )
-	`;
+	return DenominationRegExpCache[denoms] ??= regex("gi")`
+		(?<sign> [ \- \+ ] )?
+		\g<space>
+		(?<value> \d+ ([\ ,.] \d+ )* )
+		\g<space>
+		(?<denom> ${pattern(denoms)} )
+
+
+		(?(DEFINE)
+			(?<space> ${HWS} )
+		)
+	` as DenominationRegExp<Keys>;
 }
 
-const CommaSeparatorRegExp = /[\s,]/g;
-const PeriodSeparatorRegExp = /[\s.]/g;
+const ParseNumberCommaRegExp = /[\s,]/g;
+const ParseNumberPeriodRegExp = /[\s.]/g;
 
 /**
  * Converts a string into a number by removing spaces and thousands separators and converting , decimal separator into . separator.
  */
 function parseNumber(value: string, decimal: "," | "." = "."): number {
-	const separatorRegex = decimal === "." ? CommaSeparatorRegExp : PeriodSeparatorRegExp;
+	const separatorRegex = decimal === "." ? ParseNumberCommaRegExp : ParseNumberPeriodRegExp;
 	return +value.replace(separatorRegex, "").replace(",", ".");
 }
 
@@ -47,8 +57,7 @@ type MatchData<Keys> = {
  */
 function matchString<Keys extends string>(value: string, denominations: Keys[], decimal: "," | "." = "."): MatchData<Keys>[] {
 	const data: MatchData<Keys>[] = [];
-	const regexp = createRegex(denominations);
-	const matches = value.matchAll(regexp);
+	const matches = value.matchAll(getOrCreateRegex(denominations));
 	for (const match of matches) {
 		if (match?.groups) {
 			data.push({
@@ -126,7 +135,7 @@ export function parseCurrency<
 			const core = createDenomCore(denomKeys);
 
 			// split value into whole and decimal parts
-			const parts = String(value).split(".");
+			const parts = String(value).split(".") as [string, string | undefined];
 
 			// add whole value
 			core[denom] = +parts[0];

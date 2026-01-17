@@ -36,7 +36,7 @@ export class CurrencyPf2e extends Currency<GameSystemKey, DenominationKeys, Curr
 		return CurrencyPf2e.parse(sp).toString("gp");
 	}
 
-	public static readonly CurrencyData: CurrencyData = {
+	public static override readonly CurrencyData: CurrencyData = {
 		// names and value relative to default denomination (default has value = 1)
 		denominations: [
 			{ name:"Copper Piece", plural:"Copper Pieces", denom:"cp", value:1/10 },
@@ -51,7 +51,7 @@ export class CurrencyPf2e extends Currency<GameSystemKey, DenominationKeys, Curr
 		]
 	};
 
-	public static readonly GameSystem: GameSystemKey = "PF2e";
+	public static override readonly GameSystem: GameSystemKey = "PF2e";
 
 }
 

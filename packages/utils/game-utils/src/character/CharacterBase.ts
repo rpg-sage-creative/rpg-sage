@@ -1,6 +1,6 @@
 import { HasIdCore, randomSnowflake, StringMatcher, type IdCore, type Optional } from "@rsc-utils/core-utils";
 import type { DiceMacroBase, MacroBase } from "../dice/index.js";
-import type { GameSystemCode } from "../system/GameSystem.js";
+import type { GameSystemCode } from "../systems/GameSystem.js";
 
 type MessageReference = { channelId:string; guildId:string|undefined; messageId:string|undefined; };
 
