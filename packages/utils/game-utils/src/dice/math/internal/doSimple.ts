@@ -1,10 +1,10 @@
 import { globalizeRegex, NumberRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { unpipe } from "../../../utils/pipes.js";
+import { unpipe } from "../../../utils/pipes/unpipe.js";
 import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
 import { evalMath } from "./evalMath.js";
 
-export const SimpleMathRegExp = regex()`
+const SimpleMathRegExp = regex()`
 	(?<! \w )                    # ignore the entire thing if preceded a word character
 	(
 		\g<orWrappedNumber>      # pos/neg decimal number

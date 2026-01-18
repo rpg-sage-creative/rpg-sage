@@ -1,6 +1,7 @@
 import { globalizeRegex, hypot, nth, NumberRegExp, round, signed } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { cleanPipes, unpipe } from "../../../utils/pipes.js";
+import { cleanPipes } from "../../../utils/pipes/cleanPipes.js";
+import { unpipe } from "../../../utils/pipes/unpipe.js";
 import { doSimple, OrSpoileredSimpleMathRegExp } from "./doSimple.js";
 
 type SageMathFunction = keyof typeof SageMath;

@@ -1,6 +1,6 @@
 import { globalizeRegex } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { unpipe } from "../../../utils/pipes.js";
+import { unpipe } from "../../../utils/pipes/unpipe.js";
 import { evalMath } from "./evalMath.js";
 
 export const PosNegNumberRegExp = regex()`
