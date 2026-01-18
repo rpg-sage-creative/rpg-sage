@@ -1,5 +1,6 @@
-import { warn } from "@rsc-utils/core-utils";
-import type { TokenData, TokenParsers } from "./internal/tokenize.js";
+import { error, warn, type EnumLike, type Optional, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+
+const DiceTestRegExp = /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i;
 
 export enum DiceTestType {
 	None = 0,
@@ -29,9 +30,25 @@ type DiceTestTargetValue = {
 	value: number;
 };
 
+type DiceTargetTypeParser<Type extends number> = (value: Optional<string>) => Type;
+type DiceTargetValueParser<Type extends number> = (type: Type, value: number) => number;
+
+/** Modified DiceTestData specific to a game system. @todo see if we can do away with this duality. */
+export type DiceTargetData<Type extends number> = DiceTestTargetValue & {
+	/** wether or not this test should be hidden */
+	hidden: boolean;
+	/** Raw token string */
+	raw?: string;
+	/** Custom Target test type */
+	type: Type;
+	/** the value to test against */
+	value: number;
+};
+
 /** Finds the DiceTestType for the given matched value from the RegExp */
-export function parseDiceTestType(matchValue: string): DiceTestType {
-	const testType = matchValue.replace(/=+/g, "=").toLowerCase();
+export function parseDiceTestType(matchValue: Optional<string>): DiceTestType {
+	if (!matchValue) return DiceTestType.None;
+	const testType = matchValue.startsWith("=") ? "=" : matchValue.toLowerCase();
 	if (["eq", "="].includes(testType)) {
 		return DiceTestType.Equal;
 	}
@@ -50,7 +67,8 @@ export function parseDiceTestType(matchValue: string): DiceTestType {
 	return DiceTestType.None;
 }
 
-export function parseDiceTestTargetValue(rawValue: string): DiceTestTargetValue {
+function parseDiceTestTargetValue(rawValue: Optional<string>): DiceTestTargetValue {
+	if (!rawValue) return { value:0, hidden:false };
 	const hidden = rawValue.length > 4 && rawValue.startsWith("||") && rawValue.endsWith("||");
 	const value = +(hidden ? rawValue.slice(2, -2) : rawValue) || 0;
 	return { value, hidden };
@@ -118,7 +136,7 @@ export class DiceTest {
 
 	/** The token key/regex used to generate DiceTestData */
 	public static getParsers(): TokenParsers {
-		return { test:/(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i };
+		return { test:DiceTestRegExp };
 	}
 
 	public static createData(type: DiceTestType, value: number, hidden: boolean, alias?: string): DiceTestData {
@@ -136,6 +154,37 @@ export class DiceTest {
 			return DiceTest.createData(type, value, hidden);
 		}
 		return undefined;
+	}
+
+	public static parseTargetData<Type extends number = number>(token: TokenData, typeParser: DiceTargetTypeParser<Type>, valueParser?: DiceTargetValueParser<Type>): DiceTargetData<Type> | undefined {
+		if (token.key === "target") {
+			const type = typeParser(token.matches[0]);
+			let { value = 0, hidden = false } = type ? parseDiceTestTargetValue(token.matches[1]) : { };
+			if (valueParser) {
+				value = valueParser(type, value);
+			}
+			return { type, value, hidden, raw:token.token };
+		}
+		return undefined;
+	}
+
+	public static fromTarget<Key extends string, Type extends number>(data: Optional<DiceTargetData<Type> | DiceTestData>, targetEnum: EnumLike<Key, Type>, defTestType: DiceTestType): DiceTestData | undefined {
+		if (data) {
+			if ("alias" in data && data.alias) {
+				const testType = parseDiceTestType(data.alias);
+				if (testType) {
+					return DiceTest.createData(testType, data.value, data.hidden);
+				}
+			}
+			if (data.type in targetEnum) {
+				/** @todo figure out all this casting nonsense and try to make it go away ... or simplify it */
+				const key = targetEnum[data.type as unknown as keyof typeof targetEnum] as unknown as Key;
+				return DiceTest.createData(defTestType, data.value, data.hidden, key.toLowerCase());
+			}else {
+				error(`Invalid targetToTest arguments`, { data,targetEnum,defTestType });
+			}
+		}
+		return data as DiceTestData;
 	}
 
 	/** Parses the given TokenData into DiceTestData */
