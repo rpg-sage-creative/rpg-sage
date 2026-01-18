@@ -30,13 +30,13 @@ export function shuffle<T>(array: T[]): T[] {
 			const randomIndex = randomInt(0, itemCount - 1);
 
 			// switch index values
-			const value = shuffled[currentIndex];
-			shuffled[currentIndex] = shuffled[randomIndex];
+			const value = shuffled[currentIndex]!;
+			shuffled[currentIndex] = shuffled[randomIndex]!;
 			shuffled[randomIndex] = value;
 		}
 	// ensure that we have index values that differ from their original index
 	}while (!shuffled.some((value, index) => value !== index));
 
 	// map the indexes back to their values
-	return shuffled.map(index => array[index]);
+	return shuffled.map(index => array[index]!);
 }
