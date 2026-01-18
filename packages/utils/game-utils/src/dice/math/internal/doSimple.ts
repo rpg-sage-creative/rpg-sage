@@ -4,7 +4,7 @@ import { unpipe } from "../../../utils/pipes/unpipe.js";
 import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
 import { evalMath } from "./evalMath.js";
 
-const SimpleMathRegExp = regex()`
+export const SimpleMathRegExp = regex()`
 	(?<! \w )                    # ignore the entire thing if preceded a word character
 	(
 		\g<orWrappedNumber>      # pos/neg decimal number
