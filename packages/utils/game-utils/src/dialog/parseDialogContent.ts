@@ -1,4 +1,4 @@
-import { capitalize } from "@rsc-utils/core-utils";
+import { capitalize, parseHexColor } from "@rsc-utils/core-utils";
 import { unwrapUrl } from "../utils/unwrapUrl.js";
 import type { DialogContent } from "./DialogContent.js";
 import { DialogPostType } from "./DialogPostType.js";
@@ -65,7 +65,7 @@ export function parseDialogContent(content: string): DialogContent | undefined {
 			case "embedColor": {
 				if (!dialogContent.embedColor) {
 					// set only if we haven't set embedColor yet
-					dialogContent.embedColor = `#${match.value}`;
+					dialogContent.embedColor = parseHexColor(match.value);
 				}else {
 					breakWhile = true;
 				}

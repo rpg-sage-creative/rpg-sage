@@ -51,9 +51,9 @@ const DialogEmbedColorRegExp = regex("i")`
 	^
 	::
 	${HWS}
-	(0x|\#)
 	(?<color>
-		( [0-9a-f]{3} ){1,2}
+		(0x|\#)
+		( [0-9a-f]{3,4} ){1,2}
 	)
 	${HWS}
 	::
