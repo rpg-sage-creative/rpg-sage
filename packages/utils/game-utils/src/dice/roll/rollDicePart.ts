@@ -1,8 +1,8 @@
+import { sum } from "@rsc-utils/core-utils";
 import type { TDicePart } from "../dice/DicePart.js";
 import { rollDataMapper } from "../internal/rollDataMapper.js";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
 import { markRollData } from "../markup/markRollData.js";
-import { sum } from "../sum.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { rollDice } from "./rollDice.js";
 
@@ -11,7 +11,7 @@ export function rollDicePart(dicePart: TDicePart): SortedRollData {
 	const { fixedRolls, count, sides } = dicePart;
 
 	// start with fixed rolls
-	const byIndex = fixedRolls.map((roll, index) => rollDataMapper(roll, index, sides, true));
+	const byIndex = fixedRolls.slice(0, count).map((roll, index) => rollDataMapper(roll, index, sides, true));
 
 	// roll up to count
 	if (byIndex.length < count) {
@@ -19,19 +19,30 @@ export function rollDicePart(dicePart: TDicePart): SortedRollData {
 	}
 
 	const initialCount = byIndex.length;
-	const initialSum = sum(byIndex.map(roll => roll.value));
+	const initialSum = sum(byIndex, roll => roll.value);
+	const unusedFixedRolls = fixedRolls.slice(count);
 
 	let noSort = false;
 
 	// manipulate the rolls
 	dicePart.manipulation.forEach(m => {
-		const rolls = byIndex.filter(roll => !roll.isDropped);
+		const args = {
+			allRolls: byIndex,
+			notDropped: byIndex.filter(roll => !roll.isDropped),
+			unusedFixedRolls,
+		};
+
 		if (m.dropKeep) {
-			m.dropKeep.manipulateRolls(rolls);
+			m.dropKeep.manipulateRolls(args);
+
 		}else if (m.explode) {
-			byIndex.push(...m.explode.manipulateRolls(rolls));
+			const { additionalRolls, fixedRollsUsed } = m.explode.manipulateRolls(args);
+			byIndex.push(...additionalRolls);
+			unusedFixedRolls.splice(0, fixedRollsUsed);
+
 		}else if (m.threshold) {
-			m.threshold.manipulateRolls(rolls);
+			m.threshold.manipulateRolls(args);
+
 		}else if (m.noSort) {
 			noSort = true;
 		}

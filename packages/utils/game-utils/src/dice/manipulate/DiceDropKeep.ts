@@ -1,8 +1,11 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional, TokenData, TokenParsers } from "@rsc-utils/core-utils";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
-import type { TokenData, TokenParsers } from "../internal/tokenize.js";
 import type { RollData } from "../types/RollData.js";
-import { DiceManipulation } from "./DiceManipulation.js";
+import { DiceManipulation, type DiceManipulationArgs } from "./DiceManipulation.js";
+
+const DiceDropKeepRegExp = /(?<alias>[dk][lh])\s*(?<value>\d+)?/i;
+
+type DiceDropKeepTokenData = TokenData<"dropKeep"> & { matches:[string, string]; };
 
 export enum DiceDropKeepType {
 	None = 0,
@@ -43,9 +46,9 @@ export class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
 	public get value(): number { return this.data?.value ?? 0; }
 
 	/** Marks all rolls to be dropped as such. */
-	public manipulateRolls(rolls: RollData[]): void {
+	public manipulateRolls(args: DiceManipulationArgs): void {
 		if (!this.isEmpty) {
-			const sorted = rolls.slice();
+			const sorted = args.notDropped.slice();
 			sorted.sort(rollDataSorter);
 			sorted.filter(shouldBeDropped, this.data).forEach(roll => {
 				roll.isDropped = true;
@@ -66,11 +69,11 @@ export class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
 
 	/** The token key/regex used to generate DropKeepData */
 	public static getParsers(): TokenParsers {
-		return { dropKeep:/(dl|dh|kl|kh)\s*(\d+)?/i };
+		return { dropKeep:DiceDropKeepRegExp };
 	}
 
 	/** Parses the given TokenData into DropKeepData */
-	public static parseData(token: Optional<TokenData>): DiceDropKeepData | undefined {
+	public static parseData(token: Optional<TokenData | DiceDropKeepTokenData>): DiceDropKeepData | undefined {
 		if (token?.key === "dropKeep") {
 			const alias = token.matches[0].toLowerCase().slice(0, 2);
 			const type = [null, "dl", "dh", "kl", "kh"].indexOf(alias);
@@ -80,4 +83,10 @@ export class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
 		return undefined;
 	}
 
+	/** Convenience for new DiceDropKeep(data).toString(). Returns "" if data is null or undefined. */
+	public static override toString(data: Optional<DiceDropKeepData>, leftPad = "", rightPad = ""): string {
+		return data
+			? new DiceDropKeep(data).toString(leftPad, rightPad)
+			: ``;
+	}
 }

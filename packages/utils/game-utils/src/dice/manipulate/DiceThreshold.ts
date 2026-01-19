@@ -8,10 +8,12 @@ Ex: [1d8tt7] would mean that when an 8 is rolled, a value of 7 would be used.
 Ex: [1d8bt2] would mean that when a 1 is rolled, a value of 2 would be used.
 */
 
-import type { Optional } from "@rsc-utils/core-utils";
-import type { TokenData, TokenParsers } from "../internal/tokenize.js";
-import type { RollData } from "../types/RollData.js";
-import { DiceManipulation } from "./DiceManipulation.js";
+import type { Optional, TokenData, TokenParsers } from "@rsc-utils/core-utils";
+import { DiceManipulation, type DiceManipulationArgs } from "./DiceManipulation.js";
+
+const DiceThresholdRegExp = /[bt]t\s*(\d+)/i;
+
+type DiceThresholdTokenData = TokenData<"threshold"> & { matches:[string, string]; };
 
 export enum DiceThresholdType {
 	None = 0,
@@ -35,9 +37,9 @@ export class DiceThreshold extends DiceManipulation<DiceThresholdData> {
 	public get type(): DiceThresholdType { return this.data?.type ?? DiceThresholdType.None; }
 	public get value(): number { return this.data?.value ?? 0; }
 
-	public manipulateRolls(rolls: RollData[]): void {
+	public manipulateRolls(args: DiceManipulationArgs): void {
 		if (!this.isEmpty) {
-			rolls.forEach(roll => {
+			args.notDropped.forEach(roll => {
 				if (this.shouldUpdate(roll.threshold ?? roll.value)) {
 					roll.threshold = this.value;
 					if (this.type === DiceThresholdType.TopThreshold) {
@@ -61,11 +63,11 @@ export class DiceThreshold extends DiceManipulation<DiceThresholdData> {
 		return false;
 	}
 
-	public toJSON() {
+	public override toJSON() {
 		return this.data;
 	}
 
-	/** Generates string output for the given DiceExplodeData */
+	/** Generates string output for the given DiceThresholdData */
 	public toString(leftPad = "", rightPad = "") {
 		if (this.isEmpty) {
 			return ``;
@@ -78,11 +80,11 @@ export class DiceThreshold extends DiceManipulation<DiceThresholdData> {
 
 	/** The token key/regex used to generate ThresholdData */
 	public static getParsers(): TokenParsers {
-		return { threshold:/(bt|tt)\s*(\d+)/i };
+		return { threshold:DiceThresholdRegExp };
 	}
 
 	/** Parses the given TokenData into ThresholdData */
-	public static parseData(token: Optional<TokenData>): DiceThresholdData | undefined {
+	public static parseData(token: Optional<TokenData | DiceThresholdTokenData>): DiceThresholdData | undefined {
 		if (token?.key === "threshold") {
 			const alias = token.matches[0].toLowerCase().slice(0, 2);
 			const type = [null, "bt", "tt"].indexOf(alias);

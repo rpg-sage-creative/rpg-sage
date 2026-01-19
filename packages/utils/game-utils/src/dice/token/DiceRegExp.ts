@@ -1,6 +1,14 @@
+import type { TypedRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
 
-const DiceRegExp = regex("i")`
+type DiceRegExpGroups = {
+	sign?: "-" | "+" | "/" | "*";
+	fixedValues?: string;
+	dieCount?: `${number}`;
+	dieSize: `${number}`;
+};
+
+export const DiceRegExp = regex("i")`
 	(?<sign> [\-+\/*] )?    # capture optional math sign
 
 	# optional non-capture group for fixed rolls
@@ -32,11 +40,6 @@ const DiceRegExp = regex("i")`
 
 	d                       # die size indicator
 	(?<dieSize> \d+ )       # capture die size
-`;
-const DiceRegExpG = new RegExp(DiceRegExp, "gi");
+` as TypedRegExp<DiceRegExpGroups>;
 
-type Options = { globalFlag?: boolean; };
-
-export function getDiceRegex(options?: Options): RegExp {
-	return options?.globalFlag ? DiceRegExpG : DiceRegExp;
-}
+// const DiceRegExpG = globalizeRegex<TypedRegExp<DiceRegExpGroups>>(DiceRegExp);
