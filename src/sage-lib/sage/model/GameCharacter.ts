@@ -788,6 +788,10 @@ export class GameCharacter {
 			return ret("name", this.name);
 		}
 
+		if (keyLower === "displayname") {
+			return ret("displayName", this.toDisplayName());
+		}
+
 		if (keyLower === "namedescriptors" || keyLower === "csv.namedescriptors") {
 			const isCsv = keyLower.startsWith("csv");
 			const descriptors = this.toNameDescriptors();
