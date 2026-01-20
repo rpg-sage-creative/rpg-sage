@@ -3,11 +3,11 @@ import { regex } from "regex";
 
 const BasicDiceRegExp = regex("i")`
 	\[
-	[^\]]*
-	(\d|\b)  # dieCount or word break
-	d        # XdY separator
-	\d+      # dieSize
-	[^\]]*
+	[^ \] ]*
+	( \d | \b )  # dieCount or word break
+	d            # XdY separator
+	\d           # dieSize
+	[^ \] ]*
 	\]
 `;
 

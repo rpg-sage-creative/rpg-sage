@@ -1,7 +1,6 @@
 import { StringMatcher, stringOrUndefined, unwrap, type Optional } from "@rsc-utils/core-utils";
-import { hasDiceMacroArgPlaceholder, hasDiceMacroRemainingArgPlaceholder, isRandomItem, parseDialogContent, parseDiceMacroArgPlaceholdersForModal, type DiceMacroArgPlaceholder, type MacroBase } from "@rsc-utils/game-utils";
+import { hasDiceMacroArgPlaceholder, hasDiceMacroRemainingArgPlaceholder, isRandomItem, matchesBasicDice, parseDialogContent, parseDiceMacroArgPlaceholdersForModal, type DiceMacroArgPlaceholder, type MacroBase } from "@rsc-utils/game-utils";
 import { isUrl } from "@rsc-utils/io-utils";
-import { getBasicDiceRegex } from "../../../sage-dice/getBasicDiceRegex.js";
 import { isMath } from "../commands/dice/isMath.js";
 import { isValidTable } from "../commands/dice/isValidTable.js";
 import { parseTable } from "../commands/dice/parseTable.js";
@@ -205,7 +204,7 @@ export class Macro<Category extends string = string> {
 			if (parseTable(value)) {
 				return "table";
 			}
-			if (isRandomItem(value) && !getBasicDiceRegex().test(value)) {
+			if (isRandomItem(value) && !matchesBasicDice(value)) {
 				return "items";
 			}
 			if (isMath(value)) {
@@ -225,9 +224,9 @@ export class Macro<Category extends string = string> {
 			case "dialog":
 				return macro.dialog ? parseDialogContent(macro.dialog) !== undefined : false;
 			case "dice":
-				return macro.dice ? getBasicDiceRegex().test(macro.dice) : false;
+				return macro.dice ? matchesBasicDice(macro.dice) : false;
 			case "items":
-				return macro.dice ? isRandomItem(macro.dice) && !getBasicDiceRegex().test(macro.dice) : false;
+				return macro.dice ? isRandomItem(macro.dice) && !matchesBasicDice(macro.dice) : false;
 			case "math":
 				return macro.dice ? isMath(macro.dice) : false;
 			case "table":
