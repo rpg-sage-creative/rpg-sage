@@ -34,13 +34,14 @@ export const DiceMacroArgPlaceholderRegExp = regex("i")`
 		# optional default value
 		(
 			# single colon only; two colons are used as char stat references
-			:(?!:)
+			:
+			(?! : )
 
 			# optional space
 			\g<space>
 
 			# capture everything before the closing brace
-			(?<defaultValue> [^\}]* )
+			(?<defaultValue> [^ \} ]* )
 
 			# optional space
 			\g<space>

@@ -20,7 +20,7 @@ const SageMath = {
 };
 
 export const ComplexMathRegExp = regex("i")`
-	(?<!\w)                 # ignore the entire thing if preceded by a word character
+	(?<! \w )               # ignore the entire thing if preceded by a word character
 
 	(
 		# functions
@@ -50,7 +50,7 @@ export const ComplexMathRegExp = regex("i")`
 		\s*\)
 	)
 
-	(?!\w)                  # ignore the entire thing if followed by a word character
+	(?! \w )                # ignore the entire thing if followed by a word character
 
 	(?(DEFINE)
 		(?<numberOrSimple> \g<orSpoileredNumber> | \g<orSpoileredSimpleMath> )

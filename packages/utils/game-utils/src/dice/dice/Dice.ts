@@ -11,6 +11,9 @@ import { UNICODE_LEFT_ARROW } from "../types/consts.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
 import { DicePart, type DicePartCore, type TDicePart } from "./DicePart.js";
 
+const RollemBoldItalicReplaceRegExpG = /<\/?(b|em|i|strong)>/ig;
+const RollemEmojiStripEmojiRegExp = /^(?:(.*?)\s+)(\d+)$/;
+
 type DiceCoreBase = {
 	children: DicePartCore[];
 };
@@ -79,8 +82,8 @@ export class Dice<
 		const description = this.children.map((roll, index) => mapDicePartToRollString(roll, index, { hideRolls, isRollem, noDice })).join(" ");
 
 		if (isRollem) {
-			const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "").trim();
-			const [_, emoji, total] = /^(?:(.*?)\s+)(\d+)$/.exec(stripped) ?? ["","",stripped];
+			const stripped = xxs.replace(RollemBoldItalicReplaceRegExpG, "").trim();
+			const [_, emoji, total] = RollemEmojiStripEmojiRegExp.exec(stripped) ?? ["","",stripped];
 			const escapedTotal = `\` ${total} \``;
 
 			const output = desc

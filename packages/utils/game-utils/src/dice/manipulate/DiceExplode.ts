@@ -5,6 +5,13 @@ import { rollDie } from "../roll/rollDie.js";
 import type { RollData } from "../types/RollData.js";
 import { DiceManipulation, type DiceManipulationArgs, type DiceManipulationResults } from "./DiceManipulation.js";
 
+/*
+Rolemaster has a system called "open-ended" rolls, where if you roll a high enough result you roll again and add it. Some systems call this "exploding" dice, but RM has its own spin on it.
+
+Open-Ended High: If you roll above a 95 on a d100, roll again and add the second roll to the result. If the second roll is also above 95, you roll again and add it, continuing until you roll 95 or less. Most d100 rolls in RM use this.
+Open-Ended Low: If you roll a 1-5 on the d100, you roll again and subtract the result, very likely ending in a negative number. If the second roll is above 95, roll again and subtract; continue doing so until you roll 95 or less. (If you roll 1-5 on the second roll, you don't reverse it again.) In RM, this mostly only applies to skill checks.
+*/
+
 const DiceExplodeRegExp = /(x)(?:\s*(<=|<|>=|>|=)?\s*(\d+))?/i;
 
 type DiceExplodeTokenData = TokenData<"explode"> & { matches:[string, string | undefined, string | undefined]; };

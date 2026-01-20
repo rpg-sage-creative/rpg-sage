@@ -27,7 +27,7 @@ type StatBlockGroups = {
 	statKey: string;
 };
 const StatBlockRegExp = regex("i")`
-	(?!<\{)\{
+	\{
 		(
 			(?<implicitChar> :: )
 			|
@@ -42,7 +42,7 @@ const StatBlockRegExp = regex("i")`
 			|
 			(?<implicitDefault> : )
 		)?
-	\}(?!=\})
+	\}
 ` as TypedRegExp<StatBlockGroups>;
 
 // let statBlockTestRegex: RegExp;

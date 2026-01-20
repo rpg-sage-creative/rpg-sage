@@ -2,32 +2,34 @@ import { OptionalHorizontalWhitespaceRegExp as HWS, OptionalWhitespaceRegExp as 
 import { getUrlRegex } from "@rsc-utils/io-utils";
 import { regex } from "regex";
 
+/** captures :: character name (display name) :: */
 const DialogNameAndDisplayNameRegExp = regex`
 	^
 	::
 	${HWS}
 	(?<dialogName>
 		(
-			[^\(]      # capture the characters before the "(" that isn't followed by "::"
-			(?!::)
+			[^ \( ]    # capture the characters before the "(" that isn't followed by "::"
+			(?! :: )
 		)+
 	)
 	\(
 	(?<displayName>
-		[^\)]+         # capture the characters in ()
+		[^ \) ]+       # capture the characters in ()
 	)
 	\)
 	${HWS}
 	::
 `;
 
+/** captures :: (display name) :: */
 const DialogDisplayNameRegExp = regex`
 	^
 	::
 	${HWS}
 	\(
 	(?<displayName>
-		[^\)]+
+		[^ \) ]+
 	)
 	\)
 	${HWS}

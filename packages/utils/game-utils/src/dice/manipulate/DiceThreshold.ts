@@ -11,7 +11,7 @@ Ex: [1d8bt2] would mean that when a 1 is rolled, a value of 2 would be used.
 import type { Optional, TokenData, TokenParsers } from "@rsc-utils/core-utils";
 import { DiceManipulation, type DiceManipulationArgs } from "./DiceManipulation.js";
 
-const DiceThresholdRegExp = /[bt]t\s*(\d+)/i;
+const DiceThresholdRegExp = /([bt]t)\s*(\d+)/i;
 
 type DiceThresholdTokenData = TokenData<"threshold"> & { matches:[string, string]; };
 
