@@ -31,23 +31,44 @@ function createDiscordClientOptions(): ClientOptions {
 }
 
 export class ActiveBot extends Bot implements IClientEventHandler {
-	public static sns = true;
 	public static active: ActiveBot;
+
+	/** are we trying to send to sns? starts as true */
+	public static sns = true;
+
+	/** is the active bot dev ? */
 	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
+
+	/** Attempts to send the errors/args via SNS before falling back to sendToSuperUser (Discord DM). */
 	public static async notifyOfError(...args: unknown[]): Promise<void> {
+		// check the sns flag
 		if (ActiveBot.sns) {
+			// prep content
 			const notifySubject = `RPG Sage Error - ${getCodeName()}`;
 			const contentToSend = args.map(formatArg).join("\n");
-			const notifyResults = await notifyOfError(notifySubject, contentToSend);
+
+			// attemp to notify via sns
+			const notifyResults = await notifyOfError(notifySubject, contentToSend).catch(ex => {
+				ActiveBot.sendToSuperUser("SNS Error", ex);
+				return false;
+			});
+
+			// a successful sns means we are done
 			if (notifyResults) return;
 
+			// a single failure stops sending to sns to avoid a cascade of failures
 			ActiveBot.sns = false;
 		}
+
+		// fallback to discord dm
 		ActiveBot.sendToSuperUser(`# error`, ...args);
 	}
+
+	/** Tries to send errors/args to the super user as a Discord DM. */
 	public static async sendToSuperUser(...args: unknown[]): Promise<void> {
 		const user = await ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false }).catch(DiscordApiError.process);
 		if (user) {
+			// discord messages have limits, chunk the content to be safe
 			const contents = chunk(args.map(formatArg).join("\n"), { maxChunkLength:2000 });
 			for (const content of contents) {
 				await user.send(wrapUrls(content));
