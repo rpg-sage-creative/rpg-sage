@@ -38,7 +38,10 @@ export function replaceCharacterMentions(content: string, args: Args): string {
 		? (alias: string) => game.findCharacterOrCompanion(alias)
 		: (alias: string) => sageUser.findCharacterOrCompanion(alias);
 
-	const gmUserId = game ? gameMasters?.find(gm => "online" === gm.presence?.status)?.id : undefined;
+	const gmUserId = game
+		/** @todo this logic should default to the first gm ... but this causes headaches for some living servers so we need to implement a way to specify which channels belong to which gms */
+		? gameMasters?.find(gm => "online" === gm.presence?.status)?.id
+		: undefined;
 
 	const isNpc = gmUserId && game
 		? (charId: string) => !!game.gmCharacter.companions.findById(charId) || !!game.nonPlayerCharacters.findById(charId)
