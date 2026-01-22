@@ -36,9 +36,6 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	/** are we trying to send to sns? starts as true */
 	public static sns = true;
 
-	/** is the active bot dev ? */
-	public static get isDev(): boolean { return ActiveBot.active?.codeName === "dev"; }
-
 	/** Attempts to send the errors/args via SNS before falling back to sendToSuperUser (Discord DM). */
 	public static async notifyOfError(...args: unknown[]): Promise<void> {
 		// check the sns flag
@@ -69,9 +66,12 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		const user = await ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false }).catch(DiscordApiError.process);
 		if (user) {
 			// discord messages have limits, chunk the content to be safe
-			const contents = chunk(args.map(formatArg).join("\n"), { maxChunkLength:2000 });
+			const formatted = args.map(formatArg);
+			const joined = formatted.join("\n");
+			const wrapped = wrapUrls(joined);
+			const contents = chunk(wrapped, { maxChunkLength:2000 });
 			for (const content of contents) {
-				await user.send(wrapUrls(content));
+				await user.send(content);
 			}
 		}
 	}
@@ -91,7 +91,7 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		});
 
 		// To see options, look for: Discord.ClientEvents (right click nav .on below)
-		client.once("ready", this.onClientReady.bind(this));
+		client.once("clientReady", this.onClientReady.bind(this));
 
 		// TODO: if created in a game category i could add or prompt to add?
 		// channelCreate: [channel: GuildChannel];
