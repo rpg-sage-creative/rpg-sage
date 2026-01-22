@@ -6,7 +6,7 @@ Ensure no existing tmp dir
 
 Clone repo into tmp dir
 <br>
-`git clone -b BRANCH_NAME --single-branch git@github.com:randaltmeyer/rpg-sage-legacy.git /home/ec2-user/legacy/dev-tmp`
+`git clone -b BRANCH_NAME --single-branch git@github.com:rpg-sage-creative/rpg-sage.git /home/ec2-user/legacy/dev-tmp`
 
 Choose tmp dir
 <br>
@@ -22,11 +22,11 @@ Build repo
 
 Delete bot from pm2
 <br>
-`pm2 desc sage-dev-aws >/dev/null && pm2 delete sage-dev-aws`
+`pm2 desc sage-bot-dev >/dev/null && pm2 delete sage-bot-dev`
 
 Delete maps from pm2
 <br>
-`pm2 desc sage-maps-aws >/dev/null && pm2 delete sage-maps-aws`
+`pm2 desc sage-map-stable >/dev/null && pm2 delete sage-map-stable`
 
 Choose root dir
 <br>
@@ -42,19 +42,19 @@ Rename tmp dir
 
 Choose bot dir
 <br>
-`cd /home/ec2-user/legacy`
+`cd /home/ec2-user/legacy/dev`
 
 Start apps in pm2
 <br>
-`pm2 start pm2.config.cjs --env dev`
+`pm2 start bot.config.cjs --env dev --only sage-bot`
 <br>
-`pm2 start pm2.config.cjs --env beta --only sage-bot`
+`pm2 start bot.config.cjs --env beta --only sage-bot`
 <br>
-`pm2 start pm2.config.cjs --env stable`
+`pm2 start bot.config.cjs --env stable`
 
 Update pm2
 <br>
 `pm2 save`
 
 # Get a Single Branch
-`git clone -b v1.6.0 --single-branch git@github.com:randaltmeyer/rpg-sage-legacy.git rpg-sage-legacy-v1.6.0`
+`git clone -b release/vX.Y.Z --single-branch git@github.com:rpg-sage-creative/rpg-sage.git rpg-sage-vX.Y.Z`
