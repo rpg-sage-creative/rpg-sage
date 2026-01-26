@@ -1,3 +1,4 @@
 #!/bin/bash
 
-scp -i ~/.ssh/rpg-sage-stable.pem ./config/env-docker.json ec2-user@localhost:2222:/rpg-sage/dev/current/config/env.json
+echo "Copy env-docker.json to env.json"
+scp -i ~/.ssh/rpg-sage-stable.pem -P 2222 ./config/env-docker.json ec2-user@localhost:/rpg-sage/bot/dev/current/config/env.json
