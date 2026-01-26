@@ -9,5 +9,5 @@ rm -rf build
 npm run build
 
 echo "Restart process"
-pm2 startOrRestart bot.config.cjs --env dev --only sage-bot --updateEnv
-pm2 save
+pm2 startOrRestart bot.config.cjs --env dev --only sage-bot --update-env
+pm2 save --force
