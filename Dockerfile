@@ -1,33 +1,61 @@
-FROM node:24
-ENV NODE_ENV=development
+# Use a base image with SSH installed (you can choose a different base image if needed)
+FROM amazonlinux:2023
 
-WORKDIR /rpg-sage/dev
-COPY .npmrc .
-COPY build ./build
-COPY package*.json .
-COPY node_modules ./node_modules
-RUN npm install
+RUN yum update
 
-WORKDIR /rpg-sage/dev/config
-COPY config/env.docker.json ./env.json
+# in case you need to edit files
+RUN yum install -y vim
+RUN yum install -y findutils
 
-WORKDIR /rpg-sage/dev/node_modules/@rsc-sage
-COPY node_modules/@rsc-sage/env/ ./env
-COPY node_modules/@rsc-sage/localization/ ./localization
-COPY node_modules/@rsc-sage/types/ ./types
+RUN yum install -y git
 
-WORKDIR /rpg-sage/dev/node_modules/@rsc-utils
-COPY node_modules/@rsc-utils/game-utils/ ./game-utils
+# Install SSH server
+RUN yum install -y openssh-server
+RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
+RUN ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key
+RUN ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
+
+# Add ec2-user
+RUN adduser ec2-user
+RUN usermod -aG wheel ec2-user
+
+# install node/npm and pm2
+RUN curl -fsSL https://rpm.nodesource.com/setup_24.x | bash - && yum install -y nodejs
+RUN npm install -g pm2
+
+# ensure rpg-sage folder exists and is writeable
+
+RUN mkdir /rpg-sage
+
+# ensure base bot folder exists
+RUN mkdir -p /rpg-sage/bot
+
+# ensure data folder / tree exists
+RUN mkdir -p /rpg-sage/data/cache/pdf
+
+RUN mkdir -p /rpg-sage/data/foundry
+
+RUN mkdir -p /rpg-sage/data/pf2e/dist
 
 RUN mkdir -p /rpg-sage/data/sage/bots
-RUN mkdir -p /rpg-sage/data/sage/cache
+RUN mkdir -p /rpg-sage/data/sage/characters
 RUN mkdir -p /rpg-sage/data/sage/dice
 RUN mkdir -p /rpg-sage/data/sage/e20
 RUN mkdir -p /rpg-sage/data/sage/games
+RUN mkdir -p /rpg-sage/data/sage/heph
 RUN mkdir -p /rpg-sage/data/sage/maps
-RUN mkdir -p /rpg-sage/data/sage/messages
+RUN mkdir -p /rpg-sage/data/sage/messages/2026
 RUN mkdir -p /rpg-sage/data/sage/pb2e
 RUN mkdir -p /rpg-sage/data/sage/servers
 RUN mkdir -p /rpg-sage/data/sage/users
 
-CMD ["npm", "run", "start-dev-and-services"]
+RUN mkdir -p /rpg-sage/data/slash
+
+RUN chown -R ec2-user /rpg-sage
+
+# SSH port (optional, change if needed)
+EXPOSE 22
+
+# Start SSH service
+CMD ["/usr/sbin/sshd", "-D"]
