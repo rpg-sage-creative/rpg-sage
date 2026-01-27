@@ -9,10 +9,10 @@
 
 	"path": "/rpg-sage/bot/dev",
 
-	"-pre-setup" : "bash ./deploy/docker/pre-setup.sh",
-	"-post-setup" : "bash ./deploy/docker/post-setup.sh",
+	"-pre-setup" : "bash ./deploy-scripts/pre-setup.sh docker dev",
+	"-post-setup" : "bash ./deploy-scripts/post-setup.sh docker dev",
 
-	"pre-deploy-local" : "bash ./deploy/docker/pre-deploy-local.sh",
-	"-pre-deploy" : "bash ./deploy/docker/pre-deploy.sh",
-	"post-deploy" : "bash ./deploy/docker/post-deploy.sh"
+	"pre-deploy-local" : "bash ./deploy-scripts/pre-deploy-local.sh docker dev",
+	"-pre-deploy" : "bash ./deploy-scripts/pre-deploy.sh docker dev",
+	"post-deploy" : "bash ./deploy-scripts/post-deploy.sh docker dev"
 }
