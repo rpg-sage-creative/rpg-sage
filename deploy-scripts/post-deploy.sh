@@ -15,6 +15,7 @@ rm -rf build
 npm run build
 
 echo "Copy ../config/env-$codeName.json to ./config/env.json"
+eval "cp ../config/env-$codeName.json ./config/env.json"
 
 echo "Restart process"
 pm2 startOrRestart bot.config.cjs --env "$envCodeName" --only sage-bot --update-env
