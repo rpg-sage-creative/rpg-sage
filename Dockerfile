@@ -24,7 +24,7 @@ RUN npm install -g pm2
 RUN mkdir /rpg-sage
 
 # ensure base bot folder exists
-RUN mkdir -p /rpg-sage/bot
+RUN mkdir -p /rpg-sage/bot/config
 
 # ensure data folder / tree exists
 RUN mkdir -p /rpg-sage/data/cache/pdf
