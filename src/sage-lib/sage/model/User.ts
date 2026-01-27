@@ -1,4 +1,4 @@
-import { getSuperAdminId, getSuperUserId } from "@rsc-sage/env";
+import { isSuperAdminId, isSuperUserId } from "@rsc-sage/env";
 import { applyChanges, stringOrUndefined, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { MacroBase } from "@rsc-utils/game-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
@@ -106,14 +106,14 @@ export class User extends HasSageCacheCore<UserCore> {
 
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 
-		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
+		this.notes = new NoteManager(this.core.notes ??= []);
 
-		this.isSuperAdmin = core.did === getSuperAdminId();
-		this.isSuperUser = core.did === getSuperUserId();
+		this.isSuperAdmin = isSuperAdminId(core.did);
+		this.isSuperUser = isSuperUserId(core.did);
 	}
 
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
-	public get macros() { return this.core.macros ?? (this.core.macros = []); }
+	public get macros() { return this.core.macros ??= []; }
 	public nonPlayerCharacters = CharacterManager.from([], this, "npc");
 	public notes: NoteManager;
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
