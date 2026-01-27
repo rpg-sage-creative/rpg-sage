@@ -2,12 +2,9 @@
 
 codeName="$1"
 
-botPath=""
-if [ -d "/rpg-sage/bot/config" ]; then
+botPath="/home/ec2-user/legacy/config"
+if [ "$coeName" = "docker" ]; then
 	botPath="/rpg-sage/bot/config"
-fi
-if [ -d "/home/ec2-user/legacy/config" ]; then
-	botPath="/home/ec2-user/legacy/config"
 fi
 
 echo "Copy local ./config/env-$codeName.json to remote"
