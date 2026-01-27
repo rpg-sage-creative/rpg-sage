@@ -6,6 +6,6 @@ export function getSuperUserId(): Snowflake {
 }
 
 /** Retrieves the id from env for "superUserId" and compares it to the given id. */
-export function isSuperUserId(id: Optional<Snowflake>): id is Snowflake {
+export function isSuperUserId(id: Optional<string>): id is Snowflake {
 	return getId("superUser") === id;
 }

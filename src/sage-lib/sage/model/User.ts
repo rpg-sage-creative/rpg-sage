@@ -108,8 +108,8 @@ export class User extends HasSageCacheCore<UserCore> {
 
 		this.notes = new NoteManager(this.core.notes ??= []);
 
-		this.isSuperAdmin = isSuperAdminId(core.did);
-		this.isSuperUser = isSuperUserId(core.did);
+		this.isSuperAdmin = isSuperAdminId(core.id) || isSuperAdminId(core.did);
+		this.isSuperUser = isSuperUserId(core.id) || isSuperUserId(core.did);
 	}
 
 	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
