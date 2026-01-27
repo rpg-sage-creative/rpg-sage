@@ -1,14 +1,18 @@
 {
 	"key": "~/.ssh/ssh_key.pem",
-	"user": "ssh_user",
-	"host": ["127.0.0.1"],
+	"user": "ec2-user",
+	"host": [{ "host":"127.0.0.1", "port":"2222" }],
 	"ssh_options": ["StrictHostKeyChecking=no"],
-	"ref": "origin/main",
-	"repo": "git@github.com:user/repo.git",
-	"path": "/home/user",
-	"pre-setup" : "echo 'commands or local script path to be run on the host before the setup process starts'",
-	"post-setup": "echo 'commands or a script path to be run on the host after cloning the repo'",
-	"pre-deploy" : "pm2 stop ecosystem.json --env production",
-	"post-deploy" : "pm2 startOrRestart ecosystem.json --env production",
-	"pre-deploy-local" : "echo 'This is a local executed command'"
+
+	"ref": "origin/develop",
+	"repo": "https://github.com/rpg-sage-creative/rpg-sage.git",
+
+	"path": "/rpg-sage/bot/dev",
+
+	"-pre-setup" : "bash ./deploy/docker/pre-setup.sh",
+	"-post-setup" : "bash ./deploy/docker/post-setup.sh",
+
+	"pre-deploy-local" : "bash ./deploy/docker/pre-deploy-local.sh",
+	"-pre-deploy" : "bash ./deploy/docker/pre-deploy.sh",
+	"post-deploy" : "bash ./deploy/docker/post-deploy.sh"
 }
