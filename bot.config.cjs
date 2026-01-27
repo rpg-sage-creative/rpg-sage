@@ -27,9 +27,10 @@ const apps = [{
 }];
 
 const deploy = {
-	dev: { ...getJson("deploy"), ...getJson("deploy", "bot"), ...getJson("deploy", "dev") },
-	beta: { ...getJson("deploy"), ...getJson("deploy", "bot"), ...getJson("deploy", "beta") },
-	stable: { ...getJson("deploy"), ...getJson("deploy", "bot"), ...getJson("deploy", "stable") },
+	docker: getJson("deploy", "bot", "docker"),
+	dev: getJson("deploy", "bot", "dev"),
+	beta: getJson("deploy", "bot", "beta"),
+	stable: getJson("deploy", "bot", "stable"),
 }
 
 module.exports = { apps, deploy };
