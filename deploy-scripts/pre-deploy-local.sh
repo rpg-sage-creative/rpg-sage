@@ -3,7 +3,7 @@
 codeName="$1"
 
 botPath="/home/ec2-user/legacy/config"
-if [ "$coeName" = "docker" ]; then
+if [ "$codeName" = "docker" ]; then
 	botPath="/rpg-sage/bot/config"
 fi
 
