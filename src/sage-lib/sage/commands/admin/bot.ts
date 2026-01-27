@@ -1,5 +1,5 @@
-import { getBuildInfo, isDefined } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { isDefined, readRepo } from "@rsc-utils/core-utils";
+import { toDiscordDate, toHumanReadable } from "@rsc-utils/discord-utils";
 import { GameSystemType } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Bot } from "../../model/Bot.js";
@@ -80,17 +80,36 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 
 async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 	if (sageMessage.actor.sage.isSuperUser) {
-		const buildInfo = await getBuildInfo();
-		const lines: string[] = [];
-		lines.push(`### ${buildInfo.name}`);
-		lines.push(`**version** \`${buildInfo.version}\``);
-		lines.push(`**branch** \`${buildInfo.branch}\``);
-		lines.push(`**buildDate** \`${buildInfo.buildDate}\``);
-		lines.push(`### rsc-utils`);
-		buildInfo.rscLibs.sort().forEach(lib => {
-			lines.push(`- **${lib.name}** \`${lib.version}\``);
-		});
-		await sageMessage.send(lines.join("\n"));
+		const repoInfo = await readRepo(".");
+		if (repoInfo?.package) {
+			const lines: string[] = [];
+
+			lines.push(`### ${repoInfo.package.name ?? "rpg-sage"}`);
+			lines.push(`**version** \`${repoInfo.package.version ?? "unknown"}\``);
+
+			lines.push(`**branch** \`${repoInfo?.branch?.trim() ?? "unknown"}\``);
+
+			const commitUrl = repoInfo?.commit?.hash
+				? `<https://github.com/rpg-sage-creative/rpg-sage/commit/${repoInfo.commit.hash}>`
+				: "`unknown`";
+			lines.push(`**commit** ${commitUrl}`);
+
+			const buildTs = repoInfo?.build?.birthtimeMs || repoInfo?.build?.ctimeMs || 0;
+			if (buildTs) {
+				const date = new Date(buildTs);
+				lines.push(`**buildDate** \`${date.toISOString()}\``);
+				lines.push(`**buildDateRelative** ${toDiscordDate(date, "R")}`);
+			}else {
+				lines.push("**buildDate** `unknown`");
+			}
+
+			lines.push(`### rsc-utils`);
+			repoInfo?.rscUtils?.sort().forEach(lib => {
+				lines.push(`- **${lib.name}** \`${lib.version}\``);
+			});
+
+			await sageMessage.send(lines.join("\n"));
+		}
 	}
 }
 
