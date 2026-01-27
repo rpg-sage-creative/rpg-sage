@@ -15,10 +15,10 @@ const apps = [{
 
 	append_env_to_name: true,
 	wait_ready: true,
-	env: { ...getJson("env"), ...getJson("env", "bot") },
-	env_dev: { NODE_ENV: "dev", ...getJson("env", "bot", "dev") },
-	env_beta: { NODE_ENV: "beta", ...getJson("env", "bot", "beta") },
-	env_stable: { NODE_ENV: "stable", ...getJson("env", "bot", "stable") },
+	env: { },
+	env_dev: { NODE_ENV: "dev", ...getJson("env", "dev") },
+	env_beta: { NODE_ENV: "beta", ...getJson("env", "beta") },
+	env_stable: { NODE_ENV: "stable", ...getJson("env", "stable") },
 
 	error_file: `./logs/bot.log`,
 	out_file: `./logs/bot.log`,
