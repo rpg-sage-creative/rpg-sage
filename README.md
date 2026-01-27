@@ -8,10 +8,9 @@ While originally written specific to Pathfinder 2e, the core dialog and dice fun
 ## Dev Setup
 
 For transparency, and to ensure compatibility, the following versions are used:
-- The Dev Lab: NVM 0.39.7, Node 18.20.2, and Typescript 5.4.5; VSCode for development
-- The Server: NVM 0.39.7, Node 18.15.0, and Typescript 5.1.6
 
-The tasks.json file's build task includes a dependency that creates an index.d.ts for pdf2json ... mind it!
+- The Dev Lab: NVM 0.40.3, NPM 11.7.0, Node 24.9.0; VSCodium for development
+- The Server: AmazonLinux:2023, NVM 0.39.7, NPM 11.7.0, Node 24.9.0, PM2 6.0.13
 
 [Dev Setup (debian)](<./README.debian.md>)
 [Dev Setup (macOS)](<./README.macOS.md>)

@@ -6,4 +6,7 @@ services:
     volumes:
       - "./docker-volumes/rpg-sage-mono/pf2e:/rpg-sage/data/pf2e"
       - "./docker-volumes/rpg-sage-mono/sage:/rpg-sage/data/sage"
-      - "~/.ssh:/.ssh"
+      - "~/.ssh:/home/ec2-user/.ssh"
+      - "~/.npmrc:/home/ec2-user/.npmrc"
+    ports:
+      - "127.0.0.1:2222:22"

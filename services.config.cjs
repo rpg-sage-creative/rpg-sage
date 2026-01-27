@@ -22,10 +22,10 @@ const apps = appNames.map(app => {
 
 		append_env_to_name: true,
 		wait_ready: true,
-		env: { ...getJson("env"), ...getJson("env", app) },
-		env_dev: { NODE_ENV: "dev", ...getJson("env", app, "dev") },
-		env_beta: { NODE_ENV: "beta", ...getJson("env", app, "beta") },
-		env_stable: { NODE_ENV: "stable", ...getJson("env", app, "stable") },
+		env: { },
+		env_dev: { NODE_ENV: "dev", ...getJson("env", "dev") },
+		env_beta: { NODE_ENV: "beta", ...getJson("env", "beta") },
+		env_stable: { NODE_ENV: "stable", ...getJson("env", "stable") },
 
 		error_file: `./logs/${app}.log`,
 		out_file: `./logs/${app}.log`,
@@ -35,9 +35,10 @@ const apps = appNames.map(app => {
 });
 
 const deploy = {
-	dev: { ...getJson("deploy"), ...getJson("deploy", "services"), ...getJson("deploy", "dev") },
-	beta: { ...getJson("deploy"), ...getJson("deploy", "services"), ...getJson("deploy", "beta") },
-	stable: { ...getJson("deploy"), ...getJson("deploy", "services"), ...getJson("deploy", "stable") },
+	docker: getJson("deploy", "services", "docker"),
+	dev: getJson("deploy", "services", "dev"),
+	beta: getJson("deploy", "services", "beta"),
+	stable: getJson("deploy", "services", "stable"),
 };
 
 module.exports = { apps, deploy };
