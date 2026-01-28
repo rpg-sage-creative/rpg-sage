@@ -8,7 +8,7 @@
 	"repo": "https://github.com/rpg-sage-creative/rpg-sage.git",
 	"fetch": "fast",
 
-	"path": "/rpg-sage/bot/dev",
+	"path": "/rpg-sage/bot/docker",
 
 	"pre-deploy-local" : "scp -i ~/.ssh/rpg-sage-stable.pem -P 2222 ./config/env-docker.json ec2-user@127.0.0.1:/rpg-sage/bot/config/env-docker.json",
 	"post-deploy" : "rm -rf node_modules; npm ci; rm -rf build; npm run build; cp ../../config/env-docker.json ./config/env.json; pm2 startOrRestart bot.config.cjs --env docker --only sage-bot --update-env; pm2 save --force"
