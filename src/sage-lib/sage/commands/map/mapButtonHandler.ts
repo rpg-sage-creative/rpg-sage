@@ -1,4 +1,4 @@
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, Message, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
@@ -52,8 +52,8 @@ function createMapTokenSelectCustomId(messageId:Snowflake, actorId:Snowflake): s
 	return `map-select-active-token-${messageId}-${actorId}`;
 }
 
-function parseMapTokenSelectCustomId(customId: string): { messageId:Snowflake; actorId:Snowflake; } | undefined {
-	if (!customId.startsWith("map-select-active-token-")) return undefined;
+function parseMapTokenSelectCustomId(customId: Optional<string>): { messageId:Snowflake; actorId:Snowflake; } | undefined {
+	if (!customId?.startsWith("map-select-active-token-")) return undefined;
 	const parts = customId.split("-");
 	const actorId = parts.pop();
 	if (!isNonNilSnowflake(actorId)) return undefined;
