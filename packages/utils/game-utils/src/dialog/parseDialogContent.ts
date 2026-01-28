@@ -21,7 +21,7 @@ export function parseDialogContent(content: string): DialogContent | undefined {
 	};
 
 	let match: DialogRegExpMatch | undefined;
-	while (match = matchDialogRegexPair(dialogContent.content)) {console.debug({match});
+	while (match = matchDialogRegexPair(dialogContent.content)) {
 		// if we hit a duplicated section we stop processing sections
 		let breakWhile = false;
 

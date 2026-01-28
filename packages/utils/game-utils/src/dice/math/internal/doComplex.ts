@@ -84,7 +84,7 @@ export function doComplex(input: string): string {
 			};
 
 			// handle a math function
-			if (_functionName !== undefined) {console.debug({_functionName})
+			if (_functionName !== undefined) {
 				// lower case and cast type
 				const functionName = _functionName.toLowerCase() as SageMathFunction;
 				// check function args for pipes
