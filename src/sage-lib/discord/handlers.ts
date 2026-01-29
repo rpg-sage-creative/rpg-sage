@@ -1,4 +1,5 @@
-import { error, isNullOrUndefined, stringOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { ghostEvent } from "@rsc-sage/env";
+import { debug, error, isNullOrUndefined, stringOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { isDiscordApiError, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SMessage, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { ChannelType, MessageType as DMessageType, GatewayIntentBits, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
@@ -202,7 +203,7 @@ function getInteractionFlags(interaction: Optional<Interaction>): InteractionFla
 }
 
 export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
-	const output = { tested: 0, handled: 0 };
+	const output = { tested: 0, handled: 0, ghosted: 0 };
 
 	const flags = getInteractionFlags(interaction);
 	if (flags.canHandle) {
@@ -213,7 +214,10 @@ export async function handleInteraction(interaction: Interaction): Promise<THand
 		}catch(ex) {
 			error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
 		}
-		if (!output.handled) {
+
+		if (output.ghosted) debug(output);
+
+		if (!output.handled && !output.ghosted) {
 			error({
 				ev: "Unhandled Interaction",
 				guild: interaction.guild?.name,
@@ -235,8 +239,12 @@ async function handleInteractions(sageInteraction: SageInteraction<any>, output:
 		const data = await listener.tester(clonedInteraction);
 		output.tested++;
 		if (isActionableObject(data)) {
-			await listener.handler(clonedInteraction, data);
-			output.handled++;
+			if (ghostEvent(sageInteraction.server, sageInteraction.actor)) {
+				output.ghosted++;
+			}else {
+				await listener.handler(clonedInteraction, data);
+				output.handled++;
+			}
 			break;
 		}
 	}
@@ -255,8 +263,8 @@ function checkContentForUrls(content: string | null, urls: (string | null)[]) {
 				if (content.includes(url)) {
 					return true;
 				}
-				// discord did something funky, recently, that i just notice (2024-03-07) ... adding %22 at the end of embed urls ...
-				if (url.endsWith("%22") && content.includes(url.replace(/%22$/, ""))) {
+				// discord did something funky, recently, that i just noticed (2024-03-07) ... adding %22 at the end of embed urls ...
+				if (url.endsWith("%22") && content.includes(url.slice(0, -3))) {
 					return true;
 				}
 			}
@@ -342,13 +350,13 @@ function isMessageWeCanIgnore(message: MessageOrPartial): boolean {
 /** Combines all the is_X_WeCanIgnore methods for reuse. */
 function canIgnoreMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): boolean {
 	return isUserWeCanIgnore(message.author)
-	|| isChannelWeCanIgnore(message.channel)
-	|| isMessageWeCanIgnore(message)
-	|| isEditWeCanIgnore(message, originalMessage);
+		|| isChannelWeCanIgnore(message.channel)
+		|| isMessageWeCanIgnore(message)
+		|| isEditWeCanIgnore(message, originalMessage);
 }
 
 export async function handleMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>, messageType: MessageType): Promise<THandlerOutput> {
-	const output = { tested: 0, handled: 0 };
+	const output = { tested: 0, handled: 0, ghosted: 0 };
 
 	try {
 		// can we ignore it without fetching?
@@ -365,6 +373,8 @@ export async function handleMessage(message: MessageOrPartial, originalMessage: 
 				const sageMessage = await SageMessage.fromMessage(fetchedMessage as SMessage);
 				await handleMessages(sageMessage, messageType, output);
 				sageMessage.clear();
+
+				if (output.ghosted) debug(output);
 			}
 		}
 	} catch (ex) {
@@ -382,18 +392,22 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 	for (const listener of messageListeners) {
 		if (isActionableType(listener, messageType)) {
 			const clonedMessage = sageMessage.clone();
-			const commandAndArgsAndData = <TCommandAndArgsAndData<any>>await listener.tester(clonedMessage);
+			const commandAndArgsAndData = await listener.tester(clonedMessage) as TCommandAndArgsAndData<any>;
 			output.tested++;
 			if (isActionableObject(commandAndArgsAndData)) {
 				clonedMessage.setCommandAndArgs(commandAndArgsAndData);
-				await listener.handler(clonedMessage, commandAndArgsAndData.data);
-				output.handled++;
+				if (ghostEvent(sageMessage.server, sageMessage.actor)) {
+					output.ghosted++;
+				}else {
+					await listener.handler(clonedMessage, commandAndArgsAndData.data);
+					output.handled++;
+				}
 				break;
 			}
 		}
 	}
 	// track incorrect command attempts that aren't edits
-	if (!output.handled && messageType !== MessageType.Edit && sageMessage.hasPrefix && sageMessage.prefix && /^!!?/.test(sageMessage.slicedContent)) {
+	if (!output.handled && messageType !== MessageType.Edit && sageMessage.hasPrefix && sageMessage.prefix && sageMessage.slicedContent.startsWith("!")) {
 		error(`I got ${messageListeners.length} message handlers, but "${sageMessage.slicedContent}" ain't one!`);
 	}
 }
@@ -404,7 +418,7 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 
 /** Returns the number of handlers executed. */
 export async function handleReaction(messageReaction: ReactionOrPartial, user: UserOrPartial, reactionType: ReactionType): Promise<THandlerOutput> {
-	const output = { tested: 0, handled: 0 };
+	const output = { tested: 0, handled: 0, ghosted: 0 };
 
 	const canIgnore = isUserWeCanIgnore(user)
 		|| isChannelWeCanIgnore(messageReaction.message.channel);
@@ -426,13 +440,19 @@ export async function handleReaction(messageReaction: ReactionOrPartial, user: U
 
 			if (isActionableObject(commandAndData)) {
 				sageReaction.command = commandAndData.command;
-				await listener.handler(sageReaction, commandAndData.data);
-				output.handled++;
+				if (ghostEvent(sageReaction.server, sageReaction.actor)) {
+					output.ghosted++;
+				}else {
+					await listener.handler(sageReaction, commandAndData.data);
+					output.handled++;
+				}
 				break;
 			}
 		}
 
 		sageReaction?.clear();
+
+		if (output.ghosted) debug(output);
 
 	} catch (ex) {
 		error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);

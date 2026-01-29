@@ -20,7 +20,7 @@ export interface IMenuRenderable extends Renderable {
 // /** Text Channel or Channel Snowflake */
 // export type TChannelResolvable = DChannelResolvable;
 
-export type THandlerOutput = { tested: number; handled: number; };
+export type THandlerOutput = { tested: number; handled: number; ghosted: number; };
 
 
 //#region interaction type

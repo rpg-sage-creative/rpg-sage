@@ -3,6 +3,7 @@ export * from "./getRollemId.js";
 export * from "./getSnsInfo.js";
 export * from "./getSuperUserId.js";
 export * from "./getToken.js";
+export * from "./ghostEvent.js";
 export * from "./isSuperAdminId.js";
 export * from "./SageId.js";
 export * from "./TupperBoxId.js";
