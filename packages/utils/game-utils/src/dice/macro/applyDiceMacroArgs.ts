@@ -123,7 +123,7 @@ export function applyDiceMacroArgs(diceMacroCall: string, argsStack?: DiceMacroA
 
 	// indexed / named args
 	diceMacroCall = diceMacroCall.replace(DiceMacroArgPlaceholderRegExpG, match => {
-		const { vs, key, keyIndex, isIndexed, defaultValue } = parseDiceMacroArgPlaceholder(match)!;
+		const { vs, key, keyLower, keyIndex, isIndexed, defaultValue } = parseDiceMacroArgPlaceholder(match)!;
 		// const ret = (out: string) => {
 		// 	console.debug({match,vs,key,keyIndex,isIndexed,defaultValue,out});
 		// 	return out;
@@ -133,7 +133,6 @@ export function applyDiceMacroArgs(diceMacroCall: string, argsStack?: DiceMacroA
 			// return ret(nonEmptyStringOrDefaultValue(vs, indexedArgs[keyIndex], defaultValue) ?? `${vs}{${keyIndex}}`);
 			return nonEmptyStringOrDefaultValue(vs, indexedArgs[keyIndex], defaultValue) ?? `${vs}{${keyIndex}}`;
 		}else {
-			const keyLower = key.toLowerCase();
 			const namedArg = findNamedArg(argsStack, keyLower);
 			namedArgsUsed.add(keyLower);
 			// return ret(namedArgValueOrDefaultValue(vs, namedArg, defaultValue) ?? `${vs}{${key}}`);
