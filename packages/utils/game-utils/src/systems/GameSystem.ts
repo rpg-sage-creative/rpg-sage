@@ -70,6 +70,7 @@ const gameSystems: GameSystem[] = ((): GameSystemBase[] => {
 	return [
 		{ code:"None",  dice:"None",  name:"None",                       desc:"No Game System." },
 		{ code:"CnC",   dice:"CnC",   name:"Coyote & Crow",              desc:"" },
+		{ code:"D20",   dice:"D20",   name:"d20",                        desc:"" },
 		{ code:"DnD5e", dice:"DnD5e", name:"Dungeons & Dragons 5e",      desc:"", diceCritMethod:"TimesTwo" },
 		{ code:"E20",   dice:"E20",   name:"Essence 20",                 desc:"", isE20:true },
 		{ code:"PF1e",  dice:"D20",   name:"Pathfinder 1e",              desc:"" },
