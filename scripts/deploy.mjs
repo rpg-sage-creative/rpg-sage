@@ -9,10 +9,13 @@ const what = process.argv.find((arg, i) => i === 3 && ["bot","map","services"].i
 /** @type {"local"|"docker"|"dev"|"beta"|"stable"|undefined} */
 const where = process.argv.find((arg, i) => i === 4 && ["local","docker","dev","beta","stable"].includes(arg));
 
-/** @type {"ghost"|undefined} */
-const ghost = process.argv.find((arg, i) => arg === "ghost");
+/** @type {"npm-ci"|"npm-update"|"npm-ci-update"|undefined} */
+const nodeModules = process.argv.find(arg => ["npm-ci","npm-update","npm-ci-update"].includes(arg));
 
-const branch = process.argv.find((arg, i) => i === 5 && ![base, what, where, ghost].includes(arg));
+/** @type {"ghost"|undefined} */
+const ghost = process.argv.find(arg => arg === "ghost");
+
+const branch = process.argv.find((arg, i) => i === 5 && ![base, what, where, ghost, nodeModules].includes(arg));
 
 if (!base || !what || !where) {
 	console.error("node deploy.mjs deploy|env bot|map|services local|docker|dev|beta|stable");
@@ -39,7 +42,13 @@ function formatScript(json, key) {
 	let script = json[key];
 	if (!script) return script;
 	script = Array.isArray(script) ? script.join("; ") : script;
+
 	const host = ensureHost(json.host);
+	const npmInstall = nodeModules === "npm-ci" ? "npm ci;"
+		: nodeModules === "npm-update" ? "npm update;"
+		: nodeModules === "npm-ci-update" ? "npm ci; npm update;"
+		: "";
+
 	json[key] = script
 		.replaceAll("${where}", where)
 		.replaceAll("${codeName}", codeName)
@@ -48,6 +57,7 @@ function formatScript(json, key) {
 		.replaceAll("${host}", host?.host ?? "")
 		.replaceAll("-P ${port}", host?.port ? "-P " + host.port : "")
 		.replaceAll("${botRoot}", json?.botRoot)
+		.replaceAll("npm ci;", npmInstall)
 }
 
 function main() {

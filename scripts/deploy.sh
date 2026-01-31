@@ -12,6 +12,8 @@ GHOST=""
 BRANCH=""
 #
 FORCE=""
+#
+NODE_MODULES=""
 
 # Set variables in a single loop
 for arg in "$@"; do
@@ -21,12 +23,14 @@ for arg in "$@"; do
     WHAT="$arg"
   elif [[ "$arg" == "local" || "$arg" == "docker" || "$arg" == "dev" || "$arg" == "beta" || "$arg" == "stable" ]] && [[ "$WHERE" != "beta" ]]; then
     WHERE="$arg"
-  elif [[ "$arg" = "develop" || "$arg" = "beta" || "$arg" = "main" ]]; then
+  elif [[ "$arg" == "develop" || "$arg" == "beta" || "$arg" == "main" ]]; then
     BRANCH="$arg"
-  elif [ "$arg" = "ghost" ]; then
+  elif [[ "$arg" == "ghost" ]]; then
     GHOST="ghost"
-  elif [ "$arg" = "force" ]; then
+  elif [[ "$arg" == "force" ]]; then
     FORCE="--force"
+  elif [[ "$arg" == "npm-ci" || "$arg" == "npm-update" || "$arg" == "npm-ci-update" ]]; then
+    NODE_MODULES="$arg"
   fi
 done
 
@@ -67,7 +71,7 @@ if [[ "$JSON" == "env" ]]; then
   exit;
 fi
 
-node deploy.mjs deploy "$WHAT" "$WHERE" "$BRANCH" "$GHOST"
+node deploy.mjs deploy "$WHAT" "$WHERE" "$BRANCH" "$NODE_MODULES" "$GHOST"
 
 # run pm2 from repo root
 cd ..
