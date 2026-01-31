@@ -19,7 +19,7 @@ for arg in "$@"; do
     JSON="$arg"
   elif [[ "$arg" == "bot" || "$arg" == "map" || "$arg" == "pdf" || "$arg" == "random" || "$arg" == "search" || "$arg" == "all" || "$arg" == "services" ]]; then
     WHAT="$arg"
-  elif [[ "$arg" == "local" || "$arg" == "docker" || "$arg" == "dev" || "$arg" == "beta" || "$arg" == "stable" ]]; then
+  elif [[ "$arg" == "local" || "$arg" == "docker" || "$arg" == "dev" || "$arg" == "beta" || "$arg" == "stable" ]] && [[ "$WHERE" != "beta" ]]; then
     WHERE="$arg"
   elif [[ "$arg" = "develop" || "$arg" = "beta" || "$arg" = "main" ]]; then
     BRANCH="$arg"
