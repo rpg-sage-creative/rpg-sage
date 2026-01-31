@@ -84,13 +84,14 @@
 		"build": "bash ./node_modules/@rsc-utils/dev-scripts/sh/build.sh --skipIndexTs",
 		"release": "bash ./node_modules/@rsc-utils/dev-scripts/sh/release.sh",
 		"test": "echo 'no tests'",
-		"clean": "rm -rf node_modules; rm -f package-lock.json; npm i; npm run build",
-		"prestart-dev": "npm run build",
+		"clean": "rm -rf node_modules; npm ci; npm run build",
+		"prestart-dev": "npm run build; npm run deploy env local",
 		"start-dev": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
 		"start-dev-and-services": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices",
 		"app-commands": "node ./build/app-commands.mjs codeName=dev dataRoot='./docker-volumes/rpg-sage-mono'",
 		"preupdates": "npm run build",
 		"processMessages": "node ./build/updates/processMessages.js codeName=dev --getFromEnvJson",
-		"updates": "npm run processMessages"
+		"updates": "npm run processMessages",
+		"deploy": "cd ./scripts; bash deploy.sh"
 	}
 }
