@@ -9,7 +9,7 @@ WHERE="local"
 # "ghost"
 GHOST=""
 #
-BRANCH="develop"
+BRANCH=""
 #
 FORCE=""
 
@@ -31,10 +31,11 @@ for arg in "$@"; do
 done
 
 # Validate JSON and WHERE variables
-if [[ -z "$JSON" ]] || [[ -z "$WHAT" ]] || [[ -z "$WHERE" ]]; then
+if [[ -z "$JSON" ]] || [[ -z "$WHAT" ]] || [[ -z "$WHERE" ]] || [[ -z "$BRANCH" ]]; then
   echo "Error: JSON variable must be either 'deploy' or 'env'"
   echo "Error: WHAT variable must be either 'bot' or 'services'"
   echo "Error: WHERE variable must be either 'local', 'docker', 'dev', 'beta', or 'stable'"
+  echo "Error: BRANCH variable must be either 'develop', 'beta', or 'main'"
   echo "GHOST is optional, but must be 'ghost'"
   exit 1
 fi
