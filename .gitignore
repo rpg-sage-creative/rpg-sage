@@ -5,14 +5,14 @@ node_modules/
 .DS_Store
 tsconfig.tsbuildinfo
 
-# ignore config json files
-/config/*.json
+# ignore config files
+config/
 # negate ignore on templates
-!/config/*.template.json
+!config/*.template.json
 
 # docker
 shared-local-instance.db
-/docker-volumes/rpg-sage-mono/foundry
-/docker-volumes/rpg-sage-mono/pf2e
-/docker-volumes/**/*.json
-!/docker-volumes/rpg-sage-mono/sage/bots/bot.template.json
+docker-volumes/rpg-sage-mono/foundry
+docker-volumes/rpg-sage-mono/pf2e
+docker-volumes/**/*.json
+!docker-volumes/rpg-sage-mono/sage/bots/bot.template.json
