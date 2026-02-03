@@ -92,6 +92,6 @@
 		"preupdates": "npm run build",
 		"processMessages": "node ./build/updates/processMessages.js codeName=dev --getFromEnvJson",
 		"updates": "npm run processMessages",
-		"deploy": "cd ./scripts; bash deploy.sh"
+		"deploy": "node ./scripts/deploy.mjs"
 	}
 }
