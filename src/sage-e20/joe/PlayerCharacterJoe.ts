@@ -188,10 +188,13 @@ export class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharacterCoreJo
 		return `[spacer]${name}${desc}${upgrades}${effect}${traits}`;
 	}
 
-	protected toWeaponHtml(weapon: TWeaponJoe): string {
+	protected toWeaponHtml(weapon: TWeaponJoe): string | undefined {
 		const base = super.toWeaponHtml(weapon);
-		const upgrades = weapon.upgrades ? `; Upgrades: ${weapon.upgrades} ` : "";
-		return base + upgrades;
+		if (base) {
+			const upgrades = weapon.upgrades ? `; Upgrades: ${weapon.upgrades} ` : "";
+			return base + upgrades;
+		}
+		return undefined;
 	}
 
 	public getValidSections<T extends string = TCharacterSectionType>(): T[] {

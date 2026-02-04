@@ -324,7 +324,10 @@ export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> exten
 		return `[spacer]${skillValues.join(", ")}`;
 	}
 
-	protected toWeaponHtml(weapon: TWeaponE20): string {
+	protected toWeaponHtml(weapon: TWeaponE20): string | undefined {
+		if (!weapon.name && !weapon.range && !weapon.hands && !weapon.traits && !weapon.attack && !weapon.effects && !weapon.altEffects) {
+			return undefined;
+		}
 		const name = weapon.name ?? "<i>Unnamed Weapon</i>";
 		const range = weapon.range ? `; Range: ${weapon.range} ` : "";
 		const hands = weapon.hands ? `; Hands: ${weapon.hands} ` : "";
@@ -340,7 +343,7 @@ export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> exten
 			return [
 				undefined,
 				`<b>${label}</b>`,
-				...this.core.weapons.map(weapon => this.toWeaponHtml(weapon))
+				...this.core.weapons.map(weapon => this.toWeaponHtml(weapon)).filter(s => s)
 			];
 		}
 		return [];

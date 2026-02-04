@@ -306,7 +306,10 @@ export class PlayerCharacterTransformer extends PlayerCharacterE20<PlayerCharact
 		}
 	}
 
-	protected toWeaponHtml(weapon: TWeaponTransformer): string {
+	protected toWeaponHtml(weapon: TWeaponTransformer): string | undefined {
+		if (!weapon.name && !weapon.range && !weapon.hardpoint && !weapon.traits && !weapon.attack && !weapon.effects && !weapon.altEffects) {
+			return undefined;
+		}
 		const name = weapon.name ?? "<i>Unnamed Weapon</i>";
 		const range = weapon.range ? `; Range: ${weapon.range} ` : "";
 		const hardpoint = weapon.hardpoint ? `; Hardpoint: ${weapon.hardpoint} ` : "";
