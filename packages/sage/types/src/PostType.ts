@@ -1,4 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
+import { EmbedRegExp, PostRegExp } from "./DialogPostType.js";
 
 export enum PostType {
 	Content = 0,
@@ -7,10 +8,10 @@ export enum PostType {
 
 export function parsePostType(value: Optional<string>): PostType | undefined {
 	if (value) {
-		if (/\b(content|post)\b/i.test(value)) {
+		if (PostRegExp.test(value)) {
 			return PostType.Content;
 		}
-		if (/\bembed\b/i.test(value)) {
+		if (EmbedRegExp.test(value)) {
 			return PostType.Embed;
 		}
 	}

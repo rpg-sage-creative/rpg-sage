@@ -50,24 +50,31 @@ export enum SageChannelType {
 	Dice = 5
 }
 
+const GameMasterRegExp = /\b(gm|game[ -]?master)s?\b/i;
+const InCharacterRegExp = /\b(ic|in[ -]?char(acter)?)\b/i;
+const OutOfCharacterRegExp = /\b(ooc|out[ -]?of[ -]?char(acter)?)\b/i;
+const MiscellaneousRegExp = /\bmisc(ellaneous)?\b/i;
+const DiceRegExp = /\bdice\b/i;
+const NoneRegExp = /\bnone\b/i;
+
 export function parseSageChannelType(value: Optional<string>): SageChannelType | undefined {
 	if (value) {
-		if (/\b(gm|game[ -]?master)s?\b/i.test(value)) {
+		if (GameMasterRegExp.test(value)) {
 			return SageChannelType.GameMaster;
 		}
-		if (/\b(ic|in[ -]?char(acter)?)\b/i.test(value)) {
+		if (InCharacterRegExp.test(value)) {
 			return SageChannelType.InCharacter;
 		}
-		if (/\b(ooc|out[ -]?of[ -]?char(acter)?)\b/i.test(value)) {
+		if (OutOfCharacterRegExp.test(value)) {
 			return SageChannelType.OutOfCharacter;
 		}
-		if (/\bmisc(ellaneous)?\b/i.test(value)) {
+		if (MiscellaneousRegExp.test(value)) {
 			return SageChannelType.Miscellaneous;
 		}
-		if (/\bdice\b/i.test(value)) {
+		if (DiceRegExp.test(value)) {
 			return SageChannelType.Dice;
 		}
-		if (/\bnone\b/i.test(value)) {
+		if (NoneRegExp.test(value)) {
 			return SageChannelType.None;
 		}
 	}

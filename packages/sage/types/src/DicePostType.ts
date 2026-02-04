@@ -7,18 +7,23 @@ export enum DicePostType {
 	MultipleEmbeds = 3
 }
 
+const MultipleEmbedsRegExp = /\bmulti(ple)?[ -]?embeds?\b/i;
+const MultiplePostsRegExp = /\bmulti(ple)?[ -]?posts?\b/i;
+const SingleEmbedRegExp = /\b(single[ -]?)?embed\b/i;
+const SinglePostRegExp = /\b(single[ -]?)?post\b/i;
+
 export function parseDicePostType(value: Optional<string>): DicePostType | undefined {
 	if (value) {
-		if (/\bmulti(ple)?[ -]?embeds?\b/i.test(value)) {
+		if (MultipleEmbedsRegExp.test(value)) {
 			return DicePostType.MultipleEmbeds;
 		}
-		if (/\bmulti(ple)?[ -]?posts?\b/i.test(value)) {
+		if (MultiplePostsRegExp.test(value)) {
 			return DicePostType.MultiplePosts;
 		}
-		if (/\b(single)?embed\b/i.test(value)) {
+		if (SingleEmbedRegExp.test(value)) {
 			return DicePostType.SingleEmbed;
 		}
-		if (/\b(single)?post\b/i.test(value)) {
+		if (SinglePostRegExp.test(value)) {
 			return DicePostType.SinglePost;
 		}
 	}

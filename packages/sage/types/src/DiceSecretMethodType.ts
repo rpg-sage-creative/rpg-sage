@@ -8,21 +8,27 @@ export enum DiceSecretMethodType {
 	// GameMasterThread = 4
 }
 
+const IgnoreRegExp = /\bIgnore\b/i;
+const HideRegExp = /\bHide\b/i;
+const GameMasterChannelRegExp = /\b(gm|GameMasterChannel)\b/i;
+const GameMasterDirectRegExp = /\b(dm|GameMasterDirect)\b/i;
+// const GameMasterThreadRegExp = /\b(thread|GameMasterThread)\b/i;
+
 export function parseDiceSecretMethodType(value: Optional<string>): DiceSecretMethodType | undefined {
 	if (value) {
-		if (/Ignore/i.test(value)) {
+		if (IgnoreRegExp.test(value)) {
 			return DiceSecretMethodType.Ignore;
 		}
-		if (/Hide/i.test(value)) {
+		if (HideRegExp.test(value)) {
 			return DiceSecretMethodType.Hide;
 		}
-		if (/gm|GameMasterChannel/i.test(value)) {
+		if (GameMasterChannelRegExp.test(value)) {
 			return DiceSecretMethodType.GameMasterChannel;
 		}
-		if (/dm|GameMasterDirect/i.test(value)) {
+		if (GameMasterDirectRegExp.test(value)) {
 			return DiceSecretMethodType.GameMasterDirect;
 		}
-		// if (/thread|GameMasterThread/i.test(value)) {
+		// if (GameMasterThreadRegExp.test(value)) {
 		// 	return DiceSecretMethodType.GameMasterThread;
 		// }
 	}

@@ -5,12 +5,15 @@ export enum DialogPostType {
 	Post = 1
 }
 
+export const EmbedRegExp = /\bembed\b/i;
+export const PostRegExp = /\b(content|post)\b/i;
+
 export function parseDialogPostType(value: Optional<string>): DialogPostType | undefined {
 	if (value) {
-		if (/\b(content|post)\b/i.test(value)) {
+		if (PostRegExp.test(value)) {
 			return DialogPostType.Post;
 		}
-		if (/\bembed\b/i.test(value)) {
+		if (EmbedRegExp.test(value)) {
 			return DialogPostType.Embed;
 		}
 	}
