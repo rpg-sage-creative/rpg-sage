@@ -1,7 +1,14 @@
-import { globalizeRegex } from "@rsc-utils/core-utils";
+import { globalizeRegex, PipedContentRegExp } from "@rsc-utils/core-utils";
 import { unpipe } from "./unpipe.js";
+import { regex } from "regex";
 
-const NestedPipeRegExp = /\|{2}.*?\|{2}[^|]+\|{2}.*?\|{2}/;
+const NestedPipeRegExp = regex`
+	\|{2}
+		.*?
+		${PipedContentRegExp}
+		.*?
+	\|{2}
+`;
 const NestedPipeRegExpG = globalizeRegex(NestedPipeRegExp);
 
 /** Cleans instances of nested pipes by removing inner pipes. */

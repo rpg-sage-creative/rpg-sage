@@ -1,4 +1,4 @@
-import { AllCodeBlocksRegExp, dequote, stringArrayOrEmpty, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
+import { AllCodeBlocksRegExp, AlphaNumericDashDotArgKeyRegExp, dequote, stringArrayOrEmpty, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { regex } from "regex";
 import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
@@ -28,20 +28,25 @@ type StatBlockGroups = {
 };
 const StatBlockRegExp = regex("i")`
 	\{
-		(
-			(?<implicitChar> :: )
-			|
-			(?<explicitChar> [\w\ ]+ | "[\w\ ]+" )
-			::
-
-		)?
-		(?<statKey> [\w\ \-.]+ )
-		(
-			:
-			(?<explicitDefault> [^\{\}]+ )
-			|
-			(?<implicitDefault> : )
-		)?
+	(
+		\s*
+		(?<implicitChar> :: )
+		|
+		\s*
+		(?<explicitChar> [\w\ ]+ | "[\w\ ]+" )
+		\s*
+		::
+	)?
+	\s*
+	(?<statKey> ${AlphaNumericDashDotArgKeyRegExp} )
+	\s*
+	(
+		:
+		(?<explicitDefault> [^\{\}]+ )
+		|
+		(?<implicitDefault> : )
+		\s*
+	)?
 	\}
 ` as TypedRegExp<StatBlockGroups>;
 
@@ -367,8 +372,10 @@ export class StatBlockProcessor {
 		statBlock = statBlock?.trim();
 		if (!statBlock) return undefined;
 
-		const { implicitChar, implicitDefault, explicitChar, explicitDefault, statKey } = (this.constructor as typeof StatBlockProcessor).StatBlockRegExp.exec(statBlock)?.groups ?? {};
-		if (!statKey) return undefined;
+		const match = (this.constructor as typeof StatBlockProcessor).StatBlockRegExp.exec(statBlock);
+		if (!match) return undefined;
+
+		const { implicitChar, implicitDefault, explicitChar, explicitDefault, statKey } = match.groups;
 
 		const char = implicitChar ? { isImplicit:true } : this.parseCharReference(explicitChar);
 

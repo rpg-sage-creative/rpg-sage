@@ -1,7 +1,6 @@
-import { globalizeRegex, type Optional, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { globalizeRegex, PipedContentRegExp, type Optional, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
 
-const PipeSpoilerRegExp = /\|{2}[^|]+\|{2}/;
-const PipeSpoilerRegExpG = globalizeRegex(PipeSpoilerRegExp);
+const PipedContentRegExpG = globalizeRegex(PipedContentRegExp);
 
 export type UnpipeResults<Type extends string | undefined | null> = {
 	hasPipes: boolean;
@@ -24,9 +23,9 @@ export function unpipe(value: Optional<string>): UnpipeResults<Optional<string>>
 
 	// remove pipes
 	let unpiped = value;
-	while (PipeSpoilerRegExp.test(unpiped)) {
+	while (PipedContentRegExp.test(unpiped)) {
 		hasPipes = true;
-		unpiped = unpiped.replace(PipeSpoilerRegExpG, piped => piped.slice(2, -2));
+		unpiped = unpiped.replace(PipedContentRegExpG, piped => piped.slice(2, -2));
 	};
 
 	return { value, hasPipes, unpiped };
