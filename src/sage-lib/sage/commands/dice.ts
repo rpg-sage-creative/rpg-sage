@@ -179,7 +179,7 @@ export async function parseDiceMatches(content: string, { processor, sageCommand
 
 	let parseOptions: BaseParseOptions;
 
-	const redacted = redactContent(content);
+	const redacted = redactContent(content, { complete:true });
 
 	const regex = createBasicBracketsRegExpG();
 	let execArray: RegExpExecArray | null;
@@ -191,8 +191,9 @@ export async function parseDiceMatches(content: string, { processor, sageCommand
 		const match = execArray[0];
 		const index = execArray.index;
 		const inline = isWrapped(match, "[[]]");
-		const output = await parseDiscordMacro(content.slice(index, index + match.length), parseOptions)
-			?? await parseMatch(content.slice(index, index + match.length), parseOptions);
+		const sliced = content.slice(index, index + match.length);
+		const output = await parseDiscordMacro(sliced, parseOptions)
+			?? await parseMatch(sliced, parseOptions);
 		if (output.length) {
 			diceMatches.push({ match, index, inline, output });
 		}
