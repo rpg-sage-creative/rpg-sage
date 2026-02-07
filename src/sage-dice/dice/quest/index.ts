@@ -24,11 +24,12 @@ import type {
 } from "../base/types.js";
 
 //#region Tokenizer
+const QuestParsers = {
+	dice: /\s*(1)?\s*d\s*(20)/i,
+	target: /(vs)\s*(\d+|\|\|\d+\|\|)/i,
+};
 function getParsers(): TokenParsers {
-	return {
-		dice: /\s*(1)?\s*d\s*(20)/i,
-		target: /(vs)\s*(\d+|\|\|\d+\|\|)/i
-	};
+	return QuestParsers;
 }
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData): T {
 	if (token.key === "dice") {
