@@ -1,4 +1,4 @@
-import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { cleanWhitespace, randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
 import { GameSystemType, rollDice } from "@rsc-utils/game-utils";
 import {
@@ -61,11 +61,15 @@ import type {
 //#endregion
 
 //#region Tokenizer
+
+const E20Parsers = {
+	suffice: /(e|s|\*|up\d+|dn\d+)+/i,
+	target: /\b(vs\s*dif|dif|vs)\s*(\d+|\|\|\d+\|\|)/i,
+};
+
+let _parsers: TokenParsers;
 function getParsers(): TokenParsers {
-	const parsers = baseGetParsers();
-	parsers["suffix"] = /(e|s|\*|up\d+|dn\d+)+/i;
-	parsers["target"] = /\b(vs\s*dif|dif|vs)\s*(\d+|\|\|\d+\|\|)/i;
-	return parsers;
+	return _parsers ??= { ...baseGetParsers(), ...E20Parsers };
 }
 
 function applyEdgeSnagSpecShift<T extends DicePartCore>({ core, hasEdge, hasSnag, hasSpecialization, upShift, downShift }: { core: T, hasEdge: boolean, hasSnag: boolean, hasSpecialization: boolean, upShift: number, downShift: number }): T {
@@ -84,10 +88,13 @@ function applyEdgeSnagSpecShift<T extends DicePartCore>({ core, hasEdge, hasSnag
 	return core;
 }
 
-function tallyShifts(text: string, shift: "up" | "down"): number {
-	const regex = shift === "up" ? /(↑|up)\d+/gi : /(↓|dn)\d+/gi;
+const UpShiftRegExp = /(↑|up)\d+/g;    // we are using a lowercased string
+const DownShiftRegExp = /(↓|dn)\d+/g;  // we are using a lowercased string
+const UpDownShitRegExp = /↑|up|↓|dn/g; // we are using a lowercased string
+function tallyShifts(text: Lowercase<string>, shift: "up" | "down"): number {
+	const regex = shift === "up" ? UpShiftRegExp : DownShiftRegExp;
 	const matches = text.match(regex) ?? [];
-	const values = matches.map(match => +match.replace(/↑|up|↓|dn/ig, ""));
+	const values = matches.map(match => +match.replace(UpDownShitRegExp, ""));
 	return values.reduce((out, value) => out + value, 0);
 }
 
@@ -95,13 +102,14 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 	if (token.key === "suffix") {
 		const prevToken = tokens[index - 1];
 		if (prevToken?.key === "dice") {
+			const lower = token.token.toLowerCase();
 			return applyEdgeSnagSpecShift({
 				core,
-				hasEdge: token.token.match(/e/i) !== null,
-				hasSnag: token.token.match(/s/i) !== null,
-				hasSpecialization: token.token.includes("*"),
-				upShift: tallyShifts(token.token, "up"),
-				downShift: tallyShifts(token.token, "down")
+				hasEdge: lower.includes("e"),
+				hasSnag: lower.includes("s"),
+				hasSpecialization: lower.includes("*"),
+				upShift: tallyShifts(lower, "up"),
+				downShift: tallyShifts(lower, "down")
 			});
 		}
 	}
@@ -333,6 +341,10 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 
 	//#region static
 	public static create({ count, description, dropKeep, sides, sign, specialization, testOrTarget, downShift, upShift, shiftedDesc, skillDie }: TDicePartCoreArgs = { }): DicePart {
+		if (!skillDie) {
+			skillDie = `${count ?? ""}d${sides ?? 20}` as TSkillDie;
+			if (skillDie.startsWith("1d")) skillDie = skillDie.slice(1) as TSkillDie;
+		}
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameSystemType.E20,
@@ -347,7 +359,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			shiftedDesc,
 			sides: sides ?? 0,
 			sign: sign,
-			skillDie: skillDie ?? `${count ?? ""}d${sides ?? 20}`.replace(/^1d/, "d") as TSkillDie,
+			skillDie,
 			specialization,
 			test: targetDataToTestData(<TTargetData>testOrTarget) ?? <TTestData>testOrTarget ?? null,
 			target: <TTargetData>testOrTarget ?? null,
@@ -365,29 +377,29 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			while (match(core)) {
 				let sliceLength = 1;
 				//#region edge
-				if (match(core, /^e/i)) {
+				if (match(core, StartsWithERegExp)) {
 					hasEdge = true;
 				}
 				//#endregion
 				//#region snag
-				if (match(core, /^s/i)) {
+				if (match(core, StartsWithSRegExp)) {
 					hasSnag = true;
 				}
 				//#endregion
 				//#region specialization
-				if (match(core, /^\*/i)) {
+				if (match(core, StartsWithStartRegExp)) {
 					hasSpecialization = true;
 				}
 				//#endregion
 				//#region upShift
-				const upMatch = match(core, /^(↑|up)(\d*)/i);
+				const upMatch = match(core, StartsWithUpShiftRegExp);
 				if (upMatch) {
 					upShift += +upMatch[2];
 					sliceLength = upMatch[0].length;
 				}
 				//#endregion
 				//#region downShift
-				const downMatch = match(core, /^(↓|dn)(\d*)/i);
+				const downMatch = match(core, StartsWithDownShiftRegExp);
 				if (downMatch) {
 					downShift += +downMatch[2];
 					sliceLength = downMatch[0].length;
@@ -400,13 +412,18 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 		}
 		const args = <TDicePartCoreArgs>{ testOrTarget:core.target ?? core.test, ...core };
 		return DicePart.create(args);
-
-		function match(core: DicePartCore, regex = /^(e|s|\*|↑\d*|up\d+|↓\d*|dn\d+)+/i): RegExpMatchArray | null {
-			return core.description.match(regex);
-		}
 	}
 	//#endregion
 }
+		const StartsWithSRegExp = /^s/i;
+		const StartsWithERegExp = /^e/i;
+		const StartsWithStartRegExp = /^\*/i;
+		const StartsWithUpShiftRegExp = /^(↑|up)(\d*)/i;
+		const StartsWithDownShiftRegExp = /^(↓|dn)(\d*)/i;
+		const DefaultStartsWithRegExp = /^(e|s|\*|↑\d*|up\d+|↓\d*|dn\d+)+/i;
+		function match(core: DicePartCore, regex = DefaultStartsWithRegExp): RegExpMatchArray | null {
+			return core.description.match(regex);
+		}
 //#endregion
 
 //#region DicePartRoll
@@ -592,6 +609,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 //#endregion
 
 //#region DiceGroupRoll
+const SplitOnDifRegExp = /\bdif\b/;
 type DiceGroupRollCore = baseDiceGroupRollCore;
 export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGroup, DiceRoll> {
 	public toString(outputType: DiceOutputType): string;
@@ -634,7 +652,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		}
 
 		const parts = this.rolls.map((roll, index) => {
-			const out = roll.toString(DiceOutputType.M).split(/⟵/)[1].split(/\bdif\b/)[0].trim();
+			const out = roll.toString(DiceOutputType.M).split("⟵")[1].split(SplitOnDifRegExp)[0].trim();
 			if (index && roll !== highestRoll) {
 				return `<s>${out}</s>`;
 			}
@@ -647,7 +665,7 @@ export class DiceGroupRoll extends baseDiceGroupRoll<DiceGroupRollCore, DiceGrou
 		const desc = description ? correctEscapedMentions(`\`${description}\``, { emoji:true, users:true }) : "";
 		const partsDesc = rollable ? `⟵ ${parts.join("; ")}` : ``;
 		const nonRollableLabel = this.dice.getNonRollableLabel();
-		return `${emoji} <b>${nonRollableLabel ?? total}</b> ${dif} ${desc} ${partsDesc}`.replace(/\s+/g, " ");
+		return cleanWhitespace(`${emoji} <b>${nonRollableLabel ?? total}</b> ${dif} ${desc} ${partsDesc}`);
 	}
 	public static create(diceGroup: DiceGroup): DiceGroupRoll {
 		return new DiceGroupRoll({
