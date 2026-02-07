@@ -56,8 +56,6 @@ function getParsers(): TokenParsers {
 	return _parsers ??= { ...baseGetParsers(), ...Pf2eParsers };
 }
 
-const FORTUNE = "Fortune";
-const MISFORTUNE = "Misfortune";
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[]): T {
 	if (token.key === "target" || SpecialTestAliases.includes(token.key as TSpecialTestAliasType)) {
 		core.target = parseTargetData(token);
@@ -66,8 +64,8 @@ function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: Token
 	const reduceSignToDropKeepData: TReduceSignToDropKeep[] = [];
 	if (token.key === "dice") {
 		reduceSignToDropKeepData.push(
-			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:FORTUNE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
-			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:MISFORTUNE, test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "-" }
+			{ sign:"+" as TSign, type:DropKeepType.KeepHighest, value:1, alias:"Fortune", test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "+" },
+			{ sign:"-" as TSign, type:DropKeepType.KeepLowest, value:1, alias:"Misfortune", test:_core => _core.count === 2 && _core.sides === 20 && _core.sign === "-" }
 		);
 	}
 	return baseReduceTokenToDicePartCore(core, token, index, tokens, reduceSignToDropKeepData);
@@ -160,8 +158,8 @@ function gradeValue(value: number, target: number): DieRollGrade {
 const AC_DC_VS_REGEX = /ac|dc|vs/i;
 function gradeResults(roll: DiceRoll): DieRollGrade {
 	const test = roll.dice.test;
-	if (test?.alias?.match(AC_DC_VS_REGEX)) {
-		const grade = gradeValue(roll.total, test.value);
+	if (AC_DC_VS_REGEX.test(test?.alias ?? "")) {
+		const grade = gradeValue(roll.total, test!.value);
 		if (roll.isMax) {
 			return increaseGrade(grade);
 		}else if (roll.isMin) {
@@ -324,10 +322,10 @@ type TDicePartCoreArgs = baseTDicePartCoreArgs & {
 export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 	//#region flags
 	public get hasFortune(): boolean {
-		return this.dropKeep?.alias === FORTUNE;
+		return this.dropKeep?.alias === "Fortune";
 	}
 	public get hasMisfortune(): boolean {
-		return this.dropKeep?.alias === MISFORTUNE;
+		return this.dropKeep?.alias === "Misfortune";
 	}
 	public get hasAcTarget(): boolean {
 		return this.core.target?.type === TargetType.AC;
@@ -385,12 +383,14 @@ DicePart.Roll = <typeof baseDicePartRoll>DicePartRoll;
 //#endregion
 
 //#region Dice
+
 const DEADLY_REGEX = /deadly\s*\d?d(\d+)/i;
 const FATAL_REGEX = /fatal\s*\d?d(\d+)/i;
 const STRIKING_REGEX = /striking/i;
-const GREATER_STRIKING_REGEX = /greater\s*striking/i
-const MAJOR_STRIKING_REGEX = /major\s*striking/i
-const GREATER_OR_MAJOR_STRIKING_REGEX = /(greater|major)\s*striking/i
+const GREATER_STRIKING_REGEX = /greater\s*striking/i;
+const MAJOR_STRIKING_REGEX = /major\s*striking/i;
+const GREATER_OR_MAJOR_STRIKING_REGEX = /(greater|major)\s*striking/i;
+
 type DiceCore = baseDiceCore;
 export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	//#region calculated
