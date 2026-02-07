@@ -45,11 +45,12 @@ final success/failure
 
 //#region Tokenizer
 
+const CnCParsers = {
+	dice: /\s*(\d+)?\s*d\s*(12)/i,
+	target: /(vs)\s*(\d+)/i,
+};
 function getParsers(): TokenParsers {
-	return {
-		dice: /\s*(\d+)?\s*d\s*(12)/i,
-		target: /(vs)\s*(\d+)/i
-	};
+	return CnCParsers;
 }
 
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData): T {
