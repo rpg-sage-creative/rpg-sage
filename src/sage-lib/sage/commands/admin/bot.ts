@@ -90,7 +90,7 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 			lines.push(`**branch** \`${repoInfo?.branch?.trim() ?? "unknown"}\``);
 
 			const commitUrl = repoInfo?.commit?.hash
-				? `<https://github.com/rpg-sage-creative/rpg-sage/commit/${repoInfo.commit.hash}>`
+				? `[${repoInfo.commit.hash}](<https://github.com/rpg-sage-creative/rpg-sage/commit/${repoInfo.commit.hash}>)`
 				: "`unknown`";
 			lines.push(`**commit** ${commitUrl}`);
 
