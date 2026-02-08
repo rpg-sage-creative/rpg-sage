@@ -50,16 +50,19 @@
 	"publishConfig": {
 		"@rpg-sage-creative:registry": "https://npm.pkg.github.com"
 	},
-	"workspaces": [
-		"packages/*/*"
-	],
 	"devDependencies": {
+		"@discordjs/builders": "^1.13.1",
+		"discord-api-types": "^0.38.38",
 		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.2.0",
 		"@types/follow-redirects": "^1.14.4",
 		"@types/node": "^24.10.4",
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
+		"@rsc-sage/env": "workspace:*",
+		"@rsc-sage/localization": "workspace:*",
+		"@rsc-sage/types": "workspace:*",
+		"@rsc-utils/game-utils": "workspace:*",
 		"@aws-sdk/client-sns": "^3.966.0",
 		"@discordjs/rest": "^2.6.0",
 		"@napi-rs/canvas": "^0.1.88",
