@@ -87,7 +87,7 @@
 		"build": "bash ./node_modules/@rsc-utils/dev-scripts/sh/build.sh --skipIndexTs",
 		"release": "bash ./node_modules/@rsc-utils/dev-scripts/sh/release.sh",
 		"test": "echo 'no tests'",
-		"clean": "rm -rf node_modules; npm ci; npm run build",
+		"clean": "rm -rf node_modules; pnpm install; npm run build",
 		"prestart-dev": "npm run build; npm run deploy env local",
 		"start-dev": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
 		"start-dev-and-services": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices",
