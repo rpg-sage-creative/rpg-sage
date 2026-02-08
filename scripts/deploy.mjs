@@ -85,13 +85,14 @@ async function getArgs() {
 	const args = { };
 	const argKeys = Object.keys(argData);
 	const cliArgs = process.argv.slice(2);
+	const noPrompt = cliArgs.includes("--noPrompt");
 	for (let i = 0; i < argKeys.length; i++) {
 		const argKey = argKeys[i];
 		const { argIndex, prompt, values } = argData[argKey];
 		let cliArg = cliArgs.find((arg, cliIndex) => (!argIndex || argIndex === cliIndex) && values.includes(arg));
 		if (cliArg) {
 			console.log(prompt + " " + cliArg);
-		}else {
+		}else if (!noPrompt) {
 			cliArg = await promptUser(argKey).catch(console.error);
 		}
 		args[argKey] = cliArg;

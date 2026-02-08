@@ -100,6 +100,10 @@
 		"preupdates": "npm run build",
 		"processMessages": "node ./build/updates/processMessages.js codeName=dev --getFromEnvJson",
 		"updates": "npm run processMessages",
-		"deploy": "node ./scripts/deploy.mjs"
+		"deploy": "node ./scripts/deploy.mjs",
+		"predocker:setup": "docker compose down; docker compose up -d",
+		"docker:setup": "pm2 deploy bot.config.cjs docker setup",
+		"docker:start": "node ./scripts/deploy.mjs deploy docker dev bot pnpm --noPrompt",
+		"docker:stop": "pm2 deploy bot.config.cjs docker run 'pm2 stop sage-bot-dev'"
 	}
 }
