@@ -50,6 +50,11 @@
 	"publishConfig": {
 		"@rpg-sage-creative:registry": "https://npm.pkg.github.com"
 	},
+	"packageManager": "pnpm@10.29.1",
+	"engines": {
+		"node": ">=24",
+		"pnpm": ">=10"
+	},
 	"devDependencies": {
 		"@discordjs/builders": "^1.13.1",
 		"discord-api-types": "^0.38.38",
