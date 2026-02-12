@@ -1,5 +1,5 @@
 import { isNonNilSnowflake, snowflakeToDate, type Snowflake } from "@rsc-utils/core-utils";
-import type { SageMessageReferenceCore } from "../sage-lib/sage/repo/SageMessageReference.js";
+import type { SageMessageReferenceCore } from "../index.js";
 
 /** @deprecated */
 export type TDialogMessage = {

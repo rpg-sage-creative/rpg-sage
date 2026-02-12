@@ -127,7 +127,12 @@
 		"predocker:setup": "docker compose down; docker compose up -d",
 		"docker:setup": "pm2 deploy bot.config.cjs docker setup",
 		"docker:start": "pnpm deploy docker dev bot pnpm --noPrompt",
-		"docker:stop": "pm2 deploy bot.config.cjs docker run 'pm2 stop sage-bot-dev'"
+		"docker:stop": "pm2 deploy bot.config.cjs docker run 'pm2 stop sage-bot-dev'",
+
+		"data:backup": "cd ../scripts && bash data-backup.sh aws",
+		"data:reset": "cd ../scripts && bash backup-to-tmp.sh",
+		"data:process": "node ./packages/data-layer/build/process.mjs codeName=dev dataRoot=/Users/randaltmeyer/tmp/data",
+		"data:validate": "node ./packages/data-layer/build/validate.mjs codeName=dev dataRoot=/Users/randaltmeyer/tmp/data"
 	},
 	"-scripts": {
 		"start:dev:all": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices",

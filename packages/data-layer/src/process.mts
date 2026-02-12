@@ -1,0 +1,28 @@
+import { initializeConsoleUtilsByEnvironment, verbose } from "@rsc-utils/core-utils";
+import { processMessages } from "./updates/processMessages.js";
+
+initializeConsoleUtilsByEnvironment();
+
+type ObjectType = typeof ObjectTypes[number];
+const ObjectTypes = ["games", "messages", "servers", "users"] as const;
+function isObjectType(value: unknown): value is ObjectType {
+	return ObjectTypes.includes(value as ObjectType);
+}
+
+async function main() {
+	const processors: Record<ObjectType, Function> = {
+		"games": () => {},
+		"messages": processMessages,
+		"servers": () => {},
+		"users": () => {},
+	};
+
+	const objectTypeArgs = process.argv.filter(isObjectType);
+
+	verbose(`Processing: ${objectTypeArgs.join(", ") || "none"}`);
+
+	for (const objectType of objectTypeArgs) {
+		await processors[objectType]();
+	}
+}
+main();

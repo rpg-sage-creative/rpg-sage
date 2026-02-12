@@ -17,6 +17,7 @@
 		"test"
 	],
 	"references": [
+		{ "path": "./packages/data-layer" },
 		{ "path": "./packages/game-utils" },
 		{ "path": "./packages/sage-types" },
 		{ "path": "./packages/sage-env" },

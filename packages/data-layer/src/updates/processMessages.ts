@@ -1,13 +1,13 @@
 import { errorReturnFalse, errorReturnUndefined, forEachAsync, stringifyJson, verbose } from "@rsc-utils/core-utils";
 import { deleteFile, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import type { SageMessageReferenceCore } from "../sage-lib/sage/repo/SageMessageReference.js";
+import type { SageMessageReferenceCore } from "../index.js";
 import { initProcessor } from "./common.js";
 import { updateSageMessageReference } from "./updateSageMessageReference.js";
 
 /**
  * Processes every dialog message file to update its content and filename to match the latest schema
  */
-async function main() {
+export async function processMessages() {
 	const { dataRoot, files } = await initProcessor("Messages");
 
 	let unableToRead = 0;
@@ -67,8 +67,4 @@ async function main() {
 	});
 
 	verbose({ unableToRead, missingCharacterId, missingUserId, moved, updated });
-}
-
-if (process.argv[1]?.endsWith("processMessages.js")) {
-	main();
 }
