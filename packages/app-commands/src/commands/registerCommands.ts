@@ -13,7 +13,7 @@ type Commands = {
 
 export async function registerCommands(): Promise<Commands> {
 	const commands: Commands = { message:[], slash:[], user:[] };
-	const pathRoot = `./build/app-commands/commands`;
+	const pathRoot = process.argv.find(arg => arg.startsWith("pathRoot="))?.slice(9) ?? `./build/app-commands/commands`;
 	const filterFileOptions = {
 		fileFilter: (fileName: string) => fileName.endsWith(".js") && fileName !== "registerCommands.js",
 		recursive: true
