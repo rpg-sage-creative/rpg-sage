@@ -5,7 +5,7 @@
 	"main": "build/index.js",
 	"type": "module",
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.0"
+		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2"
 	},
 	"dependencies": {
 		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.4.0"

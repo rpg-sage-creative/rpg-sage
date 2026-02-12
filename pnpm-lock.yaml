@@ -52,7 +52,7 @@ importers:
         specifier: ^1.13.1
         version: 1.13.1
       '@rsc-utils/dev-scripts':
-        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.0
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
       '@types/follow-redirects':
         specifier: ^1.14.4
@@ -77,7 +77,7 @@ importers:
         version: '@rpg-sage-creative/io-utils@https://codeload.github.com/rpg-sage-creative/io-utils/tar.gz/9bce7ee331b5d84cb03acfb5408310427ef46c5e'
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.0
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/data-layer:
@@ -90,7 +90,7 @@ importers:
         version: '@rpg-sage-creative/io-utils@https://codeload.github.com/rpg-sage-creative/io-utils/tar.gz/9bce7ee331b5d84cb03acfb5408310427ef46c5e'
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.0
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/game-utils:
@@ -103,7 +103,7 @@ importers:
         version: '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/74fe7b9484107065a3cff4dddd4ec6318f2507cb'
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.0
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/sage-env:
@@ -113,7 +113,7 @@ importers:
         version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/eb41d10de3e5507f662dac314b9f4b72438aaf8a'
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.0
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/sage-localization:
@@ -123,7 +123,7 @@ importers:
         version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/eb41d10de3e5507f662dac314b9f4b72438aaf8a'
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.0
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/sage-types:
@@ -133,7 +133,7 @@ importers:
         version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/eb41d10de3e5507f662dac314b9f4b72438aaf8a'
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.0
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
 packages:
