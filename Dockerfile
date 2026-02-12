@@ -16,9 +16,9 @@ RUN yum install -y git
 RUN yum install -y openssh-server
 RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 
-# install node/npm and pm2
+# install node/npm/pnpm and pm2
 RUN curl -fsSL https://rpm.nodesource.com/setup_24.x | bash - && yum install -y nodejs
-RUN npm install -g pm2 pnpm
+RUN npm install -g pnpm pm2
 
 # ensure rpg-sage folder exists
 RUN mkdir /rpg-sage

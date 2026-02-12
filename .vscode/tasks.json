@@ -2,9 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "run-test",
-			"command": "npm",
-			"args": ["run", "test"],
+			"label": "pnpm-run-test",
+			"command": "pnpm",
+			"args": ["test"],
 			"group": "test",
 			"presentation": {
 				"echo": true,
@@ -16,9 +16,9 @@
 			}
 		},
 		{
-			"label": "start-dev",
-			"command": "npm",
-			"args": ["run", "start-dev"],
+			"label": "pnpm-run-start",
+			"command": "pnpm",
+			"args": ["start"],
 			"group": {
 				"kind": "test",
 				"isDefault": true
@@ -33,10 +33,10 @@
 			}
 		},
 		{
-			"label": "run-build",
+			"label": "pnpm-run-build",
 			"type": "shell",
-			"command": "npm",
-			"args": ["run", "build", "--", "-f"],
+			"command": "pnpm",
+			"args": ["build"],
 			"group": {
 				"kind": "build",
 				"isDefault": true

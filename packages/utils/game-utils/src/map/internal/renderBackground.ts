@@ -1,6 +1,5 @@
 import { createCanvas, type SKRSContext2D } from "@napi-rs/canvas";
-import { error, verbose } from "@rsc-utils/core-utils";
-import { stringify } from "@rsc-utils/core-utils";
+import { error, stringifyJson, verbose } from "@rsc-utils/core-utils";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { loadImage } from "./loadImage.js";
 import type { MapCache } from "./types.js";
@@ -72,7 +71,7 @@ export async function renderBackground(mapCache: MapCache): Promise<boolean> {
 		return true;
 
 	}catch(ex) {
-		verbose(`mapArgs.context.drawImage(bgImage = ${stringify(background)}, ${bgClipX}, ${bgClipY}, ${bgWidth}, ${bgHeight}, 0, 0, ${bgWidth}, ${bgHeight});`);
+		verbose(`mapArgs.context.drawImage(bgImage = ${stringifyJson(background)}, ${bgClipX}, ${bgClipY}, ${bgWidth}, ${bgHeight}, 0, 0, ${bgWidth}, ${bgHeight});`);
 		error(ex);
 		// remember the bad url
 		mapCache.invalidImages.add(background.url);

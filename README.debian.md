@@ -27,6 +27,9 @@ The tasks.json file's build task includes a dependency that creates an index.d.t
 5. run `npm -v` to ensure you have "Node Package Manager" installed
   - if "npm" is not installed, run `nvm install-latest-npm`
 
+?. ensure you have "Performant Node Package Manager" installed
+  - if not, run `npm i -g pnpm`
+
 6. create / navigate to the directory you want to clone the RPG Sage repo into
   - we commonly use `~/git/rsc`
 

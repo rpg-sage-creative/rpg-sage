@@ -14,11 +14,11 @@ Choose tmp dir
 
 Load node modules
 <br>
-`npm ci`
+`pnpm install`
 
 Build repo
 <br>
-`npm run build`
+`pnpm build`
 
 Delete bot from pm2
 <br>

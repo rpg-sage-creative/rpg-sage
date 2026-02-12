@@ -1,5 +1,5 @@
+import { parseJson } from "@rsc-utils/core-utils";
 import type { BufferHandlerJsonError, BufferHandlerResponse } from "@rsc-utils/io-utils";
-import { parse } from "@rsc-utils/core-utils";
 import type { MapRenderPayload, MapRenderResponse } from "../types.js";
 import { renderMap } from "./renderMap.js";
 
@@ -8,7 +8,7 @@ import { renderMap } from "./renderMap.js";
  * Receives a payload, renders the given map, and returns a json response.
  */
 export async function serverHandler(bufferOrPayload: Buffer | MapRenderPayload): Promise<BufferHandlerResponse<MapRenderResponse | BufferHandlerJsonError>> {
-	const payload = Buffer.isBuffer(bufferOrPayload) ? parse(bufferOrPayload.toString()) as MapRenderPayload : bufferOrPayload;
+	const payload = Buffer.isBuffer(bufferOrPayload) ? parseJson(bufferOrPayload.toString()) as MapRenderPayload : bufferOrPayload;
 	const response = await renderMap(payload.mapData, payload.mimeType);
 	if (response) {
 		return {
