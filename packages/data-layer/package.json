@@ -2,7 +2,6 @@
 	"name": "@rsc-sage/data-layer",
 	"version": "0.0.0",
 	"private": true,
-	"main": "build/index.js",
 	"type": "module",
 	"devDependencies": {
 		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2"
@@ -18,6 +17,6 @@
 
 		"build::clean-build-folder": "rm -rf build",
 		"build::clean-build-info": "rm -f *.tsbuildinfo",
-		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
+		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes && rm -f ./src/index.ts"
 	}
 }

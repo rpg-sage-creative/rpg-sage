@@ -1,7 +1,8 @@
 import { isNotBlank, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { assertArray, assertBoolean, assertNumber, assertSageCore, assertString, optional } from "../../assertions/index.js";
+import { ensureArray } from "../../ensures/ensureArray.js";
 import { deleteEmptyArray } from "../../types/deleteEmptyArray.js";
-import { DialogDiceBehaviorType, DialogPostType, isAlias, isMacroBase, isNote, MoveDirectionOutputType, type Alias, type HasVer, type MacroBase, type Note, type SageCore } from "../../types/index.js";
+import { DialogDiceBehaviorType, DialogPostType, isAlias, isMacroBase, isNote, MoveDirectionOutputType, type Alias, type MacroBase, type Note, type SageCore } from "../../types/index.js";
 import { renameProperty } from "../../types/renameProperty.js";
 import { assertSageCharacterCoreV1, type SageCharacterCoreV1 } from "../character/v1.js";
 import type { SageUserV0 } from "./v0.js";
@@ -78,15 +79,6 @@ export function assertSageUserV1(core: unknown): core is SageUserV1 {
 	return true;
 }
 
-function ensureArray<
-			Core extends HasVer & Partial<Record<Key, (OldValue | NewValue)[]>>,
-			Key extends Exclude<keyof Core, "ver">,
-			OldValue extends HasVer,
-			NewValue extends HasVer,
-			Handler extends Function
-		>({ core, key, handler, ver }: { core:Core; key:Key; handler:Handler; ver:number; }): void {
-	core[key] = core[key]?.map(o => (o.ver ?? 0) < ver ? o as NewValue : handler(o as OldValue) as NewValue) as any;
-}
 export function ensureUserV1(core: SageUserV0): SageUserV1 {
 	if (core.ver > 0) throw new Error(`cannot convert v${core.ver} to v1`);
 	deleteEmptyArray({ core, key:"aliases" });

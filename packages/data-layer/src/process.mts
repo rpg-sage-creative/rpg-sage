@@ -1,5 +1,6 @@
 import { initializeConsoleUtilsByEnvironment, verbose } from "@rsc-utils/core-utils";
 import { processMessages } from "./updates/processMessages.js";
+import { processUsers } from "./updates/processUsers.js";
 
 initializeConsoleUtilsByEnvironment();
 
@@ -14,7 +15,7 @@ async function main() {
 		"games": () => {},
 		"messages": processMessages,
 		"servers": () => {},
-		"users": () => {},
+		"users": processUsers,
 	};
 
 	const objectTypeArgs = process.argv.filter(isObjectType);

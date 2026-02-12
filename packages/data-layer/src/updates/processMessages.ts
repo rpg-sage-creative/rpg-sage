@@ -1,6 +1,6 @@
 import { errorReturnFalse, errorReturnUndefined, forEachAsync, stringifyJson, verbose } from "@rsc-utils/core-utils";
 import { deleteFile, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import type { SageMessageReferenceCore } from "../index.js";
+import type { SageMessageReferenceCore } from "../types/index.js";
 import { initProcessor } from "./common.js";
 import { updateSageMessageReference } from "./updateSageMessageReference.js";
 
