@@ -1,5 +1,6 @@
 import { randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { GameSystemType, rollDice } from "@rsc-utils/game-utils";
+import { GameSystemType } from "@rsc-utils/game-utils";
+import { rollDice } from "@rsc-utils/random-utils";
 import {
 	DiceOutputType,
 	DiceSecretMethodType,

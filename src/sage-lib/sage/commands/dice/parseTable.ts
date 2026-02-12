@@ -1,4 +1,4 @@
-import { normalizeDashes, unwrap } from "@rsc-utils/core-utils";
+import { normalizeDashes, unwrap, type TypedRegExp } from "@rsc-utils/core-utils";
 import type { SimpleRollableTable, SimpleRollableTableItem } from "./SimpleRollableTable.js";
 
 /** Parse the number cell for min/max. */
@@ -54,6 +54,9 @@ type ParsedTable = SimpleRollableTable & {
 	size?: "xxs" | "xs" | "s";
 };
 
+type ParseTableRegExpGroups = { times?:`${number}`; size?:"xxs"|"xs"|"s"; content:string; };
+const ParseTableRegExp = /^(?<times>\d+)?(?<size>xxs|xs|s)?#(?<content>(?:.|\n)*?$)/i as TypedRegExp<ParseTableRegExpGroups>;
+
 /**
  * Parses a table from the given input.
  * Checks TSV and simple lines with numbers at the beginning.
@@ -61,9 +64,8 @@ type ParsedTable = SimpleRollableTable & {
  */
 export function parseTable(value?: string | null): ParsedTable | undefined {
 	const unwrapped = unwrap(value?.trim() ?? "", "[]");
-	const groups = /^(?<times>\d+)?(?<size>xxs|xs|s)?#(?<content>(?:.|\n)*?$)/.exec(unwrapped)?.groups as { times?:`${number}`; size?:"xxs"|"xs"|"s"; content:string; } | undefined;
-	const { times, size, content } = groups ?? {};
-	const lines = normalizeDashes(content ?? unwrapped).split(/\n/);
+	const { times, size, content } = ParseTableRegExp.exec(unwrapped)?.groups ?? {};
+	const lines = normalizeDashes(content ?? unwrapped).split("\n");
 
 	// by definition, a table is multiple lines
 	// also, grabbing a one line table of math means simple math no longer works

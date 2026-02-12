@@ -1,5 +1,7 @@
 import { Season, cloneJson, fahrenheitToCelsius, isDefined } from "@rsc-utils/core-utils";
-import { GDate, randomBoolean, randomInt, rollDiceString, rollDie, type SimpleDice } from "@rsc-utils/game-utils";
+import { GDate, type SimpleDice } from "@rsc-utils/game-utils";
+import { rollDiceString, rollDie } from "@rsc-utils/random-utils";
+import { randomInt } from "node:crypto";
 import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "../index.js";
 import {
 	ClimateType,
@@ -25,7 +27,7 @@ function roll(diceString: SimpleDice | "0" | "1"): number {
 	return rollDiceString(diceString) ?? 0;
 }
 function rollDelta(): number {
-	const multiplier = randomBoolean() ? 1 : -1;
+	const multiplier = randomInt(2) ? 1 : -1;
 	return roll("1d3-1") * multiplier;
 }
 
@@ -422,7 +424,7 @@ function randomWeather(properties: IGenParameters, date: GDate): IWeatherDayResu
 			low: low,
 			cloudCover: cloudCover,
 			precipIntensity: precipIntensity,
-			precipStart: hasPrecip ? randomInt(0, 23) : undefined,
+			precipStart: hasPrecip ? randomInt(24) : undefined,
 			// precipDuration: undefined,
 			// precipItem: undefined,
 			// windStrength: undefined,

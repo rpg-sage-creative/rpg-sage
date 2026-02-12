@@ -1,5 +1,5 @@
 import type { TypedRegExp } from "@rsc-utils/core-utils";
-import { randomItem } from "@rsc-utils/game-utils";
+import { randomItem } from "@rsc-utils/random-utils";
 import { regex } from "regex";
 import type { TDiceOutput } from "../../../../sage-dice/index.js";
 import type { SageCommand } from "../../model/SageCommand.js";

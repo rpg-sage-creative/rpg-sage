@@ -8,7 +8,8 @@
 		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.3.1"
 	},
 	"dependencies": {
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.4.0"
+		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.4.0",
+		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.0"
 	},
 	"scripts": {
 		"scrub::node_modules": "rm -rf node_modules",

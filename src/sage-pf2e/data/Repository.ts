@@ -1,7 +1,7 @@
 import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
 import { debug, errorReturnEmptyArray, getDataRoot, initializeNoiseUS, initializeUKtoUS, isDefined, SnowflakeMatcher, StringMatcher, UuidMatcher, verbose, warn } from "@rsc-utils/core-utils";
-import { randomItem } from "@rsc-utils/game-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
+import { randomItem } from "@rsc-utils/random-utils";
 import type { AonBase } from "../model/base/AonBase.js";
 import type { Base, BaseCore } from "../model/base/Base.js";
 import type { HasSource } from "../model/base/HasSource.js";

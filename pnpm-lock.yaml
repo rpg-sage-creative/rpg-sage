@@ -38,6 +38,9 @@ importers:
       '@rsc-utils/io-utils':
         specifier: github:rpg-sage-creative/io-utils#semver:^1.2.0
         version: '@rpg-sage-creative/io-utils@https://codeload.github.com/rpg-sage-creative/io-utils/tar.gz/9bce7ee331b5d84cb03acfb5408310427ef46c5e'
+      '@rsc-utils/random-utils':
+        specifier: github:rpg-sage-creative/random-utils#semver:^0.1.0
+        version: '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/74fe7b9484107065a3cff4dddd4ec6318f2507cb'
       discord.js:
         specifier: ^14.25.1
         version: 14.25.1
@@ -50,7 +53,7 @@ importers:
         version: 1.13.1
       '@rsc-utils/dev-scripts':
         specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.0
-        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/2ddac93b51911d0c6b2c248863ebbb65f01c17fd'
+        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
       '@types/follow-redirects':
         specifier: ^1.14.4
         version: 1.14.4
@@ -72,7 +75,7 @@ importers:
     devDependencies:
       '@rsc-utils/dev-scripts':
         specifier: github:rpg-sage-creative/dev-scripts#semver:^1.3.1
-        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/2ddac93b51911d0c6b2c248863ebbb65f01c17fd'
+        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/sage/localization:
     dependencies:
@@ -82,7 +85,7 @@ importers:
     devDependencies:
       '@rsc-utils/dev-scripts':
         specifier: github:rpg-sage-creative/dev-scripts#semver:^1.3.1
-        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/2ddac93b51911d0c6b2c248863ebbb65f01c17fd'
+        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/sage/types:
     dependencies:
@@ -92,17 +95,20 @@ importers:
     devDependencies:
       '@rsc-utils/dev-scripts':
         specifier: github:rpg-sage-creative/dev-scripts#semver:^1.3.1
-        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/2ddac93b51911d0c6b2c248863ebbb65f01c17fd'
+        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/utils/game-utils:
     dependencies:
       '@rsc-utils/core-utils':
         specifier: github:rpg-sage-creative/core-utils#semver:^1.4.0
         version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/eb41d10de3e5507f662dac314b9f4b72438aaf8a'
+      '@rsc-utils/random-utils':
+        specifier: github:rpg-sage-creative/random-utils#semver:^0.1.0
+        version: '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/74fe7b9484107065a3cff4dddd4ec6318f2507cb'
     devDependencies:
       '@rsc-utils/dev-scripts':
         specifier: github:rpg-sage-creative/dev-scripts#semver:^1.3.1
-        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/2ddac93b51911d0c6b2c248863ebbb65f01c17fd'
+        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
 packages:
 
@@ -354,9 +360,9 @@ packages:
     resolution: {tarball: https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/eb41d10de3e5507f662dac314b9f4b72438aaf8a}
     version: 1.4.0
 
-  '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/2ddac93b51911d0c6b2c248863ebbb65f01c17fd':
-    resolution: {tarball: https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/2ddac93b51911d0c6b2c248863ebbb65f01c17fd}
-    version: 1.4.0
+  '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297':
+    resolution: {tarball: https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297}
+    version: 1.4.2
     hasBin: true
 
   '@rpg-sage-creative/discord-utils@https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/ed638670ba72b8e20872c08c1d548c50d19ac736':
@@ -382,6 +388,10 @@ packages:
   '@rpg-sage-creative/language-utils@https://codeload.github.com/rpg-sage-creative/language-utils/tar.gz/b34ae849fb17513fbf4effc3cfea6dc70c82ba4a':
     resolution: {tarball: https://codeload.github.com/rpg-sage-creative/language-utils/tar.gz/b34ae849fb17513fbf4effc3cfea6dc70c82ba4a}
     version: 1.2.0
+
+  '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/74fe7b9484107065a3cff4dddd4ec6318f2507cb':
+    resolution: {tarball: https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/74fe7b9484107065a3cff4dddd4ec6318f2507cb}
+    version: 0.1.0
 
   '@rpg-sage-creative/snowflake-utils@https://codeload.github.com/rpg-sage-creative/snowflake-utils/tar.gz/ff6354df8219a872bb672c51b090ec12651f240b':
     resolution: {tarball: https://codeload.github.com/rpg-sage-creative/snowflake-utils/tar.gz/ff6354df8219a872bb672c51b090ec12651f240b}
@@ -1266,7 +1276,7 @@ snapshots:
       '@rsc-utils/whitespace-utils': '@rpg-sage-creative/whitespace-utils@https://codeload.github.com/rpg-sage-creative/whitespace-utils/tar.gz/7c13c974b4d6d647765c60a8b03b286421329cc7'
       regex: 6.1.0
 
-  '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/2ddac93b51911d0c6b2c248863ebbb65f01c17fd': {}
+  '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297': {}
 
   '@rpg-sage-creative/discord-utils@https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/ed638670ba72b8e20872c08c1d548c50d19ac736':
     dependencies:
@@ -1312,6 +1322,8 @@ snapshots:
   '@rpg-sage-creative/language-utils@https://codeload.github.com/rpg-sage-creative/language-utils/tar.gz/b34ae849fb17513fbf4effc3cfea6dc70c82ba4a':
     dependencies:
       '@rsc-utils/type-utils': '@rpg-sage-creative/type-utils@https://codeload.github.com/rpg-sage-creative/type-utils/tar.gz/320d4c2f18ed43e6e53a8092d8e8715dcd6bbc70'
+
+  '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/74fe7b9484107065a3cff4dddd4ec6318f2507cb': {}
 
   '@rpg-sage-creative/snowflake-utils@https://codeload.github.com/rpg-sage-creative/snowflake-utils/tar.gz/ff6354df8219a872bb672c51b090ec12651f240b':
     dependencies:

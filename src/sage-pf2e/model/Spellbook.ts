@@ -1,5 +1,5 @@
 import { HasCore, randomSnowflake, type Core, type Snowflake } from "@rsc-utils/core-utils";
-import { randomItem, rollDie } from "@rsc-utils/game-utils";
+import { randomItem, rollDie } from "@rsc-utils/random-utils";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL, type TMagicTradition } from "../common.js";
 import { filter, findByValue } from "../data/Repository.js";
 import type { ArcaneSchool } from "./ArcaneSchool.js";

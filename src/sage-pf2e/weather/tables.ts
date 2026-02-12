@@ -1,5 +1,6 @@
 import { cloneJson, warn } from "@rsc-utils/core-utils";
-import { randomInt, type SimpleDice } from "@rsc-utils/game-utils";
+import type { SimpleDice } from "@rsc-utils/game-utils";
+import { randomInt } from "node:crypto";
 import { ClimateType, WindType } from "./weather.js";
 
 export interface TableItem { min: number; max: number; }
@@ -56,7 +57,7 @@ export function rollOnTable(tableName: string): TableItem | null {
 		return null;
 	}
 
-	const rand = randomInt(min, max);
+	const rand = randomInt(min, max + 1);
 	const item = table.find(_item => _item.min <= rand && rand <= _item.max) ?? null;
 	// We clone the item so that we can manipulate the values when tinkering with weather
 	return cloneJson(item);
