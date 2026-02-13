@@ -1,6 +1,6 @@
 import { errorReturnFalse, errorReturnUndefined, forEachAsync, stringifyJson, verbose } from "@rsc-utils/core-utils";
 import { deleteFile, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { ensureUserV1, type SageUserV1 } from "../validation/objects/user/index.js";
+import { ensureSageUserCore, type SageUserCoreAny } from "../types/SageUser/index.js";
 import { initProcessor } from "./common.js";
 
 /**
@@ -16,7 +16,7 @@ export async function processUsers() {
 	let updated = 0;
 
 	await forEachAsync("Users", files, async filePath => {
-		const oldCore = await readJsonFile<SageUserV1>(filePath).catch(errorReturnUndefined) ?? undefined;
+		const oldCore = await readJsonFile<SageUserCoreAny>(filePath).catch(errorReturnUndefined) ?? undefined;
 
 		// delete incomplete
 		if (!oldCore) {
@@ -35,7 +35,7 @@ export async function processUsers() {
 		// save for comparison later
 		const before = stringifyJson(oldCore);
 
-		const updatedCore = ensureUserV1(oldCore);
+		const updatedCore = ensureSageUserCore(oldCore);
 
 		// delete incomplete
 		// if (!updatedCore.userId) {

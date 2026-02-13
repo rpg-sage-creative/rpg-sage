@@ -1,8 +1,7 @@
 import { errorReturnFalse, errorReturnUndefined, forEachAsync, stringifyJson, verbose } from "@rsc-utils/core-utils";
 import { deleteFile, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import type { SageMessageReferenceCore } from "../types/index.js";
+import { ensureSageMessageReferenceCore, type SageMessageReferenceCoreAny } from "../types/index.js";
 import { initProcessor } from "./common.js";
-import { updateSageMessageReference } from "./updateSageMessageReference.js";
 
 /**
  * Processes every dialog message file to update its content and filename to match the latest schema
@@ -17,7 +16,7 @@ export async function processMessages() {
 	let updated = 0;
 
 	await forEachAsync("Messages", files, async filePath => {
-		const oldCore = await readJsonFile<SageMessageReferenceCore>(filePath).catch(errorReturnUndefined) ?? undefined;
+		const oldCore = await readJsonFile<SageMessageReferenceCoreAny>(filePath).catch(errorReturnUndefined) ?? undefined;
 
 		// delete incomplete
 		if (!oldCore) {
@@ -36,7 +35,7 @@ export async function processMessages() {
 		// save for comparison later
 		const before = stringifyJson(oldCore);
 
-		const updatedCore = updateSageMessageReference(oldCore);
+		const updatedCore = ensureSageMessageReferenceCore(oldCore);
 
 		// delete incomplete
 		if (!updatedCore.userId) {

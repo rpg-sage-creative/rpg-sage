@@ -1,6 +1,6 @@
 import { error, errorReturnFalse, errorReturnUndefined, forEachAsync, getDataRoot, randomSnowflake, tagLiterals, verbose } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { assertSageMessageReferenceV1, assertSageUserV1 } from "../../validation/index.js";
+import { assertSageMessageReferenceCore, assertSageUserCore } from "../../types/index.js";
 import type { CacheItemKey, DataMode, GlobalCacheItem } from "../types.js";
 import { ensureNonNilId } from "./ensureNonNilId.js";
 import { fetchFromDdb } from "./fetchFromDdb.js";
@@ -148,8 +148,8 @@ export class ObjectCache<Key extends CacheItemKey, CacheItem extends GlobalCache
 				errors.push(file);
 			}else {
 				switch(key) {
-					case "messages": if (!assertSageMessageReferenceV1(core)) invalid.push(file); break;
-					case "users": if (!assertSageUserV1(core)) invalid.push(file); break;
+					case "messages": if (!assertSageMessageReferenceCore(core)) invalid.push(file); break;
+					case "users": if (!assertSageUserCore(core)) invalid.push(file); break;
 				}
 			}
 		});

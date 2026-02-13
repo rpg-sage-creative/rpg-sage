@@ -133,6 +133,9 @@
 		"data:reset": "cd ../scripts && bash backup-to-tmp.sh",
 		"data:process": "node ./packages/data-layer/build/process.mjs codeName=dev dataRoot=/Users/randaltmeyer/tmp/data",
 		"data:validate": "node ./packages/data-layer/build/validate.mjs codeName=dev dataRoot=/Users/randaltmeyer/tmp/data",
+		"data:upload": "echo 'Upload to DDB'",
+		"data:compare": "echo 'Compare file vs DDB'",
+		"data:stack": "bash ./scripts/data-update.sh",
 
 		"commands:build": "node ./packages/app-commands/build/build.mjs codeName=dev --getFromEnvJson pathRoot=./packages/app-commands/build/commands"
 	},

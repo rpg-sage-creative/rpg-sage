@@ -17,6 +17,6 @@
 
 		"build::clean-build-folder": "rm -rf build",
 		"build::clean-build-info": "rm -f *.tsbuildinfo",
-		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes && rm -f ./src/index.ts"
+		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
 	}
 }

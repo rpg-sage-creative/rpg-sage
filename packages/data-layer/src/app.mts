@@ -9,4 +9,8 @@ async function main() {
 	await globalCache.populate("games");
 	await globalCache.populate("users");
 }
-main();
+
+// make sure we don't trigger this with an index.ts include
+if (process.argv[1].endsWith("app.mjs")) {
+	main();
+}

@@ -20,4 +20,8 @@ async function main() {
 		await globalCache.validate(objectType);
 	}
 }
-main();
+
+// make sure we don't trigger this with an index.ts include
+if (process.argv[1].endsWith("validate.mjs")) {
+	main();
+}
