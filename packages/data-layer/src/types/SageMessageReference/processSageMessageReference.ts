@@ -1,12 +1,12 @@
 import { errorReturnFalse, errorReturnUndefined, forEachAsync, stringifyJson, verbose } from "@rsc-utils/core-utils";
 import { deleteFile, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { ensureSageMessageReferenceCore, type SageMessageReferenceCoreAny } from "../types/index.js";
-import { initProcessor } from "./common.js";
+import { ensureSageMessageReferenceCore, type SageMessageReferenceCoreAny } from "../index.js";
+import { initProcessor } from "../initProcessor.js";
 
 /**
  * Processes every dialog message file to update its content and filename to match the latest schema
  */
-export async function processMessages() {
+export async function processSageMessageReference() {
 	const { dataRoot, files } = await initProcessor("Messages");
 
 	let unableToRead = 0;

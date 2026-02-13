@@ -1,12 +1,12 @@
 import { errorReturnFalse, errorReturnUndefined, forEachAsync, stringifyJson, verbose } from "@rsc-utils/core-utils";
 import { deleteFile, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { ensureSageUserCore, type SageUserCoreAny } from "../types/SageUser/index.js";
-import { initProcessor } from "./common.js";
+import { ensureSageUserCore, type SageUserCoreAny } from "./index.js";
+import { initProcessor } from "../initProcessor.js";
 
 /**
  * Processes every user file to update its content and filename to match the latest schema
  */
-export async function processUsers() {
+export async function processSageUser() {
 	const { dataRoot, files } = await initProcessor("Users");
 
 	let unableToRead = 0;
