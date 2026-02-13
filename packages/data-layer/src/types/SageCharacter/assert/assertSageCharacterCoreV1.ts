@@ -8,7 +8,7 @@ const objectType = "Character";
 export function assertSageCharacterCoreV1(core: SageCharacterCoreAny): core is SageCharacterCoreV1 {
 	if (!assertSageCore<SageCharacterCoreV1>(core, objectType, SageCharacterCoreV1Keys)) return false;
 
-	if (!assertString({ core, objectType, key:"aka", validator:isNotBlank, optional })) return false;
+	// if (!assertString({ core, objectType, key:"aka", validator:isNotBlank, optional })) return false;
 	if (!assertString({ core, objectType, key:"alias", validator:isNotBlank, optional })) return false;
 	if (!assertArray({ core, objectType, key:"autoChannels", validator:isAutoChannelData, optional })) return false;
 	if (!assertString({ core, objectType, key:"avatarUrl", validator:isUrl, optional })) return false;
