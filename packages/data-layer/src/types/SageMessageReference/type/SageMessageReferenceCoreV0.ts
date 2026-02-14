@@ -10,4 +10,5 @@ export type SageMessageReferenceCoreV0 = {
 	threadDid: Snowflake;
 	timestamp: number;
 	userDid: Snowflake;
+	ver: number;
 };

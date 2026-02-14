@@ -1,7 +1,10 @@
-import { isNonNilSnowflake, snowflakeToDate } from "@rsc-utils/core-utils";
-import type { SageMessageReferenceCoreV0, SageMessageReferenceCoreV1 } from "../../index.js";
+import { isNonNilSnowflake, parseSnowflake, snowflakeToDate } from "@rsc-utils/core-utils";
+import type { EnsureContext } from "../../../validation/index.js";
+import type { SageMessageReferenceCoreAny, SageMessageReferenceCoreV1 } from "../../index.js";
 
-export function ensureSageMessageReferenceCoreV1(core: SageMessageReferenceCoreV0 | SageMessageReferenceCoreV1): SageMessageReferenceCoreV1 {
+export function ensureSageMessageReferenceCoreV1(core: SageMessageReferenceCoreAny, context?: EnsureContext): SageMessageReferenceCoreV1 {
+	if (core.ver > 0) throw new Error(`cannot convert v${core.ver} to v1`);
+
 	if ("messageDid" in core) {
 		return {
 			channelId: isNonNilSnowflake(core.threadDid) ? core.threadDid : core.channelDid,
@@ -12,17 +15,21 @@ export function ensureSageMessageReferenceCoreV1(core: SageMessageReferenceCoreV
 			messageIds: [core.messageDid],
 			objectType: "Message",
 			ts: snowflakeToDate(core.messageDid).getTime(),
-			userId: core.userDid,
+			userId: parseSnowflake(core.userDid) ?? context?.userId!,
 			ver: 1
 		};
 	}
 
-	const ts = snowflakeToDate(core.id).getTime();
-	if (core.objectType !== "Message" || !core.ver || core.ts !== ts) {
-		const out = { ...core as any, objectType:"Message", ts, ver:1 };
-		if ("timestamp" in out) delete out.timestamp;
-		return out;
-	}
-
-	return core;
+	return {
+		channelId: core.channelId,
+		characterId: core.characterId,
+		gameId: core.gameId,
+		guildId: core.guildId,
+		id: core.id,
+		messageIds: core.messageIds,
+		objectType: "Message",
+		ts: snowflakeToDate(core.id).getTime(),
+		userId: parseSnowflake(core.userId) ?? context?.userId!,
+		ver: 1
+	};
 }

@@ -1,10 +1,10 @@
 import type { IdCore } from "@rsc-utils/core-utils";
-import type { Alias, DialogDiceBehaviorType, DialogPostType, MacroBase, MoveDirectionOutputType, Note } from "../../index.js";
+import type { Alias, DialogDiceBehaviorType, DialogPostType, MacroBase, MoveDirectionOutputType, Note, SageCharacterCoreV0 } from "../../index.js";
 
 export type SageUserCoreV0 = IdCore<"User"> & {
 	aliases?: Alias[];
 	/** @deprecated moved to playerCharacters */
-	characters?: unknown[];
+	characters?: SageCharacterCoreV0[];
 	confirmationPrompts?: boolean;
 	defaultDialogType?: DialogPostType;
 	defaultSagePostType?: DialogPostType;
@@ -16,9 +16,9 @@ export type SageUserCoreV0 = IdCore<"User"> & {
 	mentionPrefix?: string;
 	moveDirectionOutputType?: MoveDirectionOutputType;
 	/** @deprecated never implemented */
-	nonPlayerCharacters?: unknown[];
+	nonPlayerCharacters?: SageCharacterCoreV0[];
 	notes?: Note[];
-	playerCharacters?: unknown[];
+	playerCharacters?: SageCharacterCoreV0[];
 	/** @deprecated via roles */
 	patronTier?: number;
 	skipConfirmationFlag?: string;

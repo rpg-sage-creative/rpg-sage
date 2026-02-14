@@ -19,7 +19,8 @@ export function assertSageCore<
 	if (!assertValidKeys<Core>({ core, objectType, validKeys })) return false;
 
 	// if did/id/uuid are valid keys, then validate them
-	if (validKeys.includes("did" as Key) && validKeys.includes("id" as Key) && validKeys.includes("uuid" as Key)) {
+	// if (validKeys.includes("did" as Key) && validKeys.includes("id" as Key) && validKeys.includes("uuid" as Key)) {
+	if (validKeys.includes("id" as Key)) {
 		if (!assertIds({ core, id, objectType })) return false;
 	}
 

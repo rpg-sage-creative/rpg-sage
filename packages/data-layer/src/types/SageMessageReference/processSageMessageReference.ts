@@ -35,7 +35,7 @@ export async function processSageMessageReference() {
 		// save for comparison later
 		const before = stringifyJson(oldCore);
 
-		const updatedCore = ensureSageMessageReferenceCore(oldCore);
+		const updatedCore = ensureSageMessageReferenceCore(oldCore, {});
 
 		// delete incomplete
 		if (!updatedCore.userId) {

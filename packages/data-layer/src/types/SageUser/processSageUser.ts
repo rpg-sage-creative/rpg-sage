@@ -35,7 +35,7 @@ export async function processSageUser() {
 		// save for comparison later
 		const before = stringifyJson(oldCore);
 
-		const updatedCore = ensureSageUserCore(oldCore);
+		const updatedCore = ensureSageUserCore(oldCore, {});
 
 		// delete incomplete
 		// if (!updatedCore.userId) {

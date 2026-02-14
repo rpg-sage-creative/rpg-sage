@@ -67,6 +67,6 @@ else
 	dataReset
 	dataProcess
 	dataValidate
-	dataUpload
-	dataCompare
+	# dataUpload
+	# dataCompare
 fi

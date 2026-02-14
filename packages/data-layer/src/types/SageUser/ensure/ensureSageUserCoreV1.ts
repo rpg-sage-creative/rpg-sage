@@ -1,17 +1,21 @@
-import { deleteEmptyArray, ensureArray, renameProperty } from "../../../validation/index.js";
-import type { SageUserCoreV0, SageUserCoreV1 } from "../index.js";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import { deleteEmptyArray, ensureArray, ensureIds, renameProperty, type EnsureContext } from "../../../validation/index.js";
+import { ensureSageCharacterCore, type SageUserCoreV0, type SageUserCoreV1 } from "../../index.js";
 
-export function ensureSageUserCoreV1(core: SageUserCoreV0): SageUserCoreV1 {
+export function ensureSageUserCoreV1(core: SageUserCoreV0, context?: EnsureContext): SageUserCoreV1 {
 	if (core.ver > 0) throw new Error(`cannot convert v${core.ver} to v1`);
+
 	deleteEmptyArray({ core, key:"aliases" });
-	renameProperty({ core, oldKey:"characters", newKey:"playerCharacters" })
+	renameProperty({ core, oldKey:"characters", newKey:"playerCharacters" });
+	core.id = core.did ?? core.id;
+	ensureIds(core);
 	deleteEmptyArray({ core, key:"macros" });
-	deleteEmptyArray({ core, key:"nonPlayerCharacters" });
+	delete core.nonPlayerCharacters;
 	deleteEmptyArray({ core, key:"notes" });
-	// core.playerCharacters = core.playerCharacters?.map(char => (char.ver > 0 ? char : characterV1FromV0(char)) ?? [];
-	ensureArray;//({ core, key:"playerCharacters", handler:characterV1FromV0, ver:1 });
+	ensureArray({ core, key:"playerCharacters", handler:ensureSageCharacterCore, ver:1, context:{ ...context, userId:core.id as Snowflake } });
 	deleteEmptyArray({ core, key:"playerCharacters" });
 	delete core.patronTier;
 	core.ver = 1;
+
 	return core as SageUserCoreV1;
 }
