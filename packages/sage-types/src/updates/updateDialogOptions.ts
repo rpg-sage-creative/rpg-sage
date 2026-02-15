@@ -1,5 +1,5 @@
 import { isNotBlank } from "@rsc-utils/core-utils";
-import type { DialogOptions } from "../SageChannel.js";
+import type { DialogOptions } from "../options/DialogOptions.js";
 
 export type OldDialogOptions = DialogOptions & {
 	/** @deprecated */

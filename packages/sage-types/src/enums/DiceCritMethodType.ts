@@ -1,6 +1,6 @@
 import type { Optional } from "@rsc-utils/core-utils";
-
 import { DiceCriticalMethodType } from "@rsc-utils/game-utils";
+
 export { DiceCriticalMethodType as DiceCritMethodType } from "@rsc-utils/game-utils";
 
 const TimesTwoRegExp = /\b(x2|times[ -]?two)\b/i;

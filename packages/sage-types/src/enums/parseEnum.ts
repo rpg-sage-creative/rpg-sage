@@ -5,7 +5,7 @@ import { DiceCritMethodType, parseDiceCritMethodType } from "./DiceCritMethodTyp
 import { DicePostType, parseDicePostType } from "./DicePostType.js";
 import { DiceSecretMethodType, parseDiceSecretMethodType } from "./DiceSecretMethodType.js";
 import { parsePostType, PostType } from "./PostType.js";
-import { parseSageChannelType, SageChannelType } from "./SageChannel.js";
+import { parseSageChannelType, SageChannelType } from "./SageChannelType.js";
 
 export function parseEnum<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, value?: Optional<string>): V;
 export function parseEnum<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>, value?: Optional<string>) {

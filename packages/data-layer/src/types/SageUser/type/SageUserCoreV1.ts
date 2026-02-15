@@ -2,7 +2,7 @@ import type { Snowflake, UUID } from "@rsc-utils/core-utils";
 import type { Alias, DialogDiceBehaviorType, DialogPostType, MacroBase, MoveDirectionOutputType, Note, SageCharacterCoreV1, SageCore } from "../../index.js";
 
 export type SageUserCoreV1 = SageCore<"User", Snowflake | UUID> & {
-	/** @deprecated use dialog macros */
+	/** @deprecated use dialog templates */
 	aliases?: Alias[];
 	confirmationPrompts?: boolean;
 	defaultDialogType?: DialogPostType;

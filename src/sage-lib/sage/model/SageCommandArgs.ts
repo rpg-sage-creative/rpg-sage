@@ -1,4 +1,4 @@
-import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, type GameOptions, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type SystemOptions } from "@rsc-sage/types";
+import { type DialogOptions, DialogPostType, DiceCritMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, type GameOptions, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions, type GameSystemOptions } from "@rsc-sage/types";
 import { type Args, Color, type EnumLike, type HexColorString, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, unwrap, type UUID } from "@rsc-utils/core-utils";
 import { parseIds, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
 import { GameSystemType } from "@rsc-utils/game-utils";
@@ -426,7 +426,7 @@ export abstract class SageCommandArgs<T extends SageCommand> {
 		return serverOptions;
 	}
 
-	public getSystemOptions(): Args<SystemOptions> | undefined {
+	public getSystemOptions(): Args<GameSystemOptions> | undefined {
 		const serverOptions = {
 			gameSystemType: this.getEnum(GameSystemType, "gameSystem") ?? this.getEnum(GameSystemType, "system"),
 		};

@@ -1,5 +1,5 @@
 import { isDefined } from "@rsc-utils/core-utils";
-import type { DiceOptions } from "../SageChannel.js";
+import type { DiceOptions } from "../options/DiceOptions.js";
 
 export type OldDiceOptions = DiceOptions & {
 	/** @deprecated */

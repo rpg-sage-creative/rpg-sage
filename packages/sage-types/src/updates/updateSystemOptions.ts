@@ -1,7 +1,7 @@
 import { isDefined } from "@rsc-utils/core-utils";
-import type { SystemOptions } from "../SageChannel.js";
+import type { GameSystemOptions } from "../options/GameSystemOptions.js";
 
-export type OldSystemOptions = SystemOptions & {
+export type OldSystemOptions = GameSystemOptions & {
 	/** @deprecated */
 	defaultGameType?: number;
 	/** @deprecated */

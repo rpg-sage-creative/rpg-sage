@@ -12,6 +12,7 @@ export type MacroBase<Category extends string = string> = {
 	dice?: string;
 };
 
+/** @deprecated Rebrand Alias/DialogMacro as DialogTemplate */
 export type DialogMacroBase<Category extends string = string> = {
 	/** the name of the macro */
 	name: string;

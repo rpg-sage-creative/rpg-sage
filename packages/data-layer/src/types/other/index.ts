@@ -3,6 +3,8 @@ export * from "./AutoChannelData.js";
 export * from "./DeckType.js";
 export * from "./DialogDiceBehaviorType.js";
 export * from "./DialogPostType.js";
+export * from "./HasColors.js";
+export * from "./HasEmoji.js";
 export * from "./HasVer.js";
 export * from "./MacroBase.js";
 export * from "./MoveDirectionOutputType.js";

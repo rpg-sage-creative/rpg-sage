@@ -82,6 +82,9 @@ importers:
 
   packages/data-layer:
     dependencies:
+      '@rsc-sage/types':
+        specifier: workspace:*
+        version: link:../sage-types
       '@rsc-utils/core-utils':
         specifier: github:rpg-sage-creative/core-utils#semver:^1.4.0
         version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/7620ebfa88d4c18768eb6ddf8ff1aa507686782c'
