@@ -1,11 +1,8 @@
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
-import { GameSystemType, removeDesc } from "@rsc-utils/game-utils";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, removeDesc } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import {
-	CritMethodType,
-	DiceOutputType,
-	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
 	HasDieCore,
@@ -702,7 +699,7 @@ function shouldStartNewPart(currentPart: TokenData[], currentToken: TokenData): 
 
 export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDiceGroupRoll> extends HasDieCore<T> implements IDiceBase<V> {
 	//#region from this.core
-	public get critMethodType(): OrUndefined<CritMethodType> {
+	public get critMethodType(): OrUndefined<DiceCriticalMethodType> {
 		return this.core.critMethodType;
 	}
 	private _dice?: U[];

@@ -1,9 +1,9 @@
 import { getHomeServerId } from "@rsc-sage/env";
-import type { DialogPostType, DiceCritMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, SageChannel, ServerOptions } from "@rsc-sage/types";
+import type { DialogPostType, DiceOutputType, DicePostType, SageChannel, ServerOptions } from "@rsc-sage/types";
 import { DiceSortType, updateServer } from "@rsc-sage/types";
 import { applyChanges, randomSnowflake, warn, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
-import type { GameSystemType, MacroBase } from "@rsc-utils/game-utils";
+import type { DiceCriticalMethodType, DiceSecretMethodType, GameSystemType, MacroBase } from "@rsc-utils/game-utils";
 import { parseGameSystem, type GameSystem } from "@rsc-utils/game-utils";
 import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
@@ -38,7 +38,7 @@ export interface ServerCore extends IdCore<"Server">, IHasColors, IHasEmoji, Par
 
 // export abstract class HasDiceOptions<Core extends Partial<DiceOptions>> {
 // 	declare protected core: Core;
-// 	public get diceCritMethodType(): DiceCritMethodType | undefined { return this.core.diceCritMethodType; }
+// 	public get diceCritMethodType(): DiceCriticalMethodType | undefined { return this.core.diceCritMethodType; }
 // 	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
 // 	public get dicePostType(): PostType | undefined { return this.core.dicePostType; }
 // 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
@@ -60,7 +60,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 	public get channels(): SageChannel[] { return this.core.channels ?? []; }
 	public get commandPrefix(): string | undefined { return this.core.commandPrefix; }
 	public get dialogPostType(): DialogPostType | undefined { return this.core.dialogPostType; }
-	public get diceCritMethodType(): DiceCritMethodType | undefined { return this.core.diceCritMethodType; }
+	public get diceCritMethodType(): DiceCriticalMethodType | undefined { return this.core.diceCritMethodType; }
 	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
@@ -402,7 +402,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 			did: guild.id as Snowflake,
 			emoji: [],
 			// dialogPostType: DialogPostType.Embed,
-			// diceCritMethodType: DiceCritMethodType.Unknown,
+			// diceCritMethodType: DiceCriticalMethodType.Unknown,
 			// diceOutputType: DiceOutputType.M,
 			// dicePostType: DicePostType.SinglePost,
 			// diceSecretMethodType: DiceSecretMethodType.Ignore,

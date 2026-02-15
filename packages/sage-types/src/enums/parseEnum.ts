@@ -1,9 +1,7 @@
 import { parseEnum as parse, type EnumLike, type Optional } from "@rsc-utils/core-utils";
-import { GameSystemType, parseGameSystem } from "@rsc-utils/game-utils";
+import { DiceCriticalMethodType, DiceSecretMethodType, GameSystemType, parseDiceCriticalMethodType, parseDiceSecretMethodType, parseGameSystem } from "@rsc-utils/game-utils";
 import { DialogPostType, parseDialogPostType } from "./DialogPostType.js";
-import { DiceCritMethodType, parseDiceCritMethodType } from "./DiceCritMethodType.js";
 import { DicePostType, parseDicePostType } from "./DicePostType.js";
-import { DiceSecretMethodType, parseDiceSecretMethodType } from "./DiceSecretMethodType.js";
 import { parsePostType, PostType } from "./PostType.js";
 import { parseSageChannelType, SageChannelType } from "./SageChannelType.js";
 
@@ -12,8 +10,8 @@ export function parseEnum<K extends string = string, V extends number = number>(
 	if (enumLike === DialogPostType) {
 		return parseDialogPostType(value);
 	}
-	if (enumLike === DiceCritMethodType) {
-		return parseDiceCritMethodType(value);
+	if (enumLike === DiceCriticalMethodType) {
+		return parseDiceCriticalMethodType(value);
 	}
 	// DiceOutputType
 	if (enumLike === DicePostType) {

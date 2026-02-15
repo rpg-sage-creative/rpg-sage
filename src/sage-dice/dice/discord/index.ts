@@ -1,6 +1,6 @@
 import { debug, HasCore, parseEnum, randomSnowflake, type IdCore, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { GameSystemType, getGameSystems, matchBasicDice, parseGameSystem, type GameSystem } from "@rsc-utils/game-utils";
-import { CritMethodType, DiceOutputType, DiceSecretMethodType, type TDiceOutput } from "../../common.js";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, getGameSystems, matchBasicDice, parseGameSystem, type GameSystem } from "@rsc-utils/game-utils";
+import type { TDiceOutput } from "../../common.js";
 import { DiceGroup as baseDiceGroup, DiceGroupRoll as baseDiceGroupRoll, type Dice as baseDice, type DicePart as baseDicePart } from "../base/index.js";
 import type { DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore, DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice, TDiceGroup as baseTDiceGroup, TDiceGroupRoll as baseTDiceGroupRoll, TDicePart as baseTDicePart } from "../base/types.js";
 
@@ -18,7 +18,7 @@ for (const gameSystem of gameSystems) {
 }
 gameSystems = undefined;
 
-type DiceGroupParser<T extends baseTDiceGroup = baseTDiceGroup> = (diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType) => T;
+type DiceGroupParser<T extends baseTDiceGroup = baseTDiceGroup> = (diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: DiceCriticalMethodType) => T;
 
 function getDiceSystem(gameType?: GameSystemType): DiceSystem {
 	let diceSystem = diceSystems.get(gameType ?? GameSystemType.None);
@@ -158,13 +158,13 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 		diceString,
 		defaultGameType = GameSystemType.None,
 		defaultDiceOutputType,
-		defaultCritMethodType = CritMethodType.Unknown,
+		defaultCritMethodType = DiceCriticalMethodType.Unknown,
 		defaultDiceSecretMethodType = DiceSecretMethodType.Ignore
 	}: {
 		diceString: string;
 		defaultGameType?: GameSystemType;
 		defaultDiceOutputType?: DiceOutputType;
-		defaultCritMethodType?: CritMethodType;
+		defaultCritMethodType?: DiceCriticalMethodType;
 		defaultDiceSecretMethodType?: DiceSecretMethodType;
 	}): OrNull<DiscordDice> {
 		const matchArray = matchBasicDice(diceString);
@@ -180,7 +180,7 @@ export class DiscordDice extends HasCore<DiscordDiceCore, "DiscordDice"> {
 			let diceOutputType: OrUndefined<DiceOutputType>;
 			[match, diceOutputType] = matchDiceOutputType(match, defaultDiceOutputType);
 
-			let critMethodType: OrUndefined<CritMethodType>;
+			let critMethodType: OrUndefined<DiceCriticalMethodType>;
 			[match, critMethodType] = matchCritMethodType(match, gameType, defaultCritMethodType);
 
 			let count: number, map: number;
@@ -223,9 +223,10 @@ function matchGameType(match: string, defaultGameType: OrUndefined<GameSystemTyp
 	return [match, defaultGameType];
 }
 
+const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
+
 /** Returns the DiceOutputType at the beginning of the match along with the rest of the match. */
 function matchDiceOutputType(match: string, defaultDiceOutputType: OrUndefined<DiceOutputType>): [string, OrUndefined<DiceOutputType>] {
-	const DICE_OUTPUT_CHECK = /^(?:(xxs|xs|s|m|xxl|xl|l|rollem)\b)?/i;
 	const diceOutputMatch = match.match(DICE_OUTPUT_CHECK);
 	if (diceOutputMatch) {
 		const diceOutputTypeString = diceOutputMatch[0];
@@ -238,8 +239,8 @@ function matchDiceOutputType(match: string, defaultDiceOutputType: OrUndefined<D
 	return [match, defaultDiceOutputType];
 }
 
-/** Returns the CritMethodType at the beginning of the match along with the rest of the match. */
-function matchCritMethodType(match: string, gameType: OrUndefined<GameSystemType>, defaultCritMethodType: OrUndefined<CritMethodType>): [string, OrUndefined<CritMethodType>] {
+/** Returns the DiceCriticalMethodType at the beginning of the match along with the rest of the match. */
+function matchCritMethodType(match: string, gameType: OrUndefined<GameSystemType>, defaultCritMethodType: OrUndefined<DiceCriticalMethodType>): [string, OrUndefined<DiceCriticalMethodType>] {
 	const gameSystem = parseGameSystem(gameType);
 	if (gameSystem?.diceCritMethodType) {
 		const CRIT_METHOD_CHECK = /^(timestwo|rolltwice|addmax)?/i;

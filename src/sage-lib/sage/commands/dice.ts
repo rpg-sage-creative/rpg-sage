@@ -1,7 +1,7 @@
-import { DiceOutputType, DicePostType, DiceSecretMethodType, type DiceCritMethodType } from "@rsc-sage/types";
+import { DiceOutputType, DicePostType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
-import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath, isRandomItem, processDiceMacroCall, type DiceMacroBase, type GameSystemType, type MacroBase } from "@rsc-utils/game-utils";
+import { BasicBracketsRegExpG, createBasicBracketsRegExpG, DiceCriticalMethodType, DiceSecretMethodType, doStatMath, isRandomItem, processDiceMacroCall, type DiceMacroBase, type GameSystemType, type MacroBase } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -41,7 +41,7 @@ export type TDiceMatch = {
 type DiscordDiceOverrides = {
 	gameSystemType?: GameSystemType;
 	diceOutputType?: DiceOutputType;
-	diceCritMethodType?: DiceCritMethodType;
+	diceCritMethodType?: DiceCriticalMethodType;
 	diceSecretMethodType?: DiceSecretMethodType;
 };
 type ParseDiscordDiceOptions = BaseParseOptions & {

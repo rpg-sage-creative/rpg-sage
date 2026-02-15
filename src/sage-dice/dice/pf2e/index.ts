@@ -1,9 +1,6 @@
 import { isDefined, randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { GameSystemType, isGradeFailure } from "@rsc-utils/game-utils";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, isGradeFailure } from "@rsc-utils/game-utils";
 import {
-	CritMethodType,
-	DiceOutputType,
-	DiceSecretMethodType,
 	DieRollGrade,
 	DropKeepType,
 	TestType,
@@ -525,10 +522,10 @@ function shouldStartNewPart(currentPart: TokenData[], currentToken: TokenData): 
 }
 
 interface DiceGroupCore extends baseDiceGroupCore {
-	critMethodType?: CritMethodType;
+	critMethodType?: DiceCriticalMethodType;
 }
 export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll> {
-	public get critMethodType(): CritMethodType { return this.core.critMethodType ?? CritMethodType.Unknown; }
+	public get critMethodType(): DiceCriticalMethodType { return this.core.critMethodType ?? DiceCriticalMethodType.Unknown; }
 
 	//#region Tests
 	public getDiceByTestAlias(alias: TSpecialTestAliasType): OrNull<Dice> {
@@ -568,7 +565,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	}
 
 	//#region static
-	public static create(_dice: Dice[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType = CritMethodType.Unknown): DiceGroup {
+	public static create(_dice: Dice[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType = DiceCriticalMethodType.Unknown): DiceGroup {
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameSystemType.PF2e,
@@ -582,7 +579,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 	public static fromCore(core: DiceGroupCore): DiceGroup {
 		return new DiceGroup(core);
 	}
-	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): DiceGroup {
+	public static fromTokens(tokens: TokenData[], diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: DiceCriticalMethodType): DiceGroup {
 		let currentPart: TokenData[];
 		const partedTokens: TokenData[][] = [];
 		tokens.forEach(token => {
@@ -631,7 +628,7 @@ export class DiceGroup extends baseDiceGroup<DiceGroupCore, Dice, DiceGroupRoll>
 		});
 		return DiceGroup.create(_dice, diceOutputType, diceSecretMethodType, critMethodType);
 	}
-	public static parse(diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: CritMethodType): DiceGroup {
+	public static parse(diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: DiceCriticalMethodType): DiceGroup {
 		const tokens = tokenize(diceString, getParsers(), "desc");
 		return DiceGroup.fromTokens(tokens, diceOutputType, diceSecretMethodType, critMethodType);
 	}
@@ -721,9 +718,9 @@ function manipulateCriticalDamage(diceGroupRoll: DiceGroupRoll): void {
 		}
 
 		const critMethodType = diceGroupRoll.dice.critMethodType;
-		if (critMethodType === CritMethodType.AddMax) {
+		if (critMethodType === DiceCriticalMethodType.AddMax) {
 			critByAddingMax(diceGroupRoll);
-		} else if (critMethodType === CritMethodType.RollTwice) {
+		} else if (critMethodType === DiceCriticalMethodType.RollTwice) {
 			critByRollingTwice(diceGroupRoll);
 		}else {
 			critByTimesTwo(diceGroupRoll);

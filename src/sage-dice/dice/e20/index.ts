@@ -1,10 +1,9 @@
 import { cleanWhitespace, randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
-import { GameSystemType } from "@rsc-utils/game-utils";
+import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import {
-	DiceOutputType,
-	DiceSecretMethodType, DropKeepType,
+	DropKeepType,
 	TestType,
 	cleanDescription,
 	createValueTestData,
