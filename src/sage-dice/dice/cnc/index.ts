@@ -1,12 +1,11 @@
 import { cleanWhitespace, randomSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { DiceExplode, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, DiceExplode, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import {
 	DieRollGrade,
-	TestType, UNICODE_LEFT_ARROW,
-	cleanDescription,
 	gradeToEmoji,
 	parseTestTargetValue,
+	TestType, UNICODE_LEFT_ARROW,
 	type TDiceLiteral,
 	type TTestData
 } from "../../common.js";
@@ -177,7 +176,7 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			id: randomSnowflake(),
 
 			count: count ?? 1,
-			description: cleanDescription(description),
+			description: cleanDicePartDescription(description),
 			dropKeep: undefined,
 			modifier: 0,
 			noSort: false,

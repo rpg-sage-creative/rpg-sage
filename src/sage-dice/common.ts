@@ -1,5 +1,5 @@
 import { DiceOutputType } from "@rsc-sage/types";
-import { cleanWhitespace, HasIdCore, sortPrimitive, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
+import { HasIdCore, sortPrimitive, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
 import type { GameSystemType } from "@rsc-utils/game-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
@@ -8,16 +8,6 @@ import type { TDiceRoll } from "./dice/base/types.js";
 //#region CONST
 
 export const UNICODE_LEFT_ARROW = "\u27f5";
-
-//#endregion
-
-//#region DiceString
-
-/** This strips a trailing colon (,) or semicolon (;) */
-export function cleanDescription(description?: string): string {
-	const replaced = (description ?? "").replace(/[;,]\s*$/, "");
-	return cleanWhitespace(replaced);
-}
 
 //#endregion
 

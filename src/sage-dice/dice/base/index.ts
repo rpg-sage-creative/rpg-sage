@@ -1,13 +1,12 @@
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
-import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, removeDesc } from "@rsc-utils/game-utils";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, cleanDicePartDescription, removeDesc } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import {
 	DieRollGrade,
 	DropKeepType,
 	HasDieCore,
 	UNICODE_LEFT_ARROW,
-	cleanDescription,
 	dropKeepToString,
 	gradeRoll, gradeToEmoji,
 	mapRollToJson,
@@ -365,7 +364,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 			id: randomSnowflake(),
 
 			count: count ?? 0,
-			description: cleanDescription(description),
+			description: cleanDicePartDescription(description),
 			dropKeep: dropKeep ?? undefined,
 			modifier: modifier ?? 0,
 			noSort: noSort === true,
