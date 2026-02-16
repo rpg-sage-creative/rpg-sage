@@ -1,4 +1,5 @@
 import { tokenize } from "@rsc-utils/core-utils";
+import { UrlRegExp } from "@rsc-utils/io-utils";
 import { ComplexMathRegExp } from "../math/internal/doComplex.js";
 import { doPosNeg, PosNegNumberRegExp } from "../math/internal/doPosNeg.js";
 import { SimpleMathRegExp } from "../math/internal/doSimple.js";
@@ -13,6 +14,7 @@ import { processMath } from "../math/processMath.js";
  */
 export function doStatMath(value: string): string {
 	const parsers = {
+		url: UrlRegExp,
 		complex: ComplexMathRegExp,
 		simple: SimpleMathRegExp,
 		posNeg: PosNegNumberRegExp,
@@ -21,6 +23,7 @@ export function doStatMath(value: string): string {
 	// process other math functions on non-dice parts of the value
 	const processed = tokens.map(({ token, key }) => {
 		switch(key) {
+			case "url": // we detect urls so that we can avoid processing / as division
 			case "complex": return processMath(token);
 			case "simple": return processMath(token);
 			case "posNeg": return doPosNeg(token);
