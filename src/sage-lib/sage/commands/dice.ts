@@ -1,7 +1,7 @@
 import { DiceOutputType, DicePostType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
-import { BasicBracketsRegExpG, createBasicBracketsRegExpG, DiceCriticalMethodType, DiceSecretMethodType, doStatMath, isRandomItem, processDiceMacroCall, type DiceMacroBase, type GameSystemType, type MacroBase } from "@rsc-utils/game-utils";
+import { BasicBracketsRegExpG, createBasicBracketsRegExpG, DiceCriticalMethodType, DiceSecretMethodType, doStatMath, isMath, isRandomItem, processDiceMacroCall, type DiceMacroBase, type GameSystemType, type MacroBase } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -11,7 +11,6 @@ import { logPostCurrency } from "./admin/PostCurrency.js";
 import { registerDiceTest } from "./dice/diceTest.js";
 import { fetchTableFromUrl } from "./dice/fetchTableFromUrl.js";
 import { formatDiceOutput } from "./dice/formatDiceOutput.js";
-import { isMath } from "./dice/isMath.js";
 import { parseTable } from "./dice/parseTable.js";
 import { rollMath } from "./dice/rollMath.js";
 import { rollRandomItem } from "./dice/rollRandomItem.js";

@@ -1,7 +1,6 @@
 import { StringMatcher, stringOrUndefined, unwrap, type Optional } from "@rsc-utils/core-utils";
-import { hasDiceMacroArgPlaceholder, hasDiceMacroRemainingArgPlaceholder, isRandomItem, matchesBasicDice, parseDialogContent, parseDiceMacroArgPlaceholdersForModal, type DiceMacroArgPlaceholder, type MacroBase } from "@rsc-utils/game-utils";
+import { hasDiceMacroArgPlaceholder, hasDiceMacroRemainingArgPlaceholder, isMath, isRandomItem, matchesBasicDice, parseDialogContent, parseDiceMacroArgPlaceholdersForModal, type DiceMacroArgPlaceholder, type MacroBase } from "@rsc-utils/game-utils";
 import { isUrl } from "@rsc-utils/io-utils";
-import { isMath } from "../commands/dice/isMath.js";
 import { isValidTable } from "../commands/dice/isValidTable.js";
 import { parseTable } from "../commands/dice/parseTable.js";
 import type { TMacroOwner } from "./MacroOwner.js";
