@@ -59,10 +59,11 @@ export async function macroToPrompt(sageCommand: SageCommand, macro: Macro, opts
 	}
 
 	if (opts?.share) {
+		const sagePrefix = sageCommand.server?.getPrefixOrDefault() ?? "";
 		const nameArg = `name="${macro.name}"`;
 		const catArg = macro.isUncategorized ? `` : ` category="${macro.category}"`;
 		const contentArg = ` ${macro.type}=${quote(macro.dialog ?? macro.dice ?? "")}`;
-		parts.push(`\n\n*${localize("SHARE")}*:\`\`\`sage! macro set ${nameArg}${catArg}${contentArg}\`\`\``);
+		parts.push(`\n\n*${localize("SHARE")}*:\`\`\`${sagePrefix}! macro set ${nameArg}${catArg}${contentArg}\`\`\``);
 	}
 
 	return parts.join("");

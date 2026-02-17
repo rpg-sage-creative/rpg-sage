@@ -56,6 +56,8 @@ async function toRenderableContent(sageCommand: SageCommand, args: Args): Promis
 		return sageCommand.createAdminRenderable("FEATURE_NOT_IMPLEMENTED");
 	}
 
+	const sagePrefix = sageCommand.server?.getPrefixOrDefault() ?? "";
+
 	const macroPages = macros.getMacroPages(state) ?? [];
 	const macroPageCount = macroPages.length;
 
@@ -75,7 +77,7 @@ async function toRenderableContent(sageCommand: SageCommand, args: Args): Promis
 		);
 		content.appendTitledSection(
 			`${localize("TO_VIEW_MACRO_USE_:")}`,
-			`sage! macro details name="${nameLabel}"`
+			`${sagePrefix}! macro details name="${nameLabel}"`
 		);
 	}else {
 		content.appendTitledSection(
@@ -84,7 +86,7 @@ async function toRenderableContent(sageCommand: SageCommand, args: Args): Promis
 		);
 		content.appendTitledSection(
 			`${localize("TO_CREATE_MACRO_USE_:")}`,
-			`sage! macro set name="${nameLabel}" dice="[1d20 atk; 1d6 dmg]"`
+			`${sagePrefix}! macro set name="${nameLabel}" dice="[1d20 atk; 1d6 dmg]"`
 		);
 	}
 	return content;
