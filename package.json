@@ -74,7 +74,7 @@
 		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.4.0",
 		"@rsc-utils/discord-utils": "github:rpg-sage-creative/discord-utils#semver:^1.2.0",
 		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.2.0",
-		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.0",
+		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.1",
 		"discord.js": "^14.25.1",
 		"regex": "^6.1.0"
 	},
@@ -131,16 +131,8 @@
 
 		"data:stack": "bash ./scripts/data-update.sh",
 
-		"commands:build": "node ./packages/app-commands/build/build.mjs codeName=dev --getFromEnvJson pathRoot=./packages/app-commands/build/commands"
-	},
-	"-scripts": {
-		"start:dev:all": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices",
+		"commands:build": "node ./packages/app-commands/build/build.mjs codeName=dev --getFromEnvJson pathRoot=./packages/app-commands/build/commands",
 
-		"app-commands": "node ./build/app-commands.mjs codeName=dev dataRoot='./docker-volumes/rpg-sage-mono'",
-
-		"preupdates": "pnpm build",
-		"processMessages": "node ./build/updates/processMessages.js codeName=dev --getFromEnvJson",
-		"updates": "pnpm run processMessages"
-
+		"-start:dev:all": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices"
 	}
 }
