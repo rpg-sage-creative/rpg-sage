@@ -25,18 +25,22 @@ The following is the authorize url for RPG Sage (Stable):
 https://discord.com/oauth2/authorize?client_id=644942473315090434&permissions=2815145709792336&integration_type=0&scope=bot+applications.commands
 
 ```
+Fluxer
+```
+https://web.fluxer.app/oauth2/authorize?client_id=1473774758461800536&scope=bot&permissions=2251800619379792
+```
 
 ## Deploy
 
-@todo update this
+see DEPLOY.md
 
 ## Usage
 
 View the Complete Command Guide
-http://rpgsage.io/index.html
+https://github.com/rpg-sage-creative/rpg-sage/wiki
 
 View the Quick Start Guide
-http://rpgsage.io/quick.html
+https://github.com/rpg-sage-creative/rpg-sage/wiki/Quick-Start
 
 ## Contributing
 
