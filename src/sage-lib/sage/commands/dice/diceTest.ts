@@ -3,43 +3,85 @@ import { rollDie } from "@rsc-utils/random-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 
+let DiceRegExp: RegExp;
+
+type ParseDiceInputResults = { iterations:number; dieSize:number; };
+
+function parseDiceInput(sageCommand: SageCommand): ParseDiceInputResults | undefined {
+	// ensure we have an arg to work with
+	const input = sageCommand.args.getString("dice")
+		?? sageCommand.args.getString("die")
+		?? sageCommand.args.getString("sides")
+		?? sageCommand.args.getString("type");
+	if (!input) return undefined;
+
+	// ensure we have regexp to work with
+	DiceRegExp ??= /(?:(?<count>\d+)?d)?(?<sides>\d+)/i;
+
+	// parse input vs regexp
+	const { count = "", sides = "" } = DiceRegExp.exec(input)?.groups ?? { };
+
+	// get dieSize and test against valid
+	const dieSize = +sides;
+	if (![2,3,4,6,8,10,12,20,100].includes(dieSize)) return undefined;
+
+	// make sure we have between 1 and maxIterations
+	const maxIterations = 10000;
+	const iterations = Math.max(0, Math.min(+count || maxIterations)) || maxIterations;
+
+	return { iterations, dieSize };
+}
+
+async function rollDiceAsync(count: number, sides: number): Promise<number[]> {
+	const rolls = new Array<number>(count);
+	for (let i = 0; i < count; i++) {
+		rolls[i] = await Promise.resolve(rollDie(sides));
+	}
+	return rolls;
+}
+
 async function diceTest(sageCommand: SageCommand): Promise<void> {
 	//#region validate command
 
 	if (!sageCommand.allowDice) {
-		await sageCommand.replyStack.reply("*Dice not allowed in this channel!*");
-		return;
-	}
-	if (sageCommand.game && !(sageCommand.isGameMaster || sageCommand.isPlayer)) {
-		await sageCommand.replyStack.reply("*Only members of this game allowed!*");
-		return;
-	}
-
-	const dieValue = sageCommand.args.getString("die") ?? sageCommand.args.getString("sides") ?? sageCommand.args.getString("type");
-	if (!dieValue) {
-		await sageCommand.replyStack.reply("*Die type not given!*");
+		// denyByProv
+		const details = [
+			"<b>Dice Test</b>",
+			"This channel does not allow that!",
+			"<i>Dice not allowed in this channel.</i>"
+		];
+		await sageCommand.replyStack.whisper(details.join("\n"));
 		return;
 	}
 
-	const dieSize = +dieValue.replace(/\D/g, "");
-	if (![2,3,4,6,8,10,12,20].includes(dieSize)) {
-		await sageCommand.replyStack.reply("*Die type not valid! (2, 3, 4, 6, 8, 10, 12, 20)*");
+	if (sageCommand.game && !sageCommand.actor.isGameUser && !sageCommand.canAdminGame) {
+		// denyForGame
+		const details = [
+			"<b>Dice Test</b>",
+			"Must be a GameMaster or Player for this game or a GameAdmin, Administrator, Manager, or Owner of this server."
+		];
+		await sageCommand.replyStack.whisper(details.join("\n"));
 		return;
 	}
+
+	const inputs = parseDiceInput(sageCommand);
+	if (!inputs) {
+		const sagePrefix = sageCommand.server?.getPrefixOrDefault() ?? "";
+		const details = [
+			"The basic command for testing dice is:",
+			"> ```" + sagePrefix + "! dice test sides=\"20\"```",
+			"<i>Valid values for `sides` are: 2, 3, 4, 6, 8, 10, 12, 20</i>"
+		];
+		await sageCommand.replyStack.whisper(details.join("\n"));
+		return;
+	}
+
 
 	//#endregion
 
-	const iterations = 10000;
+	const { iterations, dieSize } = inputs;
 
-	//#region roll dice
-
-	const rolls: number[] = [];
-	let counter = iterations;
-	do {
-		rolls.push(rollDie(dieSize));
-	} while(--counter);
-
-	//#endregion
+	const rolls = await rollDiceAsync(iterations, dieSize);
 
 	const results = mapDiceTestResults({ dieSize, iterations, rolls });
 
@@ -116,24 +158,59 @@ async function diceTest(sageCommand: SageCommand): Promise<void> {
 
 	//#region create output
 
-	let output = `**Test Results: d${dieSize} x${addCommas(iterations)}**\n\`\`\``;
-	mappedCounts.forEach(count => {
-		const sDeltaBar = createDeltaBar(maxDelta, count.delta);
-		output += `\n${count.die}: ${count.count} ${sDeltaBar} (${count.sDelta})`;
-	});
-	(["high", "low"] as ("high" | "low")[]).forEach(hl => {
-		output += `\n\n${hl}: ${addCommas(highLowCounts[hl])}`;
-	});
-	output += "```\n**Streaks**\n*Roll: Length (xCount)*```";
-	for (let i = 1; i <= dieSize; i++) {
-		output += `\n${i}: `;
-		output += Object.keys(singleValueStreaks[i]).filter(key => key !== "max").map(key => `${key} (x${singleValueStreaks[i][key as any]})`).join(", ");
+	const ticks = "```";
+
+	const blockSize = dieSize === 100 ? 20 : dieSize;
+	const blocks = dieSize / blockSize;
+	const blockIndexes = (blockIndex: number) => {
+		const startDieIndex = blockIndex * blockSize;
+		const endDieIndex = startDieIndex + blockSize;
+		return { startDieIndex, endDieIndex };
+	};
+
+	let output = `**Test Results: d${dieSize} x${addCommas(iterations)}**`;
+	for (let blockIndex = 0; blockIndex < blocks; blockIndex++) {
+		const { startDieIndex, endDieIndex } = blockIndexes(blockIndex);
+		output += "\n" + ticks;
+		mappedCounts.slice(startDieIndex, endDieIndex).forEach(count => {
+			const sDeltaBar = createDeltaBar(maxDelta, count.delta);
+			output += `\n${count.die}: ${count.count} ${sDeltaBar} (${count.sDelta})`;
+		});
+		output += ticks;
 	}
+	output += ticks;
+	output += `high: ${addCommas(highLowCounts["high"])}`;
+	output += "\n\n";
+	output += `low: ${addCommas(highLowCounts["low"])}`;
+	output += ticks;
+
+	output += "\n**Streaks**";
+	for (let blockIndex = 0; blockIndex < blocks; blockIndex++) {
+		const { startDieIndex, endDieIndex } = blockIndexes(blockIndex);
+		output += "\n*Roll: Length (xCount)*";
+		output += "\n" + ticks;
+		let last = -1;
+		for (let dieIndex = startDieIndex; dieIndex < endDieIndex; dieIndex++) {
+			const die = dieIndex + 1;
+			const streakKeys = Object.keys(singleValueStreaks[die] ?? {}).filter(key => key !== "max");
+			if (streakKeys.length) {
+				output += `\n${die}: `;
+				output += streakKeys.map(key => `${key} (x${singleValueStreaks[die][key as any]})`).join(", ");
+				last = streakKeys.length;
+			}else if (last !== 0) {
+				output += "\n\u2026";
+				last = 0;
+			}
+		}
+		output += ticks;
+	}
+	output += ticks;
 	(["high", "low"] as ("high" | "low")[]).forEach(hl => {
-		output += `\n\n${hl}: `;
-		output += Object.keys(highLowStreaks[hl]).filter(key => key !== "max").map(key => `${key} (x${highLowStreaks[hl][key as any]})`).join(", ");
+		if (hl === "low") output += "\n\n"
+		output += `${hl}: `;
+		output += Object.keys(highLowStreaks[hl] ?? {}).filter(key => key !== "max").map(key => `${key} (x${highLowStreaks[hl][key as any]})`).join(", ");
 	});
-	output += "```";
+	output += ticks;
 
 	//#endregion
 
