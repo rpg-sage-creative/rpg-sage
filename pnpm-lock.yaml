@@ -24,8 +24,8 @@ importers:
         specifier: github:rpg-sage-creative/core-utils#semver:^1.4.0
         version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/7620ebfa88d4c18768eb6ddf8ff1aa507686782c'
       '@rsc-utils/discord-utils':
-        specifier: file:../discord-utils
-        version: '@rpg-sage-creative/discord-utils@file:../discord-utils'
+        specifier: github:rpg-sage-creative/discord-utils#semver:^1.3.0
+        version: '@rpg-sage-creative/discord-utils@https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/64cfab9e2f1a1b4df046f4ccb9bc110806d93587'
       '@rsc-utils/game-utils':
         specifier: workspace:*
         version: link:packages/game-utils
@@ -67,8 +67,8 @@ importers:
         specifier: github:rpg-sage-creative/core-utils#semver:^1.4.0
         version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/7620ebfa88d4c18768eb6ddf8ff1aa507686782c'
       '@rsc-utils/discord-utils':
-        specifier: file:../../../discord-utils
-        version: '@rpg-sage-creative/discord-utils@file:../discord-utils'
+        specifier: github:rpg-sage-creative/discord-utils#semver:^1.3.0
+        version: '@rpg-sage-creative/discord-utils@https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/64cfab9e2f1a1b4df046f4ccb9bc110806d93587'
       '@rsc-utils/io-utils':
         specifier: github:rpg-sage-creative/io-utils#semver:^1.2.0
         version: '@rpg-sage-creative/io-utils@https://codeload.github.com/rpg-sage-creative/io-utils/tar.gz/9bce7ee331b5d84cb03acfb5408310427ef46c5e'
@@ -410,8 +410,9 @@ packages:
     version: 1.4.2
     hasBin: true
 
-  '@rpg-sage-creative/discord-utils@file:../discord-utils':
-    resolution: {directory: ../discord-utils, type: directory}
+  '@rpg-sage-creative/discord-utils@https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/64cfab9e2f1a1b4df046f4ccb9bc110806d93587':
+    resolution: {tarball: https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/64cfab9e2f1a1b4df046f4ccb9bc110806d93587}
+    version: 1.3.0
 
   '@rpg-sage-creative/id-utils@https://codeload.github.com/rpg-sage-creative/id-utils/tar.gz/9ecaaf5d3316c8588d95024dea9ed2804b85f40a':
     resolution: {tarball: https://codeload.github.com/rpg-sage-creative/id-utils/tar.gz/9ecaaf5d3316c8588d95024dea9ed2804b85f40a}
@@ -1328,7 +1329,7 @@ snapshots:
 
   '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297': {}
 
-  '@rpg-sage-creative/discord-utils@file:../discord-utils':
+  '@rpg-sage-creative/discord-utils@https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/64cfab9e2f1a1b4df046f4ccb9bc110806d93587':
     dependencies:
       '@discordjs/builders': 1.13.1
       '@discordjs/rest': 2.6.0
