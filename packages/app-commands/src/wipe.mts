@@ -1,7 +1,7 @@
+import { getToken } from "@rsc-sage/env";
 import { error, getCodeName, getDataRoot, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
+import { wipeSlashCommands } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
-import { wipeSlashCommands } from "./rest/wipeSlashCommands.js";
-import type { BotCore } from "./types/BotCore.js";
 
 initializeConsoleUtilsByEnvironment();
 
@@ -13,6 +13,8 @@ initializeConsoleUtilsByEnvironment();
 // 		;
 // }
 
+type BotCore = { codeName:string; id:string; };
+
 async function main() {
 	const codeName = getCodeName();
 	const botCore = await findJsonFile(getDataRoot("sage/bots"), { contentFilter:(core: BotCore) => core.codeName === codeName });
@@ -22,7 +24,11 @@ async function main() {
 
 	}else {
 		// remove all slash commands for the bot
-		wipeSlashCommands(botCore);
+		wipeSlashCommands({ appId:botCore.id, appToken:getToken(), codeName });
 	}
 }
-main();
+
+// make sure we don't trigger this with an index.ts include
+if (process.argv[1].endsWith("wipe.mjs")) {
+	main();
+}

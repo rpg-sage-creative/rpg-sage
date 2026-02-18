@@ -1,6 +1,6 @@
-import type { SlashCommand } from "../../../index.js";
+import type { GameSlashCommand } from "@rsc-utils/discord-utils";
 
-export function registerCommand(): SlashCommand {
+export function registerCommand(): GameSlashCommand<"Finder"> {
 	return {
 		game: "Finder",
 		name: "Calendar",

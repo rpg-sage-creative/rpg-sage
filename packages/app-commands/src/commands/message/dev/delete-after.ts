@@ -1,4 +1,4 @@
-import type { MessageCommand } from "../../../index.js";
+import type { MessageCommand } from "@rsc-utils/discord-utils";
 
 export function registerCommand(): MessageCommand {
 	return {

@@ -1,4 +1,4 @@
-import type { SlashCommand } from "../../index.js";
+import type { SlashCommand } from "@rsc-utils/discord-utils";
 
 export function registerCommand(): SlashCommand {
 	return {
