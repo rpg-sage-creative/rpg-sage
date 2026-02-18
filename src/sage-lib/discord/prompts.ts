@@ -65,6 +65,7 @@ type PromptButtonData = {
 	label: string;
 	data?: unknown;
 };
+
 type PromptMessageSentData = {
 	message?: Message;
 	buttons: PromptButtonData[];
@@ -165,6 +166,7 @@ async function handlePrompt(sageInteraction: SageInteraction, results: IsPromptB
 	await resolvePrompt(messageId, customId as Snowflake);
 }
 
+/** Registers the event/interaction handlers for all prompt related logic: prompt(), confirm(), discordPromptYesNo() */
 export function registerPromptHandler(): void {
 	registerInteractionListener(isPromptButton, handlePrompt)
 }

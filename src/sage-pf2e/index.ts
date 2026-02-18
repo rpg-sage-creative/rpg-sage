@@ -71,7 +71,7 @@ export * from "./weather/weather.js";
 
 export * from "./common.js";
 
-export function registerAndLoad(): Promise<void> {
+export function registerAndLoadPf2eData(): Promise<void> {
 	registerBaseObjects();
 	registerBestiaryObjects();
 	registerObjects();
