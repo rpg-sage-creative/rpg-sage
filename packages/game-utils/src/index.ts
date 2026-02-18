@@ -4,7 +4,6 @@ export * from "./currency/index.js";
 export * from "./deck/index.js";
 export * from "./dialog/index.js";
 export * from "./dice/index.js";
-export * from "./map/index.js";
 export * from "./postCurrency/index.js";
 export * from "./systems/index.js";
 export * from "./tables/index.js";

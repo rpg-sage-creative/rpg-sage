@@ -1,5 +1,5 @@
 import { getPort, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
-import { RenderableMap } from "@rsc-utils/game-utils";
+import { RenderableMap } from "@rsc-utils/map-utils";
 
 initializeConsoleUtilsByEnvironment();
 RenderableMap.startServer(getPort("Map"));

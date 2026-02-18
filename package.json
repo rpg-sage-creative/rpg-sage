@@ -76,6 +76,7 @@
 		"@rsc-utils/discord-utils": "github:rpg-sage-creative/discord-utils#semver:^1.2.0",
 		"@rsc-utils/game-utils": "workspace:*",
 		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.2.0",
+		"@rsc-utils/map-utils": "workspace:*",
 		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.1",
 		"discord.js": "^14.25.1",
 		"regex": "^6.1.0"

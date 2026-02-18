@@ -18,6 +18,7 @@
 	],
 	"references": [
 		{ "path": "./packages/game-utils" },
+		{ "path": "./packages/map-utils" },
 		{ "path": "./packages/sage-types" },
 		{ "path": "./packages/sage-env" },
 		{ "path": "./packages/sage-localization" },
