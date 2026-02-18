@@ -127,6 +127,46 @@ type ValidateAuthorArgs = {
 
 type ValidateUserArgs = ValidateActorArgs | ValidateAuthorArgs;
 
+type FetchErrorArgs = { discord?:DUser; guild?:Guild; validationErrors:string[]; };
+type AppendErrorArgs = { discord?:DUser; err:unknown; fetchNotes:string, guild?:Guild; validationErrors:string[]; };
+const AppendErrorUserErrors: Record<string|number, string> = { 10007:"Unknown Member", 10013:"Unknown User" };
+function appendFetchError({ discord, err, fetchNotes, guild, validationErrors }: AppendErrorArgs): undefined {
+	validationErrors.push(`Error Validating User (SageEventCache.ts -> validateUser)`);
+	validationErrors.push(`${BULLET} ${fetchNotes}`);
+	if (discord) {
+		validationErrors.push(`${BULLET} discord = ${discord.id} (${toHumanReadable(discord)})`);
+	}
+	if (guild) {
+		validationErrors.push(`${BULLET} guild = ${guild.id} (${guild.name})`);
+	}
+	if (isDiscordApiError(err, 10007, 10013)) {
+		const errName = AppendErrorUserErrors[err.code];
+		validationErrors.push(`${BULLET} DiscordApiError ${err.code} (${errName})`)
+	}else if (isErrorLike(err)) {
+		validationErrors.push(`${BULLET} ${err.name ?? "NoName"}: ${err.message ?? "NoMessage"}`);
+	}else if (err) {
+		validationErrors.push(`${BULLET} ${stringifyJson(err)}`);
+	}
+	return undefined;
+}
+function sendErrors(validationErrors: string[]): void {
+	if (validationErrors.length > 0) {
+		error(validationErrors.join("\n"));
+	}
+}
+
+type CanBePartial<Type> = Type & { fetch:() => Promise<Type>; id:string; partial:boolean; };
+type NotPartial<Type> = Type & { partial:false; };
+async function fetchIfPartial<T extends CanBePartial<any>>(object: T, fetchNotes: string, errArgs: FetchErrorArgs): Promise<NotPartial<T>>;
+async function fetchIfPartial<T extends CanBePartial<any>>(object: T | undefined, fetchNotes: string, errArgs: FetchErrorArgs): Promise<NotPartial<T> | undefined>;
+async function fetchIfPartial<T, U extends CanBePartial<T>>(object: U | undefined, fetchNotes: string, errArgs: FetchErrorArgs): Promise<NotPartial<T> | undefined> {
+	/** @todo determine if there is some other way to tell if we have an incomplete object that could be causing errors with these fetches. */
+	if (object?.partial) {
+		return object.fetch().catch(err => appendFetchError({ ...errArgs, err, fetchNotes })) as Promise<NotPartial<T> | undefined>;
+	}
+	return object as NotPartial<T> | undefined;
+}
+
 async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateUserArgs): Promise<SageEventCacheUser> {
 	const { which, actorOrPartial, authorOrPartial, messageOrPartial, reactionOrPartial } = validateUserArgs;
 
@@ -134,51 +174,29 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 	let guild: Guild | undefined;
 
 	const validationErrors: string[] = [];
-	const appendError = (action: string, err: unknown) => {
-		validationErrors.push(`Error Validating User (SageEventCache.ts -> validateUser)`);
-		validationErrors.push(`${BULLET} ${action}`);
-		if (discord) {
-			validationErrors.push(`${BULLET} discord = ${discord.id} (${toHumanReadable(discord)})`);
-		}
-		if (guild) {
-			validationErrors.push(`${BULLET} guild = ${guild.id} (${guild.name})`);
-		}
-		if (isDiscordApiError(err, 10007, 10013)) {
-			const errName = {10007:"Unknown Member",10013:"Unknown User"}[err.code];
-			validationErrors.push(`${BULLET} DiscordApiError ${err.code} (${errName})`)
-		}else if (isErrorLike(err)) {
-			validationErrors.push(`${BULLET} ${err.name ?? "NoName"}: ${err.message ?? "NoMessage"}`);
-		}else if (err) {
-			validationErrors.push(`${BULLET} ${stringifyJson(err)}`);
-		}
-		return undefined;
-	};
-	const sendErrors = () => {
-		if (validationErrors.length > 0) {
-			error(validationErrors.join("\n"));
-		}
-	};
 
 	// try fetching the discord user object
-	discord = await (actorOrPartial ?? authorOrPartial)?.fetch().catch(err => appendError(`discord = await (actorOrPartial ?? authorOrPartial)?.fetch()`, err));
+	discord = actorOrPartial
+		? await fetchIfPartial(actorOrPartial, "discord = fetchIfPartial(actorOrPartial)", { discord, guild, validationErrors })
+		: await fetchIfPartial(authorOrPartial, "discord = fetchIfPartial(authorOrPartial)", { discord, guild, validationErrors });
 
 	// actor will always get passed in, author might not if the original was a partial
 	if (!discord && which === "author") {
 		// if we don't have a reaction and have a message, try getting author directly from message
 		if (!reactionOrPartial && messageOrPartial) {
-			const message = await messageOrPartial.fetch().catch(err => appendError(`const message = await messageOrPartial.fetch()`, err));
+			const message = await fetchIfPartial(messageOrPartial, "message = await fetchIfPartial(messageOrPartial)", { discord, guild, validationErrors });
 			discord = message?.author;
 		}
 
 		// still no discord user and we have a reaction, try getting it from reaction's message
 		if (!discord && reactionOrPartial) {
-			const reaction = await reactionOrPartial.fetch().catch(err => appendError(`const reaction = await reactionOrPartial.fetch()`, err));
-			const message = await reaction?.message.fetch().catch(err => appendError(`const message = await reaction?.message.fetch()`, err));
+			const reaction = await fetchIfPartial(reactionOrPartial, "reaction = await fetchIfPartial(reactionOrPartial)", { discord, guild, validationErrors });
+			const message = await fetchIfPartial(reaction?.message, "message = await fetchIfPartial(reaction?.message)", { discord, guild, validationErrors });
 			discord = message?.author;
 		}
 
 		// in case we managed to still have a partial ...
-		discord = await discord?.fetch().catch(err => appendError(`discord = await discord?.fetch()`, err));
+		discord = await fetchIfPartial(discord, `discord = await fetchIfPartial(discord)`, { discord, guild, validationErrors });
 	}
 
 	// we want to always have a sage user object, so pass in nil if we don't have an id
@@ -209,7 +227,7 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 			known: false,
 			sage,
 		};
-		sendErrors();
+		sendErrors(validationErrors);
 		return unknownUser;
 	}
 
@@ -219,11 +237,11 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 
 	// we need a guildmember to check server perms
 	let member: GuildMember | undefined;
-	guild = await evCache.server.discord?.fetch().catch(err => appendError(`guild = await evCache.server.discord?.fetch()`, err));
+	guild = await fetchIfPartial(evCache.server.discord, "guild = await fetchIfPartial(evCache.server.discord)", { discord, guild, validationErrors });
 	if (guild) {
 		// fetch the guild member if it isn't a bot and isn't a system user
 		if (!discord.bot && !discord.system) {
-			member = await guild.members.fetch(id).catch(err => appendError(`member = await guild.members.fetch(id)`, err));
+			member = await guild.members.fetch(id).catch(err => appendFetchError({ discord, err, fetchNotes:"member = await guild.members.fetch(id)", guild, validationErrors }));
 			if (member) {
 				roleIds.push(...member.roles.cache.keys() as MapIterator<Snowflake>);
 			}
@@ -271,7 +289,7 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 		sage,
 		uuid,
 	};
-	sendErrors();
+	sendErrors(validationErrors);
 	return knownUser;
 }
 
