@@ -61,7 +61,7 @@ import type {
 //#region Tokenizer
 
 const E20Parsers = {
-	suffice: /(e|s|\*|up\d+|dn\d+)+/i,
+	suffix: /(e|s|\*|up\d+|dn\d+)+/i,
 	target: /\b(vs\s*dif|dif|vs)\s*(\d+|\|\|\d+\|\|)/i,
 };
 
