@@ -230,18 +230,24 @@ type TSendDiceResults = {
 	countPublic: number;
 	countSecret: number;
 	hasGmChannel: boolean;
+	hasInvalid: boolean;
 	hasSecret: boolean;
 };
-export async function sendDice(sageCommand: SageCommand, outputs: TDiceOutput[]): Promise<TSendDiceResults> {
+export async function sendDice(sageCommand: SageCommand, outputs: TDiceOutput[], ignoreInvalid?: boolean): Promise<TSendDiceResults> {
 	const count = outputs.length,
 		countSecret = outputs.filter(diceRollString => diceRollString.hasSecret).length,
 		countPublic = count - countSecret,
+		hasInvalid = outputs.some(out => out.hasInvalid),
 		hasSecret = countSecret > 0,
 		allSecret = countSecret === count,
 		targetChannel = await ensureTargetChannel(sageCommand),
 		gmTargetChannel = await ensureGmTargetChannel(sageCommand, hasSecret),
 		hasGmChannel = !!gmTargetChannel,
 		formattedOutputs = outputs.map(diceRoll => formatDiceOutput(sageCommand, diceRoll, !gmTargetChannel));
+	if (outputs.some(out => out.hasInvalid) && !ignoreInvalid) {
+		const invalidHelpText = sageCommand.getLocalizer()("DICE_LIMITS_X_X_S", MaxDiceCount, MaxDieSides, sageCommand.server?.getPrefixOrDefault() ?? "sage");
+		formattedOutputs.push({ hasSecret:false, notificationContent:"", postContent:invalidHelpText });
+	}
 	if (sageCommand.dicePostType === DicePostType.MultipleEmbeds || sageCommand.dicePostType === DicePostType.MultiplePosts) {
 		await sendDiceToMultiple(sageCommand, formattedOutputs, targetChannel, gmTargetChannel);
 	}else {
@@ -250,10 +256,7 @@ export async function sendDice(sageCommand: SageCommand, outputs: TDiceOutput[])
 	if (count) {
 		await logPostCurrency(sageCommand, "dice");
 	}
-	if (outputs.some(out => out.hasInvalid)) {
-		await sageCommand.replyStack.whisper(sageCommand.getLocalizer()("DICE_LIMITS_X_X_S", MaxDiceCount, MaxDieSides, sageCommand.server?.getPrefixOrDefault() ?? "sage"));
-	}
-	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasSecret };
+	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasInvalid, hasSecret };
 }
 
 //#endregion
@@ -261,7 +264,6 @@ export async function sendDice(sageCommand: SageCommand, outputs: TDiceOutput[])
 //#endregion
 
 //#region dice
-
 
 //#region Channels
 
@@ -292,7 +294,6 @@ async function ensureGmTargetChannel(sageCommand: SageCommand, hasSecret: boolea
 }
 
 //#endregion
-
 
 //#endregion
 

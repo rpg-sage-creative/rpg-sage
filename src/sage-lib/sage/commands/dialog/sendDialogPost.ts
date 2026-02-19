@@ -1,4 +1,4 @@
-import { errorReturnEmptyArray, errorReturnUndefined, RenderableContent, warnReturnNull, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnEmptyArray, errorReturnUndefined, RenderableContent, warnReturnUndefined, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
 import { AttachmentBuilder, type Message } from "discord.js";
 import type { TDiceOutput } from "../../../../sage-dice/common.js";
@@ -98,9 +98,9 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 	const files: AttachmentBuilder[] = [];
 	if (doAttachment && sageMessage.message.attachments.size) {
 		for (const att of sageMessage.message.attachments.values()) {
-			if (att.contentType?.match(/image/i) && att.url) {
-				const buffer = await getBuffer(att.url).catch(warnReturnNull);
-				if (buffer !== null) {
+			if (att.contentType?.toLowerCase().includes("image") && att.url) {
+				const buffer = await getBuffer(att.url).catch(warnReturnUndefined);
+				if (buffer) {
 					files.push(new AttachmentBuilder(buffer, { name:att.name }));
 				}
 			}
@@ -119,7 +119,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 		//#region dice
 
 		if (diceOutputs.length) {
-			const diceResults = await sendDice(sageMessage, diceOutputs);
+			const diceResults = await sendDice(sageMessage, diceOutputs, true);
 			if (diceResults.allSecret && diceResults.hasGmChannel) {
 				const emoji = sageMessage.getEmoji(EmojiType.Die);
 				if (emoji) {
@@ -132,7 +132,7 @@ export async function sendDialogPost(sageMessage: SageMessage, postData: DialogP
 
 		//#region DialogMessageRepository / lastMessage
 
-		// save all the dialog messages, save last one
+		// write all the dialog messages, save last one
 		const lastMessage = await SageMessageReference.write({
 			characterId: character.id,
 			gameId: sageMessage.game?.id as Snowflake,

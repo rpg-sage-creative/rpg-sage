@@ -255,7 +255,7 @@ const enUS = {
 	//#endregion
 
 	//#region dice limits and test tool
-	"DICE_LIMITS_X_X_S": `RPG Sage limits dice rolls to #{0}d#{1} to avoid wasted processing.\n\nIf you were rolling more dice than that legitimately, please let us know what game system you are playing at: https://discord.gg/rpgsage.\n\nIf you were simply try to "reset the RNG", then we have a tool for that you can use that <i>also</i> provides some interesting stats about the distribution of rolls.\n\`\`\`#{2}! dice test sides="20"\`\`\`\n<i>Valid values for sides are: 2, 3, 4, 6, 8, 10, 12, 20</i>`,
+	"DICE_LIMITS_X_X_S": `## RPG Sage Dice Limits\nRPG Sage limits dice rolls to #{0}d#{1} to avoid wasted processing.\n\nIf you were rolling more dice than that legitimately, please let us know what game system you are playing at: https://discord.gg/rpgsage.\n\nIf you were simply try to "reset the RNG", then we have a tool for that you can use that *also* provides some interesting stats about the distribution of rolls.\n\`\`\`#{2}! dice test sides="20"\`\`\`\n*Valid values for sides are: 2, 3, 4, 6, 8, 10, 12, 20*`,
 	//#endregion
 };
 
