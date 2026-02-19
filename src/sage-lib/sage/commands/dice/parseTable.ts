@@ -1,9 +1,11 @@
 import { normalizeDashes, unwrap, type TypedRegExp } from "@rsc-utils/core-utils";
 import type { SimpleRollableTable, SimpleRollableTableItem } from "./SimpleRollableTable.js";
 
+const NotNumberNotDashRegExpG = /[^\d-]/g;
+
 /** Parse the number cell for min/max. */
 function cellToMinMax(cell?: string): [number, number] | undefined {
-	const strings = cell?.replace(/[^\d-]/g, "").split("-") ?? [];
+	const strings = cell?.replace(NotNumberNotDashRegExpG, "").split("-") ?? [];
 	if (strings.length < 1 || strings.length > 2) {
 		return undefined;
 	}
@@ -17,18 +19,20 @@ function cellToMinMax(cell?: string): [number, number] | undefined {
 	return [min, max];
 }
 
+// [_match, minMaxCell, textCell, ...childrenCells]
+const LineRegExp = /^(\d+(?:\s*-\s*\d+)?)\s+(.*?)$/;
+
 /** Parses each line, either by tabs or by simply grabbing the numbers from the front of the line */
 function lineToTableItem(line: string): SimpleRollableTableItem | undefined {
 	let cells: string[];
 
 	// split on tabs for TSV
 	if (line.includes("\t")) {
-		cells = line.trim().split(/\t/);
+		cells = line.trim().split("\t");
 
 	// use regex to split number(s) from the start of the line
 	}else {
-		const lineRegex = /^(\d+(?:\s*-\s*\d+)?)\s+(.*?)$/;
-		cells = (lineRegex.exec(line.trim()) ?? []).slice(1);
+		cells = (LineRegExp.exec(line.trim()) ?? []).slice(1);
 	}
 
 	const text = cells[1]?.trim();
@@ -55,7 +59,7 @@ type ParsedTable = SimpleRollableTable & {
 };
 
 type ParseTableRegExpGroups = { times?:`${number}`; size?:"xxs"|"xs"|"s"; content:string; };
-const ParseTableRegExp = /^(?<times>\d+)?(?<size>xxs|xs|s)?#(?<content>(?:.|\n)*?$)/i as TypedRegExp<ParseTableRegExpGroups>;
+const ParseTableRegExp = (/^(?<times>\d+)?(?<size>xxs|xs|s)?#(?<content>(?:.|\n)*?$)/i) as TypedRegExp<ParseTableRegExpGroups>;
 
 /**
  * Parses a table from the given input.
