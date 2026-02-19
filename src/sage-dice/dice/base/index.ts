@@ -395,13 +395,20 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 	//#endregion
 
 	//#region calculated
+	/** The sum of the dice rolled after processing DropKeep data. */
+	public get rollTotal(): number {
+		return sumDropKeep(this.rolls, this.dice.dropKeep);
+	}
+	/** The total value of the dice. sign * (modifier + rollTotal) */
 	public get total(): number {
 		const mult = this.sign === "-" ? -1 : 1;
-		return mult * (this.dice.modifier + sumDropKeep(this.rolls, this.dice.dropKeep));
+		return mult * (this.dice.modifier + this.rollTotal);
 	}
 	//#endregion
 
 	//#region flags
+	/** Dice outside the valid range return 0 even when their count and sides aren't 0. */
+	public get isInvalid(): boolean { return this.rollTotal === 0 && this.dice.count !== 0 && this.dice.sides !== 0; }
 	public get isMax(): boolean { return this.total === this.dice.max; }
 	public get isMin(): boolean { return this.total === this.dice.min; }
 	//#endregion
@@ -510,7 +517,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 	//#endregion
 
 	//#region IHasDieCore
-	public get hasSecret(): boolean { return this.diceParts.find(dicePart => dicePart.hasSecret) !== undefined; }
+	public get hasSecret(): boolean { return this.diceParts.some(dicePart => dicePart.hasSecret); }
 	//#endregion
 
 	//#region DiceBase
@@ -580,6 +587,9 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			this._dice = <U>fromCore(this.core.dice);
 		}
 		return this._dice;
+	}
+	public get hasInvalid(): boolean {
+		return this.rolls.some(dicePartRoll => dicePartRoll.isInvalid);
 	}
 	public get hasSecret(): boolean {
 		return this.dice.hasSecret;
@@ -799,6 +809,10 @@ export class DiceGroupRoll<T extends DiceGroupRollCore, U extends TDiceGroup, V 
 			this._dice = <U>fromCore(this.core.diceGroup);
 		}
 		return this._dice;
+	}
+
+	public get hasInvalid(): boolean {
+		return this.rolls.some(diceRoll => diceRoll.hasInvalid);
 	}
 
 	public get hasSecret(): boolean {

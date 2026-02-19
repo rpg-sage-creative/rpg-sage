@@ -2,6 +2,7 @@ import { DiceOutputType, DicePostType } from "@rsc-sage/types";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
 import { BasicBracketsRegExpG, createBasicBracketsRegExpG, DiceCriticalMethodType, DiceSecretMethodType, doStatMath, isMath, isRandomItem, processDiceMacroCall, type DiceMacroBase, type GameSystemType, type MacroBase } from "@rsc-utils/game-utils";
+import { MaxDiceCount, MaxDieSides } from "@rsc-utils/random-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
 import { registerMessageListener } from "../../discord/handlers.js";
@@ -248,6 +249,9 @@ export async function sendDice(sageCommand: SageCommand, outputs: TDiceOutput[])
 	}
 	if (count) {
 		await logPostCurrency(sageCommand, "dice");
+	}
+	if (outputs.some(out => out.hasInvalid)) {
+		await sageCommand.replyStack.whisper(sageCommand.getLocalizer()("DICE_LIMITS_X_X_S", MaxDiceCount, MaxDieSides, sageCommand.server?.getPrefixOrDefault() ?? "sage"));
 	}
 	return { allSecret, count, countPublic, countSecret, hasGmChannel, hasSecret };
 }

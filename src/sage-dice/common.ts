@@ -171,6 +171,7 @@ export function gradeRoll(roll: TDiceRoll): DieRollGrade {
 export type TDiceLiteral = `${number}d${number}` | `${number}d${number}+${number}` | `${number}d${number}-${number}`;
 
 export type TDiceOutput = {
+	hasInvalid: boolean;
 	hasSecret: boolean;
 	inlineOutput: string;
 	input: string,

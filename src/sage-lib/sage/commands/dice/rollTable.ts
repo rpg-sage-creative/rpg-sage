@@ -1,5 +1,5 @@
 import { unwrap } from "@rsc-utils/core-utils";
-import { randomInt } from "node:crypto";
+import { randomInt } from "@rsc-utils/random-utils";
 import type { TDiceOutput } from "../../../../sage-dice/index.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { SimpleRollableTable } from "./SimpleRollableTable.js";
@@ -13,11 +13,12 @@ type _Options = {
 };
 
 function _rollTable(table: SimpleRollableTable, options: _Options): TableOutput | undefined {
-	const roll = randomInt(table.min, table.max + 1);
+	const roll = randomInt(table.min, table.max);
 	const item = table.items.find(item => item.min <= roll && roll <= item.max);
 	if (item) {
 		const result = ["xxs","xs","s"].includes(options.size ?? "") ? item.text : `<b>${roll}</b> - ${item.text}`;
 		return {
+			hasInvalid: false,
 			hasSecret: false,
 			inlineOutput: result,
 			input: options.input,

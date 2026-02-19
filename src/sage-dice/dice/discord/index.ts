@@ -328,6 +328,7 @@ export class DiscordDiceRoll extends HasCore<DiscordDiceRollCore> {
 				? `${roll.dice.toString()}\n${roll.toString(outputType, diceSort)}`
 				: roll.toString(outputType, diceSort);
 			return {
+				hasInvalid: roll.hasInvalid,
 				hasSecret: roll.hasSecret,
 				inlineOutput: roll.toString(outputType),
 				input: roll.dice.toString(),

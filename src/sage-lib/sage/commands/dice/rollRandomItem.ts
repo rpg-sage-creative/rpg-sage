@@ -1,5 +1,5 @@
 import type { TypedRegExp } from "@rsc-utils/core-utils";
-import { randomItem } from "@rsc-utils/random-utils";
+import { randomItems } from "@rsc-utils/random-utils";
 import { regex } from "regex";
 import type { TDiceOutput } from "../../../../sage-dice/index.js";
 import type { SageCommand } from "../../model/SageCommand.js";
@@ -48,30 +48,25 @@ export function rollRandomItem(_: SageCommand, input: string): TDiceOutput[] {
 	if (!match) return [];
 
 	const { number = 1, prefix, prefixLower = prefix?.toLowerCase(), content } = match.groups;
-	const count = +number || 1;
+	const count = +number;
 	const hasSecret = prefixLower?.includes("gm") === true;
 	const sort = prefixLower?.includes("s");
 	const unique = prefixLower?.includes("u");
 	const verbose = prefixLower?.includes("v");
 	const options = content.split(",").map(s => s.trim());
 
-	const selections: string[] = [];
-	const total = (unique ? Math.min(options.length, count) : count);
-	do {
-		const random = randomItem(options)!;
-		if (!unique || !selections.includes(random)) {
-			selections.push(random);
-		}
-	} while (selections.length < total && options.find(option => !selections.includes(option)));
+	const selections = randomItems(options, count, { unique });
 
 	if (sort) {
 		selections.sort();
 	}
 
-	const output = `${selections.join(", ")} \u27f5 ${input}`;
+	const results = selections.length ? selections.join(", ") : "Ø"
+	const output = `${results} \u27f5 ${input}`;
 	const inlineOutput = verbose ? output : selections.join(", ");
 
 	return [{
+		hasInvalid: count > 0 && options.length > 0 && !selections.length,
 		hasSecret,
 		inlineOutput,
 		input: input,

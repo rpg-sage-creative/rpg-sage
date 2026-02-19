@@ -200,6 +200,7 @@ const enUS = {
 	"WE_TRIED_TO_DM_YOU": `We tried to DM this alert to you, but were unable to.`,
 
 	"WARNING_CANNOT_BE_UNDONE": `Warning, this action cannot be undone!`,
+
 	//#region map specific
 	"REPLY_TO_MAP_TO_MOVE": `Please reply to the map you wish to move your token on.`,
 	"REPLY_TO_MAP_TO_ACTIVATE": `Please reply to the map you wish to set your active token for.`,
@@ -251,6 +252,10 @@ const enUS = {
 	"CANNOT_FIND_WEBHOOK": `Unable to find webhook; Sage may not have access to post in this channel/thread.`,
 	"YOU_EDITED_S_DIALOG": 'You edited: #{0}\nThe original content has been attached to this message.\nTo stop receiving these messages, reply to this message with:```sage! user update dmOnEdit=false```',
 	"INVALID_DIALOG_EDIT": `The content you were trying to post was invalid in some way, likely too long.`,
+	//#endregion
+
+	//#region dice limits and test tool
+	"DICE_LIMITS_X_X_S": `RPG Sage limits dice rolls to #{0}d#{1} to avoid wasted processing.\n\nIf you were rolling more dice than that legitimately, please let us know what game system you are playing at: https://discord.gg/rpgsage.\n\nIf you were simply try to "reset the RNG", then we have a tool for that you can use that <i>also</i> provides some interesting stats about the distribution of rolls.\n\`\`\`#{2}! dice test sides="20"\`\`\`\n<i>Valid values for sides are: 2, 3, 4, 6, 8, 10, 12, 20</i>`,
 	//#endregion
 };
 

@@ -11,6 +11,7 @@ import type { SageCommand } from "../../model/SageCommand.js";
 export function rollMath(_: SageCommand, input: string): TDiceOutput[] {
 	const result = processMath(input) ?? "INVALID!";
 	return [{
+		hasInvalid: result === "INVALID!",
 		hasSecret: false,
 		inlineOutput: result,
 		input: input,
