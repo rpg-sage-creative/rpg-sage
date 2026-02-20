@@ -1,10 +1,9 @@
-import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType, type DiceCriticalMethodType } from "@rsc-sage/data-layer";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType, type DiceCriticalMethodType, type SageChannel } from "@rsc-sage/data-layer";
 import type { LocalizedTextKey } from "@rsc-sage/localization";
 import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import type { DiscordCache, EmbedBuilder, SupportedInteraction, SupportedRepliableInteraction } from "@rsc-utils/discord-utils";
 import { ComponentType, InteractionType, Message, PartialGroupDMChannel, type ActionRowBuilder, type AttachmentBuilder, type ButtonBuilder, type HexColorString, type If, type StringSelectMenuBuilder, type TextBasedChannel } from "discord.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
-import type { IChannel } from "../repo/base/IdRepository.js";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
@@ -352,7 +351,7 @@ export abstract class SageCommand<
 	}
 
 	/** Returns the gameChannel meta, or the serverChannel meta if no gameChannel exists. */
-	public get channel(): IChannel | undefined {
+	public get channel(): SageChannel | undefined {
 		return this.cache.getOrSet("channel", () => {
 			debug(`caching sageCommand.channel ${this.dChannel?.id}`);
 			return this.gameChannel ?? this.serverChannel;
@@ -360,7 +359,7 @@ export abstract class SageCommand<
 	}
 
 	/** Returns the gameChannel meta for the message, checking the thread before checking its channel. */
-	public get gameChannel(): IChannel | undefined {
+	public get gameChannel(): SageChannel | undefined {
 		return this.cache.getOrSet("gameChannel", () =>
 			this.game?.getChannel(this.threadDid)
 			?? this.game?.getChannel(this.channelDid)
@@ -368,7 +367,7 @@ export abstract class SageCommand<
 	}
 
 	/** Returns the serverChannel meta for the message, checking the thread before checking its channel. */
-	public get serverChannel(): IChannel | undefined {
+	public get serverChannel(): SageChannel | undefined {
 		return this.cache.getOrSet("serverChannel", () =>
 			this.server?.getChannel(this.threadDid)
 			?? this.server?.getChannel(this.channelDid)

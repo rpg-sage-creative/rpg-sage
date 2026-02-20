@@ -5,7 +5,7 @@ import { Server, type ServerCore } from "../../model/Server.js";
 import { User, type UserCore } from "../../model/User.js";
 import { globalCacheFind, globalCacheGet, globalCachePut, globalCacheRead, type GameCacheItem } from "./globalCache.js";
 
-export { DialogPostType as DialogType, type SageChannel as IChannel } from "@rsc-sage/data-layer";
+export { DialogPostType as DialogType } from "@rsc-sage/data-layer";
 
 type IdType = Snowflake | UUID;
 
