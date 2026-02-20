@@ -1,5 +1,4 @@
-import { DialogDiceBehaviorType } from "@rsc-sage/data-layer";
-import { DialogPostType } from "@rsc-sage/types";
+import { DialogDiceBehaviorType, DialogPostType } from "@rsc-sage/data-layer";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../../../model/SageCommand.js";

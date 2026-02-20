@@ -1,4 +1,4 @@
-import { DialogPostType } from "@rsc-sage/types";
+import { DialogPostType } from "@rsc-sage/data-layer";
 import { parseIds, toChannelMention, toUserMention } from "@rsc-utils/discord-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";

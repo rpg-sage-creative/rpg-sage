@@ -1,4 +1,4 @@
-import { DialogPostType, type SageChannel } from "@rsc-sage/types";
+import { DialogPostType, type SageChannel } from "@rsc-sage/data-layer";
 import { debug, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable, type SupportedTextChannel } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type SelectMenuComponentOptionData } from "discord.js";

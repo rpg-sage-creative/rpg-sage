@@ -1,5 +1,5 @@
-import { type GameOptions, type SageChannel } from "@rsc-sage/types";
-import { applyChanges, randomSnowflake, type UUID, type Snowflake } from "@rsc-utils/core-utils";
+import { type GameOptions, type SageChannel } from "@rsc-sage/data-layer";
+import { applyChanges, randomSnowflake, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { Game, type GameUserData } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";

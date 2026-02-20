@@ -1,7 +1,6 @@
-import { type DialogOptions, DialogPostType, type DiceOptions, DiceOutputType, DicePostType, DiceSortType, type GameOptions, type GameSystemOptions, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions } from "@rsc-sage/types";
+import { type DialogOptions, DialogPostType, DiceCriticalMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, type GameOptions, type GameSystemOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions } from "@rsc-sage/data-layer";
 import { type Args, Color, type EnumLike, type HexColorString, isDefined, isEmpty, isSnowflake, isUuid, type Optional, type Snowflake, unwrap, type UUID } from "@rsc-utils/core-utils";
 import { parseIds, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
-import { DiceCriticalMethodType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
 import { isUrl, type VALID_URL } from "@rsc-utils/io-utils";
 import type { Attachment, Role, User } from "discord.js";
 import { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";

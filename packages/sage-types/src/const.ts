@@ -1,1 +1,0 @@
-export { DEFAULT_GM_CHARACTER_NAME } from "@rsc-sage/data-layer";

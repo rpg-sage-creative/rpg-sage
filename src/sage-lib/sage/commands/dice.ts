@@ -1,4 +1,4 @@
-import { DiceOutputType, DicePostType } from "@rsc-sage/types";
+import { DiceOutputType, DicePostType } from "@rsc-sage/data-layer";
 import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
 import { BasicBracketsRegExpG, createBasicBracketsRegExpG, DiceCriticalMethodType, DiceSecretMethodType, doStatMath, isMath, isRandomItem, processDiceMacroCall, type DiceMacroBase, type GameSystemType, type MacroBase } from "@rsc-utils/game-utils";

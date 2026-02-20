@@ -1,4 +1,4 @@
-import { parseEnum } from "@rsc-sage/types";
+import { parseEnum } from "@rsc-sage/data-layer";
 import { nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent } from "@rsc-utils/discord-utils";
 import { GameSystemType } from "@rsc-utils/game-utils";

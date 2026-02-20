@@ -1,5 +1,4 @@
-import { DicePostType } from "@rsc-sage/types";
-import { DiceSecretMethodType } from "@rsc-utils/game-utils";
+import { DicePostType, DiceSecretMethodType } from "@rsc-sage/data-layer";
 import type { TDiceOutput } from "../../../../sage-dice/index.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { FormattedDiceOutput } from "./FormattedDiceOutput.js";

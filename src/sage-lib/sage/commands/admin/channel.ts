@@ -1,7 +1,6 @@
-import { DialogPostType, DicePostType, DiceSortType, SageChannelType, type SageChannel } from "@rsc-sage/types";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, getCriticalMethodText, parseGameSystem, SageChannelType, type SageChannel } from "@rsc-sage/data-layer";
 import { isDefined, mapAsync, stringifyJson, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, isSupportedTarget, toChannelMention } from "@rsc-utils/discord-utils";
-import { DiceOutputType, DiceSecretMethodType, GameSystemType, getCriticalMethodText, parseGameSystem } from "@rsc-utils/game-utils";
 import { GuildChannel } from "discord.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Game } from "../../model/Game.js";

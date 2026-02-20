@@ -20,9 +20,6 @@ importers:
       '@rsc-sage/localization':
         specifier: workspace:*
         version: link:packages/sage-localization
-      '@rsc-sage/types':
-        specifier: workspace:*
-        version: link:packages/sage-types
       '@rsc-utils/core-utils':
         specifier: github:rpg-sage-creative/core-utils#semver:^1.4.0
         version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/7620ebfa88d4c18768eb6ddf8ff1aa507686782c'
@@ -143,16 +140,6 @@ importers:
       '@rsc-utils/core-utils':
         specifier: github:rpg-sage-creative/core-utils#semver:^1.4.0
         version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/7620ebfa88d4c18768eb6ddf8ff1aa507686782c'
-    devDependencies:
-      '@rsc-utils/dev-scripts':
-        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
-        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
-
-  packages/sage-types:
-    dependencies:
-      '@rsc-sage/data-layer':
-        specifier: workspace:*
-        version: link:../data-layer
     devDependencies:
       '@rsc-utils/dev-scripts':
         specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
