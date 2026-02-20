@@ -1,8 +1,8 @@
-import { error, RenderableContent, warn, warnReturnNull, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { DialogPostType } from "@rsc-sage/data-layer";
+import { error, RenderableContent, warn, warnReturnUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { addInvalidWebhookUsername, DiscordKey, isMessage, isUser, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedTarget } from "@rsc-utils/discord-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
-import { DialogType } from "../sage/repo/base/IdRepository.js";
 import { SageMessageReference } from "../sage/repo/SageMessageReference.js";
 import { createMessageEmbed } from "./createMessageEmbed.js";
 import { deleteMessage, deleteMessages } from "./deletedMessages.js";
@@ -35,7 +35,7 @@ export type AuthorOptions = {
 
 type WebhookOptions = {
 	authorOptions: AuthorOptions;
-	dialogType: DialogType;
+	dialogType: DialogPostType;
 	files?: AttachmentResolvable[];
 	renderableContent: RenderableContentResolvable;
 	sageCache: SageCache;
@@ -64,8 +64,8 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 	}
 
 	const embeds = sageCache.resolveToEmbeds(renderableContent);
-	const contentToEmbeds = dialogType === DialogType.Embed;
-	const embedsToContent = dialogType === DialogType.Post;
+	const contentToEmbeds = dialogType === DialogPostType.Embed;
+	const embedsToContent = dialogType === DialogPostType.Post;
 	// const content = dialogType === DialogType.Post ? resolveToTexts(sageCache.cloneForChannel(targetChannel), renderableContent).join("\n") : undefined;
 	// const embeds = dialogType === DialogType.Embed ? sageCache.cloneForChannel(targetChannel).resolveToEmbeds(renderableContent) : [];
 	// const messages = await sendWebhookAndReturnMessages(webhook, { content, embeds, files, threadId, ...authorOptions });
@@ -115,8 +115,8 @@ export async function replaceWebhook(originalMessage: SMessageOrPartial, webhook
 		embeds.length = 0;
 	}
 
-	const contentToEmbeds = dialogType === DialogType.Embed;
-	const embedsToContent = dialogType === DialogType.Post;
+	const contentToEmbeds = dialogType === DialogPostType.Embed;
+	const embedsToContent = dialogType === DialogPostType.Post;
 
 	const threadId = originalMessage.channel.isThread() ? originalMessage.channel.id as Snowflake : undefined;
 
@@ -277,7 +277,7 @@ function sendAndAwaitReactions(sageCache: SageCache, menuRenderable: IMenuRender
 		for (let index = 0; index < menuLength; index++) {
 			let emoji: string;
 			if (!deleted && (emoji = unicodeArray[index])) {
-				const reaction = await lastMessage.react(emoji).catch(warnReturnNull);
+				const reaction = await lastMessage.react(emoji).catch(warnReturnUndefined);
 				if (reaction) {
 					reactions.push(reaction);
 				}

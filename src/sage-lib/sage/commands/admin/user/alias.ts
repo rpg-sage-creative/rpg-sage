@@ -1,10 +1,9 @@
-import type { Alias } from "@rsc-sage/data-layer";
+import { DialogPostType, type Alias } from "@rsc-sage/data-layer";
 import { isNotBlank } from "@rsc-utils/core-utils";
 import { parseDialogContent, type DialogContent } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
 function testGmTarget(sageMessage: SageMessage, dialogContent: DialogContent): boolean {
@@ -76,7 +75,7 @@ function dialogContentToTarget(dialogContent: DialogContent, separator = "::"): 
 		dialogContent.embedImageUrl,
 		dialogContent.dialogImageUrl ? `dialog=${dialogContent.dialogImageUrl}` : undefined,
 		dialogContent.embedColor,
-		DialogType[dialogContent.postType!],
+		DialogPostType[dialogContent.postType!],
 	];
 	// only valid parts
 	const filteredParts = baseParts.filter(isNotBlank);

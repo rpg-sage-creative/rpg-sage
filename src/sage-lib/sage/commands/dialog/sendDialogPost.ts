@@ -1,4 +1,4 @@
-import { DialogDiceBehaviorType } from "@rsc-sage/data-layer";
+import { DialogDiceBehaviorType, DialogPostType } from "@rsc-sage/data-layer";
 import { errorReturnEmptyArray, errorReturnUndefined, RenderableContent, warnReturnUndefined, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
 import { AttachmentBuilder, type Message } from "discord.js";
@@ -7,7 +7,6 @@ import type { GameCharacter } from "../../model/GameCharacter.js";
 import type { ColorType } from "../../model/HasColorsCore.js";
 import { EmojiType } from "../../model/HasEmojiCore.js";
 import type { SageMessage } from "../../model/SageMessage.js";
-import type { DialogType } from "../../repo/base/IdRepository.js";
 import { SageMessageReference } from "../../repo/SageMessageReference.js";
 import { logPostCurrency } from "../admin/PostCurrency.js";
 import { parseDiceMatches, sendDice, type TDiceMatch } from "../dice.js";
@@ -23,7 +22,7 @@ type DialogPostData = {
 	dialogImageUrl?: string;
 	embedColor?: HexColorString;
 	embedImageUrl?: string;
-	postType?: DialogType;
+	postType?: DialogPostType;
 	title?: string;
 };
 

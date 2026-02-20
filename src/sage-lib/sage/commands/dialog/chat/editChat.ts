@@ -1,3 +1,4 @@
+import { DialogPostType } from "@rsc-sage/data-layer";
 import { error, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
 import type { DialogContent } from "@rsc-utils/game-utils";
@@ -5,7 +6,6 @@ import { AttachmentBuilder } from "discord.js";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { includeDeleteButton } from "../../../model/utils/deleteButton.js";
-import { DialogType } from "../../../repo/base/IdRepository.js";
 import { SageMessageReference } from "../../../repo/SageMessageReference.js";
 import { updateEmbed } from "../updateEmbed.js";
 import { DialogProcessor } from "./DialogProcessor.js";
@@ -59,11 +59,11 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 
 	const msgOptions = { embeds:[updatedEmbed], threadId };
 
-	const postType = dialogContent.postType ?? (embed ? DialogType.Embed : DialogType.Post);
+	const postType = dialogContent.postType ?? (embed ? DialogPostType.Embed : DialogPostType.Post);
 	const splitOptions = {
 		blankContentValue: ZERO_WIDTH_SPACE,
-		contentToEmbeds: postType === DialogType.Embed,
-		embedsToContent: postType === DialogType.Post
+		contentToEmbeds: postType === DialogPostType.Embed,
+		embedsToContent: postType === DialogPostType.Post
 	};
 
 	const payloads = splitMessageOptions(msgOptions, splitOptions);

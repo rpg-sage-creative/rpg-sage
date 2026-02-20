@@ -1,3 +1,4 @@
+import type { DialogPostType } from "@rsc-sage/data-layer";
 import { getLocalizedText } from "@rsc-sage/localization";
 import { errorReturnEmptyArray, type RenderableContent } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
@@ -6,11 +7,10 @@ import { replaceWebhook, sendWebhook, type AuthorOptions } from "../../../discor
 import type { AttachmentResolvable } from "../../../discord/sendTo.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { includeDeleteButton } from "../../model/utils/deleteButton.js";
-import type { DialogType } from "../../repo/base/IdRepository.js";
 
 type DialogRenderableOptions = {
 	authorOptions: AuthorOptions;
-	dialogTypeOverride?: DialogType;
+	dialogTypeOverride?: DialogPostType;
 	files?: AttachmentResolvable[];
 	renderableContent: RenderableContent;
 	sageMessage: SageMessage;

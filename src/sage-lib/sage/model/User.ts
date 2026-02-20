@@ -1,9 +1,8 @@
-import { ensureSageUserCore, type Alias, type DialogDiceBehaviorType, type SageUserCore } from "@rsc-sage/data-layer";
+import { DialogPostType, ensureSageUserCore, type Alias, type DialogDiceBehaviorType, type SageUserCore } from "@rsc-sage/data-layer";
 import { isSuperAdminId, isSuperUserId } from "@rsc-sage/env";
 import { applyChanges, stringOrUndefined, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
-import type { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
 import { NamedCollection } from "./NamedCollection.js";
@@ -27,12 +26,12 @@ function updateCore(core: UserCore): UserCore {
 
 type UpdateArgs = Args<{
 	dialogDiceBehaviorType: DialogDiceBehaviorType;
-	dialogPostType: DialogType;
+	dialogPostType: DialogPostType;
 	dmOnDelete: boolean;
 	dmOnEdit: boolean;
 	mentionPrefix: string;
 	moveDirectionOutputType: MoveDirectionOutputType;
-	sagePostType: DialogType;
+	sagePostType: DialogPostType;
 	confirmationPrompts: boolean;
 	forceConfirmationFlag: string;
 	skipConfirmationFlag: string;
@@ -65,14 +64,14 @@ export class User extends HasSageCacheCore<UserCore> {
 	//#region settings
 
 	/** @deprecated use .dialogPostType */
-	public get defaultDialogType(): DialogType | undefined { return this.dialogPostType; }
+	public get defaultDialogType(): DialogPostType | undefined { return this.dialogPostType; }
 
 	/** @deprecated use .sagePostType */
-	public get defaultSagePostType(): DialogType | undefined { return this.sagePostType; }
+	public get defaultSagePostType(): DialogPostType | undefined { return this.sagePostType; }
 
 	public get dialogDiceBehaviorType() { return this.core.dialogDiceBehaviorType; }
 
-	public get dialogPostType(): DialogType | undefined { return this.core.defaultDialogType; }
+	public get dialogPostType(): DialogPostType | undefined { return this.core.defaultDialogType; }
 
 	/** undefined is false (the default logic doesn't send on delete) */
 	public get dmOnDelete(): boolean { return this.core.dmOnDelete ?? false; }
@@ -84,7 +83,7 @@ export class User extends HasSageCacheCore<UserCore> {
 
 	public get moveDirectionOutputType(): MoveDirectionOutputType | undefined { return this.core.moveDirectionOutputType; }
 
-	public get sagePostType(): DialogType | undefined { return this.core.defaultSagePostType; }
+	public get sagePostType(): DialogPostType | undefined { return this.core.defaultSagePostType; }
 
 	public get mentionPrefix(): string | undefined { return this.core.mentionPrefix; }
 	public set mentionPrefix(mentionPrefix: string | undefined) { this.core.mentionPrefix = stringOrUndefined(mentionPrefix); }

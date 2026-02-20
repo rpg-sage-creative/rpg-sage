@@ -2,7 +2,6 @@ import { DialogPostType } from "@rsc-sage/data-layer";
 import { parseIds, toChannelMention, toUserMention } from "@rsc-utils/discord-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { DialogType } from "../../../repo/base/IdRepository.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
@@ -45,7 +44,7 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 
 	const channelIds = parseIds(sageMessage.message, "channel");
 	const channelLinks = channelIds.map(channelId => toChannelMention(channelId));
-	const dialogType = dialogPostType !== undefined ? ` (${DialogType[dialogPostType]})` : "";
+	const dialogType = dialogPostType !== undefined ? ` (${DialogPostType[dialogPostType]})` : "";
 	const prompt = channelIds.length > 1 || channelIds[0] !== sageMessage.channelDid
 		? `Start ${toUserMention(userId)} using Auto Dialog ${dialogType} with ${character.name} in the given channel(s)?\n> ${channelLinks.join("\n> ")}`
 		: `Start ${toUserMention(userId)} using Auto Dialog ${dialogType} with ${character.name}?`;

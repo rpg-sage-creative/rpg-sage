@@ -1,11 +1,10 @@
-import { SageChannelType } from "@rsc-sage/data-layer";
+import { DialogPostType, SageChannelType } from "@rsc-sage/data-layer";
 import { mapAsync, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import { toChannelMention, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
 import { sendWebhook } from "../../../../discord/messages.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { StatMacroProcessor } from "../../dice/stats/StatMacroProcessor.js";
 import { toReadableOwner } from "./toReadableOwner.js";
@@ -73,7 +72,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		const parts: string[] = [];
 		parts.push(toChannelMention(data.channelDid) ?? data.channelDid);
 		if (data.dialogPostType !== undefined) {
-			parts.push(`(${DialogType[data.dialogPostType]})`);
+			parts.push(`(${DialogPostType[data.dialogPostType]})`);
 		}
 		if (data.userDid && character.userDid !== data.userDid) {
 			const user = await sageMessage.discord.fetchGuildMember(data.userDid);

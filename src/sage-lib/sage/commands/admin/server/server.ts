@@ -1,15 +1,14 @@
-import { DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCriticalMethodText } from "@rsc-sage/data-layer";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCriticalMethodText } from "@rsc-sage/data-layer";
 import { mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
 import type { Role } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
 import { AdminRoleType, GameCreatorType, type IAdminRole } from "../../../model/Server.js";
-import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
 function serverDetailsDefaultTypes(renderableContent: RenderableContent, server: Server): void {
-	renderableContent.append(`<b>Default Dialog Type</b> ${DialogType[server.dialogPostType!] ?? "<i>unset (Embed)</i>"}`);
+	renderableContent.append(`<b>Default Dialog Type</b> ${DialogPostType[server.dialogPostType!] ?? "<i>unset (Embed)</i>"}`);
 	renderableContent.append(`<b>Default Game Type</b> ${server.gameSystem?.name ?? "<i>unset (None)</i>"}`);
 	const critMethodText = getCriticalMethodText(server.gameSystemType, server.diceCritMethodType);
 	renderableContent.append(`<b>Default Dice Crit Method Type</b> ${critMethodText}`);

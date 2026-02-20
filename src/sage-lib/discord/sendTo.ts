@@ -1,8 +1,8 @@
+import { DialogPostType } from "@rsc-sage/data-layer";
 import { error, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, splitMessageOptions, type EmbedResolvable, type SplitOptions, type SupportedTarget } from "@rsc-utils/discord-utils";
 import { ActionRow, Attachment, AttachmentBuilder, Message, Webhook, type MessageActionRowComponent } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
-import { DialogType } from "../sage/repo/base/IdRepository.js";
 
 export type AttachmentResolvable = Attachment | AttachmentBuilder;
 
@@ -43,8 +43,8 @@ export async function sendTo(sendArgs: SendToArgs, splitOptions: SplitOptions, c
 	}
 
 	// check for a user post type override
-	const contentToEmbeds = splitOptions.contentToEmbeds === true || sageCache.user.defaultSagePostType === DialogType.Embed;
-	const embedsToContent = splitOptions.embedsToContent === true || sageCache.user.defaultSagePostType === DialogType.Post;
+	const contentToEmbeds = splitOptions.contentToEmbeds === true || sageCache.user.sagePostType === DialogPostType.Embed;
+	const embedsToContent = splitOptions.embedsToContent === true || sageCache.user.sagePostType === DialogPostType.Post;
 
 	// create post length safe payloads
 	const payloads = splitMessageOptions({ avatarURL, components, content, embedContent, embeds, files, replyingTo, threadId, username }, { ...splitOptions, contentToEmbeds, embedsToContent });
