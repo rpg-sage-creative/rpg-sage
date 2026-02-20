@@ -1,11 +1,11 @@
+import type { Alias } from "@rsc-sage/data-layer";
 import { isBlank, StringMatcher, type Optional } from "@rsc-utils/core-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
-import type { TAlias } from "../../../model/User.js";
 import { findCompanion } from "./findCompanion.js";
 import { findNpc } from "./findNpc.js";
 import { findPc } from "./findPc.js";
 
-type AliasResult = TAlias & { charAlias?:boolean; };
+type AliasResult = Alias & { charAlias?:boolean; };
 
 export function findAlias(sageCommand: SageCommand, aliasName: Optional<string>): AliasResult | undefined {
 	if (isBlank(aliasName)) {

@@ -1,9 +1,9 @@
+import { DialogDiceBehaviorType } from "@rsc-sage/data-layer";
 import { DialogPostType } from "@rsc-sage/types";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { DialogDiceBehaviorType } from "../../../model/User.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { MoveDirectionOutputType } from "../../map/MoveDirection.js";
 

@@ -1,9 +1,9 @@
+import type { Alias } from "@rsc-sage/data-layer";
 import { isNotBlank } from "@rsc-utils/core-utils";
 import { parseDialogContent, type DialogContent } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import type { TAlias } from "../../../model/User.js";
 import { DialogType } from "../../../repo/base/IdRepository.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
@@ -123,7 +123,7 @@ function aliasTest(sageMessage: SageMessage, dialogContent: DialogContent): bool
 	return false;
 }
 
-function aliasToPrompt(alias: TAlias, usage: boolean): string {
+function aliasToPrompt(alias: Alias, usage: boolean): string {
 	const parts = [
 		`> **Name:** ${alias.name}`,
 		`\n> **Target:** \`\`\`${alias.target.replace(/\n/g, "\n> ")}\`\`\``
@@ -134,7 +134,7 @@ function aliasToPrompt(alias: TAlias, usage: boolean): string {
 	return parts.join("");
 }
 
-async function aliasCreate(sageMessage: SageMessage, alias: TAlias): Promise<boolean> {
+async function aliasCreate(sageMessage: SageMessage, alias: Alias): Promise<boolean> {
 	const aliasPrompt = aliasToPrompt(alias, true);
 
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Create alias?`);
@@ -147,7 +147,7 @@ async function aliasCreate(sageMessage: SageMessage, alias: TAlias): Promise<boo
 	return false;
 }
 
-async function aliasUpdate(sageMessage: SageMessage, existing: TAlias, updated: TAlias): Promise<boolean> {
+async function aliasUpdate(sageMessage: SageMessage, existing: Alias, updated: Alias): Promise<boolean> {
 	const existingPrompt = aliasToPrompt(existing, false);
 	const updatedPrompt = aliasToPrompt(updated, true);
 
@@ -204,7 +204,7 @@ async function aliasSet(sageMessage: SageMessage): Promise<void> {
 	return sageMessage.reactSuccessOrFailure(saved);
 }
 
-async function deleteAlias(sageMessage: SageMessage, alias: TAlias): Promise<void> {
+async function deleteAlias(sageMessage: SageMessage, alias: Alias): Promise<void> {
 	const aliasPrompt = aliasToPrompt(alias, false);
 	const promptRenderable = createAdminRenderableContent(sageMessage.getHasColors(), `Delete Alias?`);
 	promptRenderable.append(aliasPrompt);

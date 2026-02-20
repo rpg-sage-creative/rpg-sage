@@ -1,82 +1,26 @@
+import { ensureSageUserCore, type Alias, type DialogDiceBehaviorType, type SageUserCore } from "@rsc-sage/data-layer";
 import { isSuperAdminId, isSuperUserId } from "@rsc-sage/env";
-import { applyChanges, stringOrUndefined, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import type { MacroBase } from "@rsc-utils/game-utils";
+import { applyChanges, stringOrUndefined, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import type { DialogType } from "../repo/base/IdRepository.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
 import { NamedCollection } from "./NamedCollection.js";
-import { NoteManager, type TNote } from "./NoteManager.js";
+import { NoteManager } from "./NoteManager.js";
 import type { SageCache } from "./SageCache.js";
-
-export type TAlias = {
-	name: string;
-	target: string;
-};
-
-// export enum PatronTierType { None = 0, Friend = 1, Informant = 2, Trusted = 3 }
-// export const PatronTierSnowflakes: Snowflake[] = [undefined!, "730147338529669220", "730147486446125057", "730147633867259904"];
-
-export enum DialogDiceBehaviorType { Default = 0, Inline = 1 };
 
 /**
  * @todo consider flag for AoN Legacy vs Remaster
  */
-export interface UserCore extends IdCore<"User"> {
-
-	aliases?: TAlias[];
-
-	defaultDialogType?: DialogType;
-
-	defaultSagePostType?: DialogType;
-
-	dialogDiceBehaviorType?: DialogDiceBehaviorType;
-	/** undefined is false (the default logic doesn't send on delete) */
-	dmOnDelete?: boolean;
-
-	/** undefined is true (the default logic does send on delete) */
-	dmOnEdit?: boolean;
-
-	macros?: MacroBase[];
-
-	moveDirectionOutputType?: MoveDirectionOutputType;
-
-	notes?: TNote[];
-
-	/** @deprecated */
-	patronTier?: number;
-
+export type UserCore = Omit<SageUserCore, "playerCharacters"> & {
 	playerCharacters?: (GameCharacter | GameCharacterCore)[];
-
-	mentionPrefix?: string;
-
-	/** "on" (true) by default */
-	confirmationPrompts?: boolean;
-	/** "-p" by default */
-	forceConfirmationFlag?: string;
-	/** "-y" by default */
-	skipConfirmationFlag?: string;
 }
 
 //#region Core Updates
 
-interface IOldUserCore extends UserCore {
-	/** Phase out in favor of playerCharacters */
-	characters?: GameCharacterCore[];
-}
-
-function updateCore(core: IOldUserCore): UserCore {
-	//#region move .characters to .playerCharacters
-	if (core.characters) {
-		core.playerCharacters = core.characters;
-	}
-	delete core.characters;
-	//#endregion
-
-	delete core.patronTier;
-
-	return core;
+function updateCore(core: UserCore): UserCore {
+	return ensureSageUserCore(core as SageUserCore, { ver:1 }) as UserCore;
 }
 
 //#endregion
@@ -112,7 +56,7 @@ export class User extends HasSageCacheCore<UserCore> {
 		this.isSuperUser = isSuperUserId(core.id) || isSuperUserId(core.did);
 	}
 
-	public get aliases(): NamedCollection<TAlias> { return this.core.aliases as NamedCollection<TAlias>; }
+	public get aliases(): NamedCollection<Alias> { return this.core.aliases as NamedCollection<Alias>; }
 	public get macros() { return this.core.macros ??= []; }
 	public nonPlayerCharacters = CharacterManager.from([], this, "npc");
 	public notes: NoteManager;
@@ -192,7 +136,7 @@ export class User extends HasSageCacheCore<UserCore> {
 	}
 
 	public static createCore(userId: Snowflake): UserCore {
-		return { objectType: "User", did: userId, id: userId };
+		return { did:userId, id:userId, objectType:"User", ver:1 };
 	}
 
 }
