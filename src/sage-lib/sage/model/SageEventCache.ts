@@ -155,11 +155,11 @@ function sendErrors(validationErrors: string[]): void {
 	}
 }
 
-type CanBePartial<Type> = Type & { fetch:() => Promise<Type>; id:string; partial:boolean; };
-type NotPartial<Type> = Type & { partial:false; };
-async function fetchIfPartial<T extends CanBePartial<any>>(object: T, fetchNotes: string, errArgs: FetchErrorArgs): Promise<NotPartial<T>>;
-async function fetchIfPartial<T extends CanBePartial<any>>(object: T | undefined, fetchNotes: string, errArgs: FetchErrorArgs): Promise<NotPartial<T> | undefined>;
-async function fetchIfPartial<T, U extends CanBePartial<T>>(object: U | undefined, fetchNotes: string, errArgs: FetchErrorArgs): Promise<NotPartial<T> | undefined> {
+type CanBePartial = GuildMember | MessageOrPartial | ReactionOrPartial | UserOrPartial;
+type NotPartial<Type extends CanBePartial> = Type & { partial:false; };
+async function fetchIfPartial<T extends CanBePartial>(object: T, fetchNotes: string, errArgs: FetchErrorArgs): Promise<NotPartial<T>>;
+async function fetchIfPartial<T extends CanBePartial>(object: T | undefined, fetchNotes: string, errArgs: FetchErrorArgs): Promise<NotPartial<T> | undefined>;
+async function fetchIfPartial<T extends CanBePartial>(object: T | undefined, fetchNotes: string, errArgs: FetchErrorArgs): Promise<NotPartial<T> | undefined> {
 	/** @todo determine if there is some other way to tell if we have an incomplete object that could be causing errors with these fetches. */
 	if (object?.partial) {
 		return object.fetch().catch(err => appendFetchError({ ...errArgs, err, fetchNotes })) as Promise<NotPartial<T> | undefined>;
@@ -237,11 +237,11 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 
 	// we need a guildmember to check server perms
 	let member: GuildMember | undefined;
-	guild = await fetchIfPartial(evCache.server.discord, "guild = await fetchIfPartial(evCache.server.discord)", { discord, guild, validationErrors });
+	guild = await evCache.server.discord?.fetch().catch(err => appendFetchError({ discord, err, fetchNotes:"guild = await evCache.server.discord?.fetch()", guild, validationErrors }));
 	if (guild) {
 		// fetch the guild member if it isn't a bot and isn't a system user
 		if (!discord.bot && !discord.system) {
-			member = await guild.members.fetch(id).catch(err => appendFetchError({ discord, err, fetchNotes:"member = await guild.members.fetch(id)", guild, validationErrors }));
+			member = await guild.members.fetch({ user:id, force:true }).catch(err => appendFetchError({ discord, err, fetchNotes:"member = await guild.members.fetch({ user:id, force:true })", guild, validationErrors }));
 			if (member) {
 				roleIds.push(...member.roles.cache.keys() as MapIterator<Snowflake>);
 			}
