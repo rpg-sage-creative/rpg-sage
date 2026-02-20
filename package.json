@@ -107,9 +107,11 @@
 
 		"build:fresh": "pnpm scrub && pnpm build",
 
-		"pretest": "[ -d './test' ] && pnpm build && node -e \"import * as utils from './build/index.js';\"",
-		"test": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
-		"test:one": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
+		"-pretest": "[ -d './test' ] && pnpm build && node -e \"import * as utils from './build/index.js';\"",
+		"-test": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
+		"-test:one": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
+		"pretest": "pnpm buildIfMissing",
+		"test": "[ -f './build/bot.mjs' ] && echo 'Build exists' || exit 1",
 
 		"release": "pnpm dev-scripts create-release",
 
