@@ -1,7 +1,6 @@
-import { DiceOutputType } from "@rsc-sage/data-layer";
+import { DiceCriticalMethodType, DiceOutputType, GameSystemType } from "@rsc-sage/data-layer";
 import { getEnumKeys } from "@rsc-utils/core-utils";
 import type { SlashCommand } from "@rsc-utils/discord-utils";
-import { DiceCriticalMethodType, GameSystemType } from "@rsc-utils/game-utils";
 
 function getCreateUpdateOptions(isUpdate: boolean) {
 	const options = [

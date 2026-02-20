@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "../../systems/GameSystem.js";
+import type { GameSystemCode } from "@rsc-sage/data-layer";
 import type { CurrencyCore } from "../Currency.js";
 
 type CoreArg<

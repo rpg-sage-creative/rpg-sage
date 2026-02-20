@@ -1,4 +1,4 @@
-import { GameSystemType, getGameSystems, type GameSystem } from "@rsc-utils/game-utils";
+import { GameSystemType, getGameSystems, type GameSystem } from "../enums/GameSystem.js";
 
 export type PaizoGameSystem = GameSystem & {
 	isPf: boolean;

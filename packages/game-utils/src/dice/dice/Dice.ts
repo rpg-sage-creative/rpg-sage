@@ -1,3 +1,4 @@
+import { DiceOutputType } from "@rsc-sage/data-layer";
 import { cleanWhitespace, isBoolean, randomSnowflake, sum } from "@rsc-utils/core-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
@@ -6,7 +7,6 @@ import { unquoteAndDetick } from "../internal/unquoteAndDetick.js";
 import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
 import { removeDesc } from "../removeDesc.js";
 import { sumDiceParts } from "../sumDiceParts.js";
-import { DiceOutputType } from "../types/DiceOutputType.js";
 import { UNICODE_LEFT_ARROW } from "../types/consts.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
 import { DicePart, type DicePartCore, type TDicePart } from "./DicePart.js";

@@ -1,6 +1,6 @@
+import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data-layer";
 import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent, toUserMention } from "@rsc-utils/discord-utils";
-import { GameSystemType, parseGameSystem } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { Dice } from "../../sage-dice/dice/pf2e/index.js";
 import { DieRollGrade } from "../../sage-dice/index.js";
@@ -16,7 +16,6 @@ import { boundNumber } from "../utils/boundNumber.js";
 import { toModifier } from "../utils/toModifier.js";
 import { getByLevelTable } from "./dcs.js";
 import { getSelectedOrDefault, getSelectedOrDefaultEnum, getSelectedOrDefaultNumber } from "./lib/getSelectedOrDefault.js";
-import { getPaizoGameSystems } from "./lib/PaizoGameSystem.js";
 import type { ProficiencyName } from "./lib/Proficiency.js";
 import { ProficiencyType } from "./lib/types.js";
 

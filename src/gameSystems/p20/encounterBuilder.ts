@@ -1,5 +1,5 @@
+import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data-layer";
 import { warn, ZERO_WIDTH_SPACE, type RenderableContent, type Snowflake, type SortResult } from "@rsc-utils/core-utils";
-import { GameSystemType, parseGameSystem } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from "discord.js";
 import { deleteMessage } from "../../sage-lib/discord/deletedMessages.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
@@ -7,7 +7,6 @@ import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageButtonInteraction, SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton.js";
-import { getPaizoGameSystems } from "./lib/PaizoGameSystem.js";
 import { fetchSelectedOrDefault, fetchSelectedOrDefaultEnum, fetchSelectedOrDefaultNumber } from "./lib/fetchSelectedOrDefault.js";
 import { findComponent } from "./lib/findComponent.js";
 

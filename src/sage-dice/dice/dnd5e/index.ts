@@ -1,5 +1,6 @@
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceCriticalMethodType, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, DiceDropKeepType } from "@rsc-utils/game-utils";
 import {
 	createValueTestData,
 	DieRollGrade,

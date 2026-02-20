@@ -1,3 +1,4 @@
+import { DiceOutputType } from "@rsc-sage/data-layer";
 import { randomSnowflake, type TokenData } from "@rsc-utils/core-utils";
 import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
 import { cleanDicePartDescription } from "../cleanDicePartDescription.js";
@@ -9,7 +10,6 @@ import { DiceThreshold } from "../manipulate/DiceThreshold.js";
 import { rollDicePart } from "../roll/rollDicePart.js";
 import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
-import { DiceOutputType } from "../types/DiceOutputType.js";
 import type { RollData } from "../types/RollData.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";

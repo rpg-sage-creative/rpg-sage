@@ -1,5 +1,6 @@
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, getGameSystems, parseGameSystem, type GameSystem } from "@rsc-sage/data-layer";
 import { debug, HasCore, parseEnum, randomSnowflake, type IdCore, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
-import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, getGameSystems, matchBasicDice, parseGameSystem, type GameSystem } from "@rsc-utils/game-utils";
+import { matchBasicDice } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../common.js";
 import { DiceGroup as baseDiceGroup, DiceGroupRoll as baseDiceGroupRoll, type Dice as baseDice, type DicePart as baseDicePart } from "../base/index.js";
 import type { DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore, DiceGroupRollCore as baseDiceGroupRollCore, DicePartCore as baseDicePartCore, TDice as baseTDice, TDiceGroup as baseTDiceGroup, TDiceGroupRoll as baseTDiceGroupRoll, TDicePart as baseTDicePart } from "../base/types.js";

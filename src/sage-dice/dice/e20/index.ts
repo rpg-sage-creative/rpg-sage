@@ -1,6 +1,7 @@
+import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { cleanWhitespace, randomSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
-import { cleanDicePartDescription, DiceDropKeepType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, DiceDropKeepType } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import {
 	createValueTestData,

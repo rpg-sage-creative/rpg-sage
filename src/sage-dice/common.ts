@@ -1,6 +1,6 @@
-import { DiceOutputType } from "@rsc-sage/data-layer";
+import { DiceOutputType, type GameSystemType } from "@rsc-sage/data-layer";
 import { HasIdCore, sortPrimitive, sum, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
-import { DiceDropKeepType, type DiceDropKeepData, type GameSystemType } from "@rsc-utils/game-utils";
+import { DiceDropKeepType, type DiceDropKeepData } from "@rsc-utils/game-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
 //#region rpg.dice.common.ts
