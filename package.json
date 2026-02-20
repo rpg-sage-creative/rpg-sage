@@ -64,6 +64,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-sns": "^3.966.0",
+		"@rsc-sage/data-layer": "workspace:*",
 		"@rsc-sage/env": "workspace:*",
 		"@rsc-sage/localization": "workspace:*",
 		"@rsc-sage/types": "workspace:*",
