@@ -1,6 +1,6 @@
 {
 	"name": "rpg-sage",
-	"version": "1.15.0",
+	"version": "1.15.1",
 	"description": "RPG Sage Bot",
 	"type": "module",
 	"main": "./build/app.mjs",
@@ -93,46 +93,33 @@
 		"scrub::npm": "rm -f package-lock.json",
 		"scrub::pnpm": "rm -f pnpm-lock.yaml",
 		"postscrub": "pnpm install --prefer-offline",
-
 		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
-
 		"prebuild": "pnpm scrubIfMissing && pnpm run '/^build::.*/'",
 		"build::packages": "pnpm -r run '/^build::.*/'",
 		"build::clean-build-folder": "rm -rf build",
 		"build::clean-build-info": "rm -f *.tsbuildinfo",
 		"build": "[ -f './tsconfig.json' ] && tsc --build --force tsconfig.json",
 		"-postbuild": "[ ! -f './tsconfig.d.json' ] || tsc --build --force tsconfig.d.json",
-
 		"buildIfMissing": "[ -d './build' ] || pnpm build",
-
 		"build:fresh": "pnpm scrub && pnpm build",
-
 		"-pretest": "[ -d './test' ] && pnpm build && node -e \"import * as utils from './build/index.js';\"",
 		"-test": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
 		"-test:one": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
 		"pretest": "pnpm buildIfMissing",
 		"test": "[ -f './build/bot.mjs' ] && echo 'Build exists' || exit 1",
-
 		"release": "pnpm dev-scripts create-release",
-
 		"refresh-tags": "pnpm dev-scripts refresh-tags",
-
 		"deploy-sage": "pnpm dev-scripts deploy",
-
 		"prestart": "pnpm run '/^start::.*/'",
 		"start::env": "pnpm dev-scripts write-env-json local",
 		"start::build": "pnpm build",
 		"start": "node ./build/bot.mjs codeName=dev --getFromEnvJson",
-
 		"predocker:setup": "docker compose down; docker compose up -d",
 		"docker:setup": "pm2 deploy bot.config.cjs docker setup",
 		"docker:start": "pnpm deploy docker dev bot pnpm --noPrompt",
 		"docker:stop": "pm2 deploy bot.config.cjs docker run 'pm2 stop sage-bot-dev'",
-
 		"data:stack": "bash ./scripts/data-update.sh",
-
 		"commands:build": "node ./packages/app-commands/build/build.mjs codeName=dev --getFromEnvJson",
-
 		"-start:dev:all": "node ./build/bot.mjs codeName=dev --getFromEnvJson --spawnServices"
 	}
 }
