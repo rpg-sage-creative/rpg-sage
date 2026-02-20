@@ -1,5 +1,5 @@
 import { isDefined } from "@rsc-utils/core-utils";
-import type { GameSystemOptions } from "../options/GameSystemOptions.js";
+import type { GameSystemOptions } from "../types/options/GameSystemOptions.js";
 
 export type OldSystemOptions = GameSystemOptions & {
 	/** @deprecated */

@@ -17,12 +17,12 @@
 		"test"
 	],
 	"references": [
+		{ "path": "./packages/data-layer" },
 		{ "path": "./packages/game-utils" },
 		{ "path": "./packages/map-utils" },
 		{ "path": "./packages/sage-types" },
 		{ "path": "./packages/sage-env" },
 		{ "path": "./packages/sage-localization" },
-		{ "path": "./packages/data-layer" },
 		{ "path": "./packages/app-commands" }
 	]
 }

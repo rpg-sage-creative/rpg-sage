@@ -1,7 +1,9 @@
 import { parseEnum as parse, type EnumLike, type Optional } from "@rsc-utils/core-utils";
-import { DiceCriticalMethodType, DiceSecretMethodType, GameSystemType, parseDiceCriticalMethodType, parseDiceSecretMethodType, parseGameSystem } from "@rsc-utils/game-utils";
 import { DialogPostType, parseDialogPostType } from "./DialogPostType.js";
+import { DiceCriticalMethodType, parseDiceCriticalMethodType } from "./DiceCriticalMethodType.js";
 import { DicePostType, parseDicePostType } from "./DicePostType.js";
+import { DiceSecretMethodType, parseDiceSecretMethodType } from "./DiceSecretMethodType.js";
+import { GameSystemType, parseGameSystem } from "./GameSystem.js";
 import { parsePostType, PostType } from "./PostType.js";
 import { parseSageChannelType, SageChannelType } from "./SageChannelType.js";
 

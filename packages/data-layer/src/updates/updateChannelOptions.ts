@@ -1,6 +1,6 @@
 import { isDefined } from "@rsc-utils/core-utils";
-import { SageChannelType } from "../enums/SageChannelType.js";
-import type { ChannelOptions } from "../options/ChannelOptions.js";
+import { SageChannelType } from "../types/enums/SageChannelType.js";
+import type { ChannelOptions } from "../types/options/ChannelOptions.js";
 
 export type OldChannelOptions = ChannelOptions & {
 	/** @deprecated */

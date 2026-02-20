@@ -1,4 +1,4 @@
-import type { GameSystemType } from "@rsc-utils/game-utils";
+import type { GameSystemType } from "../enums/GameSystem.js";
 
 export type GameSystemOptions = {
 	gameSystemType: GameSystemType;

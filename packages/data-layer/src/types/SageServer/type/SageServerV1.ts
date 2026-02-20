@@ -4,7 +4,7 @@ import type { HasEmbedColors } from "../../other/HasColors.js";
 import type { HasEmoji } from "../../other/HasEmoji.js";
 import type { MacroBase } from "../../other/MacroBase.js";
 import type { SageCharacterCoreV1 } from "../../SageCharacter/index.js";
-import type { SageChannel } from "@rsc-sage/types";
+// import type { SageChannel } from "@rsc-sage/types";
 
 export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
 export type IAdminRole = { did: Snowflake; type: AdminRoleType; }
@@ -13,7 +13,7 @@ export enum GameCreatorType { Admin = 0, Any = 1, None = 2 }
 
 export type SageServerCoreV1 = SageCore<"Server", Snowflake | UUID> & HasEmbedColors & HasEmoji & {
 	admins: IAdminUser[];
-	channels: SageChannel[];
+	// channels: SageChannel[];
 	commandPrefix?: string;
 	gameId?: string;
 	gmCharacter?: SageCharacterCoreV1;

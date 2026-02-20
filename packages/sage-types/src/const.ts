@@ -1,1 +1,1 @@
-export const DEFAULT_GM_CHARACTER_NAME = "Game Master";
+export { DEFAULT_GM_CHARACTER_NAME } from "@rsc-sage/data-layer";

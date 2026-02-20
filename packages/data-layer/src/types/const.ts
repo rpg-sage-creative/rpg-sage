@@ -1,0 +1,1 @@
+export const DEFAULT_GM_CHARACTER_NAME = "Game Master";
