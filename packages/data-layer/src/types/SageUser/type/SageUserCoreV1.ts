@@ -9,10 +9,13 @@ export type SageUserCoreV1 = SageCore<"User", Snowflake | UUID> & {
 	/** "on" (true) by default */
 	confirmationPrompts?: boolean;
 
+	/** "Embed" by default */
 	defaultDialogType?: DialogPostType;
 
+	/** "Embed" by default */
 	defaultSagePostType?: DialogPostType;
 
+	/** "Default": [] for dice and [[]] for inline dice; reversed for "Inline" */
 	dialogDiceBehaviorType?: DialogDiceBehaviorType;
 
 	// did (SageCore)
@@ -30,6 +33,7 @@ export type SageUserCoreV1 = SageCore<"User", Snowflake | UUID> & {
 
 	macros?: MacroBase[];
 
+	/** "@" by default */
 	mentionPrefix?: string;
 
 	moveDirectionOutputType?: MoveDirectionOutputType;
