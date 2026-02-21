@@ -63,12 +63,6 @@ export class User extends HasSageCacheCore<UserCore> {
 
 	//#region settings
 
-	/** @deprecated use .dialogPostType */
-	public get defaultDialogType(): DialogPostType | undefined { return this.dialogPostType; }
-
-	/** @deprecated use .sagePostType */
-	public get defaultSagePostType(): DialogPostType | undefined { return this.sagePostType; }
-
 	public get dialogDiceBehaviorType() { return this.core.dialogDiceBehaviorType; }
 
 	public get dialogPostType(): DialogPostType | undefined { return this.core.defaultDialogType; }
