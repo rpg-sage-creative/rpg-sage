@@ -1,14 +1,13 @@
-import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, parseGameSystem, SageChannelType, type DiceCriticalMethodType, type SageChannel } from "@rsc-sage/data-layer";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, EmbedColorType, EmojiType, GameSystemType, parseGameSystem, SageChannelType, type DiceCriticalMethodType, type SageChannel } from "@rsc-sage/data-layer";
 import type { LocalizedTextKey } from "@rsc-sage/localization";
 import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import type { DiscordCache, EmbedBuilder, SupportedInteraction, SupportedRepliableInteraction } from "@rsc-utils/discord-utils";
 import { ComponentType, InteractionType, Message, PartialGroupDMChannel, type ActionRowBuilder, type AttachmentBuilder, type ButtonBuilder, type HexColorString, type If, type StringSelectMenuBuilder, type TextBasedChannel } from "discord.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { Bot } from "./Bot.js";
+import type { HasColorsCore } from "./Colors.js";
 import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";
-import { ColorType, type IHasColorsCore } from "./HasColorsCore.js";
-import type { EmojiType } from "./HasEmojiCore.js";
 import { ReplyStack } from "./ReplyStack.js";
 import type { SageCommandArgs } from "./SageCommandArgs.js";
 import type { SageEventCache } from "./SageEventCache.js";
@@ -480,14 +479,14 @@ export abstract class SageCommand<
 	//#region colors
 
 	/** Returns the object with the correct color scheme for the current command. */
-	public getHasColors(): IHasColorsCore {
+	public getHasColors(): HasColorsCore {
 		return this.game ?? this.server ?? this.bot;
 	}
 
 	// public colors = this.game?.colors ?? this.server?.colors ?? this.bot.colors;
 
 	/** Gets the correct color by working up the "ladder" of color heirarchy. */
-	public toHexColorString(colorType: Optional<ColorType>): HexColorString | undefined {
+	public toHexColorString(colorType: Optional<EmbedColorType>): HexColorString | undefined {
 		if (!colorType) {
 			return undefined;
 		}
@@ -601,14 +600,14 @@ export abstract class SageCommand<
 		return this.eventCache.getLocalizer();
 	}
 
-	public createRenderable(colorType: ColorType, title?: string): RenderableContent {
+	public createRenderable(colorType: EmbedColorType, title?: string): RenderableContent {
 		const renderableContent = new RenderableContent(title);
 		renderableContent.setColor(this.getHasColors().toHexColorString(colorType));
 		return renderableContent;
 	}
 	public createAdminRenderable(title?: LocalizedTextKey, ...args: any[]): RenderableContent {
 		const localized = title ? this.getLocalizer()(title, ...args) : undefined;
-		return this.createRenderable(ColorType.AdminCommand, localized);
+		return this.createRenderable(EmbedColorType.AdminCommand, localized);
 	}
 
 	//#region customId

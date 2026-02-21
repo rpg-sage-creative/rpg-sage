@@ -1,10 +1,10 @@
+import { EmojiType } from "@rsc-sage/data-layer";
 import { errorReturnUndefined, getEnumValues, isDefined } from "@rsc-utils/core-utils";
 import { splitMessageOptions } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
-import { Emoji, type TEmojiAndType } from "../../model/Emoji.js";
+import type { EmojiAndType, Emojis } from "../../model/Emojis.js";
 import type { Game } from "../../model/Game.js";
-import { EmojiType } from "../../model/HasEmojiCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { Server } from "../../model/Server.js";
@@ -25,8 +25,8 @@ function getEmojiTypes(sageMessage: SageMessage): EmojiType[] {
 	return types;
 }
 
-function getEmojiAndTypes(sageCommand: SageCommand): TEmojiAndType[] {
-	const results: TEmojiAndType[] = [];
+function getEmojiAndTypes(sageCommand: SageCommand): EmojiAndType[] {
+	const results: EmojiAndType[] = [];
 
 	// get emoji by key/value pair, where key is keyof EmojiType
 	const types = getEnumValues<EmojiType>(EmojiType);
@@ -53,7 +53,7 @@ function getEmojiAndTypes(sageCommand: SageCommand): TEmojiAndType[] {
 
 //#region list
 
-function getEmoji(sageCommand: SageCommand, which: BotServerGameType): Emoji {
+function getEmoji(sageCommand: SageCommand, which: BotServerGameType): Emojis {
 	if (which === BotServerGameType.Game && sageCommand.game) {
 		return sageCommand.game.emoji;
 	}
@@ -71,7 +71,7 @@ function getOtherName(which: BotServerGameType): string {
 	return which === BotServerGameType.Server ? "Sage" : "Server";
 }
 
-function getOtherEmoji(sageMessage: SageMessage, which: BotServerGameType): Emoji {
+function getOtherEmoji(sageMessage: SageMessage, which: BotServerGameType): Emojis {
 	return which === BotServerGameType.Server ? sageMessage.bot.emoji : sageMessage.server?.emoji!;
 }
 

@@ -1,5 +1,5 @@
+import { EmbedColorType } from "@rsc-sage/data-layer";
 import { error, isDefined, warn, type RenderableContent } from "@rsc-utils/core-utils";
-import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { registerCommandRegex } from "../cmd.js";
 import { createRenderableContent } from "../helpers/createRenderableContent.js";
@@ -7,7 +7,7 @@ import { createRenderableContent } from "../helpers/createRenderableContent.js";
 export type TPfsFaction = "Horizon Hunters" | "Vigilant Seal" | "Envoys' Alliance" | "Grand Archive";
 
 export function createPfsRenderableContent(sageMessage: SageMessage): RenderableContent {
-	return createRenderableContent(sageMessage.getHasColors(), ColorType.PfsCommand);
+	return createRenderableContent(sageMessage.getHasColors(), EmbedColorType.PfsCommand);
 }
 
 // #region Links

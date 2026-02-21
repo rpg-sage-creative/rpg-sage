@@ -1,18 +1,16 @@
-import type { DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, GameSystem, GameSystemType, MacroBase, SageChannel, ServerOptions } from "@rsc-sage/data-layer";
-import { DiceSortType, parseGameSystem, updateServer } from "@rsc-sage/data-layer";
+import type { DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, EmbedColorType, EmojiType, GameSystem, GameSystemType, SageChannel, SageServerCore, ServerOptions } from "@rsc-sage/data-layer";
+import { DiceSortType, ensureSageServerCore, parseGameSystem } from "@rsc-sage/data-layer";
 import { getHomeServerId } from "@rsc-sage/env";
-import { applyChanges, randomSnowflake, warn, type Args, type IdCore, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, randomSnowflake, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import { CharacterManager } from "./CharacterManager.js";
-import { Colors } from "./Colors.js";
-import { Emoji } from "./Emoji.js";
+import { Colors, type HasColorsCore } from "./Colors.js";
+import { Emojis, type HasEmojiCore } from "./Emojis.js";
 import type { Game } from "./Game.js";
 import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
-import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
-import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
 import type { SageCache } from "./SageCache.js";
 
 export type TAdminRoleType = keyof typeof AdminRoleType;
@@ -21,17 +19,12 @@ export interface IAdminRole { did: Snowflake; type: AdminRoleType; }
 export interface IAdminUser { did: Snowflake; role: AdminRoleType; }
 export enum GameCreatorType { Admin = 0, Any = 1, None = 2 }
 
-export interface ServerCore extends IdCore<"Server">, IHasColors, IHasEmoji, Partial<ServerOptions> {
-	admins: IAdminUser[];
-	channels: SageChannel[];
-	commandPrefix?: string;
-	gameId?: string;
+export type ServerCore = Omit<SageServerCore, "gmCharacter"> & {
 	gmCharacter?: GameCharacter | GameCharacterCore;
-	name: string;
-	roles: IAdminRole[];
-	macros?: MacroBase[];
-	/** defaults to "Admin" */
-	gameCreatorType?: GameCreatorType;
+}
+
+function updateCore(core: ServerCore): ServerCore {
+	return ensureSageServerCore(core as SageServerCore, { ver:1 }) as ServerCore;
 }
 
 // export abstract class HasDiceOptions<Core extends Partial<DiceOptions>> {
@@ -42,9 +35,9 @@ export interface ServerCore extends IdCore<"Server">, IHasColors, IHasEmoji, Par
 // 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 // }
 
-export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCore, IHasEmojiCore {
+export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCore, HasEmojiCore {
 	public constructor(core: ServerCore, sageCache: SageCache) {
-		super(updateServer(core), sageCache);
+		super(updateCore(core), sageCache);
 
 		if (!this.core.gmCharacter) {
 			this.core.gmCharacter = { id:randomSnowflake(), name:"" };
@@ -354,13 +347,13 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 
 	public get colors(): Colors {
 		if (!this._colors) {
-			this._colors = new Colors(this.core.colors ?? (this.core.colors = []));
+			this._colors = new Colors(this.core.colors ??= []);
 		}
 		return this._colors;
 	}
 
-	public toHexColorString(colorType: ColorType): HexColorString | undefined {
-		if (!this.core.colors.length) {
+	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
+		if (!this.core.colors?.length) {
 			warn(`Colors Missing: Server (${this.discord?.guild?.name ?? this.id})`);
 			return this.sageCache.bot.toHexColorString(colorType);
 		}
@@ -372,11 +365,11 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 
 	// #region IHasEmoji
 
-	private _emoji?: Emoji;
+	private _emoji?: Emojis;
 
-	public get emoji(): Emoji {
+	public get emoji(): Emojis {
 		if (!this._emoji) {
-			this._emoji = new Emoji(this.core.emoji ?? (this.core.emoji = []));
+			this._emoji = new Emojis(this.core.emoji ?? (this.core.emoji = []));
 		}
 		return this._emoji;
 	}
@@ -406,11 +399,12 @@ export class Server extends HasSageCacheCore<ServerCore> implements IHasColorsCo
 			// diceSecretMethodType: DiceSecretMethodType.Ignore,
 			// gameSystemType: GameSystemType.None,
 			gmCharacterName: GameCharacter.defaultGmCharacterName,
-			id: guild.id,
+			id: guild.id as Snowflake,
 			name: guild.name,
 			objectType: "Server",
 			commandPrefix: activeBot.commandPrefix,
-			roles: []
+			roles: [],
+			ver: 1
 		};
 	}
 

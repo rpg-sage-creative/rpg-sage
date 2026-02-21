@@ -1,3 +1,4 @@
+import type { HexColorString } from "@rsc-utils/core-utils";
 
 export enum EmbedColorType {
 	Command = 1,
@@ -27,11 +28,11 @@ export enum EmbedColorType {
 
 export type EmbedColor = {
 	type: EmbedColorType;
-	hex: string;
+	hex: HexColorString;
 	/** only used for dev purposes */
 	label?: string;
 }
 
 export type HasEmbedColors = {
-	colors: EmbedColor[];
+	colors?: EmbedColor[];
 }

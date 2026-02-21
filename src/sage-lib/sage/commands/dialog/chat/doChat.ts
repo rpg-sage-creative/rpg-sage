@@ -1,14 +1,14 @@
+import type { EmbedColorType } from "@rsc-sage/data-layer";
 import { error } from "@rsc-utils/core-utils";
 import type { DialogContent } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
-import type { ColorType } from "../../../model/HasColorsCore.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { sendDialogPost } from "../sendDialogPost.js";
 import type { ChatOptions } from "./ChatOptions.js";
 
 type ChatContent = {
 	character?: GameCharacter | null;
-	colorType?: ColorType | null;
+	colorType?: EmbedColorType | null;
 	dialogContent: DialogContent;
 };
 

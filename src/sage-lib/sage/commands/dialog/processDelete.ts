@@ -1,10 +1,10 @@
+import { EmojiType } from "@rsc-sage/data-layer";
 import type { Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder, User } from "discord.js";
 import { deleteMessage, isDeleted } from "../../../discord/deletedMessages.js";
 import { registerReactionListener } from "../../../discord/handlers.js";
 import { ReactionType, type TCommand } from "../../../discord/index.js";
-import { EmojiType } from "../../model/HasEmojiCore.js";
 import type { SageReaction } from "../../model/SageReaction.js";
 import { includeDeleteButton } from "../../model/utils/deleteButton.js";
 import { SageMessageReference } from "../../repo/SageMessageReference.js";

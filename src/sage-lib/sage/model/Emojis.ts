@@ -1,8 +1,8 @@
+import type { Emoji, EmojiType } from "@rsc-sage/data-layer";
 import type { Optional } from "@rsc-utils/core-utils";
 import { tokenize } from "@rsc-utils/core-utils";
-import type { EmojiType, IEmoji } from "./HasEmojiCore.js";
 
-export type TEmojiAndType = { type: EmojiType; replacement: string; };
+export type EmojiAndType = { type: EmojiType; replacement: string; };
 
 function emojify(text: string, matches: string[], replacement: string): string {
 	if (!text || !matches.length) {
@@ -27,10 +27,15 @@ function emojify(text: string, matches: string[], replacement: string): string {
 	return tokenized.join("");
 }
 
-export class Emoji {
-	public constructor(private emoji: IEmoji[]) { }
+export type HasEmojiCore = {
+	emoji: Emojis;
+	emojify(text: string): string;
+};
 
-	public findEmoji(type: Optional<EmojiType>): IEmoji | undefined {
+export class Emojis {
+	public constructor(private emoji: Emoji[]) { }
+
+	public findEmoji(type: Optional<EmojiType>): Emoji | undefined {
 		return this.emoji.find(emoji => emoji.type === type);
 	}
 
@@ -44,7 +49,7 @@ export class Emoji {
 		return this.findEmoji(type)?.replacement ?? null;
 	}
 
-	public set(emoji: IEmoji): boolean {
+	public set(emoji: Emoji): boolean {
 		if (!emoji?.replacement || !emoji?.type || !emoji.matches?.length) {
 			return false;
 		}
@@ -73,15 +78,15 @@ export class Emoji {
 
 	// #endregion
 
-	public sync(emoji: Emoji): boolean {
+	public sync(emojis: Emojis): boolean {
 		const oldEmoji = this.emoji.slice();
 		this.emoji.length = 0;
-		this.emoji.push(...emoji.toArray());
-		return emoji.size !== oldEmoji.length
+		this.emoji.push(...emojis.toArray());
+		return emojis.size !== oldEmoji.length
 			|| this.emoji.find((_, i) => oldEmoji[i].type !== this.emoji[i].type || oldEmoji[i].replacement !== this.emoji[i].replacement) !== undefined;
 	}
 
-	public toArray(): IEmoji[] {
+	public toArray(): Emoji[] {
 		return this.emoji.map(({ type, matches, replacement }) => ({ type, matches: matches.slice(), replacement }));
 	}
 

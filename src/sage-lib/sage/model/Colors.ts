@@ -1,12 +1,18 @@
+import { EmbedColorType, type EmbedColor } from "@rsc-sage/data-layer";
 import { Color, warn, type HexColorString, type Optional } from "@rsc-utils/core-utils";
-import { ColorType, type IColor } from "./HasColorsCore.js";
 
-export type TColorAndType = { type: ColorType; color: Color; };
+export type ColorAndType = { type: EmbedColorType; color: Color; };
+
+
+export type HasColorsCore = {
+	colors: Colors;
+	toHexColorString(colorType: EmbedColorType): HexColorString | undefined;
+};
 
 export class Colors {
-	public constructor(private colors: IColor[]) { }
+	public constructor(private colors: EmbedColor[]) { }
 
-	public findColor(type: Optional<ColorType>): IColor | undefined {
+	public findColor(type: Optional<EmbedColorType>): EmbedColor | undefined {
 		return this.colors.find(color => color.type === type);
 	}
 
@@ -14,12 +20,12 @@ export class Colors {
 
 	// #region get/set/unset
 
-	public get(type: ColorType): Color | null {
+	public get(type: EmbedColorType): Color | null {
 		const color = this.findColor(type);
 		return Color.from(color?.hex) ?? null;
 	}
 
-	public set(colorAndType: TColorAndType): boolean {
+	public set(colorAndType: ColorAndType): boolean {
 		if (!colorAndType?.color || !colorAndType?.type) {
 			return false;
 		}
@@ -35,7 +41,7 @@ export class Colors {
 		return true;
 	}
 
-	public unset(type: Optional<ColorType>): boolean {
+	public unset(type: Optional<EmbedColorType>): boolean {
 		const found = this.findColor(type);
 		if (!found) {
 			return false;
@@ -54,43 +60,43 @@ export class Colors {
 			|| this.colors.find((_, i) => oldColors[i].type !== this.colors[i].type || oldColors[i].hex !== this.colors[i].hex) !== undefined;
 	}
 
-	public toArray(): IColor[] {
+	public toArray(): EmbedColor[] {
 		return this.colors.map(({ type, hex }) => ({ type, hex }));
 	}
 
-	public toHexColorString(colorType: ColorType): HexColorString | undefined {
+	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
 		const color = this.get(colorType);
 		switch (colorType) {
-			case ColorType.Command:
-			case ColorType.AdminCommand:
-			case ColorType.Search:
-			case ColorType.Dice:
-			case ColorType.Dialog:
-			case ColorType.PfsCommand:
+			case EmbedColorType.Command:
+			case EmbedColorType.AdminCommand:
+			case EmbedColorType.Search:
+			case EmbedColorType.Dice:
+			case EmbedColorType.Dialog:
+			case EmbedColorType.PfsCommand:
 				return color?.hex ?? this.toHexColorString(undefined!);
 
-			case ColorType.SearchFind:
-				return color?.hex ?? this.toHexColorString(ColorType.Search);
+			case EmbedColorType.SearchFind:
+				return color?.hex ?? this.toHexColorString(EmbedColorType.Search);
 
-			case ColorType.GameMaster:
-			case ColorType.PlayerCharacter:
-			case ColorType.NonPlayerCharacter:
-				return color?.hex ?? this.toHexColorString(ColorType.Dialog);
+			case EmbedColorType.GameMaster:
+			case EmbedColorType.PlayerCharacter:
+			case EmbedColorType.NonPlayerCharacter:
+				return color?.hex ?? this.toHexColorString(EmbedColorType.Dialog);
 
-			case ColorType.PlayerCharacterAlt:
-			case ColorType.PlayerCharacterCompanion:
-			case ColorType.PlayerCharacterFamiliar:
-			case ColorType.PlayerCharacterHireling:
-				return color?.hex ?? this.toHexColorString(ColorType.PlayerCharacter);
+			case EmbedColorType.PlayerCharacterAlt:
+			case EmbedColorType.PlayerCharacterCompanion:
+			case EmbedColorType.PlayerCharacterFamiliar:
+			case EmbedColorType.PlayerCharacterHireling:
+				return color?.hex ?? this.toHexColorString(EmbedColorType.PlayerCharacter);
 
-			case ColorType.NonPlayerCharacterAlly:
-			case ColorType.NonPlayerCharacterEnemy:
-			case ColorType.NonPlayerCharacterBoss:
-			case ColorType.NonPlayerCharacterMinion:
-				return color?.hex ?? this.toHexColorString(ColorType.NonPlayerCharacter);
+			case EmbedColorType.NonPlayerCharacterAlly:
+			case EmbedColorType.NonPlayerCharacterEnemy:
+			case EmbedColorType.NonPlayerCharacterBoss:
+			case EmbedColorType.NonPlayerCharacterMinion:
+				return color?.hex ?? this.toHexColorString(EmbedColorType.NonPlayerCharacter);
 
 			default:
-				warn(`Missing ColorType: ${colorType}`);
+				warn(`Missing EmbedColorType: ${colorType}`);
 				return undefined;
 		}
 	}

@@ -1,3 +1,4 @@
+import { EmbedColorType, EmojiType } from "@rsc-sage/data-layer";
 import { isSageId, isTupperBoxId } from "@rsc-sage/env";
 import { errorReturnUndefined, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
@@ -8,8 +9,6 @@ import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { TCommand } from "../../discord/types.js";
 import { GameUserType, type Game } from "../model/Game.js";
 import type { GameCharacter } from "../model/GameCharacter.js";
-import { ColorType } from "../model/HasColorsCore.js";
-import { EmojiType } from "../model/HasEmojiCore.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageReaction } from "../model/SageReaction.js";
 import { SageMessageReference } from "../repo/SageMessageReference.js";
@@ -18,7 +17,7 @@ import { createRenderableContent } from "./helpers/createRenderableContent.js";
 async function whisper(sageCommand: SageCommand, content: string | RenderableContent): Promise<void> {
 	let renderable: RenderableContent;
 	if (typeof(content) === "string") {
-		renderable = createRenderableContent(sageCommand.getHasColors(), ColorType.Command);
+		renderable = createRenderableContent(sageCommand.getHasColors(), EmbedColorType.Command);
 		renderable.append(content);
 	}else {
 		renderable = content;
@@ -148,7 +147,7 @@ function getServerName(guild: Optional<Guild>): string {
 
 async function processSageDialog(sageCommand: SageCommand, message: Message): Promise<void> {
 	const sendLookup = async (game?: Game, character?: Optional<GameCharacter>, userId?: Snowflake) => {
-		const renderable = createRenderableContent(sageCommand.getHasColors(), ColorType.Command, "RPG Sage Dialog Lookup");
+		const renderable = createRenderableContent(sageCommand.getHasColors(), EmbedColorType.Command, "RPG Sage Dialog Lookup");
 		renderable.append(getMessageLink(message));
 		renderable.append(getCharacterName(character));
 		renderable.append(await getUserName(game, userId, message.author.id));

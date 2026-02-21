@@ -1,22 +1,22 @@
+import { EmbedColorType } from "@rsc-sage/data-layer";
 import type { DialogType } from "@rsc-utils/game-utils";
-import { ColorType } from "../../model/HasColorsCore.js";
 
-export function getColorType(dialogType?: DialogType): ColorType | null {
+export function getColorType(dialogType?: DialogType): EmbedColorType | null {
 	switch (dialogType) {
-		case "gm": return ColorType.GameMaster;
+		case "gm": return EmbedColorType.GameMaster;
 
-		case "npc": return ColorType.NonPlayerCharacter;
-		case "ally": return ColorType.NonPlayerCharacterAlly;
-		case "enemy": return ColorType.NonPlayerCharacterEnemy;
-		case "boss": return ColorType.NonPlayerCharacterBoss;
-		case "minion": return ColorType.NonPlayerCharacterMinion;
+		case "npc": return EmbedColorType.NonPlayerCharacter;
+		case "ally": return EmbedColorType.NonPlayerCharacterAlly;
+		case "enemy": return EmbedColorType.NonPlayerCharacterEnemy;
+		case "boss": return EmbedColorType.NonPlayerCharacterBoss;
+		case "minion": return EmbedColorType.NonPlayerCharacterMinion;
 
-		case "pc": return ColorType.PlayerCharacter;
+		case "pc": return EmbedColorType.PlayerCharacter;
 
-		case "alt": return ColorType.PlayerCharacter;
-		case "companion": return ColorType.PlayerCharacterCompanion;
-		case "familiar": return ColorType.PlayerCharacterFamiliar;
-		case "hireling": return ColorType.PlayerCharacterHireling;
+		case "alt": return EmbedColorType.PlayerCharacter;
+		case "companion": return EmbedColorType.PlayerCharacterCompanion;
+		case "familiar": return EmbedColorType.PlayerCharacterFamiliar;
+		case "hireling": return EmbedColorType.PlayerCharacterHireling;
 	}
 	return null;
 }

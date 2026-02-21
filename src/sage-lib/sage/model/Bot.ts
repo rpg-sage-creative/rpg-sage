@@ -1,12 +1,8 @@
-import type { GameSystemType, MacroBase } from "@rsc-sage/data-layer";
-import { errorReturnFalse, getCodeName, getDataRoot, HasIdCore, warn, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
+import type { EmbedColorType, EmojiType, GameSystemType, HasEmbedColors, HasEmoji, MacroBase } from "@rsc-sage/data-layer";
+import { errorReturnFalse, getCodeName, getDataRoot, HasIdCore, warn, type CodeName, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
 import { fileExists, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { Colors } from "./Colors.js";
-import { Emoji } from "./Emoji.js";
-import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
-import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
-
-export type TBotCodeName = "dev" | "beta" | "stable";
+import { Colors, type HasColorsCore } from "./Colors.js";
+import { Emojis, type HasEmojiCore } from "./Emojis.js";
 
 export type TCoreAuthor = { iconUrl?: string; name?: string; url?: string; };
 export type TCorePrefixes = { command?: string; search?: string; };
@@ -20,8 +16,8 @@ export type TCorePrefixes = { command?: string; search?: string; };
 type TSearchStatus = { [key: number]: undefined | boolean | string; };
 
 /** @todo can safely stop using did and uuid and set id as discord snowflake */
-export interface BotCore extends IdCore<"Bot">, IHasColors, IHasEmoji {
-	codeName: TBotCodeName;
+export interface BotCore extends IdCore<"Bot">, HasEmbedColors, HasEmoji {
+	codeName: CodeName;
 	commandPrefix?: string;
 
 	/** Url to the Sage avatar/token. */
@@ -33,9 +29,9 @@ export interface BotCore extends IdCore<"Bot">, IHasColors, IHasEmoji {
 	macros?: MacroBase[];
 }
 
-export class Bot extends HasIdCore<BotCore> implements IHasColorsCore, IHasEmojiCore {
+export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCore {
 	public constructor(core: BotCore) { super(core); }
-	public get codeName(): TBotCodeName { return this.core.codeName; }
+	public get codeName(): CodeName { return this.core.codeName; }
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
 	public get macros() { return this.core.macros ?? (this.core.macros = []); }
@@ -64,8 +60,8 @@ export class Bot extends HasIdCore<BotCore> implements IHasColorsCore, IHasEmoji
 		return this._colors;
 	}
 
-	public toHexColorString(colorType: ColorType): HexColorString | undefined {
-		if (!this.core.colors.length) {
+	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
+		if (!this.core.colors?.length) {
 			warn(`Colors Missing: Bot (${this.codeName || this.id})`);
 			return undefined;
 		}
@@ -76,13 +72,10 @@ export class Bot extends HasIdCore<BotCore> implements IHasColorsCore, IHasEmoji
 
 	// #region IHasEmoji
 
-	private _emoji?: Emoji;
+	private _emoji?: Emojis;
 
-	public get emoji(): Emoji {
-		if (!this._emoji) {
-			this._emoji = new Emoji(this.core.emoji ?? (this.core.emoji = []));
-		}
-		return this._emoji;
+	public get emoji(): Emojis {
+		return this._emoji ??= new Emojis(this.core.emoji ??= []);
 	}
 
 	public emojify(text: string): string {

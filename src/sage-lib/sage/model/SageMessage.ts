@@ -1,3 +1,4 @@
+import { EmojiType } from "@rsc-sage/data-layer";
 import { ArgsManager, Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
@@ -6,7 +7,6 @@ import { isDeleted } from "../../discord/deletedMessages.js";
 import { sendTo } from "../../discord/sendTo.js";
 import { type TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
-import { EmojiType } from "./HasEmojiCore.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageEventCache } from "./SageEventCache.js";
 import { SageMessageArgs } from "./SageMessageArgs.js";

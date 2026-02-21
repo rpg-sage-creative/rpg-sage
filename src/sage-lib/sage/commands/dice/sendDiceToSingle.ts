@@ -1,7 +1,7 @@
+import { EmbedColorType } from "@rsc-sage/data-layer";
 import { debug, isNotBlank, type Optional } from "@rsc-utils/core-utils";
 import { toMessageUrl, type SupportedMessagesChannel, type SupportedTarget } from "@rsc-utils/discord-utils";
 import { sendTo } from "../../../discord/sendTo.js";
-import { ColorType } from "../../model/HasColorsCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { FormattedDiceOutput } from "./FormattedDiceOutput.js";
 import { createMentionLine } from "./createMentionLine.js";
@@ -14,7 +14,7 @@ export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutput
 	const publicMentionLine = await createMentionLine(sageCommand);
 	const secretMentionLine = await createMentionLine(sageCommand, true);
 	const secretReferenceLink = isSageMessage ? toMessageUrl(sageCommand.message) : ``;
-	const splitOptions = { embedColor:sageCommand.toHexColorString(ColorType.Dice) ?? undefined };
+	const splitOptions = { embedColor:sageCommand.toHexColorString(EmbedColorType.Dice) ?? undefined };
 
 	const gmPostContents: Optional<string>[] = [];
 	const gmEmbedContents: Optional<string>[] = [];

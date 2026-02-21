@@ -98,10 +98,30 @@ export type Emoji = {
 	replacement: string;
 };
 
-export interface HasEmoji {
+export type HasEmoji = {
 	emoji?: Emoji[];
-}
-export interface HasEmojiCore {
+};
+
+export type HasEmojiCore = {
 	emoji: Emoji;
 	emojify(text: string): string;
-}
+};
+
+// type EmojiCategory = "Command" | "Condition" | "Dialog" | "Dice" | "DiceResults" | "Logo" | "Map" | "MapMovement" | "Permission";
+
+// export type IEmojiV2 = {
+// 	/** @deprecated The old number value of EnumType. Remove when all old data is converted to remove "type". */
+// 	type: number;
+// 	/** Command, Condition, Dialog, Dice, DiceResults, Map, Permission, etc. */
+// 	category: EmojiCategory;
+// 	/** Specifies if users can change/customize this emoji. */
+// 	isCustomizable: boolean;
+// 	/** @deprecated The old string value of EnumType. Remove when all old data is converted to remove "type". */
+// 	label: string;
+// 	/** The name of the emoji. */
+// 	name: string;
+// 	/** Array of string literal matches that trigger the emoji. */
+// 	matches: string[];
+// 	/** The emoji (one or more) to replace the match with. */
+// 	replacement: string;
+// };

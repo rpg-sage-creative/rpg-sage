@@ -1,6 +1,6 @@
+import { EmojiType } from "@rsc-sage/data-layer";
 import { registerReactionListener } from "../../../discord/handlers.js";
 import { ReactionType, type TCommand } from "../../../discord/index.js";
-import { EmojiType } from "../../model/HasEmojiCore.js";
 import type { SageReaction } from "../../model/SageReaction.js";
 
 async function isPin(sageReaction: SageReaction): Promise<TCommand | null> {

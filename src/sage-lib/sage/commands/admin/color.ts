@@ -1,10 +1,10 @@
+import { EmbedColorType, type EmbedColor } from "@rsc-sage/data-layer";
 import { Color, error, errorReturnUndefined, getEnumValues, isDefined, partition, stringifyJson } from "@rsc-utils/core-utils";
 import { EmbedBuilder } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
-import type { Colors, TColorAndType } from "../../model/Colors.js";
+import type { ColorAndType, Colors } from "../../model/Colors.js";
 import type { Game } from "../../model/Game.js";
-import { ColorType, type IColor } from "../../model/HasColorsCore.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { Server } from "../../model/Server.js";
@@ -12,26 +12,26 @@ import { BotServerGameType } from "../helpers/BotServerGameType.js";
 
 //#region args
 
-function getColorTypes(sageMessage: SageMessage): ColorType[] {
+function getColorTypes(sageMessage: SageMessage): EmbedColorType[] {
 
 	// get emoji by key, where key is keyof EmojiType
-	const types = sageMessage.args.manager.enumValues(ColorType);
+	const types = sageMessage.args.manager.enumValues(EmbedColorType);
 
 	if (!types.length) {
-		const type = sageMessage.args.getEnum(ColorType, "type");
+		const type = sageMessage.args.getEnum(EmbedColorType, "type");
 		if (isDefined(type)) types.push(type);
 	}
 
 	return types;
 }
 
-function getColorAndTypes(sageCommand: SageCommand): TColorAndType[] {
-	const results: TColorAndType[] = [];
+function getColorAndTypes(sageCommand: SageCommand): ColorAndType[] {
+	const results: ColorAndType[] = [];
 
 	// get color by key/value pair, where key is keyof ColorType
-	const types = getEnumValues<ColorType>(ColorType);
+	const types = getEnumValues<EmbedColorType>(EmbedColorType);
 	types.forEach(type => {
-		const color = sageCommand.args.getColor(ColorType[type]);
+		const color = sageCommand.args.getColor(EmbedColorType[type]);
 		if (color) {
 			results.push({ color, type });
 		}
@@ -40,7 +40,7 @@ function getColorAndTypes(sageCommand: SageCommand): TColorAndType[] {
 	// If none found, fall back to the old way of type="keyof ColorType" and color="color"
 	if (!results.length) {
 		const color = sageCommand.args.getColor("color");
-		const type = sageCommand.args.getEnum(ColorType, "type");
+		const type = sageCommand.args.getEnum(EmbedColorType, "type");
 		if (color && isDefined(type)) {
 			results.push({ color, type });
 		}
@@ -79,12 +79,12 @@ function getWhichEntity(sageMessage: SageMessage, which: BotServerGameType): Ser
 	return which === BotServerGameType.Server ? sageMessage.server : sageMessage.game;
 }
 
-type RenderPair = { which:BotServerGameType; type:ColorType; };
+type RenderPair = { which:BotServerGameType; type:EmbedColorType; };
 
 function renderColors(sageCommand: SageCommand, ...pairs: RenderPair[]): EmbedBuilder[] {
 	const embeds: EmbedBuilder[] = [];
 
-	const errorPushInvalid = (pair: RenderPair, botColor?: IColor, color?: string, hex?: string) => {
+	const errorPushInvalid = (pair: RenderPair, botColor?: EmbedColor, color?: string, hex?: string) => {
 		error(`renderColors:: Invalid embed color value: ${stringifyJson({pair,botColor,color,hex})}`);
 		embeds.push(new EmbedBuilder({ description:`Invalid ColorType: ${pair.type}` }));
 	}
@@ -115,14 +115,14 @@ function renderColors(sageCommand: SageCommand, ...pairs: RenderPair[]): EmbedBu
 		}
 
 		const inheritedText = inherited ? `*(unset, inherited)*` : ``;
-		const description = `${hexColor.toUpperCase()} ${ColorType[type]} ${inheritedText}`.trim();
+		const description = `${hexColor.toUpperCase()} ${EmbedColorType[type]} ${inheritedText}`.trim();
 		embeds.push(new EmbedBuilder({ description }).setColor(hexColor));
 	}
 
 	return embeds;
 }
 
-async function _colorList(sageMessage: SageMessage, which: BotServerGameType, canSync: boolean, ...types: ColorType[]): Promise<void> {
+async function _colorList(sageMessage: SageMessage, which: BotServerGameType, canSync: boolean, ...types: EmbedColorType[]): Promise<void> {
 	const colors = getColors(sageMessage, which);
 	let render = colors.size > 0;
 	if (!render) {

@@ -1,4 +1,4 @@
-import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameOptions, GameSystem, GameSystemType, MacroBase, SageChannel } from "@rsc-sage/data-layer";
+import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameSystem, GameSystemType, HasEmbedColors, HasEmoji, MacroBase, SageChannel } from "@rsc-sage/data-layer";
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame } from "@rsc-sage/data-layer";
 import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, stringOrUndefined, warn, type Args, type Comparable, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
@@ -12,11 +12,9 @@ import { PartyManager } from "../commands/trackers/party/PartyManager.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import { CharacterManager } from "./CharacterManager.js";
 import type { CharacterShell } from "./CharacterShell.js";
-import { Colors } from "./Colors.js";
-import { Emoji } from "./Emoji.js";
+import { Colors, type HasColorsCore } from "./Colors.js";
+import { Emojis, type HasEmojiCore } from "./Emojis.js";
 import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
-import type { ColorType, IHasColors, IHasColorsCore } from "./HasColorsCore.js";
-import type { EmojiType, IHasEmoji, IHasEmojiCore } from "./HasEmojiCore.js";
 import type { SageCache } from "./SageCache.js";
 import type { Server } from "./Server.js";
 
@@ -26,7 +24,7 @@ export type GameRoleData = { did: Snowflake; type: GameRoleType; dicePing: boole
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
 export type GameUserData = { did: Snowflake; type: GameUserType; dicePing: boolean; };
 
-export interface GameCore extends IdCore<"Game">, IHasColors, IHasEmoji, Partial<GameOptions>, CoreWithPostCurrency {
+export interface GameCore extends IdCore<"Game">, HasEmbedColors, HasEmoji, Partial<GameOptions>, CoreWithPostCurrency {
 	createdTs: number;
 	archivedTs?: number;
 
@@ -155,7 +153,7 @@ function fixDupeUsers(game: GameCore): void {
 	game.users = filtered;
 }
 
-export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>, IHasColorsCore, IHasEmojiCore, HasPostCurrency {
+export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>, HasColorsCore, HasEmojiCore, HasPostCurrency {
 	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {
 		super(updateGame(core), sageCache);
 		fixDupeUsers(core);
@@ -663,8 +661,8 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		return this._colors;
 	}
 
-	public toHexColorString(colorType: ColorType): HexColorString | undefined {
-		if (!this.core.colors.length) {
+	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
+		if (!this.core.colors?.length) {
 			warn(`Colors Missing: Game (${this.name || this.id})`);
 			return this.server.toHexColorString(colorType);
 		}
@@ -676,10 +674,10 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	// #region IHasEmoji
 
-	private _emoji?: Emoji;
+	private _emoji?: Emojis;
 
-	public get emoji(): Emoji {
-		this._emoji ??= new Emoji(this.core.emoji ?? (this.core.emoji = []));
+	public get emoji(): Emojis {
+		this._emoji ??= new Emojis(this.core.emoji ?? (this.core.emoji = []));
 		return this._emoji;
 	}
 

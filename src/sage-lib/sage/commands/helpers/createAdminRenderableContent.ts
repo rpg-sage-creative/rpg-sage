@@ -1,8 +1,8 @@
+import { EmbedColorType } from "@rsc-sage/data-layer";
 import type { RenderableContent } from "@rsc-utils/core-utils";
-import type { IHasColorsCore } from "../../model/HasColorsCore.js";
-import { ColorType } from "../../model/HasColorsCore.js";
+import type { HasColorsCore } from "../../model/Colors.js";
 import { createRenderableContent } from "./createRenderableContent.js";
 
-export function createAdminRenderableContent(hasColors: IHasColorsCore, title?: string): RenderableContent {
-	return createRenderableContent(hasColors, ColorType.AdminCommand, title);
+export function createAdminRenderableContent(hasColors: HasColorsCore, title?: string): RenderableContent {
+	return createRenderableContent(hasColors, EmbedColorType.AdminCommand, title);
 }

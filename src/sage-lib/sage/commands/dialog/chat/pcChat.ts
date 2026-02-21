@@ -1,5 +1,5 @@
+import { EmbedColorType } from "@rsc-sage/data-layer";
 import type { DialogContent } from "@rsc-utils/game-utils";
-import { ColorType } from "../../../model/HasColorsCore.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { findPc } from "../find/findPc.js";
 import type { ChatOptions } from "./ChatOptions.js";
@@ -16,7 +16,7 @@ export async function pcChat(sageMessage: SageMessage, dialogContent: DialogCont
 	}
 
 	if (character) {
-		await doChat(sageMessage, { character, colorType:ColorType.PlayerCharacter, dialogContent }, options);
+		await doChat(sageMessage, { character, colorType:EmbedColorType.PlayerCharacter, dialogContent }, options);
 	}else {
 		await sageMessage.reactWarn(`Unable to find PC for dialog: "${dialogContent.name ?? ""}"`);
 	}
