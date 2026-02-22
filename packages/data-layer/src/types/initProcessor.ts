@@ -1,7 +1,7 @@
 import { enableLogLevels, getDataRoot, verbose } from "@rsc-utils/core-utils";
 import { filterFiles } from "@rsc-utils/io-utils";
 
-export async function initProcessor(what: "Messages" | "Users") {
+export async function initProcessor(what: "Games" | "Messages" | "Servers" | "Users") {
 	enableLogLevels("development");
 
 	verbose(`Updating ${what} ...`);

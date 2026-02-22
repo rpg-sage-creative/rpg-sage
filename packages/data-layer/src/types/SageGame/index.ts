@@ -1,4 +1,4 @@
 export * from "./assert/index.js";
 export * from "./ensure/index.js";
 export * from "./type/index.js";
-export * from "./processSageServer.js";
+export * from "./processSageGame.js";

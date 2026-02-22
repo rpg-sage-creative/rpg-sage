@@ -4,6 +4,7 @@ export * from "./options/index.js";
 export * from "./other/index.js";
 export * from "./SageChannel/index.js";
 export * from "./SageCharacter/index.js";
+export * from "./SageGame/index.js";
 export * from "./SageMessageReference/index.js";
 export * from "./SageServer/index.js";
 export * from "./SageUser/index.js";

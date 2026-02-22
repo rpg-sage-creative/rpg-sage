@@ -1,0 +1,75 @@
+import { errorReturnFalse, errorReturnUndefined, forEachAsync, stringifyJson, verbose } from "@rsc-utils/core-utils";
+import { deleteFile, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { ensureSageServerCore, type SageServerCoreAny } from "./index.js";
+import { initProcessor } from "../initProcessor.js";
+
+/**
+ * Processes every server file to update its content and filename to match the latest schema
+ */
+export async function processSageServer() {
+	const { dataRoot, files } = await initProcessor("Servers");
+
+	let unableToRead = 0;
+	// let missingCharacterId = 0;
+	let missingUserId = 0;
+	let moved = 0;
+	let updated = 0;
+
+	await forEachAsync("Servers", files, async filePath => {
+		const oldCore = await readJsonFile<SageServerCoreAny>(filePath).catch(errorReturnUndefined) ?? undefined;
+
+		// delete incomplete
+		if (!oldCore) {
+			await deleteFile(filePath).catch(errorReturnFalse);
+			unableToRead++;
+			return;
+		}
+
+		// delete incomplete
+		// if (!oldCore.characterId) {
+		// 	await deleteFile(filePath).catch(errorReturnFalse);
+		// 	missingCharacterId++;
+		// 	return;
+		// }
+
+		// save for comparison later
+		const before = stringifyJson(oldCore);
+
+		const updatedCore = ensureSageServerCore(oldCore, {});
+
+		// delete incomplete
+		// if (!updatedCore.userId) {
+		// 	await deleteFile(filePath).catch(errorReturnFalse);
+		// 	missingUserId++;
+		// 	return;
+		// }
+
+		// messages are stored by year
+		// const idYear = new Date(updatedCore.ts).getFullYear();
+
+		const writeFilePath = `${dataRoot}/${updatedCore.id}.json`;
+		const wrongPath = filePath !== writeFilePath;
+
+		const hasChanges = before !== stringifyJson(updatedCore);
+
+		if (wrongPath || hasChanges) {
+			await writeFile(writeFilePath, updatedCore, { makeDir:true }).catch(errorReturnFalse);
+
+			if (wrongPath) {
+				await deleteFile(filePath).catch(errorReturnFalse);
+				moved++;
+
+			}else {
+				updated++;
+			}
+		}
+	});
+
+	verbose({
+		unableToRead,
+		// missingCharacterId,
+		missingUserId,
+		moved,
+		updated
+	});
+}

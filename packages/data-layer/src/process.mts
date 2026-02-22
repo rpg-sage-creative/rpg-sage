@@ -1,5 +1,5 @@
 import { initializeConsoleUtilsByEnvironment, verbose } from "@rsc-utils/core-utils";
-import { processSageMessageReference, processSageUser } from "./index.js";
+import { processSageGame, processSageMessageReference, processSageServer, processSageUser } from "./index.js";
 
 initializeConsoleUtilsByEnvironment();
 
@@ -11,9 +11,9 @@ function isObjectType(value: unknown): value is ObjectType {
 
 async function main() {
 	const processors: Record<ObjectType, Function> = {
-		"games": () => {},
+		"games": processSageGame,
 		"messages": processSageMessageReference,
-		"servers": () => {},
+		"servers": processSageServer,
 		"users": processSageUser,
 	};
 
