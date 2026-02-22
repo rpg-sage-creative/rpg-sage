@@ -1,3 +1,4 @@
+import type { DeckCore } from "@rsc-sage/data-layer";
 import { capitalize, randomSnowflake, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { randomItems, shuffle } from "@rsc-utils/random-utils";
 import { getCards, type CardBase, type DeckType } from "./decks/getCards.js";
@@ -30,33 +31,6 @@ export type DeckPlayArgs<From extends StackKey = StackKey, To extends StackKey =
 	| { from:From; to:To; fromWhere:FromWhere; toWhere:ToWhere; indexes?:never; cardIds?:never; randomCount?:never; count?:never; upTo?:number; };
 
 export type DeckDrawArgs = { count:number; upTo?:never; } | { count?:never; upTo:number; };
-
-export type DeckCore = {
-	cardCount: number;
-
-	/** Represents cards that were discarded. */
-	discardPile?: number[];
-
-	/** Represents face down cards to be drawn from. Stored by cardId. Top of the deck (first drawn) is index 0. */
-	drawPile?: number[];
-
-	/** Represents the cards held in hand. */
-	hand?: number[];
-
-	id: Snowflake;
-
-	messageId?: Snowflake;
-
-	name: string;
-
-	/** Sage Core objectType. */
-	objectType: "Deck";
-
-	spread?: number[];
-
-	/** Default deck is a 52 card deck */
-	type: DeckType;
-};
 
 /** becuase we use ordinals to select cards in hand/spread we need to reverse their slice args @todo decide if this is the right choice or not */
 function getSliceArgs(count: number, where: StackWhereKey) {
@@ -245,7 +219,8 @@ export class Deck {
 			id,
 			name: type,
 			objectType,
-			type
+			type,
+			ver: 1
 		};
 	}
 
@@ -277,7 +252,8 @@ export class Deck {
 			id: randomSnowflake(),
 			name: type,
 			objectType: "Deck",
-			type
+			type,
+			ver: 1
 		};
 		return new Deck(core);
 	}
