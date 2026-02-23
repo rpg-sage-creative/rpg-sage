@@ -1,12 +1,12 @@
 // import { debug } from "@rsc-utils/core-utils";
 import type { SageChannel } from "../types/SageChannel/SageChannel.js";
 import { updateChannelOptions, type OldChannelOptions } from "./updateChannelOptions.js";
-import { updateDialogOptions, type OldDialogOptions } from "./updateDialogOptions.js";
-import { updateDiceOptions, type OldDiceOptions } from "./updateDiceOptions.js";
+import { ensureDialogOptionsV1, type DialogOptionsOld } from "../types/DialogOptions/index.js";
+import { ensureDiceOptionsV1, type DiceOptionsOld } from "../types/DiceOptions/index.js";
 import { updateSystemOptions, type OldSystemOptions } from "./updateSystemOptions.js";
 
 export type OldSageChannel = SageChannel
-& OldChannelOptions & OldDialogOptions & OldDiceOptions & OldSystemOptions
+& OldChannelOptions & DialogOptionsOld & DiceOptionsOld & OldSystemOptions
 & {
 	/** @deprecated */
 	did?: string;
@@ -16,6 +16,7 @@ export type OldSageChannel = SageChannel
 
 	/** @deprecated */
 	sendCommandTo?: string;
+
 	/** @deprecated */
 	sendSearchTo?: string;
 
@@ -30,8 +31,8 @@ export function updateSageChannel(channel: OldSageChannel): void {
 	// delete channel.did;
 
 	updateChannelOptions(channel);
-	updateDialogOptions(channel);
-	updateDiceOptions(channel);
+	ensureDialogOptionsV1(channel);
+	ensureDiceOptionsV1(channel);
 	updateSystemOptions(channel);
 
 	delete channel.nickName;

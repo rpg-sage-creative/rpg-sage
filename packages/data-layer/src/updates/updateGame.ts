@@ -1,10 +1,10 @@
 // import { debug } from "@rsc-utils/core-utils";
-import { type OldDialogOptions, updateDialogOptions } from "./updateDialogOptions.js";
-import { type OldDiceOptions, updateDiceOptions } from "./updateDiceOptions.js";
-import { type OldSageChannel, updateSageChannel } from "./updateSageChannel.js";
-import { type OldSystemOptions, updateSystemOptions } from "./updateSystemOptions.js";
+import { ensureDialogOptionsV1, type DialogOptionsOld } from "../types/DialogOptions/index.js";
+import { ensureDiceOptionsV1, type DiceOptionsOld } from "../types/DiceOptions/index.js";
+import { updateSageChannel, type OldSageChannel } from "./updateSageChannel.js";
+import { updateSystemOptions, type OldSystemOptions } from "./updateSystemOptions.js";
 
-type GameCore = OldSystemOptions & OldDiceOptions & OldDialogOptions & {
+type GameCore = OldSystemOptions & DiceOptionsOld & DialogOptionsOld & {
 	channels: OldSageChannel[];
 	id: string;
 };
@@ -12,8 +12,8 @@ type GameCore = OldSystemOptions & OldDiceOptions & OldDialogOptions & {
 export function updateGame<T>(game: T): T;
 export function updateGame<T extends GameCore>(game: T): T {
 	// debug(`Updating Game: ${game.id} ...`);
-	updateDialogOptions(game);
-	updateDiceOptions(game);
+	ensureDialogOptionsV1(game);
+	ensureDiceOptionsV1(game);
 	updateSystemOptions(game);
 	game.channels?.forEach(updateSageChannel);
 	// debug(`Updating Game: ${game.id} ... done.`);

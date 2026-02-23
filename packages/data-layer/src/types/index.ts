@@ -1,4 +1,6 @@
 export * from "./Deck/index.js";
+export * from "./DialogOptions/index.js";
+export * from "./DiceOptions/index.js";
 export * from "./enums/index.js";
 export * from "./options/index.js";
 export * from "./other/index.js";
