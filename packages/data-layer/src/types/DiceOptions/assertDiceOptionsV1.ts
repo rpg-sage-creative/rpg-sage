@@ -3,6 +3,7 @@ import { assertNumber, assertString, optional } from "../../validation/index.js"
 import { DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType } from "../enums/index.js";
 import type { DiceOptionsAny, DiceOptionsV1 } from "./DiceOptions.js";
 
+/** diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, sendDiceTo */
 export function assertDiceOptionsV1(objectType: string, core: DiceOptionsAny): core is DiceOptionsV1 {
 
 	if (!assertNumber({ core, objectType, key:"diceCritMethodType", optional, validator:DiceCriticalMethodType })) return false;

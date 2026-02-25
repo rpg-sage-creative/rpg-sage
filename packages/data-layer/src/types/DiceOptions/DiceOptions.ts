@@ -9,6 +9,8 @@ export type DiceOptionsV0 = DiceOptionsV1 & {
 	/** @deprecated */
 	defaultCritMethodType?: number;
 	/** @deprecated */
+	defaultDiceOutput?: number;
+	/** @deprecated */
 	defaultDiceOutputType?: number;
 	/** @deprecated */
 	defaultDicePostType?: number;
@@ -17,10 +19,19 @@ export type DiceOptionsV0 = DiceOptionsV1 & {
 };
 
 export type DiceOptionsV1 = {
-	diceCritMethodType: DiceCriticalMethodType;
-	diceOutputType: DiceOutputType;
-	dicePostType: DicePostType;
-	diceSecretMethodType: DiceSecretMethodType;
-	diceSortType: DiceSortType;
-	sendDiceTo: Snowflake;
+	diceCritMethodType?: DiceCriticalMethodType;
+	diceOutputType?: DiceOutputType;
+	dicePostType?: DicePostType;
+	diceSecretMethodType?: DiceSecretMethodType;
+	diceSortType?: DiceSortType;
+	sendDiceTo?: Snowflake;
 };
+
+export const DiceOptionsV1Keys: (keyof DiceOptionsV1)[] = [
+	"diceCritMethodType",
+	"diceOutputType",
+	"dicePostType",
+	"diceSecretMethodType",
+	"diceSortType",
+	"sendDiceTo",
+];

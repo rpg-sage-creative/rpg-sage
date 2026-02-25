@@ -58,12 +58,12 @@
 	"devDependencies": {
 		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2",
 		"@types/follow-redirects": "^1.14.4",
-		"@types/node": "^24.10.4",
+		"@types/node": "^24.10.13",
 		"typescript": "^5.9.3",
 		"zlib-sync": "^0.1.10"
 	},
 	"dependencies": {
-		"@aws-sdk/client-sns": "^3.966.0",
+		"@aws-sdk/client-sns": "^3.996.0",
 		"@rsc-sage/data-layer": "workspace:*",
 		"@rsc-sage/env": "workspace:*",
 		"@rsc-sage/localization": "workspace:*",

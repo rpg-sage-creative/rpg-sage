@@ -3,6 +3,7 @@ import { assertNumber, assertString, optional } from "../../validation/index.js"
 import { DialogPostType, MoveDirectionOutputType } from "../enums/index.js";
 import type { DialogOptionsAny, DialogOptionsV1 } from "./DialogOptions.js";
 
+/** dialogPostType, gmCharacterName, mentionPrefix, moveDirectionOutputType, sendDialogTo */
 export function assertDialogOptionsV1(objectType: string, core: DialogOptionsAny): core is DialogOptionsV1 {
 
 	if (!assertNumber({ core, objectType, key:"dialogPostType", optional, validator:DialogPostType })) return false;

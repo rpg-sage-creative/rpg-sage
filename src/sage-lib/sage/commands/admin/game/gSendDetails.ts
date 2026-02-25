@@ -1,9 +1,9 @@
-import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCriticalMethodText } from "@rsc-sage/data-layer";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameRoleType, getCriticalMethodText } from "@rsc-sage/data-layer";
 import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { getDateStrings, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, toHumanReadable, type SupportedTextChannel } from "@rsc-utils/discord-utils";
 import type { GuildMember, TextChannel } from "discord.js";
-import { GameRoleType, mapSageChannelNameTags, nameTagsToType, type Game } from "../../../model/Game.js";
+import { mapSageChannelNameTags, nameTagsToType, type Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { MoveDirectionOutputType } from "../../map/MoveDirection.js";

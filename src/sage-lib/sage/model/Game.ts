@@ -1,9 +1,9 @@
-import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameSystem, GameSystemType, HasEmbedColors, HasEmoji, MacroBase, SageChannel } from "@rsc-sage/data-layer";
-import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, SageChannelType, parseGameSystem, parseSageChannelType, updateGame } from "@rsc-sage/data-layer";
-import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, stringOrUndefined, warn, type Args, type Comparable, type IdCore, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameRoleData, GameSystem, GameSystemType, GameUserData, PostCurrency, SageChannel, SageGameCore } from "@rsc-sage/data-layer";
+import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameRoleType, GameUserType, SageChannelType, ensureSageGameCore, parseGameSystem, parseSageChannelType } from "@rsc-sage/data-layer";
+import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, stringOrUndefined, warn, type Args, type Comparable, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
-import type { CoreWithPostCurrency, HasPostCurrency } from "../commands/admin/PostCurrency.js";
+import type { HasPostCurrency } from "../commands/admin/PostCurrency.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { EncounterCore } from "../commands/trackers/encounter/Encounter.js";
 import { EncounterManager } from "../commands/trackers/encounter/EncounterManager.js";
@@ -18,36 +18,16 @@ import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { SageCache } from "./SageCache.js";
 import type { Server } from "./Server.js";
 
-export enum GameRoleType { Unknown = 0, Spectator = 1, Player = 2, GameMaster = 3, Cast = 4, Table = 5 }
-export type GameRoleData = { did: Snowflake; type: GameRoleType; dicePing: boolean; };
-
-export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }
-export type GameUserData = { did: Snowflake; type: GameUserType; dicePing: boolean; };
-
-export interface GameCore extends IdCore<"Game">, HasEmbedColors, HasEmoji, Partial<GameOptions>, CoreWithPostCurrency {
-	createdTs: number;
-	archivedTs?: number;
-
-	name: string;
-
-	serverId: UUID;
-	serverDid: Snowflake;
-
-	channels: SageChannel[];
-	roles?: GameRoleData[];
-
-	users?: GameUserData[];
-
-	gmCharacter?: GameCharacter | GameCharacterCore;
-	nonPlayerCharacters?: (GameCharacter | GameCharacterCore)[];
-	playerCharacters?: (GameCharacter | GameCharacterCore)[];
-
-	parties?: PartyCore[] | PartyManager;
+export type GameCore = Omit<SageGameCore, "encounters" | "gmCharacter" | "nonPlayerCharacters" | "parties" | "playerCharacters"> & {
 	encounters?: EncounterCore[] | EncounterManager;
+	gmCharacter?: GameCharacter | GameCharacterCore;
+	nonPlayerCharacters?: GameCharacterCore[] | CharacterManager;
+	parties?: PartyCore[] | PartyManager;
+	playerCharacters?: GameCharacterCore[] | CharacterManager;
+};
 
-	macros?: MacroBase[];
-
-	mentionPrefix?: string;
+function updateCore(core: GameCore): GameCore {
+	return ensureSageGameCore(core as SageGameCore, { ver:1 }) as GameCore;
 }
 
 type MappedChannelNameTags = {
@@ -155,13 +135,13 @@ function fixDupeUsers(game: GameCore): void {
 
 export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>, HasColorsCore, HasEmojiCore, HasPostCurrency {
 	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {
-		super(updateGame(core), sageCache);
+		super(updateCore(core), sageCache);
 		fixDupeUsers(core);
 
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
-		this.core.encounters = EncounterManager.from(this.core.encounters as EncounterCore[] ?? (this.core.encounters = []), this);
-		this.core.parties = PartyManager.from(this.core.parties as PartyCore[] ?? (this.core.parties = []), this);
+		this.core.encounters = EncounterManager.from(this.core.encounters as EncounterCore[] ?? [], this);
+		this.core.parties = PartyManager.from(this.core.parties as PartyCore[] ?? [], this);
 
 		if (!this.core.gmCharacter) {
 			let gmCharacterCore: GameCharacterCore | undefined;
@@ -204,7 +184,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	public get serverDid(): Snowflake { return this.core.serverDid; }
 	public get serverId(): UUID { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }
-	public get macros() { return this.core.macros ?? (this.core.macros = []); }
+	public get macros() { return this.core.macros ??= []; }
 
 	public get gmRole(): GameRoleData | undefined { return this.roles.find(role => role.type === GameRoleType.GameMaster); }
 	public get gmRoleDid(): Snowflake | undefined { return this.gmRole?.did; }
@@ -214,7 +194,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	/** Returns users assigned manually, NOT users assigned via Player role. */
 	private get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
 
-	public get channels(): SageChannel[] { return this.core.channels ?? (this.core.channels = []); }
+	public get channels(): SageChannel[] { return this.core.channels ??= []; }
 	public get gameMasters(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
 	public get gmCharacter(): GameCharacter { return this.core.gmCharacter as GameCharacter; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
@@ -228,12 +208,12 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 			?? this.encounters.findCharacter(name)
 			?? this.parties.findCharacter(name);
 	}
-	public get roles(): GameRoleData[] { return this.core.roles ?? (this.core.roles = []); }
-	public get users(): GameUserData[] { return this.core.users ?? (this.core.users = []); }
+	public get roles(): GameRoleData[] { return this.core.roles ??= []; }
+	public get users(): GameUserData[] { return this.core.users ??= []; }
 
 	public get encounters(): EncounterManager { return this.core.encounters as EncounterManager; }
 	public get parties(): PartyManager { return this.core.parties as PartyManager; }
-	public get postCurrency() { return this.core.postCurrency ?? (this.core.postCurrency = {}); }
+	public get postCurrency(): PostCurrency { return this.core.postCurrency ??= {}; }
 
 	//#region Guild fetches
 	public async findBestPlayerChannel(): Promise<SageChannel | undefined> {

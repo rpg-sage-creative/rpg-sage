@@ -1,4 +1,5 @@
-import type { HexColorString } from "@rsc-utils/core-utils";
+import { isHexColorString, isNotBlank, type HexColorString } from "@rsc-utils/core-utils";
+import { isSimpleObject } from "../../validation/index.js";
 
 export enum EmbedColorType {
 	Command = 1,
@@ -35,4 +36,12 @@ export type EmbedColor = {
 
 export type HasEmbedColors = {
 	colors?: EmbedColor[];
+}
+
+export function isEmbedColor(color: unknown): color is EmbedColor {
+	return isSimpleObject<EmbedColor>(color)
+		&& typeof(color.type) === "number"
+		&& color.type in EmbedColorType
+		&& isHexColorString(color.hex)
+		&& (!color.label || isNotBlank(color.label));
 }

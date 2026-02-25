@@ -101,14 +101,14 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 				hasGmChannels = true;
 				if (threadDid) {
 					// thread is gm channel
-					isGmChannel = gmChannels.some(ch => (ch.did ?? ch.id) === threadDid);
+					isGmChannel = gmChannels.some(ch => ch.id === threadDid);
 					// thread is not channel and channel is gm channel
 					if (!isGmChannel) {
-						isGmChannel = !channels?.some(ch => (ch.did ?? ch.id) === threadDid)
-							&& gmChannels.some(ch => (ch.did ?? ch.id) === channelDid);
+						isGmChannel = !channels?.some(ch => ch.id === threadDid)
+							&& gmChannels.some(ch => ch.id === channelDid);
 					}
 				}else {
-					isGmChannel = gmChannels.some(ch => (ch.did ?? ch.id) === channelDid);
+					isGmChannel = gmChannels.some(ch => ch.id === channelDid);
 				}
 			}
 		}

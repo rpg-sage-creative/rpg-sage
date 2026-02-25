@@ -1,3 +1,6 @@
+export * from "./AdminRole.js";
+export * from "./AdminRoleType.js";
+export * from "./AdminUser.js";
 export * from "./DialogDiceBehaviorType.js";
 export * from "./DialogPostType.js";
 export * from "./DiceCriticalMethodType.js";
@@ -7,6 +10,7 @@ export * from "./DiceSecretMethodType.js";
 export * from "./DiceSortType.js";
 export * from "./EmbedColorType.js";
 export * from "./EmojiType.js";
+export * from "./GameCreatorType.js";
 export * from "./GameSystem.js";
 export * from "./MoveDirectionOutputType.js";
 export * from "./parseEnum.js";

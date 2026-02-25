@@ -5,6 +5,9 @@ import type { SageMessageReferenceCoreAny, SageMessageReferenceCoreV1 } from "..
 export function ensureSageMessageReferenceCoreV1(core: SageMessageReferenceCoreAny, context?: EnsureContext): SageMessageReferenceCoreV1 {
 	if (core.ver > 0) throw new Error(`cannot convert v${core.ver} to v1`);
 
+	// there was a bug that caused these references to nest
+	while ("core" in core) core = core.core as SageMessageReferenceCoreAny;
+
 	if ("messageDid" in core) {
 		return {
 			channelId: isNonNilSnowflake(core.threadDid) ? core.threadDid : core.channelDid,
@@ -32,4 +35,5 @@ export function ensureSageMessageReferenceCoreV1(core: SageMessageReferenceCoreA
 		userId: parseSnowflake(core.userId) ?? context?.userId!,
 		ver: 1
 	};
+
 }

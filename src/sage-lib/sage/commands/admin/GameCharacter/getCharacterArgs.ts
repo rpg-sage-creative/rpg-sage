@@ -1,5 +1,5 @@
+import { GameUserType } from "@rsc-sage/data-layer";
 import { Arg, Color, debug, error, isBlank, warn, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { GameUserType } from "../../../model/Game.js";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -145,10 +145,6 @@ export function getCharacterArgs(sageMessage: SageMessage, isGm: boolean, isUpda
 	return { core, mods, names, stats, userId };
 }
 
-const TypeRegExp = /^type$/i;
-const UserRegExp = /^user$/i;
-const UnsetRegExp = /^unset$/i;
-
 export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean, isUpdate: boolean): Promise<Results[]> {
 	const dsvResults = await fetchAndParseAllDsv(sageMessage);
 
@@ -178,15 +174,16 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 			let userId: Snowflake | undefined;
 
 			Object.entries(item).forEach(([key, value], index) => {
-				const valueOrNull = isBlank(value) || UnsetRegExp.test(value) ? null : value;
-				if (TypeRegExp.test(key)) {
+				const keyLower = key.toLowerCase();
+				const valueOrNull = isBlank(value) || keyLower === "unset" ? null : value;
+				if (keyLower === "type") {
 					type = /^(gm|pc|npc|companion|minion)$/i.test(value) ? value.toLowerCase() as "pc" : undefined;
-				}else if (UserRegExp.test(key)) {
+				}else if (keyLower === "user") {
 					if (valueOrNull) {
 						userId = sageMessage.game?.hasPlayer(value) ? value as Snowflake : playerMap.get(value.toLowerCase().replace(/^@/, ""));
 					}
 				}else if (isValidCoreKey(key)) {
-					switch(key.toLowerCase()) {
+					switch(keyLower) {
 						// core
 						case "alias": getCore().alias = valueOrNull!; break;
 						case "avatar": getCore().avatarUrl = valueOrNull!; break;

@@ -1,7 +1,7 @@
-import { type GameOptions, type SageChannel } from "@rsc-sage/data-layer";
+import { type GameOptions, type GameUserData, type SageChannel } from "@rsc-sage/data-layer";
 import { applyChanges, randomSnowflake, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
-import { Game, type GameUserData } from "../../../model/Game.js";
+import { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { gBlockBots } from "./gBlockBots.js";
 import { getGameChannels } from "./getGameChannels.js";
@@ -21,6 +21,7 @@ function createGame(sageCommand: SageCommand, gameOptions: Partial<GameOptions>,
 		users,
 		...gameOptions,
 		name: gameOptions.name!,
+		ver: 1,
 	}, sageCommand.server!, sageCommand.sageCache);
 }
 

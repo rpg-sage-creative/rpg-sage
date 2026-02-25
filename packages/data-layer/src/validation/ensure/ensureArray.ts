@@ -1,8 +1,11 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
 import type { HasVer } from "../../types/index.js";
+import { deleteEmptyArray } from "../utils/deleteEmptyArray.js";
 
 export type EnsureContext = {
-	characterId?: string;
+	characterId?: Snowflake;
+	gameId?: Snowflake;
+	serverId?: Snowflake;
 	userId?: Snowflake;
 };
 
@@ -18,7 +21,9 @@ type EnsureArrayArgs<Core, Key, Handler> = {
 	key: Key;
 	handler: Handler;
 	context?: EnsureContext;
+	optional?: "optional";
 };
+
 
 type EnsureVersionedArrayArgs<Core, Key, Handler> = {
 	core: Core;
@@ -26,9 +31,11 @@ type EnsureVersionedArrayArgs<Core, Key, Handler> = {
 	handler: Handler;
 	ver: number;
 	context?: EnsureContext;
+	optional?: "optional";
 };
 
-type Args<Core, Key, Handler> = EnsureArrayArgs<Core, Key, Handler> | EnsureVersionedArrayArgs<Core, Key, Handler>;
+type Args<Core, Key, Handler> = EnsureArrayArgs<Core, Key, Handler>
+	| EnsureVersionedArrayArgs<Core, Key, Handler>;
 
 export function ensureArray<
 			Core extends HasVer & Partial<Record<Key, (OldValue | NewValue)[]>>,
@@ -51,7 +58,7 @@ export function ensureArray<
 			NewValue extends HasVer
 		>(args: Args<Core, Key, EnsureArrayHandler<OldValue, NewValue>>): void {
 
-	const { core, key, handler, context } = args;
+	const { core, key, handler, context, optional } = args;
 	if ("ver" in args) {
 		core[key] = core[key]?.map(o => {
 			if ((o.ver ?? 0) < args.ver) {
@@ -63,6 +70,9 @@ export function ensureArray<
 	}else {
 		core[key] = core[key]
 			?.map(o => handler(o, { context }))
-			.filter(o => o !== undefined) as any;
+			.filter(o => o !== undefined && o !== null) as any;
+	}
+	if (optional === "optional") {
+		deleteEmptyArray({ core, key });
 	}
 }

@@ -13,9 +13,17 @@ export type DialogOptionsV0 = DialogOptionsV1 & {
 };
 
 export type DialogOptionsV1 = {
-	dialogPostType: DialogPostType;
-	gmCharacterName: string;
+	dialogPostType?: DialogPostType;
+	gmCharacterName?: string;
 	mentionPrefix?: string;
 	moveDirectionOutputType?: number;
-	sendDialogTo: Snowflake;
+	sendDialogTo?: Snowflake;
 };
+
+export const DialogOptionsV1Keys: (keyof DialogOptionsV1)[] = [
+	"dialogPostType",
+	"gmCharacterName",
+	"mentionPrefix",
+	"moveDirectionOutputType",
+	"sendDialogTo",
+];

@@ -60,9 +60,7 @@ function parseAutoChannel(channelData: ChannelData | undefined): SelectedChannel
 }
 
 function isSameChannel(autoChannel: AutoChannelData | undefined, gameChannel: SageChannel | undefined): boolean {
-	return autoChannel && gameChannel
-		? autoChannel.channelDid === gameChannel.did || autoChannel.channelDid === gameChannel.id
-		: false;
+	return autoChannel && gameChannel ? autoChannel.channelDid === gameChannel.id : false;
 }
 
 //#endregion
@@ -256,7 +254,7 @@ async function createChannelList(sageCommand: SageCommand, chars: Chars, selecte
 		}
 
 		if (!added) {
-			const autoChannel = { channelDid:gameChannel.did ?? gameChannel.id };
+			const autoChannel = { channelDid:gameChannel.id };
 			const label = await labelAutoChannel(autoChannel);
 			const value = stringifyAutoChannel(autoChannel);
 			if (label) addOption({ label, value });

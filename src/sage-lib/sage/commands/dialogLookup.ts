@@ -1,4 +1,4 @@
-import { EmbedColorType, EmojiType } from "@rsc-sage/data-layer";
+import { EmbedColorType, EmojiType, GameUserType } from "@rsc-sage/data-layer";
 import { isSageId, isTupperBoxId } from "@rsc-sage/env";
 import { errorReturnUndefined, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
@@ -7,7 +7,7 @@ import { ReactionType } from "../../discord/enums.js";
 import { registerReactionListener } from "../../discord/handlers.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { TCommand } from "../../discord/types.js";
-import { GameUserType, type Game } from "../model/Game.js";
+import type { Game } from "../model/Game.js";
 import type { GameCharacter } from "../model/GameCharacter.js";
 import type { SageCommand } from "../model/SageCommand.js";
 import type { SageReaction } from "../model/SageReaction.js";

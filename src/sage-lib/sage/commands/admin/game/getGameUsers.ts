@@ -1,4 +1,4 @@
-import { GameUserType, type GameUserData } from "../../../model/Game.js";
+import { GameUserType, type GameUserData } from "@rsc-sage/data-layer";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
 export async function getGameUsers(sageCommand: SageCommand): Promise<GameUserData[]> {

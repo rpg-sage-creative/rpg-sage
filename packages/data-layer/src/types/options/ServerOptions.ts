@@ -1,5 +1,9 @@
-import type { DialogOptions } from "../DialogOptions/DialogOptions.js";
-import type { DiceOptions } from "../DiceOptions/DiceOptions.js";
-import type { GameSystemOptions } from "./GameSystemOptions.js";
+import { DialogOptionsV1Keys, DiceOptionsV1Keys, GameSystemOptionsV1Keys, type DialogOptions, type DiceOptions, type GameSystemOptions } from "../../index.js";
 
 export type ServerOptions = DialogOptions & DiceOptions & GameSystemOptions;
+
+export const ServerOptionsKeysV1: (keyof ServerOptions)[] = [
+	...DialogOptionsV1Keys,
+	...DiceOptionsV1Keys,
+	...GameSystemOptionsV1Keys,
+];

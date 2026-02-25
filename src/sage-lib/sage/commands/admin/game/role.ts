@@ -1,5 +1,5 @@
+import { GameRoleType } from "@rsc-sage/data-layer";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
-import { GameRoleType } from "../../../model/Game.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
