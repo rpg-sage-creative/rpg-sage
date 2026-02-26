@@ -1,4 +1,6 @@
-import { DialogOptionsKeys, DiceOptionsKeys, GameSystemOptionsKeys, type DialogOptions, type DiceOptions, type GameSystemOptions } from "../index.js";
+import { DialogOptionsKeys, type DialogOptions } from "./DialogOptions/index.js";
+import { DiceOptionsKeys, type DiceOptions } from "./DiceOptions/index.js";
+import { GameSystemOptionsKeys, type GameSystemOptions } from "./GameSystemOptions.js";
 
 export type GameOptions = DialogOptions & DiceOptions & GameSystemOptions & {
 	name: string;

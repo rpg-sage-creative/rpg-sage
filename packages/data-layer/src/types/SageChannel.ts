@@ -3,7 +3,7 @@ import { assertString, isSimpleObject, renameProperty, type EnsureOptions } from
 import { assertChannelOptions, ChannelOptionsV1Keys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
 import { assertDialogOptions, DialogOptionsKeys, ensureDialogOptions, type DialogOptions } from "./DialogOptions/index.js";
 import { assertDiceOptions, DiceOptionsKeys, ensureDiceOptions, type DiceOptions } from "./DiceOptions/index.js";
-import { assertGameSystemOptions, ensureGameSystemOptions, GameSystemOptionsKeys, type GameSystemOptions } from "./GameSystemOptions/index.js";
+import { assertGameSystemOptions, ensureGameSystemOptions, GameSystemOptionsKeys, type GameSystemOptions } from "./GameSystemOptions.js";
 
 /** All SageChannel options that can be set by users. */
 export type SageChannelOptions = DialogOptions & DiceOptions & GameSystemOptions & ChannelOptions;
