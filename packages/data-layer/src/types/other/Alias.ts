@@ -1,7 +1,5 @@
 
-export type AliasV1 = {
+export type Alias = {
 	name: string;
 	target: string;
 };
-
-export type Alias = AliasV1;
