@@ -7,6 +7,7 @@ import type { HasGame } from "./index.js";
 import { SageCommand, type IdPartsBase, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageEventCache } from "./SageEventCache.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
+import type { ClientEventsKey } from "./utils/createClientEventLabel.js";
 
 // import type { SlashCommandGameType } from "../../../../packages/app-commands/build/types/types.js";
  type SlashCommandGameType = "PF1E" | "PF2E" | "SF1E" | "SF2E" | "Finder";
@@ -258,9 +259,9 @@ export class SageInteraction<T extends SupportedInteraction = any>
 
 	//#endregion
 
-	public static async fromInteraction<T extends SupportedInteraction>(interaction: T): Promise<SageInteraction<T>> {
+	public static async fromInteraction<T extends SupportedInteraction>(clientEvent: ClientEventsKey, interaction: T): Promise<SageInteraction<T>> {
 		return new SageInteraction({
-			eventCache: await SageEventCache.fromInteraction(interaction),
+			eventCache: await SageEventCache.fromInteraction(clientEvent, interaction),
 			interaction,
 			type: InteractionType.Unknown
 		});

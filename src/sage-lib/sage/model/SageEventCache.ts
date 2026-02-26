@@ -15,6 +15,7 @@ import type { Bot } from "./Bot.js";
 import { Game, type GameCore } from "./Game.js";
 import { AdminRoleType, Server } from "./Server.js";
 import { User } from "./User.js";
+import { createClientEventLabel, type ClientEvent, type ClientEventsKey } from "./utils/createClientEventLabel.js";
 
 export type ContentFormatter = (content?: Optional<string>) => string;
 
@@ -128,11 +129,12 @@ type ValidateAuthorArgs = {
 
 type ValidateUserArgs = ValidateActorArgs | ValidateAuthorArgs;
 
-type FetchErrorArgs = { discord?:DUser; guild?:Guild; validationErrors:string[]; };
-type AppendErrorArgs = { discord?:DUser; err:unknown; fetchNotes:string, guild?:Guild; validationErrors:string[]; };
+type FetchErrorArgs = { clientEvent: ClientEvent; discord?:DUser; guild?:Guild; validationErrors:string[]; };
+type AppendErrorArgs = { clientEvent: ClientEvent; discord?:DUser; err:unknown; fetchNotes:string, guild?:Guild; validationErrors:string[]; };
 const AppendErrorUserErrors: Record<string|number, string> = { 10007:"Unknown Member", 10013:"Unknown User" };
-function appendFetchError({ discord, err, fetchNotes, guild, validationErrors }: AppendErrorArgs): undefined {
+function appendFetchError({ clientEvent, discord, err, fetchNotes, guild, validationErrors }: AppendErrorArgs): undefined {
 	validationErrors.push(`Error Validating User (SageEventCache.ts -> validateUser)`);
+	validationErrors.push(`${BULLET} clientEvent = ${clientEvent}`);
 	validationErrors.push(`${BULLET} ${fetchNotes}`);
 	if (discord) {
 		validationErrors.push(`${BULLET} discord = ${discord.id} (${toHumanReadable(discord)})`);
@@ -169,6 +171,7 @@ async function fetchIfPartial<T extends CanBePartial>(object: T | undefined, fet
 }
 
 async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateUserArgs): Promise<SageEventCacheUser> {
+	const { clientEvent } = evCache;
 	const { which, actorOrPartial, authorOrPartial, messageOrPartial, reactionOrPartial } = validateUserArgs;
 
 	let discord: DUser | undefined;
@@ -178,26 +181,26 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 
 	// try fetching the discord user object
 	discord = actorOrPartial
-		? await fetchIfPartial(actorOrPartial, "discord = fetchIfPartial(actorOrPartial)", { discord, guild, validationErrors })
-		: await fetchIfPartial(authorOrPartial, "discord = fetchIfPartial(authorOrPartial)", { discord, guild, validationErrors });
+		? await fetchIfPartial(actorOrPartial, "discord = fetchIfPartial(actorOrPartial)", { clientEvent, discord, guild, validationErrors })
+		: await fetchIfPartial(authorOrPartial, "discord = fetchIfPartial(authorOrPartial)", { clientEvent, discord, guild, validationErrors });
 
 	// actor will always get passed in, author might not if the original was a partial
 	if (!discord && which === "author") {
 		// if we don't have a reaction and have a message, try getting author directly from message
 		if (!reactionOrPartial && messageOrPartial) {
-			const message = await fetchIfPartial(messageOrPartial, "message = await fetchIfPartial(messageOrPartial)", { discord, guild, validationErrors });
+			const message = await fetchIfPartial(messageOrPartial, "message = await fetchIfPartial(messageOrPartial)", { clientEvent, discord, guild, validationErrors });
 			discord = message?.author;
 		}
 
 		// still no discord user and we have a reaction, try getting it from reaction's message
 		if (!discord && reactionOrPartial) {
-			const reaction = await fetchIfPartial(reactionOrPartial, "reaction = await fetchIfPartial(reactionOrPartial)", { discord, guild, validationErrors });
-			const message = await fetchIfPartial(reaction?.message, "message = await fetchIfPartial(reaction?.message)", { discord, guild, validationErrors });
+			const reaction = await fetchIfPartial(reactionOrPartial, "reaction = await fetchIfPartial(reactionOrPartial)", { clientEvent, discord, guild, validationErrors });
+			const message = await fetchIfPartial(reaction?.message, "message = await fetchIfPartial(reaction?.message)", { clientEvent, discord, guild, validationErrors });
 			discord = message?.author;
 		}
 
 		// in case we managed to still have a partial ...
-		discord = await fetchIfPartial(discord, `discord = await fetchIfPartial(discord)`, { discord, guild, validationErrors });
+		discord = await fetchIfPartial(discord, `discord = await fetchIfPartial(discord)`, { clientEvent, discord, guild, validationErrors });
 	}
 
 	// we want to always have a sage user object, so pass in nil if we don't have an id
@@ -238,11 +241,11 @@ async function validateUser(evCache: SageEventCache, validateUserArgs: ValidateU
 
 	// we need a guildmember to check server perms
 	let member: GuildMember | undefined;
-	guild = await evCache.server.discord?.fetch().catch(err => appendFetchError({ discord, err, fetchNotes:"guild = await evCache.server.discord?.fetch()", guild, validationErrors }));
+	guild = await evCache.server.discord?.fetch().catch(err => appendFetchError({ clientEvent, discord, err, fetchNotes:"guild = await evCache.server.discord?.fetch()", guild, validationErrors }));
 	if (guild) {
 		// fetch the guild member if it isn't a bot and isn't a system user
 		if (!discord.bot && !discord.system) {
-			member = await guild.members.fetch({ user:id, force:true }).catch(err => appendFetchError({ discord, err, fetchNotes:"member = await guild.members.fetch({ user:id, force:true })", guild, validationErrors }));
+			member = await guild.members.fetch({ user:id, force:true }).catch(err => appendFetchError({ clientEvent, discord, err, fetchNotes:"member = await guild.members.fetch({ user:id, force:true })", guild, validationErrors }));
 			if (member) {
 				roleIds.push(...member.roles.cache.keys() as MapIterator<Snowflake>);
 			}
@@ -391,6 +394,7 @@ type SageEventCacheCore = {
 	author: SageEventCacheUser;
 	/** author of the message being acted upon */
 	authorOrPartial?: UserOrPartial;
+	clientEvent: ClientEvent;
 	discord: DiscordCache;
 	discordKey: DiscordKey;
 	game?: Game;
@@ -407,6 +411,7 @@ type SageEventCacheCreateOptions = {
 	actorOrPartial: UserOrPartial;
 	authorOrPartial: UserOrPartial | undefined;
 	channel: Channel | undefined;
+	clientEvent: ClientEvent;
 	discord: DiscordCache;
 	discordKey: DiscordKey;
 	guild: Guild | undefined;
@@ -415,13 +420,14 @@ type SageEventCacheCreateOptions = {
 };
 
 async function createSageEventCache(options: SageEventCacheCreateOptions): Promise<SageEventCache> {
-	const { actorOrPartial, authorOrPartial, channel, discord, discordKey, guild, messageOrPartial, reactionOrPartial } = options;
+	const { actorOrPartial, authorOrPartial, channel, clientEvent, discord, discordKey, guild, messageOrPartial, reactionOrPartial } = options;
 
 	const core: SageEventCacheCore = {
 		actor: undefined!, // below
 		actorOrPartial,
 		author: undefined!,
 		authorOrPartial,
+		clientEvent,
 		discord,
 		discordKey,
 		game: undefined,
@@ -488,6 +494,8 @@ async function createSageEventCache(options: SageEventCacheCreateOptions): Promi
 /** This is Sage's per event caching mechanism. */
 export class SageEventCache {
 	constructor(protected core: SageEventCacheCore) { }
+
+	public get clientEvent() { return this.core.clientEvent; }
 
 	/** Clears the cache/maps in an attempt to avoid memory leaks. */
 	public clear(): void {
@@ -840,11 +848,12 @@ export class SageEventCache {
 		return new SageEventCache(core);
 	}
 
-	private static async _fromMessage(messageOrPartial: MessageOrPartial, actorOrPartial: UserOrPartial, reactionOrPartial?: ReactionOrPartial): Promise<SageEventCache> {
+	private static async _fromMessage(clientEvent: ClientEventsKey, messageOrPartial: MessageOrPartial, actorOrPartial: UserOrPartial, reactionOrPartial?: ReactionOrPartial): Promise<SageEventCache> {
 		const evCache = await createSageEventCache({
 			actorOrPartial,
 			authorOrPartial: messageOrPartial.author ?? undefined,
 			channel: messageOrPartial.channel,
+			clientEvent: createClientEventLabel(clientEvent),
 			discord: DiscordCache.from(messageOrPartial),
 			discordKey: DiscordKey.from(messageOrPartial),
 			guild: messageOrPartial.guild ?? undefined,
@@ -854,23 +863,24 @@ export class SageEventCache {
 		return evCache;
 	}
 
-	public static async fromMessage(messageOrPartial: MessageOrPartial): Promise<SageEventCache> {
+	public static async fromMessage(clientEvent: ClientEventsKey, messageOrPartial: MessageOrPartial): Promise<SageEventCache> {
 		const message = await messageOrPartial.fetch();
-		const evCache = await SageEventCache._fromMessage(message, message.author);
+		const evCache = await SageEventCache._fromMessage(clientEvent, message, message.author);
 		await evCache.validateActor();
 		return evCache;
 	}
 
-	public static fromMessageReaction(reactionOrPartial: ReactionOrPartial, actorOrPartial: UserOrPartial): Promise<SageEventCache> {
-		return SageEventCache._fromMessage(reactionOrPartial.message, actorOrPartial, reactionOrPartial);
+	public static fromMessageReaction(clientEvent: ClientEventsKey, reactionOrPartial: ReactionOrPartial, actorOrPartial: UserOrPartial): Promise<SageEventCache> {
+		return SageEventCache._fromMessage(clientEvent, reactionOrPartial.message, actorOrPartial, reactionOrPartial);
 	}
 
-	public static async fromInteraction(interaction: SupportedInteraction): Promise<SageEventCache> {
+	public static async fromInteraction(clientEvent: ClientEventsKey, interaction: SupportedInteraction): Promise<SageEventCache> {
 		const messageOrPartial = "message" in interaction ? interaction.message ?? undefined : undefined;
 		const evCache = await createSageEventCache({
 			actorOrPartial: interaction.user,
 			authorOrPartial: messageOrPartial?.author ?? undefined,
 			channel: interaction.channel ?? undefined,
+			clientEvent: createClientEventLabel(clientEvent, interaction),
 			discord: DiscordCache.from(interaction),
 			discordKey: DiscordKey.from(interaction as Interaction),
 			guild: interaction.guild ?? undefined,

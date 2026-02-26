@@ -6,6 +6,7 @@ import { ReactionType } from "../../discord/index.js";
 import { SageCommand, type SageCommandCore } from "./SageCommand.js";
 import { SageEventCache } from "./SageEventCache.js";
 import { SageReactionArgs } from "./SageReactionArgs.js";
+import type { ClientEventsKey } from "./utils/createClientEventLabel.js";
 
 interface SageReactionCore extends SageCommandCore {
 	messageReaction: ReactionOrPartial;
@@ -102,9 +103,9 @@ export class SageReaction
 
 	public async whisper(): Promise<void> { }
 
-	public static async fromMessageReaction(messageReaction: ReactionOrPartial, user: UserOrPartial, reactionType: ReactionType): Promise<SageReaction> {
+	public static async fromMessageReaction(clientEvent: ClientEventsKey, messageReaction: ReactionOrPartial, user: UserOrPartial, reactionType: ReactionType): Promise<SageReaction> {
 		return new SageReaction({
-			eventCache: await SageEventCache.fromMessageReaction(messageReaction, user),
+			eventCache: await SageEventCache.fromMessageReaction(clientEvent, messageReaction, user),
 			messageReaction,
 			reactionType,
 			user

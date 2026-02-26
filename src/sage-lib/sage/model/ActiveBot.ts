@@ -1,27 +1,13 @@
 import { getSageId, getSuperUserId, getToken } from "@rsc-sage/env";
-import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, verbose, type Snowflake } from "@rsc-utils/core-utils";
+import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, tagLiterals, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, getRegisteredIntents, getRegisteredPartials, wrapUrls } from "@rsc-utils/discord-utils";
-import { ActivityType, Client, type ClientOptions, type Guild, type Interaction, type Message, type MessageReaction, type PartialMessage, type PartialMessageReaction, type PartialUser, type User } from "discord.js";
+import { ActivityType, Client, type ClientOptions } from "discord.js";
 import { notifyOfError } from "../../../sage-utils/notifyOfError.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
-import { MessageType, ReactionType } from "../../discord/index.js";
 import { initializeServer } from "../repo/base/initializeServer.js";
 import { Bot, type BotCore } from "./Bot.js";
-
-interface IClientEventHandler {
-	onClientReady(client: Client): void;
-	onClientGuildCreate(guild: Guild): void;
-	// onClientGuildDelete(guild: Guild): void;
-	// onClientGuildBanAdd(ban: GuildBan): void;
-	// onClientGuildBanRemove(ban: GuildBan): void;
-	// onClientGuildMemberUpdate(member: GuildMember | PartialGuildMember, originalMember: GuildMember): void;
-	// onClientGuildMemberRemove(member: GuildMember | PartialGuildMember): void;
-	onClientMessageCreate(message: Message): void;
-	onClientMessageUpdate(originalMessage: Message | PartialMessage, message: Message | PartialMessage): void;
-	onClientMessageReactionAdd(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void;
-	onClientMessageReactionRemove(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void;
-}
+import { createClientEventLabel } from "./utils/createClientEventLabel.js";
 
 function createDiscordClientOptions(): ClientOptions {
 	return {
@@ -30,7 +16,7 @@ function createDiscordClientOptions(): ClientOptions {
 	};
 }
 
-export class ActiveBot extends Bot implements IClientEventHandler {
+export class ActiveBot extends Bot {
 	public static active: ActiveBot;
 
 	/** are we trying to send to sns? starts as true */
@@ -91,7 +77,21 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		});
 
 		// To see options, look for: Discord.ClientEvents (right click nav .on below)
-		client.once("clientReady", this.onClientReady.bind(this));
+		client.once("clientReady", client => {
+			client.user?.setPresence({
+				status: "online"
+			});
+			client.user?.setActivity("rpgsage.io; /sage-help", {
+				type: ActivityType.Playing
+			});
+
+			ActiveBot.active = this;
+
+			addLogHandler("error", ActiveBot.notifyOfError);
+
+			info(`Discord.Client.on("clientReady") [success]`);
+			ActiveBot.sendToSuperUser(`Discord.Client.on("clientReady") [success]`);
+		});
 
 		// TODO: if created in a game category i could add or prompt to add?
 		// channelCreate: [channel: GuildChannel];
@@ -101,7 +101,13 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		// channelPinsUpdate: [channel: TextBasedChannels, date: Date];
 		// channelUpdate: [oldChannel: DMChannel | GuildChannel, newChannel: DMChannel | GuildChannel];
 
-		client.on("guildCreate", this.onClientGuildCreate.bind(this));
+		client.on("guildCreate", guild => {
+			initializeServer(guild).then(initialized => {
+				const guildArg = { id:guild.id, name:guild.name };
+				verbose(tagLiterals`Discord.Client.on("guildCreate", ${guildArg}) => ${initialized}`);
+			});
+		});
+
 		// client.on("guildDelete", this.onClientGuildDelete.bind(this));
 		// TODO: What is unavailable?
 		// guildUnavailable: [guild: Guild];
@@ -114,18 +120,55 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		// client.on("guildMemberUpdate", this.onClientGuildMemberUpdate.bind(this));
 		// client.on("guildMemberRemove", this.onClientGuildMemberRemove.bind(this));
 
-		client.on("interactionCreate", this.onInteractionCreate.bind(this));
+		const interactionEvents = ["interactionCreate"] as const;
+		for (const ev of interactionEvents) {
+			client.on(ev, interaction => {
+				handleInteraction(ev, interaction).then(data => {
+					if (data.handled > 0 || data.tested > 0) {
+						const clientEvent = createClientEventLabel(ev, interaction);
+						const interactionArg = "message" in interaction
+							? { id:interaction.id, message:{ id:interaction.message?.id }, user:{ id:interaction.user.id } }
+							: { id:interaction.id, user:{ id:interaction.user.id } };
+						verbose(tagLiterals`Discord.Client.on(${clientEvent}, interaction:${interactionArg}) => ${data.tested}.${data.handled}`);
+					}
+				});
+			});
+		}
 
-		client.on("messageCreate", this.onClientMessageCreate.bind(this));
-		client.on("messageUpdate", this.onClientMessageUpdate.bind(this));
-		// TODO: Do I need to track deletes for any reason?
-		// messageDelete: [message: Message | PartialMessage];
-		client.on("messageDelete", msg => setDeleted(msg.id as Snowflake));
-		// messageDeleteBulk: [messages: Collection<Snowflake, Message | PartialMessage>];
-		client.on("messageDeleteBulk", msgs => msgs.forEach(msg => setDeleted(msg.id as Snowflake)));
+		const messageEvents = ["messageCreate", "messageUpdate"] as const;
+		for (const ev of messageEvents) {
+			client.on(ev, (originalMessage, updatedMessage?) => {
+				handleMessage(ev, originalMessage, updatedMessage).then(data => {
+					if (data.handled > 0) {
+						const originalMessageArg = { id:originalMessage.id, author:{ id:originalMessage.author?.id } };
+						const updatedMessageArg = { id:updatedMessage?.id, author:{ id:updatedMessage?.author?.id } };
+						verbose(tagLiterals`Discord.Client.on(${ev}, originalMessage:${originalMessageArg}, updatedMessage:${updatedMessageArg}) => ${data.tested}.${data.handled}`);
+					}
+				});
+			});
+		}
 
-		client.on("messageReactionAdd", this.onClientMessageReactionAdd.bind(this));
-		client.on("messageReactionRemove", this.onClientMessageReactionRemove.bind(this));
+		/*
+			by tracking deleted messages (even only for a couple seconds) we can try:
+			1. delete any resources tied to that message (OG maps and char sheets not linked elsewhere)
+			2. avoid processing dialog processed and deleted by tupper
+		*/
+		client.on("messageDelete", message => setDeleted(message.id as Snowflake));
+		client.on("messageDeleteBulk", messages => messages.forEach(message => setDeleted(message.id as Snowflake)));
+
+		const reactionEvents = ["messageReactionAdd", "messageReactionRemove"] as const;
+		for (const ev of reactionEvents) {
+			client.on(ev, (messageReaction, user, _details) => {
+				handleReaction(ev, messageReaction, user).then(data => {
+					if (data.handled > 0) {
+						const messageReactionArg = { message:{ id:messageReaction.message.id }, emoji:{ name:messageReaction.emoji.name } };
+						const userArg = { id:user.id };
+						verbose(tagLiterals`Discord.Client.on(${ev}, messageReaction:${messageReactionArg}, user:${userArg}) => ${data.tested}.${data.handled}`);
+					}
+				});
+			});
+		}
+
 		// TODO: Do these call the above remove or do i need to handle all?
 		// messageReactionRemoveAll: [message: Message | PartialMessage, reactions: Collection<string | Snowflake, MessageReaction>];
 		// messageReactionRemoveEmoji: [reaction: MessageReaction | PartialMessageReaction];
@@ -145,37 +188,6 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 		// webhookUpdate: [channel: TextChannel | NewsChannel];
 
 		client.login(getToken());
-	}
-
-	onInteractionCreate(interaction: Interaction): void {
-		handleInteraction(interaction).then(data => {
-			if (data.handled > 0 || data.tested > 0) {
-				const commandName = interaction.isCommand() ? interaction.commandName : "";
-				verbose(`Discord.Client.on("interactionCreate", "${interaction.id}", "${commandName}") => ${data.tested}.${data.handled}`);
-			}
-		});
-	}
-
-	onClientReady(client: Client): void {
-		client.user?.setPresence({
-			status: "online"
-		});
-		client.user?.setActivity("rpgsage.io; /sage-help", {
-			type: ActivityType.Playing
-		});
-
-		ActiveBot.active = this;
-
-		addLogHandler("error", ActiveBot.notifyOfError);
-
-		info(`Discord.Client.on("clientReady") [success]`);
-		ActiveBot.sendToSuperUser(`Discord.Client.on("clientReady") [success]`);
-	}
-
-	onClientGuildCreate(guild: Guild): void {
-		initializeServer(guild).then(initialized => {
-			verbose(`Discord.Client.on("guildCreate", "${guild.id}::${guild.name}") => ${initialized}`);
-		});
 	}
 
 	// onClientGuildDelete(guild: Guild): void {
@@ -219,38 +231,6 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	// 	}
 	// }
 
-	onClientMessageCreate(message: Message): void {
-		handleMessage(message, null, MessageType.Post).then(data => {
-			if (data.handled > 0) {
-				verbose(`Discord.Client.on("message", "${message.id}") => ${data.tested}.${data.handled}`);
-			}
-		});
-	}
-
-	onClientMessageUpdate(originalMessage: Message | PartialMessage, updatedMessage: Message | PartialMessage): void {
-		handleMessage(updatedMessage, originalMessage, MessageType.Edit).then(data => {
-			if (data.handled > 0) {
-				verbose(`Discord.Client.on("messageUpdate", "${originalMessage.id}", "${updatedMessage.id}") => ${data.tested}.${data.handled}`);
-			}
-		});
-	}
-
-	onClientMessageReactionAdd(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void {
-		handleReaction(messageReaction, user, ReactionType.Add).then(data => {
-			if (data.handled > 0) {
-				verbose(`Discord.Client.on("messageReactionAdd", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
-			}
-		});
-	}
-
-	onClientMessageReactionRemove(messageReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): void {
-		handleReaction(messageReaction, user, ReactionType.Remove).then(data => {
-			if (data.handled > 0) {
-				verbose(`Discord.Client.on("messageReactionRemove", "${messageReaction.message.id}::${messageReaction.emoji}", "${user.id}") => ${data.tested}.${data.handled}`);
-			}
-		});
-	}
-
 	public static client: Client;
 
 	public static load(bot: Bot): ActiveBot {
@@ -265,8 +245,3 @@ export class ActiveBot extends Bot implements IClientEventHandler {
 	}
 
 }
-
-// async function handleGuildMemberUpdate(originalMember: GuildMember | PartialGuildMember, updatedMember: GuildMember): Promise<boolean>;
-// async function handleGuildMemberUpdate(_: GuildMember | PartialGuildMember, __: GuildMember): Promise<boolean> {
-// 	return true;
-// }

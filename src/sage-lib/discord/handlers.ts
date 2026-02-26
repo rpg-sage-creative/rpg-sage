@@ -5,6 +5,7 @@ import { ChannelType, MessageType as DMessageType, GatewayIntentBits, Permission
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
 import { SageReaction } from "../sage/model/SageReaction.js";
+import type { ClientEventsKey } from "../sage/model/utils/createClientEventLabel.js";
 import { isDeleted } from "./deletedMessages.js";
 import { MessageType, ReactionType } from "./enums.js";
 import type { TCommandAndArgsAndData, TCommandAndData, THandlerOutput, TInteractionHandler, TInteractionTester, TMessageHandler, TMessageTester, TReactionHandler, TReactionTester } from "./types.js";
@@ -202,13 +203,13 @@ function getInteractionFlags(interaction: Optional<Interaction>): InteractionFla
 	return { canIgnore:false, canHandle:false };
 }
 
-export async function handleInteraction(interaction: Interaction): Promise<THandlerOutput> {
+export async function handleInteraction(clientEvent: ClientEventsKey, interaction: Interaction): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0, ghosted: 0 };
 
 	const flags = getInteractionFlags(interaction);
 	if (flags.canHandle) {
 		try {
-			const sageInteraction = await SageInteraction.fromInteraction(interaction as SupportedInteraction);
+			const sageInteraction = await SageInteraction.fromInteraction(clientEvent, interaction as SupportedInteraction);
 			await handleInteractions(sageInteraction, output);
 			sageInteraction.clear();
 		}catch(ex) {
@@ -355,7 +356,9 @@ function canIgnoreMessage(message: MessageOrPartial, originalMessage: Optional<M
 		|| isEditWeCanIgnore(message, originalMessage);
 }
 
-export async function handleMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>, messageType: MessageType): Promise<THandlerOutput> {
+type HandleMessageClientEventsKey = ClientEventsKey & ("messageCreate" | "messageUpdate");
+
+export async function handleMessage(clientEvent: HandleMessageClientEventsKey, message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0, ghosted: 0 };
 
 	try {
@@ -370,7 +373,8 @@ export async function handleMessage(message: MessageOrPartial, originalMessage: 
 
 			// process the message
 			if (!canIgnore && fetchedMessage) {
-				const sageMessage = await SageMessage.fromMessage(fetchedMessage as SMessage);
+				const sageMessage = await SageMessage.fromMessage(clientEvent, fetchedMessage as SMessage);
+				const messageType = clientEvent === "messageCreate" ? MessageType.Post : MessageType.Edit;
 				await handleMessages(sageMessage, messageType, output);
 				sageMessage.clear();
 
@@ -416,8 +420,10 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 
 // #region reactions
 
+type HandleReactionClientEventsKey = ClientEventsKey & ("messageReactionAdd" | "messageReactionRemove");
+
 /** Returns the number of handlers executed. */
-export async function handleReaction(messageReaction: ReactionOrPartial, user: UserOrPartial, reactionType: ReactionType): Promise<THandlerOutput> {
+export async function handleReaction(clientEvent: HandleReactionClientEventsKey, messageReaction: ReactionOrPartial, user: UserOrPartial): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0, ghosted: 0 };
 
 	const canIgnore = isUserWeCanIgnore(user)
@@ -430,10 +436,12 @@ export async function handleReaction(messageReaction: ReactionOrPartial, user: U
 	try {
 		let sageReaction: SageReaction | undefined;
 
+		const reactionType = clientEvent === "messageReactionAdd" ? ReactionType.Add : ReactionType.Remove;
+
 		for (const listener of reactionListeners) {
 			if (!isActionableType(listener, reactionType)) continue;
 
-			if (!sageReaction) sageReaction = await SageReaction.fromMessageReaction(messageReaction, user, reactionType);
+			sageReaction ??= await SageReaction.fromMessageReaction(clientEvent, messageReaction, user, reactionType);
 
 			const commandAndData = await listener.tester(sageReaction) as TCommandAndData<any>;
 			output.tested++;

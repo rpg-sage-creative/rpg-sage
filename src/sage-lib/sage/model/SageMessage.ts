@@ -11,6 +11,7 @@ import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand
 import { SageEventCache } from "./SageEventCache.js";
 import { SageMessageArgs } from "./SageMessageArgs.js";
 import type { HasGame } from "./index.js";
+import type { ClientEventsKey } from "./utils/createClientEventLabel.js";
 import { addMessageDeleteButton } from "./utils/deleteButton.js";
 
 interface SageMessageCore extends SageCommandCore {
@@ -272,8 +273,8 @@ export class SageMessage
 
 	//#endregion
 
-	public static async fromMessage(message: SMessage): Promise<SageMessage> {
-		const eventCache = await SageEventCache.fromMessage(message);
+	public static async fromMessage(clientEvent: ClientEventsKey, message: SMessage): Promise<SageMessage> {
+		const eventCache = await SageEventCache.fromMessage(clientEvent, message);
 		const prefixOrDefault = eventCache.getPrefixOrDefault();
 		const prefixRegex = regex("i")`^\s*(?<prefix>${prefixOrDefault ? prefixOrDefault : "sage"})?[!?]!?`;
 		const prefixMatch = prefixRegex.exec(message.content ?? "");
