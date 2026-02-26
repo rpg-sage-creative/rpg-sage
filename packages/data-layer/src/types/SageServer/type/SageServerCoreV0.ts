@@ -1,4 +1,4 @@
-import type { SageChannelOld } from "../../SageChannel/SageChannel.js";
+import type { SageChannelOld } from "../../SageChannel.js";
 import type { DialogOptionsOld } from "../../DialogOptions/DialogOptions.js";
 import type { DiceOptionsOld } from "../../DiceOptions/DiceOptions.js";
 import type { GameSystemOptionsOld } from "../../GameSystemOptions/GameSystemOptions.js";

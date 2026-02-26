@@ -1,5 +1,5 @@
 import { isNonNilSnowflake, isNotBlank } from "@rsc-utils/core-utils";
-import { assertSageChannelV1, type SageChannelAny } from "../../../index.js";
+import { assertSageChannel, type SageChannel, type SageChannelAny } from "../../../index.js";
 import { assertArray, assertNumber, assertSageCore, assertString, isMacroBase, optional } from "../../../validation/index.js";
 import { assertDialogOptionsV1 } from "../../DialogOptions/assertDialogOptionsV1.js";
 import { assertDiceOptionsV1 } from "../../DiceOptions/assertDiceOptionsV1.js";
@@ -8,12 +8,16 @@ import { assertSageCharacterCoreV1 } from "../../SageCharacter/index.js";
 import { GameCreatorType, isAdminRole, isAdminUser, isEmbedColor, isEmoji } from "../../enums/index.js";
 import { SageServerV1Keys, type SageServerCoreAny, type SageServerCoreV1 } from "../index.js";
 
+function isSageChannel(channel: unknown): channel is SageChannel {
+	return assertSageChannel(objectType, channel as SageChannelAny);
+}
+
 const objectType = "Server";
 export function assertSageServerCoreV1(core: SageServerCoreAny): core is SageServerCoreV1 {
 	if (!assertSageCore<SageServerCoreV1>(core, objectType, SageServerV1Keys)) return false;
 
 	if (!assertArray({ core, objectType, key:"admins", optional, validator:isAdminUser })) return false;
-	if (!assertArray({ core, objectType, key:"channels", optional, validator:(channel: SageChannelAny) => assertSageChannelV1(objectType, channel) })) return false;
+	if (!assertArray({ core, objectType, key:"channels", optional, validator:isSageChannel })) return false;
 	if (!assertArray({ core, objectType, key:"colors", optional, validator:isEmbedColor })) return false;
 	if (!assertString({ core, objectType, key:"commandPrefix", optional })) return false;
 	// dialogPostType, gmCharacterName, mentionPrefix, moveDirectionOutputType, sendDialogTo

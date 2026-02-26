@@ -3,7 +3,7 @@ import type { GameCreatorType } from "../../enums/GameCreatorType.js";
 import type { HasEmbedColors, HasEmoji } from "../../enums/index.js";
 import { ServerOptionsKeysV1, type MacroBase, type SageCore, type ServerOptions } from "../../index.js";
 import type { AdminRole, AdminUser } from "../../enums/index.js";
-import type { SageChannel } from "../../SageChannel/SageChannel.js";
+import type { SageChannel } from "../../SageChannel.js";
 import type { SageCharacterCoreV1 } from "../../SageCharacter/index.js";
 // import type { SageChannel } from "../../SageChannel/index.js";
 

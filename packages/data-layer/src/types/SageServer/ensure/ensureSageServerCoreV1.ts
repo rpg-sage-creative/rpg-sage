@@ -1,5 +1,5 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { ensureSageChannelV1 } from "../../../index.js";
+import { ensureSageChannel } from "../../../index.js";
 import { deleteInvalidString, ensureArray, ensureIds, optional, type EnsureContext } from "../../../validation/index.js";
 import { ensureDialogOptionsV1 } from "../../DialogOptions/ensureDialogOptionsV1.js";
 import { ensureDiceOptionsV1 } from "../../DiceOptions/ensureDiceOptionsV1.js";
@@ -12,7 +12,7 @@ export function ensureSageServerCoreV1(core: SageServerCoreV0, context?: EnsureC
 
 	ensureIds(core);
 
-	ensureArray({ core, key:"channels", handler:ensureSageChannelV1, optional , context:{ ...context, serverId:core.id as Snowflake }});
+	ensureArray({ core, key:"channels", handler:ensureSageChannel, optional , context:{ ...context, serverId:core.id as Snowflake }});
 	ensureDialogOptionsV1(core);
 	ensureDiceOptionsV1(core);
 	ensureGameSystemOptionsV1(core);
