@@ -1,15 +1,6 @@
+import type { CardBase, DeckType } from "@rsc-sage/data-layer";
 import { getEnglish52Cards } from "./english52.js";
 import { getEnglish54Cards } from "./english54.js";
-
-export type CardBase = {
-	/** Generally the index in a "new deck order" */
-	id: number;
-	name: string;
-	code: string;
-	emoji?: string;
-};
-
-export type DeckType = "English52" | "English54";
 
 /**
  * face "up" represents a newly opened deck of cards with the faces up; this would put jokers on top at indexes 0, 1

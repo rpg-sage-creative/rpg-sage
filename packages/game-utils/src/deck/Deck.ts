@@ -1,7 +1,7 @@
-import type { DeckCore } from "@rsc-sage/data-layer";
+import type { CardBase, DeckCore, DeckType } from "@rsc-sage/data-layer";
 import { capitalize, randomSnowflake, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { randomItems, shuffle } from "@rsc-utils/random-utils";
-import { getCards, type CardBase, type DeckType } from "./decks/getCards.js";
+import { getCards } from "./decks/getCards.js";
 
 /*
 	A pile represents a stack of cards.

@@ -1,6 +1,7 @@
 export * from "./AdminRole.js";
 export * from "./AdminRoleType.js";
 export * from "./AdminUser.js";
+export * from "./DeckType.js";
 export * from "./DialogDiceBehaviorType.js";
 export * from "./DialogPostType.js";
 export * from "./DiceCriticalMethodType.js";

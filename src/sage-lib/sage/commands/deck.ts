@@ -1,6 +1,7 @@
+import type { CardBase } from "@rsc-sage/data-layer";
 import { BULLET, capitalize, error, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
-import { Deck, type CardBase, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "@rsc-utils/game-utils";
+import { Deck, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "@rsc-utils/game-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { deleteMessage } from "../../discord/deletedMessages.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
@@ -656,7 +657,7 @@ async function handleCardsButton(sageInteration: SageButtonInteraction): Promise
 function listCards(cards: CardBase[], gokValue?: boolean, gokTotal?: boolean): string {
 	const valuedCards = cards.map(({ name, emoji }) => {
 		const label = emoji ?? name;
-		const stringValue: string | number = name.split(" ")[0];
+		const stringValue: string = name.split(" ")[0];
 		const letter = stringValue[0];
 		const letterIndex = ["J","Q","K","A"].indexOf(letter);
 		const value = letterIndex < 0 ? +stringValue : letterIndex + 11;
