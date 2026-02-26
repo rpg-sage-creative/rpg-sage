@@ -3,9 +3,7 @@ import { assertString, isSimpleObject, renameProperty, type EnsureOptions } from
 import { assertChannelOptions, ChannelOptionsV1Keys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
 import { assertDialogOptions, DialogOptionsKeys, ensureDialogOptions, type DialogOptions } from "./DialogOptions/index.js";
 import { assertDiceOptions, DiceOptionsKeys, ensureDiceOptions, type DiceOptions } from "./DiceOptions/index.js";
-import { assertGameSystemOptionsV1 } from "./GameSystemOptions/assertGameSystemOptionsV1.js";
-import { GameSystemOptionsV1Keys, type GameSystemOptions } from "./GameSystemOptions/GameSystemOptions.js";
-import { ensureGameSystemOptionsV1 } from "./GameSystemOptions/index.js";
+import { assertGameSystemOptions, ensureGameSystemOptions, GameSystemOptionsKeys, type GameSystemOptions } from "./GameSystemOptions/index.js";
 
 /** All SageChannel options that can be set by users. */
 export type SageChannelOptions = DialogOptions & DiceOptions & GameSystemOptions & ChannelOptions;
@@ -31,7 +29,7 @@ export const SageChannelV1Keys: (keyof SageChannel)[] = [
 	...ChannelOptionsV1Keys,
 	...DialogOptionsKeys,
 	...DiceOptionsKeys,
-	...GameSystemOptionsV1Keys,
+	...GameSystemOptionsKeys,
 	"id",
 ];
 
@@ -40,7 +38,7 @@ export function assertSageChannel(objectType: string, core: SageChannelAny): cor
 	if (!assertChannelOptions(objectType, core)) return false;
 	if (!assertDialogOptions({ core, objectType })) return false;
 	if (!assertDiceOptions({ core, objectType })) return false;
-	if (!assertGameSystemOptionsV1(objectType, core)) return false;
+	if (!assertGameSystemOptions({ core, objectType })) return false;
 	if (!assertString({ core, objectType, key:"id", validator:isNonNilSnowflake })) return false;
 	return true
 }
@@ -49,7 +47,7 @@ export function ensureSageChannel(core: SageChannelOld, _?: EnsureOptions): Sage
 	ensureChannelOptions(core);
 	ensureDialogOptions(core);
 	ensureDiceOptions(core);
-	ensureGameSystemOptionsV1(core);
+	ensureGameSystemOptions(core);
 
 	// move did to id
 	renameProperty({ core, oldKey:"did", newKey:"id" });

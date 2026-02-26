@@ -1,11 +1,8 @@
 import { isNonNilSnowflake, isNotBlank } from "@rsc-utils/core-utils";
-import { assertSageChannel, type SageChannel, type SageChannelAny } from "../../../index.js";
 import { assertArray, assertNumber, assertSageCore, assertString, isMacroBase, optional } from "../../../validation/index.js";
-import { assertDialogOptions } from "../../DialogOptions/assertDialogOptions.js";
-import { assertDiceOptions } from "../../DiceOptions/assertDiceOptions.js";
-import { assertGameSystemOptionsV1 } from "../../GameSystemOptions/assertGameSystemOptionsV1.js";
-import { assertSageCharacterCoreV1 } from "../../SageCharacter/index.js";
 import { GameCreatorType, isAdminRole, isAdminUser, isEmbedColor, isEmoji } from "../../enums/index.js";
+import { assertDialogOptions, assertDiceOptions, assertGameSystemOptions, assertSageCharacterCoreV1 } from "../../index.js";
+import { assertSageChannel, type SageChannel, type SageChannelAny } from "../../SageChannel.js";
 import { SageServerV1Keys, type SageServerCoreAny, type SageServerCoreV1 } from "../index.js";
 
 function isSageChannel(channel: unknown): channel is SageChannel {
@@ -29,7 +26,7 @@ export function assertSageServerCoreV1(core: SageServerCoreAny): core is SageSer
 	if (!assertNumber({ core, objectType, key:"gameCreatorType", optional, validator:GameCreatorType })) return false;
 	if (!assertString({ core, objectType, key:"gameId", optional, validator:isNonNilSnowflake })) return false;
 	// gameSystemType
-	if (!assertGameSystemOptionsV1(objectType, core)) return false;
+	if (!assertGameSystemOptions({ core, objectType })) return false;
 	if ("gmCharacter" in core && !assertSageCharacterCoreV1(core.gmCharacter!)) return false;
 	// id
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;

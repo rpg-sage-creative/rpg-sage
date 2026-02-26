@@ -1,5 +1,5 @@
 import { isNotBlank } from "@rsc-utils/core-utils";
-import { assertDialogOptions, assertDiceOptions, assertGameSystemOptionsV1, assertSageChannel, assertSageCharacterCoreV1, isEmbedColor, isEmoji, type SageChannel, type SageChannelAny } from "../../../index.js";
+import { assertDialogOptions, assertDiceOptions, assertGameSystemOptions, assertSageChannel, assertSageCharacterCoreV1, isEmbedColor, isEmoji, type SageChannel, type SageChannelAny } from "../../../index.js";
 import { assertArray, assertNumber, assertSageCore, assertString, isMacroBase, optional } from "../../../validation/index.js";
 import { SageGameV1Keys, type SageGameCoreAny, type SageGameCoreV1 } from "../index.js";
 
@@ -26,7 +26,7 @@ export function assertSageGameCoreV1(core: SageGameCoreAny): core is SageGameCor
 	}
 	// core.encounters
 	// gameSystemType
-	if (!assertGameSystemOptionsV1(objectType, core)) return false;
+	if (!assertGameSystemOptions({ core, objectType })) return false;
 	if ("gmCharacter" in core && !assertSageCharacterCoreV1(core.gmCharacter!)) return false;
 	// id
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;

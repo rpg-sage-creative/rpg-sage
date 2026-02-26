@@ -1,6 +1,6 @@
 import { type Snowflake } from "@rsc-utils/core-utils";
 import { deleteEmptyArray, ensureArray, ensureIds, optional, renameProperty, type EnsureContext } from "../../../validation/index.js";
-import { ensureDialogOptions, ensureDiceOptions, ensureEmoji, ensureGameSystemOptionsV1, ensureSageChannel } from "../../index.js";
+import { ensureDialogOptions, ensureDiceOptions, ensureEmoji, ensureGameSystemOptions, ensureSageChannel } from "../../index.js";
 import { ensureSageCharacterCoreV1, type SageCharacterCoreV0 } from "../../SageCharacter/index.js";
 import { GameUserType, type SageGameCoreV0, type SageGameCoreV1 } from "../index.js";
 
@@ -11,7 +11,7 @@ export function ensureSageGameCoreV1(core: SageGameCoreV0, context?: EnsureConte
 
 	ensureDialogOptions(core);
 	ensureDiceOptions(core);
-	ensureGameSystemOptionsV1(core);
+	ensureGameSystemOptions(core);
 	renameProperty({ core, oldKey:"type", newKey:"gameSystemType" });
 
 	ensureArray({ core, key:"channels", handler:ensureSageChannel, optional , context:{ ...context, gameId:core.id as Snowflake }});

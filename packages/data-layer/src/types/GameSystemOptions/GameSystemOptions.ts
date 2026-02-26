@@ -1,10 +1,8 @@
 import type { GameSystemType } from "../enums/GameSystem.js";
 
-export type GameSystemOptionsOld = GameSystemOptionsV0;
-export type GameSystemOptions = GameSystemOptionsV1;
 export type GameSystemOptionsAny = GameSystemOptionsOld | GameSystemOptions;
 
-export type GameSystemOptionsV0 = GameSystemOptionsV1 & {
+export type GameSystemOptionsOld = GameSystemOptions & {
 	/** @deprecated */
 	defaultGame?: number;
 	/** @deprecated */
@@ -13,10 +11,10 @@ export type GameSystemOptionsV0 = GameSystemOptionsV1 & {
 	gameType?: number;
 };
 
-export type GameSystemOptionsV1 = {
+export type GameSystemOptions = {
 	gameSystemType?: GameSystemType;
 };
 
-export const GameSystemOptionsV1Keys: (keyof GameSystemOptionsV1)[] = [
+export const GameSystemOptionsKeys: (keyof GameSystemOptions)[] = [
 	"gameSystemType",
 ];

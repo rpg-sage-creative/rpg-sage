@@ -1,7 +1,7 @@
 import { renameProperty } from "../../validation/index.js";
-import type { GameSystemOptionsV0, GameSystemOptionsV1 } from "./GameSystemOptions.js";
+import type { GameSystemOptionsOld, GameSystemOptions } from "./GameSystemOptions.js";
 
-export function ensureGameSystemOptionsV1(core: GameSystemOptionsV0): GameSystemOptionsV1 {
+export function ensureGameSystemOptions(core: GameSystemOptionsOld): GameSystemOptions {
 
 	renameProperty({ core, oldKey:"defaultGame", newKey:"gameSystemType" });
 	renameProperty({ core, oldKey:"defaultGameType", newKey:"gameSystemType" });

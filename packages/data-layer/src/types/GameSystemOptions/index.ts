@@ -1,3 +1,3 @@
-export * from "./assertGameSystemOptionsV1.js";
-export * from "./ensureGameSystemOptionsV1.js";
+export * from "./assertGameSystemOptions.js";
+export * from "./ensureGameSystemOptions.js";
 export * from "./GameSystemOptions.js";
