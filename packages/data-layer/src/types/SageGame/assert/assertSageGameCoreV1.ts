@@ -1,18 +1,15 @@
 import { isNotBlank } from "@rsc-utils/core-utils";
-import { assertDialogOptions, assertDiceOptions, assertGameSystemOptions, assertSageChannel, assertSageCharacterCoreV1, isEmbedColor, isEmoji, type SageChannel, type SageChannelAny } from "../../../index.js";
 import { assertArray, assertNumber, assertSageCore, assertString, isMacroBase, optional } from "../../../validation/index.js";
+import { isEmbedColor, isEmoji } from "../../enums/index.js";
+import { assertDialogOptions, assertDiceOptions, assertGameSystemOptions, assertSageChannel, assertSageCharacterCoreV1 } from "../../index.js";
 import { SageGameV1Keys, type SageGameCoreAny, type SageGameCoreV1 } from "../index.js";
-
-function isSageChannel(channel: unknown): channel is SageChannel {
-	return assertSageChannel(objectType, channel as SageChannelAny);
-}
 
 const objectType = "Game";
 export function assertSageGameCoreV1(core: SageGameCoreAny): core is SageGameCoreV1 {
 	if (!assertSageCore<SageGameCoreV1>(core, objectType, SageGameV1Keys)) return false;
 
 	if (!assertNumber({ core, objectType, key:"archivedTs", optional })) return false;
-	if (!assertArray({ core, objectType, key:"channels", optional, validator:isSageChannel })) return false;
+	if (!assertArray({ core, objectType, key:"channels", optional, asserter:assertSageChannel })) return false;
 	if (!assertArray({ core, objectType, key:"colors", optional, validator:isEmbedColor })) return false;
 	if (!assertNumber({ core, objectType, key:"createdTs" })) return false;
 	// dialogPostType, gmCharacterName, mentionPrefix, moveDirectionOutputType, sendDialogTo

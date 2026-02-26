@@ -25,7 +25,7 @@ export type SageChannel = SageChannelOptions & {
 	id: Snowflake;
 };
 
-export const SageChannelV1Keys: (keyof SageChannel)[] = [
+export const SageChannelKeys: (keyof SageChannel)[] = [
 	...ChannelOptionsV1Keys,
 	...DialogOptionsKeys,
 	...DiceOptionsKeys,
@@ -33,7 +33,7 @@ export const SageChannelV1Keys: (keyof SageChannel)[] = [
 	"id",
 ];
 
-export function assertSageChannel(objectType: string, core: SageChannelAny): core is SageChannel {
+export function assertSageChannel({ core, objectType }: { core:SageChannelAny; objectType:string; }): boolean {
 	if (!isSimpleObject<SageChannel>(core)) return false;
 	if (!assertChannelOptions(objectType, core)) return false;
 	if (!assertDialogOptions({ core, objectType })) return false;
