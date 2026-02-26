@@ -1,12 +1,12 @@
 import type { HexColorString, Snowflake } from "@rsc-utils/core-utils";
-import type { AutoChannelData, DeckCoreV1, MacroBase, Note, SageCore, SageMessageReferenceCoreV1 } from "../../index.js";
+import type { AutoChannelData, DeckCore, MacroBase, Note, SageCore, SageMessageReferenceCoreV1 } from "../../index.js";
 
 export type SageCharacterCoreV1 = Omit<SageCore<"Character", Snowflake>, "did"> & {
 	alias?: string;
 	autoChannels?: AutoChannelData[];
 	avatarUrl?: string;
 	companions?: SageCharacterCoreV1[];
-	decks?: DeckCoreV1[];
+	decks?: DeckCore[];
 	embedColor?: HexColorString;
 	essence20?: unknown;
 	essence20Id?: string;

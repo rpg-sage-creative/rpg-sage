@@ -1,7 +1,7 @@
 import { isHexColorString, isNonNilSnowflake, isNotBlank } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { assertArray, assertSageCore, assertSimpleObject, assertString, isAutoChannelData, isMacroBase, isNote, isValidId, optional, tagFailure, } from "../../../validation/index.js";
-import { assertDeckCoreV1, assertSageMessageReferenceCoreV1, SageCharacterCoreV1Keys, type SageCharacterCoreAny, type SageCharacterCoreV1 } from "../../index.js";
+import { assertDeckCore, assertSageMessageReferenceCoreV1, SageCharacterCoreV1Keys, type SageCharacterCoreAny, type SageCharacterCoreV1 } from "../../index.js";
 
 // const AliasRegExp = /^\w+$/;
 const objectType = "Character";
@@ -13,7 +13,7 @@ export function assertSageCharacterCoreV1(core: SageCharacterCoreAny): core is S
 	if (!assertArray({ core, objectType, key:"autoChannels", validator:isAutoChannelData, optional })) return false;
 	if (!assertString({ core, objectType, key:"avatarUrl", validator:isUrl, optional })) return false;
 	if (!assertArray({ core, objectType, key:"companions", validator:assertSageCharacterCoreV1, optional })) return false;
-	if (!assertArray({ core, objectType, key:"decks", validator:assertDeckCoreV1, optional })) return false;
+	if (!assertArray({ core, objectType, key:"decks", validator:assertDeckCore, optional })) return false;
 	if (!assertString({ core, objectType, key:"embedColor", validator:isHexColorString, optional })) return false;
 	if ("essence20" in core) {
 		if (!assertSimpleObject(core.essence20)) return tagFailure`${objectType}: invalid essence20`;

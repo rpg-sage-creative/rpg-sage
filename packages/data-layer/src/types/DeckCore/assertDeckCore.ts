@@ -1,8 +1,8 @@
 import { isNotBlank, isSnowflake, sortPrimitive } from "@rsc-utils/core-utils";
-import { assertArray, assertNumber, assertSageCore, assertString, optional } from "../../../validation/index.js";
-import { DeckCoreV1Keys, type DeckCoreAny, type DeckCoreV1 } from "../index.js";
+import { assertArray, assertNumber, assertSageCore, assertString, optional } from "../../validation/index.js";
+import { DeckCoreKeys, type DeckCore, type DeckCoreAny } from "./DeckCore.js";
 
-export function assertEnglishDeck(core: DeckCoreV1, count: number): boolean {
+export function assertEnglishDeck(core: DeckCore, count: number): boolean {
 	const cards = ([] as number[])
 		.concat(core.discardPile ?? [])
 		.concat(core.drawPile ?? [])
@@ -13,13 +13,14 @@ export function assertEnglishDeck(core: DeckCoreV1, count: number): boolean {
 	return cards.length === count && cards.every((value, index) => value === index);
 }
 
-const objectType = "Deck";
-export function assertDeckCoreV1(core: DeckCoreAny): core is DeckCoreV1 {
-	if (!assertSageCore<DeckCoreV1>(core, objectType, DeckCoreV1Keys)) return false;
+function isPositiveNumber(value: number) { return value > 0; }
+function isValidDeck(value: string) { return ["English52","English54"].includes(value); }
 
-	const isPositiveNumber = (value: number) => value > 0;
+const objectType = "Deck";
+export function assertDeckCore(core: DeckCoreAny): core is DeckCore {
+	if (!assertSageCore<DeckCore>(core, objectType, DeckCoreKeys)) return false;
+
 	const isValidCard = (value: unknown) => typeof(value) === "number" ? value >= 0 && value < core.cardCount : false;
-	const isValidDeck = (value: string) => ["English52","English54"].includes(value);
 
 	if (!assertNumber({ core, objectType, key:"cardCount", validator:isPositiveNumber })) return false;
 	if (!assertArray({ core, objectType, key:"discardPile", validator:isValidCard, optional })) return false;

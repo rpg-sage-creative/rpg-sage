@@ -1,5 +1,5 @@
 import type { HexColorString, Snowflake } from "@rsc-utils/core-utils";
-import type { DeckCoreV1, DialogPostType, MacroBase, SageMessageReferenceCoreV1 } from "../../index.js";
+import type { DeckCore, DialogPostType, MacroBase, SageMessageReferenceCoreV1 } from "../../index.js";
 
 export type SageCharacterCoreV2 = {
 	/** short name used to ease dialog access */
@@ -23,7 +23,7 @@ export type SageCharacterCoreV2 = {
 	}>;
 
 	/** character specific decks; experimental deck logic */
-	decks?: DeckCoreV1[];
+	decks?: DeckCore[];
 
 	/** contains data about the character's dialog presence */
 	dialog: {
