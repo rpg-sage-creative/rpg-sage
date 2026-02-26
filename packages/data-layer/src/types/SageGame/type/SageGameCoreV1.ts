@@ -1,9 +1,9 @@
 import type { Snowflake, UUID } from "@rsc-utils/core-utils";
 import type { HasEmbedColors, HasEmoji } from "../../enums/index.js";
-import { DialogOptionsKeys, DiceOptionsV1Keys, GameSystemOptionsV1Keys, type DialogOptions, type DiceOptions, type GameSystemOptions, type MacroBase, type SageCore } from "../../index.js";
+import { DialogOptionsKeys, DiceOptionsKeys, GameSystemOptionsV1Keys, type DialogOptions, type DiceOptions, type GameSystemOptions, type MacroBase, type SageCore } from "../../index.js";
+import type { PostCurrency } from "../../PostCurrency.js";
 import type { SageChannel } from "../../SageChannel.js";
 import type { SageCharacterCore } from "../../SageCharacter/index.js";
-import type { PostCurrency } from "../../PostCurrency.js";
 
 export type HasPostCurrency = { postCurrency?:PostCurrency; };
 
@@ -19,7 +19,7 @@ export type GameOptions = DialogOptions & DiceOptions & GameSystemOptions & {
 
 const GameOptionsKeysV1: (keyof GameOptions)[] = [
 	...DialogOptionsKeys,
-	...DiceOptionsV1Keys,
+	...DiceOptionsKeys,
 	...GameSystemOptionsV1Keys,
 	"name",
 ];

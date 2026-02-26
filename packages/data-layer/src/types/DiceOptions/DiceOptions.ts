@@ -1,24 +1,22 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
 import type { DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType } from "../enums/index.js";
 
-export type DiceOptionsOld = DiceOptionsV0;
-export type DiceOptions = DiceOptionsV1;
 export type DiceOptionsAny = DiceOptionsOld | DiceOptions;
 
-export type DiceOptionsV0 = DiceOptionsV1 & {
+export type DiceOptionsOld = DiceOptions & {
 	/** @deprecated */
-	defaultCritMethodType?: number;
+	defaultCritMethodType?: DiceCriticalMethodType;
 	/** @deprecated */
-	defaultDiceOutput?: number;
+	defaultDiceOutput?: DiceOutputType;
 	/** @deprecated */
-	defaultDiceOutputType?: number;
+	defaultDiceOutputType?: DiceOutputType;
 	/** @deprecated */
-	defaultDicePostType?: number;
+	defaultDicePostType?: DicePostType;
 	/** @deprecated */
-	defaultDiceSecretMethodType?: number;
+	defaultDiceSecretMethodType?: DiceSecretMethodType;
 };
 
-export type DiceOptionsV1 = {
+export type DiceOptions = {
 	diceCritMethodType?: DiceCriticalMethodType;
 	diceOutputType?: DiceOutputType;
 	dicePostType?: DicePostType;
@@ -27,7 +25,7 @@ export type DiceOptionsV1 = {
 	sendDiceTo?: Snowflake;
 };
 
-export const DiceOptionsV1Keys: (keyof DiceOptionsV1)[] = [
+export const DiceOptionsKeys: (keyof DiceOptions)[] = [
 	"diceCritMethodType",
 	"diceOutputType",
 	"dicePostType",

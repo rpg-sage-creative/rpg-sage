@@ -1,9 +1,7 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { ensureSageChannel } from "../../../index.js";
 import { deleteInvalidString, ensureArray, ensureIds, optional, type EnsureContext } from "../../../validation/index.js";
-import { ensureDialogOptions } from "../../DialogOptions/ensureDialogOptions.js";
-import { ensureDiceOptionsV1 } from "../../DiceOptions/ensureDiceOptionsV1.js";
 import { ensureGameSystemOptionsV1 } from "../../GameSystemOptions/ensureGameSystemOptionsV1.js";
+import { ensureDialogOptions, ensureDiceOptions, ensureSageChannel } from "../../index.js";
 import { ensureSageCharacterCoreV1, type SageCharacterCoreV0 } from "../../SageCharacter/index.js";
 import type { SageServerCoreV0, SageServerCoreV1 } from "../index.js";
 
@@ -14,7 +12,7 @@ export function ensureSageServerCoreV1(core: SageServerCoreV0, context?: EnsureC
 
 	ensureArray({ core, key:"channels", handler:ensureSageChannel, optional , context:{ ...context, serverId:core.id as Snowflake }});
 	ensureDialogOptions(core);
-	ensureDiceOptionsV1(core);
+	ensureDiceOptions(core);
 	ensureGameSystemOptionsV1(core);
 	core.gmCharacter ? core.gmCharacter = ensureSageCharacterCoreV1(core.gmCharacter as SageCharacterCoreV0, context) : delete core.gmCharacter;
 	deleteInvalidString({ core, key:"name" });

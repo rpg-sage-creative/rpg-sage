@@ -1,5 +1,5 @@
 import { isNotBlank } from "@rsc-utils/core-utils";
-import { isSimpleObject } from "../../validation/index.js";
+import { assertArray, assertNumber, isSimpleObject } from "../../validation/index.js";
 
 export enum EmojiType {
 
@@ -109,13 +109,23 @@ export type HasEmojiCore = {
 	emojify(text: string): string;
 };
 
-
+/** TypeGuard */
 export function isEmoji(emoji: unknown): emoji is Emoji {
 	return isSimpleObject<Emoji>(emoji)
 		&& typeof(emoji.type) === "number"
 		&& emoji.type in EmojiType
 		&& !!emoji.matches?.length && emoji.matches.every(isNotBlank)
 		&& isNotBlank(emoji.replacement);
+}
+
+/** Returns valid Emoji or undefined */
+export function ensureEmoji(emoji: unknown): Emoji | undefined {
+	return isSimpleObject<Emoji>(emoji)
+		&& assertNumber({ core:emoji, objectType:"Emoji", key:"type", validator:EmojiType })
+		&& emoji.matches.length
+		&& assertArray({ core:emoji, objectType:"Emoji", key:"matches", validator:isNotBlank })
+		&& isNotBlank(emoji.replacement)
+		? emoji : undefined;
 }
 
 // type EmojiCategory = "Command" | "Condition" | "Dialog" | "Dice" | "DiceResults" | "Logo" | "Map" | "MapMovement" | "Permission";

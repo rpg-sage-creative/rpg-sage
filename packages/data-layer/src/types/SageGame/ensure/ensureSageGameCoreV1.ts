@@ -1,15 +1,8 @@
-import { isNotBlank, type Snowflake } from "@rsc-utils/core-utils";
-import { assertArray, assertNumber, deleteEmptyArray, ensureArray, ensureIds, isSimpleObject, optional, renameProperty, type EnsureContext } from "../../../validation/index.js";
-import { EmojiType, ensureDialogOptions, ensureDiceOptionsV1, ensureGameSystemOptionsV1, ensureSageChannel, ensureSageCharacterCoreV1, GameUserType, type Emoji, type SageCharacterCoreV0, type SageGameCoreV0, type SageGameCoreV1 } from "../../index.js";
-
-function ensureEmoji(emoji: unknown): Emoji | undefined {
-	return isSimpleObject<Emoji>(emoji)
-		&& assertNumber({ core:emoji, objectType:"Emoji", key:"type", validator:EmojiType })
-		&& emoji.matches.length
-		&& assertArray({ core:emoji, objectType:"Emoji", key:"matches", validator:isNotBlank })
-		&& isNotBlank(emoji.replacement)
-		? emoji : undefined;
-}
+import { type Snowflake } from "@rsc-utils/core-utils";
+import { deleteEmptyArray, ensureArray, ensureIds, optional, renameProperty, type EnsureContext } from "../../../validation/index.js";
+import { ensureDialogOptions, ensureDiceOptions, ensureEmoji, ensureGameSystemOptionsV1, ensureSageChannel } from "../../index.js";
+import { ensureSageCharacterCoreV1, type SageCharacterCoreV0 } from "../../SageCharacter/index.js";
+import { GameUserType, type SageGameCoreV0, type SageGameCoreV1 } from "../index.js";
 
 export function ensureSageGameCoreV1(core: SageGameCoreV0, context?: EnsureContext): SageGameCoreV1 {
 	if (core.ver > 0) throw new Error(`cannot convert v${core.ver} to v1`);
@@ -17,7 +10,7 @@ export function ensureSageGameCoreV1(core: SageGameCoreV0, context?: EnsureConte
 	ensureIds(core);
 
 	ensureDialogOptions(core);
-	ensureDiceOptionsV1(core);
+	ensureDiceOptions(core);
 	ensureGameSystemOptionsV1(core);
 	renameProperty({ core, oldKey:"type", newKey:"gameSystemType" });
 

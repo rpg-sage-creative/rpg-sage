@@ -2,9 +2,7 @@ import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { assertString, isSimpleObject, renameProperty, type EnsureOptions } from "../validation/index.js";
 import { assertChannelOptions, ChannelOptionsV1Keys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
 import { assertDialogOptions, DialogOptionsKeys, ensureDialogOptions, type DialogOptions } from "./DialogOptions/index.js";
-import { assertDiceOptionsV1 } from "./DiceOptions/assertDiceOptionsV1.js";
-import { DiceOptionsV1Keys, type DiceOptions } from "./DiceOptions/DiceOptions.js";
-import { ensureDiceOptionsV1 } from "./DiceOptions/index.js";
+import { assertDiceOptions, DiceOptionsKeys, ensureDiceOptions, type DiceOptions } from "./DiceOptions/index.js";
 import { assertGameSystemOptionsV1 } from "./GameSystemOptions/assertGameSystemOptionsV1.js";
 import { GameSystemOptionsV1Keys, type GameSystemOptions } from "./GameSystemOptions/GameSystemOptions.js";
 import { ensureGameSystemOptionsV1 } from "./GameSystemOptions/index.js";
@@ -32,7 +30,7 @@ export type SageChannel = SageChannelOptions & {
 export const SageChannelV1Keys: (keyof SageChannel)[] = [
 	...ChannelOptionsV1Keys,
 	...DialogOptionsKeys,
-	...DiceOptionsV1Keys,
+	...DiceOptionsKeys,
 	...GameSystemOptionsV1Keys,
 	"id",
 ];
@@ -41,7 +39,7 @@ export function assertSageChannel(objectType: string, core: SageChannelAny): cor
 	if (!isSimpleObject<SageChannel>(core)) return false;
 	if (!assertChannelOptions(objectType, core)) return false;
 	if (!assertDialogOptions({ core, objectType })) return false;
-	if (!assertDiceOptionsV1(objectType, core)) return false;
+	if (!assertDiceOptions({ core, objectType })) return false;
 	if (!assertGameSystemOptionsV1(objectType, core)) return false;
 	if (!assertString({ core, objectType, key:"id", validator:isNonNilSnowflake })) return false;
 	return true
@@ -50,7 +48,7 @@ export function assertSageChannel(objectType: string, core: SageChannelAny): cor
 export function ensureSageChannel(core: SageChannelOld, _?: EnsureOptions): SageChannel {
 	ensureChannelOptions(core);
 	ensureDialogOptions(core);
-	ensureDiceOptionsV1(core);
+	ensureDiceOptions(core);
 	ensureGameSystemOptionsV1(core);
 
 	// move did to id

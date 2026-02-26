@@ -1,5 +1,5 @@
 import { isNotBlank } from "@rsc-utils/core-utils";
-import { assertDialogOptions, assertDiceOptionsV1, assertGameSystemOptionsV1, assertSageChannel, assertSageCharacterCoreV1, isEmbedColor, isEmoji, type SageChannel, type SageChannelAny } from "../../../index.js";
+import { assertDialogOptions, assertDiceOptions, assertGameSystemOptionsV1, assertSageChannel, assertSageCharacterCoreV1, isEmbedColor, isEmoji, type SageChannel, type SageChannelAny } from "../../../index.js";
 import { assertArray, assertNumber, assertSageCore, assertString, isMacroBase, optional } from "../../../validation/index.js";
 import { SageGameV1Keys, type SageGameCoreAny, type SageGameCoreV1 } from "../index.js";
 
@@ -18,7 +18,7 @@ export function assertSageGameCoreV1(core: SageGameCoreAny): core is SageGameCor
 	// dialogPostType, gmCharacterName, mentionPrefix, moveDirectionOutputType, sendDialogTo
 	if (!assertDialogOptions({ core, objectType })) return false;
 	// diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, sendDiceTo
-	if (!assertDiceOptionsV1(objectType, core)) return false;
+	if (!assertDiceOptions({ core, objectType })) return false;
 	// did --> this needs to become an invalid key
 	if (!assertArray({ core, objectType, key:"emoji", optional, validator:isEmoji })) {
 		console.log(core);

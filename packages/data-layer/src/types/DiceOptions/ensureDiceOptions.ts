@@ -1,7 +1,7 @@
 import { renameProperty } from "../../validation/index.js";
-import type { DiceOptionsV0, DiceOptionsV1 } from "./DiceOptions.js";
+import type { DiceOptionsOld, DiceOptions } from "./DiceOptions.js";
 
-export function ensureDiceOptionsV1(core: DiceOptionsV0): DiceOptionsV1 {
+export function ensureDiceOptions(core: DiceOptionsOld): DiceOptions {
 
 	renameProperty({ core, oldKey:"defaultCritMethodType", newKey:"diceCritMethodType" });
 	renameProperty({ core, oldKey:"defaultDiceOutput", newKey:"diceOutputType" });
