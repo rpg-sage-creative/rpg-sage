@@ -1,11 +1,8 @@
 import type { Snowflake, UUID } from "@rsc-utils/core-utils";
-import type { GameCreatorType } from "../../enums/GameCreatorType.js";
-import type { HasEmbedColors, HasEmoji } from "../../enums/index.js";
-import { ServerOptionsKeysV1, type MacroBase, type SageCore, type ServerOptions } from "../../index.js";
-import type { AdminRole, AdminUser } from "../../enums/index.js";
-import type { SageChannel } from "../../SageChannel.js";
+import type { AdminRole, AdminUser, GameCreatorType, HasEmbedColors, HasEmoji } from "../../enums/index.js";
+import type { MacroBase, SageChannel, SageCore, ServerOptions } from "../../index.js";
 import type { SageCharacterCoreV1 } from "../../SageCharacter/index.js";
-// import type { SageChannel } from "../../SageChannel/index.js";
+import { ServerOptionsKeys } from "../../ServerOptions.js";
 
 export type SageServerCoreV1 = SageCore<"Server", Snowflake | UUID> & HasEmbedColors & HasEmoji & ServerOptions & {
 
@@ -49,7 +46,7 @@ export type SageServerCoreV1 = SageCore<"Server", Snowflake | UUID> & HasEmbedCo
 };
 
 export const SageServerV1Keys: (keyof SageServerCoreV1)[] = [
-	...ServerOptionsKeysV1,
+	...ServerOptionsKeys,
 	"admins",
 	"channels",
 	"colors",
