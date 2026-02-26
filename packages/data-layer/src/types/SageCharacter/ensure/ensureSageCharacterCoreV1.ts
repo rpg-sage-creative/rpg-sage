@@ -1,6 +1,6 @@
 import { isSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteEmptyArray, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, renameProperty, type EnsureContext } from "../../../validation/index.js";
-import { ensureDeckCore } from "../../DeckCore/index.js";
+import { ensureDeckCore } from "../../DeckCore.js";
 import { DialogPostType } from "../../enums/DialogPostType.js";
 import type { AutoChannelData } from "../../other/index.js";
 import { ensureSageMessageReferenceCore } from "../../SageMessageReference/index.js";
