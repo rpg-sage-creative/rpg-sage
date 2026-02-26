@@ -1,4 +1,4 @@
-import { DialogOptionsKeys, type DialogOptions } from "./DialogOptions/index.js";
+import { DialogOptionsKeys, type DialogOptions } from "./DialogOptions.js";
 import { DiceOptionsKeys, type DiceOptions } from "./DiceOptions/index.js";
 import { GameSystemOptionsKeys, type GameSystemOptions } from "./GameSystemOptions.js";
 
