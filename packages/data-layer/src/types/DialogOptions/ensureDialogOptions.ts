@@ -1,7 +1,7 @@
 import { renameProperty } from "../../validation/index.js";
-import type { DialogOptionsV0, DialogOptionsV1 } from "./DialogOptions.js";
+import type { DialogOptionsOld, DialogOptions } from "./DialogOptions.js";
 
-export function ensureDialogOptionsV1(core: DialogOptionsV0): DialogOptionsV1 {
+export function ensureDialogOptions(core: DialogOptionsOld): DialogOptions {
 
 	renameProperty({ core, oldKey:"defaultDialogType", newKey:"dialogPostType" });
 	renameProperty({ core, oldKey:"defaultGmCharacterName", newKey:"gmCharacterName" });

@@ -1,5 +1,5 @@
 import { isNotBlank } from "@rsc-utils/core-utils";
-import { assertDialogOptionsV1, assertDiceOptionsV1, assertGameSystemOptionsV1, assertSageChannel, assertSageCharacterCoreV1, isEmbedColor, isEmoji, type SageChannel, type SageChannelAny } from "../../../index.js";
+import { assertDialogOptions, assertDiceOptionsV1, assertGameSystemOptionsV1, assertSageChannel, assertSageCharacterCoreV1, isEmbedColor, isEmoji, type SageChannel, type SageChannelAny } from "../../../index.js";
 import { assertArray, assertNumber, assertSageCore, assertString, isMacroBase, optional } from "../../../validation/index.js";
 import { SageGameV1Keys, type SageGameCoreAny, type SageGameCoreV1 } from "../index.js";
 
@@ -16,7 +16,7 @@ export function assertSageGameCoreV1(core: SageGameCoreAny): core is SageGameCor
 	if (!assertArray({ core, objectType, key:"colors", optional, validator:isEmbedColor })) return false;
 	if (!assertNumber({ core, objectType, key:"createdTs" })) return false;
 	// dialogPostType, gmCharacterName, mentionPrefix, moveDirectionOutputType, sendDialogTo
-	if (!assertDialogOptionsV1(objectType, core)) return false;
+	if (!assertDialogOptions({ core, objectType })) return false;
 	// diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, sendDiceTo
 	if (!assertDiceOptionsV1(objectType, core)) return false;
 	// did --> this needs to become an invalid key

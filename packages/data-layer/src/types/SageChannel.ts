@@ -1,10 +1,7 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { assertString, isSimpleObject, renameProperty, type EnsureOptions } from "../validation/index.js";
 import { assertChannelOptions, ChannelOptionsV1Keys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
-import { assertDialogOptionsV1 } from "./DialogOptions/assertDialogOptionsV1.js";
-import { DialogOptionsV1Keys, type DialogOptions } from "./DialogOptions/DialogOptions.js";
-import { ensureDialogOptionsV1 } from "./DialogOptions/index.js";
+import { assertDialogOptions, DialogOptionsKeys, ensureDialogOptions, type DialogOptions } from "./DialogOptions/index.js";
 import { assertDiceOptionsV1 } from "./DiceOptions/assertDiceOptionsV1.js";
 import { DiceOptionsV1Keys, type DiceOptions } from "./DiceOptions/DiceOptions.js";
 import { ensureDiceOptionsV1 } from "./DiceOptions/index.js";
@@ -34,7 +31,7 @@ export type SageChannel = SageChannelOptions & {
 
 export const SageChannelV1Keys: (keyof SageChannel)[] = [
 	...ChannelOptionsV1Keys,
-	...DialogOptionsV1Keys,
+	...DialogOptionsKeys,
 	...DiceOptionsV1Keys,
 	...GameSystemOptionsV1Keys,
 	"id",
@@ -43,7 +40,7 @@ export const SageChannelV1Keys: (keyof SageChannel)[] = [
 export function assertSageChannel(objectType: string, core: SageChannelAny): core is SageChannel {
 	if (!isSimpleObject<SageChannel>(core)) return false;
 	if (!assertChannelOptions(objectType, core)) return false;
-	if (!assertDialogOptionsV1(objectType, core)) return false;
+	if (!assertDialogOptions({ core, objectType })) return false;
 	if (!assertDiceOptionsV1(objectType, core)) return false;
 	if (!assertGameSystemOptionsV1(objectType, core)) return false;
 	if (!assertString({ core, objectType, key:"id", validator:isNonNilSnowflake })) return false;
@@ -52,7 +49,7 @@ export function assertSageChannel(objectType: string, core: SageChannelAny): cor
 
 export function ensureSageChannel(core: SageChannelOld, _?: EnsureOptions): SageChannel {
 	ensureChannelOptions(core);
-	ensureDialogOptionsV1(core);
+	ensureDialogOptions(core);
 	ensureDiceOptionsV1(core);
 	ensureGameSystemOptionsV1(core);
 

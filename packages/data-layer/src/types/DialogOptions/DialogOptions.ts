@@ -1,18 +1,16 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
 import type { DialogPostType } from "../enums/DialogPostType.js";
 
-export type DialogOptionsOld = DialogOptionsV0;
-export type DialogOptions = DialogOptionsV1;
 export type DialogOptionsAny = DialogOptionsOld | DialogOptions;
 
-export type DialogOptionsV0 = DialogOptionsV1 & {
+export type DialogOptionsOld = DialogOptions & {
 	/** @deprecated use .dialogPostType */
 	defaultDialogType?: number;
 	/** @deprecated use .gmCharacterName */
 	defaultGmCharacterName?: string;
 };
 
-export type DialogOptionsV1 = {
+export type DialogOptions = {
 	dialogPostType?: DialogPostType;
 	gmCharacterName?: string;
 	mentionPrefix?: string;
@@ -20,7 +18,7 @@ export type DialogOptionsV1 = {
 	sendDialogTo?: Snowflake;
 };
 
-export const DialogOptionsV1Keys: (keyof DialogOptionsV1)[] = [
+export const DialogOptionsKeys: (keyof DialogOptions)[] = [
 	"dialogPostType",
 	"gmCharacterName",
 	"mentionPrefix",

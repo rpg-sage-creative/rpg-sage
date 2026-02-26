@@ -1,7 +1,7 @@
 import { isNonNilSnowflake, isNotBlank } from "@rsc-utils/core-utils";
 import { assertSageChannel, type SageChannel, type SageChannelAny } from "../../../index.js";
 import { assertArray, assertNumber, assertSageCore, assertString, isMacroBase, optional } from "../../../validation/index.js";
-import { assertDialogOptionsV1 } from "../../DialogOptions/assertDialogOptionsV1.js";
+import { assertDialogOptions } from "../../DialogOptions/assertDialogOptions.js";
 import { assertDiceOptionsV1 } from "../../DiceOptions/assertDiceOptionsV1.js";
 import { assertGameSystemOptionsV1 } from "../../GameSystemOptions/assertGameSystemOptionsV1.js";
 import { assertSageCharacterCoreV1 } from "../../SageCharacter/index.js";
@@ -21,7 +21,7 @@ export function assertSageServerCoreV1(core: SageServerCoreAny): core is SageSer
 	if (!assertArray({ core, objectType, key:"colors", optional, validator:isEmbedColor })) return false;
 	if (!assertString({ core, objectType, key:"commandPrefix", optional })) return false;
 	// dialogPostType, gmCharacterName, mentionPrefix, moveDirectionOutputType, sendDialogTo
-	if (!assertDialogOptionsV1(objectType, core)) return false;
+	if (!assertDialogOptions({ core, objectType })) return false;
 	// diceCritMethodType, diceOutputType, dicePostType, diceSecretMethodType, diceSortType, sendDiceTo
 	if (!assertDiceOptionsV1(objectType, core)) return false;
 	// did --> this needs to become an invalid key
