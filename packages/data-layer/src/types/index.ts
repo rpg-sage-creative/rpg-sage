@@ -1,5 +1,4 @@
 export * from "./DeckCore/index.js";
-export * from "./DiceOptions/index.js";
 export * from "./enums/index.js";
 export * from "./other/index.js";
 export * from "./SageCharacter/index.js";
@@ -10,6 +9,7 @@ export * from "./SageUser/index.js";
 export * from "./ChannelOptions.js";
 export * from "./const.js";
 export * from "./DialogOptions.js";
+export * from "./DiceOptions.js";
 export * from "./GameOptions.js";
 export * from "./GameSystemOptions.js";
 export * from "./initProcessor.js";

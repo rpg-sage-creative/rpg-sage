@@ -1,7 +1,7 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
 import type { SageChannelOld } from "../../../index.js";
 import type { DialogOptionsOld } from "../../DialogOptions.js";
-import type { DiceOptionsOld } from "../../DiceOptions/DiceOptions.js";
+import type { DiceOptionsOld } from "../../DiceOptions.js";
 import type { GameSystemOptionsOld } from "../../GameSystemOptions.js";
 import type { SageGameCoreV1 } from "./SageGameCoreV1.js";
 

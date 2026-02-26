@@ -2,7 +2,7 @@ import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { assertString, isSimpleObject, renameProperty, type EnsureOptions } from "../validation/index.js";
 import { assertChannelOptions, ChannelOptionsV1Keys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
 import { assertDialogOptions, DialogOptionsKeys, ensureDialogOptions, type DialogOptions } from "./DialogOptions.js";
-import { assertDiceOptions, DiceOptionsKeys, ensureDiceOptions, type DiceOptions } from "./DiceOptions/index.js";
+import { assertDiceOptions, DiceOptionsKeys, ensureDiceOptions, type DiceOptions } from "./DiceOptions.js";
 import { assertGameSystemOptions, ensureGameSystemOptions, GameSystemOptionsKeys, type GameSystemOptions } from "./GameSystemOptions.js";
 
 /** All SageChannel options that can be set by users. */
