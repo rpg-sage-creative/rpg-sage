@@ -1,6 +1,7 @@
 import type { Snowflake } from "@rsc-utils/core-utils";
 import { isNonNilSnowflake } from "@rsc-utils/core-utils";
 import { assertString, isSimpleObject, renameProperty, type EnsureOptions } from "../validation/index.js";
+import { assertChannelOptions, ChannelOptionsV1Keys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
 import { assertDialogOptionsV1 } from "./DialogOptions/assertDialogOptionsV1.js";
 import { DialogOptionsV1Keys, type DialogOptions } from "./DialogOptions/DialogOptions.js";
 import { ensureDialogOptionsV1 } from "./DialogOptions/index.js";
@@ -10,7 +11,6 @@ import { ensureDiceOptionsV1 } from "./DiceOptions/index.js";
 import { assertGameSystemOptionsV1 } from "./GameSystemOptions/assertGameSystemOptionsV1.js";
 import { GameSystemOptionsV1Keys, type GameSystemOptions } from "./GameSystemOptions/GameSystemOptions.js";
 import { ensureGameSystemOptionsV1 } from "./GameSystemOptions/index.js";
-import { assertChannelOptionsV1, ChannelOptionsV1Keys, ensureChannelOptionsV1, type ChannelOptions } from "./options/ChannelOptions.js";
 
 /** All SageChannel options that can be set by users. */
 export type SageChannelOptions = DialogOptions & DiceOptions & GameSystemOptions & ChannelOptions;
@@ -20,13 +20,10 @@ export type SageChannelAny = SageChannel | SageChannelOld;
 export type SageChannelOld = SageChannel & {
 	/** @deprecated */
 	did?: Snowflake;
-
 	/** @deprecated */
 	nickName?: string;
-
 	/** @deprecated */
 	sendCommandTo?: string;
-
 	/** @deprecated */
 	sendSearchTo?: string;
 };
@@ -45,17 +42,16 @@ export const SageChannelV1Keys: (keyof SageChannel)[] = [
 
 export function assertSageChannel(objectType: string, core: SageChannelAny): core is SageChannel {
 	if (!isSimpleObject<SageChannel>(core)) return false;
-	if (!assertChannelOptionsV1(objectType, core)) return false;
+	if (!assertChannelOptions(objectType, core)) return false;
 	if (!assertDialogOptionsV1(objectType, core)) return false;
 	if (!assertDiceOptionsV1(objectType, core)) return false;
 	if (!assertGameSystemOptionsV1(objectType, core)) return false;
 	if (!assertString({ core, objectType, key:"id", validator:isNonNilSnowflake })) return false;
-
 	return true
 }
 
 export function ensureSageChannel(core: SageChannelOld, _?: EnsureOptions): SageChannel {
-	ensureChannelOptionsV1(core);
+	ensureChannelOptions(core);
 	ensureDialogOptionsV1(core);
 	ensureDiceOptionsV1(core);
 	ensureGameSystemOptionsV1(core);

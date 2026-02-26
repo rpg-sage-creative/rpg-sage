@@ -1,12 +1,10 @@
 import { isDefined } from "@rsc-utils/core-utils";
-import { assertNumber, type EnsureContext, optional } from "../../validation/index.js";
-import { SageChannelType } from "../enums/SageChannelType.js";
+import { assertNumber, type EnsureContext, optional } from "../validation/index.js";
+import { SageChannelType } from "./enums/SageChannelType.js";
 
-export type ChannelOptionsOld = ChannelOptionsV0;
-export type ChannelOptions = ChannelOptionsV1;
 export type ChannelOptionsAny = ChannelOptionsOld | ChannelOptions;
 
-export type ChannelOptionsV0 = ChannelOptionsV1 & {
+export type ChannelOptionsOld = ChannelOptions & {
 	/** @deprecated */
 	gameAdmin?: boolean;
 	/** @deprecated */
@@ -21,7 +19,6 @@ export type ChannelOptionsV0 = ChannelOptionsV1 & {
 	dice?: boolean;
 	/** @deprecated */
 	search?: boolean;
-
 	/** @deprecated */
 	gameMaster?: number;
 	/** @deprecated */
@@ -30,7 +27,7 @@ export type ChannelOptionsV0 = ChannelOptionsV1 & {
 	nonPlayer?: number;
 };
 
-export type ChannelOptionsV1 = {
+export type ChannelOptions = {
 	type: SageChannelType;
 };
 
@@ -38,12 +35,12 @@ export const ChannelOptionsV1Keys: (keyof ChannelOptions)[] = [
 	"type",
 ];
 
-export function assertChannelOptionsV1(objectType: string, core: ChannelOptions): core is ChannelOptions {
+export function assertChannelOptions(objectType: string, core: ChannelOptions): core is ChannelOptions {
 	if (!assertNumber({ core, objectType, key:"type", optional, validator:SageChannelType })) return false;
 	return true;
 }
 
-export function ensureChannelOptionsV1(core: ChannelOptionsV0, _context?: EnsureContext): ChannelOptionsV1 {
+export function ensureChannelOptions(core: ChannelOptionsOld, _context?: EnsureContext): ChannelOptions {
 	if (!isDefined(core.type)) {
 		const gameMaster = core.gameMaster;
 		const player = core.player;
@@ -87,6 +84,7 @@ export function ensureChannelOptionsV1(core: ChannelOptionsV0, _context?: Ensure
 		}
 	}
 
+	// delete unused old stuff
 	delete core.gameAdmin;
 	delete core.serverAdmin;
 	delete core.admin;
@@ -94,10 +92,9 @@ export function ensureChannelOptionsV1(core: ChannelOptionsV0, _context?: Ensure
 	delete core.dialog;
 	delete core.dice;
 	delete core.search;
-
 	delete core.gameMaster;
 	delete core.player;
 	delete core.nonPlayer;
 
-	return core as ChannelOptionsV1;
+	return core as ChannelOptions;
 }

@@ -10,6 +10,7 @@ export * from "./SageGame/index.js";
 export * from "./SageMessageReference/index.js";
 export * from "./SageServer/index.js";
 export * from "./SageUser/index.js";
+export * from "./ChannelOptions.js";
 export * from "./const.js";
 export * from "./initProcessor.js";
 export * from "./PostCurrency.js";
