@@ -24,7 +24,7 @@ export type ServerCore = Omit<SageServerCore, "gmCharacter"> & {
 }
 
 function updateCore(core: ServerCore): ServerCore {
-	return ensureSageServerCore(core as SageServerCore, { ver:1 }) as ServerCore;
+	return ensureSageServerCore(core as SageServerCore) as ServerCore;
 }
 
 // export abstract class HasDiceOptions<Core extends Partial<DiceOptions>> {
@@ -404,7 +404,6 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 			objectType: "Server",
 			commandPrefix: activeBot.commandPrefix,
 			roles: [],
-			ver: 1
 		};
 	}
 

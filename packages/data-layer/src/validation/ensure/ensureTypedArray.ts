@@ -1,23 +1,27 @@
-import type { HasVer } from "../../types/index.js";
 import { deleteEmptyArray } from "../utils/deleteEmptyArray.js";
 
-type EnsureArrayTypeGuard<Value> = (object: unknown) => object is Value;
-
-type EnsureTypedArrayArgs<Core, Key, TypeGuard> = {
+type EnsureTypedArrayArgs<Core, Key, Value> = {
 	core: Core;
 	key: Key;
-	typeGuard: TypeGuard;
+	typeGuard: (object: unknown) => object is Value;
 	optional?: "optional";
 };
 
 export function ensureTypedArray<
-			Core extends HasVer & Partial<Record<Key, Value[]>>,
+			Core extends Partial<Record<Key, Value[]>>,
 			Key extends Exclude<keyof Core, "ver">,
 			Value
-		>(args: EnsureTypedArrayArgs<Core, Key, EnsureArrayTypeGuard<Value>>): void {
+		>({ core, key, typeGuard, optional }: EnsureTypedArrayArgs<Core, Key, Value>): void {
 
-	const { core, key, typeGuard, optional } = args;
-	core[key] = core[key]?.filter(typeGuard) as any;
+	// remove non-array
+	if (core[key] && !Array.isArray(core[key])) {
+		delete core[key];
+	}
+
+	// filter array
+	core[key] = core[key]?.filter(typeGuard) ?? [] as any;
+
+	// remove optional empty array
 	if (optional === "optional") {
 		deleteEmptyArray({ core, key });
 	}

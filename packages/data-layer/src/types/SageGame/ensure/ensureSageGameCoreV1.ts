@@ -1,12 +1,10 @@
-import { type Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { deleteEmptyArray, ensureArray, ensureIds, optional, renameProperty, type EnsureContext } from "../../../validation/index.js";
 import { ensureDialogOptions, ensureDiceOptions, ensureEmoji, ensureGameSystemOptions, ensureSageChannel } from "../../index.js";
 import { ensureSageCharacterCoreV1, type SageCharacterCoreV0 } from "../../SageCharacter/index.js";
 import { GameUserType, type SageGameCoreV0, type SageGameCoreV1 } from "../index.js";
 
 export function ensureSageGameCoreV1(core: SageGameCoreV0, context?: EnsureContext): SageGameCoreV1 {
-	if (core.ver > 0) throw new Error(`cannot convert v${core.ver} to v1`);
-
 	ensureIds(core);
 
 	ensureDialogOptions(core);
@@ -32,8 +30,6 @@ export function ensureSageGameCoreV1(core: SageGameCoreV0, context?: EnsureConte
 
 	const gmUserId = core.users?.find(u => u.type === GameUserType.GameMaster)?.did;
 	core.gmCharacter ? core.gmCharacter = ensureSageCharacterCoreV1(core.gmCharacter as SageCharacterCoreV0, { ...context, userId:gmUserId }) : delete core.gmCharacter;
-
-	core.ver = 1;
 
 	return core as SageGameCoreV1;
 }

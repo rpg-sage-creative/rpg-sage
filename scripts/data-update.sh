@@ -12,6 +12,7 @@ TMP_DATA_PATH=$(pwd)
 resetPath
 
 WHICH="$1"
+YEAR="$2"
 
 function dataBackup() {
 	resetPath
@@ -24,23 +25,29 @@ function dataBackup() {
 }
 
 function dataReset() {
+	local objectType="$1"
+	local year="$2"
 	resetPath
 	if [ -f '../scripts/backup-to-tmp.sh' ]; then
 		cd ../scripts
-		bash backup-to-tmp.sh -which "$WHICH"
+		bash backup-to-tmp.sh -which "$objectType" -year "$year"
 	else
 		echo "back-to-tmp.sh NOT FOUND"
 	fi
 }
 
 function dataProcess() {
+	local objectType="$1"
+	local year="$2"
 	resetPath
-	node ./packages/data-layer/build/process.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$WHICH"
+	node ./packages/data-layer/build/process.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$objectType" "$year"
 }
 
 function dataValidate() {
+	local objectType="$1"
+	local year="$2"
 	resetPath
-	node ./packages/data-layer/build/validate.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$WHICH"
+	node ./packages/data-layer/build/validate.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$objectType" "$year"
 }
 
 function dataUpload() {
@@ -51,8 +58,20 @@ function dataCompare() {
 	echo "Compare file vs DDB"
 }
 
+function dataStack() {
+	local objectType="$1"
+	local year="$2"
+	dataReset "$objectType" "$year"
+	dataProcess "$objectType" "$year"
+	dataValidate "$objectType" "$year"
+	# dataUpload
+	# dataCompare
+}
+
 if [ "$WHICH" == "backup" ]; then
+
 	dataBackup
+
 else
 
 	if [ "$WHICH" != "characters" ] && [ "$WHICH" != "games" ] && [ "$WHICH" != "messages" ] && [ "$WHICH" != "servers" ] && [ "$WHICH" != "users" ]; then
@@ -64,9 +83,16 @@ else
 	fi
 	echo "Which: $WHICH"
 
-	dataReset
-	dataProcess
-	dataValidate
-	# dataUpload
-	# dataCompare
+	if [ "$WHICH" = "messages" ] && [ -z "$YEAR" ]; then
+
+		YEARS=( "2021" "2022" "2023" "2024" "2025" "2026" )
+		for year in "${YEARS[@]}"; do
+			dataStack "$WHICH" "$year"
+		done
+
+	else
+
+		dataStack "$WHICH" "$YEAR"
+
+	fi
 fi

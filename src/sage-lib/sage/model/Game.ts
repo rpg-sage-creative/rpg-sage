@@ -27,7 +27,7 @@ export type GameCore = Omit<SageGameCore, "encounters" | "gmCharacter" | "nonPla
 };
 
 function updateCore(core: GameCore): GameCore {
-	return ensureSageGameCore(core as SageGameCore, { ver:1 }) as GameCore;
+	return ensureSageGameCore(core as SageGameCore) as GameCore;
 }
 
 type MappedChannelNameTags = {

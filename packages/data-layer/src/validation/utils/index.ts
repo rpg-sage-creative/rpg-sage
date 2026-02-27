@@ -1,4 +1,3 @@
-export * from "./coreNeedsUpdate.js";
 export * from "./deleteEmptyArray.js";
 export * from "./deleteInvalidHexColorString.js";
 export * from "./deleteInvalidString.js";

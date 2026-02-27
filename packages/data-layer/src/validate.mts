@@ -1,4 +1,4 @@
-import { initializeConsoleUtilsByEnvironment, verbose } from "@rsc-utils/core-utils";
+import { initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
 import { GlobalCache } from "./cache/GlobalCache.js";
 
 initializeConsoleUtilsByEnvironment();
@@ -14,10 +14,12 @@ async function main() {
 
 	const objectTypeArgs = process.argv.filter(isObjectType);
 
-	verbose(`Validating: ${objectTypeArgs.join(", ") || "none"}`);
+	const years = ["2021", "2022", "2023", "2024", "2025", "2026"];
+	const yearArgs = process.argv.filter(arg => years.includes(arg));
+	if (!yearArgs.length) yearArgs.push(...years);
 
 	for (const objectType of objectTypeArgs) {
-		await globalCache.validate(objectType);
+		await globalCache.validate(objectType, yearArgs);
 	}
 }
 

@@ -32,6 +32,11 @@ export type DeckPlayArgs<From extends StackKey = StackKey, To extends StackKey =
 
 export type DeckDrawArgs = { count:number; upTo?:never; } | { count?:never; upTo:number; };
 
+const DiscardPileRegExp = /^discard(Pile)?$/i;
+const DrawPileRegExp = /^draw(Pile)?$/i;
+const HandRegExp = /^hand$/i;
+const SpreadRegExp = /^spread$/i;
+
 /** becuase we use ordinals to select cards in hand/spread we need to reverse their slice args @todo decide if this is the right choice or not */
 function getSliceArgs(count: number, where: StackWhereKey) {
 	return where === "top" ? { start:0, end:count } : { start:-1 * count, end:undefined };
@@ -70,7 +75,7 @@ export class Deck {
 
 		// compare card ids to ensure a proper deck
 		const cleanDeck = cards.map(({ id }) => id);
-		const thisDeck = [...this.discardPile, ...this.drawPile, ...this.hand, ...this.spread].sort();
+		const thisDeck = ([] as number[]).concat(this.discardPile).concat(this.drawPile).concat(this.hand).concat(this.spread).sort();
 		return thisDeck.join(",") !== cleanDeck.join(",");
 	}
 
@@ -208,10 +213,7 @@ export class Deck {
 	}
 
 	public reset() {
-		/** @todo this type check is only temp while i develop */
-		const type = this.core.type?.replace("Default", "English") as DeckType ?? "Default52";
-
-		const { id, objectType } = this.core;
+		const { id, objectType, type = "English52" } = this.core;
 		const drawPile = getCards(type).map(({id}) => id);
 		this.core = {
 			cardCount: drawPile.length,
@@ -220,7 +222,6 @@ export class Deck {
 			name: type,
 			objectType,
 			type,
-			ver: 1
 		};
 	}
 
@@ -253,17 +254,16 @@ export class Deck {
 			name: type,
 			objectType: "Deck",
 			type,
-			ver: 1
 		};
 		return new Deck(core);
 	}
 
 	public static parseStackKey(value?: Optional<string>): StackKey | undefined {
 		if (value) {
-			if (/^discard(Pile)?$/i.test(value)) return "discardPile";
-			if (/^draw(Pile)?$/i.test(value)) return "drawPile";
-			if (/^hand$/i.test(value)) return "hand";
-			if (/^spread$/i.test(value)) return "spread";
+			if (DiscardPileRegExp.test(value)) return "discardPile";
+			if (DrawPileRegExp.test(value)) return "drawPile";
+			if (HandRegExp.test(value)) return "hand";
+			if (SpreadRegExp.test(value)) return "spread";
 		}
 		return undefined;
 	}

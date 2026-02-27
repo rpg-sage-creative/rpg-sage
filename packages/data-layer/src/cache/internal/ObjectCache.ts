@@ -1,4 +1,4 @@
-import { error, errorReturnFalse, errorReturnUndefined, forEachAsync, getDataRoot, randomSnowflake, tagLiterals, verbose } from "@rsc-utils/core-utils";
+import { capitalize, error, errorReturnFalse, errorReturnUndefined, forEachAsync, getDataRoot, randomSnowflake, tagLiterals, verbose } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { assertSageGameCore, assertSageMessageReferenceCore, assertSageServerCore, assertSageUserCore } from "../../types/index.js";
 import type { CacheItemKey, DataMode, GlobalCacheItem } from "../types.js";
@@ -125,39 +125,52 @@ export class ObjectCache<Key extends CacheItemKey, CacheItem extends GlobalCache
 		return true;
 	}
 
-	public async validate(): Promise<boolean> {
+	public async validate(yearArgs?: string[]): Promise<boolean> {
 		const { key } = this;
+		const what = capitalize(key);
 
-		verbose(tagLiterals`Validating ${key} ...`);
-
-		// iterate the json files and load cache data into memory
-		const path = getDataRoot(`sage/${key}`);
-
-		verbose(tagLiterals`  Reading from ${key} ...`);
-
-		const files = await filterFiles(path, { fileExt:"json", recursive:true });
-
-		verbose(tagLiterals`  Found ${files.length} files ...`);
+		const objectRoot = getDataRoot(`sage/${key}`);
 
 		const errors: string[] = [];
 		const invalid: string[] = [];
+		let fileCount = 0;
 
-		await forEachAsync(`  Validating files`, files, async file => {
-			const core = await readJsonFile<CacheItem>(file).catch(errorReturnUndefined);
-			if (!core) {
-				errors.push(file);
-			}else {
-				switch(key) {
-					case "games": if (!assertSageGameCore(core)) invalid.push(file); break;
-					case "messages": if (!assertSageMessageReferenceCore(core)) invalid.push(file); break;
-					case "servers": if (!assertSageServerCore(core)) invalid.push(file); break;
-					case "users": if (!assertSageUserCore(core)) invalid.push(file); break;
-				}
+		verbose(`ObjectType: ${what}`);
+		verbose(`  ${what} Path: ${objectRoot}`);
+
+		const children = key === "messages" ? yearArgs ?? [2021, 2022, 2023, 2024, 2025, 2026] : [""];
+		if (children[0]) {
+			verbose(`  ${what} Children: ${children}`);
+		}
+		for (const child of children) {
+			const dataPath = child ? `${objectRoot}/${child}` : objectRoot;
+			if (child) {
+				verbose(`  ${what} ${child} Path: ${dataPath}`);
 			}
-		});
+
+			verbose(`  Counting ${what} ...`);
+			const files = await filterFiles(dataPath, { fileExt:"json", recursive:true });
+			verbose(`                 ... ${files.length} found.`)
+
+			fileCount += files.length;
+
+			await forEachAsync(`    Validating ${child ? what + " " + child : what}`, files, async file => {
+				const core = await readJsonFile<CacheItem>(file).catch(errorReturnUndefined);
+				if (!core) {
+					errors.push(file);
+				}else {
+					switch(key) {
+						case "games": if (!assertSageGameCore(core)) invalid.push(file); break;
+						case "messages": if (!assertSageMessageReferenceCore(core)) invalid.push(file); break;
+						case "servers": if (!assertSageServerCore(core)) invalid.push(file); break;
+						case "users": if (!assertSageUserCore(core)) invalid.push(file); break;
+					}
+				}
+			});
+		}
 
 		// send to the logs so we can see if something is amiss
-		verbose({ key:this.key, path, files:files.length, errors:errors.length, invalid:invalid.length, keys:this.cache.size });
+		verbose({ key:this.key, path:objectRoot, files:fileCount, errors:errors.length, invalid:invalid.length, keys:this.cache.size });
 
 		return !errors.length && !invalid.length;
 	}

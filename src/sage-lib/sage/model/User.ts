@@ -19,7 +19,7 @@ export type UserCore = Omit<SageUserCore, "playerCharacters"> & {
 //#region Core Updates
 
 function updateCore(core: UserCore): UserCore {
-	return ensureSageUserCore(core as SageUserCore, { ver:1 }) as UserCore;
+	return ensureSageUserCore(core as SageUserCore) as UserCore;
 }
 
 //#endregion
@@ -129,7 +129,7 @@ export class User extends HasSageCacheCore<UserCore> {
 	}
 
 	public static createCore(userId: Snowflake): UserCore {
-		return { did:userId, id:userId, objectType:"User", ver:1 };
+		return { did:userId, id:userId, objectType:"User" };
 	}
 
 }

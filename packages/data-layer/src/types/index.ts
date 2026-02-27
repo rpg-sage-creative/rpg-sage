@@ -12,7 +12,6 @@ export * from "./DialogOptions.js";
 export * from "./DiceOptions.js";
 export * from "./GameOptions.js";
 export * from "./GameSystemOptions.js";
-export * from "./initProcessor.js";
 export * from "./PostCurrency.js";
 export * from "./SageChannel.js";
 export * from "./ServerOptions.js";

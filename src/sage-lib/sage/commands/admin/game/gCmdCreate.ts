@@ -21,7 +21,6 @@ function createGame(sageCommand: SageCommand, gameOptions: Partial<GameOptions>,
 		users,
 		...gameOptions,
 		name: gameOptions.name!,
-		ver: 1,
 	}, sageCommand.server!, sageCommand.sageCache);
 }
 

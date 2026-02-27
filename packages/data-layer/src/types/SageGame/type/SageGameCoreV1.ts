@@ -91,7 +91,6 @@ export const SageGameV1Keys: (keyof SageGameCoreV1)[] = [
 	"serverId",
 	"users",
 	"uuid",
-	"ver"
 ];
 /*
 	createdTs: number;

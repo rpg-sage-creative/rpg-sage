@@ -42,5 +42,4 @@ export const SageMessageReferenceV1Keys: (keyof SageMessageReferenceCoreV1)[] = 
 	"objectType",   // id from SageCore
 	"ts",
 	"userId",
-	"ver",          // id from SageCore
 ];

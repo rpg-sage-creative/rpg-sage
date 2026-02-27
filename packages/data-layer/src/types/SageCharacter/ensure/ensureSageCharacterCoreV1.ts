@@ -1,4 +1,4 @@
-import { isSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { isSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteEmptyArray, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, renameProperty, type EnsureContext } from "../../../validation/index.js";
 import { ensureDeckCore } from "../../DeckCore.js";
 import { DialogPostType } from "../../enums/DialogPostType.js";
@@ -34,7 +34,7 @@ function ensureAutoChannel(core: AutoChannelDataResolvable): AutoChannelData {
 }
 
 export function ensureSageCharacterCoreV1(core: SageCharacterCoreV0, context?: EnsureContext): SageCharacterCoreV1 {
-	if (core.ver > 0) throw new Error(`cannot convert v${core.ver} to v1`);
+	if (!core.id) core.id = randomSnowflake();
 
 	// delete core.aka;
 	deleteInvalidString({ core, key:"alias" }); // regex:/\w+/i ? ? ?

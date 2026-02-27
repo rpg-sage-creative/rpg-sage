@@ -50,11 +50,11 @@ export class GlobalCache {
 		return this.for(key)?.populate() ?? false;
 	}
 
-	public async validate(key: CacheItemKey): Promise<boolean> {
+	public async validate(key: CacheItemKey, yearArgs?: string[]): Promise<boolean> {
 		if (!this.cache.has(key)) {
 			this.cache.set(key, new ObjectCache(key, GlobalCache.DataMode[key], GlobalCache.FormatFiles));
 		}
-		return this.for(key)?.validate() ?? false;
+		return this.for(key)?.validate(yearArgs) ?? false;
 	}
 
 	public static initialize(): GlobalCache {

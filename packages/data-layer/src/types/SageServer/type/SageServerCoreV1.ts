@@ -62,7 +62,6 @@ export const SageServerV1Keys: (keyof SageServerCoreV1)[] = [
 	"objectType",
 	"roles",
 	"uuid",
-	"ver"
 ];
 
 /*

@@ -5,8 +5,6 @@ import { ensureSageCharacterCoreV1, type SageCharacterCoreV0 } from "../../SageC
 import type { SageServerCoreV0, SageServerCoreV1 } from "../index.js";
 
 export function ensureSageServerCoreV1(core: SageServerCoreV0, context?: EnsureContext): SageServerCoreV1 {
-	if (core.ver > 0) throw new Error(`cannot convert v${core.ver} to v1`);
-
 	ensureIds(core);
 
 	ensureArray({ core, key:"channels", handler:ensureSageChannel, optional , context:{ ...context, serverId:core.id as Snowflake }});
@@ -15,8 +13,6 @@ export function ensureSageServerCoreV1(core: SageServerCoreV0, context?: EnsureC
 	ensureGameSystemOptions(core);
 	core.gmCharacter ? core.gmCharacter = ensureSageCharacterCoreV1(core.gmCharacter as SageCharacterCoreV0, context) : delete core.gmCharacter;
 	deleteInvalidString({ core, key:"name" });
-
-	core.ver = 1;
 
 	delete core.games;
 	delete core.logLevel;

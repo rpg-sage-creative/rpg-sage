@@ -3,7 +3,6 @@ import { ensureArray, ensureIds, ensureTypedArray, isAlias, isMacroBase, isNote,
 import { ensureSageCharacterCore, type SageUserCoreV0, type SageUserCoreV1 } from "../../index.js";
 
 export function ensureSageUserCoreV1(core: SageUserCoreV0, context?: EnsureContext): SageUserCoreV1 {
-	if (core.ver > 0) throw new Error(`cannot convert v${core.ver} to v1`);
 
 	ensureIds(core);
 
@@ -12,9 +11,8 @@ export function ensureSageUserCoreV1(core: SageUserCoreV0, context?: EnsureConte
 	ensureTypedArray({ core, key:"macros", typeGuard:isMacroBase, optional });
 	delete core.nonPlayerCharacters;
 	ensureTypedArray({ core, key:"notes", typeGuard:isNote, optional });
-	ensureArray({ core, key:"playerCharacters", handler:ensureSageCharacterCore, optional, ver:1, context:{ ...context, userId:core.id as Snowflake } });
+	ensureArray({ core, key:"playerCharacters", handler:ensureSageCharacterCore, optional, context:{ ...context, userId:core.id as Snowflake } });
 	delete core.patronTier;
-	core.ver = 1;
 
 	return core as SageUserCoreV1;
 }

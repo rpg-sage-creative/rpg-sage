@@ -72,5 +72,4 @@ export const SageUserV1Keys: (keyof SageUserCoreV1)[] = [
 	"playerCharacters",
 	"skipConfirmationFlag",
 	"uuid",
-	"ver"
 ];

@@ -23,7 +23,6 @@ export function assertSageMessageReferenceCoreV1(core: SageMessageReferenceCoreA
 		debug({userId:(core as any).coreId,userDid:(core as any).userDid,core});
 		return false;
 	}
-	if (!assertNumber({ core, objectType, key:"ver", validator:ver => ver === 1 })) return false;
 
 	return true;
 }
