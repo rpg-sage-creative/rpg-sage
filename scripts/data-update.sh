@@ -74,20 +74,35 @@ if [ "$WHICH" == "backup" ]; then
 
 else
 
-	if [ "$WHICH" != "characters" ] && [ "$WHICH" != "games" ] && [ "$WHICH" != "messages" ] && [ "$WHICH" != "servers" ] && [ "$WHICH" != "users" ]; then
+	if [ "$WHICH" != "characters" ] && [ "$WHICH" != "games" ] && [ "$WHICH" != "messages" ] && [ "$WHICH" != "servers" ] && [ "$WHICH" != "users" ] && [ "$WHICH" != "all" ]; then
 		read -p "Enter ObjectType: " WHICH
-		if [ "$WHICH" != "characters" ] && [ "$WHICH" != "games" ] && [ "$WHICH" != "messages" ] && [ "$WHICH" != "servers" ] && [ "$WHICH" != "users" ]; then
+		if [ "$WHICH" != "characters" ] && [ "$WHICH" != "games" ] && [ "$WHICH" != "messages" ] && [ "$WHICH" != "servers" ] && [ "$WHICH" != "users" ] && [ "$WHICH" != "all" ]; then
 			echo "Ok, exiting ..."
 			exit 1
 		fi
 	fi
 	echo "Which: $WHICH"
 
-	if [ "$WHICH" = "messages" ] && [ -z "$YEAR" ]; then
+	if [ "$WHICH" = "all" ]; then
+
+		dataStack games
+		dataStack servers
+		dataStack users
 
 		YEARS=( "2021" "2022" "2023" "2024" "2025" "2026" )
 		for year in "${YEARS[@]}"; do
-			dataStack "$WHICH" "$year"
+
+			dataStack messages "$year"
+
+		done
+
+	elif [ "$WHICH" = "messages" ] && [ -z "$YEAR" ]; then
+
+		YEARS=( "2021" "2022" "2023" "2024" "2025" "2026" )
+		for year in "${YEARS[@]}"; do
+
+			dataStack messages "$year"
+
 		done
 
 	else
