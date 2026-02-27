@@ -1,4 +1,4 @@
-import { DialogPostType, ensureSageUserCore, type Alias, type DialogDiceBehaviorType, type SageUserCore } from "@rsc-sage/data-layer";
+import { DialogPostType, ensureSageUserCore, type Alias, type DialogDiceBehaviorType, type SageUserCore, type SageUserCoreOld } from "@rsc-sage/data-layer";
 import { isSuperAdminId, isSuperUserId } from "@rsc-sage/env";
 import { applyChanges, stringOrUndefined, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
@@ -19,7 +19,7 @@ export type UserCore = Omit<SageUserCore, "playerCharacters"> & {
 //#region Core Updates
 
 function updateCore(core: UserCore): UserCore {
-	return ensureSageUserCore(core as SageUserCore) as UserCore;
+	return ensureSageUserCore(core as SageUserCoreOld) as UserCore;
 }
 
 //#endregion
