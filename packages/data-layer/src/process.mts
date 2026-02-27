@@ -1,5 +1,5 @@
 import { errorReturnFalse, errorReturnUndefined, forEachAsync, getDataRoot, initializeConsoleUtilsByEnvironment, stringifyJson, verbose, type Snowflake } from "@rsc-utils/core-utils";
-import { deleteFile, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { ensureSageGameCore, ensureSageMessageReferenceCore, ensureSageServerCore, ensureSageUserCore, type EnsureContext, type SageCore, type SageMessageReferenceCore } from "./index.js";
 
 initializeConsoleUtilsByEnvironment();
@@ -20,12 +20,20 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 
 	const objectRoot = getDataRoot(`sage/${what.toLowerCase()}`);
 
+	/** cannot read the file */
 	let unableToRead = 0;
+	/** should have had a character id and didn't */
 	let missingCharacterId = 0;
+	/** should have had a user id and didn't */
 	let missingUserId = 0;
+	/** file path/name was wrong and moved (may have had changes) */
 	let moved = 0;
+	/** the target file already exists */
+	let targetExists = 0;
+	/** contents changed (but file wasn't moved) */
 	let updated = 0;
-	let tooMuch = 0;
+	/** a second update pass changed the contents (this shouldn't happen) */
+	let updatedTwice = 0;
 
 	verbose(`ObjectType: ${what}`);
 	verbose(`  ${what} Path: ${objectRoot}`);
@@ -82,6 +90,12 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 			}
 
 			const wrongPath = filePath !== writeFilePath;
+			if (wrongPath) {
+				const exists = await fileExists(writeFilePath);
+				if (exists) {
+					targetExists++;
+				}
+			}
 
 			const after = stringifyJson(updatedCore);
 			const hasChanges = before !== after;
@@ -100,12 +114,12 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 
 			const hasMoreChanges = after !== stringifyJson(processor(updatedCore));
 			if (hasMoreChanges) {
-				tooMuch++;
+				updatedTwice++;
 			}
 		});
 	}
 
-	verbose({ unableToRead, missingCharacterId, missingUserId, moved, updated, tooMuch });
+	verbose({ unableToRead, missingCharacterId, missingUserId, moved, targetExists, updated, updatedTwice });
 }
 
 async function main() {

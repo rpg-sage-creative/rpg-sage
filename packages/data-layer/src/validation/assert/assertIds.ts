@@ -9,24 +9,30 @@ type Info<Core extends IdCore> = {
 export function assertIds<Core extends IdCore>(info: Info<Core>): boolean {
 	const { core, id, objectType } = info;
 
+	const idIsSnowflake = isNonNilSnowflake(core.id);
+	const idIsUuid = isNonNilUuid(core.id);
+
 	if (id === "snowflake") {
-		if (!isNonNilSnowflake(core.id)) return tagFailure`${objectType}: invalid snowflake id (${core.id})`;
+		if (!idIsSnowflake) return tagFailure`${objectType}: invalid snowflake id (${core.id})`;
 
 	}else if (id === "uuid") {
-		if (!isNonNilUuid(core.id)) return tagFailure`${objectType}: invalid uuid id (${core.id})`;
+		if (!idIsUuid) return tagFailure`${objectType}: invalid uuid id (${core.id})`;
 
 	}else {
-		if (!(isNonNilSnowflake(core.id) || isNonNilUuid(core.id))) return tagFailure`${objectType}: invalid id (${core.id})`;
+		if (!idIsSnowflake && !idIsUuid) return tagFailure`${objectType}: invalid id (${core.id})`;
 	}
 
 	if ("did" in core) {
-		if (!isNonNilSnowflake(core.did)) return tagFailure`${objectType}: invalid did (${core.did})`;
-	}
-	if ("uuid" in core) {
-		if (!isNonNilUuid(core.uuid)) return tagFailure`${objectType}: invalid uuid (${core.uuid})`;
+		const didIsValid = isNonNilSnowflake(core.did);
+		if (!didIsValid) return tagFailure`${objectType}: invalid did (${core.did})`;
+		if (idIsSnowflake && core.id !== core.did) return tagFailure`${objectType}: mismatched id (${core.id}) and did (${core.did})`;
 	}
 
-	// if ((core.did || core.uuid) && core.id !== core.did && core.id !== core.uuid) return errorReturnFalse(tagLiterals`mismatched ids: id=${core.id}; did=${core.did}; uuid=${core.uuid}`);
+	if ("uuid" in core) {
+		const uuidIsValid = isNonNilUuid(core.uuid);
+		if (!uuidIsValid) return tagFailure`${objectType}: invalid uuid (${core.uuid})`;
+		if (idIsUuid && core.id !== core.uuid) return tagFailure`${objectType}: mismatched id (${core.id}) and uuid (${core.uuid})`;
+	}
 
 	return true;
 }
