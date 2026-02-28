@@ -1,7 +1,8 @@
 import { isNotBlank, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { assertArray, assertBoolean, assertNumber, assertSageCore, assertString, ensureArray, ensureIds, ensureTypedArray, isAlias, isMacroBase, isNote, optional, renameProperty, type EnsureContext } from "../validation/index.js";
+import { assertArray, assertBoolean, assertNumber, assertSageCore, assertString, ensureArray, ensureIds, isAlias, isMacroBase, optional, renameProperty, type EnsureContext } from "../validation/index.js";
 import { DialogDiceBehaviorType, DialogPostType, MoveDirectionOutputType } from "./enums/index.js";
-import type { Alias, MacroBase, Note, SageCore } from "./other/index.js";
+import type { Alias, MacroBase, SageCore } from "./other/index.js";
+import { isNote, type Note } from "./other/Note.js";
 import { assertSageCharacterCore, ensureSageCharacterCore, type SageCharacterCore, type SageCharacterCoreOld } from "./SageCharacterCore.js";
 
 export type SageUserCoreAny = SageUserCore | SageUserCoreOld;
@@ -119,11 +120,11 @@ export function ensureSageUserCore(core: SageUserCoreOld, context?: EnsureContex
 
 	ensureIds(core);
 
-	ensureTypedArray({ core, key:"aliases", typeGuard:isAlias, optional });
+	ensureArray({ core, key:"aliases", optional, typeGuard:isAlias });
 	renameProperty({ core, oldKey:"characters", newKey:"playerCharacters" });
-	ensureTypedArray({ core, key:"macros", typeGuard:isMacroBase, optional });
+	ensureArray({ core, key:"macros", optional, typeGuard:isMacroBase });
 	delete core.nonPlayerCharacters;
-	ensureTypedArray({ core, key:"notes", typeGuard:isNote, optional });
+	ensureArray({ core, key:"notes", optional, typeGuard:isNote });
 	ensureArray({ core, key:"playerCharacters", handler:ensureSageCharacterCore, optional, context:{ ...context, userId:core.id as Snowflake } });
 	delete core.patronTier;
 

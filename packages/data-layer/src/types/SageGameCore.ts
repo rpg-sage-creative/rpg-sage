@@ -2,11 +2,11 @@ import { isNonNilSnowflake, isNonNilUuid, type Snowflake, type UUID } from "@rsc
 import { writeFileSync } from "@rsc-utils/io-utils";
 import { assertArray, assertNumber, assertSageCore, assertString, deleteEmptyArray, ensureArray, ensureIds, isMacroBase, optional, renameProperty, type EnsureContext } from "../validation/index.js";
 import { isEmbedColor, type HasEmbedColors } from "./enums/EmbedColorType.js";
-import { ensureEmoji, isEmoji, type HasEmoji } from "./enums/EmojiType.js";
+import { isEmoji, type HasEmoji } from "./enums/EmojiType.js";
 import { isGameRoleData, type GameRoleData } from "./enums/GameRoleType.js";
 import { GameUserType, isGameUserData, type GameUserData } from "./enums/GameUserType.js";
 import { assertGameOptions, ensureGameOptions, GameOptionsKeys, type GameOptions, type GameOptionsOld } from "./GameOptions.js";
-import type { MacroBase, SageCore } from "./other/index.js";
+import { findGameNpcUserId, type MacroBase, type SageCore } from "./other/index.js";
 import { assertPostCurrency, type HasPostCurrency } from "./PostCurrency.js";
 import { assertSageChannel, ensureSageChannel, type SageChannel, type SageChannelOld } from "./SageChannel.js";
 import { assertSageCharacterCore, ensureSageCharacterCore, type SageCharacterCore, type SageCharacterCoreOld } from "./SageCharacterCore.js";
@@ -144,11 +144,12 @@ export function ensureSageGameCore(core: SageGameCoreOld, context?: EnsureContex
 	ensureGameOptions(core);
 	renameProperty({ core, oldKey:"type", newKey:"gameSystemType" });
 
-	ensureArray({ core, key:"channels", handler:ensureSageChannel, optional , context:{ ...context, gameId:core.id as Snowflake }});
-	ensureArray({ core, key:"emoji", handler:ensureEmoji, optional });
+	ensureArray({ core, key:"channels", optional, handler:ensureSageChannel , context:{ ...context, gameId:core.id as Snowflake }});
+	ensureArray({ core, key:"emoji", optional, typeGuard:isEmoji });
 	deleteEmptyArray({ core, key:"encounters" });
 	deleteEmptyArray({ core, key:"parties" });
 
+	//#region core.users
 	if ("gameMasters" in core && core.gameMasters?.length) {
 		const users = core.users ??= [];
 		core.gameMasters.forEach(({ did }) => users.some(u => u.did === did) ? void 0 : users.push({ did, type:GameUserType.GameMaster, dicePing:true }));
@@ -159,56 +160,19 @@ export function ensureSageGameCore(core: SageGameCoreOld, context?: EnsureContex
 		core.players.forEach(({ did }) => users.some(u => u.did === did) ? void 0 : users.push({ did, type:GameUserType.Player, dicePing:true }));
 		delete core.players;
 	}
+	ensureArray({ core, key:"users", typeGuard:isGameUserData });
+	//#endregion
 
 	const gameId = core.id as Snowflake;
-	const userId = findNpcUserId(core);
-	if (core.nonPlayerCharacters?.length&&!userId)writeFileSync("./missing-gm-id.json",core);
+	const gmUserId = findGameNpcUserId(core);
+	if (core.nonPlayerCharacters?.length&&!gmUserId)writeFileSync("./missing-gm-id.json",core);
 	if (core.gmCharacter) {
-		core.gmCharacter = ensureSageCharacterCore(core.gmCharacter, { ...context, gameId, userId }) as SageCharacterCoreOld;
+		core.gmCharacter = ensureSageCharacterCore(core.gmCharacter, { ...context, gameId, userId:gmUserId }) as SageCharacterCoreOld;
 	}else {
 		delete core.gmCharacter;
 	}
-	ensureArray({ core, key:"nonPlayerCharacters", handler:ensureSageCharacterCore, optional, context:{ ...context, gameId, userId } });
-	ensureArray({ core, key:"playerCharacters", handler:ensureSageCharacterCore, optional, context:{ ...context, gameId } });
+	ensureArray({ core, key:"nonPlayerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId, userId:gmUserId } });
+	ensureArray({ core, key:"playerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId } });
 
 	return core as SageGameCore;
-}
-
-function getMessageUserId(core?: { userDid?:Snowflake; userId?:Snowflake; }): Snowflake | undefined {
-	return core?.userId ?? undefined;
-}
-function findLastMessageUserId(core?: SageCharacterCoreOld): Snowflake | undefined {
-	return getMessageUserId(core?.lastMessages?.find(getMessageUserId));
-}
-function getMessageUserDid(core?: { userDid?:Snowflake; userId?:Snowflake; }): Snowflake | undefined {
-	return core?.userDid ?? undefined;
-}
-function findLastMessageUserDid(core?: SageCharacterCoreOld): Snowflake | undefined {
-	return getMessageUserDid(core?.lastMessages?.find(getMessageUserDid));
-}
-function findNpcUserId(core: SageGameCoreOld): Snowflake | undefined {
-	// get first gm id
-	let gmUserId = core.users?.find(u => u.type === GameUserType.GameMaster)?.did;
-
-	// get first npc with userId
-	if (!gmUserId) {
-		gmUserId = getMessageUserId(core.nonPlayerCharacters?.find(getMessageUserId));
-	}
-
-	// get first npc with userDid
-	if (!gmUserId) {
-		gmUserId = getMessageUserDid(core.nonPlayerCharacters?.find(getMessageUserDid));
-	}
-
-	// get first npc with lastMessage userId
-	if (!gmUserId) {
-		gmUserId = getMessageUserId(core.nonPlayerCharacters?.find(findLastMessageUserId));
-	}
-
-	// get first npc with lastMessage userDid
-	if (!gmUserId) {
-		gmUserId = getMessageUserDid(core.nonPlayerCharacters?.find(findLastMessageUserDid));
-	}
-
-	return gmUserId;
 }

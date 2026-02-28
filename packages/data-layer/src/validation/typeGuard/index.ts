@@ -3,7 +3,6 @@ export * from "./isAutoChannelData.js";
 export * from "./isEmptyArray.js";
 export * from "./isEmptyString.js";
 export * from "./isMacroBase.js";
-export * from "./isNote.js";
 export * from "./isSimpleObject.js";
 export * from "./isValidId.js";
 export * from "./isValidString.js";

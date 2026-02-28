@@ -11,9 +11,17 @@ export type EnsureContext = {
 type Args<Core, Key, OldValue, NewValue> = {
 	context?: EnsureContext;
 	core: Core;
-	key: Key;
 	handler: (object: OldValue, context?: EnsureContext) => NewValue | undefined;
+	key: Key;
 	optional?: "optional";
+	typeGuard?: never;
+} | {
+	context?: EnsureContext;
+	core: Core;
+	handler?: never;
+	key: Key;
+	optional?: "optional";
+	typeGuard: (object: unknown) => object is NewValue;
 };
 
 export function ensureArray<
@@ -21,18 +29,25 @@ export function ensureArray<
 			Key extends Exclude<keyof Core, "ver">,
 			OldValue,
 			NewValue
-		>({ core, key, handler, context, optional }: Args<Core, Key, OldValue, NewValue>): void {
+		>({ core, key, handler, context, optional, typeGuard }: Args<Core, Key, OldValue, NewValue>): void {
 
 	// remove non-array
 	if (core[key] && !Array.isArray(core[key])) {
 		delete core[key];
 	}
 
-	// map and filter array
-	core[key] = core[key]
-		?.map(o => handler(o, context))
-		.filter(o => o !== undefined && o !== null)
-		?? [] as any;
+	if (handler) {
+		// map and filter array
+		core[key] = core[key]
+			?.map(o => handler(o, context))
+			.filter(o => o !== undefined && o !== null)
+			?? [] as any;
+	}
+
+	if (typeGuard) {
+		// filter array
+		core[key] = core[key]?.filter(typeGuard) ?? [] as any;
+	}
 
 	// remove optional empty array
 	if (optional === "optional") {

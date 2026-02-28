@@ -1,10 +1,11 @@
 import { isHexColorString, isNonNilSnowflake, isNotBlank, randomSnowflake, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
-import { assertArray, assertSageCore, assertSimpleObject, assertString, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, isAutoChannelData, isMacroBase, isNote, isValidId, optional, renameProperty, tagFailure, type EnsureContext, } from "../validation/index.js";
+import { assertArray, assertSageCore, assertSimpleObject, assertString, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, isAutoChannelData, isMacroBase, isValidId, optional, renameProperty, tagFailure, type EnsureContext, } from "../validation/index.js";
 import { assertDeckCore, ensureDeckCore, type DeckCore } from "./DeckCore.js";
 import { assertSageMessageReferenceCore, ensureSageMessageReferenceCore, type SageMessageReferenceCore, type SageMessageReferenceCoreOld } from "./SageMessageReferenceCore.js";
-import type { MacroBase, Note, SageCore } from "./index.js";
+import { findCharUserId, type MacroBase, type SageCore } from "./index.js";
 import { ensureAutoChannelData, type AutoChannelData } from "./other/AutoChannelData.js";
+import { isNote, type Note } from "./other/Note.js";
 
 export type SageCharacterCoreAny = SageCharacterCore | SageCharacterCoreOld;
 
@@ -133,15 +134,15 @@ export function assertSageCharacterCore(core: SageCharacterCoreAny): core is Sag
 export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: EnsureContext): SageCharacterCore {
 	if (!core.id) core.id = randomSnowflake();
 
-	const userId = context?.userId ?? isNonNilSnowflake(core.userDid) ? core.userDid : undefined;
+	const userId = () => context?.userId ?? findCharUserId(core);
 
 	// delete core.aka;
 	deleteInvalidString({ core, key:"alias" }); // regex:/\w+/i ? ? ?
 	ensureArray({ core, key:"autoChannels", handler:ensureAutoChannelData });
 	// deleteEmptyArray({ core, key:"autoChannels" });
 	deleteInvalidUrl({ core, key:"avatarUrl" });
-	ensureArray({ core, key:"companions", optional, handler:ensureSageCharacterCore, context });
-	ensureArray({ core, key:"decks", optional, handler:ensureDeckCore, context})
+	ensureArray({ core, key:"companions", optional, handler:ensureSageCharacterCore, context:{ ...context, userId:userId() } });
+	ensureArray({ core, key:"decks", optional, handler:ensureDeckCore, context});
 	deleteInvalidHexColorString({ core, key:"embedColor" });
 	// essence20
 	// essence20Id
@@ -149,16 +150,16 @@ export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: En
 	// hephaistosId
 	renameProperty({ core, oldKey:"iconUrl", newKey:"tokenUrl" });
 	// id
-	ensureArray({ core, key:"lastMessages", optional, handler:ensureSageMessageReferenceCore, context:{ ...context, characterId:core.id, userId } });
+	ensureArray({ core, key:"lastMessages", optional, handler:ensureSageMessageReferenceCore, context:{ ...context, characterId:core.id, userId:userId() } });
 	// deleteEmptyArray({ core, key:"macros" });
 	// name
 	delete core.nameLower;
-	// deleteEmptyArray({ core, key:"notes" });
+	ensureArray({ core, key:"notes", optional, typeGuard:isNote });
 	core.objectType = "Character";
 	// pathbuilder
 	// pathbuilderId
 	deleteInvalidUrl({ core, key:"tokenUrl" });
-	core.userDid = userId;
+	core.userDid = userId();
 	// uuid
 
 	return core as SageCharacterCore;
