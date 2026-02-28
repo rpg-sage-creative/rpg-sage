@@ -1,9 +1,6 @@
 import { isNotBlank } from "@rsc-utils/core-utils";
 import type { HephaistosCharacterCoreSF1e } from "../types.js";
-
-function isSimpleObject(json: unknown): json is Record<string, any> {
-	return json ? json.constructor === Object : false;
-}
+import { isSimpleObject } from "@rsc-sage/data-layer";
 
 function isValidCore(json: unknown): json is HephaistosCharacterCoreSF1e {
 	if (isSimpleObject(json)) {

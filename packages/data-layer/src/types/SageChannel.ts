@@ -1,5 +1,5 @@
 import { debug, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
-import { assertString, isSimpleObject, renameProperty } from "../validation/index.js";
+import { assertSimpleObject, assertString, renameProperty } from "../validation/index.js";
 import { assertChannelOptions, ChannelOptionsV1Keys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
 import { assertDialogOptions, DialogOptionsKeys, ensureDialogOptions, type DialogOptions } from "./DialogOptions.js";
 import { assertDiceOptions, DiceOptionsKeys, ensureDiceOptions, type DiceOptions } from "./DiceOptions.js";
@@ -34,7 +34,7 @@ export const SageChannelKeys: (keyof SageChannel)[] = [
 ];
 
 export function assertSageChannel({ core, objectType }: { core:SageChannelAny; objectType:string; }): boolean {
-	if (!isSimpleObject<SageChannel>(core)) return false;
+	if (!assertSimpleObject<SageChannel>(core)) return false;
 	if (!assertChannelOptions({ core, objectType })) return false;
 	if (!assertDialogOptions({ core, objectType })) return false;
 	if (!assertDiceOptions({ core, objectType })) return false;

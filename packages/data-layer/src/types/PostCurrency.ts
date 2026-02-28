@@ -1,5 +1,5 @@
 import { debug, isNonNilSnowflake, isNotBlank, type Snowflake } from "@rsc-utils/core-utils";
-import { assertArray, assertBoolean, assertNumber, assertString, isSimpleObject, optional } from "../validation/index.js";
+import { assertArray, assertBoolean, assertNumber, assertSimpleObject, assertString, optional } from "../validation/index.js";
 
 export type PostCurrencyUserCountPostType = "dialog" | "dice";
 export type PostCurrencyIncrementPostType = PostCurrencyUserCountPostType | "all";
@@ -57,7 +57,7 @@ function isPostCurrencyUserCountPostType(value: unknown): value is PostCurrencyU
 }
 
 function assertPostCurrencyIncrement({ core, objectType }: { core:PostCurrencyIncrement; objectType:string; }): boolean {
-	if (!isSimpleObject<PostCurrencyIncrement>(core)) return false;
+	if (!assertSimpleObject<PostCurrencyIncrement>(core)) return false;
 	if (!assertString({ core, objectType, key:"channelId", optional, validator:isNonNilSnowflake })) return false;
 	if (!assertString({ core, objectType, key:"postType", validator:isPostCurrencyIncrementPostType })) return false;
 	if (!assertNumber({ core, objectType, key:"increment" })) return false;
@@ -65,7 +65,7 @@ function assertPostCurrencyIncrement({ core, objectType }: { core:PostCurrencyIn
 }
 
 function assertPostCurrencyUserCount({ core, objectType }: { core:PostCurrencyUserCount; objectType:string; }): boolean {
-	if (!isSimpleObject<PostCurrencyUserCount>(core)) return false;
+	if (!assertSimpleObject<PostCurrencyUserCount>(core)) return false;
 	if (!assertString({ core, objectType, key:"userId", validator:isNonNilSnowflake })) return false;
 	if (!assertString({ core, objectType, key:"channelId", validator:isNonNilSnowflake })) return false;
 	if (!assertString({ core, objectType, key:"postType", validator:isPostCurrencyUserCountPostType })) return false;
@@ -74,7 +74,7 @@ function assertPostCurrencyUserCount({ core, objectType }: { core:PostCurrencyUs
 }
 
 function assertPostCurrencyDataEvent({ core, objectType }: { core:PostCurrencyDataEvent; objectType:string; }): boolean {
-	if (!isSimpleObject<PostCurrencyDataEvent>(core)) return false;
+	if (!assertSimpleObject<PostCurrencyDataEvent>(core)) return false;
 	if (!assertArray({ core, objectType, key:"increments", asserter:assertPostCurrencyIncrement })) return false;
 	if (!assertArray({ core, objectType, key:"userCounts", asserter:assertPostCurrencyUserCount })) return false;
 	if (!assertNumber({ core, objectType, key:"beginTs" })) return false;
@@ -83,7 +83,7 @@ function assertPostCurrencyDataEvent({ core, objectType }: { core:PostCurrencyDa
 }
 
 function assertPostCurrencyDataTotal({ core, objectType }: { core:PostCurrencyDataTotal; objectType:string; }): boolean {
-	if (!isSimpleObject<PostCurrencyDataTotal>(core)) return false;
+	if (!assertSimpleObject<PostCurrencyDataTotal>(core)) return false;
 	if (!assertString({ core, objectType, key:"userId", validator:isNonNilSnowflake })) return false;
 	if (!assertNumber({ core, objectType, key:"dialog" })) return false;
 	if (!assertNumber({ core, objectType, key:"dice" })) return false;
@@ -92,7 +92,7 @@ function assertPostCurrencyDataTotal({ core, objectType }: { core:PostCurrencyDa
 }
 
 export function assertPostCurrency({ core, objectType }: { core:PostCurrency; objectType:string; }): boolean {
-	if (!isSimpleObject(core)) return false;
+	if (!assertSimpleObject(core)) return false;
 	for (const [key, data] of Object.entries(core)) {
 		if (key !== data.key) debug({ key, dataKey:data.key });
 		if (!assertString({ core:data, objectType, key:"key", validator:isNotBlank })) return false;

@@ -10,7 +10,7 @@ export function assertSageCore<
 		>(core: unknown, objectType: ObjectType, validKeys: Key[], id?: "snowflake" | "uuid"): core is Core {
 
 	// make sure it is a simple object: {}
-	if (!assertSimpleObject(core)) return false;
+	if (!assertSimpleObject<Core>(core)) return false;
 
 	// validate objectType
 	if (!assertObjectType<Core>(core, objectType)) return false;
