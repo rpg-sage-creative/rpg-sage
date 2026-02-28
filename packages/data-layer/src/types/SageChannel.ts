@@ -35,7 +35,7 @@ export const SageChannelKeys: (keyof SageChannel)[] = [
 
 export function assertSageChannel({ core, objectType }: { core:SageChannelAny; objectType:string; }): boolean {
 	if (!isSimpleObject<SageChannel>(core)) return false;
-	if (!assertChannelOptions(objectType, core)) return false;
+	if (!assertChannelOptions({ core, objectType })) return false;
 	if (!assertDialogOptions({ core, objectType })) return false;
 	if (!assertDiceOptions({ core, objectType })) return false;
 	if (!assertGameSystemOptions({ core, objectType })) return false;
@@ -43,7 +43,7 @@ export function assertSageChannel({ core, objectType }: { core:SageChannelAny; o
 	return true
 }
 
-export function ensureSageChannel(core: SageChannelOld): SageChannel {
+export function ensureSageChannel(core: SageChannelOld): SageChannel | undefined {
 	ensureChannelOptions(core);
 	ensureDialogOptions(core);
 	ensureDiceOptions(core);
@@ -57,5 +57,5 @@ export function ensureSageChannel(core: SageChannelOld): SageChannel {
 	delete core.sendCommandTo;
 	delete core.sendSearchTo;
 
-	return core as SageChannel;
+	return core;
 }

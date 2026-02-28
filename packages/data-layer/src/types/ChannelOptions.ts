@@ -35,7 +35,7 @@ export const ChannelOptionsV1Keys: (keyof ChannelOptions)[] = [
 	"type",
 ];
 
-export function assertChannelOptions(objectType: string, core: ChannelOptions): core is ChannelOptions {
+export function assertChannelOptions({ core, objectType }: { core:ChannelOptions; objectType:string; }): boolean {
 	if (!assertNumber({ core, objectType, key:"type", optional, validator:SageChannelType })) return false;
 	return true;
 }
