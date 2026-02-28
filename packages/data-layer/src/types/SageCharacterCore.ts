@@ -1,4 +1,4 @@
-import { isHexColorString, isNonNilSnowflake, isNotBlank, randomSnowflake, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
+import { isBlank, isHexColorString, isNonNilSnowflake, isNotBlank, randomSnowflake, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { assertArray, assertSageCore, assertSimpleObject, assertString, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, isAutoChannelData, isMacroBase, isValidId, optional, renameProperty, tagFailure, type EnsureContext, } from "../validation/index.js";
 import { assertDeckCore, ensureDeckCore, type DeckCore } from "./DeckCore.js";
@@ -131,10 +131,12 @@ export function assertSageCharacterCore(core: SageCharacterCoreAny): core is Sag
 	return true;
 }
 
-export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: EnsureContext): SageCharacterCore {
+export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: EnsureContext): SageCharacterCore | undefined {
+	if (isBlank(core.name)) return undefined;
+
 	if (!core.id) core.id = randomSnowflake();
 
-	const userId = () => context?.userId ?? findCharUserId(core);
+	const userId = () => findCharUserId(core) ?? context?.userId;
 
 	// delete core.aka;
 	deleteInvalidString({ core, key:"alias" }); // regex:/\w+/i ? ? ?
@@ -162,7 +164,7 @@ export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: En
 	core.userDid = userId();
 	// uuid
 
-	return core as SageCharacterCore;
+	return core;
 }
 
 // export type SageCharacterCoreV2 = {

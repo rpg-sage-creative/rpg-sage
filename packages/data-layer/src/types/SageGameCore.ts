@@ -128,7 +128,7 @@ export function assertSageGameCore(core: unknown): core is SageGameCore {
 	// objectType
 	// core.parties
 	if (!assertArray({ core, objectType, key:"playerCharacters", optional, validator:assertSageCharacterCore })) return false;
-	if ("postCurrency" in core && core.postCurrency !== undefined && !assertPostCurrency({ core:core.postCurrency, objectType })) return false;
+	if (core.postCurrency !== undefined && !assertPostCurrency({ core:core.postCurrency, objectType })) return false;
 	if (!assertArray({ core, objectType, key:"roles", optional, validator:isGameRoleData })) return false;
 	if (!assertString({ core, objectType, key:"serverDid", validator:isNonNilSnowflake })) return false;
 	if (!assertString({ core, objectType, key:"serverId", validator:val => isNonNilSnowflake(val) || isNonNilUuid(val) })) return false;
@@ -172,7 +172,7 @@ export function ensureSageGameCore(core: SageGameCoreOld, context?: EnsureContex
 		delete core.gmCharacter;
 	}
 	ensureArray({ core, key:"nonPlayerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId, userId:gmUserId } });
-	ensureArray({ core, key:"playerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId } });
+	ensureArray({ core, key:"playerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId, userId:gmUserId } });
 
-	return core as SageGameCore;
+	return core;
 }
