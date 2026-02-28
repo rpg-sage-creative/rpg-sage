@@ -1,32 +1,19 @@
 import { isNotBlank, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { assertArray, assertBoolean, assertNumber, assertSageCore, assertString, ensureArray, ensureIds, ensureTypedArray, isAlias, isMacroBase, isNote, optional, renameProperty, type EnsureContext } from "../validation/index.js";
-import type { Alias, MacroBase, Note, SageCharacterCoreV0, SageCharacterCoreV1, SageCore } from "./index.js";
-import { assertSageCharacterCoreV1, DialogDiceBehaviorType, DialogPostType, ensureSageCharacterCore, MoveDirectionOutputType } from "./index.js";
+import { DialogDiceBehaviorType, DialogPostType, MoveDirectionOutputType } from "./enums/index.js";
+import type { Alias, MacroBase, Note, SageCore } from "./other/index.js";
+import { assertSageCharacterCore, ensureSageCharacterCore, type SageCharacterCore, type SageCharacterCoreOld } from "./SageCharacterCore.js";
 
 export type SageUserCoreAny = SageUserCore | SageUserCoreOld;
 
-export type SageUserCoreOld = SageUserCore & {
-	aliases?: Alias[];
+export type SageUserCoreOld = Omit<SageUserCore, "characters" | "nonPlayerCharacters" | "playerCharacters"> & {
 	/** @deprecated moved to playerCharacters */
-	characters?: SageCharacterCoreV0[];
-	confirmationPrompts?: boolean;
-	defaultDialogType?: DialogPostType;
-	defaultSagePostType?: DialogPostType;
-	dialogDiceBehaviorType?: DialogDiceBehaviorType;
-	dmOnDelete?: boolean;
-	dmOnEdit?: boolean;
-	forceConfirmationFlag?: string;
-	macros?: MacroBase[];
-	mentionPrefix?: string;
-	moveDirectionOutputType?: MoveDirectionOutputType;
+	characters?: SageCharacterCoreOld[];
 	/** @deprecated never implemented */
-	nonPlayerCharacters?: SageCharacterCoreV0[];
-	notes?: Note[];
-	playerCharacters?: SageCharacterCoreV0[];
+	nonPlayerCharacters?: SageCharacterCoreOld[];
+	playerCharacters?: SageCharacterCoreOld[];
 	/** @deprecated via roles */
 	patronTier?: number;
-	skipConfirmationFlag?: string;
-	ver: number;
 };
 
 export type SageUserCore = SageCore<"User", Snowflake | UUID> & {
@@ -71,7 +58,7 @@ export type SageUserCore = SageCore<"User", Snowflake | UUID> & {
 	// objectType (SageCore)
 
 	/** @deprecated use single .characters array */
-	playerCharacters?: SageCharacterCoreV1[];
+	playerCharacters?: SageCharacterCore[];
 
 	/** "-y" by default */
 	skipConfirmationFlag?: string;
@@ -121,7 +108,7 @@ export function assertSageUserCore(core: SageUserCoreAny): core is SageUserCore 
 	if (!assertNumber({ core, objectType, key:"moveDirectionOutputType", optional, validator:MoveDirectionOutputType })) return false;
 	if (!assertArray({ core, objectType, key:"notes", optional, validator:isNote })) return false;
 	// objectType
-	if (!assertArray({ core, objectType, key:"playerCharacters", optional, validator:assertSageCharacterCoreV1 })) return false;
+	if (!assertArray({ core, objectType, key:"playerCharacters", optional, validator:assertSageCharacterCore })) return false;
 	if (!assertString({ core, objectType, key:"skipConfirmationFlag", optional, validator:isNotBlank })) return false;
 	// uuid
 
@@ -140,7 +127,7 @@ export function ensureSageUserCore(core: SageUserCoreOld, context?: EnsureContex
 	ensureArray({ core, key:"playerCharacters", handler:ensureSageCharacterCore, optional, context:{ ...context, userId:core.id as Snowflake } });
 	delete core.patronTier;
 
-	return core;
+	return core as SageUserCore;
 }
 
 // export type UserDataV2 = {

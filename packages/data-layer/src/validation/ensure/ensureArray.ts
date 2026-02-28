@@ -12,12 +12,12 @@ type Args<Core, Key, OldValue, NewValue> = {
 	context?: EnsureContext;
 	core: Core;
 	key: Key;
-	handler: (object: OldValue | NewValue, context?: EnsureContext) => NewValue | undefined;
+	handler: (object: OldValue, context?: EnsureContext) => NewValue | undefined;
 	optional?: "optional";
 };
 
 export function ensureArray<
-			Core extends Partial<Record<Key, (OldValue | NewValue)[]>>,
+			Core extends Partial<Record<Key, OldValue[]>>,
 			Key extends Exclude<keyof Core, "ver">,
 			OldValue,
 			NewValue

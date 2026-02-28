@@ -46,6 +46,8 @@ export type PostCurrency = {
 	[key:string]: PostCurrencyData;
 };
 
+export type HasPostCurrency = { postCurrency?:PostCurrency; };
+
 function isPostCurrencyIncrementPostType(value: unknown): value is PostCurrencyIncrementPostType {
 	return isPostCurrencyUserCountPostType(value) || value === "all";
 }

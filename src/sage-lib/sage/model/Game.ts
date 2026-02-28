@@ -1,4 +1,4 @@
-import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameRoleData, GameSystem, GameSystemType, GameUserData, PostCurrency, SageChannel, SageGameCore } from "@rsc-sage/data-layer";
+import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameRoleData, GameSystem, GameSystemType, GameUserData, PostCurrency, SageChannel, SageGameCore, SageGameCoreOld } from "@rsc-sage/data-layer";
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameRoleType, GameUserType, SageChannelType, ensureSageGameCore, parseGameSystem, parseSageChannelType } from "@rsc-sage/data-layer";
 import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, stringOrUndefined, warn, type Args, type Comparable, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
@@ -27,7 +27,7 @@ export type GameCore = Omit<SageGameCore, "encounters" | "gmCharacter" | "nonPla
 };
 
 function updateCore(core: GameCore): GameCore {
-	return ensureSageGameCore(core as SageGameCore) as GameCore;
+	return ensureSageGameCore(core as SageGameCoreOld) as GameCore;
 }
 
 type MappedChannelNameTags = {

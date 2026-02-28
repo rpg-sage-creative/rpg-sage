@@ -4,15 +4,16 @@ import { assertArray, assertNumber, assertSageCore, assertString, deleteInvalidS
 import { GameCreatorType, isAdminRole, isAdminUser, isEmbedColor, isEmoji, type AdminRole, type AdminUser, type HasEmbedColors, type HasEmoji } from "./enums/index.js";
 import type { MacroBase, SageCore } from "./index.js";
 import { assertSageChannel, ensureSageChannel, type SageChannel, type SageChannelOld } from "./SageChannel.js";
-import { assertSageCharacterCoreV1, ensureSageCharacterCoreV1, type SageCharacterCoreV0, type SageCharacterCoreV1 } from "./SageCharacter/index.js";
+import { assertSageCharacterCore, ensureSageCharacterCore, type SageCharacterCore, type SageCharacterCoreOld } from "./SageCharacterCore.js";
 import { assertServerOptions, ensureServerOptions, ServerOptionsKeys, type ServerOptions, type ServerOptionsOld } from "./ServerOptions.js";
 
 export type SageServerCoreAny = SageServerCore | SageServerCoreOld;
 
-export type SageServerCoreOld = Omit<SageServerCore, "channels"> & ServerOptionsOld & {
+export type SageServerCoreOld = Omit<SageServerCore, "channels" | "gmCharacter"> & ServerOptionsOld & {
 	channels: SageChannelOld[];
 	/** @deprecated */
 	games?: unknown;
+	gmCharacter?: SageCharacterCoreOld;
 	id: string;
 	/** @deprecated */
 	logLevel?: unknown;
@@ -40,7 +41,7 @@ export type SageServerCore = SageCore<"Server", Snowflake | UUID> & HasEmbedColo
 	gameId?: string;
 
 	/** server level gm character for shared stats/npcs and non-game usage */
-	gmCharacter?: SageCharacterCoreV1;
+	gmCharacter?: SageCharacterCore;
 
 	// id
 
@@ -94,7 +95,7 @@ export function assertSageServerCore(core: unknown): core is SageServerCore {
 	if (!assertArray({ core, objectType, key:"emoji", optional, validator:isEmoji })) return false;
 	if (!assertNumber({ core, objectType, key:"gameCreatorType", optional, validator:GameCreatorType })) return false;
 	if (!assertString({ core, objectType, key:"gameId", optional, validator:isNonNilSnowflake })) return false;
-	if ("gmCharacter" in core && !assertSageCharacterCoreV1(core.gmCharacter!)) return false;
+	if ("gmCharacter" in core && !assertSageCharacterCore(core.gmCharacter!)) return false;
 	// id
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
 	if (!assertString({ core, objectType, key:"name", optional, validator:isNotBlank })) return false;
@@ -111,12 +112,12 @@ export function ensureSageServerCore(core: SageServerCoreOld, context?: EnsureCo
 	ensureServerOptions(core);
 
 	ensureArray({ core, key:"channels", handler:ensureSageChannel, optional , context:{ ...context, serverId:core.id as Snowflake }});
-	core.gmCharacter ? core.gmCharacter = ensureSageCharacterCoreV1(core.gmCharacter as SageCharacterCoreV0, context) : delete core.gmCharacter;
+	core.gmCharacter ? core.gmCharacter = ensureSageCharacterCore(core.gmCharacter, context) as SageCharacterCoreOld : delete core.gmCharacter;
 	deleteInvalidString({ core, key:"name" });
 
 	delete core.games;
 	delete core.logLevel;
 	delete core.nickName;
 
-	return core;
+	return core as SageServerCore;
 }

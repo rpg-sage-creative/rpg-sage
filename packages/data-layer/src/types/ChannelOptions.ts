@@ -1,5 +1,5 @@
 import { isDefined } from "@rsc-utils/core-utils";
-import { assertNumber, type EnsureContext, optional } from "../validation/index.js";
+import { assertNumber, optional } from "../validation/index.js";
 import { SageChannelType } from "./enums/SageChannelType.js";
 
 export type ChannelOptionsAny = ChannelOptionsOld | ChannelOptions;
@@ -40,7 +40,7 @@ export function assertChannelOptions({ core, objectType }: { core:ChannelOptions
 	return true;
 }
 
-export function ensureChannelOptions(core: ChannelOptionsOld, _context?: EnsureContext): ChannelOptions {
+export function ensureChannelOptions(core: ChannelOptionsOld): ChannelOptions {
 	if (!isDefined(core.type)) {
 		const gameMaster = core.gameMaster;
 		const player = core.player;

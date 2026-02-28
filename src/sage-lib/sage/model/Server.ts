@@ -1,4 +1,4 @@
-import type { DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, EmbedColorType, EmojiType, GameSystem, GameSystemType, SageChannel, SageServerCore, ServerOptions } from "@rsc-sage/data-layer";
+import type { DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, EmbedColorType, EmojiType, GameSystem, GameSystemType, SageChannel, SageServerCore, SageServerCoreOld, ServerOptions } from "@rsc-sage/data-layer";
 import { DiceSortType, ensureSageServerCore, parseGameSystem } from "@rsc-sage/data-layer";
 import { getHomeServerId } from "@rsc-sage/env";
 import { applyChanges, randomSnowflake, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
@@ -24,7 +24,7 @@ export type ServerCore = Omit<SageServerCore, "gmCharacter"> & {
 }
 
 function updateCore(core: ServerCore): ServerCore {
-	return ensureSageServerCore(core as SageServerCore) as ServerCore;
+	return ensureSageServerCore(core as SageServerCoreOld) as ServerCore;
 }
 
 // export abstract class HasDiceOptions<Core extends Partial<DiceOptions>> {
