@@ -114,15 +114,15 @@ export function assertSageUserCore(core: SageUserCoreAny): core is SageUserCore 
 	// did
 	if (!assertBoolean({ core, objectType, key:"dmOnDelete", optional })) return false;
 	if (!assertBoolean({ core, objectType, key:"dmOnEdit", optional })) return false;
-	if (!assertString({ core, objectType, key:"forceConfirmationFlag", validator:isNotBlank, optional })) return false;
+	if (!assertString({ core, objectType, key:"forceConfirmationFlag", optional, validator:isNotBlank })) return false;
 	// id
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
-	if (!assertString({ core, objectType, key:"mentionPrefix", validator:isNotBlank, optional })) return false;
+	if (!assertString({ core, objectType, key:"mentionPrefix", optional, validator:isNotBlank })) return false;
 	if (!assertNumber({ core, objectType, key:"moveDirectionOutputType", optional, validator:MoveDirectionOutputType })) return false;
 	if (!assertArray({ core, objectType, key:"notes", optional, validator:isNote })) return false;
 	// objectType
 	if (!assertArray({ core, objectType, key:"playerCharacters", optional, validator:assertSageCharacterCoreV1 })) return false;
-	if (!assertString({ core, objectType, key:"skipConfirmationFlag", validator:isNotBlank, optional })) return false;
+	if (!assertString({ core, objectType, key:"skipConfirmationFlag", optional, validator:isNotBlank })) return false;
 	// uuid
 
 	return true;
