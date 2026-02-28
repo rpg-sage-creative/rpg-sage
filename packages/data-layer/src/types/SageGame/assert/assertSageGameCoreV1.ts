@@ -1,7 +1,7 @@
 import { isNotBlank } from "@rsc-utils/core-utils";
 import { assertArray, assertNumber, assertSageCore, assertString, isMacroBase, optional } from "../../../validation/index.js";
 import { isEmbedColor, isEmoji } from "../../enums/index.js";
-import { assertDialogOptions, assertDiceOptions, assertGameSystemOptions, assertSageChannel, assertSageCharacterCoreV1 } from "../../index.js";
+import { assertDialogOptions, assertDiceOptions, assertGameSystemOptions, assertPostCurrency, assertSageChannel, assertSageCharacterCoreV1 } from "../../index.js";
 import { SageGameV1Keys, type SageGameCoreAny, type SageGameCoreV1 } from "../index.js";
 
 const objectType = "Game";
@@ -30,6 +30,7 @@ export function assertSageGameCoreV1(core: SageGameCoreAny): core is SageGameCor
 	if (!assertString({ core, objectType, key:"name", validator:isNotBlank })) return false;
 	core.nonPlayerCharacters
 	// objectType
+	if ("postCurrency" in core && core.postCurrency !== undefined && !assertPostCurrency({ core:core.postCurrency, objectType })) return false;
 
 	return true;
 }
