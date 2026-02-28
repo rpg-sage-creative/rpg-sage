@@ -12,7 +12,7 @@ type Args<Core, Key, OldValue, NewValue> = {
 	context?: EnsureContext;
 	core: Core;
 	key: Key;
-	handler: (object: OldValue | NewValue, context?: EnsureContext) => NewValue;
+	handler: (object: OldValue | NewValue, context?: EnsureContext) => NewValue | undefined;
 	optional?: "optional";
 };
 
