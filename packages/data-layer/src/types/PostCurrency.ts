@@ -92,7 +92,7 @@ function assertPostCurrencyDataTotal({ core, objectType }: { core:PostCurrencyDa
 }
 
 export function assertPostCurrency({ core, objectType }: { core:PostCurrency; objectType:string; }): boolean {
-	if (!assertSimpleObject(core)) return false;
+	if (!assertSimpleObject<PostCurrency>(core)) return false;
 	for (const [key, data] of Object.entries(core)) {
 		if (key !== data.key) debug({ key, dataKey:data.key });
 		if (!assertString({ core:data, objectType, key:"key", validator:isNotBlank })) return false;
@@ -102,7 +102,7 @@ export function assertPostCurrency({ core, objectType }: { core:PostCurrency; ob
 		if (!assertArray({ core:data, objectType, key:"events", asserter:assertPostCurrencyDataEvent })) return false;
 		if (!assertArray({ core:data, objectType, key:"totals", asserter:assertPostCurrencyDataTotal })) return false;
 	}
-	return false;
+	return true;
 }
 
 // const arr = [
