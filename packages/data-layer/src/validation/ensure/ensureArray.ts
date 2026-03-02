@@ -3,8 +3,10 @@ import { deleteEmptyArray } from "../utils/deleteEmptyArray.js";
 
 export type EnsureContext = {
 	characterId?: Snowflake;
+	characterType?: "gm" | "npc" | "pc";
 	gameId?: Snowflake;
 	serverId?: Snowflake;
+	snowflakeDate?: number;
 	userId?: Snowflake;
 };
 

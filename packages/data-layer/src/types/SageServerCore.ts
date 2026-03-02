@@ -95,7 +95,7 @@ export function assertSageServerCore(core: unknown): core is SageServerCore {
 	if (!assertArray({ core, objectType, key:"emoji", optional, validator:isEmoji })) return false;
 	if (!assertNumber({ core, objectType, key:"gameCreatorType", optional, validator:GameCreatorType })) return false;
 	if (!assertString({ core, objectType, key:"gameId", optional, validator:isNonNilSnowflake })) return false;
-	if ("gmCharacter" in core && !assertSageCharacterCore(core.gmCharacter!)) return false;
+	if ("gmCharacter" in core && !assertSageCharacterCore({ core:core.gmCharacter!, type:"gm" })) return false;
 	// id
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
 	if (!assertString({ core, objectType, key:"name", optional, validator:isNotBlank })) return false;
@@ -112,12 +112,12 @@ export function ensureSageServerCore(core: SageServerCoreOld, context?: EnsureCo
 	ensureServerOptions(core);
 
 	ensureArray({ core, key:"channels", handler:ensureSageChannel, optional , context:{ ...context, serverId:core.id as Snowflake }});
-	core.gmCharacter ? core.gmCharacter = ensureSageCharacterCore(core.gmCharacter, context) as SageCharacterCoreOld : delete core.gmCharacter;
+	core.gmCharacter ? core.gmCharacter = ensureSageCharacterCore(core.gmCharacter, { ...context, characterType:"gm" }) as SageCharacterCoreOld : delete core.gmCharacter;
 	deleteInvalidString({ core, key:"name" });
 
 	delete core.games;
 	delete core.logLevel;
 	delete core.nickName;
 
-	return core as SageServerCore;
+	return core;
 }

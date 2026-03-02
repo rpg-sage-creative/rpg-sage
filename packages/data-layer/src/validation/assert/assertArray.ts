@@ -1,3 +1,4 @@
+import { debug } from "@rsc-utils/core-utils";
 import { tagFailure } from "../index.js";
 
 type Info<Core, Type> = {
@@ -32,12 +33,15 @@ export function assertArray<Core, Type>(info: Info<Core, Type>): boolean {
 			return tagFailure`${objectType}: invalid array (${key} === ${value})`;
 		}
 		if (asserter) {
-			if (!value.every(val => asserter({ core:val, objectType }))) {
-				return tagFailure`${objectType}: invalid array item(s) ${asserter.name} (${key} === ${simplifyArray(key, value)})`;
+			const failed = value.find(val => !asserter({ core:val, objectType }));
+			if (failed) {
+				return tagFailure`${objectType}: invalid array item(s) asserter:${asserter.name} (${key} === ${simplifyArray(key, value)})`;
 			}
 		}else {
-			if (!value.every(validator)) {
-				return tagFailure`${objectType}: invalid array item(s) ${validator.name} (${key} === ${simplifyArray(key, value)})`;
+			const failed = value.find(val => !validator(val));
+			if (failed) {
+				if (validator.name === "assertSageCharacterCore") debug(failed);
+				return tagFailure`${objectType}: invalid array item(s) validator:${validator.name} (${key} === ${simplifyArray(key, value)})`;
 			}
 		}
 

@@ -15,6 +15,7 @@ function _findLastMessageUserId(core: Char | undefined, idKey: keyof Ids): Snowf
 	return core?.lastMessages?.find(msg => _getUserId(msg, idKey))?.[idKey] ?? undefined;
 }
 
+/** check char object directly before looking through last messages */
 function _findCharUserId(char: Char | undefined, idKey: keyof Ids): Snowflake | undefined {
 	return _getUserId(char, idKey) ?? _findLastMessageUserId(char, idKey);
 }
@@ -29,6 +30,7 @@ function _findCharsUserId(chars: Char[] | undefined, idKey: keyof Ids): Snowflak
 	return undefined;
 }
 
+/** checks char for userId, then last messages for userId, then char for userDid, then last messages for userDid */
 export function findCharUserId(charCore: Char): Snowflake | undefined {
 	return _findCharUserId(charCore, "userId") ?? _findCharUserId(charCore, "userDid");
 }

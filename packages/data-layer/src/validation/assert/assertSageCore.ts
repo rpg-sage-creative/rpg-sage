@@ -1,4 +1,4 @@
-import type { Snowflake, UUID } from "@rsc-utils/core-utils";
+import { debug, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import type { SageCore } from "../../types/index.js";
 import { assertIds, assertObjectType, assertSimpleObject, assertValidKeys } from "./index.js";
 
@@ -17,7 +17,7 @@ export function assertSageCore<
 
 	// validate keys
 	if (!assertValidKeys<Core>({ core, objectType, validKeys })) {
-		console.log(core);
+		debug(core);
 		return false;
 	}
 

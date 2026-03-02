@@ -85,22 +85,22 @@ export const SageCharacterCoreKeys: (keyof SageCharacterCore)[] = [
 
 // const AliasRegExp = /^\w+$/;
 const objectType = "Character";
-export function assertSageCharacterCore(core: SageCharacterCoreAny): core is SageCharacterCore {
+export function assertSageCharacterCore({ core, type }: { core:SageCharacterCoreAny; type:"gm"|"pc"|"npc"; }): boolean {
 	if (!assertSageCore<SageCharacterCore>(core, objectType, SageCharacterCoreKeys)) return false;
 
 	// if (!assertString({ core, objectType, key:"aka", validator:isNotBlank, optional })) return false;
-	if (!assertString({ core, objectType, key:"alias", validator:isNotBlank, optional })) return false;
-	if (!assertArray({ core, objectType, key:"autoChannels", validator:isAutoChannelData, optional })) return false;
-	if (!assertString({ core, objectType, key:"avatarUrl", validator:isUrl, optional })) return false;
-	if (!assertArray({ core, objectType, key:"companions", validator:assertSageCharacterCore, optional })) return false;
-	if (!assertArray({ core, objectType, key:"decks", validator:assertDeckCore, optional })) return false;
-	if (!assertString({ core, objectType, key:"embedColor", validator:isHexColorString, optional })) return false;
+	if (!assertString({ core, objectType, key:"alias", optional, validator:isNotBlank })) return false;
+	if (!assertArray({ core, objectType, key:"autoChannels", optional, validator:isAutoChannelData })) return false;
+	if (!assertString({ core, objectType, key:"avatarUrl", optional, validator:isUrl })) return false;
+	if (!assertArray({ core, objectType, key:"companions", optional, validator:(char: SageCharacterCoreAny) => assertSageCharacterCore({ core:char, type }) })) return false;
+	if (!assertArray({ core, objectType, key:"decks", optional, validator:assertDeckCore })) return false;
+	if (!assertString({ core, objectType, key:"embedColor", optional, validator:isHexColorString })) return false;
 	if ("essence20" in core) {
 		if (!assertSimpleObject(core.essence20)) return tagFailure`${objectType}: invalid essence20`;
 		// test object
 	}
 	if ("essence20Id" in core) {
-		if (!assertString({ core, objectType, key:"essence20Id", validator:isValidId, optional })) return false;
+		if (!assertString({ core, objectType, key:"essence20Id", optional, validator:isValidId })) return false;
 		// test id
 	}
 	if ("hephaistos" in core) {
@@ -108,25 +108,31 @@ export function assertSageCharacterCore(core: SageCharacterCoreAny): core is Sag
 		// test object
 	}
 	if ("hephaistosId" in core) {
-		if (!assertString({ core, objectType, key:"hephaistosId", validator:isNonNilSnowflake, optional })) return false;
+		if (!assertString({ core, objectType, key:"hephaistosId", optional, validator:isNonNilSnowflake })) return false;
 		// test id
 	}
-	if (!assertArray({ core, objectType, key:"lastMessages", validator:assertSageMessageReferenceCore, optional })) return false;
-	if (!assertArray({ core, objectType, key:"macros", validator:isMacroBase, optional })) return false;
+	if (!assertArray({ core, objectType, key:"lastMessages", optional, validator:assertSageMessageReferenceCore })) return false;
+	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
 	if (!assertString({ core, objectType, key:"name", validator:isNotBlank })) return false;
-	if (!assertArray({ core, objectType, key:"notes", validator:isNote, optional })) return false;
+	if (!assertArray({ core, objectType, key:"notes", optional, validator:isNote })) return false;
 	// objectType
 	if ("pathbuilder" in core) {
 		if (!assertSimpleObject(core.pathbuilder)) return tagFailure`${objectType}: invalid pathbuilder`;
 		// test object
 	}
 	if ("pathbuilderId" in core) {
-		if (!assertString({ core, objectType, key:"pathbuilderId", validator:isValidId, optional })) return false;
+		if (!assertString({ core, objectType, key:"pathbuilderId", optional, validator:isValidId })) return false;
 		// is it a valid id; meaning, does it link to an actual pathbuilder character somewhere?
 		// validate that character ? ? ?
 	}
-	if (!assertString({ core, objectType, key:"tokenUrl", validator:isUrl, optional })) return false;
-	if (!assertString({ core, objectType, key:"userDid", validator:isNonNilSnowflake, optional })) return false;
+	if (!assertString({ core, objectType, key:"tokenUrl", optional, validator:isUrl })) return false;
+	if (type === "gm") {
+		// GM char shouldn't have a userDid
+		if ("userDid" in core) return tagFailure`GM char/minion has userDid`;
+	}else {
+		// NPC should have gm's userDid; PCs should have player's userDid
+		if (!assertString({ core, objectType, key:"userDid", validator:isNonNilSnowflake })) return false;
+	}
 
 	return true;
 }
@@ -134,7 +140,7 @@ export function assertSageCharacterCore(core: SageCharacterCoreAny): core is Sag
 export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: EnsureContext): SageCharacterCore | undefined {
 	if (isBlank(core.name)) return undefined;
 
-	if (!core.id) core.id = randomSnowflake();
+	randomSnowflake// if (!core.id) core.id = randomSnowflake();
 
 	const userId = () => findCharUserId(core) ?? context?.userId;
 
@@ -161,7 +167,11 @@ export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: En
 	// pathbuilder
 	// pathbuilderId
 	deleteInvalidUrl({ core, key:"tokenUrl" });
-	core.userDid = userId();
+	if (context?.characterType === "gm") {
+		delete core.userDid;
+	}else {
+		core.userDid = userId();
+	}
 	// uuid
 
 	return core;
