@@ -1,4 +1,4 @@
-import { isNonNilSnowflake, isNonNilUuid, randomSnowflake, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, isNonNilUuid, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { writeFileSync } from "@rsc-utils/io-utils";
 import { assertArray, assertNumber, assertSageCore, assertString, deleteEmptyArray, ensureArray, ensureIds, isMacroBase, optional, renameProperty, type EnsureContext } from "../validation/index.js";
 import { isEmbedColor, type HasEmbedColors } from "./enums/EmbedColorType.js";
@@ -139,8 +139,7 @@ export function assertSageGameCore(core: unknown): core is SageGameCore {
 }
 
 export function ensureSageGameCore(core: SageGameCoreOld, context?: EnsureContext): SageGameCore {
-	ensureIds(core);
-	if (!core.did) core.did = randomSnowflake({ timestamp:core.createdTs });
+	ensureIds(core, { didTs:core.createdTs });
 
 	ensureGameOptions(core);
 	renameProperty({ core, oldKey:"type", newKey:"gameSystemType" });
