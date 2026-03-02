@@ -68,9 +68,18 @@ function dataStack() {
 	# dataCompare
 }
 
+function dataIds() {
+	resetPath
+	node ./packages/data-layer/build/ids.mjs codeName=dev "dataRoot=$TMP_DATA_PATH"
+}
+
 if [ "$WHICH" == "backup" ]; then
 
 	dataBackup
+
+elif [ "$WHICH" == "ids" ]; then
+
+	dataIds
 
 else
 
