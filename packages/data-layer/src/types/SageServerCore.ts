@@ -95,7 +95,7 @@ export function assertSageServerCore(core: unknown): core is SageServerCore {
 	if (!assertArray({ core, objectType, key:"emoji", optional, validator:isEmoji })) return false;
 	if (!assertNumber({ core, objectType, key:"gameCreatorType", optional, validator:GameCreatorType })) return false;
 	if (!assertString({ core, objectType, key:"gameId", optional, validator:isNonNilSnowflake })) return false;
-	if ("gmCharacter" in core && !assertSageCharacterCore({ core:core.gmCharacter!, type:"gm" })) return false;
+	if ("gmCharacter" in core && !assertSageCharacterCore(core.gmCharacter)) return false;
 	// id
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
 	if (!assertString({ core, objectType, key:"name", optional, validator:isNotBlank })) return false;

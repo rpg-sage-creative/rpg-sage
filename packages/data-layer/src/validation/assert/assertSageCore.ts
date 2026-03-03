@@ -3,20 +3,20 @@ import type { SageCore } from "../../types/index.js";
 import { assertIds, assertObjectType, assertSimpleObject, assertValidKeys } from "./index.js";
 
 export function assertSageCore<
-			Core extends SageCore<ObjectType, IdType>,
+			TypedCore extends SageCore<ObjectType, IdType> & { objectType:ObjectType; },
 			ObjectType extends string = string,
 			IdType extends Snowflake | UUID = Snowflake | UUID,
-			Key extends keyof Core = keyof Core
-		>(core: unknown, objectType: ObjectType, validKeys: Key[], id?: "snowflake" | "uuid"): core is Core {
+			Key extends keyof TypedCore = keyof TypedCore
+		>(core: unknown, objectType: ObjectType, validKeys: Key[], id?: "snowflake" | "uuid"): core is TypedCore {
 
 	// make sure it is a simple object: {}
-	if (!assertSimpleObject<Core>(core)) return false;
+	if (!assertSimpleObject<TypedCore>(core)) return false;
 
 	// validate objectType
-	if (!assertObjectType<Core>(core, objectType)) return false;
+	if (!assertObjectType({ core, objectType })) return false;
 
 	// validate keys
-	if (!assertValidKeys<Core>({ core, objectType, validKeys })) {
+	if (!assertValidKeys({ core, objectType, validKeys })) {
 		debug(core);
 		return false;
 	}

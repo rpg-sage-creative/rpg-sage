@@ -11,8 +11,8 @@ type Options = { didTs?:number; uuidTs?:number; }
 export function ensureIds(core: Core, options?: Options): void {
 
 	let did = parseSnowflake(core.did) ?? parseSnowflake(core.id);
-	if (!did && options?.didTs) did = generateSnowflake({ timestamp:options.didTs });
-	if (did) core.did = did;
+	did ??= generateSnowflake({ ts:options?.didTs });
+	core.did = did;
 
 	let uuid = parseUuid(core.uuid) ?? parseUuid(core.id);
 	if (!uuid && options?.uuidTs) uuid = generateUuid({ ts:options.uuidTs });

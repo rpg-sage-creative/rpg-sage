@@ -1,5 +1,5 @@
-import { debug, isNonNilSnowflake, parseSnowflake, snowflakeToDate, type Snowflake } from "@rsc-utils/core-utils";
-import { assertArray, assertNumber, assertSageCore, assertString, isValidId, optional, type EnsureContext } from "../validation/index.js";
+import { debug, isNonNilSnowflake, isValidId, parseSnowflake, snowflakeToDate, type Snowflake } from "@rsc-utils/core-utils";
+import { assertArray, assertNumber, assertSageCore, assertString, optional, type EnsureContext } from "../validation/index.js";
 import type { SageCore } from "./index.js";
 
 export type SageMessageReferenceCoreAny = SageMessageReferenceCore | SageMessageReferenceCoreOld;
@@ -78,7 +78,7 @@ export function assertSageMessageReferenceCore(core: unknown): core is SageMessa
 	if (!assertArray({ core, objectType, key:"messageIds", validator:isNonNilSnowflake })) return false;
 	// objectType
 	if (!assertNumber({ core, objectType, key:"ts", validator:isValidTimestamp })) return false;
-	if (!assertString({ core, objectType, key:"userId", validator:isNonNilSnowflake })) {
+	if (!assertString({ core, objectType, key:"userId", optional, validator:isNonNilSnowflake })) {
 		debug({userId:(core as any).coreId,userDid:(core as any).userDid,core});
 		return false;
 	}

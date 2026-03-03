@@ -1,21 +1,6 @@
 import { debug } from "@rsc-utils/core-utils";
 import { tagFailure } from "../index.js";
-
-type Info<Core, Type> = {
-	asserter?: never;
-	core: Core;
-	key: keyof Core;
-	objectType: string;
-	optional?: "optional";
-	validator: (value: Type) => unknown
-} | {
-	asserter: (arg: { core:Type, objectType:string; }) => boolean;
-	core: Core;
-	key: keyof Core;
-	objectType: string;
-	optional?: "optional";
-	validator?: never;
-};
+import type { AssertArgs } from "./types.js";
 
 function simplifyArray(key: any, value: any[]): any[] {
 	if (["playerCharacters","nonPlayerCharacters"].includes(key)) {
@@ -24,8 +9,8 @@ function simplifyArray(key: any, value: any[]): any[] {
 	return value;
 }
 
-export function assertArray<Core, Type>(info: Info<Core, Type>): boolean {
-	const { asserter, core, key, objectType, optional, validator } = info;
+export function assertArray<Core, Type>(args: AssertArgs<Core, Type>): boolean {
+	const { asserter, core, key, objectType, optional, validator } = args;
 
 	if (key in (core as Record<string, any>)) {
 		const value = core[key];
@@ -37,12 +22,14 @@ export function assertArray<Core, Type>(info: Info<Core, Type>): boolean {
 			if (failed) {
 				return tagFailure`${objectType}: invalid array item(s) asserter:${asserter.name} (${key} === ${simplifyArray(key, value)})`;
 			}
-		}else {
+		}else if (validator) {
 			const failed = value.find(val => !validator(val));
 			if (failed) {
 				if (validator.name === "assertSageCharacterCore") debug(failed);
 				return tagFailure`${objectType}: invalid array item(s) validator:${validator.name} (${key} === ${simplifyArray(key, value)})`;
 			}
+		}else {
+			throw new Error("assertArray(args); args missing asserter AND validator");
 		}
 
 	}else if (!optional) {

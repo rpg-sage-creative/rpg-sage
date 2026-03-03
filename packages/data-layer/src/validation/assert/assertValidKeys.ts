@@ -1,12 +1,12 @@
 import { tagFailure } from "../index.js";
 
-type Info<Core> = {
+type AssertValidKeysArgs<Core> = {
 	core: Core;
 	objectType: string;
 	validKeys: (keyof Core)[];
 };
-export function assertValidKeys<Core>(info: Info<Core>): boolean {
-	const { core, validKeys, objectType } = info;
+export function assertValidKeys<Core>(args: AssertValidKeysArgs<Core>): boolean {
+	const { core, validKeys, objectType } = args;
 
 	const coreKeys = Object.keys(core as object) as (keyof Core)[];
 	const invalidKeys = coreKeys.filter(key => !validKeys.includes(key));

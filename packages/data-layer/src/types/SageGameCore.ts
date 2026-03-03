@@ -1,12 +1,11 @@
-import { isNonNilSnowflake, isNonNilUuid, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { writeFileSync } from "@rsc-utils/io-utils";
-import { assertArray, assertNumber, assertSageCore, assertString, deleteEmptyArray, ensureArray, ensureIds, isMacroBase, optional, renameProperty, type EnsureContext } from "../validation/index.js";
+import { isNonNilSnowflake, isNonNilUuid, isValidId, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { assertArray, assertNumber, assertObject, assertSageCore, assertString, deleteEmptyArray, ensureArray, ensureIds, isMacroBase, optional, renameProperty, type EnsureContext } from "../validation/index.js";
 import { isEmbedColor, type HasEmbedColors } from "./enums/EmbedColorType.js";
 import { isEmoji, type HasEmoji } from "./enums/EmojiType.js";
 import { isGameRoleData, type GameRoleData } from "./enums/GameRoleType.js";
 import { GameUserType, isGameUserData, type GameUserData } from "./enums/GameUserType.js";
 import { assertGameOptions, ensureGameOptions, GameOptionsKeys, type GameOptions, type GameOptionsOld } from "./GameOptions.js";
-import { findGameNpcUserId, type MacroBase, type SageCore } from "./other/index.js";
+import { type MacroBase, type SageCore } from "./other/index.js";
 import { assertPostCurrency, type HasPostCurrency } from "./PostCurrency.js";
 import { assertSageChannel, ensureSageChannel, type SageChannel, type SageChannelOld } from "./SageChannel.js";
 import { assertSageCharacterCore, ensureSageCharacterCore, type SageCharacterCore, type SageCharacterCoreOld } from "./SageCharacterCore.js";
@@ -69,7 +68,7 @@ export type SageGameCore = SageCore<"Game", Snowflake | UUID> & HasEmbedColors &
 	roles?: GameRoleData[];
 
 	/** game server's sage uuid */
-	serverId: UUID;
+	serverId: Snowflake | UUID;
 
 	/** game server's discord snowflake */
 	serverDid: Snowflake;
@@ -121,13 +120,14 @@ export function assertSageGameCore(core: unknown): core is SageGameCore {
 	// did --> this needs to become an invalid key
 	if (!assertArray({ core, objectType, key:"emoji", optional, validator:isEmoji })) return false;
 	// core.encounters
-	if ("gmCharacter" in core && !assertSageCharacterCore({ core:core.gmCharacter!, type:"gm" })) return false;
+	if (!assertObject({ core, objectType, key:"gmCharacter", optional, validator:assertSageCharacterCore })) return false;
 	// id
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
 	if (!assertArray({ core, objectType, key:"nonPlayerCharacters", optional, validator:assertSageCharacterCore })) return false;
 	// objectType
 	// core.parties
 	if (!assertArray({ core, objectType, key:"playerCharacters", optional, validator:assertSageCharacterCore })) return false;
+	if (!assertObject({ core, objectType, key:"postCurrency", optional, asserter:assertPostCurrency })) return false;
 	if (core.postCurrency !== undefined && !assertPostCurrency({ core:core.postCurrency, objectType })) return false;
 	if (!assertArray({ core, objectType, key:"roles", optional, validator:isGameRoleData })) return false;
 	if (!assertString({ core, objectType, key:"serverDid", validator:isNonNilSnowflake })) return false;
@@ -148,6 +148,7 @@ export function ensureSageGameCore(core: SageGameCoreOld, context?: EnsureContex
 	ensureArray({ core, key:"emoji", optional, typeGuard:isEmoji });
 	deleteEmptyArray({ core, key:"encounters" });
 	deleteEmptyArray({ core, key:"parties" });
+	if (!isValidId(core.serverId)) core.serverId = core.serverDid;
 
 	//#region core.users
 	if ("gameMasters" in core && core.gameMasters?.length) {
@@ -164,11 +165,9 @@ export function ensureSageGameCore(core: SageGameCoreOld, context?: EnsureContex
 	//#endregion
 
 	const gameId = core.id as Snowflake;
-	const gmUserId = findGameNpcUserId(core);
-	if (core.nonPlayerCharacters?.length&&!gmUserId)writeFileSync("./missing-gm-id.json",core);
-	core.gmCharacter ? core.gmCharacter = ensureSageCharacterCore(core.gmCharacter, { ...context, characterType:"gm", gameId, userId:gmUserId }) as SageCharacterCoreOld : delete core.gmCharacter;
-	ensureArray({ core, key:"nonPlayerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId, userId:gmUserId } });
-	ensureArray({ core, key:"playerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId, userId:gmUserId } });
+	core.gmCharacter ? core.gmCharacter = ensureSageCharacterCore(core.gmCharacter, { ...context, characterType:"gm", gameId }) as SageCharacterCoreOld : delete core.gmCharacter;
+	ensureArray({ core, key:"nonPlayerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId } });
+	ensureArray({ core, key:"playerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId } });
 
 	return core;
 }

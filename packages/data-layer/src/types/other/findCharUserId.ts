@@ -35,6 +35,7 @@ export function findCharUserId(charCore: Char): Snowflake | undefined {
 	return _findCharUserId(charCore, "userId") ?? _findCharUserId(charCore, "userDid");
 }
 
+/** looks for a gm before scanning npcs for userId/userDid */
 export function findGameNpcUserId(gameCore: SageGameCoreOld): Snowflake | undefined {
 	// get first gm id
 	return gameCore.users?.find(u => u.type === GameUserType.GameMaster)?.did

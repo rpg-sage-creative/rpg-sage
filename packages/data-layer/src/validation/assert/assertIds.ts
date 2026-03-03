@@ -1,13 +1,14 @@
 import { isNonNilSnowflake, isNonNilUuid, type IdCore } from "@rsc-utils/core-utils";
 import { tagFailure } from "../index.js";
 
-type Info<Core extends IdCore> = {
+type AssertIdsArgs<Core extends IdCore> = {
 	core: Core;
 	id?: "snowflake" | "uuid";
 	objectType: string;
 };
-export function assertIds<Core extends IdCore>(info: Info<Core>): boolean {
-	const { core, id, objectType } = info;
+
+export function assertIds<Core extends IdCore>(args: AssertIdsArgs<Core>): boolean {
+	const { core, id, objectType } = args;
 
 	const idIsSnowflake = isNonNilSnowflake(core.id);
 	const idIsUuid = isNonNilUuid(core.id);

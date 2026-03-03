@@ -1,14 +1,8 @@
 import { tagFailure } from "../index.js";
+import type { AssertArgs } from "./types.js";
 
-type Info<Core> = {
-	core: Core;
-	key: keyof Core;
-	objectType: string;
-	optional?: "optional";
-};
-
-export function assertBoolean<Core>(info: Info<Core>): boolean {
-	const { core, key, objectType, optional } = info;
+export function assertBoolean<Core>(args: AssertArgs<Core>): boolean {
+	const { core, key, objectType, optional } = args;
 
 	if (key in (core as Record<string, any>)) {
 		const value = core[key];

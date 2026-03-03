@@ -1,6 +1,6 @@
-import { isBlank, isHexColorString, isNonNilSnowflake, isNotBlank, randomSnowflake, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
+import { isBlank, isHexColorString, isNonNilSnowflake, isNotBlank, isValidId, warnReturnUndefined, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
-import { assertArray, assertSageCore, assertSimpleObject, assertString, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, isAutoChannelData, isMacroBase, isValidId, optional, renameProperty, tagFailure, type EnsureContext, } from "../validation/index.js";
+import { assertArray, assertSageCore, assertSimpleObject, assertString, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, ensureIds, isAutoChannelData, isMacroBase, optional, renameProperty, tagFailure, type EnsureContext, } from "../validation/index.js";
 import { assertDeckCore, ensureDeckCore, type DeckCore } from "./DeckCore.js";
 import { assertSageMessageReferenceCore, ensureSageMessageReferenceCore, type SageMessageReferenceCore, type SageMessageReferenceCoreOld } from "./SageMessageReferenceCore.js";
 import { findCharUserId, type MacroBase, type SageCore } from "./index.js";
@@ -36,7 +36,7 @@ export type SageCharacterCoreOld = Omit<SageCharacterCore, "companions" | "lastM
 	userDid?: Snowflake;
 };
 
-export type SageCharacterCore = Omit<SageCore<"Character", Snowflake>, "did"> & {
+export type SageCharacterCore = SageCore<"Character", Snowflake> & {
 	alias?: string;
 	autoChannels?: AutoChannelData[];
 	avatarUrl?: string;
@@ -55,7 +55,6 @@ export type SageCharacterCore = Omit<SageCore<"Character", Snowflake>, "did"> & 
 	pathbuilderId?: string;
 	tokenUrl?: string;
 	userDid?: Snowflake;
-	ver: number;
 };
 
 export const SageCharacterCoreKeys: (keyof SageCharacterCore)[] = [
@@ -65,10 +64,11 @@ export const SageCharacterCoreKeys: (keyof SageCharacterCore)[] = [
 	"avatarUrl",
 	"companions",
 	"decks",
+	"did",
 	"embedColor",
-	"essence20",
+	// "essence20",
 	"essence20Id",
-	"hephaistos",
+	// "hephaistos",
 	"hephaistosId",
 	"id",
 	"lastMessages",
@@ -85,14 +85,14 @@ export const SageCharacterCoreKeys: (keyof SageCharacterCore)[] = [
 
 // const AliasRegExp = /^\w+$/;
 const objectType = "Character";
-export function assertSageCharacterCore({ core, type }: { core:SageCharacterCoreAny; type:"gm"|"pc"|"npc"; }): boolean {
+export function assertSageCharacterCore(core: unknown): core is SageCharacterCore {
 	if (!assertSageCore<SageCharacterCore>(core, objectType, SageCharacterCoreKeys)) return false;
 
 	// if (!assertString({ core, objectType, key:"aka", validator:isNotBlank, optional })) return false;
 	if (!assertString({ core, objectType, key:"alias", optional, validator:isNotBlank })) return false;
 	if (!assertArray({ core, objectType, key:"autoChannels", optional, validator:isAutoChannelData })) return false;
 	if (!assertString({ core, objectType, key:"avatarUrl", optional, validator:isUrl })) return false;
-	if (!assertArray({ core, objectType, key:"companions", optional, validator:(char: SageCharacterCoreAny) => assertSageCharacterCore({ core:char, type }) })) return false;
+	if (!assertArray({ core, objectType, key:"companions", optional, validator:assertSageCharacterCore })) return false;
 	if (!assertArray({ core, objectType, key:"decks", optional, validator:assertDeckCore })) return false;
 	if (!assertString({ core, objectType, key:"embedColor", optional, validator:isHexColorString })) return false;
 	if ("essence20" in core) {
@@ -126,22 +126,17 @@ export function assertSageCharacterCore({ core, type }: { core:SageCharacterCore
 		// validate that character ? ? ?
 	}
 	if (!assertString({ core, objectType, key:"tokenUrl", optional, validator:isUrl })) return false;
-	if (type === "gm") {
-		// GM char shouldn't have a userDid
-		if ("userDid" in core) return tagFailure`GM char/minion has userDid`;
-	}else {
-		// NPC should have gm's userDid; PCs should have player's userDid
-		if (!assertString({ core, objectType, key:"userDid", validator:isNonNilSnowflake })) return false;
-	}
+	if (!assertString({ core, objectType, key:"userDid", optional, validator:isNonNilSnowflake })) return false;
 
 	return true;
 }
 
 export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: EnsureContext): SageCharacterCore | undefined {
-	if (isBlank(core.name)) return undefined;
+	if (isBlank(core.name)) return warnReturnUndefined(core);
 
-	randomSnowflake// if (!core.id) core.id = randomSnowflake();
+	ensureIds(core);
 
+	// get userId for lastMessages
 	const userId = () => findCharUserId(core) ?? context?.userId;
 
 	// delete core.aka;
@@ -167,11 +162,7 @@ export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: En
 	// pathbuilder
 	// pathbuilderId
 	deleteInvalidUrl({ core, key:"tokenUrl" });
-	if (context?.characterType === "gm") {
-		delete core.userDid;
-	}else {
-		core.userDid = userId();
-	}
+	context?.characterType === "gm" ? delete core.userDid : core.userDid = userId();
 	// uuid
 
 	return core;
