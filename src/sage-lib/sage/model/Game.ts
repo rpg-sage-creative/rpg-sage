@@ -182,7 +182,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	public set mentionPrefix(mentionPrefix: string | undefined) { this.core.mentionPrefix = stringOrUndefined(mentionPrefix); }
 
 	public get serverDid(): Snowflake { return this.core.serverDid; }
-	public get serverId(): UUID { return this.core.serverId; }
+	public get serverId(): UUID | Snowflake { return this.core.serverId; }
 	private get discord() { return this.sageCache.discord; }
 	public get macros() { return this.core.macros ??= []; }
 
