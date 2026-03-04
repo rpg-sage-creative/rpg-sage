@@ -94,6 +94,7 @@ export function assertSageCharacterCore(core: unknown): core is SageCharacterCor
 	if (!assertString({ core, objectType, key:"avatarUrl", optional, validator:isUrl })) return false;
 	if (!assertArray({ core, objectType, key:"companions", optional, validator:assertSageCharacterCore })) return false;
 	if (!assertArray({ core, objectType, key:"decks", optional, validator:assertDeckCore })) return false;
+	// did --> should eventually go away
 	if (!assertString({ core, objectType, key:"embedColor", optional, validator:isHexColorString })) return false;
 	if ("essence20" in core) {
 		if (!assertSimpleObject(core.essence20)) return tagFailure`${objectType}: invalid essence20`;
@@ -111,6 +112,7 @@ export function assertSageCharacterCore(core: unknown): core is SageCharacterCor
 		if (!assertString({ core, objectType, key:"hephaistosId", optional, validator:isNonNilSnowflake })) return false;
 		// test id
 	}
+	// id
 	if (!assertArray({ core, objectType, key:"lastMessages", optional, validator:assertSageMessageReferenceCore })) return false;
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
 	if (!assertString({ core, objectType, key:"name", validator:isNotBlank })) return false;
@@ -127,6 +129,7 @@ export function assertSageCharacterCore(core: unknown): core is SageCharacterCor
 	}
 	if (!assertString({ core, objectType, key:"tokenUrl", optional, validator:isUrl })) return false;
 	if (!assertString({ core, objectType, key:"userDid", optional, validator:isNonNilSnowflake })) return false;
+	// uuid
 
 	return true;
 }
@@ -141,8 +144,7 @@ export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: En
 
 	// delete core.aka;
 	deleteInvalidString({ core, key:"alias" }); // regex:/\w+/i ? ? ?
-	ensureArray({ core, key:"autoChannels", handler:ensureAutoChannelData });
-	// deleteEmptyArray({ core, key:"autoChannels" });
+	ensureArray({ core, key:"autoChannels", optional, handler:ensureAutoChannelData });
 	deleteInvalidUrl({ core, key:"avatarUrl" });
 	ensureArray({ core, key:"companions", optional, handler:ensureSageCharacterCore, context:{ ...context, userId:userId() } });
 	ensureArray({ core, key:"decks", optional, handler:ensureDeckCore, context});
