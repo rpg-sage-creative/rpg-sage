@@ -131,7 +131,7 @@ export function assertSageGameCore(core: unknown): core is SageGameCore {
 	if (!assertArray({ core, objectType, key:"roles", optional, validator:isGameRoleData })) return false;
 	if (!assertString({ core, objectType, key:"serverDid", validator:isNonNilSnowflake })) return false;
 	if (!assertString({ core, objectType, key:"serverId", validator:val => isNonNilSnowflake(val) || isNonNilUuid(val) })) return false;
-	if (!assertArray({ core, objectType, key:"users", optional, validator:isGameUserData })) return false;
+	if (!assertArray({ core, objectType, key:"users", optional, uniqueByKey:"did", validator:isGameUserData })) return false;
 	// uuid --> this needs to become an invalid key
 
 	return true;
@@ -150,16 +150,21 @@ export function ensureSageGameCore(core: SageGameCoreOld, context?: EnsureContex
 	if (!isValidId(core.serverId)) core.serverId = core.serverDid;
 
 	//#region core.users
+	// move old old gameMasters list to users list
 	if ("gameMasters" in core && core.gameMasters?.length) {
 		const users = core.users ??= [];
 		core.gameMasters.forEach(({ did }) => users.some(u => u.did === did) ? void 0 : users.push({ did, type:GameUserType.GameMaster, dicePing:true }));
 		delete core.gameMasters;
 	}
+	// move old old players list to users list
 	if ("players" in core && core.players?.length) {
 		const users = core.users ??= [];
 		core.players.forEach(({ did }) => users.some(u => u.did === did) ? void 0 : users.push({ did, type:GameUserType.Player, dicePing:true }));
 		delete core.players;
 	}
+	// remove duplicate users
+	core.users = fixDupeUsers(core.users);
+	// remove any invalid users
 	ensureArray({ core, key:"users", typeGuard:isGameUserData });
 	//#endregion
 
@@ -169,4 +174,29 @@ export function ensureSageGameCore(core: SageGameCoreOld, context?: EnsureContex
 	ensureArray({ core, key:"playerCharacters", optional, handler:ensureSageCharacterCore, context:{ ...context, gameId } });
 
 	return core;
+}
+
+/** Cleans up the users from the time we weren't correctly validating duplicate users when adding them. */
+function fixDupeUsers(users?: GameUserData[]): GameUserData[] | undefined {
+	if (!users) return undefined;
+
+	// 0 = unkonwn, 1 = player, 2 = gm
+	const sets = [new Set<string>(), new Set<string>(), new Set<string>()];
+
+	users.forEach(user => sets[user.type ?? 0].add(user.did));
+
+	const filtered: GameUserData[] = [];
+	while (sets.length) {
+		// do them in priority order: gm, player, other
+		const set = sets.pop()!;
+		// we just popped the set, so length is the user type
+		const type = sets.length;
+		for (const did of set) {
+			const found = users.find(user => user.did === did && user.type === type);
+			if (found && !filtered.find(user => user.did === did)) {
+				filtered.push(found);
+			}
+		}
+	}
+	return filtered;
 }
