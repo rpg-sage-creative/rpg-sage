@@ -1,5 +1,5 @@
-import { isBlank, isHexColorString, isNonNilSnowflake, isNotBlank, isValidId, warnReturnUndefined, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
-import { isUrl } from "@rsc-utils/io-utils";
+import { getDataRoot, isBlank, isHexColorString, isNonNilSnowflake, isNotBlank, isValidId, warn, warnReturnUndefined, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { fileExistsSync, isUrl } from "@rsc-utils/io-utils";
 import { assertArray, assertSageCore, assertSimpleObject, assertString, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, ensureIds, isAutoChannelData, isMacroBase, optional, renameProperty, tagFailure, type EnsureContext, } from "../validation/index.js";
 import { assertDeckCore, ensureDeckCore, type DeckCore } from "./DeckCore.js";
 import { assertSageMessageReferenceCore, ensureSageMessageReferenceCore, type SageMessageReferenceCore, type SageMessageReferenceCoreOld } from "./SageMessageReferenceCore.js";
@@ -102,16 +102,19 @@ export function assertSageCharacterCore(core: unknown): core is SageCharacterCor
 	}
 	if ("essence20Id" in core) {
 		if (!assertString({ core, objectType, key:"essence20Id", optional, validator:isValidId })) return false;
-		// test id
+		if (!importFileExists("e20", core.essence20Id)) return false;
+
 	}
+	if ("essence20" in core && "essence20Id" in core) warn("both essence20 and essence20Id");
 	if ("hephaistos" in core) {
 		if (!assertSimpleObject(core.hephaistos)) return tagFailure`${objectType}: invalid hephaistos`;
 		// test object
 	}
 	if ("hephaistosId" in core) {
 		if (!assertString({ core, objectType, key:"hephaistosId", optional, validator:isNonNilSnowflake })) return false;
-		// test id
+		if (!importFileExists("heph", core.hephaistosId)) return false;
 	}
+	if ("hephaistos" in core && "hephaistosId" in core) warn("both hephaistos and hephaistosId");
 	// id
 	if (!assertArray({ core, objectType, key:"lastMessages", optional, validator:assertSageMessageReferenceCore })) return false;
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
@@ -124,13 +127,23 @@ export function assertSageCharacterCore(core: unknown): core is SageCharacterCor
 	}
 	if ("pathbuilderId" in core) {
 		if (!assertString({ core, objectType, key:"pathbuilderId", optional, validator:isValidId })) return false;
-		// is it a valid id; meaning, does it link to an actual pathbuilder character somewhere?
+		if (!importFileExists("pb2e", core.pathbuilderId)) return false;
 		// validate that character ? ? ?
 	}
+	if ("pathbuilder" in core && "pathbuilderId" in core) warn("both pathbuilder and pathbuilderId");
 	if (!assertString({ core, objectType, key:"tokenUrl", optional, validator:isUrl })) return false;
 	if (!assertString({ core, objectType, key:"userDid", optional, validator:isNonNilSnowflake })) return false;
 	// uuid
 
+	return true;
+}
+
+function importFileExists(which: "e20" | "heph" | "pb2e", id: Optional<string>): boolean {
+	const filePath = getDataRoot(`sage/${which}/${id}.json`);
+	if (!fileExistsSync(filePath)) {
+		warn(`Missing ${which} file: ${filePath}`);
+		return false;
+	}
 	return true;
 }
 
@@ -163,6 +176,7 @@ export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: En
 	core.objectType = "Character";
 	// pathbuilder
 	// pathbuilderId
+	if (core.pathbuilderId && !importFileExists("pb2e", core.pathbuilderId)) delete core.pathbuilderId;
 	deleteInvalidUrl({ core, key:"tokenUrl" });
 	context?.characterType === "gm" ? delete core.userDid : core.userDid = userId();
 	// uuid
