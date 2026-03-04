@@ -1,4 +1,4 @@
-import { debug, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { errorReturnFalse, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import type { SageCore } from "../../types/index.js";
 import { assertIds, assertObjectType, assertSimpleObject, assertValidKeys } from "./index.js";
 
@@ -16,10 +16,7 @@ export function assertSageCore<
 	if (!assertObjectType({ core, objectType })) return false;
 
 	// validate keys
-	if (!assertValidKeys({ core, objectType, validKeys })) {
-		debug(core);
-		return false;
-	}
+	if (!assertValidKeys({ core, objectType, validKeys })) return errorReturnFalse(core);
 
 	// if did/id/uuid are valid keys, then validate them
 	// if (validKeys.includes("did" as Key) && validKeys.includes("id" as Key) && validKeys.includes("uuid" as Key)) {
