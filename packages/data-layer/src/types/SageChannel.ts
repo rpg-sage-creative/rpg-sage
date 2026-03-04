@@ -1,4 +1,4 @@
-import { debug, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, warnReturnUndefined, type Snowflake } from "@rsc-utils/core-utils";
 import { assertSimpleObject, assertString, renameProperty } from "../validation/index.js";
 import { assertChannelOptions, ChannelOptionsV1Keys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
 import { assertDialogOptions, DialogOptionsKeys, ensureDialogOptions, type DialogOptions } from "./DialogOptions.js";
@@ -51,10 +51,7 @@ export function ensureSageChannel(core: SageChannelOld): SageChannel | undefined
 
 	// move did to id
 	renameProperty({ core, oldKey:"did", newKey:"id" });
-	if (!isNonNilSnowflake(core.id)) {
-		debug(`Invalid SageChannelId ("${core.id}"); removing channel`);
-		return undefined;
-	}
+	if (!isNonNilSnowflake(core.id)) return warnReturnUndefined(`Invalid SageChannel.id ("${core.id}"); removing channel`);
 
 	// delete unused old stuff
 	delete core.nickName;

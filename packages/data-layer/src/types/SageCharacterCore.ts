@@ -132,7 +132,7 @@ export function assertSageCharacterCore(core: unknown): core is SageCharacterCor
 }
 
 export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: EnsureContext): SageCharacterCore | undefined {
-	if (isBlank(core.name)) return warnReturnUndefined(core);
+	if (isBlank(core.name)) return warnReturnUndefined(`Invalid SageCharacter.name (${JSON.stringify(core.name)}); removing ${context?.characterType ?? "character"}`);
 
 	ensureIds(core);
 
