@@ -119,16 +119,15 @@ export function assertSageGameCore(core: unknown): core is SageGameCore {
 	if (!assertNumber({ core, objectType, key:"createdTs" })) return false;
 	// did --> this needs to become an invalid key
 	if (!assertArray({ core, objectType, key:"emoji", optional, validator:isEmoji })) return false;
-	// core.encounters
+	// core.encounters --> not currently in use
 	if (!assertObject({ core, objectType, key:"gmCharacter", optional, validator:assertSageCharacterCore })) return false;
 	// id
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
 	if (!assertArray({ core, objectType, key:"nonPlayerCharacters", optional, validator:assertSageCharacterCore })) return false;
 	// objectType
-	// core.parties
+	// core.parties --> not currently in use
 	if (!assertArray({ core, objectType, key:"playerCharacters", optional, validator:assertSageCharacterCore })) return false;
 	if (!assertObject({ core, objectType, key:"postCurrency", optional, asserter:assertPostCurrency })) return false;
-	if (core.postCurrency !== undefined && !assertPostCurrency({ core:core.postCurrency, objectType })) return false;
 	if (!assertArray({ core, objectType, key:"roles", optional, validator:isGameRoleData })) return false;
 	if (!assertString({ core, objectType, key:"serverDid", validator:isNonNilSnowflake })) return false;
 	if (!assertString({ core, objectType, key:"serverId", validator:val => isNonNilSnowflake(val) || isNonNilUuid(val) })) return false;
