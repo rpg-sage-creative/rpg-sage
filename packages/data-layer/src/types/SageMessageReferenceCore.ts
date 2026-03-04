@@ -1,4 +1,4 @@
-import { debug, isNonNilSnowflake, isValidId, parseSnowflake, snowflakeToDate, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, isValidId, parseSnowflake, snowflakeToDate, type Snowflake } from "@rsc-utils/core-utils";
 import { assertArray, assertNumber, assertSageCore, assertString, optional, type EnsureContext } from "../validation/index.js";
 import type { SageCore } from "./index.js";
 
@@ -74,14 +74,11 @@ export function assertSageMessageReferenceCore(core: unknown): core is SageMessa
 	if (!assertString({ core, objectType, key:"characterId", validator:isValidId })) return false;
 	if (!assertString({ core, objectType, key:"gameId", validator:isValidId, optional })) return false;
 	if (!assertString({ core, objectType, key:"guildId", validator:isNonNilSnowflake })) return false;
-	if (!assertString({ core, objectType, key:"id", validator:isNonNilSnowflake })) return false;
+	// id
 	if (!assertArray({ core, objectType, key:"messageIds", validator:isNonNilSnowflake })) return false;
 	// objectType
 	if (!assertNumber({ core, objectType, key:"ts", validator:isValidTimestamp })) return false;
-	if (!assertString({ core, objectType, key:"userId", optional, validator:isNonNilSnowflake })) {
-		debug({userId:(core as any).coreId,userDid:(core as any).userDid,core});
-		return false;
-	}
+	if (!assertString({ core, objectType, key:"userId", optional, validator:isNonNilSnowflake })) return false;
 
 	return true;
 }
