@@ -1,6 +1,6 @@
 import { isNonNilSnowflake, warnReturnUndefined, type Snowflake } from "@rsc-utils/core-utils";
 import { assertSimpleObject, assertString, renameProperty } from "../validation/index.js";
-import { assertChannelOptions, ChannelOptionsV1Keys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
+import { assertChannelOptions, ChannelOptionsKeys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";
 import { assertDialogOptions, DialogOptionsKeys, ensureDialogOptions, type DialogOptions } from "./DialogOptions.js";
 import { assertDiceOptions, DiceOptionsKeys, ensureDiceOptions, type DiceOptions } from "./DiceOptions.js";
 import { assertGameSystemOptions, ensureGameSystemOptions, GameSystemOptionsKeys, type GameSystemOptions } from "./GameSystemOptions.js";
@@ -26,7 +26,7 @@ export type SageChannel = SageChannelOptions & {
 };
 
 export const SageChannelKeys: (keyof SageChannel)[] = [
-	...ChannelOptionsV1Keys,
+	...ChannelOptionsKeys,
 	...DialogOptionsKeys,
 	...DiceOptionsKeys,
 	...GameSystemOptionsKeys,

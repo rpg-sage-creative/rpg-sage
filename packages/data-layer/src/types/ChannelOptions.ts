@@ -31,7 +31,7 @@ export type ChannelOptions = {
 	type: SageChannelType;
 };
 
-export const ChannelOptionsV1Keys: (keyof ChannelOptions)[] = [
+export const ChannelOptionsKeys: (keyof ChannelOptions)[] = [
 	"type",
 ];
 

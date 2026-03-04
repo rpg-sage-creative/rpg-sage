@@ -186,7 +186,7 @@ export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: En
 // 		 * possibly used to reply to the last user to post as this character?
 // 		 * possibly used to detect when there are new posts to respond to?
 // 		 */
-// 		lastMessage?: SageMessageReferenceCoreV1;
+// 		lastMessage?: SageMessageReferenceCore;
 // 	}>;
 
 // 	/** character specific decks; experimental deck logic */

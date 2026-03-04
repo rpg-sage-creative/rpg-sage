@@ -70,7 +70,7 @@ export type SageUserCore = SageCore<"User", Snowflake | UUID> & {
 	// ver (SageCore)
 };
 
-export const SageUserV1Keys: (keyof SageUserCore)[] = [
+export const SageUserKeys: (keyof SageUserCore)[] = [
 	"aliases",
 	"confirmationPrompts",
 	"defaultDialogType",
@@ -93,7 +93,7 @@ export const SageUserV1Keys: (keyof SageUserCore)[] = [
 
 const objectType = "User";
 export function assertSageUserCore(core: SageUserCoreAny): core is SageUserCore {
-	if (!assertSageCore<SageUserCore>(core, objectType, SageUserV1Keys)) return false;
+	if (!assertSageCore<SageUserCore>(core, objectType, SageUserKeys)) return false;
 
 	if (!assertArray({ core, objectType, key:"aliases", optional, validator:isAlias })) return false;
 	if (!assertBoolean({ core, objectType, key:"confirmationPrompts", optional })) return false;
