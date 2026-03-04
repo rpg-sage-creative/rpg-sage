@@ -121,12 +121,9 @@ export function ensureSageUserCore(core: SageUserCoreOld, context?: EnsureContex
 
 	ensureIds(core);
 
-	ensureArray({ core, key:"aliases", optional, typeGuard:isAlias });
 	renameProperty({ core, oldKey:"characters", newKey:"playerCharacters" });
-	ensureArray({ core, key:"macros", optional, typeGuard:isMacroBase });
-	delete core.nonPlayerCharacters;
-	ensureArray({ core, key:"notes", optional, typeGuard:isNote });
 	ensureArray({ core, key:"playerCharacters", handler:ensureSageCharacterCore, optional, context:{ ...context, userId:core.id as Snowflake } });
+	delete core.nonPlayerCharacters;
 	delete core.patronTier;
 
 	return core as SageUserCore;
