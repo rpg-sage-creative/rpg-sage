@@ -10,6 +10,7 @@ export type Note = {
 export function isNote(note: unknown): note is Note {
 	if (isSimpleObject(note) && "ownerDid" in note) throw new Error(`Note with ownerDid!`);
 	return isSimpleObject(note)
+		&& Object.keys(note).length === 3
 		&& isValidString(note.category)
 		&& isValidString(note.title)
 		&& isValidString(note.note);

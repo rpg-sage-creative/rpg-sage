@@ -1,5 +1,4 @@
-import { isNotBlank } from "@rsc-utils/core-utils";
-import { isSimpleObject } from "../../validation/typeGuard/isSimpleObject.js";
+import { isSimpleObject, isValidString } from "../../validation/index.js";
 
 export type Alias = {
 	name: string;
@@ -9,6 +8,6 @@ export type Alias = {
 export function isAlias(alias: unknown): alias is Alias {
 	return isSimpleObject(alias)
 		&& Object.keys(alias).length === 2
-		&& isNotBlank(alias.name)
-		&& isNotBlank(alias.target);
+		&& isValidString(alias.name)
+		&& isValidString(alias.target);
 }
