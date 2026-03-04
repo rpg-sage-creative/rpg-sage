@@ -1,23 +1,31 @@
-import { dequote, escapeRegex, QuotedContentRegExp, type Snowflake } from "@rsc-utils/core-utils";
+import { dequote, escapeRegex, globalizeRegex, QuotedContentRegExp, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
 import type { GuildMember } from "discord.js";
 import type { Game } from "../../../model/Game.js";
 import type { User as SageUser } from "../../../model/User.js";
 
-/** holds the baseline char mention regex */
-const CharMentionRegex = new RegExp(`@\\w+|@${QuotedContentRegExp.source}`);
+/** creates the char mention regexp source for the given mention prefix */
+function createCharMentionRegExpSource(mentionPrefix: string) {
+	return `${escapeRegex(mentionPrefix)}\\w+|${escapeRegex(mentionPrefix)}(${QuotedContentRegExp.source})`;
+}
+
+/** holds the baseline char mention regexp */
+const CharMentionRegExp = new RegExp(createCharMentionRegExpSource("@"));
+const CharMentionRegExpG = globalizeRegex(CharMentionRegExp);
 
 /** gets the char mention regex as determined by the args */
-function getCharMentionRegex({ gFlag, mentionPrefix = "@" }: { gFlag?:"g"; mentionPrefix?:string; } ): RegExp {
-	if (mentionPrefix !== "@" || gFlag === "g") {
-		return new RegExp(`${escapeRegex(mentionPrefix)}${CharMentionRegex.source.slice(1)}`, gFlag);
-	}
-	return CharMentionRegex;
+function getCharMentionRegExpG(mentionPrefix: Optional<string>) {
+	return mentionPrefix && mentionPrefix !== "@"
+		? new RegExp(createCharMentionRegExpSource(mentionPrefix), "g")
+		: CharMentionRegExpG;
 }
 
 /** gets a char mention regex w/o global flag but for the specified prefix (if given) and tests the content */
-function testCharMentionRegex(content: string, args: { mentionPrefix?:string; }): boolean {
-	return getCharMentionRegex(args).test(content ?? "");
+function testCharMentionRegex(content: string, mentionPrefix: Optional<string>): boolean {
+	const regex = mentionPrefix && mentionPrefix !== "@"
+		? new RegExp(createCharMentionRegExpSource(mentionPrefix))
+		: CharMentionRegExp;
+	return regex.test(content);
 }
 
 type Args = {
@@ -28,11 +36,12 @@ type Args = {
 };
 
 export function replaceCharacterMentions(content: string, args: Args): string {
-	if (!testCharMentionRegex(content, args)) {
+	const { mentionPrefix } = args;
+	if (!testCharMentionRegex(content, mentionPrefix)) {
 		return content;
 	}
 
-	const { game, gameMasters, mentionPrefix, sageUser } = args;
+	const { game, gameMasters, sageUser } = args;
 
 	const findChar = game
 		? (alias: string) => game.findCharacterOrCompanion(alias)
@@ -47,8 +56,11 @@ export function replaceCharacterMentions(content: string, args: Args): string {
 		? (charId: string) => !!game.gmCharacter.companions.findById(charId) || !!game.nonPlayerCharacters.findById(charId)
 		: () => false;
 
-	return content.replace(getCharMentionRegex({ mentionPrefix, gFlag:"g" }), mention => {
-		const char = findChar(dequote(mention.slice(1)));
+	const mentionPrefixLength = mentionPrefix?.length ?? 1;
+
+	return content.replace(getCharMentionRegExpG(mentionPrefix), mention => {
+		// dequote in case we have @"char name" instead of just @alias
+		const char = findChar(dequote(mention.slice(mentionPrefixLength)));
 		const charName = char?.name;
 		let userMention: string | undefined;
 		if (char) {
