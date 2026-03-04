@@ -9,8 +9,12 @@ function simplifyArray(key: any, value: any[]): any[] {
 	return value;
 }
 
-export function assertArray<Core, Type>(args: AssertArgs<Core, Type>): boolean {
-	const { asserter, core, key, objectType, optional, validator } = args;
+type AssertArrayArgs<Core, Type> = AssertArgs<Core, Type> & {
+	uniqueByKey?: keyof Core;
+};
+
+export function assertArray<Core, Type>(args: AssertArrayArgs<Core, Type>): boolean {
+	const { asserter, core, key, objectType, optional, uniqueByKey, validator } = args;
 
 	if (key in (core as Record<string, any>)) {
 		const value = core[key];
@@ -30,6 +34,12 @@ export function assertArray<Core, Type>(args: AssertArgs<Core, Type>): boolean {
 			}
 		}else {
 			throw new Error("assertArray(args); args missing asserter AND validator");
+		}
+		if (uniqueByKey) {
+			const dupeValues = value.filter((object, index, array) => index !== array.findIndex(other => object[uniqueByKey] === other[uniqueByKey]));
+			if (dupeValues.length) {
+				return tagFailure`${objectType}: duplicate array (${key}) items (${dupeValues.map(object => object[uniqueByKey])})`;
+			}
 		}
 
 	}else if (!optional) {
