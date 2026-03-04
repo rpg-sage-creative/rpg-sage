@@ -1,5 +1,4 @@
-import type { Snowflake, UUID } from "@rsc-utils/core-utils";
-import { isNonNilSnowflake, isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { assertArray, assertNumber, assertSageCore, assertString, deleteInvalidString, ensureArray, ensureIds, isMacroBase, optional, type EnsureContext } from "../validation/index.js";
 import { GameCreatorType, isAdminRole, isAdminUser, isEmbedColor, isEmoji, type AdminRole, type AdminUser, type HasEmbedColors, type HasEmoji } from "./enums/index.js";
 import type { MacroBase, SageCore } from "./index.js";
@@ -94,7 +93,7 @@ export function assertSageServerCore(core: unknown): core is SageServerCore {
 	// did --> this needs to become an invalid key
 	if (!assertArray({ core, objectType, key:"emoji", optional, validator:isEmoji })) return false;
 	if (!assertNumber({ core, objectType, key:"gameCreatorType", optional, validator:GameCreatorType })) return false;
-	if (!assertString({ core, objectType, key:"gameId", optional, validator:isNonNilSnowflake })) return false;
+	// gameId --> currently not in use
 	if ("gmCharacter" in core && !assertSageCharacterCore(core.gmCharacter)) return false;
 	// id
 	if (!assertArray({ core, objectType, key:"macros", optional, validator:isMacroBase })) return false;
