@@ -1,7 +1,8 @@
 import { isNotBlank, type Snowflake, type UUID } from "@rsc-utils/core-utils";
-import { assertArray, assertBoolean, assertNumber, assertSageCore, assertString, ensureArray, ensureIds, isAlias, isMacroBase, optional, renameProperty, type EnsureContext } from "../validation/index.js";
+import { assertArray, assertBoolean, assertNumber, assertSageCore, assertString, ensureArray, ensureIds, isMacroBase, optional, renameProperty, type EnsureContext } from "../validation/index.js";
 import { DialogDiceBehaviorType, DialogPostType, MoveDirectionOutputType } from "./enums/index.js";
-import type { Alias, MacroBase, SageCore } from "./other/index.js";
+import { isAlias, type Alias } from "./other/Alias.js";
+import type { MacroBase, SageCore } from "./other/index.js";
 import { isNote, type Note } from "./other/Note.js";
 import { assertSageCharacterCore, ensureSageCharacterCore, type SageCharacterCore, type SageCharacterCoreOld } from "./SageCharacterCore.js";
 

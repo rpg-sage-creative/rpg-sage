@@ -1,4 +1,3 @@
-export * from "./isAlias.js";
 export * from "./isAutoChannelData.js";
 export * from "./isEmptyArray.js";
 export * from "./isEmptyString.js";
