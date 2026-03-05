@@ -30,26 +30,22 @@ async function gameRoleSet(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactBlock();
 	}
 
-	const roleDid = sageMessage.args.getRoleId("role");
-	const roleType = sageMessage.args.getEnum(GameRoleType, "type");
-	if (!roleDid || !roleType) {
+	const did = sageMessage.args.getRoleId("role");
+	const type = sageMessage.args.getEnum(GameRoleType, "type");
+	const dicePing = sageMessage.args.getBoolean("dicePing") ?? undefined;
+	if (!did || !type) {
 		return sageMessage.reactFailure();
 	}
 
 	const guild = sageMessage.discord.guild;
-	const guildRole = await sageMessage.discord.fetchGuildRole(roleDid);
+	const guildRole = await sageMessage.discord.fetchGuildRole(did);
 	if (!guild || !guildRole) {
 		return sageMessage.reactFailure();
 	}
 
 	const game = sageMessage.game!;
-	const role = game.getRole(roleType);
-	if (!role) {
-		const added = await game.addRole(roleType, roleDid);
-		return sageMessage.reactSuccessOrFailure(added);
-	}
-	const updated = await game.updateRole(roleType, roleDid);
-	return sageMessage.reactSuccessOrFailure(updated);
+	const saved = await game.setRole({ type, did, dicePing });
+	return sageMessage.reactSuccessOrFailure(saved);
 }
 
 
@@ -63,7 +59,7 @@ async function gameRoleRemove(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.reactFailure();
 	}
 
-	const removed = await sageMessage.game!.removeRole(roleType);
+	const removed = await sageMessage.game!.unsetRole(roleType);
 	return sageMessage.reactSuccessOrFailure(removed);
 }
 

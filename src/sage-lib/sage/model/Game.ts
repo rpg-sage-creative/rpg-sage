@@ -1,6 +1,6 @@
 import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameRoleData, GameSystem, GameSystemType, GameUserData, PostCurrency, SageChannel, SageGameCore, SageGameCoreOld } from "@rsc-sage/data-layer";
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameRoleType, GameUserType, SageChannelType, ensureSageGameCore, parseGameSystem, parseSageChannelType } from "@rsc-sage/data-layer";
-import { applyChanges, error, isDefined, randomSnowflake, sortPrimitive, stringOrUndefined, warn, type Args, type Comparable, type Optional, type OrNull, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { applyChanges, error, generateSnowflake, isDefined, sortPrimitive, warn, type Args, type Comparable, type Optional, type OrNull, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, HexColorString, Role } from "discord.js";
 import type { HasPostCurrency } from "../commands/admin/PostCurrency.js";
@@ -18,7 +18,7 @@ import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { SageCache } from "./SageCache.js";
 import type { Server } from "./Server.js";
 
-export type GameCore = Omit<SageGameCore, "encounters" | "gmCharacter" | "nonPlayerCharacters" | "parties" | "playerCharacters"> & {
+type GameCoreOverrides = {
 	encounters?: EncounterCore[] | EncounterManager;
 	gmCharacter?: GameCharacter | GameCharacterCore;
 	nonPlayerCharacters?: GameCharacterCore[] | CharacterManager;
@@ -26,8 +26,17 @@ export type GameCore = Omit<SageGameCore, "encounters" | "gmCharacter" | "nonPla
 	playerCharacters?: GameCharacterCore[] | CharacterManager;
 };
 
+export type GameCore = Omit<SageGameCore, keyof GameCoreOverrides> & GameCoreOverrides;
+
+/** type safe helper for updating game cores */
 function updateCore(core: GameCore): GameCore {
 	return ensureSageGameCore(core as SageGameCoreOld) as GameCore;
+}
+
+/** deletes the character (and companions) .userId if it is one of the given userIds that were removed from the Game. */
+function unlinkChar(char: GameCharacter, userIds: Snowflake[]) {
+	if (userIds.includes(char.userId!)) char.userId = undefined;
+	char.companions.forEach(comp => unlinkChar(comp, userIds));
 }
 
 type MappedChannelNameTags = {
@@ -109,34 +118,9 @@ async function mapChannels(channels: SageChannel[], sageCache: SageCache): Promi
 	return [gChannels.concat(sChannels), gChannels, sChannels];
 }
 
-/** Cleans up the users from the time we weren't correctly validating duplicate users when adding them. */
-function fixDupeUsers(game: GameCore): void {
-	// 0 = unkonwn, 1 = player, 2 = gm
-	const sets = [new Set<string>(), new Set<string>(), new Set<string>()];
-
-	const users = game.users ?? [];
-	users?.forEach(user => sets[user.type ?? 0].add(user.did));
-
-	const filtered: GameUserData[] = [];
-	while (sets.length) {
-		// do them in priority order: gm, player, other
-		const set = sets.pop()!;
-		// we just popped the set, so length is the user type
-		const type = sets.length;
-		for (const did of set) {
-			const found = users.find(user => user.did === did && user.type === type);
-			if (found && !filtered.find(user => user.did === did)) {
-				filtered.push(found);
-			}
-		}
-	}
-	game.users = filtered;
-}
-
 export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>, HasColorsCore, HasEmojiCore, HasPostCurrency {
 	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {
 		super(updateCore(core), sageCache);
-		fixDupeUsers(core);
 
 		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
 		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
@@ -153,7 +137,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 				gmCharacterCore = gmCharacter.toJSON();
 			}
 			if (!gmCharacterCore) {
-				gmCharacterCore = { id:randomSnowflake(), name:gmCharacterName };
+				gmCharacterCore = { id:generateSnowflake(), name:gmCharacterName };
 			}
 			this.core.gmCharacter = gmCharacterCore;
 		}
@@ -165,37 +149,53 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	public get isArchived(): boolean { return this.core.createdTs && this.core.archivedTs ? this.core.createdTs < this.core.archivedTs : false; }
 
 	public get name(): string { return this.core.name; }
-	private _gameSystem?: GameSystem | null;
-	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
-	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
-	/** @deprecated use .gameSystemType */
-	public get gameType(): GameSystemType | undefined { return this.core.gameSystemType; }
+
+	//#region dialog options
+
 	public get dialogPostType(): DialogPostType | undefined { return this.core.dialogPostType; }
+	// gmCharacterName
+	public get mentionPrefix(): string | undefined { return this.core.mentionPrefix; }
+	public get moveDirectionOutputType(): MoveDirectionOutputType | undefined { return this.core.moveDirectionOutputType; }
+	// sendDialogTo
+
+	//#endregion
+
+	//#region dice options
+
 	public get diceCritMethodType(): DiceCriticalMethodType | undefined { return this.core.diceCritMethodType; }
 	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
-	public get moveDirectionOutputType(): MoveDirectionOutputType | undefined { return this.core.moveDirectionOutputType; }
+	// sendDiceTo
 
-	public get mentionPrefix(): string | undefined { return this.core.mentionPrefix; }
-	public set mentionPrefix(mentionPrefix: string | undefined) { this.core.mentionPrefix = stringOrUndefined(mentionPrefix); }
+	//#endregion
+
+	//#region game system options
+
+	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
+
+	//#region derived
+	private _gameSystem?: GameSystem | null;
+	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
+	//#endregion
+
+	//#endregion
+
 
 	public get serverDid(): Snowflake { return this.core.serverDid; }
-	public get serverId(): UUID | Snowflake { return this.core.serverId; }
-	private get discord() { return this.sageCache.discord; }
+
 	public get macros() { return this.core.macros ??= []; }
 
-	public get gmRole(): GameRoleData | undefined { return this.roles.find(role => role.type === GameRoleType.GameMaster); }
-	public get gmRoleDid(): Snowflake | undefined { return this.gmRole?.did; }
+	public get gmRole(): GameRoleData | undefined { return this.getRole(GameRoleType.GameMaster); }
+	public get playerRole(): GameRoleData | undefined { return this.getRole(GameRoleType.Player); }
 
-	public get playerRole(): GameRoleData | undefined { return this.roles.find(role => role.type === GameRoleType.Player); }
-	public get playerRoleDid(): Snowflake | undefined { return this.playerRole?.did; }
 	/** Returns users assigned manually, NOT users assigned via Player role. */
 	private get players(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.Player).map(user => user.did); }
+	/** Returns users assigned manually, NOT users assigned via GameMaster role. */
+	public get gameMasters(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
 
 	public get channels(): SageChannel[] { return this.core.channels ??= []; }
-	public get gameMasters(): Snowflake[] { return this.users.filter(user => user.type === GameUserType.GameMaster).map(user => user.did); }
 	public get gmCharacter(): GameCharacter { return this.core.gmCharacter as GameCharacter; }
 	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
 	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
@@ -216,16 +216,18 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	public get postCurrency(): PostCurrency { return this.core.postCurrency ??= {}; }
 
 	//#region Guild fetches
-	public async findBestPlayerChannel(): Promise<SageChannel | undefined> {
-		const [allChannels, gChannels, sChannels] = await mapChannels(this.channels, this.sageCache);
-		return (
-				allChannels.find(channel => channel.nameTags.ic)
-				?? allChannels.find(channel => channel.nameTags.ooc)
-				?? sChannels.find(channel => !channel.nameTags.gm)
-				?? gChannels.find(channel => !channel.nameTags.gm)
-			)?.sChannel;
-	}
-	public async findBestGameMasterChannel(): Promise<SageChannel> {
+
+	/** Returns the "best" channel for the given type/purpose. */
+	public async findBestChannel(type: "ic" | "gm"): Promise<SageChannel | undefined> {
+		if (type === "ic") {
+			const [allChannels, gChannels, sChannels] = await mapChannels(this.channels, this.sageCache);
+			return (
+					allChannels.find(channel => channel.nameTags.ic)
+					?? allChannels.find(channel => channel.nameTags.ooc)
+					?? sChannels.find(channel => !channel.nameTags.gm)
+					?? gChannels.find(channel => !channel.nameTags.gm)
+				)?.sChannel;
+		}
 		const [allChannels] = await mapChannels(this.channels, this.sageCache);
 		return (
 				allChannels.find(channel => channel.nameTags.gm)
@@ -233,6 +235,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 				?? allChannels[0]
 			)?.sChannel;
 	}
+
 	public async gmGuildChannel(): Promise<OrNull<GuildChannel>> {
 		for (const sChannel of this.channels) {
 			if (sChannel.type === SageChannelType.GameMaster) {
@@ -247,10 +250,11 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	/** Returns all players (manual and role) as GuildMember objects. */
 	public async pGuildMembers(): Promise<GuildMember[]> {
-		const pGuildMembers = await Promise.all(this.players.map(player => this.discord.fetchGuildMember(player)));
-		const pRoleDid = this.playerRoleDid;
+		const { discord } = this.sageCache;
+		const pGuildMembers = await Promise.all(this.players.map(player => discord.fetchGuildMember(player)));
+		const pRoleDid = this.playerRole?.did;
 		if (pRoleDid) {
-			const discordRole = await this.discord.fetchGuildRole(pRoleDid);
+			const discordRole = await discord.fetchGuildRole(pRoleDid);
 			if (discordRole) {
 				const roleOnly = discordRole.members.filter(guildMember => !pGuildMembers.some(p => p?.id === guildMember.id));
 				pGuildMembers.push(...roleOnly.values());
@@ -273,16 +277,18 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	/** Returns all manually added users that are not found on this Server. */
 	public async orphanUsers(): Promise<GameUserData[]> {
-		const all = await Promise.all(this.users.map(user => this.discord.fetchGuildMember(user.did)));
+		const { discord } = this.sageCache;
+		const all = await Promise.all(this.users.map(user => discord.fetchGuildMember(user.did)));
 		return this.users.filter((_, index) => !all[index]);
 	}
 
 	/** Returns all game masters (manual and role) as GuildMember objects. */
 	public async gmGuildMembers(): Promise<GuildMember[]> {
-		const gmGuildMembers = await Promise.all(this.gameMasters.map(gameMaster => this.discord.fetchGuildMember(gameMaster)));
-		const gmRoleDid = this.gmRoleDid;
+		const { discord } = this.sageCache;
+		const gmGuildMembers = await Promise.all(this.gameMasters.map(gameMaster => discord.fetchGuildMember(gameMaster)));
+		const gmRoleDid = this.gmRole?.did;
 		if (gmRoleDid) {
-			const discordRole = await this.discord.fetchGuildRole(gmRoleDid);
+			const discordRole = await discord.fetchGuildRole(gmRoleDid);
 			if (discordRole) {
 				const roleOnly = discordRole.members.filter(guildMember => !gmGuildMembers.some(gm => gm?.id === guildMember.id));
 				gmGuildMembers.push(...roleOnly.values());
@@ -290,6 +296,8 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		}
 		return gmGuildMembers.filter(isDefined);
 	}
+
+	/** Returns the first gm that has a presence of "online". if none are "online" then the first gm is returned. */
 	public async gmGuildMember(): Promise<GuildMember | undefined> {
 		const gmGuildMembers = await this.gmGuildMembers();
 		if (gmGuildMembers.length > 1) {
@@ -301,10 +309,14 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		}
 		return gmGuildMembers[0];
 	}
+
+	/** Returns discord role objects for all roles set in the Game. */
 	public async guildRoles(): Promise<Role[]> {
-		const all = await Promise.all(this.roles.map(role => this.discord.fetchGuildRole(role.did)));
+		const { discord } = this.sageCache;
+		const all = await Promise.all(this.roles.map(role => discord.fetchGuildRole(role.did)));
 		return all.filter(isDefined);
 	}
+
 	//#endregion
 
 	// #region Channel actions
@@ -336,181 +348,174 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	// #endregion
 
 	// #region Role actions
-	public async addRole(roleType: GameRoleType, roleDid: Snowflake): Promise<boolean> {
-		const found = this.getRole(roleType);
-		if (found) {
-			return false;
+
+	public async setRole({ type, did, dicePing }: GameRoleData): Promise<boolean> {
+		// find existing
+		const role = this.getRole(type);
+		if (role) {
+			// return false for no changes
+			if (role.did === did && role.dicePing === dicePing) {
+				return false;
+			}
+			// make changes
+			role.did = did;
+			role.dicePing = dicePing ?? role.dicePing;
+
+		}else {
+			// add a new one
+			(this.core.roles ??= []).push({ type, did, dicePing:dicePing ?? true });
 		}
-		const role = { did: roleDid, type: roleType, dicePing: true };
-		(this.core.roles ?? (this.core.roles = [])).push(role);
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const userDids = this.getUsersByRole(role.type);
-		// 	await Roles.addRoleToUser(this.sageCache, role.did, userDids);
-		// }
-		// return saved;
-		*/
 		return this.save();
 	}
-	public async updateRole(roleType: GameRoleType, roleDid: Snowflake): Promise<boolean> {
-		const role = this.getRole(roleType);
-		if (!role || role.did === roleDid) {
-			return false;
+
+	public async unsetRole(type: GameRoleType): Promise<boolean> {
+		// count roles before filtering
+		const length = this.core.roles?.length;
+
+		// filter roles
+		this.core.roles = this.core.roles?.filter(role => role.type !== type);
+
+		// if we have a different count, save it
+		if (this.core.roles?.length !== length) {
+			return this.save();
 		}
-		/*
-		// const oldRole = { type:role.type, did:role.did };
-		*/
-		role.did = roleDid;
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const userDids = this.getUsersByRole(oldRole.type);
-		// 	await Roles.updateRoleForUser(this.sageCache, oldRole.did, role.did, userDids);
-		// }
-		// return saved;
-		*/
-		return this.save();
+
+		// return false for no changes
+		return false;
 	}
-	public async removeRole(roleType: GameRoleType): Promise<boolean> {
-		const role = this.getRole(roleType);
-		if (!role) {
-			return false;
-		}
-		this.core.roles = this.core.roles!.filter(_role => _role !== role);
-		/** @todo this will likely orphan pcs and npcs, which we are removing linkage to in the functions below ... */
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const userDids = this.getUsersByRole(role.type);
-		// 	await Roles.removeRoleFromUser(this.sageCache, role.did, userDids);
-		// }
-		// return saved;
-		*/
-		return this.save();
-	}
+
 	// #endregion
 
 	// #region GameMaster actions
-	public async addGameMasters(userDids: Snowflake[]): Promise<boolean> {
-		const filtered: Snowflake[] = [];
-		for (const userDid of userDids) {
-			const user = this.getUser(userDid);
+
+	/** add the given users as gms, first removing them as players if needed */
+	public async addGameMasters(userIds: Snowflake[]): Promise<boolean> {
+		// filtered list of the given user ids that need to be added
+		const toAdd: Snowflake[] = [];
+
+		// iterate the given user ids
+		for (const userId of userIds) {
+			// see if the user is already in the Game
+			const user = this.getUser(userId);
 			if (user) {
+				// if the user is not a gamemaster, then we need to remove them before adding them as a gamemaster
 				if (user.type !== GameUserType.GameMaster) {
-					await this.removePlayers([userDid]);
-					filtered.push(userDid);
+					// remove them as player
+					await this.removePlayers([userId], false);
+					// now add them
+					toAdd.push(userId);
 				}
 			} else {
-				filtered.push(userDid);
+				// not in the game yet, add them
+				toAdd.push(userId);
 			}
 		}
-		if (!filtered.length) {
+
+		// if we have nothing to add, return false
+		if (!toAdd.length) {
 			return false;
 		}
 
-		const gameMasters = filtered.map(userDid => ({ did: userDid, type: GameUserType.GameMaster, dicePing:true }));
-		(this.core.users ?? (this.core.users = [])).push(...gameMasters);
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const roleTypes = getRoleTypes(GameRoleType.GameMaster);
-		// 	const roleDids = this.roles.filter(role => roleTypes.includes(role.type)).map(role => role.did);
-		// 	if (roleDids.length) {
-		// 		await Roles.addRoleToUser(this.sageCache, roleDids, userDids);
-		// 	}
-		// }
-		// return saved;
-		*/
+		// ensure users array
+		const users = this.core.users ??= [];
+
+		// add each user
+		for (const userId of toAdd) {
+			users.push({ did: userId, type: GameUserType.GameMaster, dicePing:true });
+		}
+
+		// save the game
 		return this.save();
 	}
-	public async removeGameMasters(userDids: Snowflake[]): Promise<boolean> {
-		const filtered = userDids.filter(userDid => this.hasGameMaster(userDid));
-		if (!filtered.length) {
+
+	/** remove user as a gamemaster. unlink when they leave a game, don't unlink if switching between gm/player */
+	public async removeGameMasters(userIds: Snowflake[], unlinkChars: boolean): Promise<boolean> {
+		// make sure they are gamemasters
+		const toRemove = userIds.filter(userId => this.hasGameMaster(userId));
+		if (!toRemove.length) {
 			return false;
 		}
 
-		// unlink npcs from ex-GMs
-		this.nonPlayerCharacters.forEach(char => {
-			if (filtered.includes(char.userDid!)) {
-				delete char.userDid;
-			}
-		});
+		// unlink to save the gms hassle
+		if (unlinkChars) {
+			unlinkChar(this.gmCharacter, toRemove);
+			this.nonPlayerCharacters.forEach(char => unlinkChar(char, toRemove));
+			this.playerCharacters.forEach(char => unlinkChar(char, toRemove));
+		}
 
-		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.GameMaster || !filtered.includes(user.did));
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const roleDids = this.roles.map(role => role.did);
-		// 	if (roleDids.length) {
-		// 		await Roles.removeRoleFromUser(this.sageCache, roleDids, filtered);
-		// 	}
-		// }
-		// return saved;
-		*/
+		// filter users to have only non-gms or gms not removed
+		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.GameMaster || !toRemove.includes(user.did));
+
+		// save the game
 		return this.save();
 	}
+
 	// #endregion GameMaster actions
 
 	// #region Player actions
-	public async addPlayers(userDids: Snowflake[]): Promise<boolean> {
-		const filtered: Snowflake[] = [];
-		for (const userDid of userDids) {
-			const user = this.getUser(userDid);
+
+	/** add the given users as players, first removing them as gms if needed */
+	public async addPlayers(userIds: Snowflake[]): Promise<boolean> {
+		// filtered list of the given user ids that need to be added
+		const toAdd: Snowflake[] = [];
+
+		// iterate the given user ids
+		for (const userId of userIds) {
+			// see if the user is already in the Game
+			const user = this.getUser(userId);
 			if (user) {
+				// if the user is not a player, then we need to remove them before adding them as a player
 				if (user.type !== GameUserType.Player) {
-					await this.removeGameMasters([userDid]);
-					filtered.push(userDid);
+					// remove them as gamemaster
+					await this.removeGameMasters([userId], false);
+					// now add them
+					toAdd.push(userId);
 				}
 			} else {
-				filtered.push(userDid);
+				// not in the game yet, add them
+				toAdd.push(userId);
 			}
 		}
-		if (!filtered.length) {
+
+		// if we have nothing to add, return false
+		if (!toAdd.length) {
 			return false;
 		}
 
-		const players = filtered.map(userDid => (<GameUserData>{ did: userDid, type: GameUserType.Player }));
-		(this.core.users ?? (this.core.users = [])).push(...players);
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const roleTypes = getRoleTypes(GameRoleType.Player);
-		// 	const roleDids = this.roles.filter(role => roleTypes.includes(role.type)).map(role => role.did);
-		// 	if (roleDids.length) {
-		// 		await Roles.addRoleToUser(this.sageCache, roleDids, userDids);
-		// 	}
-		// }
-		// return saved;
-		*/
+		// ensure users array
+		const users = this.core.users ??= [];
+
+		// add each user
+		for (const userId of toAdd) {
+			users.push({ did: userId, type: GameUserType.Player, dicePing:true });
+		}
+
+		// save the game
 		return this.save();
 	}
-	public async removePlayers(userDids: Snowflake[]): Promise<boolean> {
-		const filtered = userDids.filter(userDid => this.hasPlayer(userDid));
-		if (!filtered.length) {
+
+	/** remove user as a player. unlink when they leave a game, don't unlink if switching between gm/player */
+	public async removePlayers(userIds: Snowflake[], unlinkChars: boolean): Promise<boolean> {
+		// make sure they are players
+		const toRemove = userIds.filter(userId => this.hasPlayer(userId));
+		if (!toRemove.length) {
 			return false;
 		}
 
-		// unlink pcs from ex-Players
-		this.playerCharacters.forEach(char => {
-			if (filtered.includes(char.userDid!)) {
-				delete char.userDid;
-			}
-		});
+		// unlink to save the gms hassle
+		if (unlinkChars) {
+			unlinkChar(this.gmCharacter, toRemove);
+			this.nonPlayerCharacters.forEach(char => unlinkChar(char, toRemove));
+			this.playerCharacters.forEach(char => unlinkChar(char, toRemove));
+		}
 
-		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.Player || !filtered.includes(user.did));
-		/*
-		// const saved = await this.save();
-		// if (saved) {
-		// 	const roleDids = this.roles.map(role => role.did);
-		// 	if (roleDids.length) {
-		// 		await Roles.removeRoleFromUser(this.sageCache, roleDids, filtered);
-		// 	}
-		// }
-		// return saved;
-		*/
+		// filter users to have only non-players or players not removed
+		this.core.users = this.core.users!.filter(user => user.type !== GameUserType.Player || !toRemove.includes(user.did));
+
+		// save the game
 		return this.save();
 	}
+
 	// #endregion PC actions
 
 	public getAutoCharacterForChannel(userDid: Snowflake, ...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {
@@ -551,7 +556,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 			}
 			return false;
 		}
-		const gameRole = this.roles.find(role => role.did === userOrRoleDid);
+		const gameRole = this.getRole(userOrRoleDid);
 		if (gameRole && gameRole.dicePing !== dicePing) {
 			gameRole.dicePing = dicePing;
 			return this.save();
@@ -586,10 +591,11 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		return undefined;
 	}
 
-	public getRole(roleType: GameRoleType): GameRoleData | undefined {
-		return this.roles.find(role => role.type === roleType);
+	public getRole(value: GameRoleType | Snowflake): GameRoleData | undefined {
+		return this.roles.find(role => role.type === value || role.did === value);
 	}
 
+	/** returns the user info for a manually added (not via role) user */
 	public getUser(userResolvable: Optional<CanBeUserIdResolvable>): GameUserData | undefined {
 		const userId = resolveUserId(userResolvable);
 		return this.users.find(user => user.did === userId);
@@ -605,10 +611,12 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		return this.getChannel(didOrKey as DiscordKey) !== undefined;
 	}
 
+	/** returns true if the user was manually added (not via role) as a gamemaster */
 	public hasGameMaster(userResolvable: Optional<CanBeUserIdResolvable>): boolean {
 		return this.getUser(userResolvable)?.type === GameUserType.GameMaster;
 	}
 
+	/** returns true if the user was manually added (not via role) as a player */
 	public hasPlayer(userResolvable: Optional<CanBeUserIdResolvable>): boolean {
 		return this.getUser(userResolvable)?.type === GameUserType.Player;
 	}
@@ -637,7 +645,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	private _colors?: Colors;
 
 	public get colors(): Colors {
-		this._colors ??= new Colors(this.core.colors ?? (this.core.colors = []));
+		this._colors ??= new Colors(this.core.colors ??= []);
 		return this._colors;
 	}
 
@@ -657,7 +665,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	private _emoji?: Emojis;
 
 	public get emoji(): Emojis {
-		this._emoji ??= new Emojis(this.core.emoji ?? (this.core.emoji = []));
+		this._emoji ??= new Emojis(this.core.emoji ??= []);
 		return this._emoji;
 	}
 
@@ -666,7 +674,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 			text = this.emoji.emojify(text);
 			text = this.server.emojify(text);
 		}catch(ex) {
-			error({ gameId:this.id, serverId:this.serverId, serverDid:this.serverDid }, ex);
+			error({ gameId:this.id, serverDid:this.serverDid }, ex);
 		}
 		return text;
 	}

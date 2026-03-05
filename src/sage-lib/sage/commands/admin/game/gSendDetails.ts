@@ -143,7 +143,7 @@ function gameDetailsAppendDice(renderableContent: RenderableContent, game: Game)
 
 async function showGameRenderServer(renderableContent: RenderableContent, sageCommand: SageCommand, game: Game): Promise<void> {
 	if (sageCommand.actor.sage.isSuperUser && game.serverDid !== sageCommand.server?.did) {
-		renderableContent.appendTitledSection("<b>Server</b>", game.serverDid, game.serverId);
+		renderableContent.appendTitledSection("<b>Server</b>", game.serverDid);
 		const guild = await sageCommand.discord.fetchGuild(game.serverDid);
 		if (guild) {
 			renderableContent.append(`<b>Name</b> ${guild.name}`);

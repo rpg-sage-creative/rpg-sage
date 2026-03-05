@@ -5,7 +5,7 @@ import type { HasCharacters } from "./HasCharacters.js";
 export async function shareLeaves(hasCharacters: HasCharacters<any>, characters: CharacterShell[]): Promise<void> {
 	if (characters.length) {
 		const game = hasCharacters.game;
-		const ic = await game.findBestPlayerChannel();
+		const ic = await game.findBestChannel("ic");
 		const channel = await game.sageCache.fetchChannel(ic?.id);
 		if (isSupportedTarget(channel)) {
 			const joinedWhat = "setInit" in hasCharacters ? "encounter" : "party";

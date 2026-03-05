@@ -355,9 +355,9 @@ export class GameCharacter {
 
 	/** The character's user's Discord ID */
 	public get userId(): Snowflake | undefined { return this.core.userDid; }
+	public set userId(userId: Snowflake | undefined) { this.core.userDid = userId; }
 	/** @deprecated use .userId */
 	public get userDid(): Snowflake | undefined { return this.core.userDid; }
-	public set userDid(userDid: Snowflake | undefined) { this.core.userDid = userDid; }
 
 	//#region AutoChannels
 

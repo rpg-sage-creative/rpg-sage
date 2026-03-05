@@ -40,7 +40,7 @@ export async function gPruneOrphans(sageCommand: SageCommand): Promise<boolean> 
 	const unable: string[] = [];
 
 	if (missingPlayers) {
-		const removed = await game.removePlayers(missingPlayerSnowflakes);
+		const removed = await game.removePlayers(missingPlayerSnowflakes, true);
 		if (removed) {
 			changed = true;
 		}else {
@@ -49,7 +49,7 @@ export async function gPruneOrphans(sageCommand: SageCommand): Promise<boolean> 
 	}
 
 	if (missingGms) {
-		const removed = await game.removeGameMasters(missingGmSnowflakes);
+		const removed = await game.removeGameMasters(missingGmSnowflakes, true);
 		if (removed) {
 			changed = true;
 		}else {
