@@ -1,10 +1,9 @@
-import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, getCriticalMethodText } from "@rsc-sage/data-layer";
+import { AdminRoleType, DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameCreatorType, getCriticalMethodText, type AdminRole } from "@rsc-sage/data-layer";
 import { mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
 import type { Role } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import type { Server } from "../../../model/Server.js";
-import { AdminRoleType, GameCreatorType, type IAdminRole } from "../../../model/Server.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
 function serverDetailsDefaultTypes(renderableContent: RenderableContent, server: Server): void {
@@ -17,7 +16,7 @@ function serverDetailsDefaultTypes(renderableContent: RenderableContent, server:
 	renderableContent.append(`<b>Default Dice Secret Method Type</b> ${DiceSecretMethodType[server.diceSecretMethodType!] ?? "<i>unset (Ignore)</i>"}`);
 	renderableContent.append(`<b>Default Dice Sort Type</b> ${DiceSortType[server.diceSortType!] ?? "<i>unset (None)</i>"}`);
 }
-type TRole = { role:IAdminRole, discordRole:Role };
+type TRole = { role:AdminRole, discordRole:Role };
 async function serverDetails(sageMessage: SageMessage): Promise<void> {
 	let server: Optional<Server> = sageMessage.server;
 	if (server && !sageMessage.canAdminServer) {

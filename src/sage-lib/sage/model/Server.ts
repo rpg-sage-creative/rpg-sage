@@ -1,7 +1,7 @@
-import type { DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, EmbedColorType, EmojiType, GameSystem, GameSystemType, SageChannel, SageServerCore, SageServerCoreOld, ServerOptions } from "@rsc-sage/data-layer";
+import type { AdminRole, AdminRoleType, AdminUser, DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, EmbedColorType, EmojiType, GameCreatorType, GameSystem, GameSystemType, SageChannel, SageServerCore, SageServerCoreOld, ServerOptions } from "@rsc-sage/data-layer";
 import { DiceSortType, ensureSageServerCore, parseGameSystem } from "@rsc-sage/data-layer";
 import { getHomeServerId } from "@rsc-sage/env";
-import { applyChanges, randomSnowflake, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, generateSnowflake, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Guild, HexColorString } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
@@ -13,15 +13,11 @@ import type { Game } from "./Game.js";
 import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { SageCache } from "./SageCache.js";
 
-export type TAdminRoleType = keyof typeof AdminRoleType;
-export enum AdminRoleType { Unknown = 0, GameAdmin = 1, ServerAdmin = 2, SageAdmin = 3 }
-export interface IAdminRole { did: Snowflake; type: AdminRoleType; }
-export interface IAdminUser { did: Snowflake; role: AdminRoleType; }
-export enum GameCreatorType { Admin = 0, Any = 1, None = 2 }
-
-export type ServerCore = Omit<SageServerCore, "gmCharacter"> & {
+type ServerCoreOverrides = {
 	gmCharacter?: GameCharacter | GameCharacterCore;
-}
+};
+
+export type ServerCore = Omit<SageServerCore, keyof ServerCoreOverrides> & ServerCoreOverrides;
 
 function updateCore(core: ServerCore): ServerCore {
 	return ensureSageServerCore(core as SageServerCoreOld) as ServerCore;
@@ -40,35 +36,61 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 		super(updateCore(core), sageCache);
 
 		if (!this.core.gmCharacter) {
-			this.core.gmCharacter = { id:randomSnowflake(), name:"" };
+			this.core.gmCharacter = { id:generateSnowflake(), name:"" };
 		}
 		this.core.gmCharacter.name = this.core.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
 		this.core.gmCharacter = CharacterManager.from([this.core.gmCharacter as GameCharacterCore], this, "gm")[0];
 	}
 
 	// #region Public Properties
-	public get admins(): IAdminUser[] { return this.core.admins ?? []; }
-	public get channels(): SageChannel[] { return this.core.channels ?? []; }
-	public get commandPrefix(): string | undefined { return this.core.commandPrefix; }
+
+	//#region dialog options
+
 	public get dialogPostType(): DialogPostType | undefined { return this.core.dialogPostType; }
+
+	/** The default gm character name for the server. */
+	public get gmCharacterName(): string { return this.core.gmCharacterName ?? GameCharacter.defaultGmCharacterName; }
+
+	// mentionPrefix
+	// moveDirectionOutputType
+	// sendDialogTo
+
+	//#endregion
+
+	//#region dice options
+
 	public get diceCritMethodType(): DiceCriticalMethodType | undefined { return this.core.diceCritMethodType; }
 	public get diceOutputType(): DiceOutputType | undefined { return this.core.diceOutputType; }
 	public get dicePostType(): DicePostType | undefined { return this.core.dicePostType; }
 	public get diceSecretMethodType(): DiceSecretMethodType | undefined { return this.core.diceSecretMethodType; }
 	public get diceSortType(): DiceSortType | undefined { return this.core.diceSortType; }
+	// sendDiceTo
+
+	//#endregion
+
+	//#region game system options
+
+	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
+
+	//#region derived
+	private _gameSystem?: GameSystem | null;
+	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
+	//#endregion
+
+	//#endregion
+
+
+	public get admins(): AdminUser[] { return this.core.admins ??= []; }
+	public get channels(): SageChannel[] { return this.core.channels ??= []; }
+	public get commandPrefix(): string | undefined { return this.core.commandPrefix; }
 	public get gameCreatorType(): GameCreatorType | undefined { return this.core.gameCreatorType; }
 	public get gameId(): string | undefined { return this.core.gameId; }
 	public set gameId(gameId: string | undefined) { this.core.gameId = gameId; }
-	private _gameSystem?: GameSystem | null;
-	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
-	public get gameSystemType(): GameSystemType | undefined { return this.core.gameSystemType; }
-	/** The default gm character name for the server. */
-	public get gmCharacterName(): string { return this.core.gmCharacterName ?? GameCharacter.defaultGmCharacterName; }
 	/** The generic Game Master for the Server. */
 	public get gmCharacter(): GameCharacter { return this.core.gmCharacter as GameCharacter; }
 	public get discord() { return this.sageCache.discord; }
 	public get name(): string { return this.core.name; }
-	public get roles(): IAdminRole[] { return this.core.roles ?? []; }
+	public get roles(): AdminRole[] { return this.core.roles ??= []; }
 	public get macros() { return this.core.macros ??= []; }
 	// #endregion
 
@@ -177,8 +199,8 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 		if (found) {
 			return found.role;
 		}
-		const admin: IAdminUser = { did: userDid, role: roleType };
-		(this.core.admins || (this.core.admins = [])).push(admin);
+		const admin: AdminUser = { did: userDid, role: roleType };
+		(this.core.admins ??= []).push(admin);
 		const saved = await this.save();
 		// if (saved) {
 		// 	const role = this.getRole(roleType);
@@ -249,7 +271,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 
 	// #region get
 
-	public getAdmin(userDid: Snowflake): IAdminUser | undefined {
+	public getAdmin(userDid: Snowflake): AdminUser | undefined {
 		return this.admins.find(admin => admin.did === userDid);
 	}
 
@@ -273,7 +295,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 		return undefined;
 	}
 
-	public getRole(roleType: AdminRoleType): IAdminRole | undefined {
+	public getRole(roleType: AdminRoleType): AdminRole | undefined {
 		return this.roles.find(role => role.type === roleType);
 	}
 

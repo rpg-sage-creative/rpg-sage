@@ -1,4 +1,4 @@
-import { GameUserType } from "@rsc-sage/data-layer";
+import { AdminRoleType, GameUserType } from "@rsc-sage/data-layer";
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
 import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
@@ -13,7 +13,7 @@ import { JsonRepo } from "../repo/base/JsonRepo.js";
 import { ActiveBot } from "./ActiveBot.js";
 import type { Bot } from "./Bot.js";
 import { Game, type GameCore } from "./Game.js";
-import { AdminRoleType, Server } from "./Server.js";
+import { Server } from "./Server.js";
 import { User } from "./User.js";
 import { createClientEventLabel, type ClientEvent, type ClientEventsKey } from "./utils/createClientEventLabel.js";
 

@@ -1,15 +1,15 @@
-import { forEachAsync, isDefined, mapAsync, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { AdminRoleType, type AdminUser } from "@rsc-sage/data-layer";
+import { forEachAsync, isDefined, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { SageCommand } from "../../../model/SageCommand.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { AdminRoleType, type IAdminUser } from "../../../model/Server.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
-type TAdminUser = IAdminUser & { discordUser: User };
+type MappedAdminUser = AdminUser & { discordUser?: User };
 
-async function renderUser(renderableContent: RenderableContent, user: TAdminUser): Promise<void> {
+async function renderUser(renderableContent: RenderableContent, user: MappedAdminUser): Promise<void> {
 	renderableContent.appendTitledSection(`<b>${toHumanReadable(user?.discordUser) || "<i>Unknown</i>"}</b>`);
 	// renderableContent.append(`<b>User Id</b> ${user.discordUser?.id}`);
 	// renderableContent.append(`<b>Username</b> ${user?.discordUser?.username || "<i>Unknown</i>"}`);
@@ -21,12 +21,11 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.whisper(`Sorry, you aren't allowed to access this command.`);
 	}
 
-	let users: TAdminUser[] = await mapAsync(sageMessage.server.admins, async admin => {
-		return {
-			discordUser: await sageMessage.discord.fetchUser(admin.did),
-			...admin
-		} as TAdminUser;
-	});
+	let users: MappedAdminUser[] = [];
+	for (const { did, role } of sageMessage.server.admins) {
+		const discordUser = await sageMessage.discord.fetchUser(did);
+		users.push({ did, discordUser, role });
+	}
 
 	if (users) {
 		const filter = sageMessage.args.getString("filter");

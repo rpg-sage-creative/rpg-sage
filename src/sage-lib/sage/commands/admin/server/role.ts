@@ -1,10 +1,10 @@
+import { AdminRoleType, type AdminRole } from "@rsc-sage/data-layer";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
-import { AdminRoleType, type IAdminRole, type TAdminRoleType } from "../../../model/Server.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 
-function getAdminRoleLabel(adminRole: IAdminRole): TAdminRoleType {
-	return <TAdminRoleType>AdminRoleType[adminRole.type || 0];
+function getAdminRoleLabel(adminRole: AdminRole): keyof AdminRoleType {
+	return AdminRoleType[adminRole.type || 0] as keyof AdminRoleType;
 }
 
 async function serverRoleList(sageMessage: SageMessage): Promise<void> {

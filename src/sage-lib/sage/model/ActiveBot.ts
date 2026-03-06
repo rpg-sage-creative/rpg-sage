@@ -1,8 +1,8 @@
-import { getSageId, getSuperUserId, getToken } from "@rsc-sage/env";
+import { getSageId, getSnsClientConfig, getSuperUserId, getToken } from "@rsc-sage/env";
 import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, tagLiterals, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, getRegisteredIntents, getRegisteredPartials, wrapUrls } from "@rsc-utils/discord-utils";
+import { sendSns } from "@rsc-utils/io-utils";
 import { ActivityType, Client, type ClientOptions } from "discord.js";
-import { notifyOfError } from "../../../sage-utils/notifyOfError.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
 import { initializeServer } from "../repo/base/initializeServer.js";
@@ -16,51 +16,54 @@ function createDiscordClientOptions(): ClientOptions {
 	};
 }
 
-export class ActiveBot extends Bot {
-	public static active: ActiveBot;
-
-	/** are we trying to send to sns? starts as true */
-	public static sns = true;
-
-	/** Attempts to send the errors/args via SNS before falling back to sendToSuperUser (Discord DM). */
-	public static async notifyOfError(...args: unknown[]): Promise<void> {
-		// check the sns flag
-		if (ActiveBot.sns) {
+/** Attempts to send the errors/args via SNS before falling back to sendToSuperUser (Discord DM). */
+async function notifyViaSns(...args: unknown[]): Promise<void> {
+	// check the sns flag
+	if (ActiveBot.sns) {
+		const clientConfig = getSnsClientConfig();
+		if (clientConfig) {
 			// prep content
-			const notifySubject = `RPG Sage Error - ${getCodeName()}`;
-			const contentToSend = args.map(formatArg).join("\n");
+			const subject = `RPG Sage Error - ${getCodeName()}`;
+			const content = args.map(formatArg).join("\n");
 
 			// attemp to notify via sns
-			const notifyResults = await notifyOfError(notifySubject, contentToSend).catch(ex => {
-				ActiveBot.sendToSuperUser("SNS Error", ex);
+			const notifyResults = await sendSns({ clientConfig, content, subject }).catch(ex => {
+				notifyViaDm("SNS Error", ex);
 				return false;
 			});
 
 			// a successful sns means we are done
 			if (notifyResults) return;
-
-			// a single failure stops sending to sns to avoid a cascade of failures
-			ActiveBot.sns = false;
 		}
 
-		// fallback to discord dm
-		ActiveBot.sendToSuperUser(`# error`, ...args);
+		// a single failure stops sending to sns to avoid a cascade of failures
+		ActiveBot.sns = false;
 	}
 
-	/** Tries to send errors/args to the super user as a Discord DM. */
-	public static async sendToSuperUser(...args: unknown[]): Promise<void> {
-		const user = await ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false }).catch(DiscordApiError.process);
-		if (user) {
-			// discord messages have limits, chunk the content to be safe
-			const formatted = args.map(formatArg);
-			const joined = formatted.join("\n");
-			const wrapped = wrapUrls(joined);
-			const contents = chunk(wrapped, { maxChunkLength:2000 });
-			for (const content of contents) {
-				await user.send(content);
-			}
+	// fallback to discord dm
+	notifyViaDm(`# error`, ...args);
+}
+
+/** Tries to send errors/args to the super user as a Discord DM. */
+async function notifyViaDm(...args: unknown[]): Promise<void> {
+	const user = await ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false }).catch(DiscordApiError.process);
+	if (user) {
+		// discord messages have limits, chunk the content to be safe
+		const formatted = args.map(formatArg);
+		const joined = formatted.join("\n");
+		const wrapped = wrapUrls(joined);
+		const contents = chunk(wrapped, { maxChunkLength:2000 });
+		for (const content of contents) {
+			await user.send(content);
 		}
 	}
+}
+
+export class ActiveBot extends Bot {
+	public static active: ActiveBot;
+
+	/** are we trying to send to sns? starts as true */
+	public static sns = true;
 
 	// public client: Client;
 
@@ -87,10 +90,10 @@ export class ActiveBot extends Bot {
 
 			ActiveBot.active = this;
 
-			addLogHandler("error", ActiveBot.notifyOfError);
+			addLogHandler("error", notifyViaSns);
 
 			info(`Discord.Client.on("clientReady") [success]`);
-			ActiveBot.sendToSuperUser(`Discord.Client.on("clientReady") [success]`);
+			notifyViaDm(`Discord.Client.on("clientReady") [success]`);
 		});
 
 		// TODO: if created in a game category i could add or prompt to add?

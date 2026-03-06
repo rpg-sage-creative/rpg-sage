@@ -1,4 +1,4 @@
-import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, EmbedColorType, EmojiType, GameSystemType, parseGameSystem, SageChannelType, type DiceCriticalMethodType, type SageChannel } from "@rsc-sage/data-layer";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, EmbedColorType, EmojiType, GameCreatorType, GameSystemType, parseGameSystem, SageChannelType, type DiceCriticalMethodType, type SageChannel } from "@rsc-sage/data-layer";
 import type { LocalizedTextKey } from "@rsc-sage/localization";
 import { Cache, debug, HasCache, isDefined, RenderableContent, stringOrUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import type { DiscordCache, EmbedBuilder, SupportedInteraction, SupportedRepliableInteraction } from "@rsc-utils/discord-utils";
@@ -14,7 +14,7 @@ import type { SageEventCache } from "./SageEventCache.js";
 import type { SageAutocompleteInteraction, SageButtonInteraction, SageInteraction, SageMessageContextInteraction, SageModalSubmitInteraction, SageSlashCommandInteraction, SageStringSelectInteraction, SageUserContextInteraction } from "./SageInteraction.js";
 import type { SageMessage } from "./SageMessage.js";
 import type { SageReaction } from "./SageReaction.js";
-import { GameCreatorType, type Server } from "./Server.js";
+import type { Server } from "./Server.js";
 import type { User } from "./User.js";
 import { findActiveCharacter } from "./utils/findActiveCharacter.js";
 
