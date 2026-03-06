@@ -1,4 +1,4 @@
-import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { CharacterBase, type DiceMacroBase, type StatResults } from "@rsc-utils/game-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
@@ -44,8 +44,8 @@ function abilitiesToHtml(char: PathbuilderCharacter): string {
 }
 
 function itemsToHtml(weapons: TPathbuilderCharacterWeapon[], armors: TPathbuilderCharacterArmor[]): string {
-	const weaponNames = weapons.map(weapon => weapon.display ?? weapon.name);
-	const armorNames = armors.map(armor => armor.display ?? armor.name);
+	const weaponNames = weapons.map(weapon => stringOrUndefined(weapon.display) ?? weapon.name);
+	const armorNames = armors.map(armor => stringOrUndefined(armor.display) ?? armor.name);
 	return weaponNames.concat(armorNames).join(", ");
 }
 
