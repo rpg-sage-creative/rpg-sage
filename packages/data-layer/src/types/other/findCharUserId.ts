@@ -32,15 +32,15 @@ function _findCharsUserId(chars: Char[] | undefined, idKey: keyof Ids): Snowflak
 
 /** checks char for userId, then last messages for userId, then char for userDid, then last messages for userDid */
 export function findCharUserId(charCore: Char): Snowflake | undefined {
-	return _findCharUserId(charCore, "userId") ?? _findCharUserId(charCore, "userDid");
+	return _findCharUserId(charCore, "userDid") ?? _findCharUserId(charCore, "userId");
 }
 
 /** looks for a gm before scanning npcs for userId/userDid */
 export function findGameNpcUserId(gameCore: SageGameCoreOld): Snowflake | undefined {
 	// get first gm id
 	return gameCore.users?.find(u => u.type === GameUserType.GameMaster)?.did
-	// get first npc with userId
-		?? _findCharsUserId(gameCore.nonPlayerCharacters, "userId")
 	// get first npc with userDid
-		?? _findCharsUserId(gameCore.nonPlayerCharacters, "userDid");
+		?? _findCharsUserId(gameCore.nonPlayerCharacters, "userDid")
+	// get first npc with userId
+		?? _findCharsUserId(gameCore.nonPlayerCharacters, "userId");
 }
