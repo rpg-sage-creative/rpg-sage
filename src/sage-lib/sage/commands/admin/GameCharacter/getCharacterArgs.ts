@@ -76,8 +76,8 @@ function getCore({ args, message }: SageMessage, names: Names, isUpdate: boolean
 	// let's see if they dropped an image to be set on the character
 	if (tokenUrl === undefined || avatarUrl === undefined) {
 		const images = message.attachments.filter(att => att.contentType?.startsWith("image/"));
-		const tokenImage = images.find(att => /token/.test(att.name)) ?? images.find(att => !/avatar/.test(att.name)) ?? images.first();
-		const avatarImage = images.find(att => /avatar/.test(att.name)) ?? images.find(att => !/token/.test(att.name) && att !== tokenImage) ?? images.find(att => att !== tokenImage);
+		const tokenImage = images.find(att => att.name.includes("token")) ?? images.find(att => !att.name.includes("avatar")) ?? images.first();
+		const avatarImage = images.find(att => att.name.includes("avatar")) ?? images.find(att => !att.name.includes("token") && att !== tokenImage) ?? images.find(att => att !== tokenImage);
 		if (tokenUrl === undefined && tokenImage) {
 			core.tokenUrl = tokenImage.url;
 			hasKeys = true;
