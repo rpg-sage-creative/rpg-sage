@@ -1,5 +1,5 @@
 import { GameSystemType } from "@rsc-sage/data-layer";
-import { SearchScore } from "@rsc-utils/core-utils";
+import { cleanWhitespace, SearchScore } from "@rsc-utils/core-utils";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
 import type { TParsedSearchInfo } from "../../common.js";
 import { type TResultsLink, getSearchResultsLinks, sortSearchResults } from "../index.js";
@@ -10,16 +10,14 @@ function urlRoot() {
 	return "https://www.aonsrd.com/";
 }
 
-const WS = /\s+/g;
-
 export function createSearchUrl(searchText: string): string {
-	const cleanSearchText = searchText.replace(WS, "+");
+	const cleanSearchText = cleanWhitespace(searchText, { replacement:"+" });
 	return `${urlRoot()}Search.aspx?Query=${cleanSearchText}`;
 }
 
 export function createSearchResultUrl(link: TResultsLink): string {
 	const root = urlRoot();
-	const cleanUrl = link.url.replace(WS, "+").replace(new RegExp("^" + root, "i"), "");
+	const cleanUrl = cleanWhitespace(link.url, { replacement:"+" }).replace(new RegExp("^" + root, "i"), "");
 	return root + cleanUrl;
 }
 

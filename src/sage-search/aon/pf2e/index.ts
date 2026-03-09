@@ -1,5 +1,5 @@
 import { GameSystemType } from "@rsc-sage/data-layer";
-import { error, oneToUS, sortPrimitive, StringMatcher, type SearchScore, type SortResult } from "@rsc-utils/core-utils";
+import { cleanWhitespace, error, oneToUS, sortPrimitive, StringMatcher, type SearchScore, type SortResult } from "@rsc-utils/core-utils";
 import { getJson } from "@rsc-utils/io-utils";
 import type { AonBase } from "../../../sage-pf2e/model/base/AonBase.js";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
@@ -14,7 +14,7 @@ function urlRoot() {
 }
 
 export function createSearchUrl(searchText: string): string | null {
-	const cleanSearchText = searchText.replace(/\s+/g, "+");
+	const cleanSearchText = cleanWhitespace(searchText, { replacement:"+" });
 	return `${urlRoot()}Search.aspx?query=${cleanSearchText}`;
 }
 
@@ -49,7 +49,7 @@ export async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnl
 }
 
 function cleanSpaces(terms: string | string[]): string {
-	return (Array.isArray(terms) ? terms.join(" ") : terms).replace(/\s+/g, " ");
+	return cleanWhitespace((Array.isArray(terms) ? terms.join(" ") : terms));
 }
 function buildPostData(terms: string[], shouldMust: "should" | "must"): TPostData {
 	const postData: TPostData = {
