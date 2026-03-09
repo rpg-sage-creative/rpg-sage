@@ -1,4 +1,5 @@
 import { autoChannelDataMatches } from "@rsc-sage/data-layer";
+import { quote } from "@rsc-utils/core-utils";
 import { parseIds, toChannelMention, toUserMention } from "@rsc-utils/discord-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -32,17 +33,22 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 		return sendNotFound(sageMessage, `${characterTypeMeta.singularDescriptor} Auto Dialog (Off)`, characterTypeMeta.singularDescriptor!, alias ?? names.name);
 	}
 
+	const thisChannelId = sageMessage.channelDid;
 	const channelIds = parseIds(sageMessage.message, "channel");
+	if (!channelIds.length && thisChannelId) {
+		channelIds.push(thisChannelId);
+	}
+
 	const autoChannelIds = channelIds.filter(channelId => character?.autoChannels.find(channel => autoChannelDataMatches(channel, { channelId, userId })));
 	if (!autoChannelIds.length) {
 		const label = channelIds.length > 1 ? "those channels" : "that channel";
 		return sageMessage.whisper(`You aren't using Auto Dialog with ${character.name} in ${label}.`);
 	}
 
-	const channelLinks = autoChannelIds.map(channelId => toChannelMention(channelId));
-	const prompt = autoChannelIds.length > 1 || autoChannelIds[0] !== sageMessage.channelDid
-		? `Stop ${toUserMention(userId)} using Auto Dialog with ${character.name} in the given channel(s)?\n> ${channelLinks.join("\n> ")}`
-		: `Stop ${toUserMention(userId)} using Auto Dialog with ${character.name}?`;
+	const channelLinks = channelIds.map(channelId =>
+		"\n> " + toChannelMention(channelId) + (channelId === thisChannelId ? " <i>(this channel)</i>" : "")
+	);
+	const prompt = `Stop ${toUserMention(userId)} using Auto Dialog with ${quote(character.name)} in:${channelLinks.join("")}`;
 
 	const removeAutoArgs = { channelIds:autoChannelIds, game:sageMessage.game, sageUser:sageMessage.sageUser, userId };
 	await promptCharConfirm(sageMessage, character, prompt, async char => {
