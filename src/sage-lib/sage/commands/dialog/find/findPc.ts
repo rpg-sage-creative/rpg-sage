@@ -27,10 +27,10 @@ export function findPc(sageCommand: SageCommand, name: Optional<string>, opts: O
 
 	// try grabbing auto character
 	if (opts.auto) {
-		const autoChannel = { channelDid:sageCommand.channelDid!, userDid:actorId };
-		const autoChar = gamePcs?.getAutoCharacter(autoChannel)
-			?? userPcs.getAutoCharacter(autoChannel);
-		if (autoChar) return autoChar;
+		const autoArg = { channelId:sageCommand.channelDid!, userId:actorId };
+		const autoResult = gamePcs?.getAutoCharacter(autoArg)
+			?? userPcs.getAutoCharacter(autoArg);
+		if (autoResult) return autoResult.char;
 	}
 
 	// else grab their first

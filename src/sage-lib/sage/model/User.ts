@@ -1,22 +1,24 @@
-import { DialogPostType, ensureSageUserCore, type Alias, type DialogDiceBehaviorType, type SageUserCore, type SageUserCoreOld } from "@rsc-sage/data-layer";
+import { DialogPostType, ensureSageUserCore, type Alias, type AutoChannelData, type DialogDiceBehaviorType, type SageCharacterCore, type SageUserCore, type SageUserCoreOld } from "@rsc-sage/data-layer";
 import { isSuperAdminId, isSuperUserId } from "@rsc-sage/env";
-import { applyChanges, stringOrUndefined, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, stringOrUndefined, type Args, type Snowflake } from "@rsc-utils/core-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
 import { CharacterManager } from "./CharacterManager.js";
-import type { GameCharacter, GameCharacterCore } from "./GameCharacter.js";
+import type { AutoChannelResult, GameCharacter, GameCharacterCore } from "./GameCharacter.js";
 import { NamedCollection } from "./NamedCollection.js";
 import { NoteManager } from "./NoteManager.js";
 import type { SageCache } from "./SageCache.js";
 
+//#region Core Updates
+
+type UserCoreOverrides = {
+	playerCharacters?: (GameCharacter | SageCharacterCore)[];
+};
+
 /**
  * @todo consider flag for AoN Legacy vs Remaster
  */
-export type UserCore = Omit<SageUserCore, "playerCharacters"> & {
-	playerCharacters?: (GameCharacter | GameCharacterCore)[];
-}
-
-//#region Core Updates
+export type UserCore = Omit<SageUserCore, keyof UserCoreOverrides> & UserCoreOverrides;
 
 function updateCore(core: UserCore): UserCore {
 	return ensureSageUserCore(core as SageUserCoreOld) as UserCore;
@@ -98,12 +100,9 @@ export class User extends HasSageCacheCore<UserCore> {
 			?? this.playerCharacters.findCompanion(name);
 	}
 
-	public getAutoCharacterForChannel(...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {
-		for (const channelDid of channelDids) {
-			if (channelDid) {
-				const autoChannelData = { channelDid, userDid:this.did };
-				return this.playerCharacters.getAutoCharacter(autoChannelData);
-			}
+	public getAutoCharacterForChannel({ channelId }: AutoChannelData): AutoChannelResult | undefined {
+		if (channelId) {
+			return this.playerCharacters.getAutoCharacter({ channelId, userId:this.did });
 		}
 		return undefined;
 	}

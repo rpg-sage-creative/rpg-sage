@@ -1,4 +1,4 @@
-import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameRoleData, GameSystem, GameSystemType, GameUserData, PostCurrency, SageChannel, SageGameCore, SageGameCoreOld } from "@rsc-sage/data-layer";
+import type { AutoChannelData, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameRoleData, GameSystem, GameSystemType, GameUserData, PostCurrency, SageChannel, SageGameCore, SageGameCoreOld } from "@rsc-sage/data-layer";
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameRoleType, GameUserType, SageChannelType, ensureSageGameCore, parseGameSystem, parseSageChannelType } from "@rsc-sage/data-layer";
 import { applyChanges, error, generateSnowflake, isDefined, sortPrimitive, warn, type Args, type Comparable, type Optional, type OrNull, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
@@ -14,7 +14,7 @@ import { CharacterManager } from "./CharacterManager.js";
 import type { CharacterShell } from "./CharacterShell.js";
 import { Colors, type HasColorsCore } from "./Colors.js";
 import { Emojis, type HasEmojiCore } from "./Emojis.js";
-import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
+import { GameCharacter, type AutoChannelResult, type GameCharacterCore } from "./GameCharacter.js";
 import type { SageCache } from "./SageCache.js";
 import type { Server } from "./Server.js";
 
@@ -137,7 +137,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 				gmCharacterCore = gmCharacter.toJSON();
 			}
 			if (!gmCharacterCore) {
-				gmCharacterCore = { id:generateSnowflake(), name:gmCharacterName };
+				gmCharacterCore = { id:generateSnowflake(), name:gmCharacterName, objectType:"Character" };
 			}
 			this.core.gmCharacter = gmCharacterCore;
 		}
@@ -518,19 +518,14 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	// #endregion PC actions
 
-	public getAutoCharacterForChannel(userDid: Snowflake, ...channelDids: Optional<Snowflake>[]): GameCharacter | undefined {
-		for (const channelDid of channelDids) {
-			if (channelDid) {
-				const autoChannelData = { channelDid, userDid };
-				const autoChar = this.playerCharacters.getAutoCharacter(autoChannelData)
-					?? this.nonPlayerCharacters.getAutoCharacter(autoChannelData);
-					if (autoChar) {
-						return autoChar;
-					}
-					if (this.gmCharacter.hasAutoChannel(autoChannelData)) {
-					return this.gmCharacter;
-				}
-			}
+	public getAutoCharacterForChannel(autoArg: AutoChannelData): AutoChannelResult | undefined {
+		const autoResult = this.playerCharacters.getAutoCharacter(autoArg)
+			?? this.nonPlayerCharacters.getAutoCharacter(autoArg);
+		if (autoResult) {
+			return autoResult;
+		}
+		if (this.gmCharacter.hasAutoChannel(autoArg)) {
+			return { char:this.gmCharacter, data:autoArg };
 		}
 		return undefined;
 	}

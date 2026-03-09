@@ -1,10 +1,10 @@
-import { DialogPostType, type SageChannel } from "@rsc-sage/data-layer";
+import { autoChannelDataMatches, DialogPostType, type AutoChannelData, type SageChannel } from "@rsc-sage/data-layer";
 import { debug, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable, type SupportedTextChannel } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type SelectMenuComponentOptionData } from "discord.js";
 import { getSelectedOrDefault } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
-import type { AutoChannelData, GameCharacter } from "../../../model/GameCharacter.js";
+import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { type SageButtonInteraction, type SageStringSelectInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -38,9 +38,9 @@ type ChannelData = `${Snowflake}|${State}|${Snowflake}`;
 
 function stringifyAutoChannel(autoChannel: AutoChannelData): ChannelData {
 	return [
-		autoChannel.channelDid,
+		autoChannel.channelId,
 		DialogPostType[autoChannel.dialogPostType!]?.toLowerCase() ?? "",
-		autoChannel.userDid ?? ""
+		autoChannel.userId ?? ""
 	].join("|") as ChannelData;
 }
 
@@ -48,11 +48,11 @@ type SelectedChannelData = AutoChannelData & { state:State; };
 
 function parseAutoChannel(channelData: ChannelData | undefined): SelectedChannelData | undefined {
 	if (channelData) {
-		const [channelDid, state, userDid] = channelData.split("|") as [Snowflake, State, Snowflake];
+		const [channelId, state, userId] = channelData.split("|") as [Snowflake, State, Snowflake];
 		return {
-			channelDid,
+			channelId,
 			dialogPostType: state === "embed" ? DialogPostType.Embed : state === "post" ? DialogPostType.Post : undefined,
-			userDid: userDid ? userDid : undefined,
+			userId: userId ? userId : undefined,
 			state: state ? state : "on"
 		};
 	}
@@ -60,7 +60,7 @@ function parseAutoChannel(channelData: ChannelData | undefined): SelectedChannel
 }
 
 function isSameChannel(autoChannel: AutoChannelData | undefined, gameChannel: SageChannel | undefined): boolean {
-	return autoChannel && gameChannel ? autoChannel.channelDid === gameChannel.id : false;
+	return autoChannel && gameChannel ? autoChannel.channelId === gameChannel.id : false;
 }
 
 //#endregion
@@ -225,10 +225,10 @@ async function createChannelList(sageCommand: SageCommand, chars: Chars, selecte
 	};
 
 	const labelAutoChannel = async (autoChannel: AutoChannelData, force?: boolean) => {
-		const channel = await sageCommand.discord.fetchChannel<SupportedTextChannel>({ guildId:serverId, channelId:autoChannel.channelDid });
+		const channel = await sageCommand.discord.fetchGuildChannel<SupportedTextChannel>({ guildId:serverId, channelId:autoChannel.channelId });
 		if (!channel && !force) return undefined;
-		const channelLabel = channel?.name ?? `#${autoChannel.channelDid}`;
-		const userName = autoChannel.userDid ? ` ${await toUserName(autoChannel.userDid)}` : "";
+		const channelLabel = channel?.name ?? `#${autoChannel.channelId}`;
+		const userName = autoChannel.userId ? ` ${await toUserName(autoChannel.userId)}` : "";
 		const postType = autoChannel.dialogPostType !== undefined ? ` (${DialogPostType[autoChannel.dialogPostType]})` : "";
 		return channelLabel + userName + postType;
 	};
@@ -254,7 +254,7 @@ async function createChannelList(sageCommand: SageCommand, chars: Chars, selecte
 		}
 
 		if (!added) {
-			const autoChannel = { channelDid:gameChannel.id };
+			const autoChannel = { channelId:gameChannel.id };
 			const label = await labelAutoChannel(autoChannel);
 			const value = stringifyAutoChannel(autoChannel);
 			if (label) addOption({ label, value });
@@ -278,7 +278,7 @@ function createButtonRow(sageCommand: SageCommand, chars: Chars, selectedValue?:
 	const userId = sageCommand.sageUser.did;
 	const acParsed = parseAutoChannel(selectedValue);
 	const character = chars.all.find(char => char.id === chars.id);
-	const acFound = character?.autoChannels.find(ac => ac.channelDid === acParsed?.channelDid && ac.dialogPostType === acParsed?.dialogPostType && ac.userDid === acParsed?.userDid);
+	const acFound = character?.autoChannels.find(ac => autoChannelDataMatches(ac, acParsed));
 	const state = acFound ? acParsed?.state : "off";
 
 	const createButton = (action: Action, label: string) => new ButtonBuilder().setCustomId(createCustomId(userId, action, character?.id)).setLabel(label).setStyle(ButtonStyle.Primary).setDisabled(!selectedValue || state === action);
@@ -315,15 +315,15 @@ async function handleAction(sageInteraction: SageButtonInteraction|SageStringSel
 	const autoChannel = parseAutoChannel(channelData);
 	if (!character || !autoChannel) return;
 
-	const channelId = autoChannel.channelDid;
+	const channelId = autoChannel.channelId;
 	const removeAutoChannel = async (save?: boolean, force?: boolean) => {
-		if (force || sageUser.equals(autoChannel.userDid)) {
+		if (force || sageUser.equals(autoChannel.userId)) {
 			await character.removeAutoChannel(autoChannel, save);
 		}
 	};
-	const setAutoChannel = async (channelDid: Snowflake, userDid: Snowflake, dialogPostType?: DialogPostType) => {
-		await character.setAutoChannel({ channelDid, userDid, dialogPostType }, true);
-		channelData = `${channelDid}|${DialogPostType[dialogPostType!]?.toLowerCase() ?? ""}|${userDid}` as ChannelData;
+	const setAutoChannel = async (channelId: Snowflake, userId: Snowflake, dialogPostType?: DialogPostType) => {
+		await character.setAutoChannel({ channelId, userId, dialogPostType }, true);
+		channelData = `${channelId}|${DialogPostType[dialogPostType!]?.toLowerCase() ?? ""}|${userId}` as ChannelData;
 	};
 
 	switch(action) {

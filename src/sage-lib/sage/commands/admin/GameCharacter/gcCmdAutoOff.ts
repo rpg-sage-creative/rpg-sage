@@ -1,3 +1,4 @@
+import { autoChannelDataMatches } from "@rsc-sage/data-layer";
 import { parseIds, toChannelMention, toUserMention } from "@rsc-utils/discord-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -32,7 +33,7 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 	}
 
 	const channelIds = parseIds(sageMessage.message, "channel");
-	const autoChannelIds = channelIds.filter(channelId => character?.autoChannels.find(channel => channel.channelDid === channelId && channel.userDid === userId));
+	const autoChannelIds = channelIds.filter(channelId => character?.autoChannels.find(channel => autoChannelDataMatches(channel, { channelId, userId })));
 	if (!autoChannelIds.length) {
 		const label = channelIds.length > 1 ? "those channels" : "that channel";
 		return sageMessage.whisper(`You aren't using Auto Dialog with ${character.name} in ${label}.`);
@@ -43,8 +44,9 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 		? `Stop ${toUserMention(userId)} using Auto Dialog with ${character.name} in the given channel(s)?\n> ${channelLinks.join("\n> ")}`
 		: `Stop ${toUserMention(userId)} using Auto Dialog with ${character.name}?`;
 
+	const removeAutoArgs = { channelIds:autoChannelIds, game:sageMessage.game, sageUser:sageMessage.sageUser, userId };
 	await promptCharConfirm(sageMessage, character, prompt, async char => {
-		await removeAuto(sageMessage, { userId, channelIds:autoChannelIds });
+		await removeAuto(removeAutoArgs);
 		return char.save();
 	});
 

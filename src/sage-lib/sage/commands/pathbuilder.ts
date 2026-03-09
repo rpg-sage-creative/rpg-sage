@@ -145,7 +145,8 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, pbChar: Pathbuilde
 			name: pbChar.name,
 			pathbuilderId: pbChar.id,
 			tokenUrl,
-			userDid: pbChar.userId as Snowflake
+			userDid: pbChar.userId as Snowflake,
+			objectType: "Character"
 		});
 
 	// if something went wrong, fail out

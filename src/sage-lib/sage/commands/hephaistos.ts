@@ -146,7 +146,8 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, hChar: HephaistosC
 			name: hChar.name,
 			hephaistosId: hChar.id,
 			tokenUrl,
-			userDid: hChar.userId as Snowflake
+			userDid: hChar.userId as Snowflake,
+			objectType: "Character"
 		});
 
 	// if something went wrong, fail out

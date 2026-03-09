@@ -49,10 +49,11 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 		? `Start ${toUserMention(userId)} using Auto Dialog ${dialogType} with ${character.name} in the given channel(s)?\n> ${channelLinks.join("\n> ")}`
 		: `Start ${toUserMention(userId)} using Auto Dialog ${dialogType} with ${character.name}?`;
 
+	const removeAutoArgs = { channelIds, game:sageMessage.game, sageUser:sageMessage.sageUser, userId };
 	await promptCharConfirm(sageMessage, character, prompt, async char => {
-		await removeAuto(sageMessage, { userId, channelIds });
-		for (const channelDid of channelIds) {
-			await char.setAutoChannel({ channelDid, dialogPostType, userDid:userId }, false);
+		await removeAuto(removeAutoArgs);
+		for (const channelId of channelIds) {
+			await char.setAutoChannel({ channelId, dialogPostType, userId }, false);
 		}
 		return char.save();
 	});

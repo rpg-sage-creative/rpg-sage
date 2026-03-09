@@ -33,24 +33,24 @@ export function parseOrAutoDialogContent(sageMessage: SageMessage): DialogConten
 	}
 
 	// get userId and channelIds
-	const userDid = sageMessage.sageUser.did;
-	const channelDids = [sageMessage.threadDid, sageMessage.channelDid].filter(isDefined);
+	const userId = sageMessage.sageUser.did;
+	const channelIds = [sageMessage.threadDid, sageMessage.channelDid].filter(isDefined);
 
 	// check thread then channel for auto dialog
-	for (const channelDid of channelDids) {
+	for (const channelId of channelIds) {
+		const autoArg = { channelId, userId };
 		// game characters have priority over user characters
-		const autoCharacter = sageMessage.game?.getAutoCharacterForChannel(userDid, channelDid)
-			?? sageMessage.sageUser.getAutoCharacterForChannel(channelDid);
+		const autoResult = sageMessage.game?.getAutoCharacterForChannel(autoArg)
+			?? sageMessage.sageUser.getAutoCharacterForChannel(autoArg);
 
-		if (autoCharacter) {
-			const autoChannel = autoCharacter.getAutoChannel({ channelDid, userDid });
+		if (autoResult) {
 			return [{
-				type: autoCharacter.type,
+				type: autoResult.char.type,
 				// alias: undefined,
 				// who: undefined,
 				// attachment: undefined,
-				postType: autoChannel?.dialogPostType,
-				name: autoCharacter.name,
+				postType: autoResult.data.dialogPostType,
+				name: autoResult.char.name,
 				// displayName: undefined,
 				// title: undefined,
 				// imageUrl: undefined,

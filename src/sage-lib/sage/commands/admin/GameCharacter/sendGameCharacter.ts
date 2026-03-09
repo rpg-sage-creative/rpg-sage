@@ -70,13 +70,13 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	const autoChannels = character.autoChannels;
 	const autoChannelItems = await mapAsync(autoChannels, async data => {
 		const parts: string[] = [];
-		parts.push(toChannelMention(data.channelDid) ?? data.channelDid);
+		parts.push(toChannelMention(data.channelId) ?? data.channelId);
 		if (data.dialogPostType !== undefined) {
 			parts.push(`(${DialogPostType[data.dialogPostType]})`);
 		}
-		if (data.userDid && character.userDid !== data.userDid) {
-			const user = await sageMessage.discord.fetchGuildMember(data.userDid);
-			parts.push(toHumanReadable(user) ?? data.userDid);
+		if (data.userId && character.userId !== data.userId) {
+			const user = await sageMessage.discord.fetchGuildMember(data.userId);
+			parts.push(toHumanReadable(user) ?? data.userId);
 		}
 		return parts.join(" ");
 	});

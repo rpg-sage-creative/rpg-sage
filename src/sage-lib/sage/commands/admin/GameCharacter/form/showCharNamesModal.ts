@@ -25,7 +25,6 @@ export function showCharNamesModal(sageInteraction: SageInteraction, char: GameC
 		action: "SubmitNames",
 		fields: [
 			["name", "Character Name", char.name, maxLength, true],
-			["aka", "Character Nickname (aka)", char.aka ?? "", maxLength],
 			["alias", "Character Alias (used for RPG Sage commands)", char.alias ?? "", maxLength],
 			["displayNameTemplate", "Display Name Template", char.getTemplate("displayName") ?? "", maxLength]
 		]
@@ -44,7 +43,6 @@ async function handleCharNamesSubmit(sageInteraction: SageInteraction, idParts: 
 	const char = await getCharToEdit(sageInteraction, idParts.charId);
 	if (char && form) {
 		char.name = form.name;
-		char.aka = form.aka;
 		char.alias = form.alias;
 		char.setTemplate("displayName", form.displayNameTemplate);
 	}

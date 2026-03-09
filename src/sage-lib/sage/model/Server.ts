@@ -1,4 +1,4 @@
-import type { AdminRole, AdminRoleType, AdminUser, DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, EmbedColorType, EmojiType, GameCreatorType, GameSystem, GameSystemType, SageChannel, SageServerCore, SageServerCoreOld, ServerOptions } from "@rsc-sage/data-layer";
+import type { AdminRole, AdminRoleType, AdminUser, DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, EmbedColorType, EmojiType, GameCreatorType, GameSystem, GameSystemType, SageChannel, SageCharacterCore, SageServerCore, SageServerCoreOld, ServerOptions } from "@rsc-sage/data-layer";
 import { DiceSortType, ensureSageServerCore, parseGameSystem } from "@rsc-sage/data-layer";
 import { getHomeServerId } from "@rsc-sage/env";
 import { applyChanges, generateSnowflake, warn, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
@@ -14,7 +14,7 @@ import { GameCharacter, type GameCharacterCore } from "./GameCharacter.js";
 import type { SageCache } from "./SageCache.js";
 
 type ServerCoreOverrides = {
-	gmCharacter?: GameCharacter | GameCharacterCore;
+	gmCharacter?: GameCharacter | SageCharacterCore;
 };
 
 export type ServerCore = Omit<SageServerCore, keyof ServerCoreOverrides> & ServerCoreOverrides;
@@ -36,7 +36,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 		super(updateCore(core), sageCache);
 
 		if (!this.core.gmCharacter) {
-			this.core.gmCharacter = { id:generateSnowflake(), name:"" };
+			this.core.gmCharacter = { id:generateSnowflake(), name:"", objectType:"Character" };
 		}
 		this.core.gmCharacter.name = this.core.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
 		this.core.gmCharacter = CharacterManager.from([this.core.gmCharacter as GameCharacterCore], this, "gm")[0];

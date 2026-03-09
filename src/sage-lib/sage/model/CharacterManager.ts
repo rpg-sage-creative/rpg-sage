@@ -1,7 +1,8 @@
-import { randomSnowflake, type Optional, type OrUndefined, type Snowflake } from "@rsc-utils/core-utils";
+import type { AutoChannelData } from "@rsc-sage/data-layer";
+import { generateSnowflake, type Optional, type OrUndefined, type Snowflake } from "@rsc-utils/core-utils";
 import { resolveSnowflake, type CanBeSnowflakeResolvable } from "@rsc-utils/discord-utils";
 import type { Game } from "./Game.js";
-import { GameCharacter, type GameCharacterCore, type TGameCharacterType } from "./GameCharacter.js";
+import { GameCharacter, type AutoChannelResult, type GameCharacterCore, type TGameCharacterType } from "./GameCharacter.js";
 import type { Server } from "./Server.js";
 import type { User } from "./User.js";
 
@@ -51,7 +52,7 @@ export class CharacterManager extends Array<GameCharacter> {
 	public async addCharacter(core: GameCharacterCore): Promise<GameCharacter | null> {
 		const found = this.findByUser(core.userDid, core.name);
 		if (!found) {
-			const newCore = <GameCharacterCore>{ ...core, id: randomSnowflake() };
+			const newCore = { ...core, id: generateSnowflake() };
 			const character = new GameCharacter(newCore, this);
 			if (!this.findByName(character.name)) {
 				this.push(character);
@@ -146,17 +147,25 @@ export class CharacterManager extends Array<GameCharacter> {
 
 	//#endregion
 
-	public getAutoCharacter(autoChannelData: {channelDid:Snowflake;userDid:Snowflake;}): GameCharacter | undefined {
+	public getAutoCharacter(arg: AutoChannelData): AutoChannelResult | undefined {
+		let data: AutoChannelData | undefined;
+
+		// check the characters
 		for (const char of this) {
-			if (char.hasAutoChannel(autoChannelData)) {
-				return char;
+			// return channel and chararacter
+			if (data = char.getAutoChannel(arg)) {
+				return { char, data };
 			}
+
+			// check the companions
 			for (const comp of char.companions) {
-				if (comp.hasAutoChannel(autoChannelData)) {
-					return comp;
+				// return channel and companion
+				if (data = comp.getAutoChannel(arg)) {
+					return { char:comp, data };
 				}
 			}
 		}
+
 		return undefined;
 	}
 
@@ -180,7 +189,7 @@ export class CharacterManager extends Array<GameCharacter> {
 
 		Array.from(values).forEach(core => {
 			if (!core.id) {
-				core.id = randomSnowflake();
+				core.id = generateSnowflake();
 			}
 			characterManager.push(new GameCharacter(core, characterManager));
 		});

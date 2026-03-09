@@ -108,7 +108,7 @@ async function serverHandler(bufferOrPayload: Buffer | PixelsDicePayload): Promi
 		const channel = await guild?.channels.fetch(action.channelId);
 		if (channel?.isSendable()) {
 			const diceString = `[(${payload.faceValue})${payload.dieType} \`${payload.pixelName}: ${payload.profileName}\`]`;
-			const processor = StatMacroProcessor.for(new GameCharacter({id:"1",name:""})) as StatMacroProcessor;
+			const processor = StatMacroProcessor.for(new GameCharacter({id:"1",name:"",objectType:"Character"})) as StatMacroProcessor;
 			const sageCommand = { isSageReaction:()=>false, getTieredMacros:()=>[], sageUser:{macros:[]} } as any;
 			const diceMatches = await parseDiceMatches(diceString, { processor, sageCommand });
 			const diceOutput = diceMatches.map(dice => dice.output).flat();

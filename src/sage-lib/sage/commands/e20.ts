@@ -74,7 +74,8 @@ async function addOrUpdateCharacter(sageCommand: SageCommand, eChar: TPlayerChar
 			name: eChar.name,
 			essence20Id: eChar.id,
 			tokenUrl,
-			userDid: eChar.userId as Snowflake
+			userDid: eChar.userId as Snowflake,
+			objectType: "Character"
 		});
 
 	// if something went wrong, fail out

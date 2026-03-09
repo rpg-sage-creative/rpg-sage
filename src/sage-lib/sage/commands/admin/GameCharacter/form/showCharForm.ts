@@ -67,7 +67,6 @@ function buildCharForm(sageCommand: SageCommand, charId?: CharId, compId?: CharI
 
 function buildFormEmbed(sageCommand: SageCommand, char: GameCharacter): EmbedBuilder {
 	const embed = createMessageEmbed({ title:char.name, thumbnailUrl:char.avatarUrl });
-	embed.appendDescription(`**Nickname (aka)** ${char.aka ?? "*none*"}`, "\n");
 	embed.appendDescription(`**Alias** ${char.alias ?? "*none*"}`, "\n");
 	const displayNameTemplate = char.getTemplate("displayName");
 	const displayName = char.toDisplayName({ processor:StatMacroProcessor.withStats(sageCommand) });

@@ -411,13 +411,13 @@ export abstract class SageCommand<
 	 */
 	public get playerCharacter(): GameCharacter | undefined {
 		return this.cache.getOrSet("playerCharacter", () => {
-			const channelDid = this.channel?.id as Snowflake;
-			const userDid = this.sageUser?.did;
-			if (!userDid) return undefined;
-			const autoChannelData = { channelDid, userDid };
-			return this.game?.playerCharacters.getAutoCharacter(autoChannelData)
-				?? this.game?.playerCharacters.findByUser(userDid)
-				?? this.sageUser.playerCharacters.getAutoCharacter(autoChannelData);
+			const userId = this.sageUser?.did;
+			if (!userId) return undefined;
+
+			const autoArg = { channelId:this.channel?.id as Snowflake, userId };
+			return this.game?.playerCharacters.getAutoCharacter(autoArg)?.char
+				?? this.game?.playerCharacters.findByUser(userId)
+				?? this.sageUser.playerCharacters.getAutoCharacter(autoArg)?.char;
 		});
 	}
 

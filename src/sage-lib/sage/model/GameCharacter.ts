@@ -1,5 +1,5 @@
-import { DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type DeckCore, type DeckType, type DialogPostType, type GameSystem, type MacroBase } from "@rsc-sage/data-layer";
-import { applyChanges, Color, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type AutoChannelData, type DeckCore, type DeckType, type GameSystem, type SageCharacterCore } from "@rsc-sage/data-layer";
+import { applyChanges, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -7,16 +7,16 @@ import { mkdirSync } from "fs";
 import { Condition } from "../../../gameSystems/Condition.js";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
-import type { TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
+import type { PathbuilderCharacterCore, TPathbuilderCharacterMoney } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
 import { HephaistosCharacterSF1e } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";
 import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/import/types.js";
 import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
-import { PathbuilderCharacter, type TPathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
+import { PathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { SageMessageReference, type SageMessageReferenceCore } from "../repo/SageMessageReference.js";
 import { CharacterManager } from "./CharacterManager.js";
-import { NoteManager, type TNote } from "./NoteManager.js";
+import { NoteManager } from "./NoteManager.js";
 import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
 import { getMetaStat } from "./utils/getMetaStat.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
@@ -45,50 +45,6 @@ EncounterCharacter snapshots will be created at the start of every round.
 const MatchSpaceRegExp = /(\s)/g;
 
 export type TGameCharacterType = "gm" | "npc" | "pc" | "companion" | "minion";
-
-export type AutoChannelData = {
-	channelDid: Snowflake;
-	dialogPostType?: DialogPostType;
-	userDid?: Snowflake;
-};
-
-export type GameCharacterCore = {
-	/** nickname (aka) */
-	aka?: string;
-	/** short name used to ease dialog access */
-	alias?: string;
-	/** Channels to automatically treat input as dialog */
-	autoChannels?: AutoChannelData[];
-	/** The image used for the right side of the dialog */
-	avatarUrl?: string;
-	/** The character's companion characters */
-	companions?: (GameCharacter | GameCharacterCore)[];
-	/** experimental deck logic */
-	decks?: (Deck | DeckCore)[];
-	/** Discord compatible color: #001122 */
-	embedColor?: HexColorString;
-	/** Unique ID of this character */
-	id: Snowflake;
-	/** A list of the character's last messages by channel. */
-	lastMessages?: (SageMessageReference | SageMessageReferenceCore)[];
-	/** Character tier macros */
-	macros?: MacroBase[];
-	/** The character's name */
-	name: string;
-	/** The character's notes (stats & journal too) */
-	notes?: TNote[];
-	/** The character's Pathbuilder build. */
-	pathbuilder?: TPathbuilderCharacter;
-	pathbuilderId?: string;
-	essence20?: TEssence20CharacterCore;
-	essence20Id?: string;
-	hephaistos?: HephaistosCharacterCoreSF1e;
-	hephaistosId?: string;
-	/** The image used to represent the character to the left of the post */
-	tokenUrl?: string;
-	/** The character's user's Discord ID */
-	userDid?: Snowflake;
-};
 
 // 		export type TPlayerCharacterImageType = "Default"
 // 												| "Token" | "TokenBloody" | "TokenDying"
@@ -124,57 +80,21 @@ function createTempPath({ charId, gameId, userId }: TempIds): string {
 
 //#endregion
 
-//#region Core Updates
+type SageCharacterCoreOverrides = {
+	/** The character's companion characters */
+	companions?: (GameCharacter | GameCharacterCore)[];
+	/** experimental deck logic */
+	decks?: (Deck | DeckCore)[];
+	/** A list of the character's last messages by channel. */
+	lastMessages?: (SageMessageReference | SageMessageReferenceCore)[];
+};
 
-interface IOldGameCharacterCore extends Omit<GameCharacterCore, "autoChannels" | "embedColor"> {
-	autoChannels?: (Snowflake | AutoChannelData)[];
-	embedColor?: string;
-	iconUrl?: string;
-}
+export type GameCharacterCore = Omit<SageCharacterCore, keyof SageCharacterCoreOverrides> & SageCharacterCoreOverrides;
 
-function updateCore(core: IOldGameCharacterCore): GameCharacterCore {
-	//#region update autoChannels
-	if (core.autoChannels) {
-		core.autoChannels = core.autoChannels.map(data => {
-			if (typeof(data) === "string") {
-				return { channelDid:data, userDid:core.userDid };
-			}
-			return data;
-		});
-	}
-	//#endregion
-
-	//#region update embedColor
-	if (core.embedColor) {
-		core.embedColor = Color.from(core.embedColor)?.hex;
-	}
-	//#endregion
-
-	//#region move .iconUrl to .avatarUrl
-	if (core.iconUrl) {
-		core.avatarUrl = core.iconUrl;
-	}
-	delete core.iconUrl;
-	//#endregion
-
-	/** @todo remove this when the cores have all been fixed! */
-	fixLastMessages(core as GameCharacterCore);
-
-	return core as GameCharacterCore;
-}
-
-/** @deprecated An initial attempt at the global in memory cache caused character lastMessages cores to become crazily nested! */
-function fixLastMessages(core: GameCharacterCore): void {
-	core.lastMessages = core.lastMessages?.map((lm: SageMessageReferenceCore | { core:SageMessageReferenceCore }) => {
-		while("core" in lm) {
-			lm = lm.core;
-		}
-		return lm;
-	});
-}
-
-//#endregion
-
+export type AutoChannelResult = {
+	char: GameCharacter;
+	data: AutoChannelData;
+};
 export class GameCharacter {
 	public equals(other: Optional<string | GameCharacter>): boolean {
 		if (!other) return false;
@@ -183,8 +103,6 @@ export class GameCharacter {
 	}
 
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
-		updateCore(core);
-
 		const companionType = this.isPcOrCompanion ? "companion" : "minion";
 		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
 		this.core.lastMessages = this.core.lastMessages?.map(SageMessageReference.fromCore) ?? [];
@@ -205,10 +123,6 @@ export class GameCharacter {
 	}
 	public hasDeck(deckId: string) { return this.core.decks?.some(d => d.id === deckId) ?? false; }
 	public get hasDecks() { return (this.core.decks?.length ?? 0) > 0; }
-
-	/** nickname (aka); @todo phase out nickname as a note/stat */
-	public get aka(): string | undefined { return this.core.aka ?? this.getNoteStat("nickname"); }
-	public set aka(aka: string | undefined) { this.core.aka = aka; this.notes.setStat("nickname", ""); }
 
 	/** short name used to ease dialog access */
 	public get alias(): string | undefined {
@@ -300,7 +214,7 @@ export class GameCharacter {
 	public get essence20(): TEssence20Character | null {
 		if (this._essence20 === undefined) {
 			if (this.core.essence20) {
-				this._essence20 = loadCharacterCore(this.core.essence20) ?? null;
+				this._essence20 = loadCharacterCore(this.core.essence20 as TEssence20CharacterCore) ?? null;
 			}
 			if (this.core.essence20Id) {
 				this._essence20 = loadCharacterSync(this.core.essence20Id) ?? null;
@@ -317,7 +231,7 @@ export class GameCharacter {
 	public get hephaistos(): HephaistosCharacterSF1e | null {
 		if (this._hephaistos === undefined) {
 			if (this.core.hephaistos) {
-				this._hephaistos = new HephaistosCharacterSF1e(this.core.hephaistos);
+				this._hephaistos = new HephaistosCharacterSF1e(this.core.hephaistos as HephaistosCharacterCoreSF1e);
 			}
 			if (this.core.hephaistosId) {
 				this._hephaistos = HephaistosCharacterSF1e.loadCharacterSync(this.core.hephaistosId) ?? null;
@@ -334,7 +248,7 @@ export class GameCharacter {
 	public get pathbuilder(): PathbuilderCharacter | null {
 		if (this._pathbuilder === undefined) {
 			if (this.core.pathbuilder) {
-				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder);
+				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder as PathbuilderCharacterCore);
 			}
 			if (this.core.pathbuilderId) {
 				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId) ?? null;
@@ -361,8 +275,8 @@ export class GameCharacter {
 
 	//#region AutoChannels
 
-	public getAutoChannel(data: AutoChannelData): AutoChannelData | null {
-		return this.autoChannels.find(ch => ch.channelDid === data.channelDid && ch.userDid === data.userDid) ?? null;
+	public getAutoChannel(data: AutoChannelData): AutoChannelData | undefined {
+		return this.autoChannels.find(ch => autoChannelDataMatches(ch, data));
 	}
 
 	public setAutoChannel(data: AutoChannelData, save = true): Promise<boolean> {
@@ -801,14 +715,6 @@ export class GameCharacter {
 
 		if (keyLower === "alias") {
 			return ret("alias", this.alias);
-		}
-
-		/** @todo check the data to see if these are even in use */
-		if (["aka","nname","nickname"].includes(keyLower)) {
-			return ret("nickname", this.aka);
-		}
-		if ("nickorname" === keyLower) {
-			return ret("nickOrName", this.aka ?? this.name);
 		}
 
 		//#region tracker bars
