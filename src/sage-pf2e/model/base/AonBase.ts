@@ -1,5 +1,4 @@
-import { error, sortPrimitive, type Comparable, type SearchInfo, type SearchScore, type Searchable, type SortResult } from "@rsc-utils/core-utils";
-import { capitalize } from "@rsc-utils/core-utils";
+import { capitalize, error, sortPrimitive, type Comparable, type SearchInfo, type SearchScore, type Searchable, type SortResult } from "@rsc-utils/core-utils";
 import { parseSources, type TParsedSource } from "../../data/Repository.js";
 import type { Base } from "./Base.js";
 import { HasSource, type SourcedCore, type TSourceInfo } from "./HasSource.js";
@@ -48,6 +47,27 @@ From https://elasticsearch.galdiuz.com/aon/_search
                     ]
                 }
 */
+
+/**
+ * Creates an html link element for the given url and label.
+ * If url starts with a / (slash) character, it gets sliced to remove duplicate / (slash) characters in final url.
+ * If noRedirect is truthy, "&NoRedirect=1" is appended to the url.
+ */
+function createLink(url: string, label: string, noRedirect?: boolean): string {
+	while (url.startsWith("/")) url = url.slice(1);
+	const NoRedirect = noRedirect ? "&NoRedirect=1" : "";
+	return `<a href="https://2e.aonprd.com/${url}${NoRedirect}">${label}</a>`;
+}
+
+/** cache regex for reuse */
+const WholeNumberRegExp = /\d+/;
+
+/**
+ * Attemps to update the url by replacing the numeric id in the url with the numeric id at the end of the given idString.
+ */
+function updateLinkId(url: string, idString: string): string {
+	return url.replace(WholeNumberRegExp, idString.split("-").pop()!);
+}
 
 export interface AonBaseCore extends SourcedCore<""> {
 	category: string;
@@ -149,18 +169,21 @@ export class AonBase
 	public toAonLink(label: string): string;
 	public toAonLink(searchResult: true): string;
 	public toAonLink(label?: boolean | string): string {
-		const createLink = (url: string, label: string) => `<a href="https://2e.aonprd.com/${url}">${label}</a>`;
 		const thisUrl = this.core.url;
 
 		if (label === true) {
 			const { legacyId, remasterId } = this;
 			if (remasterId) {
-				const remasterUrl = thisUrl.replace(/\d+/, remasterId.split("-").pop()!);
-				return `${createLink(remasterUrl, "(link)")} ${createLink(`${thisUrl}&NoRedirect=1`, "(legacy)")}`;
+				const remasterUrl = updateLinkId(thisUrl, remasterId);
+				const remasterLink = createLink(remasterUrl, "(link)");
+				const legacyLink = createLink(`${thisUrl}`, "(legacy)", true);
+				return remasterLink + " " + legacyLink;
 			}
 			if (legacyId) {
-				const legacyUrl = thisUrl.replace(/\d+/, legacyId.split("-").pop()!);
-				return `${createLink(thisUrl, "(link)")} ${createLink(`${legacyUrl}&NoRedirect=1`, "(legacy)")}`;
+				const remasterLink = createLink(thisUrl, "(link)");
+				const legacyUrl = updateLinkId(thisUrl, legacyId);
+				const legacyLink = createLink(`${legacyUrl}`, "(legacy)", true);
+				return remasterLink + " " + legacyLink;
 			}
 			return createLink(thisUrl, `(link)`);
 		}
