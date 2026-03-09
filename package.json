@@ -98,7 +98,7 @@
 		"build::packages": "pnpm -r run '/^build::.*/'",
 		"build::clean-build-folder": "rm -rf build",
 		"build::clean-build-info": "rm -f *.tsbuildinfo",
-		"build": "[ -f './tsconfig.json' ] && tsc --build --force tsconfig.json",
+		"build": "[ -f './tsconfig.json' ] && tsc --build --force --verbose tsconfig.json",
 		"-postbuild": "[ ! -f './tsconfig.d.json' ] || tsc --build --force tsconfig.d.json",
 		"buildIfMissing": "[ -d './build' ] || pnpm build",
 		"build:fresh": "pnpm scrub && pnpm build",
