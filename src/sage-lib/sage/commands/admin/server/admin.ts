@@ -113,7 +113,7 @@ async function adminAdd(sageMessage: SageMessage): Promise<void> {
 			hasRoleType ? null : `- Invalid AdminRoleType: ${sageMessage.args.getString("type") ?? "*not found*"}.`,
 			`Example: \`sage! admin add @UserMention type="GameAdmin"\``
 		].filter(isDefined).join("\n");
-		return sageMessage.whisperWikiHelp({ message, page:`Sage-Admin-Tiers` });
+		return sageMessage.whisperWikiHelp({ message, page:"RPG-Sage-Admin-Tiers" });
 	}
 
 	if (!canAdminThis) {
@@ -151,7 +151,7 @@ async function adminUpdate(sageMessage: SageMessage): Promise<void> {
 			hasRoleType ? null : `- Invalid AdminRoleType: ${sageMessage.args.getString("type") ?? "*not found*"}.`,
 			`Example: \`sage! admin update @UserMention type="GameAdmin"\``
 		].filter(isDefined).join("\n");
-		return sageMessage.whisperWikiHelp({ message, page:`Sage-Admin-Tiers` });
+		return sageMessage.whisperWikiHelp({ message, page:"RPG-Sage-Admin-Tiers" });
 	}
 
 	if (!canAdminThis) {
@@ -181,7 +181,7 @@ async function adminRemove(sageMessage: SageMessage): Promise<void> {
 
 	if (!userId) {
 		const message = `Sorry, we cannot process your request:\n- Missing/Invalid User.\nExample: \`sage! admin remove @UserMention\``;
-		return sageMessage.whisperWikiHelp({ message, page:`Sage-Admin-Tiers` });
+		return sageMessage.whisperWikiHelp({ message, page:"RPG-Sage-Admin-Tiers" });
 	}
 
 	if (!canAdminThis) {
@@ -209,7 +209,7 @@ async function adminHelp(sageCommand: SageCommand): Promise<void> {
 		`sage! admin remove @UserMention`,
 		"```",
 	].join("\n");
-	await sageCommand.whisperWikiHelp({ isHelp, message, page:"Sage-Admin-Tiers" });
+	await sageCommand.whisperWikiHelp({ isHelp, message, page:"RPG-Sage-Admin-Tiers" });
 }
 
 export function registerAdmin(): void {
