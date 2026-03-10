@@ -281,22 +281,22 @@ function checkContentForUrls(content: string | null, urls: (string | null)[]) {
  * 1. ignore image embeds
  * @param botTesterMessage
  */
-function isEditWeCanIgnore(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): boolean {
-	if (!originalMessage) {
+function isEditWeCanIgnore(oldMessage: MessageOrPartial, newMessage: Optional<MessageOrPartial>): boolean {
+	if (!newMessage) {
 		return false;
 	}
 
 	// Embedding images and website cards don't change the message content
-	const matchingContent = originalMessage.content === message.content;
+	const matchingContent = oldMessage.content === newMessage.content;
 
 	// The new message should have more embeds than the original
-	const moreEmbedLengths = originalMessage.embeds.length < message.embeds.length;
+	const moreEmbedLengths = oldMessage.embeds.length < newMessage.embeds.length;
 
 	// the first of the new embeds
-	const newEmbedIndex = originalMessage.embeds.length;
+	const newEmbedIndex = newMessage.embeds.length;
 
 	// If an embed's url is in the content, the edit was simply to create the embed
-	const contentIncludesUrls = checkContentForUrls(message.content, message.embeds.slice(newEmbedIndex).map(embed => embed.url));
+	const contentIncludesUrls = checkContentForUrls(newMessage.content, newMessage.embeds.slice(newEmbedIndex).map(embed => embed.url));
 
 	return matchingContent && moreEmbedLengths && contentIncludesUrls;
 }
@@ -349,27 +349,27 @@ function isMessageWeCanIgnore(message: MessageOrPartial): boolean {
 }
 
 /** Combines all the is_X_WeCanIgnore methods for reuse. */
-function canIgnoreMessage(message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): boolean {
-	return isUserWeCanIgnore(message.author)
-		|| isChannelWeCanIgnore(message.channel)
-		|| isMessageWeCanIgnore(message)
-		|| isEditWeCanIgnore(message, originalMessage);
+function canIgnoreMessage(oldMessage: MessageOrPartial, newMessage: Optional<MessageOrPartial>): boolean {
+	return isUserWeCanIgnore(oldMessage.author)
+		|| isChannelWeCanIgnore(oldMessage.channel)
+		|| isMessageWeCanIgnore(oldMessage)
+		|| isEditWeCanIgnore(oldMessage, newMessage);
 }
 
 type HandleMessageClientEventsKey = ClientEventsKey & ("messageCreate" | "messageUpdate");
 
-export async function handleMessage(clientEvent: HandleMessageClientEventsKey, message: MessageOrPartial, originalMessage: Optional<MessageOrPartial>): Promise<THandlerOutput> {
+export async function handleMessage(clientEvent: HandleMessageClientEventsKey, oldMessage: MessageOrPartial, newMessage: Optional<MessageOrPartial>): Promise<THandlerOutput> {
 	const output = { tested: 0, handled: 0, ghosted: 0 };
 
 	try {
 		// can we ignore it without fetching?
-		let canIgnore = canIgnoreMessage(message, originalMessage);
+		let canIgnore = canIgnoreMessage(oldMessage, newMessage);
 		if (!canIgnore) {
 			// fetch it just in case
-			const fetchedMessage = await message.fetch();
+			const fetchedMessage = await (newMessage ?? oldMessage).fetch();
 
 			// recheck a fetched message just in case
-			canIgnore = fetchedMessage ? canIgnoreMessage(fetchedMessage, originalMessage) : false;
+			canIgnore = fetchedMessage ? canIgnoreMessage(fetchedMessage, newMessage) : false;
 
 			// process the message
 			if (!canIgnore && fetchedMessage) {
@@ -385,7 +385,7 @@ export async function handleMessage(clientEvent: HandleMessageClientEventsKey, m
 		// DiscordAPIError[10008]: Unknown Message <-- probably a deleted message from tupperbox
 		// DiscordAPIError[50001]: Missing Access  <-- probably in a server and getting events but can't see this channel
 		if (!isDiscordApiError(ex, 10008, 50001)) {
-			error(toHumanReadable(message.author) ?? "Unknown User", `\`${message.content}\``, ex);
+			error(toHumanReadable(oldMessage.author) ?? "Unknown User", `\`${oldMessage.content}\``, ex);
 		}
 	}
 
