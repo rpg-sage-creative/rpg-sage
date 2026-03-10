@@ -24,7 +24,7 @@ async function invalidGame(sageMessage: SageMessage): Promise<void> {
 	unableSearchResults.append(`<code>sage! game update gameSystem="PF2E"</code>`);
 	unableSearchResults.append(`<code>sage! server update gameSystem="PF2E"</code>`);
 	unableSearchResults.append(`<br/>Acceptable gameSystem values are:<ul><li>"PF" (Pathfinder)</li><li>"PF2E" (Pathfinder 2e)</li><li>"SF" (Starfinder)</li></ul>`);
-	unableSearchResults.append(`<br/>For more information, see <https://rpgsage.io>`);
+	unableSearchResults.append(`<br/>${sageMessage.getLocalizer()("FOR_MORE_INFO_SEE")}`);
 	await sageMessage.sageCache.send(sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();
 }
@@ -33,7 +33,7 @@ async function currentlyDisabled(sageMessage: SageMessage): Promise<void> {
 	const unableSearchResults = new RenderableContent(`<b>Cannot Perform Search</b>`);
 	unableSearchResults.append(`We are sorry, we have disabled the search engine for this game system for the following reason:`);
 	unableSearchResults.append(`<br/>${sageMessage.bot.getSearchStatus(sageMessage.gameSystemType)}`);
-	unableSearchResults.append(`<br/>For more information, join us at <https://discord.com/invite/pfAcUMN>`);
+	unableSearchResults.append(`<br/>${sageMessage.getLocalizer()("FOR_MORE_INFO_JOIN")}`);
 	await sageMessage.sageCache.send(sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();
 }
