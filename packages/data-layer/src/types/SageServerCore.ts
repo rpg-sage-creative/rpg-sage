@@ -55,6 +55,8 @@ export type SageServerCore = SageCore<"Server", Snowflake | UUID> & HasEmbedColo
 	/** used to allow users to admin sage/games via role instead of .admins */
 	roles: AdminRole[];
 
+	// updatedTs
+
 	// uuid
 
 	// ver
@@ -77,6 +79,7 @@ export const SageServerKeys: (keyof SageServerCore)[] = [
 	"name",
 	"objectType",
 	"roles",
+	"updatedTs",
 	"uuid",
 ];
 

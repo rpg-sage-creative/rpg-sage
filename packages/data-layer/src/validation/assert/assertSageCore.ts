@@ -1,6 +1,6 @@
 import { errorReturnFalse, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import type { SageCore } from "../../types/index.js";
-import { assertIds, assertObjectType, assertSimpleObject, assertValidKeys } from "./index.js";
+import { assertIds, assertNumber, assertObjectType, assertSimpleObject, assertValidKeys, optional } from "./index.js";
 
 export function assertSageCore<
 			TypedCore extends SageCore<ObjectType, IdType> & { objectType:ObjectType; },
@@ -23,6 +23,10 @@ export function assertSageCore<
 	if (validKeys.includes("id" as Key)) {
 		if (!assertIds({ core, id, objectType })) return false;
 	}
+
+	if (!assertNumber({ core, objectType, key:"createdTs", optional })) return false;
+
+	if (!assertNumber({ core, objectType, key:"updatedTs", optional })) return false;
 
 	return true;
 }

@@ -27,7 +27,7 @@ export type SageGameCoreOld = Omit<SageGameCore, "channels" | "gmCharacter" | "n
 	type?: number;
 }
 
-export type SageGameCore = SageCore<"Game", Snowflake | UUID> & HasEmbedColors & HasEmoji & GameOptions & HasPostCurrency & {
+export type SageGameCore = Omit<SageCore<"Game", Snowflake | UUID>, "createdTs"> & HasEmbedColors & HasEmoji & GameOptions & HasPostCurrency & {
 
 	/** timestamp the game was archived */
 	archivedTs?: number;
@@ -73,6 +73,8 @@ export type SageGameCore = SageCore<"Game", Snowflake | UUID> & HasEmbedColors &
 	/** game server's discord snowflake */
 	serverDid: Snowflake;
 
+	// updatedTs
+
 	/** users and gms */
 	users?: GameUserData[];
 
@@ -103,6 +105,7 @@ export const SageGameKeys: (keyof SageGameCore)[] = [
 	"roles",
 	"serverDid",
 	"serverId",
+	"updatedTs",
 	"users",
 	"uuid",
 ];

@@ -65,6 +65,8 @@ export type SageUserCore = SageCore<"User", Snowflake | UUID> & {
 	/** "-y" by default */
 	skipConfirmationFlag?: string;
 
+	// updatedTs (SageCore)
+
 	// uuid (SageCore)
 
 	// ver (SageCore)
@@ -88,6 +90,7 @@ export const SageUserKeys: (keyof SageUserCore)[] = [
 	"objectType",
 	"playerCharacters",
 	"skipConfirmationFlag",
+	"updatedTs",
 	"uuid",
 ];
 

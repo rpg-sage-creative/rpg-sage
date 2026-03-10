@@ -4,7 +4,7 @@ import { filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 type CacheItemObjectType = "Game" | "Server" | "User";
 
 /** The most basic form of global in memory cache items. */
-export type GlobalCacheItem = { id:string; did?:string; uuid?:string; objectType:CacheItemObjectType; };
+export type GlobalCacheItem = { id:string; did?:string; uuid?:string; objectType:CacheItemObjectType; updatedTs?:number; };
 
 /** Creates an in memory cache item that is purely ids and objectType. (Mostly used for logging output.) */
 function toGlobalCacheItem(item: GlobalCacheItem): GlobalCacheItem {
@@ -222,6 +222,9 @@ export async function globalCachePut<T extends GlobalCacheItem>(item: T): Promis
 		itemId = randomSnowflake();
 		item.id = itemId;
 	}
+
+	// set the updatedTs
+	item.updatedTs = Date.now();
 
 	// write to file using the first id found (should be .id)
 	const path = getJsonPath(key, itemId);
