@@ -1,11 +1,13 @@
 import { errorReturnFalse, errorReturnUndefined, forEachAsync, getDataRoot, initializeConsoleUtilsByEnvironment, stringifyJson, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { stat, Stats } from "node:fs";
 import { ensureSageGameCore, ensureSageMessageReferenceCore, ensureSageServerCore, ensureSageUserCore, type EnsureContext, type SageCore, type SageMessageReferenceCore } from "./index.js";
 
 initializeConsoleUtilsByEnvironment();
 
 type ObjectType = "Game" | "Message" | "Server" | "User";
 
+/** false typeguard */
 function isMessage(_core: unknown, objectType: ObjectType): _core is SageMessageReferenceCore {
 	return objectType === "Message";
 }
@@ -14,6 +16,82 @@ type Processor<
 	Type extends ObjectType,
 	Core extends SageCore<Type, Snowflake> = any
 	> = (object: any, context?: EnsureContext) => Core;
+
+async function getUpdateTs(filePath: string): Promise<number | undefined> {
+	const stats = await new Promise<Stats>((resolve, reject) =>
+		stat(filePath, (err, stats: Stats) => err ? reject(err) : resolve(stats))
+	).catch(() => undefined);
+	return stats?.mtimeMs;
+}
+async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { dataPath:string; filePath:string; }) {
+	let core = await readJsonFile<SageCore<Type, Snowflake>>(filePath).catch(errorReturnUndefined) ?? undefined;
+	let updatedTs = core ? await getUpdateTs(filePath) : undefined;
+	let fileCount = 0;
+	const toDelete: { deletePath:string; reason:string; }[] = [];
+
+	if (core) {
+		const filePathSet = new Set<string>();
+		const filePathMeta: { filePath:string; core:SageCore<Type, Snowflake>; updatedTs:number; }[] = [];
+
+		const getOtherCore = async (id?: string) => {
+			if (!id) return;
+			const otherFilePath = `${dataPath}/${id}.json`;
+			if (!filePathSet.has(otherFilePath)) {
+				let otherCore: SageCore<Type, Snowflake> | undefined;
+				if (otherFilePath === filePath) {
+					// use initially loaded core
+					otherCore = core;
+				}else if (await fileExists(otherFilePath)) {
+					// go fetch duplicate
+					otherCore = await readJsonFile<SageCore<Type, Snowflake>>(otherFilePath).catch(errorReturnUndefined) ?? undefined;
+					if (!otherCore) {
+						toDelete.push({ deletePath:otherFilePath, reason:"invalid" });
+					}
+				}
+				if (otherCore) {
+					const otherUpdatedTs = otherCore.updatedTs ?? await getUpdateTs(otherFilePath);
+					if (otherUpdatedTs) {
+						filePathSet.add(otherFilePath);
+						filePathMeta.push({ filePath:otherFilePath, core:otherCore, updatedTs:otherUpdatedTs });
+					}
+				}
+			}
+		};
+
+		await getOtherCore(core.id);
+		await getOtherCore(core.did);
+		await getOtherCore(core.uuid);
+
+		fileCount = filePathSet.size;
+
+		// find index of newest core
+		let metaIndex = -1;
+		filePathMeta.forEach((meta, index) => {
+			if (metaIndex < 0 || (updatedTs && meta.updatedTs > updatedTs)) {
+				metaIndex = index;
+			}
+		});
+		// mark other cores for deletion and store newest core
+		filePathMeta.forEach((meta, index) => {
+			if (index === metaIndex) {
+				filePath = meta.filePath;
+				core = meta.core;
+			}else {
+				toDelete.push({ deletePath:meta.filePath, reason:"duplicate" });
+			}
+		});
+
+	}else {
+
+		// let's fail out
+		fileCount = 1;
+		toDelete.push({ deletePath:filePath, reason:"invalid" });
+
+	}
+
+	return { fileCount, toDelete, filePath, core };
+
+}
 
 async function processObjects<Type extends ObjectType>(objectType: Type, processor: Processor<Type>, yearArgs: string[]): Promise<void> {
 	const what = objectType + "s";
@@ -34,6 +112,8 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 	let updated = 0;
 	/** a second update pass changed the contents (this shouldn't happen) */
 	let updatedTwice = 0;
+	/** this object had more than 1 file */
+	let duplicatesDeleted = 0;
 
 	verbose(`ObjectType: ${what}`);
 	verbose(`  ${what} Path: ${objectRoot}`);
@@ -52,17 +132,40 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 		const files = await filterFiles(dataPath, { fileExt:"json", recursive:true });
 		verbose(`                 ... ${files.length} found.`)
 
+		const deletedSet = new Set<string>();
 		await forEachAsync(`    Updating ${child ? what + " " + child : what}`, files, async filePath => {
-			const oldCore = await readJsonFile<SageCore<Type, Snowflake>>(filePath).catch(errorReturnUndefined) ?? undefined;
+			// due to getNewestCore, we might delete a later item
+			if (deletedSet.has(filePath)) return;
 
-			// delete incomplete
+			// get newest core for the filePath
+			const meta = await getNewestCore({ dataPath, filePath });
+
+			// get the returned core
+			const oldCore = meta.core;
+
+			// update the filePath to match the returned core
+			filePath = meta.filePath;
+
+			// delete invalid/duplicate files
+			for (const { deletePath, reason } of meta.toDelete) {
+				if (reason === "invalid") {
+					unableToRead++;
+					await deleteFile(deletePath).catch(() => false);
+					deletedSet.add(deletePath);
+				}
+				if (reason === "duplicate") {
+					duplicatesDeleted++;
+					verbose(`        Deleting "${reason}" of ${filePath.split("/").pop()}: ${deletePath.split("/").pop()}; `);
+					await deleteFile(deletePath).catch(errorReturnFalse);
+					deletedSet.add(deletePath);
+				}
+			}
+
 			if (!oldCore) {
-				await deleteFile(filePath).catch(errorReturnFalse);
-				unableToRead++;
 				return;
 			}
 
-			// delete incomplete
+			// delete incomplete message
 			if (isMessage(oldCore, objectType) && !oldCore.characterId) {
 				await deleteFile(filePath).catch(errorReturnFalse);
 				missingCharacterId++;
@@ -119,7 +222,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 		});
 	}
 
-	verbose({ unableToRead, missingCharacterId, missingUserId, moved, targetExists, updated, updatedTwice });
+	verbose({ unableToRead, missingCharacterId, missingUserId, moved, targetExists, updated, updatedTwice, duplicatesDeleted });
 }
 
 async function main() {
