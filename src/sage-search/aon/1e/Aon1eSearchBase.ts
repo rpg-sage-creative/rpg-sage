@@ -1,20 +1,23 @@
-import { HasCore, RenderableContent, type Renderable, type SearchInfo, type SearchScore, type Searchable } from "@rsc-utils/core-utils";
-import { StringMatcher } from "@rsc-utils/core-utils";
+import { HasCore, RenderableContent, StringMatcher, type Renderable, type SearchInfo, type SearchScore, type Searchable } from "@rsc-utils/core-utils";
 import type { IHasName } from "../../../sage-pf2e/index.js";
-import type { TResultsLink } from "../index.js";
-import { createSearchResultUrl } from "./index.js";
+import { createAon1eSearchResultUrl } from "./createAon1eSearchResultUrl.js";
+import type { Aon1eGameSystemCode, Aon1eSearchResultsLink } from "./types.js";
 
 /**
- * temp solution for pf1 search results using the existing search output mechanism
+ * temp solution for 1e search results using the existing search output mechanism
  * ultimately this should house the results and not the categories ... but i wanna just get *A* solution first
  */
-export class AonPf1SearchBase
+export class Aon1eSearchBase
 	extends
-		HasCore<TResultsLink, string>
+		HasCore<Aon1eSearchResultsLink, string>
 	implements
 		IHasName,
 		Renderable,
 		Searchable {
+
+	public constructor(public gameSystem: Aon1eGameSystemCode, core: Aon1eSearchResultsLink) {
+		super(core);
+	}
 
 	// #region IHasName
 
@@ -46,8 +49,9 @@ export class AonPf1SearchBase
 	}
 
 	public toSearchResult(): string {
-		const category = this.searchResultCategory.replace("Magic Items - Wondrous Items", "Wondrous Items");
-		const url = createSearchResultUrl(this.core);
+		const category = this.searchResultCategory.replace("Magic Items - Wondrous Items", "Wondrous Items"); // PF1e
+		// const category = this.searchResultCategory; // SF1e
+		const url = createAon1eSearchResultUrl(this.gameSystem, this.core);
 		return `[aon] ${this.name} - ${category} <a href="${url}">(link)</a>`;
 	}
 

@@ -1,9 +1,12 @@
+import type { GameSystemCode } from "@rsc-sage/data-layer";
 import { capitalize, error, sortPrimitive, type Comparable, type SearchInfo, type SearchScore, type Searchable, type SortResult } from "@rsc-utils/core-utils";
 import { parseSources, type TParsedSource } from "../../data/Repository.js";
 import type { Base } from "./Base.js";
 import { HasSource, type SourcedCore, type TSourceInfo } from "./HasSource.js";
 import type { Source } from "./Source.js";
 import type { IHasArchives, IHasLink, IHasName } from "./interfaces.js";
+import type { GameSearchInfo } from "../../../sage-search/GameSearchInfo.js";
+import type { Aon2eGameSystemCode } from "../../../sage-search/aon/2e/types.js";
 
 /*
 From https://elasticsearch.galdiuz.com/aon/_search
@@ -48,15 +51,23 @@ From https://elasticsearch.galdiuz.com/aon/_search
                 }
 */
 
+type CreateLinkArgs = {
+	gameSystem: GameSystemCode;
+	url: string;
+	label: string;
+	noRedirect?: boolean;
+};
+
 /**
  * Creates an html link element for the given url and label.
  * If url starts with a / (slash) character, it gets sliced to remove duplicate / (slash) characters in final url.
  * If noRedirect is truthy, "&NoRedirect=1" is appended to the url.
  */
-function createLink(url: string, label: string, noRedirect?: boolean): string {
+function createAonLink({ gameSystem, url, label, noRedirect }: CreateLinkArgs): string {
+	const host = gameSystem === "PF2e" ? "2e.aonprd.com" : "2e.aonsrd.com";
 	while (url.startsWith("/")) url = url.slice(1);
 	const NoRedirect = noRedirect ? "&NoRedirect=1" : "";
-	return `<a href="https://2e.aonprd.com/${url}${NoRedirect}">${label}</a>`;
+	return `<a href="https://${host}/${url}${NoRedirect}">${label}</a>`;
 }
 
 /** cache regex for reuse */
@@ -112,7 +123,7 @@ export class AonBase
 		IHasName,
 		Searchable {
 
-	public constructor(protected core: AonBaseCore) {
+	public constructor(public readonly gameSystem: Aon2eGameSystemCode, protected core: AonBaseCore) {
 		super(hackCore(core));
 		this._objectType = capitalize(this.core.type);
 	}
@@ -169,8 +180,10 @@ export class AonBase
 	public toAonLink(label: string): string;
 	public toAonLink(searchResult: true): string;
 	public toAonLink(label?: boolean | string): string {
-		const thisUrl = this.core.url;
+		const { gameSystem } = this;
+		const createLink = (url: string, label: string, noRedirect?: boolean) => createAonLink({ gameSystem, url, label, noRedirect });
 
+		const thisUrl = this.core.url;
 		if (label === true) {
 			const { legacyId, remasterId } = this;
 			if (remasterId) {
@@ -237,7 +250,7 @@ export class AonBase
 
 	// #endregion
 
-	public static searchRecursive(core: AonBaseCore, searchInfo: SearchInfo): SearchScore<AonBase>[] {
-		return new AonBase(core).searchRecursive(searchInfo);
+	public static searchRecursive(core: AonBaseCore, searchInfo: GameSearchInfo<Aon2eGameSystemCode>): SearchScore<AonBase>[] {
+		return new AonBase(searchInfo.gameSystem, core).searchRecursive(searchInfo);
 	}
 }

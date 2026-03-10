@@ -1,23 +1,21 @@
-import { addCommas, RenderableContent, toSuperscript, type OrUndefined, type SearchScore } from "@rsc-utils/core-utils";
+import { addCommas, RenderableContent, toSuperscript, type OrUndefined } from "@rsc-utils/core-utils";
 import { AonBase } from "../../../sage-pf2e/model/base/AonBase.js";
 import type { Base } from "../../../sage-pf2e/model/base/Base.js";
 import type { HasSource } from "../../../sage-pf2e/model/base/HasSource.js";
 import type { Source } from "../../../sage-pf2e/model/base/Source.js";
 import type { GameSearchInfo } from "../../GameSearchInfo.js";
 import { SearchResults } from "../../SearchResults.js";
-import { createSearchUrl } from "./index.js";
-import type { TResponseData } from "./types.js";
+import { createAon2eSearchUrl } from "./createAon2eSearchUrl.js";
+import type { Aon2eGameSystemCode, Aon2eSearchResponseData, AonScore } from "./types.js";
 
-type TScore = SearchScore<Base>;
-
-function createClickableSearchLink(searchResults: Pf2eSearchResults, label: string): string {
-	const url = createSearchUrl(searchResults.searchInfo.searchText);
+function createClickableSearchLink(searchResults: Aon2eSearchResults, label: string): string {
+	const url = createAon2eSearchUrl(searchResults.searchInfo.gameSystem, searchResults.searchInfo.searchText);
 	return `<a href="${url}">${label}</a>`;
 }
 
-type TRenderableMeta = { hasCompScore:boolean; sources:Source[]; unicodeArray:string[]; unicodeIndex:number; };
+type RenderableMeta = { hasCompScore:boolean; sources:Source[]; unicodeArray:string[]; unicodeIndex:number; };
 
-function toSourceSuper(this: TRenderableMeta, source: Source): string {
+function toSourceSuper(this: RenderableMeta, source: Source): string {
 	if (source && !source.isCore) {
 		if (!this.sources.includes(source)) {
 			this.sources.push(source);
@@ -31,7 +29,7 @@ function isActionable(sage?: Base): sage is Base {
 	return sage?.hasDescription === true || sage?.hasDetails === true;
 }
 
-function scoreToLineItem(this: Pf2eSearchResults, meta: TRenderableMeta, score: TScore, scoreIndex: number): string {
+function scoreToLineItem(this: Aon2eSearchResults, meta: RenderableMeta, score: AonScore, scoreIndex: number): string {
 	const aonSearchable = this.searchables[scoreIndex],
 		sageSearchable = this.sageSearchables[scoreIndex],
 		searchable = sageSearchable ?? aonSearchable,
@@ -52,9 +50,9 @@ function sourceToFootnote(source: Source, sourceIndex: number): string {
 	return `<i>${toSuperscript(sourceIndex + 1)}${source.name}</i>`;
 }
 
-export class Pf2eSearchResults extends SearchResults<AonBase> {
-
-	public constructor(searchInfo: GameSearchInfo, responseData: TResponseData) {
+export class Aon2eSearchResults extends SearchResults<AonBase> {
+	declare public searchInfo: GameSearchInfo<Aon2eGameSystemCode>;
+	public constructor(searchInfo: GameSearchInfo<Aon2eGameSystemCode>, responseData: Aon2eSearchResponseData) {
 		super(searchInfo);
 		// this set tracks id/remasterId/legacyId so that we don't display the same item on two lines
 		const set = new Set<string>();
@@ -110,7 +108,8 @@ export class Pf2eSearchResults extends SearchResults<AonBase> {
 
 		const labelPrefix = this.objectType ? `${this.objectType} ` : ``;
 		const labelSuffix = this.searchInfo.keyTerm ? ` \\${this.searchInfo.keyTerm}` : ``;
-		const label = `Pathfinder 2e ${labelPrefix}Search Results for: \`${this.searchInfo.searchText + labelSuffix}\``;
+		const gameName = this.searchInfo.gameSystem === "SF2e" ? "Starfinder" : "Pathfinder";
+		const label = `${gameName} 2e ${labelPrefix}Search Results for: \`${this.searchInfo.searchText + labelSuffix}\``;
 
 		const title = hasComp || isEmpty ? `<b>${label}</b> not found!` : `<b>${label}</b>`;
 
@@ -140,7 +139,7 @@ export class Pf2eSearchResults extends SearchResults<AonBase> {
 		}
 
 
-		const meta: TRenderableMeta = {
+		const meta: RenderableMeta = {
 			hasCompScore: !!this.scores[0]?.compScore,
 			sources: [],
 			unicodeArray: this.getMenuUnicodeArray(),

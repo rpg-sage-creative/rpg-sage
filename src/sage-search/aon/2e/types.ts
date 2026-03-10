@@ -1,6 +1,12 @@
-//#region PostData
+import type { GameSystemCode } from "@rsc-sage/data-layer";
+import type { AonBase, AonBaseCore } from "../../../sage-pf2e/model/base/AonBase.js";
+import type { SearchScore } from "@rsc-utils/core-utils";
 
-import type { AonBaseCore } from "../../../sage-pf2e/model/base/AonBase.js";
+export type Aon2eGameSystemCode = GameSystemCode & ("PF2e" | "SF2e");
+
+export type AonScore = SearchScore<AonBase>;
+
+//#region PostData
 
 /*
 {
@@ -25,13 +31,13 @@ import type { AonBaseCore } from "../../../sage-pf2e/model/base/AonBase.js";
 }
 */
 
-type Tmpp = { match_phrase_prefix: { name: { query:string; } } };
-type Tmm = { multi_match: { query:string; type:"best_fields"; fields:["name","text^0.1","trait_raw","type"]; fuzziness:"auto"; } };
-type Tbm = { bool: { must?:Tmm[]; should?:Tmm[]; } };
-export type TPostData = {
+type mpp = { match_phrase_prefix: { name: { query:string; } } };
+type mm = { multi_match: { query:string; type:"best_fields"; fields:["name","text^0.1","trait_raw","type"]; fuzziness:"auto"; } };
+type bm = { bool: { must?:mm[]; should?:mm[]; } };
+export type Aon2eSearchPostData = {
 	query: {
 		bool: {
-			should: [Tmpp, Tbm];
+			should: [mpp, bm];
 			filter?: [ { terms: { type:string[] } } ];
 			must_not?: [ { terms: { type:string[] } } ];
 			minimum_should_match: 1;
@@ -109,18 +115,18 @@ export type TPostData = {
 }
 */
 
-export type TResponseData = {
+export type Aon2eSearchResponseData = {
 	took: number;
 	timed_out: boolean;
 	_shards: { total:number; successful:number; skipped:number; failed:number; };
 	hits: {
 		total: { value:number; relation:string; };
 		max_score: number;
-		hits: THit[];
+		hits: Hit[];
 	};
 };
 
-type THit = {
+type Hit = {
 	_index: string;
 	_type: string;
 	_id: string;

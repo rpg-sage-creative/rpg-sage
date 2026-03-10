@@ -1,37 +1,25 @@
-import { GameSystemType } from "@rsc-sage/data-layer";
-import { cleanWhitespace, error, oneToUS, sortPrimitive, StringMatcher, type SearchScore, type SortResult } from "@rsc-utils/core-utils";
+import { cleanWhitespace, error, oneToUS, sortPrimitive, StringMatcher, type SortResult } from "@rsc-utils/core-utils";
 import { getJson } from "@rsc-utils/io-utils";
-import type { AonBase } from "../../../sage-pf2e/model/base/AonBase.js";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
-import type { TParsedSearchInfo } from "../../common.js";
-import { Pf2eSearchResults } from "./Pf2eSearchResults.js";
-import type { TPostData, TResponseData } from "./types.js";
+import type { ParsedSearchInfo } from "../../common.js";
+import { Aon2eSearchResults } from "./Aon2eSearchResults.js";
+import { getAon2eSearchUrl } from "./getAon2eSearchUrl.js";
+import type { Aon2eGameSystemCode, Aon2eSearchPostData, Aon2eSearchResponseData, AonScore } from "./types.js";
 
-const PF2E_SEARCH_URL = `https://elasticsearch.aonprd.com/aon/_search`;
-
-function urlRoot() {
-	return "https://2e.aonprd.com/";
-}
-
-export function createSearchUrl(searchText: string): string | null {
-	const cleanSearchText = cleanWhitespace(searchText, { replacement:"+" });
-	return `${urlRoot()}Search.aspx?query=${cleanSearchText}`;
-}
-
-export async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnly: boolean): Promise<Pf2eSearchResults> {
-	const searchInfo = new GameSearchInfo(GameSystemType.PF2e, parsedSearchInfo.searchText, nameOnly ? "" : "g");
+export async function searchAon2e(gameSystem: Aon2eGameSystemCode, parsedSearchInfo: ParsedSearchInfo, nameOnly: boolean): Promise<Aon2eSearchResults> {
+	const searchInfo = new GameSearchInfo(gameSystem, parsedSearchInfo.searchText, nameOnly ? "" : "g");
 
 	const postDataShould = buildPostData(searchInfo.terms.map(term => oneToUS(term.term)), "should");
-	const responseShould = await getJson<TResponseData>(PF2E_SEARCH_URL, postDataShould).catch(e => error(e)! || null);
+	const responseShould = await getJson<Aon2eSearchResponseData>(getAon2eSearchUrl(gameSystem), postDataShould).catch(e => error(e)! || null);
 	// writeFileSync(`${getDataRoot(`cache/json`, true)}/pf2e.aon.search.json`, responseShould, true, true);
-	const searchResults = new Pf2eSearchResults(searchInfo, responseShould);
+	const searchResults = new Aon2eSearchResults(searchInfo, responseShould);
 	/** @todo run a "must" search before running a "should" search and splice the results with "must" results at the top */
 
 	//#region type shuffle
 
 	const types = ensurePlusMinusTypes(parsedSearchInfo.plusTypes, parsedSearchInfo.minusTypes);
 	const rarities = { plus:parsedSearchInfo.plusRarities, minus:parsedSearchInfo.minusRarities };
-	searchResults.scores.sort((a: TScore, b: TScore) => sortResults(a, b, types, rarities));
+	searchResults.scores.sort((a: AonScore, b: AonScore) => sortResults(a, b, types, rarities));
 
 	//#endregion
 
@@ -51,8 +39,9 @@ export async function searchAonPf2e(parsedSearchInfo: TParsedSearchInfo, nameOnl
 function cleanSpaces(terms: string | string[]): string {
 	return cleanWhitespace((Array.isArray(terms) ? terms.join(" ") : terms));
 }
-function buildPostData(terms: string[], shouldMust: "should" | "must"): TPostData {
-	const postData: TPostData = {
+
+function buildPostData(terms: string[], shouldMust: "should" | "must"): Aon2eSearchPostData {
+	const postData: Aon2eSearchPostData = {
 		query: {
 			bool: {
 				should: [
@@ -90,18 +79,16 @@ function buildPostData(terms: string[], shouldMust: "should" | "must"): TPostDat
 
 //#region SearchResults sorting
 
-type TScore = SearchScore<AonBase>;
-
 type TPlusMinus = { plus:string[]; minus:string[]; };
 
-const defaultPlusTypes = [] as string[];
+// const defaultPlusTypes = [] as string[];
 const defaultMinusTypes = ["item", "source", "rules", "creature"];
 
 function ensurePlusMinusTypes(plus: string[], minus: string[]): TPlusMinus {
 	// start with user plus list
-	plus = plus
+	// plus = plus
 		// add default plus list (excluding those in user plus/minus lists)
-		.concat(defaultPlusTypes.filter(type => !plus.includes(type) && !minus.includes(type)));
+		// .concat(defaultPlusTypes.filter(type => !plus.includes(type) && !minus.includes(type)));
 
 	// start with default list
 	minus = defaultMinusTypes
@@ -130,7 +117,7 @@ function sort(aValue: string, bValue: string, plusMinus: TPlusMinus, plus: boole
 }
 
 // function sortResults(a: TScore, b: TScore, types: TPlusMinus, rarities: TPlusMinus): TSortResult {
-function sortResults(a: TScore, b: TScore, types: TPlusMinus, _: TPlusMinus): SortResult {
+function sortResults(a: AonScore, b: AonScore, types: TPlusMinus, _: TPlusMinus): SortResult {
 	return sort(a.searchable.objectTypeLower, b.searchable.objectTypeLower, types, true)
 		// || sort(a.searchable.rarityLower, b.searchable.rarityLower, rarities, true)
 		// || sort(a.searchable.rarityLower, b.searchable.rarityLower, rarities, false)

@@ -1,4 +1,4 @@
-import { RenderableContent } from "@rsc-utils/core-utils";
+import { isNotBlank, RenderableContent } from "@rsc-utils/core-utils";
 import { type Base, RARITIES } from "../../../sage-pf2e/index.js";
 import type { SearchResults } from "../../../sage-search/SearchResults.js";
 import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common.js";
@@ -59,7 +59,8 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	const promise = sageMessage.sageCache.send(sageMessage.message.channel, `> Searching ${searchEngine.name}, please wait ...`, sageMessage.message.author);
 
 	// Parse the query
-	const parsedSearchInfo = parseSearchInfo(sageMessage.args.manager.raw(), RARITIES);
+	const nonBlankArgs = sageMessage.args.manager.raw().filter(isNotBlank);
+	const parsedSearchInfo = parseSearchInfo(nonBlankArgs, RARITIES);
 
 	// start the search
 	const searchResults = await searchEngine.search(parsedSearchInfo, nameOnly);
