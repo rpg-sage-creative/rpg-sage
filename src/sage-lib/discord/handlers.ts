@@ -1,6 +1,7 @@
 import { ghostEvent } from "@rsc-sage/env";
 import { debug, error, isNullOrUndefined, stringOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { isDiscordApiError, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SMessage, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { DialogTypeOrAliasRegExp } from "@rsc-utils/game-utils";
 import { ChannelType, MessageType as DMessageType, GatewayIntentBits, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
@@ -148,7 +149,7 @@ export function registerInteractionListener(tester: TInteractionTester, handler:
 export function registerMessageListener(tester: TMessageTester, handler: TMessageHandler, { type = MessageType.Post, command, ...options }: RegisterMessageOptions = { }): void {
 	command = (stringOrUndefined(command) ?? stringOrUndefined(tester.name) ?? handler.name).trim();
 	const keyRegex = command.toLowerCase().replace(/[-\s]+/g, "[\\-\\s]*");
-	const regex = RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
+	const regex = new RegExp(`^${keyRegex}(?:$|(\\s+(?:.|\\n)*?)$)`, "i");
 	registerListener({ which:"MessageListener", tester, handler, type, command, regex, ...options });
 }
 
@@ -282,8 +283,19 @@ function checkContentForUrls(content: string | null, urls: (string | null)[]) {
  * @param botTesterMessage
  */
 function isEditWeCanIgnore(oldMessage: MessageOrPartial, newMessage: Optional<MessageOrPartial>): boolean {
+	// no new message means not an edit, thus we can't ignore it
 	if (!newMessage) {
 		return false;
+	}
+
+	// if the new message has no content, we can't do anything with it
+	if (!newMessage.content) {
+		return true;
+	}
+
+	// currently, we only listen to edits so that we can catch a dialog post gone wrong that was fixed ...
+	if (!DialogTypeOrAliasRegExp.test(newMessage.content)) {
+		return true;
 	}
 
 	// Embedding images and website cards don't change the message content
@@ -344,8 +356,9 @@ function isMessageWeCanIgnore(message: MessageOrPartial): boolean {
 // function isMessageWeCanIgnore(message: MessageOrPartial, _originalMessage: Optional<MessageOrPartial>): boolean {
 	const { id, system, type, webhookId } = message;
 	return system || !!webhookId
+		|| (type !== DMessageType.Default && type !== DMessageType.Reply)
 		|| isDeleted(id as Snowflake)
-		|| (type !== null ? ![DMessageType.Default, DMessageType.Reply].includes(type) : false);
+		;
 }
 
 /** Combines all the is_X_WeCanIgnore methods for reuse. */
