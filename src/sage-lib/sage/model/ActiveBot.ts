@@ -74,10 +74,7 @@ export class ActiveBot extends Bot {
 
 		ActiveBot.client = client;
 
-		captureProcessExit(() => {
-			info("Destroying Discord.Client");
-			return ActiveBot.client.destroy();
-		});
+		captureProcessExit(() => ActiveBot.active.destroy());
 
 		// To see options, look for: Discord.ClientEvents (right click nav .on below)
 		client.once("clientReady", client => {
@@ -191,6 +188,12 @@ export class ActiveBot extends Bot {
 		// webhookUpdate: [channel: TextChannel | NewsChannel];
 
 		client.login(getToken());
+	}
+
+	public destroy() {
+		super.destroy();
+		info("Destroying Discord.Client");
+		return ActiveBot.client.destroy();
 	}
 
 	// onClientGuildDelete(guild: Guild): void {

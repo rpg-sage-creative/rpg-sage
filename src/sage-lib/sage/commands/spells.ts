@@ -1,10 +1,9 @@
-import { nth, toUniqueDefined, warn, type Optional } from "@rsc-utils/core-utils";
-import { capitalize } from "@rsc-utils/core-utils";
+import { capitalize, nth, toUniqueDefined, warn, type Optional } from "@rsc-utils/core-utils";
 import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e/index.js";
 import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";
-import { renderAll } from "./default.js";
+import { renderAll } from "./pf2e/renderAll.js";
 
 // #region Spell
 function reduceByLevel<T extends Spell<string, any>>(spells: T[]): T[][] {

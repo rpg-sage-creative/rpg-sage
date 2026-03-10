@@ -20,7 +20,7 @@ type Args = {
 	commands: Command[];
 
 	/** Listen to all? */
-	handler?: SageCommandHandler;
+	handler?: never;
 
 	/** List to slash commands? */
 	interaction?: SageCommandHandler | SageInteractionHandler;
@@ -30,7 +30,22 @@ type Args = {
 
 	/** Listen to reactions? */
 	reaction?: SageCommandHandler | SageReactionHandler;
-};
+} | {
+	/** Commands */
+	commands: Command[];
+
+	/** Listen to all? */
+	handler?: SageCommandHandler;
+
+	/** List to slash commands? */
+	interaction?: never;
+
+	/** Listen to posted messages? */
+	message?: never;
+
+	/** Listen to reactions? */
+	reaction?: never;
+}
 
 function createInteractionTester(command: Command) {
 	if (typeof(command) === "string") {

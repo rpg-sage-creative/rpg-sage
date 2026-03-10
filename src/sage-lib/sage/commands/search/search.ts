@@ -1,9 +1,11 @@
-import { isNotBlank, RenderableContent } from "@rsc-utils/core-utils";
-import { type Base, RARITIES } from "../../../sage-pf2e/index.js";
-import type { SearchResults } from "../../../sage-search/SearchResults.js";
-import { getSearchEngine, parseSearchInfo } from "../../../sage-search/common.js";
-import { deleteMessages } from "../../discord/deletedMessages.js";
-import type { SageMessage } from "../model/SageMessage.js";
+import { ArgsManager, isNotBlank, RenderableContent } from "@rsc-utils/core-utils";
+import { type Base, RARITIES } from "../../../../sage-pf2e/index.js";
+import type { SearchResults } from "../../../../sage-search/SearchResults.js";
+import { getSearchEngine, parseSearchInfo } from "../../../../sage-search/common.js";
+import { deleteMessages } from "../../../discord/deletedMessages.js";
+import { registerMessageListener } from "../../../discord/handlers.js";
+import type { TCommandAndArgs } from "../../../discord/types.js";
+import type { SageMessage } from "../../model/SageMessage.js";
 
 function theOneOrMatchToSage(searchResults: SearchResults<any>, match = false): Base | null {
 	const aon = searchResults.theOne ?? (match ? searchResults.theMatch : null);
@@ -23,7 +25,7 @@ async function invalidGame(sageMessage: SageMessage): Promise<void> {
 	unableSearchResults.append(`<code>sage! channel update gameSystem="PF2E"</code>`);
 	unableSearchResults.append(`<code>sage! game update gameSystem="PF2E"</code>`);
 	unableSearchResults.append(`<code>sage! server update gameSystem="PF2E"</code>`);
-	unableSearchResults.append(`<br/>Acceptable gameSystem values are:<ul><li>"PF" (Pathfinder)</li><li>"PF2E" (Pathfinder 2e)</li><li>"SF" (Starfinder)</li></ul>`);
+	unableSearchResults.append(`<br/>Acceptable gameSystem values are:<ul><li>"PF2E" (Pathfinder 2e)</li><li>"SF1E" (Starfinder)</li><li>"SF2E" (Starfinder 2e)</li></ul>`);
 	unableSearchResults.append(`<br/>${sageMessage.getLocalizer()("FOR_MORE_INFO_SEE")}`);
 	await sageMessage.sageCache.send(sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();
@@ -36,6 +38,18 @@ async function currentlyDisabled(sageMessage: SageMessage): Promise<void> {
 	unableSearchResults.append(`<br/>${sageMessage.getLocalizer()("FOR_MORE_INFO_JOIN")}`);
 	await sageMessage.sageCache.send(sageMessage.message.channel, unableSearchResults, sageMessage.message.author);
 	return Promise.resolve();
+}
+
+const SearchTestRegExp = /^\?[^!]\s*\w+/;
+function searchTester(sageMessage: SageMessage): TCommandAndArgs | null {
+	const slicedContent = sageMessage.slicedContent;
+	if (sageMessage.hasPrefix && SearchTestRegExp.test(slicedContent)) {
+		return {
+			command: "search",
+			args: ArgsManager.from(slicedContent.slice(1))
+		};
+	}
+	return null;
 }
 
 export async function searchHandler(sageMessage: SageMessage, nameOnly = false): Promise<void> {
@@ -76,4 +90,8 @@ export async function searchHandler(sageMessage: SageMessage, nameOnly = false):
 	await sageMessage.sageCache.send(sageMessage.message.channel, renderableToSend, sageMessage.message.author);
 
 	return Promise.resolve();
+}
+
+export function registerSearch(): void {
+	registerMessageListener(searchTester, searchHandler);
 }

@@ -5,13 +5,8 @@ import type { HasSource } from "../../../sage-pf2e/model/base/HasSource.js";
 import type { Source } from "../../../sage-pf2e/model/base/Source.js";
 import type { GameSearchInfo } from "../../GameSearchInfo.js";
 import { SearchResults } from "../../SearchResults.js";
-import { createAon2eSearchUrl } from "./createAon2eSearchUrl.js";
+import { createAon2eSearchLink } from "./createAon2eSearchLink.js";
 import type { Aon2eGameSystemCode, Aon2eSearchResponseData, AonScore } from "./types.js";
-
-function createClickableSearchLink(searchResults: Aon2eSearchResults, label: string): string {
-	const url = createAon2eSearchUrl(searchResults.searchInfo.gameSystem, searchResults.searchInfo.searchText);
-	return `<a href="${url}">${label}</a>`;
-}
 
 type RenderableMeta = { hasCompScore:boolean; sources:Source[]; unicodeArray:string[]; unicodeIndex:number; };
 
@@ -146,13 +141,15 @@ export class Aon2eSearchResults extends SearchResults<AonBase> {
 			unicodeIndex: 0
 		};
 
+		const { gameSystem, searchText } = this.searchInfo;
+
 		const content = this.createRenderable();
 		if (this.isEmpty) {
-			content.append(createClickableSearchLink(this, `Search Archives of Nethys Directly`));
+			content.append(createAon2eSearchLink(gameSystem, searchText, "Search Archives of Nethys Directly"));
 		}else {
 			content.append(...this.scores.slice(0, this.getMenuLength()).map((score, scoreIndex) => scoreToLineItem.call(this, meta, score, scoreIndex)));
 			content.append(...meta.sources.map(sourceToFootnote));
-			content.append(createClickableSearchLink(this, `View Results on Archives of Nethys`));
+			content.append(createAon2eSearchLink(gameSystem, searchText, "View Results on Archives of Nethys"));
 		}
 		return content;
 	}
