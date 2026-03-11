@@ -1,9 +1,9 @@
-import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type AutoChannelData, type DeckCore, type DeckType, type GameSystem, type SageCharacterCore } from "@rsc-sage/data-layer";
+import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type AutoChannelData, type DeckCore, type DeckType, type GameSystem, type SageCharacterCore, type SageMessageReferenceCore } from "@rsc-sage/data-layer";
 import { applyChanges, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { mkdirSync } from "fs";
+import { mkdirSync } from "node:fs";
 import { Condition } from "../../../gameSystems/Condition.js";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
@@ -14,7 +14,7 @@ import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/impo
 import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
-import { SageMessageReference, type SageMessageReferenceCore } from "../repo/SageMessageReference.js";
+import { SageMessageReference } from "../repo/SageMessageReference.js";
 import { CharacterManager } from "./CharacterManager.js";
 import { NoteManager } from "./NoteManager.js";
 import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
@@ -95,6 +95,7 @@ export type AutoChannelResult = {
 	char: GameCharacter;
 	data: AutoChannelData;
 };
+
 export class GameCharacter {
 	public equals(other: Optional<string | GameCharacter>): boolean {
 		if (!other) return false;
