@@ -12,28 +12,12 @@ export type SageCharacterCoreAny = SageCharacterCore | SageCharacterCoreOld;
 export type SageCharacterCoreOld = Omit<SageCharacterCore, "companions" | "lastMessages"> & {
 	/** @deprecated */
 	aka?: string;
-	alias?: string;
-	autoChannels?: AutoChannelData[];
-	avatarUrl?: string;
 	companions?: SageCharacterCoreOld[];
-	decks?: DeckCore[];
-	embedColor?: HexColorString;
-	essence20?: unknown;
-	essence20Id?: string;
-	hephaistos?: unknown;
-	hephaistosId?: string;
 	/** @deprecated */
 	iconUrl?: string;
 	lastMessages?: SageMessageReferenceCoreOld[];
-	macros?: MacroBase[];
-	name: string;
 	/** @deprecated */
 	nameLower?: string;
-	notes?: Note[];
-	pathbuilder?: unknown;
-	pathbuilderId?: string;
-	tokenUrl?: string;
-	userDid?: Snowflake;
 };
 
 export type SageCharacterCore = SageCore<"Character", Snowflake> & {
@@ -53,6 +37,7 @@ export type SageCharacterCore = SageCore<"Character", Snowflake> & {
 	notes?: Note[];
 	pathbuilder?: unknown;
 	pathbuilderId?: string;
+	tags?: string[];
 	tokenUrl?: string;
 	userDid?: Snowflake;
 };
@@ -78,6 +63,7 @@ export const SageCharacterCoreKeys: (keyof SageCharacterCore)[] = [
 	"objectType",
 	"pathbuilder",
 	"pathbuilderId",
+	"tags",
 	"tokenUrl",
 	"userDid",
 	"uuid",
@@ -131,6 +117,7 @@ export function assertSageCharacterCore(core: unknown): core is SageCharacterCor
 		// validate that character ? ? ?
 	}
 	if ("pathbuilder" in core && "pathbuilderId" in core) warn("both pathbuilder and pathbuilderId");
+	if (!assertArray({ core, objectType, key:"tags", optional, validator:isNotBlank })) return false;
 	if (!assertString({ core, objectType, key:"tokenUrl", optional, validator:isUrl })) return false;
 	if (!assertString({ core, objectType, key:"userDid", optional, validator:isNonNilSnowflake })) return false;
 	// uuid
