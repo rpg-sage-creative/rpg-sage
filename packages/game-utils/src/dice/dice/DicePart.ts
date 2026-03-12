@@ -1,5 +1,5 @@
 import { DiceOutputType } from "@rsc-sage/data-layer";
-import { randomSnowflake, type TokenData } from "@rsc-utils/core-utils";
+import { generateSnowflake, type TokenData } from "@rsc-utils/core-utils";
 import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
 import { cleanDicePartDescription } from "../cleanDicePartDescription.js";
 import { hasSecretFlag } from "../hasSecretFlag.js";
@@ -210,7 +210,7 @@ export class DicePart<
 		return this.fromCore({
 			objectType: "DicePart",
 			gameType: this.GameType,
-			id: randomSnowflake(),
+			id: generateSnowflake(),
 
 			children: undefined!,
 			count: args.count ?? 0,

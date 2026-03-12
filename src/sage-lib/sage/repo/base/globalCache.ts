@@ -1,4 +1,4 @@
-import { error, errorReturnFalse, errorReturnUndefined, getCodeName, getDataRoot, isNonNilSnowflake, isNonNilUuid, randomSnowflake, toLiteral, verbose, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { error, errorReturnFalse, errorReturnUndefined, generateSnowflake, getCodeName, getDataRoot, isNonNilSnowflake, isNonNilUuid, toLiteral, verbose, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 
 type CacheItemObjectType = "Game" | "Server" | "User";
@@ -219,7 +219,7 @@ export async function globalCachePut<T extends GlobalCacheItem>(item: T): Promis
 	if (!itemId) {
 		/** @todo when can i ensure this will never be called !? */
 		error(`globalCachePut(${toLiteral(key)}, ${toLiteral(toGlobalCacheItem(item))})`);
-		itemId = randomSnowflake();
+		itemId = generateSnowflake();
 		item.id = itemId;
 	}
 

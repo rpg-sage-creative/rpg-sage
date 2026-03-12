@@ -1,4 +1,4 @@
-import { capitalize, error, errorReturnFalse, errorReturnUndefined, forEachAsync, getDataRoot, randomSnowflake, tagLiterals, verbose } from "@rsc-utils/core-utils";
+import { capitalize, error, errorReturnFalse, errorReturnUndefined, forEachAsync, generateSnowflake, getDataRoot, tagLiterals, verbose } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { assertSageGameCore, assertSageMessageReferenceCore, assertSageServerCore, assertSageUserCore, type SageUserCore } from "../../types/index.js";
 import type { CacheItemKey, DataMode, GlobalCacheItem } from "../types.js";
@@ -181,7 +181,7 @@ export class ObjectCache<Key extends CacheItemKey, CacheItem extends GlobalCache
 		if (!itemId) {
 			/** @todo when can i ensure this will never be called !? */
 			error(tagLiterals`GlobalCache.ObjectCache.put(${this.key}, ${simplifyForLogging(item)})`);
-			itemId = randomSnowflake();
+			itemId = generateSnowflake();
 			item.id = itemId;
 		}
 

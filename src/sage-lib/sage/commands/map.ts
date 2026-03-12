@@ -55,7 +55,7 @@ export function registerMap(): void {
 // 		auras: [],
 // 		clip: clip as [number, number, number, number],
 // 		grid: [sageInteraction.getNumber("cols", true), sageInteraction.getNumber("rows", true)],
-// 		id: randomSnowflake(),
+// 		id: generateSnowflake(),
 // 		messageId: undefined!,
 // 		name: sageInteraction.getString("name", true),
 // 		spawn: spawn as [number, number],
@@ -182,7 +182,7 @@ export function registerMap(): void {
 
 // 	const image: TGameMapImage = {
 // 		auras: [],
-// 		id: randomSnowflake(),
+// 		id: generateSnowflake(),
 // 		layer: LayerType[layerValue],
 // 		name: sageInteraction.args.getString("name")!,
 // 		pos: [

@@ -1,5 +1,5 @@
 import { DiceOutputType, DiceSecretMethodType, type DiceCriticalMethodType } from "@rsc-sage/data-layer";
-import { isBoolean, randomSnowflake, tokenize, type TokenData } from "@rsc-utils/core-utils";
+import { generateSnowflake, isBoolean, tokenize, type TokenData } from "@rsc-utils/core-utils";
 import { isGradeFailure } from "../grade.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
 import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
@@ -64,7 +64,7 @@ export class DiceGroup<
 		return new this({
 			objectType: "DiceGroup",
 			gameType: this.GameType,
-			id: randomSnowflake(),
+			id: generateSnowflake(),
 
 			children: dice.map(_dice => _dice.toJSON()),
 			criticalMethodType: args.criticalMethodType,

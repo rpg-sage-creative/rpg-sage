@@ -1,4 +1,4 @@
-import { StringMatcher, debug, dequote, isNonNilSnowflake, randomSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { StringMatcher, debug, dequote, generateSnowflake, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import type { Guild } from "discord.js";
 import { regex } from "regex";
 import { COL, LayerType, ROW, type TGameMapAura, type TGameMapCore, type TGameMapImage } from "./GameMapBase.js";
@@ -145,7 +145,7 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 		auras: [],
 		clip: clip as [number, number, number, number],
 		grid: [cols, rows, gridColor],
-		id: randomSnowflake(),
+		id: generateSnowflake(),
 		name: name,
 		spawn: spawn as [number, number],
 		terrain: [],
@@ -184,7 +184,7 @@ function mapSectionTo<T extends TGameMapImage>(lines: string[], layerType: Layer
 
 	return {
 		auras: [],
-		id: randomSnowflake(),
+		id: generateSnowflake(),
 		layer: layerType,
 		name,
 		pos,

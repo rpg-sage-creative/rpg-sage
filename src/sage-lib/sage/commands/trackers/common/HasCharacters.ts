@@ -1,4 +1,4 @@
-import { escapeRegex, randomSnowflake } from "@rsc-utils/core-utils";
+import { escapeRegex, generateSnowflake } from "@rsc-utils/core-utils";
 import { CharacterShell, type CharacterShellCore } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
@@ -34,7 +34,7 @@ export abstract class HasCharacters<Core extends HasCharactersCore> {
 
 	public addChar(char: GameCharacter, nickname= char.name): CharacterShell {
 		const gameCharacterId = char.id;
-		const id = randomSnowflake();
+		const id = generateSnowflake();
 		const type = char.type;
 
 		let suffixIndex = -1;

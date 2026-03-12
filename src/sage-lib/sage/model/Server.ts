@@ -128,7 +128,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 	// 	const diceSecretMethodType = _diceSecretMethodType ?? this.defaultDiceSecretMethodType;
 	// 	const game = new Game({
 	// 		objectType: "Game",
-	// 		id: randomSnowflake(),
+	// 		id: generateSnowflake(),
 	// 		serverDid: this.did,
 	// 		serverId: this.id,
 	// 		createdTs: new Date().getTime(),

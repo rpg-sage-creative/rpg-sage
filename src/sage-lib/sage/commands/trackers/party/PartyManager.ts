@@ -1,4 +1,4 @@
-import { randomSnowflake, type Optional } from "@rsc-utils/core-utils";
+import { generateSnowflake, type Optional } from "@rsc-utils/core-utils";
 import type { CharacterShellCore } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";
 import { Manager } from "../common/Manager.js";
@@ -11,7 +11,7 @@ export class PartyManager extends Manager<PartyCore, Party> {
 	}
 
 	protected createCore(name: string): PartyCore {
-		return { characters:[], id:randomSnowflake(), name };
+		return { characters:[], id:generateSnowflake(), name };
 	}
 
 	protected wrap(core: PartyCore): Party {
@@ -22,7 +22,7 @@ export class PartyManager extends Manager<PartyCore, Party> {
 		const characters = this.game.playerCharacters.map(pc => {
 			return {
 				gameCharacterId: pc.id,
-				id: randomSnowflake(),
+				id: generateSnowflake(),
 				label: pc.name,
 				nickname: pc.name,
 				type: "pc"
@@ -30,7 +30,7 @@ export class PartyManager extends Manager<PartyCore, Party> {
 		});
 		const core = {
 			characters,
-			id: randomSnowflake(),
+			id: generateSnowflake(),
 			name: "Player Characters",
 			// type: "pc"
 		};

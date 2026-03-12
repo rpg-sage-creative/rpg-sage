@@ -1,4 +1,4 @@
-import { isDefined, randomSnowflake, type Optional } from "@rsc-utils/core-utils";
+import { generateSnowflake, isDefined, type Optional } from "@rsc-utils/core-utils";
 import type { SageInteraction } from "../../model/SageInteraction.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { GameMap } from "./GameMap.js";
@@ -77,7 +77,7 @@ export function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage
 					tokensToAdd.push({
 						auras: [],
 						characterId: char.id,
-						id: randomSnowflake(),
+						id: generateSnowflake(),
 						layer: LayerType.Token,
 						name: charName,
 						pos: gameMap.spawn ?? [1,1],

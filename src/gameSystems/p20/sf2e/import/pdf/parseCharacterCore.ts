@@ -1,4 +1,4 @@
-import { capitalize, randomSnowflake, type Optional } from "@rsc-utils/core-utils";
+import { capitalize, generateSnowflake, type Optional } from "@rsc-utils/core-utils";
 import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
 import { parseSize } from "../../../import/pathbuilder-2e/parseSize.js";
 import type { PathbuilderCharacterCore, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../import/pathbuilder-2e/types.js";
@@ -252,7 +252,7 @@ export function parseCharacterCore(mgr: PdfJsonFieldManager, pdfKeyMap: PdfKeyMa
 	, "str") as keyof typeof abilities;
 	return {
 		objectType: "P20Character",
-		id: randomSnowflake(),
+		id: generateSnowflake(),
 		name: mgr.getValue("name") ?? undefined,
 		class: mgr.getValue("class", ""),
 		dualClass: null,

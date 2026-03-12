@@ -1,4 +1,4 @@
-import { EphemeralMap, error, errorReturnFalse, errorReturnNull, randomSnowflake, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { EphemeralMap, error, errorReturnFalse, errorReturnUndefined, generateSnowflake, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { createActionRow, getActionRows } from "@rsc-utils/discord-utils";
 import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Message } from "discord.js";
 import type { SageCommand } from "../sage/model/SageCommand.js";
@@ -15,7 +15,7 @@ type NonLinkButtonBuilder = ButtonBuilder & { data:APIButtonComponentWithCustomI
 function createButtons(buttons: TPromptButton[]): NonLinkButtonBuilder[] {
 	return buttons.map(button => {
 		const messageButton = new ButtonBuilder();
-		messageButton.setCustomId(randomSnowflake());
+		messageButton.setCustomId(generateSnowflake());
 		messageButton.setLabel(button.label);
 		messageButton.setStyle(button.style);
 		return messageButton as NonLinkButtonBuilder;
@@ -92,7 +92,7 @@ async function sendPromptMessage(args: PromptArgs): Promise<PromptMessageSentDat
 	const components = [buttonRow];
 
 	// send message
-	const message = await dChannel.send({ content, embeds, components }).catch(errorReturnNull);
+	const message = await dChannel.send({ content, embeds, components }).catch(errorReturnUndefined);
 	if (message) {
 		// map button data only if successful
 		const buttons = args.buttons.map(({ label, data }, index) => {

@@ -1,5 +1,5 @@
 import type { CardBase, DeckCore, DeckType } from "@rsc-sage/data-layer";
-import { capitalize, randomSnowflake, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { capitalize, generateSnowflake, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { randomItems, shuffle } from "@rsc-utils/random-utils";
 import { getCards } from "./decks/getCards.js";
 
@@ -250,7 +250,7 @@ export class Deck {
 		const core: DeckCore = {
 			cardCount: cards.length,
 			drawPile,
-			id: randomSnowflake(),
+			id: generateSnowflake(),
 			name: type,
 			objectType: "Deck",
 			type,

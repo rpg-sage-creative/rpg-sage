@@ -1,5 +1,5 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
-import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, randomSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, generateSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
 import { DiceDropKeep, DiceDropKeepType, cleanDicePartDescription, removeDesc, type DiceDropKeepData } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
@@ -357,7 +357,7 @@ export class DicePart<T extends DicePartCore, U extends TDicePartRoll> extends H
 		return new DicePart({
 			objectType: "DicePart",
 			gameType: GameSystemType.None,
-			id: randomSnowflake(),
+			id: generateSnowflake(),
 
 			count: count ?? 0,
 			description: cleanDicePartDescription(description),
@@ -452,7 +452,7 @@ export class DicePartRoll<T extends DicePartRollCore, U extends TDicePart> exten
 		return {
 			objectType: "DicePartRoll",
 			gameType,
-			id: randomSnowflake(),
+			id: generateSnowflake(),
 			dice: dicePart.toJSON(),
 			rolls
 		};
@@ -538,7 +538,7 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 		return new Dice({
 			objectType: "Dice",
 			gameType: GameSystemType.None,
-			id: randomSnowflake(),
+			id: generateSnowflake(),
 			diceParts: diceParts.map<DicePartCore>(Dice.toJSON)
 		});
 	}
@@ -675,7 +675,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			objectType: "DiceRoll",
 			gameType: GameSystemType.None,
 			//Quick rolls can never be reloaded, so we don't need a UUID
-			id: uuid ? randomSnowflake() : null!,
+			id: uuid ? generateSnowflake() : null!,
 			dice: _dice.toJSON(),
 			rolls: _dice.diceParts.map<DicePartRollCore>(mapRollToJson)
 		};
@@ -745,7 +745,7 @@ export class DiceGroup<T extends DiceGroupCore, U extends TDice, V extends TDice
 		return new DiceGroup({
 			objectType: "DiceGroup",
 			gameType: GameSystemType.None,
-			id: randomSnowflake(),
+			id: generateSnowflake(),
 			critMethodType: critMethodType,
 			dice: _dice.map<DiceCore>(DiceGroup.toJSON),
 			diceOutputType: diceOutputType,
@@ -851,7 +851,7 @@ export class DiceGroupRoll<T extends DiceGroupRollCore, U extends TDiceGroup, V 
 			objectType: "DiceGroupRoll",
 			gameType: GameSystemType.None,
 			//Quick rolls can never be reloaded, so we don't need a UUID
-			id: uuid ? randomSnowflake() : null!,
+			id: uuid ? generateSnowflake() : null!,
 			diceGroup: diceGroup.toJSON(),
 			rolls: diceGroup.dice.map<DiceRollCore>(mapRollToJson)
 		});

@@ -1,4 +1,4 @@
-import { HasCore, randomSnowflake, type Core, type Snowflake } from "@rsc-utils/core-utils";
+import { HasCore, generateSnowflake, type Core, type Snowflake } from "@rsc-utils/core-utils";
 import { randomItem, rollDie } from "@rsc-utils/random-utils";
 import { ARCANE, DASH, DIVINE, OCCULT, PRIMAL, type TMagicTradition } from "../common.js";
 import { filter, findByValue } from "../data/Repository.js";
@@ -73,7 +73,7 @@ export class Spellbook extends HasCore<SpellbookCore> {
 	public constructor(spells: SpellCollection);
 	public constructor(spells?: any) {
 		super(<any>{ spells: new SpellCollection(spells) });
-		this.id = `Spellbook${DASH}${randomSnowflake()}`;
+		this.id = `Spellbook${DASH}${generateSnowflake()}`;
 	}
 
 	/**************************************************************************************************************************/

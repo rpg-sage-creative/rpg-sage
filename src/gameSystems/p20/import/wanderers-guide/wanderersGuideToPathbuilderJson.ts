@@ -1,5 +1,4 @@
-import { debug, randomSnowflake, type Optional, type UUID } from "@rsc-utils/core-utils";
-import { capitalize } from "@rsc-utils/core-utils";
+import { capitalize, debug, generateSnowflake, type Optional, type UUID } from "@rsc-utils/core-utils";
 import { Ability } from "../../../d20/lib/Ability.js";
 import { Skill } from "../../lib/Skill.js";
 import { parseSize } from "../pathbuilder-2e/parseSize.js";
@@ -485,7 +484,7 @@ export function wanderersGuideToPathbuilderJson(json: any): PathbuilderCharacter
 		const proficiencies = parseProficiencies(content);
 		return {
 			objectType: "P20Character",
-			id: randomSnowflake(),
+			id: generateSnowflake(),
 			name: character.name,
 			class: details.class.name,
 			dualClass: null,

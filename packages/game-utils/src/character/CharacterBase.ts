@@ -1,5 +1,5 @@
 import type { GameSystemCode } from "@rsc-sage/data-layer";
-import { HasIdCore, randomSnowflake, StringMatcher, type IdCore, type Optional } from "@rsc-utils/core-utils";
+import { generateSnowflake, HasIdCore, StringMatcher, type IdCore, type Optional } from "@rsc-utils/core-utils";
 import type { DiceMacroBase, MacroBase } from "../dice/index.js";
 
 type MessageReference = { channelId:string; guildId:string|undefined; messageId:string|undefined; };
@@ -59,7 +59,7 @@ export abstract class CharacterBase<
 	public constructor(core: Core) {
 		super(updateCore(core));
 		if (!core.id) {
-			core.id = randomSnowflake();
+			core.id = generateSnowflake();
 		}
 	}
 

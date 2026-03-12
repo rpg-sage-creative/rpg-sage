@@ -1,4 +1,4 @@
-import { randomSnowflake } from "@rsc-utils/core-utils";
+import { generateSnowflake } from "@rsc-utils/core-utils";
 import { CharacterShell } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";
 import { Manager } from "../common/Manager.js";
@@ -11,7 +11,7 @@ export class EncounterManager extends Manager<EncounterCore, Encounter> {
 	}
 
 	protected createCore(name: string): EncounterCore {
-		return { characters:[], id:randomSnowflake(), name };
+		return { characters:[], id:generateSnowflake(), name };
 	}
 
 	public findActiveChar(name: string): CharacterShell | undefined {
