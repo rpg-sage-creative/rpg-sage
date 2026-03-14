@@ -110,6 +110,7 @@
 		"release": "pnpm dev-scripts create-release",
 		"refresh-tags": "pnpm dev-scripts refresh-tags",
 		"deploy-sage": "pnpm dev-scripts deploy",
+		"deploy:beta": "git checkout beta && git merge develop && git push && git checkout develop && pnpm dev-scripts deploy beta",
 		"prestart": "pnpm run '/^start::.*/'",
 		"start::env": "pnpm dev-scripts write-env-json local",
 		"start::build": "pnpm build",
