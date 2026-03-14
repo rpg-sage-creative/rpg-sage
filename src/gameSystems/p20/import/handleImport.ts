@@ -6,7 +6,8 @@ import { fetchCores } from "./fetchCore.js";
 export async function handleImport(sageCommand: SageCommand): Promise<void> {
 	const id = sageCommand.args.getNumber("id");
 	if (id) {
-		return sageCommand.whisper(`
+		const content =
+`
 We are sorry, but importing your character directly from Pathbuilder 2e is disabled. Due to recent DDOS attacks against them, they were forced to change their site. Until we are able to work with them to support a safe way to import directly, we can only support manual imports.
 ### Steps to import manually:
 1. open your browser to <https://pathbuilder2e.com/json.php?id=${id}>
@@ -17,15 +18,16 @@ We are sorry, but importing your character directly from Pathbuilder 2e is disab
   - any name will do, as long as it ends with \`.json\`
   - for simplicity, you can use \`${id}.json\`
 4. paste all the json into the file
-  - Win ctrl + v
   - macOS cmd + v
+  - Win ctrl + v
 5. start a new discord message
   - drag/drop or attach the file to the message
   - for Pathfinder 2e, type: \`sage! import pf2e\`
   - for Starfinder 2e, type: \`sage! import sf2e\`
 6. send the message to trigger an import
 -# *for more help, visit us at <https://discord.gg/rpgsage>*
-		`);
+`;
+    return sageCommand.replyStack.whisper({ content, ephemeral:true });
 	}
 	return _handleImport(sageCommand, { fetchCores, postCharacter });
 }
