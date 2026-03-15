@@ -9,7 +9,7 @@
 	},
 	"dependencies": {
 		"@rsc-sage/data-layer": "workspace:*",
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.4.0",
+		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.6.0",
 		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.1"
 	},
 	"scripts": {
