@@ -97,8 +97,8 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 			const buildTs = repoInfo?.build?.birthtimeMs || repoInfo?.build?.ctimeMs || 0;
 			if (buildTs) {
 				const date = new Date(buildTs);
-				lines.push(`**buildDate** \`${date.toISOString()}\``);
-				lines.push(`**buildDateRelative** ${toDiscordDate(date, "R")}`);
+				lines.push(`**build** ${toDiscordDate(date, "R")}`);
+				lines.push(`- UTC \`${date.toISOString()}\``);
 			}else {
 				lines.push("**buildDate** `unknown`");
 			}
