@@ -1,4 +1,4 @@
-import { errorReturnFalse, errorReturnNull, getDataRoot, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnFalse, errorReturnNull, formatDataFilePath, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { RenderableGameMap } from "./RenderableGameMap.js";
 
@@ -97,7 +97,7 @@ export type TGameMapCore = {
 
 /** returns path to the json file */
 function getMapFilePath(messageId: Snowflake): string {
-	return `${getDataRoot("sage")}/maps/${messageId}.json`;
+	return formatDataFilePath(["sage", "maps"], messageId);
 }
 
 export abstract class GameMapBase {

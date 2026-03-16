@@ -1,5 +1,5 @@
 import type { EmbedColorType, EmojiType, GameSystemType, HasEmbedColors, HasEmoji, MacroBase } from "@rsc-sage/data-layer";
-import { errorReturnFalse, getCodeName, getDataRoot, HasIdCore, warn, type CodeName, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
+import { errorReturnFalse, formatDataFilePath, getCodeName, HasIdCore, warn, type CodeName, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
 import { fileExists, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { Colors, type HasColorsCore } from "./Colors.js";
 import { Emojis, type HasEmojiCore } from "./Emojis.js";
@@ -93,10 +93,10 @@ export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCo
 	}
 
 	public static async readOrCreate(id: Snowflake): Promise<Bot | undefined> {
-		const botPath = `${getDataRoot("sage")}/bots/${id}.json`;
+		const botPath = formatDataFilePath(["sage", "bots"], id);
 		const exists = await fileExists(botPath);
 		if (!exists) {
-			const botTemplatePath = `${getDataRoot("sage")}/bots/bot.template.json`;
+			const botTemplatePath = formatDataFilePath(["sage", "bots"], "bot.template.json");
 			const templateCore = await readJsonFile<BotCore>(botTemplatePath);
 			if (templateCore) {
 				templateCore.id = id;
@@ -109,7 +109,7 @@ export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCo
 	}
 
 	public static async write(bot: BotCore | Bot): Promise<boolean> {
-		const botPath = `${getDataRoot("sage")}/bots/${bot.id}.json`;
+		const botPath = formatDataFilePath(["sage", "bots"], bot.id);
 		const formatted = bot.codeName === "dev";
 		const core = "toJSON" in bot ? bot.toJSON() : bot;
 		return writeFile(botPath, core, { makeDir:true, formatted }).catch(errorReturnFalse);

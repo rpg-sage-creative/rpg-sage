@@ -1,4 +1,4 @@
-import { getDataRoot, isBlank, isHexColorString, isNonNilSnowflake, isNotBlank, isValidId, warn, warnReturnUndefined, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { formatDataFilePath, isBlank, isHexColorString, isNonNilSnowflake, isNotBlank, isValidId, warn, warnReturnUndefined, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { fileExistsSync, isUrl } from "@rsc-utils/io-utils";
 import { assertArray, assertSageCore, assertSimpleObject, assertString, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, ensureIds, isAutoChannelData, isMacroBase, optional, renameProperty, tagFailure, type EnsureContext, } from "../validation/index.js";
 import { assertDeckCore, ensureDeckCore, type DeckCore } from "./DeckCore.js";
@@ -126,11 +126,15 @@ export function assertSageCharacterCore(core: unknown): core is SageCharacterCor
 }
 
 function importFileExists(which: "e20" | "heph" | "pb2e", id: Optional<string>): boolean {
-	const filePath = getDataRoot(`sage/${which}/${id}.json`);
+	if (!id) return false;
+
+	const filePath = formatDataFilePath(["sage", which], id);
+
 	if (!fileExistsSync(filePath)) {
 		warn(`Missing ${which} file: ${filePath}`);
 		return false;
 	}
+
 	return true;
 }
 
