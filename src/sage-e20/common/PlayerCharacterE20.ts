@@ -1,4 +1,4 @@
-import { errorReturnFalse, getDataRoot, isDefined, numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import { errorReturnFalse, formatDataFilePath, isDefined, numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import type { StatResults } from "@rsc-utils/game-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/game-utils";
 import { fileExistsSync, writeFile } from "@rsc-utils/io-utils";
@@ -350,15 +350,18 @@ export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> exten
 	}
 
 	public static createFilePath(characterId: string): string {
-		return `${getDataRoot("sage")}/e20/${characterId}.json`;
+		return formatDataFilePath(["sage", "e20"], characterId);
 	}
+
 	public static exists(characterId: string): boolean {
 		return fileExistsSync(PlayerCharacterE20.createFilePath(characterId));
 	}
+
 	public static async saveCharacter(character: PlayerCharacterE20<any> | PlayerCharacterCoreE20): Promise<boolean> {
 		const json = "toJSON" in character ? character.toJSON() : character;
 		return writeFile(PlayerCharacterE20.createFilePath(character.id), json, { makeDir:true }).catch(errorReturnFalse);
 	}
+
 	public async save(): Promise<boolean> {
 		return PlayerCharacterE20.saveCharacter(this);
 	}

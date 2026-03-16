@@ -253,8 +253,9 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 }
 
 export async function loadData(): Promise<void> {
-	const pf2DataPath = `${getDataRoot("pf2e")}`.replace(/\/+/g, "/");
-	const files: string[] = await filterFiles(pf2DataPath, file => file.endsWith(".json"), true)
+	const pf2DataPath = getDataRoot("pf2e");
+
+	const files: string[] = await filterFiles(pf2DataPath, { fileExt:"json", recursive:true })
 		.catch(errorReturnEmptyArray);
 	if (!files.length) {
 		warn(`No files in "${pf2DataPath}" ...`);

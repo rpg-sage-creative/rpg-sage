@@ -1,4 +1,4 @@
-import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, getDataRoot, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, formatDataFilePath, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { CharacterBase, type DiceMacroBase, type StatResults } from "@rsc-utils/game-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
@@ -1227,11 +1227,13 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 	//#region save/load
 
 	public static createFilePath(characterId: string): string {
-		return `${getDataRoot("sage")}/pb2e/${characterId}.json`;
+		return formatDataFilePath(["sage", "pb2e"], characterId);
 	}
+
 	public static exists(characterId: string): boolean {
 		return fileExistsSync(PathbuilderCharacter.createFilePath(characterId));
 	}
+
 	public static loadCharacterSync(characterId: string): PathbuilderCharacter | undefined {
 		try {
 			const core = readJsonFileSync<TPathbuilderCharacter>(PathbuilderCharacter.createFilePath(characterId));
@@ -1240,14 +1242,17 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			return errorReturnUndefined(ex);
 		}
 	}
+
 	public static async loadCharacter(characterId: string): Promise<PathbuilderCharacter | null> {
 		const core = await readJsonFile<TPathbuilderCharacter>(PathbuilderCharacter.createFilePath(characterId)).catch(errorReturnUndefined);
 		return core ? new PathbuilderCharacter(core) : null;
 	}
+
 	public static async saveCharacter(character: TPathbuilderCharacter | PathbuilderCharacter): Promise<boolean> {
 		const json = "toJSON" in character ? character.toJSON() : character;
-		return writeFile(PathbuilderCharacter.createFilePath(character.id), json, { makeDir:true }).catch(errorReturnFalse);
+		return writeFile(PathbuilderCharacter.createFilePath(character.id), json).catch(errorReturnFalse);
 	}
+
 	public async save(): Promise<boolean> {
 		return PathbuilderCharacter.saveCharacter(this);
 	}

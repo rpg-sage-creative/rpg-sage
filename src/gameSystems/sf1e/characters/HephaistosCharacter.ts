@@ -1,4 +1,4 @@
-import { addCommas, errorReturnFalse, errorReturnUndefined, getDataRoot, type Optional } from "@rsc-utils/core-utils";
+import { addCommas, errorReturnFalse, errorReturnUndefined, formatDataFilePath, type Optional } from "@rsc-utils/core-utils";
 import { CharacterBase, type DiceMacroBase, type MacroBase } from "@rsc-utils/game-utils";
 import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability } from "../../d20/lib/Ability.js";
@@ -489,15 +489,18 @@ export class HephaistosCharacterSF1e extends CharacterBase<HephaistosCharacterCo
 	}
 
 	public static createFilePath(characterId: string): string {
-		return `${getDataRoot("sage")}/heph/${characterId}.json`;
+		return formatDataFilePath(["sage", "heph"], characterId);
 	}
+
 	public static exists(characterId: string): boolean {
 		return fileExistsSync(HephaistosCharacterSF1e.createFilePath(characterId));
 	}
+
 	public static async loadCharacter(characterId: string): Promise<HephaistosCharacterSF1e | null> {
 		const core = await readJsonFile<HephaistosCharacterCoreSF1e>(HephaistosCharacterSF1e.createFilePath(characterId)).catch(errorReturnUndefined);
 		return core ? new HephaistosCharacterSF1e(core) : null;
 	}
+
 	public static loadCharacterSync(characterId: string): HephaistosCharacterSF1e | undefined {
 		try {
 			const core = readJsonFileSync<HephaistosCharacterCoreSF1e>(HephaistosCharacterSF1e.createFilePath(characterId));
@@ -506,6 +509,7 @@ export class HephaistosCharacterSF1e extends CharacterBase<HephaistosCharacterCo
 			return errorReturnUndefined(ex);
 		}
 	}
+
 	public static getCharacterSections<SectionType, ViewType>(view: Optional<ViewType>): SectionType[] | undefined {
 		switch(view) {
 			case "All": return ["All"] as SectionType[];
@@ -518,4 +522,5 @@ export class HephaistosCharacterSF1e extends CharacterBase<HephaistosCharacterCo
 		}
 		return undefined;
 	}
+
 }
