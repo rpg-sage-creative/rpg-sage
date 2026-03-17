@@ -1,4 +1,4 @@
-import { DataTable, type CacheItemObjectType, type GlobalCacheItem } from "@rsc-sage/data-layer";
+import { DataTable, type BaseCacheItem, type CacheItemObjectType } from "@rsc-sage/data-layer";
 import { debug, EphemeralMap, error, getDataRoot, isNonNilSnowflake, isNonNilUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { Game, type GameCore } from "../../model/Game.js";
 import { GameCharacter, type GameCharacterCore } from "../../model/GameCharacter.js";
@@ -68,7 +68,7 @@ export class IdRepository<
 
 	//#region Entities
 
-	public async find<CacheItem extends GlobalCacheItem<Type>>(objectType: Type, tester: (core: CacheItem) => unknown): Promise<Entity | undefined> {
+	public async find<CacheItem extends BaseCacheItem<Type>>(objectType: Type, tester: (core: CacheItem) => unknown): Promise<Entity | undefined> {
 		const entities = this.cached;
 
 		const cachedEntity = entities.find(entity => entity.objectType === objectType && tester(entity.toJSON() as CacheItem));

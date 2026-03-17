@@ -2,14 +2,14 @@ import { forEachAsync, getDataRoot, tagLiterals, verbose } from "@rsc-utils/core
 import { DdbRepo, filterFiles } from "@rsc-utils/io-utils";
 import { basename } from "node:path";
 import type { DataTable } from "../DataTable.js";
-import type { DataMode, GlobalCacheItem } from "../types.js";
+import type { BaseCacheItem, DataMode } from "../types.js";
 
 export type PopulateHandler = (
 	dataTable: DataTable<any>,
 ) => Promise<boolean>;
 
 export async function populateFromBoth<
-	CacheItem extends GlobalCacheItem = GlobalCacheItem
+	CacheItem extends BaseCacheItem = BaseCacheItem
 >(
 	dataTable: DataTable<any>,
 ): Promise<boolean> {
@@ -24,7 +24,7 @@ export async function populateFromBoth<
 }
 
 export async function populateFromDdb<
-	CacheItem extends GlobalCacheItem = GlobalCacheItem
+	CacheItem extends BaseCacheItem = BaseCacheItem
 >(
 	dataTable: DataTable<any>,
 ): Promise<boolean> {
@@ -66,7 +66,7 @@ export async function populateFromDdb<
 }
 
 export async function populateFromDdbFirst<
-	CacheItem extends GlobalCacheItem = GlobalCacheItem
+	CacheItem extends BaseCacheItem = BaseCacheItem
 >(
 	dataTable: DataTable<any>,
 ): Promise<boolean> {
@@ -80,7 +80,7 @@ export async function populateFromDdbFirst<
 }
 
 export async function populateFromFile<
-	CacheItem extends GlobalCacheItem = GlobalCacheItem
+	CacheItem extends BaseCacheItem = BaseCacheItem
 >(
 	dataTable: DataTable<any>,
 ): Promise<boolean> {
@@ -120,7 +120,7 @@ export async function populateFromFile<
 }
 
 export async function populateFromFileFirst<
-	CacheItem extends GlobalCacheItem = GlobalCacheItem
+	CacheItem extends BaseCacheItem = BaseCacheItem
 >(
 	dataTable: DataTable<any>,
 ): Promise<boolean> {

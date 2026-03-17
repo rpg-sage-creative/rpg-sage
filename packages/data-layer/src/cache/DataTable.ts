@@ -4,7 +4,7 @@ import { getPopulateHandler, type PopulateHandler } from "./internal/getPopulate
 import { getReadHandler, type ReadHandler } from "./internal/getReadHandler.js";
 import { getWriteHandler, type WriteHandler } from "./internal/getWriteHandler.js";
 import { simplifyCacheItem, simplifyForLogging } from "./internal/simplify.js";
-import type { CacheItemObjectType, CacheItemTableName, CharacterCacheItem, DataMode, GameCacheItem, GlobalCacheItem } from "./types.js";
+import type { BaseCacheItem, CacheItemObjectType, CacheItemTableName, CharacterCacheItem, DataMode, GameCacheItem } from "./types.js";
 import { objectTypeToTableName } from "./types.js";
 
 type DataTableConfigItem = {
@@ -22,7 +22,7 @@ type DataTableConfigItem = {
 type UncachedDataTable<
 	ObjectType extends CacheItemObjectType,
 	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
-	CacheItem extends GlobalCacheItem<ObjectType> = GlobalCacheItem<ObjectType>
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>
 > = {
 	tableName: TableName;
 	fetch<Core extends CacheItem>(item: CacheItem): Promise<Core | undefined>;
@@ -32,7 +32,7 @@ type UncachedDataTable<
 type CachedDataTable<
 	ObjectType extends CacheItemObjectType,
 	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
-	CacheItem extends GlobalCacheItem<ObjectType> = GlobalCacheItem<ObjectType>
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>
 > = UncachedDataTable<ObjectType, TableName, CacheItem> & {
 	filter<Core extends CacheItem>(predicate: (core: Core) => unknown): CacheItem[];
 	find<Core extends CacheItem>(predicate: (core: Core) => unknown): CacheItem | undefined;
@@ -47,7 +47,7 @@ type CachedDataTable<
 export class DataTable<
 	ObjectType extends CacheItemObjectType,
 	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
-	CacheItem extends GlobalCacheItem<ObjectType> = GlobalCacheItem<ObjectType>
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>
 > {
 
 	//#region instance
@@ -123,7 +123,7 @@ export class DataTable<
 	}
 
 	/**
-	 * Returns the in memory globally cached GlobalCacheItem array that matches the filter.
+	 * Returns the in memory globally cached BaseCacheItem array that matches the filter.
 	 * It is expected that if you need an instance of the item that you will use ObjectCache.fetch().
 	*/
 	public filter<Core extends CacheItem>(predicate: (core: Core) => unknown): CacheItem[] {
@@ -146,7 +146,7 @@ export class DataTable<
 	}
 
 	/**
-	 * Returns the in memory globally cached GlobalCacheItem that matches the filter.
+	 * Returns the in memory globally cached BaseCacheItem that matches the filter.
 	 * It is expected that if you need an instance of the item that you will use ObjectCache.fetch().
 	*/
 	public find<Core extends CacheItem>(predicate: (core: Core) => unknown): CacheItem | undefined {
@@ -167,7 +167,7 @@ export class DataTable<
 	}
 
 	/**
-	 * Returns the in memory globally cached GlobalCacheItem by id.
+	 * Returns the in memory globally cached BaseCacheItem by id.
 	 * It is expected that if you need an instance of the item that you will use ObjectCache.fetch().
 	 */
 	public get(id: string): CacheItem | undefined {
@@ -220,7 +220,11 @@ export class DataTable<
 		return true;
 	}
 
-	/** returns the item that was removed */
+	/**
+	 * Attempts to remove the item in cache with the given id.
+	 * @param id id of the item to remove
+	 * @returns the item removed or undefined
+	 */
 	public remove(id: string): CacheItem | undefined {
 		if (!this.isCached) return undefined;
 

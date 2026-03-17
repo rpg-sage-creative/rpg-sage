@@ -2,13 +2,11 @@ export type CacheItemObjectType = "Character" | "Game" | "Message" | "Server" | 
 
 export type CacheItemTableName = Lowercase<`${CacheItemObjectType}s`>;
 
-export type CacheKey = CacheItemObjectType | CacheItemTableName;
-
 /** ddb and file should be the only options when this is done; the others are for testing */
 export type DataMode = "both" | "ddb" | "ddb-first" | "file" | "file-first";
 
 /** The most basic form of global in memory cache items. */
-export type GlobalCacheItem<ObjectType extends CacheItemObjectType = CacheItemObjectType> = {
+export type BaseCacheItem<ObjectType extends CacheItemObjectType = CacheItemObjectType> = {
 	/** @deprecated drop after all objects have been updated to point to snowflake ids */
 	did?: string;
 	id: string;
@@ -18,7 +16,7 @@ export type GlobalCacheItem<ObjectType extends CacheItemObjectType = CacheItemOb
 	uuid?: string;
 };
 
-export type CharacterCacheItem = GlobalCacheItem<"Character"> & {
+export type CharacterCacheItem = BaseCacheItem<"Character"> & {
 	alias?: string;
 	gameId?: string;
 	name: string;
@@ -26,7 +24,7 @@ export type CharacterCacheItem = GlobalCacheItem<"Character"> & {
 };
 
 /** The global in memory cache item used for Games. */
-export type GameCacheItem = GlobalCacheItem<"Game"> & {
+export type GameCacheItem = BaseCacheItem<"Game"> & {
 	archivedTs?: number;
 	channels?: {
 		/** @deprecated */

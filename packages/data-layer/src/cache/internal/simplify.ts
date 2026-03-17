@@ -1,19 +1,19 @@
-import type { CharacterCacheItem, GameCacheItem, GlobalCacheItem } from "../types.js";
+import type { BaseCacheItem, CharacterCacheItem, GameCacheItem } from "../types.js";
 
-type AnyCacheItem = GlobalCacheItem | GameCacheItem | CharacterCacheItem;
+type AnyCacheItem = BaseCacheItem | GameCacheItem | CharacterCacheItem;
 
 /**
  * @internal
  * Simplifies the given object to a basic form for caching in memory and still enabling some properties to be searched.
  */
 export function simplifyCacheItem<
-	Core extends GlobalCacheItem,
-	CacheItem extends GlobalCacheItem,
+	Core extends BaseCacheItem,
+	CacheItem extends BaseCacheItem,
 >(
 	core: Core
 ): CacheItem {
 
-	// GlobalCacheItem
+	// BaseCacheItem
 	let { did, id, objectType, updatedTs, uuid, } = core;
 
 	// GameCacheItem
@@ -29,7 +29,7 @@ export function simplifyCacheItem<
 	users = users?.map(({ did }) => ({ did }));
 
 	return {
-		// GlobalCacheItem
+		// BaseCacheItem
 		did, id, objectType, updatedTs, uuid,
 
 		// GameCacheItem
@@ -46,8 +46,8 @@ export function simplifyCacheItem<
  * Creates an in memory cache item that is purely ids and objectType. (Mostly used for logging output.)
  */
 export function simplifyForLogging(
-	item: GlobalCacheItem
-): GlobalCacheItem {
+	item: BaseCacheItem
+): BaseCacheItem {
 
 	const { id, did, uuid, objectType } = item;
 	return { id, did, uuid, objectType };

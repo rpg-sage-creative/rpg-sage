@@ -1,17 +1,17 @@
 import { errorReturnFalse } from "@rsc-utils/core-utils";
 import { writeFile } from "@rsc-utils/io-utils";
 import type { DataTable } from "../DataTable.js";
-import type { CacheItemObjectType, DataMode, GlobalCacheItem } from "../types.js";
+import type { BaseCacheItem, CacheItemObjectType, DataMode } from "../types.js";
 import { getJsonPath } from "./getJsonPath.js";
 
 export type WriteHandler = (
 	dataTable: DataTable<CacheItemObjectType>,
-	item: GlobalCacheItem,
+	item: BaseCacheItem,
 ) => Promise<boolean>;
 
 async function writeToBoth(
 	dataTable: DataTable<CacheItemObjectType>,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ): Promise<boolean> {
 
 	const toDdb = await writeToDdb(dataTable, item);
@@ -22,7 +22,7 @@ async function writeToBoth(
 
 async function writeToDdb(
 	dataTable: DataTable<CacheItemObjectType>,
-	item: GlobalCacheItem,
+	item: BaseCacheItem,
 ): Promise<boolean> {
 
 	dataTable;
@@ -33,7 +33,7 @@ async function writeToDdb(
 
 async function writeToDdbFirst(
 	dataTable: DataTable<CacheItemObjectType>,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ): Promise<boolean> {
 
 	const toDdb = await writeToDdb(dataTable, item);
@@ -44,7 +44,7 @@ async function writeToDdbFirst(
 
 async function writeToFile(
 	dataTable: DataTable<CacheItemObjectType>,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ): Promise<boolean> {
 
 	const path = getJsonPath(dataTable.tableName, item.id);
@@ -55,7 +55,7 @@ async function writeToFile(
 
 async function writeToFileFirst(
 	dataTable: DataTable<CacheItemObjectType>,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ): Promise<boolean> {
 
 	const toFile = await writeToFile(dataTable, item);

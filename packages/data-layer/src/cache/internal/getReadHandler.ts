@@ -1,20 +1,20 @@
 import { areEqual, debug, error, noop, warn, type OrUndefined } from "@rsc-utils/core-utils";
 import { DdbRepo, readJsonFile } from "@rsc-utils/io-utils";
-import type { CacheItemTableName, DataMode, GlobalCacheItem } from "../types.js";
+import type { BaseCacheItem, CacheItemTableName, DataMode } from "../types.js";
 import { getJsonPath } from "./getJsonPath.js";
 
 export type ReadHandler<
-	T extends GlobalCacheItem
+	T extends BaseCacheItem
 > = (
 	tableName: CacheItemTableName,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ) => Promise<T | undefined>;
 
 async function readFromBoth<
-	T extends GlobalCacheItem
+	T extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ): Promise<OrUndefined<T>> {
 
 	const ddbStart = Date.now();
@@ -42,10 +42,10 @@ async function readFromBoth<
 }
 
 async function readFromDdb<
-	T extends GlobalCacheItem
+	T extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ): Promise<OrUndefined<T>> {
 
 	const ddbRepo = new DdbRepo(DdbRepo.DdbClientConfig);
@@ -60,10 +60,10 @@ async function readFromDdb<
 }
 
 async function readFromDdbFirst<
-	T extends GlobalCacheItem
+	T extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ): Promise<OrUndefined<T>> {
 
 	const fromDdb = await readFromDdb<T>(tableName, item);
@@ -74,10 +74,10 @@ async function readFromDdbFirst<
 }
 
 async function readFromFile<
-	T extends GlobalCacheItem
+	T extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ): Promise<OrUndefined<T>> {
 
 	// read by id first
@@ -101,10 +101,10 @@ async function readFromFile<
 }
 
 async function readFromFileFirst<
-	T extends GlobalCacheItem
+	T extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
-	item: GlobalCacheItem
+	item: BaseCacheItem
 ): Promise<OrUndefined<T>> {
 
 	const fromFile = await readFromFile<T>(tableName, item);
@@ -116,7 +116,7 @@ async function readFromFileFirst<
 
 /** @internal */
 export function getReadHandler<
-	CacheItem extends GlobalCacheItem
+	CacheItem extends BaseCacheItem
 >(
 	dataMode: DataMode
 ): ReadHandler<CacheItem> {

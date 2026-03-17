@@ -5,9 +5,9 @@ import { assertSageGameCore } from "../../types/SageGameCore.js";
 import { assertSageMessageReferenceCore } from "../../types/SageMessageReferenceCore.js";
 import { assertSageServerCore } from "../../types/SageServerCore.js";
 import { assertSageUserCore } from "../../types/SageUserCore.js";
-import { objectTypeToTableName, type CacheItemObjectType, type GlobalCacheItem } from "../types.js";
+import { objectTypeToTableName, type BaseCacheItem, type CacheItemObjectType } from "../types.js";
 
-export async function validate<CacheItem extends GlobalCacheItem = GlobalCacheItem>(objectType: CacheItemObjectType, yearArgs?: string[]): Promise<boolean> {
+export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(objectType: CacheItemObjectType, yearArgs?: string[]): Promise<boolean> {
 	const errors: string[] = [];
 	const invalid: string[] = [];
 	let fileCount = 0;
