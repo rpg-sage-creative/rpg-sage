@@ -1,6 +1,5 @@
-import type { SageMessageReferenceCore } from "@rsc-sage/data-layer";
-import { error, errorReturnFalse, errorReturnUndefined, getDataRoot, snowflakeToDate, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { DataTable, type SageMessageReferenceCore } from "@rsc-sage/data-layer";
+import { error, errorReturnUndefined, noop, snowflakeToDate, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { Message, MessageReference, PartialMessage } from "discord.js";
 
 type ReadOptions = {
@@ -15,12 +14,6 @@ type WriteArgs = {
 };
 
 type MessageResolvable = Message | PartialMessage | MessageReference;
-
-function createFilePath(messageId: string): string {
-	const root = getDataRoot("sage/messages");
-	const year = snowflakeToDate(messageId as Snowflake).getFullYear();
-	return `${root}/${year}/${messageId}.json`;
-}
 
 export class SageMessageReference {
 	public constructor(private readonly core: SageMessageReferenceCore) { }
@@ -70,15 +63,23 @@ export class SageMessageReference {
 			return undefined;
 		}
 
-		const filePath = createFilePath(messageId);
-		const catcher = options?.ignoreMissingFile ? () => undefined : errorReturnUndefined;
-		const core = await readJsonFile<SageMessageReferenceCore>(filePath).catch(catcher) ?? undefined;
+		const messageTable = DataTable.for("Message");
+
+		const catcher = options?.ignoreMissingFile
+			? noop
+			: errorReturnUndefined;
+
+		const core = await messageTable
+			.fetch<SageMessageReferenceCore>({ objectType:"Message", id:messageId })
+			.catch(catcher);
 
 		return core ? new SageMessageReference(core) : undefined;
 	}
 
 	public static async write({ characterId, gameId, messages, userId }: WriteArgs): Promise<SageMessageReference | undefined> {
 		let lastCore: SageMessageReferenceCore | undefined;
+
+		const messageTable = DataTable.for("Message");
 
 		// grab all the message ids first
 		const messageIds = messages.map(msg => msg.id as Snowflake);
@@ -104,8 +105,7 @@ export class SageMessageReference {
 			};
 
 			// attempt to save and track the last core
-			const filePath = createFilePath(message.id);
-			const success = await writeFile(filePath, core).catch(errorReturnFalse);
+			const success = await messageTable.write(core);
 			if (success) {
 				lastCore = core;
 			}

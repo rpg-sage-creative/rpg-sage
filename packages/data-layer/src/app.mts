@@ -1,13 +1,12 @@
 import { initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
-import { GlobalCache } from "./cache/GlobalCache.js";
+import { DataTable } from "./cache/DataTable.js";
 
 initializeConsoleUtilsByEnvironment();
 
 async function main() {
-	const globalCache = GlobalCache.initialize();
-	await globalCache.populate("servers");
-	await globalCache.populate("games");
-	await globalCache.populate("users");
+	await DataTable
+		.initialize()
+		.populate();
 }
 
 // make sure we don't trigger this with an index.ts include

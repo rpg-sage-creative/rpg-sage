@@ -1,7 +1,8 @@
 import { errorReturnFalse, errorReturnUndefined, forEachAsync, getDataRoot, initializeConsoleUtilsByEnvironment, stringifyJson, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { stat, Stats } from "node:fs";
-import { ensureSageGameCore, ensureSageMessageReferenceCore, ensureSageServerCore, ensureSageUserCore, type EnsureContext, type SageCore, type SageMessageReferenceCore } from "./index.js";
+import { basename, join } from "node:path";
+import { ensureSageGameCore, ensureSageMessageReferenceCore, ensureSageServerCore, ensureSageUserCore, objectTypeToTableName, type EnsureContext, type SageCore, type SageMessageReferenceCore } from "./index.js";
 
 initializeConsoleUtilsByEnvironment();
 
@@ -18,11 +19,12 @@ type Processor<
 	> = (object: any, context?: EnsureContext) => Core;
 
 async function getUpdateTs(filePath: string): Promise<number | undefined> {
-	const stats = await new Promise<Stats>((resolve, reject) =>
-		stat(filePath, (err, stats: Stats) => err ? reject(err) : resolve(stats))
-	).catch(() => undefined);
+	const { promise, resolve, reject } = Promise.withResolvers<Stats>();
+	stat(filePath, (err, stats: Stats) => err ? reject(err) : resolve(stats));
+	const stats = await promise.catch(() => undefined);
 	return stats?.mtimeMs;
 }
+
 async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { dataPath:string; filePath:string; }) {
 	let core = await readJsonFile<SageCore<Type, Snowflake>>(filePath).catch(errorReturnUndefined) ?? undefined;
 	let updatedTs = core ? await getUpdateTs(filePath) : undefined;
@@ -35,12 +37,16 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 
 		const getOtherCore = async (id?: string) => {
 			if (!id) return;
+
 			const otherFilePath = `${dataPath}/${id}.json`;
 			if (!filePathSet.has(otherFilePath)) {
+
 				let otherCore: SageCore<Type, Snowflake> | undefined;
+
 				if (otherFilePath === filePath) {
 					// use initially loaded core
 					otherCore = core;
+
 				}else if (await fileExists(otherFilePath)) {
 					// go fetch duplicate
 					otherCore = await readJsonFile<SageCore<Type, Snowflake>>(otherFilePath).catch(errorReturnUndefined) ?? undefined;
@@ -48,6 +54,7 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 						toDelete.push({ deletePath:otherFilePath, reason:"invalid" });
 					}
 				}
+
 				if (otherCore) {
 					const otherUpdatedTs = otherCore.updatedTs ?? await getUpdateTs(otherFilePath);
 					if (otherUpdatedTs) {
@@ -55,6 +62,7 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 						filePathMeta.push({ filePath:otherFilePath, core:otherCore, updatedTs:otherUpdatedTs });
 					}
 				}
+
 			}
 		};
 
@@ -71,6 +79,7 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 				metaIndex = index;
 			}
 		});
+
 		// mark other cores for deletion and store newest core
 		filePathMeta.forEach((meta, index) => {
 			if (index === metaIndex) {
@@ -94,9 +103,9 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 }
 
 async function processObjects<Type extends ObjectType>(objectType: Type, processor: Processor<Type>, yearArgs: string[]): Promise<void> {
-	const what = objectType + "s";
+	const tableName = objectTypeToTableName(objectType);
 
-	const objectRoot = getDataRoot(`sage/${what.toLowerCase()}`);
+	const objectRoot = getDataRoot(["sage", tableName]);
 
 	/** cannot read the file */
 	let unableToRead = 0;
@@ -115,25 +124,26 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 	/** this object had more than 1 file */
 	let duplicatesDeleted = 0;
 
-	verbose(`ObjectType: ${what}`);
-	verbose(`  ${what} Path: ${objectRoot}`);
+	verbose(`ObjectType: ${objectType}`);
+	verbose(`  ${objectType} Path: ${objectRoot}`);
 
 	const children = objectType === "Message" ? yearArgs : [""];
 	if (children[0]) {
-		verbose(`  ${what} Children: ${children}`);
+		verbose(`  ${objectType} Children: ${children}`);
 	}
+
 	for (const child of children) {
-		const dataPath = child ? `${objectRoot}/${child}` : objectRoot;
+		const dataPath = child ? join(objectRoot, child) : objectRoot;
 		if (child) {
-			verbose(`  ${what} ${child} Path: ${dataPath}`);
+			verbose(`  ${objectType} ${child} Path: ${dataPath}`);
 		}
 
-		verbose(`  Counting ${what} ...`);
+		verbose(`  Counting ${objectType} ...`);
 		const files = await filterFiles(dataPath, { fileExt:"json", recursive:true });
 		verbose(`                 ... ${files.length} found.`)
 
 		const deletedSet = new Set<string>();
-		await forEachAsync(`    Updating ${child ? what + " " + child : what}`, files, async filePath => {
+		await forEachAsync(`    Updating ${child ? objectType + " " + child : objectType}`, files, async filePath => {
 			// due to getNewestCore, we might delete a later item
 			if (deletedSet.has(filePath)) return;
 
@@ -155,7 +165,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 				}
 				if (reason === "duplicate") {
 					duplicatesDeleted++;
-					verbose(`        Deleting "${reason}" of ${filePath.split("/").pop()}: ${deletePath.split("/").pop()}; `);
+					verbose(`        Deleting "${reason}" of ${basename(filePath)}: ${basename(deletePath)}; `);
 					await deleteFile(deletePath).catch(errorReturnFalse);
 					deletedSet.add(deletePath);
 				}

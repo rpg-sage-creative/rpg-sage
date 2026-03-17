@@ -1,25 +1,25 @@
 import { initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
-import { GlobalCache } from "./cache/GlobalCache.js";
+import { validate } from "./cache/internal/validate.js";
+import { type CacheItemObjectType, isCacheItemObjectType, isCacheItemTableName, tableNameToObjectType } from "./cache/types.js";
 
 initializeConsoleUtilsByEnvironment();
 
-type ObjectType = typeof ObjectTypes[number];
-const ObjectTypes = ["games", "messages", "servers", "users"] as const;
-function isObjectType(value: unknown): value is ObjectType {
-	return ObjectTypes.includes(value as ObjectType);
-}
-
 async function main() {
-	const globalCache = GlobalCache.initialize();
+	// const globalCache = GlobalCache.initialize();
 
-	const objectTypeArgs = process.argv.filter(isObjectType);
+	const objectTypes = new Set<CacheItemObjectType>();
+
+	process.argv.forEach(arg => {
+		if (isCacheItemObjectType(arg)) objectTypes.add(arg);
+		if (isCacheItemTableName(arg)) objectTypes.add(tableNameToObjectType(arg));
+	});
 
 	const years = ["2021", "2022", "2023", "2024", "2025", "2026"];
 	const yearArgs = process.argv.filter(arg => years.includes(arg));
 	if (!yearArgs.length) yearArgs.push(...years);
 
-	for (const objectType of objectTypeArgs) {
-		await globalCache.validate(objectType, yearArgs);
+	for (const objectType of objectTypes) {
+		await validate(objectType, yearArgs);
 	}
 }
 

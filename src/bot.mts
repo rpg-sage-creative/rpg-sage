@@ -1,3 +1,4 @@
+import { DataTable } from "@rsc-sage/data-layer";
 import { getSageId } from "@rsc-sage/env";
 import { error, getEndpoint, getPort, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
 import { DiscordCache } from "@rsc-utils/discord-utils";
@@ -5,7 +6,6 @@ import { RenderableMap } from "@rsc-utils/map-utils";
 import { registerPromptHandler } from "./sage-lib/discord/prompts.js";
 import { registerCommandHandlers } from "./sage-lib/sage/commands/index.js";
 import { ActiveBot } from "./sage-lib/sage/model/ActiveBot.js";
-import { globalCachePopulate } from "./sage-lib/sage/repo/base/globalCache.js";
 import { registerAndLoadPf2eData } from "./sage-pf2e/index.js";
 
 initializeConsoleUtilsByEnvironment();
@@ -45,9 +45,9 @@ registerPromptHandler();
 
 await registerAndLoadPf2eData();
 
-globalCachePopulate("servers");
-globalCachePopulate("users");
-globalCachePopulate("games");
+await DataTable
+	.initialize()
+	.populate();
 
 ActiveBot.load(bot);
 

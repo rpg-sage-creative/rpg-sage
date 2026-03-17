@@ -18,7 +18,8 @@ type BotCore = { codeName:string; id:string; };
 
 async function main() {
 	const codeName = getCodeName();
-	const botCore = await findJsonFile(getDataRoot("sage/bots"), { contentFilter:(core: BotCore) => core.codeName === codeName });
+	const botsPath = getDataRoot(["sage", "bots"]);
+	const botCore = await findJsonFile(botsPath, { contentFilter:(core: BotCore) => core.codeName === codeName });
 
 	if (!botCore) {
 		error(`Unable to find Bot: ${codeName}`);
