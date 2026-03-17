@@ -57,7 +57,9 @@ export class SageMessageReference {
 	}
 
 	public static async read(resolvable: MessageResolvable, options?: ReadOptions): Promise<SageMessageReference | undefined> {
-		const messageId = "id" in resolvable ? resolvable.id : resolvable.messageId;
+		const messageId = "id" in resolvable
+			? resolvable.id as Snowflake
+			: resolvable.messageId as Snowflake;
 		if (!messageId) {
 			error(`DialogMessageRepository.read(): resolvable doesn't have message id`);
 			return undefined;
