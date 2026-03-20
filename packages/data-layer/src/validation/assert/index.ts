@@ -4,6 +4,7 @@ export * from "./assertIds.js";
 export * from "./assertNumber.js";
 export * from "./assertObject.js";
 export * from "./assertObjectType.js";
+export * from "./assertRecord.js";
 export * from "./assertSageCore.js";
 export * from "./assertSimpleObject.js";
 export * from "./assertString.js";

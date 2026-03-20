@@ -2,11 +2,11 @@ import { debug } from "@rsc-utils/core-utils";
 import { tagFailure } from "../index.js";
 import type { AssertArgs } from "./types.js";
 
-function simplifyArray(key: any, value: any[]): any[] {
+function simplifyArray(key: any, array: any[]): any[] {
 	if (["playerCharacters","nonPlayerCharacters"].includes(key)) {
-		return [`${value.length} ${key}`];
+		return [`${array.length} ${key}`];
 	}
-	return value;
+	return array;
 }
 
 type AssertArrayArgs<Core, Type> = AssertArgs<Core, Type> & {
@@ -17,26 +17,26 @@ export function assertArray<Core, Type>(args: AssertArrayArgs<Core, Type>): bool
 	const { asserter, core, key, objectType, optional, uniqueByKey, validator } = args;
 
 	if (key in (core as Record<string, any>)) {
-		const value = core[key];
-		if (!Array.isArray(value)) {
-			return tagFailure`${objectType}: invalid array (${key} === ${value})`;
+		const array = core[key];
+		if (!Array.isArray(array)) {
+			return tagFailure`${objectType}: invalid array (${key} === ${array})`;
 		}
 		if (asserter) {
-			const failed = value.find(val => !asserter({ core:val, objectType }));
+			const failed = array.find(val => !asserter({ core:val, objectType }));
 			if (failed) {
-				return tagFailure`${objectType}: invalid array item(s) asserter:${asserter.name} (${key} === ${simplifyArray(key, value)})`;
+				return tagFailure`${objectType}: invalid array item(s) asserter:${asserter.name} (${key} === ${simplifyArray(key, array)})`;
 			}
 		}else if (validator) {
-			const failed = value.find(val => !validator(val));
+			const failed = array.find(val => !validator(val));
 			if (failed) {
 				if (validator.name === "assertSageCharacterCore") debug(failed);
-				return tagFailure`${objectType}: invalid array item(s) validator:${validator.name} (${key} === ${simplifyArray(key, value)})`;
+				return tagFailure`${objectType}: invalid array item(s) validator:${validator.name} (${key} === ${simplifyArray(key, array)})`;
 			}
 		}else {
 			throw new Error("assertArray(args); args missing asserter AND validator");
 		}
 		if (uniqueByKey) {
-			const dupeValues = value.filter((object, index, array) => index !== array.findIndex(other => object[uniqueByKey] === other[uniqueByKey]));
+			const dupeValues = array.filter((o, i, a) => i !== a.findIndex(other => o[uniqueByKey] === other[uniqueByKey]));
 			if (dupeValues.length) {
 				return tagFailure`${objectType}: duplicate array (${key}) items (${dupeValues.map(object => object[uniqueByKey])})`;
 			}
