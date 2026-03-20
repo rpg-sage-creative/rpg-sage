@@ -183,5 +183,4 @@ export function ensureSageUserCore(core: SageUserCoreOld, context?: EnsureContex
 // 	"settings",
 // 	"updatedTs",
 // 	"uuid",
-// 	"ver"
 // ];

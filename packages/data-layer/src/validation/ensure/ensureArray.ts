@@ -28,7 +28,7 @@ type Args<Core, Key, OldValue, NewValue> = {
 
 export function ensureArray<
 			Core extends Partial<Record<Key, OldValue[]>>,
-			Key extends Exclude<keyof Core, "ver">,
+			Key extends keyof Core,
 			OldValue,
 			NewValue
 		>({ core, key, handler, context, optional, typeGuard }: Args<Core, Key, OldValue, NewValue>): void {
