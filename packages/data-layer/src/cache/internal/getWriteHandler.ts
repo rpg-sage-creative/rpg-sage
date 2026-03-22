@@ -1,73 +1,105 @@
 import { errorReturnFalse } from "@rsc-utils/core-utils";
-import { writeFile } from "@rsc-utils/io-utils";
+import { writeFile, type RepoItem } from "@rsc-utils/io-utils";
 import type { DataTable } from "../DataTable.js";
-import type { BaseCacheItem, CacheItemObjectType, DataMode } from "../types.js";
+import type { BaseCacheItem, CacheItemObjectType, CacheItemTableName, DataMode } from "../types.js";
+import { getDdbTable } from "./DdbRepo.js";
 import { getJsonPath } from "./getJsonPath.js";
 
-export type WriteHandler = (
-	dataTable: DataTable<CacheItemObjectType>,
-	item: BaseCacheItem,
+export type WriteHandler<
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+	Core extends CacheItem = CacheItem,
+> = (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	core: Core,
 ) => Promise<boolean>;
 
-async function writeToBoth(
-	dataTable: DataTable<CacheItemObjectType>,
-	item: BaseCacheItem
+async function writeToBoth<
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+	Core extends CacheItem = CacheItem,
+> (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	core: Core,
 ): Promise<boolean> {
 
-	const toDdb = await writeToDdb(dataTable, item);
-	const toFile = await writeToFile(dataTable, item);
+	const toDdb = await writeToDdb(dataTable, core);
+	const toFile = await writeToFile(dataTable, core);
 	return toDdb === true && toFile === true;
 
 }
 
-async function writeToDdb(
-	dataTable: DataTable<CacheItemObjectType>,
-	item: BaseCacheItem,
+async function writeToDdb<
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+	Core extends CacheItem = CacheItem,
+> (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	core: Core,
 ): Promise<boolean> {
 
-	dataTable;
-	item;
-	return false;
+	const ddbTable = getDdbTable(dataTable.tableName);
+	return ddbTable.save(core as RepoItem).catch(errorReturnFalse);
 
 }
 
-async function writeToDdbFirst(
-	dataTable: DataTable<CacheItemObjectType>,
-	item: BaseCacheItem
+async function writeToDdbFirst<
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+	Core extends CacheItem = CacheItem,
+> (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	core: Core,
 ): Promise<boolean> {
 
-	const toDdb = await writeToDdb(dataTable, item);
+	const toDdb = await writeToDdb(dataTable, core);
 	if (toDdb) return toDdb;
 
-	return writeToFile(dataTable, item);
+	return writeToFile(dataTable, core);
 }
 
-async function writeToFile(
-	dataTable: DataTable<CacheItemObjectType>,
-	item: BaseCacheItem
+async function writeToFile<
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+	Core extends CacheItem = CacheItem,
+> (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	core: Core,
 ): Promise<boolean> {
 
-	const path = getJsonPath(dataTable.tableName, item.id);
+	const path = getJsonPath(dataTable.tableName, core.id);
 	const options = { makeDir:true, formatted:dataTable.formatFiles };
-	return writeFile(path, item, options).catch(errorReturnFalse);
+	return writeFile(path, core, options).catch(errorReturnFalse);
 
 }
 
-async function writeToFileFirst(
-	dataTable: DataTable<CacheItemObjectType>,
-	item: BaseCacheItem
+async function writeToFileFirst<
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+	Core extends CacheItem = CacheItem,
+> (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	core: Core,
 ): Promise<boolean> {
 
-	const toFile = await writeToFile(dataTable, item);
+	const toFile = await writeToFile(dataTable, core);
 	if (toFile) return toFile;
 
-	return writeToDdb(dataTable, item);
+	return writeToDdb(dataTable, core);
 }
 
 /** @internal */
-export function getWriteHandler(
+export function getWriteHandler<
+	ObjectType extends CacheItemObjectType,
+> (
 	dataMode: DataMode
-): WriteHandler {
+): WriteHandler<ObjectType> {
 
 	switch(dataMode) {
 		case "both": return writeToBoth;

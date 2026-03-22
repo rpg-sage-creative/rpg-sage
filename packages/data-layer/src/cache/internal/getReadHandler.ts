@@ -1,27 +1,28 @@
-import { areEqual, debug, error, noop, warn, type OrUndefined } from "@rsc-utils/core-utils";
-import { DdbRepo, readJsonFile } from "@rsc-utils/io-utils";
+import { areEqual, debug, error, noop, warn } from "@rsc-utils/core-utils";
+import { readJsonFile, type RepoId } from "@rsc-utils/io-utils";
 import type { BaseCacheItem, CacheItemTableName, DataMode } from "../types.js";
+import { getDdbTable } from "./DdbRepo.js";
 import { getJsonPath } from "./getJsonPath.js";
 
 export type ReadHandler<
-	T extends BaseCacheItem
+	Core extends BaseCacheItem
 > = (
 	tableName: CacheItemTableName,
 	item: BaseCacheItem
-) => Promise<T | undefined>;
+) => Promise<Core | undefined>;
 
 async function readFromBoth<
-	T extends BaseCacheItem
+	Core extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
 	item: BaseCacheItem
-): Promise<OrUndefined<T>> {
+): Promise<Core | undefined> {
 
 	const ddbStart = Date.now();
-	const fromDdb = await readFromDdb(tableName, item);
+	const fromDdb = await readFromDdb<Core>(tableName, item);
 	const ddbDone = Date.now();
 	const fileStart = Date.now();
-	const fromFile = await readFromFile(tableName, item);
+	const fromFile = await readFromFile<Core>(tableName, item);
 	const fileDone = Date.now();
 	debug({ ddbStart, ddbDone, ddbMs:ddbDone-ddbStart, fileStart, fileDone, fileMs:fileDone-fileStart });
 
@@ -37,24 +38,27 @@ async function readFromBoth<
 		warn(`fetchFromBoth - different json: ${tableName} -> ${item}`);
 	}
 
-	return fromDdb as T ?? fromFile;
+	return fromDdb ?? fromFile;
 
 }
 
 async function readFromDdb<
-	T extends BaseCacheItem
+	Core extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
-	item: BaseCacheItem
-): Promise<OrUndefined<T>> {
+	{ did, id, uuid }: BaseCacheItem
+): Promise<Core | undefined> {
 
-	const ddbRepo = new DdbRepo(DdbRepo.DdbClientConfig);
-	const ddbTable = ddbRepo.for(tableName);
-	const ready = await ddbTable.ensure();
-	if (!ready) return undefined;
+	const ddbTable = getDdbTable(tableName);
 
-	tableName;
-	item;
+	const ids = [id, did, uuid].filter(s => s) as RepoId[];
+	const cores = await ddbTable.get(ids);
+	for (const core of cores) {
+		if (core) {
+			return core as Core;
+		}
+	}
+
 	return undefined;
 
 }
@@ -63,13 +67,13 @@ async function readFromDdbFirst<
 	T extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
-	item: BaseCacheItem
-): Promise<OrUndefined<T>> {
+	cacheItem: BaseCacheItem
+): Promise<T | undefined> {
 
-	const fromDdb = await readFromDdb<T>(tableName, item);
+	const fromDdb = await readFromDdb<T>(tableName, cacheItem);
 	if (fromDdb) return fromDdb;
 
-	return readFromFile(tableName, item);
+	return readFromFile(tableName, cacheItem);
 
 }
 
@@ -77,22 +81,22 @@ async function readFromFile<
 	T extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
-	item: BaseCacheItem
-): Promise<OrUndefined<T>> {
+	cacheItem: BaseCacheItem
+): Promise<T | undefined> {
 
 	// read by id first
-	const idPath = getJsonPath(tableName, item.id);
+	const idPath = getJsonPath(tableName, cacheItem.id);
 	let json = await readJsonFile<T>(idPath).catch(noop);
 
 	// read by did if id missed
-	if (!json && item.did) {
-		const didPath = getJsonPath(tableName, item.did);
+	if (!json && cacheItem.did) {
+		const didPath = getJsonPath(tableName, cacheItem.did);
 		json = await readJsonFile<T>(didPath).catch(noop);
 	}
 
 	// read by uuid id id and did missed
-	if (!json && item.uuid) {
-		const uuidPath = getJsonPath(tableName, item.uuid);
+	if (!json && cacheItem.uuid) {
+		const uuidPath = getJsonPath(tableName, cacheItem.uuid);
 		json = await readJsonFile<T>(uuidPath).catch(noop);
 	}
 
@@ -104,13 +108,13 @@ async function readFromFileFirst<
 	T extends BaseCacheItem
 >(
 	tableName: CacheItemTableName,
-	item: BaseCacheItem
-): Promise<OrUndefined<T>> {
+	cacheItem: BaseCacheItem
+): Promise<T | undefined> {
 
-	const fromFile = await readFromFile<T>(tableName, item);
+	const fromFile = await readFromFile<T>(tableName, cacheItem);
 	if (fromFile) return fromFile;
 
-	return readFromDdb(tableName, item);
+	return readFromDdb(tableName, cacheItem);
 
 }
 

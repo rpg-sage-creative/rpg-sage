@@ -26,7 +26,7 @@ type UncachedDataTable<
 > = {
 	tableName: TableName;
 	fetch<Core extends CacheItem>(item: CacheItem): Promise<Core | undefined>;
-	write(item: CacheItem): Promise<boolean>;
+	write<Core extends CacheItem>(core: Core): Promise<boolean>;
 };
 
 type CachedDataTable<
@@ -34,8 +34,8 @@ type CachedDataTable<
 	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>
 > = UncachedDataTable<ObjectType, TableName, CacheItem> & {
-	filter<Core extends CacheItem>(predicate: (core: Core) => unknown): CacheItem[];
-	find<Core extends CacheItem>(predicate: (core: Core) => unknown): CacheItem | undefined;
+	filter<CacheItem>(predicate: (item: CacheItem) => unknown): CacheItem[];
+	find<CacheItem>(predicate: (item: CacheItem) => unknown): CacheItem | undefined;
 	get(id: string | CacheItem): CacheItem | undefined;
 	has(id: string | CacheItem): boolean;
 	populate(): Promise<boolean>;
@@ -47,7 +47,7 @@ type CachedDataTable<
 export class DataTable<
 	ObjectType extends CacheItemObjectType,
 	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
-	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 > {
 
 	//#region instance
@@ -67,7 +67,7 @@ export class DataTable<
 
 	public readonly objectType: ObjectType;
 
-	public readonly populateHandler: PopulateHandler;
+	public readonly populateHandler: PopulateHandler<ObjectType, TableName>;
 
 	public readonly readHandler: ReadHandler<CacheItem>;
 
@@ -75,7 +75,7 @@ export class DataTable<
 
 	public wasPopulated: boolean;
 
-	private readonly writeHandler: WriteHandler;
+	private readonly writeHandler: WriteHandler<ObjectType, TableName>;
 
 	private constructor(
 		{ dataMode, formatFiles, isCached, objectType, tableName }: Required<DataTableConfigItem>,
@@ -85,7 +85,7 @@ export class DataTable<
 		this.isCached = isCached;
 		this.objectType = objectType as ObjectType;
 		this.populateHandler = getPopulateHandler(dataMode);
-		this.readHandler = getReadHandler<CacheItem>(dataMode);
+		this.readHandler = getReadHandler(dataMode);
 		this.tableName = tableName as TableName;
 		this.wasPopulated = false;
 		this.writeHandler = getWriteHandler(dataMode);

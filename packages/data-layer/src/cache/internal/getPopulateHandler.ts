@@ -1,53 +1,64 @@
-import { forEachAsync, getDataRoot, tagLiterals, verbose } from "@rsc-utils/core-utils";
-import { DdbRepo, filterFiles } from "@rsc-utils/io-utils";
-import { basename } from "node:path";
+import { forEachAsync, getDataRoot, noop, tagLiterals, verbose } from "@rsc-utils/core-utils";
+import { DdbRepo, filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import type { DataTable } from "../DataTable.js";
-import type { BaseCacheItem, DataMode } from "../types.js";
+import type { BaseCacheItem, CacheItemObjectType, CacheItemTableName, DataMode } from "../types.js";
 
-export type PopulateHandler = (
-	dataTable: DataTable<any>,
+export type PopulateHandler<
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+> = (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
 ) => Promise<boolean>;
 
 export async function populateFromBoth<
-	CacheItem extends BaseCacheItem = BaseCacheItem
->(
-	dataTable: DataTable<any>,
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+> (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
 ): Promise<boolean> {
 
 	// load all the items from the files
-	const fromFile = await populateFromFile<CacheItem>(dataTable);
+	const fromFile = await populateFromFile(dataTable);
 
 	// load all the items from ddb
-	const fromDdb = await populateFromDdb<CacheItem>(dataTable);
+	const fromDdb = await populateFromDdb(dataTable);
 
 	return fromFile && fromDdb;
 }
 
 export async function populateFromDdb<
-	CacheItem extends BaseCacheItem = BaseCacheItem
->(
-	dataTable: DataTable<any>,
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+> (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
 ): Promise<boolean> {
 
 	const { tableName } = dataTable;
 
 	verbose(tagLiterals`Populating ${tableName} ...`);
 
-	const ddbRepo = new DdbRepo(DdbRepo.DdbClientConfig);
-	const ddbTable = ddbRepo.for(dataTable.tableName);
+	const ddbRepo = new DdbRepo(
+		DdbRepo.DdbClientConfig,
+		{ tableNameParser:() => tableName },
+	);
+	const ddbTable = ddbRepo.for(dataTable.objectType);
 
 	verbose(tagLiterals`  Reading from ${tableName} ...`);
 
-	const ready = await ddbTable.ensure();
+	const response = await ddbTable.ensure(true);
+	const ready = response.TableDescription?.TableName === tableName;
 
 	let files = 0;
 	let errors = 0;
 
 	if (ready) {
 
-		await ddbTable.forEachAsync<CacheItem>(item => {
+		await ddbTable.forEachAsync(item => {
 
-			const cached = dataTable.put(item);
+			const cached = dataTable.put(item as CacheItem);
 			if (!cached) {
 				errors++;
 			}
@@ -66,33 +77,37 @@ export async function populateFromDdb<
 }
 
 export async function populateFromDdbFirst<
-	CacheItem extends BaseCacheItem = BaseCacheItem
->(
-	dataTable: DataTable<any>,
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+> (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
 ): Promise<boolean> {
 
 	// load all the items from ddb
-	const fromDdb = await populateFromDdb<CacheItem>(dataTable);
+	const fromDdb = await populateFromDdb(dataTable);
 	if (fromDdb) return fromDdb;
 
 	// load all the items from the files
-	return populateFromFile<CacheItem>(dataTable);
+	return populateFromFile(dataTable);
 }
 
 export async function populateFromFile<
-	CacheItem extends BaseCacheItem = BaseCacheItem
->(
-	dataTable: DataTable<any>,
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
+> (
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
 ): Promise<boolean> {
 
 	const { objectType, tableName } = dataTable;
 
-	verbose(tagLiterals`Populating ${tableName} ...`);
+	verbose(tagLiterals`Populating ${objectType} ...`);
 
 	// iterate the json files and load cache data into memory
 	const dirPath = getDataRoot(["sage", tableName]);
 
-	verbose(tagLiterals`  Reading from ${tableName} ...`);
+	verbose(tagLiterals`  Reading from ${dirPath} ...`);
 
 	const files = await filterFiles(dirPath, { fileExt:"json" });
 
@@ -102,10 +117,10 @@ export async function populateFromFile<
 
 	await forEachAsync(`  Reading files`, files, async file => {
 
-		const id = basename(file, ".json");
-		const item = { id, objectType } as CacheItem;
-		const cached = await dataTable.fetchAndCache(item);
-		if (!cached) {
+		const json = await readJsonFile<CacheItem>(file).catch(noop);
+		if (json) {
+			dataTable.put(json);
+		}else {
 			errors.push(file);
 		}
 
@@ -120,23 +135,28 @@ export async function populateFromFile<
 }
 
 export async function populateFromFileFirst<
-	CacheItem extends BaseCacheItem = BaseCacheItem
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 >(
-	dataTable: DataTable<any>,
+	dataTable: DataTable<ObjectType, TableName, CacheItem>,
 ): Promise<boolean> {
 
 	// load all the items from the files
-	const fromFile = await populateFromDdb<CacheItem>(dataTable);
+	const fromFile = await populateFromFile(dataTable);
 	if (fromFile) return fromFile;
 
 	// load all the items from ddb
-	return populateFromDdb<CacheItem>(dataTable);
+	return populateFromDdb(dataTable);
 }
 
 /** @internal */
-export function getPopulateHandler(
+export function getPopulateHandler<
+	ObjectType extends CacheItemObjectType,
+	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
+>(
 	dataMode: DataMode,
-): PopulateHandler {
+): PopulateHandler<ObjectType, TableName> {
 
 	switch(dataMode) {
 		case "both": return populateFromBoth;
