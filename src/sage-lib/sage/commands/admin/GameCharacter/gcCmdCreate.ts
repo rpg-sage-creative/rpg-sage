@@ -2,20 +2,19 @@ import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
+import { cannotManageCharacter } from "./cannotManageCharacter.js";
 import { getCharacterArgs } from "./getCharacterArgs.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
-import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 	const localize = sageMessage.getLocalizer();
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
-			return sageMessage.replyStack.whisper(localize("NPC_ONLY_IN_GAME"));
-		}
-		return sageMessage.replyStack.whisper(localize("CANNOT_CREATE_CHARACTERS_HERE"));
+
+	// initial check of permission to manage characters
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "CREATE")) {
+		return;
 	}
 
 	const { core, mods, names, stats, userId } = getCharacterArgs(sageMessage, characterTypeMeta.isGm, false);
@@ -84,6 +83,7 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 		return created;
 	});
 
-	const not = created ? "" : "***NOT***";
-	await sageMessage.replyStack.reply(`Character "${newChar.name}" ${not} Created!`);
+	const messageKey = created ? "CHARACTER_S_CREATED" : "CHARACTER_S_NOT_CREATED";
+	const message = localize(messageKey, newChar.name);
+	await sageMessage.replyStack.reply(message);
 }

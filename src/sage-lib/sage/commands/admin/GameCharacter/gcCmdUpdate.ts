@@ -1,6 +1,7 @@
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
+import { cannotManageCharacter } from "./cannotManageCharacter.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterArgs } from "./getCharacterArgs.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
@@ -8,25 +9,15 @@ import { getUserDid } from "./getUserDid.js";
 import { promptCharConfirm, promptModsConfirm } from "./promptCharConfirm.js";
 import { sendGameCharacter } from "./sendGameCharacter.js";
 import { sendNotFound } from "./sendNotFound.js";
-import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameCharacter): Promise<void> {
 	const localize = sageMessage.getLocalizer();
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage, character);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		if (characterTypeMeta.isGm) {
-			if (sageMessage.game) {
-				return sageMessage.replyStack.whisper(`Sorry, only the GM, GameAdmins, or admins can edit the GM character.`);
-			}
-			if (sageMessage.server) {
-				return sageMessage.replyStack.whisper(`Sorry, only admins can edit the GM character.`);
-			}
-		}
-		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
-			return sageMessage.replyStack.whisper(localize("NPC_ONLY_IN_GAME"));
-		}
-		return sageMessage.replyStack.whisper(`Sorry, you cannot update characters here.`);
+
+	// initial check of permission to manage characters
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "UPDATE")) {
+		return;
 	}
 
 	const { core, mods, names, stats, userId } = getCharacterArgs(sageMessage, characterTypeMeta.isGm, true);
@@ -46,6 +37,11 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 			}
 		}
 
+		// revalidate access to view the character
+		if (await cannotManageCharacter(sageMessage, characterTypeMeta, "DETAILS", character)) {
+			return;
+		}
+
 		await sendGameCharacter(sageMessage, character);
 		return;
 	}
@@ -57,6 +53,11 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 	}
 
 	if (character) {
+		// revalidate access to manage the character
+		if (await cannotManageCharacter(sageMessage, characterTypeMeta, "UPDATE", character)) {
+			return;
+		}
+
 		if (core) {
 			await character.update(core, false);
 
@@ -87,7 +88,7 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 		}
 
 		let updated = false;
-		await promptCharConfirm(sageMessage, character, `Update ${character.name}?`, async char => {
+		await promptCharConfirm(sageMessage, character, localize("UPDATE_S_?", character.name), async char => {
 			if (characterTypeMeta.isGm) {
 				const owner = sageMessage.game ?? sageMessage.server;
 				if (owner && owner.toJSON().gmCharacterName !== char.name) {
@@ -97,14 +98,15 @@ export async function gcCmdUpdate(sageMessage: SageMessage, character?: GameChar
 			return updated = await char.save(true);
 		});
 
-		const not = updated ? "" : "***NOT***";
-		await sageMessage.replyStack.reply(`Character "${character.name}" ${not} Updated!`);
+		const messageKey = updated ? "CHARACTER_S_UPDATED" : "CHARACTER_S_NOT_UPDATED";
+		const message = localize(messageKey, character.name);
+		await sageMessage.replyStack.reply(message);
 		return;
 	}
 
 	if (!names.name && !names.oldName && !core?.alias) {
-		return sageMessage.replyStack.whisper(`Sorry, you must provide a name or alias to update a character.`);
+		return sageMessage.replyStack.whisper(localize("MUST_PROVIDE_NAME_OR_ALIAS_TO_UPDATE"));
 	}
 
-	return sageMessage.replyStack.whisper(`Sorry, "${names.name ?? names.oldName}" not found, please use create command!`);
+	return sageMessage.replyStack.whisper(localize("CHARACTER_S_NOT_FOUND", names.name ?? names.oldName));
 }

@@ -9,9 +9,9 @@ import type { SageCommand } from "../../../model/SageCommand.js";
 import { type SageButtonInteraction, type SageStringSelectInteraction } from "../../../model/SageInteraction.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
+import { cannotManageCharacter } from "./cannotManageCharacter.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterTypeMeta, type TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
-import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 import { toReadableOwner } from "./toReadableOwner.js";
 
 //#region customId
@@ -362,21 +362,10 @@ async function handleAction(sageInteraction: SageButtonInteraction|SageStringSel
 
 export async function showForm(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		if (!sageMessage.allowCommand) {
-			return sageMessage.replyStack.whisper(`Sorry, you cannot manage characters here.`);
-		}
-		if (sageMessage.game) {
-			if (!sageMessage.canAdminGame && !sageMessage.isPlayer) {
-				return sageMessage.replyStack.whisper(`Sorry, you are not part of this Game.`);
-			}
-			if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.canAdminGame) {
-				return sageMessage.replyStack.whisper(`Sorry, only GMs and Admins can manage NPCs.`);
-			}
-		}else if (characterTypeMeta.isGmOrNpcOrMinion) {
-			return sageMessage.replyStack.whisper(`Sorry, NPCs only exist inside a Game.`);
-		}
-		return sageMessage.replyStack.whisper(`I'm sorry Dave, I'm afraid I can't do that.`);
+
+	// initial check of permission to manage characters
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "AUTO")) {
+		return;
 	}
 
 	const character = await getAutoCharacter(sageMessage, characterTypeMeta);

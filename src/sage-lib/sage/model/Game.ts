@@ -566,6 +566,32 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	// #region Get
 
+	/**
+	 * returns a list of players entrusted by GMs to help admin other characters.
+	 * includes players entrusted by other players to help admin their characters.
+	 * includes a character's owner.
+	 * @todo implement logic to let GMs and players edit this list
+	 */
+	public getTrustedPlayers(character?: GameCharacter | CharacterShell): Snowflake[] {
+		const trusted: Snowflake[] = [];
+
+		// add character owner
+		if (character?.userId) {
+			trusted.push(character.userId);
+		}
+
+		// add GMs
+		this.users.forEach(user => {
+			if (user.type === GameUserType.GameMaster) {
+				trusted.push(user.did);
+			}
+		});
+
+		// add entrusted users
+
+		return trusted;
+	}
+
 	public getChannel(discordKey: DiscordKey): SageChannel | undefined;
 	public getChannel(channelDid: Optional<Snowflake>): SageChannel | undefined;
 	public getChannel(didOrKey: Optional<Snowflake> | DiscordKey): SageChannel | undefined {

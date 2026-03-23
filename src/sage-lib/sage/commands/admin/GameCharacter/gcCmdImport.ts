@@ -4,9 +4,9 @@ import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { CharacterManager } from "../../../model/CharacterManager.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
+import { cannotManageCharacter } from "./cannotManageCharacter.js";
 import { getCharactersArgs } from "./getCharacterArgs.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
-import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 type CharData = { name:string; type:string; action:string; };
 function createAttemptPromptContent(prompt: string, chars: CharData[]): string {
@@ -39,11 +39,10 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 	const localize = sageMessage.getLocalizer();
 
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
-			return sageMessage.replyStack.whisper(localize("NPC_ONLY_IN_GAME"));
-		}
-		return sageMessage.replyStack.whisper(localize("CANNOT_IMPORT_CHARACTERS_HERE"));
+
+	// initial check of permission to manage characters
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "IMPORT")) {
+		return;
 	}
 
 	const allResults = await getCharactersArgs(sageMessage, characterTypeMeta.isGm, false);
