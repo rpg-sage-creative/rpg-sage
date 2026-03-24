@@ -1,23 +1,25 @@
 import type { Optional } from "@rsc-utils/core-utils";
 import { CharacterManager } from "../../../model/CharacterManager.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
+import { cannotManageCharacter } from "./cannotManageCharacter.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { getUserDid } from "./getUserDid.js";
 import { sendGameCharactersOrNotFound } from "./sendGameCharactersOrNotFound.js";
-import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdList(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
-			return sageMessage.replyStack.whisper(`Sorry, NPCs only exist inside a Game.`);
-		}
-		return sageMessage.replyStack.whisper(`Sorry, you cannot list characters here.`);
+
+	// initial check of permission to manage characters
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "LIST")) {
+		return;
 	}
 
 	const hasCharacters = sageMessage.game ?? sageMessage.sageUser;
 
-	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
+	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpcOrMinion
+		? hasCharacters.nonPlayerCharacters
+		: hasCharacters.playerCharacters;
+
 	if (characterTypeMeta.isCompanion) {
 		const userDid = await getUserDid(sageMessage),
 			names = sageMessage.args.getNames(),

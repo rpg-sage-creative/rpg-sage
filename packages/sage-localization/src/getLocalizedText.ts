@@ -81,6 +81,18 @@ const enUS = {
 	"NPC_ONLY_IN_GAME": `Sorry, NPCs only exist inside a Game.`,
 	"DIALOG_NOT_IN_DMS": `Sorry, Dialog does not function in DMs.`,
 
+	"UPDATE_S_?": `Update "#{0}"?`,
+	"DELETE_S_?": `Delete "#{0}"?`,
+
+	"CANNOT_MANAGE_CHARACTERS_HERE": `Sorry, you cannot manage characters here.`,
+	"CANNOT_MANAGE_GAME_GM": `Sorry, only the GM, GameAdmins, or admins can manage the GM character.`,
+	"CANNOT_MANAGE_GAME_NPC": `Sorry, only GMs can manage Game NPCs.`,
+	"CANNOT_MANAGE_GAME_PC": `Sorry, only GMs or Players can manage Game PCs.`,
+	"CANNOT_MANAGE_SERVER_GM": `Sorry, only admins can manage the Server GM character.`,
+	"CANNOT_MANAGE_GM": `Sorry, you cannot manage GM characters.`,
+	"CANNOT_MANAGE_CHARACTERS": `Sorry, you cannot manage characters.`,
+	"CANNOT_MANAGE_OTHER_CHARACTERS": `Sorry, you cannot manage another user's character.`,
+
 	"CANNOT_CREATE_CHARACTERS_HERE": `Sorry, you cannot create characters here.`,
 
 	"CANNOT_IMPORT_CHARACTERS_HERE": `Sorry, you cannot import characters here.`,
@@ -99,11 +111,14 @@ const enUS = {
 	"HERE_ARE_EXPORTED_CHARACTERS": `Here are your exported characters.`,
 
 	"CANNOT_FIND_S": `Sorry, we cannot find "#{0}".`,
+	"MUST_PROVIDE_NAME_OR_ALIAS_TO_UPDATE": `Sorry, you must provide a name or alias to update a character.`,
 
 	"CHARACTER_S_CREATED": `Character "#{0}" created.`,
 	"CHARACTER_S_NOT_CREATED": `Character "#{0}" ***NOT*** created!`,
 	"CHARACTER_S_UPDATED": `Character "#{0}" updated.`,
 	"CHARACTER_S_NOT_UPDATED": `Character "#{0}" ***NOT*** updated!`,
+	"CHARACTER_S_DELETED": `Character "#{0}" deleted.`,
+	"CHARACTER_S_NOT_DELETED": `Character "#{0}" ***NOT*** deleted!`,
 	"CHARACTER_S_NOT_FOUND": `Character "#{0}" ***NOT*** found!`,
 
 	"USERNAME_S_BANNED": `The username is invalid due to your use of "#{0}". ${DISCORD_POLICY}`,
@@ -146,7 +161,6 @@ const enUS = {
 	"GAME_MACROS": `Game Macros`,
 	"SERVER_MACROS": `Server Macros`,
 	"GLOBAL_MACROS": `Global Macros`,
-
 
 	"INVALID_MACRO_NAME": `Macro names should only contain letters, numbers, spaces, underscores, and dashes.`,
 	"INVALID_MACRO_DUPLICATE": `There is already a macro with that name.`,

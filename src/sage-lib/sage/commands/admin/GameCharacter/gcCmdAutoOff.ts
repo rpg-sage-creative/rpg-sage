@@ -3,18 +3,20 @@ import { quote } from "@rsc-utils/core-utils";
 import { parseIds, toChannelMention, toUserMention } from "@rsc-utils/discord-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
+import { cannotManageCharacter } from "./cannotManageCharacter.js";
 import { getCharacter } from "./getCharacter.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
 import { removeAuto } from "./removeAuto.js";
 import { sendGameCharacter } from "./sendGameCharacter.js";
 import { sendNotFound } from "./sendNotFound.js";
-import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+
+	// initial check of permission to manage characters
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "AUTO")) {
+		return;
 	}
 
 	const names = sageMessage.args.getNames();
@@ -33,7 +35,12 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 		return sendNotFound(sageMessage, `${characterTypeMeta.singularDescriptor} Auto Dialog (Off)`, characterTypeMeta.singularDescriptor!, alias ?? names.name);
 	}
 
-	const thisChannelId = sageMessage.channelDid;
+	// revalidate access to manage the character
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "AUTO", character)) {
+		return;
+	}
+
+	const thisChannelId = sageMessage.threadOrChannelDid;
 	const channelIds = parseIds(sageMessage.message, "channel");
 	if (!channelIds.length && thisChannelId) {
 		channelIds.push(thisChannelId);

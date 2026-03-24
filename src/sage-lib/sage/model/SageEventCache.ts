@@ -54,7 +54,9 @@ type KnownUser = {
 	id: Snowflake;
 	/** was given Sage's GameAdmin role */
 	isGameAdmin: boolean;
+	/** a game is present and the user is a GameMaster */
 	isGameMaster: boolean;
+	/** a game is present and the user is a GamePlayer */
 	isGamePlayer: boolean;
 	/** isGameMaster || isGamePlayer */
 	isGameUser: boolean;

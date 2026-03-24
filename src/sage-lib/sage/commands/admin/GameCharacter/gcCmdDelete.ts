@@ -1,13 +1,15 @@
 import type { SageMessage } from "../../../model/SageMessage.js";
+import { cannotManageCharacter } from "./cannotManageCharacter.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
 import { getUserDid } from "./getUserDid.js";
 import { promptCharConfirm } from "./promptCharConfirm.js";
-import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdDelete(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		return sageMessage.reactBlock();
+
+	// initial check of permission to manage characters
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "DELETE")) {
+		return;
 	}
 
 	const userDid = getUserDid(sageMessage),
@@ -24,13 +26,22 @@ export async function gcCmdDelete(sageMessage: SageMessage): Promise<void> {
 		character = (sageMessage.game ?? sageMessage.server)?.gmCharacter.companions.findByName(names.name);
 	}
 
+	const localize = sageMessage.getLocalizer();
+
 	if (!character) {
-		return sageMessage.replyStack.whisper(`Sorry, ${characterTypeMeta.singularDescriptor} "${names.name ?? "*no name given*"}" not found.`);
+		return sageMessage.replyStack.whisper(localize("CHARACTER_S_NOT_FOUND", names.name ?? "*no name given*"));
+	}
+
+	// revalidate access to manage the character
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "DELETE", character)) {
+		return;
 	}
 
 	let deleted = false;
-	await promptCharConfirm(sageMessage, character, `Delete ${characterTypeMeta.singularDescriptor} "${character.name}"?`, async char => deleted = await char.remove());
+	const promptMessage = localize("DELETE_S_?", character.name);
+	await promptCharConfirm(sageMessage, character, promptMessage, async char => deleted = await char.remove());
 
-	const not = deleted ? "" : "***NOT***";
-	await sageMessage.replyStack.reply(`${characterTypeMeta.singularDescriptor} "${character.name}" ${not} Deleted!`);
+	const messageKey = deleted ? "CHARACTER_S_DELETED" : "CHARACTER_S_NOT_DELETED";
+	const message = localize(messageKey, character.name);
+	await sageMessage.replyStack.reply(message);
 }

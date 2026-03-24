@@ -1,19 +1,15 @@
 import { AttachmentBuilder } from "discord.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
+import { cannotManageCharacter } from "./cannotManageCharacter.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
-import { testCanAdminCharacter } from "./testCanAdminCharacter.js";
 
 export async function gcCmdExport(sageMessage: SageMessage): Promise<void> {
 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
-	if (!testCanAdminCharacter(sageMessage, characterTypeMeta)) {
-		if (characterTypeMeta.isGmOrNpcOrMinion && !sageMessage.game) {
-			return sageMessage.replyStack.whisper(`Sorry, NPCs only exist inside a Game.`);
-		}
-		return sageMessage.replyStack.whisper(`Sorry, you cannot export characters here.`);
-	}
-	if (characterTypeMeta.isGm) {
-		return sageMessage.replyStack.whisper(`Sorry, you cannot export the GM.`);
+
+	// initial check of permission to manage characters
+	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "EXPORT")) {
+		return;
 	}
 
 	const hasCharacters = sageMessage.game ?? sageMessage.sageUser;
@@ -67,6 +63,11 @@ export async function gcCmdExport(sageMessage: SageMessage): Promise<void> {
 		}
 		// save for filename
 		charName = character.alias ?? character.name;
+
+		// revalidate permission to manage character
+		if (await cannotManageCharacter(sageMessage, characterTypeMeta, "EXPORT", character)) {
+			return;
+		}
 	}
 
 	if (!tsvMap.size) {
@@ -84,8 +85,9 @@ export async function gcCmdExport(sageMessage: SageMessage): Promise<void> {
 	});
 
 	// get input
-	let fileName = sageMessage.args.getString("fileName")?.replace(/[^\w\.\-]+/, "-")
-		?? charName?.replace(/[^\w\.\-]+/, "-")
+	const fileNameCleanupRegExp = /[^\w\.\-]+/g;
+	let fileName = sageMessage.args.getString("fileName")?.replace(fileNameCleanupRegExp, "-")
+		?? charName?.replace(fileNameCleanupRegExp, "-")
 		?? `RPG-Sage-Character-Export-${characterTypeMeta.isGmOrNpcOrMinion ? "NPC" : "PC"}.tsv`;
 	// make sure it ends with .tsv
 	fileName = fileName.replace(/(\.tsv)?$/i, ".tsv");
