@@ -40,7 +40,7 @@ export async function gcCmdAutoOff(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const thisChannelId = sageMessage.channelDid;
+	const thisChannelId = sageMessage.threadOrChannelDid;
 	const channelIds = parseIds(sageMessage.message, "channel");
 	if (!channelIds.length && thisChannelId) {
 		channelIds.push(thisChannelId);

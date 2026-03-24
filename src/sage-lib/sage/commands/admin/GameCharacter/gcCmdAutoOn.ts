@@ -52,7 +52,11 @@ export async function gcCmdAutoOn(sageMessage: SageMessage): Promise<void> {
 		return;
 	}
 
-	const thisChannelId = sageMessage.channelDid;
+	if (character.userId && character.userId !== userId) {
+		return sageMessage.whisper(`Cannot start ${toUserMention(userId)} using Auto Dialog with ${character.name}:\n- Character belongs to ${toUserMention(character.userId)}!`);
+	}
+
+	const thisChannelId = sageMessage.threadOrChannelDid;
 	const channelIds = parseIds(sageMessage.message, "channel");
 	if (!channelIds.length && thisChannelId) {
 		channelIds.push(thisChannelId);
