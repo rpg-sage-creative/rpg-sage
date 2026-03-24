@@ -288,7 +288,7 @@ export class Check {
 	public static forSkill<T extends Skill>(char: PathbuilderCharacter, skill?: T): Check | undefined {
 		if (!skill) return undefined;
 
-		const check = new Check(char, skill.name);
+		const check = new Check(char, skill.isLore() ? skill.topic : skill.name);
 		check.addProficiency(skill.isLore()? skill.topic : skill.name);
 		check.setAbility(skill.ability.name);
 

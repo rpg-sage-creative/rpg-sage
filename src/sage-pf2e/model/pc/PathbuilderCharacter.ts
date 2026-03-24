@@ -964,26 +964,34 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		return this.core.lores ?? [];
 	}
 
-	public getLore(loreName: string): TPathbuilderCharacterLore | undefined {
-		if (!loreName) {
+	public getLore(loreToFind: string): TPathbuilderCharacterLore | undefined {
+		if (!loreToFind) {
 			return undefined;
 		}
 
-		const clean = (name: string) => name?.replace(SkillRegExps.loreG, "").toLowerCase();
+		// we want to compare the clean lore name without spaces and lowercased
+		const cleanLoreToFind = loreToFind.replace(SkillRegExps.loreG, "").replaceAll(" ", "").toLowerCase();
 
-		loreName = clean(loreName);
+		const lore = this.lores.reduce((out, lore) => {
+			// clean the lore name and lowercase it
+			const cleanLoreName = lore[0].replace(SkillRegExps.loreG, "").toLowerCase();
+			// compare without the spaces
+			if (cleanLoreName.replaceAll(" ", "") === cleanLoreToFind) {
+				// "formalize" the lore name by adding "Lore" after capitalized words
+				const formalLoreName = capitalize(cleanLoreName, " ") + " Lore";
+				return [formalLoreName, lore[1]] as TPathbuilderCharacterLore;
+			}
+			return out;
+		}, undefined as TPathbuilderCharacterLore | undefined);
 
-		const lore = this.lores.find(lore => clean(lore[0]) === loreName)?.slice() as TPathbuilderCharacterLore | undefined;
 		if (!lore) {
 			return undefined;
 		}
 
-		lore[0] = `${capitalize(loreName)} Lore`;
-
 		const isLegendary = (skill: string) => this.getProficiencyMod(skill as TPathbuilderCharacterProficienciesKey) === ProficiencyType.Legendary;
-		if (SkillRegExps.bardic.test(loreName)) {
+		if (cleanLoreToFind.includes("bardic")) {
 			lore[1] = isLegendary("Occultism") ? ProficiencyType.Expert : ProficiencyType.Trained;
-		}else if (SkillRegExps.loremaster.test(loreName)) {
+		}else if (cleanLoreToFind.includes("loremaster")) {
 			lore[1] = ["Arcana", "Occultism", "Religion", "Society"].some(isLegendary) ? ProficiencyType.Expert : ProficiencyType.Trained;
 		}
 
