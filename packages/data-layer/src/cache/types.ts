@@ -1,6 +1,6 @@
-export type CacheItemObjectType = "Character" | "Game" | "Message" | "Server" | "User";
+export type CacheItemObjectType = "Character" | "Dice" | "Game" | "Message" | "Server" | "User";
 
-export type CacheItemTableName = Lowercase<`${CacheItemObjectType}s`>;
+export type CacheItemDirName = Lowercase<`${CacheItemObjectType}s`>;
 
 /** ddb and file should be the only options when this is done; the others are for testing */
 export type DataMode = "both" | "ddb" | "ddb-first" | "file" | "file-first";
@@ -45,13 +45,14 @@ export function isCacheItemObjectType(value: unknown): value is CacheItemObjectT
 	return ["Character", "Game", "Message", "Server", "User"].includes(value as CacheItemObjectType);
 }
 
-export function isCacheItemTableName(value: unknown): value is CacheItemTableName {
-	return ["characters", "games", "messages", "servers", "users"].includes(value as CacheItemTableName);
+export function isCacheItemDirName(value: unknown): value is CacheItemDirName {
+	return ["characters", "games", "messages", "servers", "users"].includes(value as CacheItemDirName);
 }
 
-export function objectTypeToTableName<
+/** Used when writing data to file system. Converts "User" to "users". */
+export function objectTypeToDirName<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName,
+	TableName extends CacheItemDirName,
 >(
 	objectType: ObjectType,
 ): TableName {
@@ -60,8 +61,37 @@ export function objectTypeToTableName<
 
 }
 
-export function tableNameToObjectType<
-	TableName extends CacheItemTableName,
+/** @todo create an ObjectType -> TableName map in env.json ... this makes it easier to manage different bots for different platforms. */
+export function objectTypeToTableName<
+	ObjectType extends CacheItemObjectType,
+>(
+	_objectType: ObjectType,
+): string {
+
+	// Ddb was designed for a single table per app (mostly).
+	// The only reason to break stuff off would be to move messages (or dice?) to their own.
+	// Also, to share characters across platforms, I might want to put characters in their own???
+	// Splitting characters into their own table would also require ensuring users have a single/unique "sage id" again ...
+	// switch(objectType) {
+	// 	// separate table for all dice from all platforms for better stats?
+	// 	case "Dice": return "rpg_sage_dice";
+	// 	// separate table for all messages from all platforms for better stats?
+	// 	case "Message": return "rpg_sage_messages";
+	// 	// separate table for all characters from all platforms for better reuse?
+	// 	case "Character":
+	// 	case "Game":
+	// 	case "Server":
+	// 	// separate table for all users from all platforms for better global settings?
+	// 	case "User":
+	// 	default: return "rpg_sage_discord";
+	// }
+	return "rpg_sage_discord";
+
+}
+
+/** Used when reading data from file system. Converts "users" to "User". */
+export function dirNameToObjectType<
+	TableName extends CacheItemDirName,
 	ObjectType extends CacheItemObjectType,
 >(
 	tableName: TableName,

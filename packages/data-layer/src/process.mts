@@ -1,8 +1,11 @@
-import { errorReturnFalse, errorReturnUndefined, forEachAsync, getDataRoot, initializeConsoleUtilsByEnvironment, stringifyJson, verbose, type Snowflake } from "@rsc-utils/core-utils";
+import { forEachAsync, getDataRoot, getDateStrings, initializeConsoleUtilsByEnvironment, stringifyJson, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { stat, Stats } from "node:fs";
 import { basename, join } from "node:path";
-import { ensureSageGameCore, ensureSageMessageReferenceCore, ensureSageServerCore, ensureSageUserCore, objectTypeToTableName, type EnsureContext, type SageCore, type SageMessageReferenceCore } from "./index.js";
+import { getDdbTable } from "./cache/internal/DdbRepo.js";
+import { objectTypeToDirName } from "./cache/types.js";
+import { ensureSageGameCore, ensureSageMessageReferenceCore, ensureSageServerCore, ensureSageUserCore, type SageCore, type SageMessageReferenceCore } from "./types/index.js";
+import type { EnsureContext } from "./validation/index.js";
 
 initializeConsoleUtilsByEnvironment();
 
@@ -21,15 +24,15 @@ type Processor<
 async function getUpdateTs(filePath: string): Promise<number | undefined> {
 	const { promise, resolve, reject } = Promise.withResolvers<Stats>();
 	stat(filePath, (err, stats: Stats) => err ? reject(err) : resolve(stats));
-	const stats = await promise.catch(() => undefined);
+	const stats = await promise;
 	return stats?.mtimeMs;
 }
 
 async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { dataPath:string; filePath:string; }) {
-	let core = await readJsonFile<SageCore<Type, Snowflake>>(filePath).catch(errorReturnUndefined) ?? undefined;
+	let core = await readJsonFile<SageCore<Type, Snowflake>>(filePath) ?? undefined;
 	let updatedTs = core ? await getUpdateTs(filePath) : undefined;
 	let fileCount = 0;
-	const toDelete: { deletePath:string; reason:string; }[] = [];
+	const toDelete: { deletePath:string; reason:string; updatedTs?:number; }[] = [];
 
 	if (core) {
 		const filePathSet = new Set<string>();
@@ -49,7 +52,7 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 
 				}else if (await fileExists(otherFilePath)) {
 					// go fetch duplicate
-					otherCore = await readJsonFile<SageCore<Type, Snowflake>>(otherFilePath).catch(errorReturnUndefined) ?? undefined;
+					otherCore = await readJsonFile<SageCore<Type, Snowflake>>(otherFilePath) ?? undefined;
 					if (!otherCore) {
 						toDelete.push({ deletePath:otherFilePath, reason:"invalid" });
 					}
@@ -86,7 +89,7 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 				filePath = meta.filePath;
 				core = meta.core;
 			}else {
-				toDelete.push({ deletePath:meta.filePath, reason:"duplicate" });
+				toDelete.push({ deletePath:meta.filePath, reason:"duplicate", updatedTs:meta.updatedTs });
 			}
 		});
 
@@ -98,14 +101,14 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 
 	}
 
-	return { fileCount, toDelete, filePath, core };
+	return { fileCount, toDelete, filePath, core, updatedTs };
 
 }
-
+function tsToDate(ts?: number) { return ts ? ` (${getDateStrings(new Date(ts)).date})` : ""; }
 async function processObjects<Type extends ObjectType>(objectType: Type, processor: Processor<Type>, yearArgs: string[]): Promise<void> {
-	const tableName = objectTypeToTableName(objectType);
+	const dirName = objectTypeToDirName(objectType);
 
-	const objectRoot = getDataRoot(["sage", tableName]);
+	const objectRoot = getDataRoot(["sage", dirName]);
 
 	/** cannot read the file */
 	let unableToRead = 0;
@@ -132,6 +135,10 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 		verbose(`  ${objectType} Children: ${children}`);
 	}
 
+	const ddbTable = getDdbTable(objectType);
+	await ddbTable.ensure(true);
+
+	const ddbPromises: Promise<any>[] = [];
 	for (const child of children) {
 		const dataPath = child ? join(objectRoot, child) : objectRoot;
 		if (child) {
@@ -143,6 +150,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 		verbose(`                 ... ${files.length} found.`)
 
 		const deletedSet = new Set<string>();
+		// const ddbQueue: any[] = [];
 		await forEachAsync(`    Updating ${child ? objectType + " " + child : objectType}`, files, async filePath => {
 			// due to getNewestCore, we might delete a later item
 			if (deletedSet.has(filePath)) return;
@@ -157,16 +165,17 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 			filePath = meta.filePath;
 
 			// delete invalid/duplicate files
-			for (const { deletePath, reason } of meta.toDelete) {
+			for (const { deletePath, reason, updatedTs } of meta.toDelete) {
 				if (reason === "invalid") {
 					unableToRead++;
-					await deleteFile(deletePath).catch(() => false);
+					await deleteFile(deletePath);
 					deletedSet.add(deletePath);
 				}
 				if (reason === "duplicate") {
 					duplicatesDeleted++;
-					verbose(`        Deleting "${reason}" of ${basename(filePath)}: ${basename(deletePath)}; `);
-					await deleteFile(deletePath).catch(errorReturnFalse);
+					verbose(`        Deleting "${reason}" of ${basename(filePath)}${tsToDate(meta.updatedTs)}: ${basename(deletePath)}${tsToDate(updatedTs)}; `);
+					verbose(`            ` + JSON.stringify({id:oldCore?.id,did:oldCore?.did,uuid:oldCore?.uuid}));
+					await deleteFile(deletePath);
 					deletedSet.add(deletePath);
 				}
 			}
@@ -177,7 +186,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 
 			// delete incomplete message
 			if (isMessage(oldCore, objectType) && !oldCore.characterId) {
-				await deleteFile(filePath).catch(errorReturnFalse);
+				await deleteFile(filePath);
 				missingCharacterId++;
 				return;
 			}
@@ -189,7 +198,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 
 			// delete incomplete
 			if (isMessage(updatedCore, objectType) && !updatedCore.userId) {
-				await deleteFile(filePath).catch(errorReturnFalse);
+				await deleteFile(filePath);
 				missingUserId++;
 				return;
 			}
@@ -214,10 +223,10 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 			const hasChanges = before !== after;
 
 			if (wrongPath || hasChanges) {
-				await writeFile(writeFilePath, updatedCore, { makeDir:true }).catch(errorReturnFalse);
+				await writeFile(writeFilePath, updatedCore, { makeDir:true });
 
 				if (wrongPath) {
-					await deleteFile(filePath).catch(errorReturnFalse);
+					await deleteFile(filePath);
 					moved++;
 
 				}else {
@@ -229,8 +238,14 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 			if (hasMoreChanges) {
 				updatedTwice++;
 			}
+
+			// ddbTable.save(updatedCore);
+			// ddbQueue.push(updatedCore);
 		});
+		// ddbPromises.push(ddbTable.save(ddbQueue));
 	}
+
+	await Promise.all(ddbPromises);
 
 	verbose({ unableToRead, missingCharacterId, missingUserId, moved, targetExists, updated, updatedTwice, duplicatesDeleted });
 }

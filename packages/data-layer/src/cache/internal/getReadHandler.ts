@@ -1,41 +1,41 @@
 import { areEqual, debug, error, noop, warn } from "@rsc-utils/core-utils";
 import { readJsonFile, type RepoId } from "@rsc-utils/io-utils";
-import type { BaseCacheItem, CacheItemTableName, DataMode } from "../types.js";
+import {  objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
 import { getDdbTable } from "./DdbRepo.js";
 import { getJsonPath } from "./getJsonPath.js";
 
 export type ReadHandler<
 	Core extends BaseCacheItem
 > = (
-	tableName: CacheItemTableName,
+	objectType: CacheItemObjectType,
 	item: BaseCacheItem
 ) => Promise<Core | undefined>;
 
 async function readFromBoth<
 	Core extends BaseCacheItem
 >(
-	tableName: CacheItemTableName,
+	objectType: CacheItemObjectType,
 	item: BaseCacheItem
 ): Promise<Core | undefined> {
 
 	const ddbStart = Date.now();
-	const fromDdb = await readFromDdb<Core>(tableName, item);
+	const fromDdb = await readFromDdb<Core>(objectType, item);
 	const ddbDone = Date.now();
 	const fileStart = Date.now();
-	const fromFile = await readFromFile<Core>(tableName, item);
+	const fromFile = await readFromFile<Core>(objectType, item);
 	const fileDone = Date.now();
 	debug({ ddbStart, ddbDone, ddbMs:ddbDone-ddbStart, fileStart, fileDone, fileMs:fileDone-fileStart });
 
 	if (!fromDdb && !fromFile) {
-		error(`fetchFromBoth - both missing: ${tableName} -> ${item}`);
+		error(`fetchFromBoth - both missing: ${objectType} -> ${item}`);
 		return undefined;
 	}
 
 	if (!fromDdb || !fromFile) {
-		warn(`fetchFromBoth - ${fromDdb ? "file" : "ddb"} missing: ${tableName} -> ${item}`);
+		warn(`fetchFromBoth - ${fromDdb ? "file" : "ddb"} missing: ${objectType} -> ${item}`);
 
 	}else if (!areEqual(fromDdb, fromFile)) {
-		warn(`fetchFromBoth - different json: ${tableName} -> ${item}`);
+		warn(`fetchFromBoth - different json: ${objectType} -> ${item}`);
 	}
 
 	return fromDdb ?? fromFile;
@@ -45,11 +45,11 @@ async function readFromBoth<
 async function readFromDdb<
 	Core extends BaseCacheItem
 >(
-	tableName: CacheItemTableName,
+	objectType: CacheItemObjectType,
 	{ did, id, uuid }: BaseCacheItem
 ): Promise<Core | undefined> {
 
-	const ddbTable = getDdbTable(tableName);
+	const ddbTable = getDdbTable(objectType);
 
 	const ids = [id, did, uuid].filter(s => s) as RepoId[];
 	const cores = await ddbTable.get(ids);
@@ -66,37 +66,39 @@ async function readFromDdb<
 async function readFromDdbFirst<
 	T extends BaseCacheItem
 >(
-	tableName: CacheItemTableName,
+	objectType: CacheItemObjectType,
 	cacheItem: BaseCacheItem
 ): Promise<T | undefined> {
 
-	const fromDdb = await readFromDdb<T>(tableName, cacheItem);
+	const fromDdb = await readFromDdb<T>(objectType, cacheItem);
 	if (fromDdb) return fromDdb;
 
-	return readFromFile(tableName, cacheItem);
+	return readFromFile(objectType, cacheItem);
 
 }
 
 async function readFromFile<
 	T extends BaseCacheItem
 >(
-	tableName: CacheItemTableName,
+	objectType: CacheItemObjectType,
 	cacheItem: BaseCacheItem
 ): Promise<T | undefined> {
 
+	const dirName = objectTypeToDirName(objectType);
+
 	// read by id first
-	const idPath = getJsonPath(tableName, cacheItem.id);
+	const idPath = getJsonPath(dirName, cacheItem.id);
 	let json = await readJsonFile<T>(idPath).catch(noop);
 
 	// read by did if id missed
 	if (!json && cacheItem.did) {
-		const didPath = getJsonPath(tableName, cacheItem.did);
+		const didPath = getJsonPath(dirName, cacheItem.did);
 		json = await readJsonFile<T>(didPath).catch(noop);
 	}
 
 	// read by uuid id id and did missed
 	if (!json && cacheItem.uuid) {
-		const uuidPath = getJsonPath(tableName, cacheItem.uuid);
+		const uuidPath = getJsonPath(dirName, cacheItem.uuid);
 		json = await readJsonFile<T>(uuidPath).catch(noop);
 	}
 
@@ -107,14 +109,14 @@ async function readFromFile<
 async function readFromFileFirst<
 	T extends BaseCacheItem
 >(
-	tableName: CacheItemTableName,
+	objectType: CacheItemObjectType,
 	cacheItem: BaseCacheItem
 ): Promise<T | undefined> {
 
-	const fromFile = await readFromFile<T>(tableName, cacheItem);
+	const fromFile = await readFromFile<T>(objectType, cacheItem);
 	if (fromFile) return fromFile;
 
-	return readFromDdb(tableName, cacheItem);
+	return readFromDdb(objectType, cacheItem);
 
 }
 

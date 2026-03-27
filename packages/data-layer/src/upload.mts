@@ -1,7 +1,7 @@
 import { forEachAsync, getDataRoot, initializeConsoleUtilsByEnvironment, noop, tagLiterals, verbose } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile, type RepoItem } from "@rsc-utils/io-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
-import { type BaseCacheItem, type CacheItemObjectType, isCacheItemObjectType, isCacheItemTableName, objectTypeToTableName, tableNameToObjectType } from "./cache/types.js";
+import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType } from "./cache/types.js";
 
 initializeConsoleUtilsByEnvironment();
 
@@ -12,7 +12,7 @@ async function main() {
 
 	process.argv.forEach(arg => {
 		if (isCacheItemObjectType(arg)) objectTypes.add(arg);
-		if (isCacheItemTableName(arg)) objectTypes.add(tableNameToObjectType(arg));
+		if (isCacheItemDirName(arg)) objectTypes.add(dirNameToObjectType(arg));
 	});
 
 	const years = ["2021", "2022", "2023", "2024", "2025", "2026"];
@@ -20,7 +20,7 @@ async function main() {
 	if (!yearArgs.length) yearArgs.push(...years);
 
 	for (const objectType of objectTypes) {
-		const ddbTable = getDdbTable(objectTypeToTableName(objectType));
+		const ddbTable = getDdbTable(objectType);
 		const { tableName } = ddbTable;
 
 		verbose(tagLiterals`Uploading to DDB: ${objectType} ...`);

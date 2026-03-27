@@ -5,7 +5,7 @@ import { assertSageGameCore } from "../../types/SageGameCore.js";
 import { assertSageMessageReferenceCore } from "../../types/SageMessageReferenceCore.js";
 import { assertSageServerCore } from "../../types/SageServerCore.js";
 import { assertSageUserCore } from "../../types/SageUserCore.js";
-import { objectTypeToTableName, type BaseCacheItem, type CacheItemObjectType } from "../types.js";
+import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType } from "../types.js";
 
 export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(objectType: CacheItemObjectType, yearArgs?: string[]): Promise<boolean> {
 	const errors: string[] = [];
@@ -14,7 +14,9 @@ export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(
 
 	verbose(`ObjectType: ${objectType}`);
 
-	const dataPath = getDataRoot(["sage", objectTypeToTableName(objectType)]);
+	const dirName = objectTypeToDirName(objectType);
+
+	const dataPath = getDataRoot(["sage", dirName]);
 	verbose(`  ${objectType} Path: ${dataPath}`);
 
 	const children = objectType === "Message" ? yearArgs ?? ["2021", "2022", "2023", "2024", "2025", "2026"] : [""];
@@ -23,7 +25,7 @@ export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(
 	}
 
 	for (const child of children) {
-		const childPath = child ? getDataRoot(["sage", objectTypeToTableName(objectType), child]) : dataPath;
+		const childPath = child ? getDataRoot(["sage", dirName, child]) : dataPath;
 		if (child) {
 			verbose(`  ${objectType} ${child} Path: ${childPath}`);
 		}

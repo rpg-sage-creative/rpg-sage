@@ -1,27 +1,25 @@
 import { errorReturnFalse } from "@rsc-utils/core-utils";
 import { writeFile, type RepoItem } from "@rsc-utils/io-utils";
 import type { DataTable } from "../DataTable.js";
-import type { BaseCacheItem, CacheItemObjectType, CacheItemTableName, DataMode } from "../types.js";
+import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
 import { getDdbTable } from "./DdbRepo.js";
 import { getJsonPath } from "./getJsonPath.js";
 
 export type WriteHandler<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 	Core extends CacheItem = CacheItem,
 > = (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 	core: Core,
 ) => Promise<boolean>;
 
 async function writeToBoth<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 	Core extends CacheItem = CacheItem,
 > (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 	core: Core,
 ): Promise<boolean> {
 
@@ -33,26 +31,24 @@ async function writeToBoth<
 
 async function writeToDdb<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 	Core extends CacheItem = CacheItem,
 > (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 	core: Core,
 ): Promise<boolean> {
 
-	const ddbTable = getDdbTable(dataTable.tableName);
+	const ddbTable = getDdbTable(dataTable.objectType);
 	return ddbTable.save(core as RepoItem).catch(errorReturnFalse);
 
 }
 
 async function writeToDdbFirst<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 	Core extends CacheItem = CacheItem,
 > (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 	core: Core,
 ): Promise<boolean> {
 
@@ -64,15 +60,14 @@ async function writeToDdbFirst<
 
 async function writeToFile<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 	Core extends CacheItem = CacheItem,
 > (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 	core: Core,
 ): Promise<boolean> {
 
-	const path = getJsonPath(dataTable.tableName, core.id);
+	const path = getJsonPath(objectTypeToDirName(dataTable.objectType), core.id);
 	const options = { makeDir:true, formatted:dataTable.formatFiles };
 	return writeFile(path, core, options).catch(errorReturnFalse);
 
@@ -80,11 +75,10 @@ async function writeToFile<
 
 async function writeToFileFirst<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 	Core extends CacheItem = CacheItem,
 > (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 	core: Core,
 ): Promise<boolean> {
 

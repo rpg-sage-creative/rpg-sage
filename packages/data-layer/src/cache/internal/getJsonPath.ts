@@ -1,14 +1,13 @@
-import { snowflakeToDate, type Snowflake } from "@rsc-utils/core-utils";
-import { formatDataFilePath } from "@rsc-utils/core-utils";
-import type { CacheItemTableName } from "../types.js";
+import { formatDataFilePath, snowflakeToDate, type Snowflake } from "@rsc-utils/core-utils";
+import type { CacheItemDirName } from "../types.js";
 
 /**
  * @internal
  * Reusable function to avoid typoes when getting json file path.
  */
-export function getJsonPath(tableName: CacheItemTableName, id: string): string {
-	const dataPath = ["sage", tableName];
-	if (tableName === "messages") {
+export function getJsonPath(dirName: CacheItemDirName, id: string): string {
+	const dataPath = ["sage", dirName];
+	if (dirName === "messages") {
 		dataPath.push(snowflakeToDate(id as Snowflake).getFullYear().toString());
 	}
 	return formatDataFilePath(dataPath, id);

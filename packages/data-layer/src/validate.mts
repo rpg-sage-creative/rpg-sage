@@ -1,6 +1,6 @@
 import { initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
 import { validate } from "./cache/internal/validate.js";
-import { type CacheItemObjectType, isCacheItemObjectType, isCacheItemTableName, tableNameToObjectType } from "./cache/types.js";
+import { type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType } from "./cache/types.js";
 
 initializeConsoleUtilsByEnvironment();
 
@@ -11,7 +11,7 @@ async function main() {
 
 	process.argv.forEach(arg => {
 		if (isCacheItemObjectType(arg)) objectTypes.add(arg);
-		if (isCacheItemTableName(arg)) objectTypes.add(tableNameToObjectType(arg));
+		if (isCacheItemDirName(arg)) objectTypes.add(dirNameToObjectType(arg));
 	});
 
 	const years = ["2021", "2022", "2023", "2024", "2025", "2026"];

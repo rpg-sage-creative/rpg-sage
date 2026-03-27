@@ -1,22 +1,20 @@
 import { forEachAsync, getDataRoot, noop, tagLiterals, verbose } from "@rsc-utils/core-utils";
 import { DdbRepo, filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import type { DataTable } from "../DataTable.js";
-import type { BaseCacheItem, CacheItemObjectType, CacheItemTableName, DataMode } from "../types.js";
+import type { BaseCacheItem, CacheItemObjectType, DataMode } from "../types.js";
 
 export type PopulateHandler<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 > = (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 ) => Promise<boolean>;
 
 export async function populateFromBoth<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 > (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 ): Promise<boolean> {
 
 	// load all the items from the files
@@ -30,10 +28,9 @@ export async function populateFromBoth<
 
 export async function populateFromDdb<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 > (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 ): Promise<boolean> {
 
 	const { tableName } = dataTable;
@@ -78,10 +75,9 @@ export async function populateFromDdb<
 
 export async function populateFromDdbFirst<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 > (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 ): Promise<boolean> {
 
 	// load all the items from ddb
@@ -94,10 +90,9 @@ export async function populateFromDdbFirst<
 
 export async function populateFromFile<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 > (
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 ): Promise<boolean> {
 
 	const { objectType, tableName } = dataTable;
@@ -136,10 +131,9 @@ export async function populateFromFile<
 
 export async function populateFromFileFirst<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 >(
-	dataTable: DataTable<ObjectType, TableName, CacheItem>,
+	dataTable: DataTable<ObjectType, CacheItem>,
 ): Promise<boolean> {
 
 	// load all the items from the files
@@ -153,10 +147,9 @@ export async function populateFromFileFirst<
 /** @internal */
 export function getPopulateHandler<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 >(
 	dataMode: DataMode,
-): PopulateHandler<ObjectType, TableName> {
+): PopulateHandler<ObjectType> {
 
 	switch(dataMode) {
 		case "both": return populateFromBoth;

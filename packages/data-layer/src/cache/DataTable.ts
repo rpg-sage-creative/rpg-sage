@@ -4,8 +4,7 @@ import { getPopulateHandler, type PopulateHandler } from "./internal/getPopulate
 import { getReadHandler, type ReadHandler } from "./internal/getReadHandler.js";
 import { getWriteHandler, type WriteHandler } from "./internal/getWriteHandler.js";
 import { simplifyCacheItem, simplifyForLogging } from "./internal/simplify.js";
-import type { BaseCacheItem, CacheItemObjectType, CacheItemTableName, CharacterCacheItem, DataMode, GameCacheItem } from "./types.js";
-import { objectTypeToTableName } from "./types.js";
+import { objectTypeToTableName, type BaseCacheItem, type CacheItemObjectType, type CharacterCacheItem, type DataMode, type GameCacheItem } from "./types.js";
 
 type DataTableConfigItem = {
 	/** default: "file" */
@@ -16,24 +15,22 @@ type DataTableConfigItem = {
 	isCached?: boolean;
 
 	objectType: CacheItemObjectType;
-	tableName?: CacheItemTableName;
+	tableName?: string;
 };
 
 type UncachedDataTable<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>
 > = {
-	tableName: TableName;
+	tableName: string;
 	fetch<Core extends CacheItem>(item: CacheItem): Promise<Core | undefined>;
 	write<Core extends CacheItem>(core: Core): Promise<boolean>;
 };
 
 type CachedDataTable<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>
-> = UncachedDataTable<ObjectType, TableName, CacheItem> & {
+> = UncachedDataTable<ObjectType, CacheItem> & {
 	filter<CacheItem>(predicate: (item: CacheItem) => unknown): CacheItem[];
 	find<CacheItem>(predicate: (item: CacheItem) => unknown): CacheItem | undefined;
 	get(id: string | CacheItem): CacheItem | undefined;
@@ -46,7 +43,6 @@ type CachedDataTable<
  */
 export class DataTable<
 	ObjectType extends CacheItemObjectType,
-	TableName extends CacheItemTableName = Lowercase<`${ObjectType}s`>,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
 > {
 
@@ -67,15 +63,15 @@ export class DataTable<
 
 	public readonly objectType: ObjectType;
 
-	public readonly populateHandler: PopulateHandler<ObjectType, TableName>;
+	public readonly populateHandler: PopulateHandler<ObjectType>;
 
 	public readonly readHandler: ReadHandler<CacheItem>;
 
-	public readonly tableName: TableName;
+	public readonly tableName: string;
 
 	public wasPopulated: boolean;
 
-	private readonly writeHandler: WriteHandler<ObjectType, TableName>;
+	private readonly writeHandler: WriteHandler<ObjectType>;
 
 	private constructor(
 		{ dataMode, formatFiles, isCached, objectType, tableName }: Required<DataTableConfigItem>,
@@ -86,7 +82,7 @@ export class DataTable<
 		this.objectType = objectType as ObjectType;
 		this.populateHandler = getPopulateHandler(dataMode);
 		this.readHandler = getReadHandler(dataMode);
-		this.tableName = tableName as TableName;
+		this.tableName = tableName;
 		this.wasPopulated = false;
 		this.writeHandler = getWriteHandler(dataMode);
 	}
@@ -100,7 +96,7 @@ export class DataTable<
 			return undefined;
 		}
 
-		const core = await this.readHandler(this.tableName, item);
+		const core = await this.readHandler(this.objectType, item);
 		return core as Core;
 	}
 
@@ -277,11 +273,11 @@ export class DataTable<
 	public static formatFiles: boolean;
 
 	/** returns the ObjectCache for the given key */
-	public static for(objectType: "Character"): CachedDataTable<"Character", "characters", CharacterCacheItem>;
-	public static for(objectType: "Game"): CachedDataTable<"Game", "games", GameCacheItem>;
-	public static for(objectType: "Message"): UncachedDataTable<"Message", "messages">;
-	public static for(objectType: "Server"): CachedDataTable<"Server", "servers">;
-	public static for(objectType: "User"): CachedDataTable<"User", "users">;
+	public static for(objectType: "Character"): CachedDataTable<"Character", CharacterCacheItem>;
+	public static for(objectType: "Game"): CachedDataTable<"Game", GameCacheItem>;
+	public static for(objectType: "Message"): UncachedDataTable<"Message">;
+	public static for(objectType: "Server"): CachedDataTable<"Server">;
+	public static for(objectType: "User"): CachedDataTable<"User">;
 	public static for<ObjectType extends CacheItemObjectType>(objectType: ObjectType): CachedDataTable<CacheItemObjectType>;
 	public static for(objectType: CacheItemObjectType): UncachedDataTable<CacheItemObjectType> | undefined {
 		return DataTable.tables.get(objectType);
@@ -297,7 +293,7 @@ export class DataTable<
 			return {
 				dataMode: opts?.dataMode ?? "file",
 				formatFiles: opts?.formatFiles ?? formatFiles,
-				isCached: opts?.isCached ?? objectType !== "Message",
+				isCached: opts?.isCached ?? !["Dice", "Message"].includes(objectType),
 				objectType: opts?.objectType ?? objectType,
 				tableName: opts?.tableName ?? objectTypeToTableName(objectType)
 			};
@@ -305,6 +301,7 @@ export class DataTable<
 
 		DataTable.config = {
 			Character: getConfigItem("Character"),
+			Dice: getConfigItem("Dice"),
 			Game: getConfigItem("Game"),
 			Message: getConfigItem("Message"),
 			Server: getConfigItem("Server"),
