@@ -141,6 +141,7 @@ function importFileExists(which: "e20" | "heph" | "pb2e", id: Optional<string>):
 export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: EnsureContext): SageCharacterCore | undefined {
 	if (isBlank(core.name)) return warnReturnUndefined(`Invalid SageCharacter.name (${JSON.stringify(core.name)}); removing ${context?.characterType ?? "character"}`);
 
+	core.objectType = "Character";
 	ensureIds(core);
 
 	// get userId for lastMessages
@@ -164,7 +165,7 @@ export function ensureSageCharacterCore(core: SageCharacterCoreOld, context?: En
 	// name
 	delete core.nameLower;
 	ensureArray({ core, key:"notes", optional, typeGuard:isNote });
-	core.objectType = "Character";
+	// objectType
 	// pathbuilder
 	// pathbuilderId
 	if (core.pathbuilderId && !importFileExists("pb2e", core.pathbuilderId)) delete core.pathbuilderId;
