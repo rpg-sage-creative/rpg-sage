@@ -25,7 +25,7 @@ import type {
 //#region Tokenizer
 const QuestParsers = {
 	dice: /\s*(1)?\s*d\s*(20)/i,
-	target: /(vs)\s*(\d+|\|\|\d+\|\|)/i,
+	target: /(?<![a-z])(vs)\s*(\d+\b|\|\|\d+\|\|)/i,
 };
 function getParsers(): TokenParsers {
 	return QuestParsers;

@@ -46,7 +46,7 @@ final success/failure
 
 const CnCParsers = {
 	dice: /\s*(\d+)?\s*d\s*(12)/i,
-	target: /(vs)\s*(\d+)/i,
+	target: /(?<![a-z])(vs)\s*(\d+)\b/i,
 };
 function getParsers(): TokenParsers {
 	return CnCParsers;

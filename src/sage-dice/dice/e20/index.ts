@@ -63,7 +63,7 @@ import type {
 
 const E20Parsers = {
 	suffix: /(e|s|\*|up\d+|dn\d+)+/i,
-	target: /\b(vs\s*dif|dif|vs)\s*(\d+|\|\|\d+\|\|)/i,
+	target: /(?<![a-z])(vs\s*dif|dif|vs)\s*(\d+\b|\|\|\d+\|\|)/i,
 };
 
 let _parsers: TokenParsers;

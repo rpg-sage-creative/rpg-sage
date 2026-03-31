@@ -30,14 +30,14 @@ import type {
 
 const Pf2eParsers = {
 	"special": /(deadly|fatal)\s*\d?d\d+/i,
-	"target": /(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+|\|\|\d+\|\|)/i,
+	"target": /(?<![a-z])(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+\b|\|\|\d+\|\|)/i,
 
 	// vs type
-	"concealed": /(vs\s*conceal(?:ed|ment)?)/i,
-	"deafened": /(vs\s*deaf(?:ened)?)/i,
-	"hidden": /(vs\s*hidden)/i,
-	"stupefied": /(vs\s*stup[ie]fied)\s*(\d+)/i,
-	"undetected": /(vs\s*undetected)/i,
+	"concealed": /(?<![a-z])(vs\s*conceal(?:ed|ment)?)\b/i,
+	"deafened": /(?<![a-z])(vs\s*deaf(?:ened)?)\b/i,
+	"hidden": /(?<![a-z])(vs\s*hidden)\b/i,
+	"stupefied": /(?<![a-z])(vs\s*stup[ie]fied)\s*(\d+)\b/i,
+	"undetected": /(?<![a-z])(vs\s*undetected)\b/i,
 
 	// vs or just type
 	// "concealed": /((?:vs\s*)?conceal(?:ed|ment)?)/i,

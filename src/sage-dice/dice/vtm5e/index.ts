@@ -45,7 +45,7 @@ hunger takes priority in critical pairings ...
 function getParsers(): TokenParsers {
 	return {
 		dice: /(\d+)?\s*d\s*10\s*(?:h\s*(\d+)|(\d+)\s*h)?/i,
-		target: /(vs)\s*(\d+|\|\|\d+\|\|)/i
+		target: /(?<![a-z])(vs)\s*(\d+\b|\|\|\d+\|\|)/i
 	};
 }
 

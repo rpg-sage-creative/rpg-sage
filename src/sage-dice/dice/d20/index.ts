@@ -26,7 +26,7 @@ import type {
 
 const D20Parsers = {
 	crits: /crit\s*(?:(\d+)\+?)?\s*(?:x(\d+))?\s*(?:conf(?:irm(?:ation)?)?\s*([\-\+]\d+))?/i,
-	target: /(ac|dc)\s*(\d+|\|\|\d+\|\|)/i,
+	target: /(?<![a-z])(ac|dc)\s*(\d+\b|\|\|\d+\|\|)/i,
 };
 
 let _parsers: TokenParsers;
