@@ -32,11 +32,6 @@ export type DeckPlayArgs<From extends StackKey = StackKey, To extends StackKey =
 
 export type DeckDrawArgs = { count:number; upTo?:never; } | { count?:never; upTo:number; };
 
-const DiscardPileRegExp = /^discard(Pile)?$/i;
-const DrawPileRegExp = /^draw(Pile)?$/i;
-const HandRegExp = /^hand$/i;
-const SpreadRegExp = /^spread$/i;
-
 /** becuase we use ordinals to select cards in hand/spread we need to reverse their slice args @todo decide if this is the right choice or not */
 function getSliceArgs(count: number, where: StackWhereKey) {
 	return where === "top" ? { start:0, end:count } : { start:-1 * count, end:undefined };
@@ -212,8 +207,8 @@ export class Deck {
 		};
 	}
 
-	public reset() {
-		const { id, objectType, type = "English52" } = this.core;
+	public reset(deckType: DeckType = "English52") {
+		const { id, objectType, type = deckType } = this.core;
 		const drawPile = getCards(type).map(({id}) => id);
 		this.core = {
 			cardCount: drawPile.length,
@@ -260,16 +255,21 @@ export class Deck {
 
 	public static parseStackKey(value?: Optional<string>): StackKey | undefined {
 		if (value) {
-			if (DiscardPileRegExp.test(value)) return "discardPile";
-			if (DrawPileRegExp.test(value)) return "drawPile";
-			if (HandRegExp.test(value)) return "hand";
-			if (SpreadRegExp.test(value)) return "spread";
+			const lower = value.toLowerCase();
+			if (lower === "discard" || lower === "discardpile") return "discardPile";
+			if (lower === "draw" || lower === "drawpile") return "drawPile";
+			if (lower === "hand") return "hand";
+			if (lower === "spread") return "spread";
 		}
 		return undefined;
 	}
 
 	public static parseStackWhereKey(value?: Optional<string>): StackWhereKey | undefined {
-		return value === "top" ? "top" : value === "bottom" ? "bottom" : undefined;
+		switch(value?.toLowerCase()) {
+			case "top": return "top";
+			case "bottom": return "bottom";
+			default: return undefined;
+		}
 	}
 
 	public static from(core: DeckCore | Deck): Deck {

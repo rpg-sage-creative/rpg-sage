@@ -26,6 +26,8 @@ export type SageUserCore = SageCore<"User", Snowflake | UUID> & {
 	/** "on" (true) by default */
 	confirmationPrompts?: boolean;
 
+	// createdTs (SageCore)
+
 	/** "Embed" by default */
 	defaultDialogType?: DialogPostType;
 
@@ -68,13 +70,12 @@ export type SageUserCore = SageCore<"User", Snowflake | UUID> & {
 	// updatedTs (SageCore)
 
 	// uuid (SageCore)
-
-	// ver (SageCore)
 };
 
 export const SageUserKeys: (keyof SageUserCore)[] = [
 	"aliases",
 	"confirmationPrompts",
+	"createdTs",
 	"defaultDialogType",
 	"defaultSagePostType",
 	"dialogDiceBehaviorType",
@@ -173,7 +174,6 @@ export function ensureSageUserCore(core: SageUserCoreOld, context?: EnsureContex
 // export type UserV2 = SageCore<"User", Snowflake> & {
 // 	settings: UserSettingsV2;
 // 	updatedTs: number;
-// 	ver: number;
 // };
 
 // export const UserV2Keys: (keyof UserV2)[] = [
@@ -183,5 +183,4 @@ export function ensureSageUserCore(core: SageUserCoreOld, context?: EnsureContex
 // 	"settings",
 // 	"updatedTs",
 // 	"uuid",
-// 	"ver"
 // ];

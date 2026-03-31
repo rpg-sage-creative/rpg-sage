@@ -1,2 +1,2 @@
-export * from "./GlobalCache.js";
+export * from "./DataTable.js";
 export * from "./types.js";

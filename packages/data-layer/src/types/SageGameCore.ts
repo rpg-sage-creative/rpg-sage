@@ -38,12 +38,14 @@ export type SageGameCore = Omit<SageCore<"Game", Snowflake | UUID>, "createdTs">
 	/** timestamp the game was created */
 	createdTs: number;
 
+	// did (SageCore)
+
 	encounters?: unknown[];
 
 	/** game level gm character */
 	gmCharacter?: SageCharacterCore;
 
-	// id
+	// id (SageCore)
 
 	/** game level macros */
 	macros?: MacroBase[];
@@ -57,7 +59,7 @@ export type SageGameCore = Omit<SageCore<"Game", Snowflake | UUID>, "createdTs">
 	/** list of non player characters */
 	nonPlayerCharacters?: SageCharacterCore[];
 
-	// objectType
+	// objectType (SageCore)
 
 	parties?: unknown[];
 
@@ -73,14 +75,12 @@ export type SageGameCore = Omit<SageCore<"Game", Snowflake | UUID>, "createdTs">
 	/** game server's discord snowflake */
 	serverDid: Snowflake;
 
-	// updatedTs
+	// updatedTs (SageCore)
 
 	/** users and gms */
 	users?: GameUserData[];
 
-	// uuid
-
-	// ver
+	// uuid (SageCore)
 };
 
 export const SageGameKeys: (keyof SageGameCore)[] = [

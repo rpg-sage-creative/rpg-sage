@@ -51,7 +51,10 @@ function dataValidate() {
 }
 
 function dataUpload() {
-	echo "Upload to DDB"
+	local objectType="$1"
+	local year="$2"
+	resetPath
+	node ./packages/data-layer/build/upload.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$objectType" "$year"
 }
 
 function dataCompare() {

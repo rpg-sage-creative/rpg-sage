@@ -1,4 +1,4 @@
-import { AdminRoleType, GameUserType } from "@rsc-sage/data-layer";
+import { AdminRoleType, DataTable, GameUserType, type GameCacheItem } from "@rsc-sage/data-layer";
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
 import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
@@ -8,8 +8,7 @@ import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
 import { resolveContent } from "../../discord/resolvers/resolveContent.js";
 import { MoveDirection } from "../commands/map/MoveDirection.js";
-import { globalCacheFilter, globalCacheRead, type GameCacheItem, type GlobalCacheItem } from "../repo/base/globalCache.js";
-import { JsonRepo } from "../repo/base/JsonRepo.js";
+import { IdRepository } from "../repo/base/IdRepository.js";
 import { ActiveBot } from "./ActiveBot.js";
 import type { Bot } from "./Bot.js";
 import { Game, type GameCore } from "./Game.js";
@@ -405,7 +404,7 @@ type SageEventCacheCore = {
 	messageOrPartial?: MessageOrPartial;
 	/** reaction of a reaction */
 	reactionOrPartial?: ReactionOrPartial;
-	repo: JsonRepo;
+	repo: IdRepository;
 	server: SageEventCacheServer;
 };
 
@@ -442,7 +441,7 @@ async function createSageEventCache(options: SageEventCacheCreateOptions): Promi
 
 	const evCache = new SageEventCache(core);
 
-	core.repo = new JsonRepo(evCache);
+	core.repo = new IdRepository(evCache);
 
 	core.home = await evCache.getOrFetchServer(getHomeServerId()) as Server;
 
@@ -743,7 +742,7 @@ export class SageEventCache {
 
 		const contentFilter = (core: GameCacheItem) => {
 			// match server first
-			if (core.serverDid !== serverId) return false;
+			if (core.serverDid !== serverId && core.serverId !== serverId) return false;
 			// match archived or not
 			if (!archived === !core.archivedTs) return false;
 			// if we have a user, make sure they are in the game
@@ -752,9 +751,10 @@ export class SageEventCache {
 			return true;
 		};
 
-		const cacheItems = globalCacheFilter("games", contentFilter) as GlobalCacheItem[];
-		const cores = await mapAsync(cacheItems, item => globalCacheRead(item)) as GameCore[];
-		return cores.filter(isDefined).map(core => new Game(core, server, this));
+		const objectCache = DataTable.for("Game");
+		const cacheItems = objectCache.filter(contentFilter);
+		const cores = await mapAsync(cacheItems, item => objectCache.fetch<GameCore>(item));
+		return cores.filter(isDefined).map((core: GameCore) => new Game(core, server, this));
 	}
 
 	public async fetchMessage(keyOrReference: DiscordKey | MessageReferenceOrPartial): Promise<Message | undefined> {

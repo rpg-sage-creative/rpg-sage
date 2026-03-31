@@ -31,7 +31,9 @@ export type SageServerCore = SageCore<"Server", Snowflake | UUID> & HasEmbedColo
 	/** "sage!" by default */
 	commandPrefix?: string;
 
-	// did
+	// createdTs (SageCore)
+
+	// did (SageCore)
 
 	/** "Admin" by default */
 	gameCreatorType?: GameCreatorType;
@@ -42,7 +44,7 @@ export type SageServerCore = SageCore<"Server", Snowflake | UUID> & HasEmbedColo
 	/** server level gm character for shared stats/npcs and non-game usage */
 	gmCharacter?: SageCharacterCore;
 
-	// id
+	// id (SageCore)
 
 	/** server level macros */
 	macros?: MacroBase[];
@@ -50,16 +52,14 @@ export type SageServerCore = SageCore<"Server", Snowflake | UUID> & HasEmbedColo
 	/** stores the name of the server the last time an update was made */
 	name: string;
 
-	// objectType
+	// objectType (SageCore)
 
 	/** used to allow users to admin sage/games via role instead of .admins */
 	roles: AdminRole[];
 
-	// updatedTs
+	// updatedTs (SageCore)
 
-	// uuid
-
-	// ver
+	// uuid (SageCore)
 
 };
 
@@ -69,6 +69,7 @@ export const SageServerKeys: (keyof SageServerCore)[] = [
 	"channels",
 	"colors",
 	"commandPrefix",
+	"createdTs",
 	"did",
 	"emoji",
 	"gameCreatorType",
