@@ -1,12 +1,12 @@
 import { initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
 import { deleteFile } from "@rsc-utils/io-utils";
-import { getIdMap, getIdMapFilePath } from "./validation/getIdMap.js";
+import { getIdsArrayFilePath, writeIdsArray } from "./validation/IdsArray.js";
 
 initializeConsoleUtilsByEnvironment();
 
 async function main() {
-	await deleteFile(getIdMapFilePath())
-	await getIdMap();
+	await deleteFile(getIdsArrayFilePath());
+	await writeIdsArray();
 }
 
 // make sure we don't trigger this with an index.ts include
