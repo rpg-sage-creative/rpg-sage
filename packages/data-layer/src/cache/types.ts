@@ -3,7 +3,7 @@ export type CacheItemObjectType = "Character" | "Dice" | "Game" | "Message" | "S
 export type CacheItemDirName = Lowercase<`${CacheItemObjectType}s`>;
 
 /** ddb and file should be the only options when this is done; the others are for testing */
-export type DataMode = "both" | "ddb" | "ddb-first" | "file" | "file-first";
+export type DataMode = "both" | "ddb" | "file";
 
 /** The most basic form of global in memory cache items. */
 export type BaseCacheItem<ObjectType extends CacheItemObjectType = CacheItemObjectType> = {

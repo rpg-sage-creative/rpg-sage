@@ -43,21 +43,6 @@ async function writeToDdb<
 
 }
 
-async function writeToDdbFirst<
-	ObjectType extends CacheItemObjectType,
-	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
-	Core extends CacheItem = CacheItem,
-> (
-	dataTable: DataTable<ObjectType, CacheItem>,
-	core: Core,
-): Promise<boolean> {
-
-	const toDdb = await writeToDdb(dataTable, core);
-	if (toDdb) return toDdb;
-
-	return writeToFile(dataTable, core);
-}
-
 async function writeToFile<
 	ObjectType extends CacheItemObjectType,
 	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
@@ -67,25 +52,11 @@ async function writeToFile<
 	core: Core,
 ): Promise<boolean> {
 
-	const path = getJsonPath(objectTypeToDirName(dataTable.objectType), core.id);
+	const dirName = objectTypeToDirName(dataTable.objectType);
+	const filePath = getJsonPath(dirName, core.id);
 	const options = { makeDir:true, formatted:dataTable.formatFiles };
-	return writeFile(path, core, options).catch(errorReturnFalse);
+	return writeFile(filePath, core, options).catch(errorReturnFalse);
 
-}
-
-async function writeToFileFirst<
-	ObjectType extends CacheItemObjectType,
-	CacheItem extends BaseCacheItem<ObjectType> = BaseCacheItem<ObjectType>,
-	Core extends CacheItem = CacheItem,
-> (
-	dataTable: DataTable<ObjectType, CacheItem>,
-	core: Core,
-): Promise<boolean> {
-
-	const toFile = await writeToFile(dataTable, core);
-	if (toFile) return toFile;
-
-	return writeToDdb(dataTable, core);
 }
 
 /** @internal */
@@ -98,9 +69,7 @@ export function getWriteHandler<
 	switch(dataMode) {
 		case "both": return writeToBoth;
 		case "ddb": return writeToDdb;
-		case "ddb-first": return writeToDdbFirst;
 		case "file": return writeToFile;
-		case "file-first": return writeToFileFirst;
 	}
 
 }

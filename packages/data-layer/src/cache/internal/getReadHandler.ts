@@ -1,6 +1,6 @@
-import { areEqual, debug, error, noop, warn } from "@rsc-utils/core-utils";
+import { areEqual, debug, error, isDefined, noop, warn } from "@rsc-utils/core-utils";
 import { readJsonFile, type RepoId } from "@rsc-utils/io-utils";
-import {  objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
+import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
 import { getDdbTable } from "./DdbRepo.js";
 import { getJsonPath } from "./getJsonPath.js";
 
@@ -51,7 +51,7 @@ async function readFromDdb<
 
 	const ddbTable = getDdbTable(objectType);
 
-	const ids = [id, did, uuid].filter(s => s) as RepoId[];
+	const ids = [id, did, uuid].filter(isDefined) as RepoId[];
 	const cores = await ddbTable.get(ids);
 	for (const core of cores) {
 		if (core) {
@@ -60,20 +60,6 @@ async function readFromDdb<
 	}
 
 	return undefined;
-
-}
-
-async function readFromDdbFirst<
-	T extends BaseCacheItem
->(
-	objectType: CacheItemObjectType,
-	cacheItem: BaseCacheItem
-): Promise<T | undefined> {
-
-	const fromDdb = await readFromDdb<T>(objectType, cacheItem);
-	if (fromDdb) return fromDdb;
-
-	return readFromFile(objectType, cacheItem);
 
 }
 
@@ -91,32 +77,18 @@ async function readFromFile<
 	let json = await readJsonFile<T>(idPath).catch(noop);
 
 	// read by did if id missed
-	if (!json && cacheItem.did) {
+	if (!json && cacheItem.did && cacheItem.id !== cacheItem.did) {
 		const didPath = getJsonPath(dirName, cacheItem.did);
 		json = await readJsonFile<T>(didPath).catch(noop);
 	}
 
 	// read by uuid id id and did missed
-	if (!json && cacheItem.uuid) {
+	if (!json && cacheItem.uuid && cacheItem.id !== cacheItem.uuid) {
 		const uuidPath = getJsonPath(dirName, cacheItem.uuid);
 		json = await readJsonFile<T>(uuidPath).catch(noop);
 	}
 
 	return json ?? undefined;
-
-}
-
-async function readFromFileFirst<
-	T extends BaseCacheItem
->(
-	objectType: CacheItemObjectType,
-	cacheItem: BaseCacheItem
-): Promise<T | undefined> {
-
-	const fromFile = await readFromFile<T>(objectType, cacheItem);
-	if (fromFile) return fromFile;
-
-	return readFromDdb(objectType, cacheItem);
 
 }
 
@@ -130,9 +102,7 @@ export function getReadHandler<
 	switch(dataMode) {
 		case "both": return readFromBoth;
 		case "ddb": return readFromDdb;
-		case "ddb-first": return readFromDdbFirst;
 		case "file": return readFromFile;
-		case "file-first": return readFromFileFirst;
 	}
 
 }
