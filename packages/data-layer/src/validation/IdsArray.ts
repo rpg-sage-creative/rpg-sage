@@ -1,4 +1,4 @@
-import { debug, getDataRoot, noop, parseSnowflake, parseUuid, toUnique, verbose, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { debug, getDataRoot, isDefined, noop, parseSnowflake, parseUuid, toUnique, verbose, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { join } from "node:path";
 import type { SageCharacterCore } from "../types/SageCharacterCore.js";
@@ -14,7 +14,7 @@ function objectTypeToDirName(objectType: ObjectType): DirName {
 }
 
 type Ids = { id:string; did?:Snowflake; uuid?:UUID; };
-type Core = Ids & { objectType:ObjectType; };
+type Core<Type extends string = ObjectType> = Ids & { objectType:Type; };
 type ArrayCore = Core & { filePath?:string; };
 
 const idsArray: ArrayCore[] = [];
@@ -123,27 +123,29 @@ export function getIdsArrayFilePath() {
 	return join(getDataRoot("sage"), "ids-array.json");
 }
 
-export function findId(id: string, objectType?: string) {
-	for (const ids of idsArray) {
-		if (ids.id === id || ids.did === id || ids.uuid === id) {
-			if (!objectType || ids.objectType === objectType) {
-				return ids;
-			}
-		}
-	}
-	return undefined;
+export function findIds<Type extends string>(core: Core<Type>) {
+	return idsArray.find(other => coresMatch(core as Core<ObjectType>, other));
 }
 
-export function getFilePaths(ids: Ids & { objectType:string; }) {
-	const id = ids?.id.toLowerCase();
-	const did = ids?.did?.toLowerCase();
-	const uuid = ids?.uuid?.toLowerCase();
-	const objectType = ids?.objectType;
+function idsMatch(a: Ids, b: Ids) {
+	const aIds = [a.id.toLowerCase(), a.did?.toLowerCase(), a.uuid?.toLowerCase()].filter(isDefined);
+	const bIds = [b.id.toLowerCase(), b.did?.toLowerCase(), b.uuid?.toLowerCase()].filter(isDefined);
+	return aIds.some(aId => bIds.includes(aId));
+}
+
+function coresMatch(a: Core, b: Core) {
+	return a.objectType === b.objectType && idsMatch(a, b);
+}
+
+export function getFilePaths<Type extends string>(core: Core<Type>) {
+	return idsArray
+		.filter(other => other.filePath && coresMatch(core as Core<ObjectType>, other))
+		.map(other => other.filePath!)
+		.filter(toUnique);
+}
+
+export function getDuplicates() {
 	return idsArray.filter(ids => {
-		if (!ids.filePath) return false;
-		if (ids.objectType !== objectType) return false;
-		return (id && (ids.id === id || ids.did === id || ids.uuid === id)) || (did && ids.did === did) || (uuid && ids.uuid === uuid);
-	})
-	.map(ids => ids.filePath!)
-	.filter(toUnique);
+		return getFilePaths(ids).length > 1;
+	});
 }
