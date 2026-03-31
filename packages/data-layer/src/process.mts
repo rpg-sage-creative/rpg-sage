@@ -313,7 +313,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 			// ddbTable.save(updatedCore);
 			// ddbQueue.push(updatedCore);
 		});
-		await writeFile(`./${objectType}-to-delete.txt`, [...deletedSet].map(p => "rm ./" + p.split("/").slice(-2).join("/")).join("\n"));
+		// await writeFile(`./${objectType}-to-delete.txt`, [...deletedSet].map(p => "rm ./" + p.split("/").slice(-2).join("/")).join("\n"));
 		// ddbPromises.push(ddbTable.save(ddbQueue));
 	}
 
