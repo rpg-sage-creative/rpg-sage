@@ -5,7 +5,66 @@ import { basename, join } from "node:path";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
 import { objectTypeToDirName } from "./cache/types.js";
 import { ensureSageGameCore, ensureSageMessageReferenceCore, ensureSageServerCore, ensureSageUserCore, type SageCore, type SageMessageReferenceCore } from "./types/index.js";
-import type { EnsureContext } from "./validation/index.js";
+import { getFilePaths, populateIdsArray, type EnsureContext } from "./validation/index.js";
+
+/*
+	1. build map of existing IDs in use
+	  - this will be needed when new ids are generated
+	2. process all objects
+	3. iterate through map of IDs to replace old ids with newest IDs
+
+	id   - either a snowflake or uuid; assigned by Sage
+	did  - snowflake assigned by discord (Discord ID)
+	uuid - uuid; assigned by Sage
+
+	character
+		id
+		essence20Id
+		hephaistosId
+		pathbuilderId
+		userDid
+
+	e20/heph/pb2e
+		id                --> id/did/uuid
+		characterId       --> character: id/did/uuid
+		sheet.macroUserId --> user: id/did/uuid
+		userId            --> user: id/did/uuid
+
+	game
+		id                    --> id/did/uuid
+		serverDid             --> guild: id (showflake)
+		serverId              --> server: id/uuid
+		channels[].id         --> channenl: did
+		gmCharacter
+		nonPlayerCharacters[]
+		playerCharacters[]
+		roles[]
+			did               --> role: did
+		users[]
+			did               --> user: did
+
+	map
+		id               --> snowflake
+		messageId        --> message: id (snowflake)
+		userId           --> user: id (snowflake)
+		auras[].userId   --> user: id (snowflake)
+		terrain[].userId --> user: id (snowflake)
+		tokens[].userId  --> user: id (snowflake)
+
+	server
+		id                    --> id/did/uuid
+		gameId                --> game: id/did/uuid
+		admins[]
+			did               --> user: id (snowflake)
+		channels[].id         --> channel: id (snowflake)
+		roles[]
+			did               --> role: id (snowflake)
+
+	user
+		id                    --> id/did/uuid
+		playerCharacters[]
+
+*/
 
 initializeConsoleUtilsByEnvironment();
 
@@ -28,7 +87,7 @@ async function getUpdateTs(filePath: string): Promise<number | undefined> {
 	return stats?.mtimeMs;
 }
 
-async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { dataPath:string; filePath:string; }) {
+async function getNewestCore<Type extends ObjectType>(filePath: string) {
 	let core = await readJsonFile<SageCore<Type, Snowflake>>(filePath) ?? undefined;
 	let updatedTs = core ? await getUpdateTs(filePath) : undefined;
 	let fileCount = 0;
@@ -38,10 +97,7 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 		const filePathSet = new Set<string>();
 		const filePathMeta: { filePath:string; core:SageCore<Type, Snowflake>; updatedTs:number; }[] = [];
 
-		const getOtherCore = async (id?: string) => {
-			if (!id) return;
-
-			const otherFilePath = `${dataPath}/${id}.json`;
+		const getOtherCore = async (otherFilePath: string) => {
 			if (!filePathSet.has(otherFilePath)) {
 
 				let otherCore: SageCore<Type, Snowflake> | undefined;
@@ -69,9 +125,10 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 			}
 		};
 
-		await getOtherCore(core.id);
-		await getOtherCore(core.did);
-		await getOtherCore(core.uuid);
+		const otherFilePaths = getFilePaths(core);
+		for (const otherFilePath of otherFilePaths) {
+			await getOtherCore(otherFilePath)
+		}
 
 		fileCount = filePathSet.size;
 
@@ -104,7 +161,11 @@ async function getNewestCore<Type extends ObjectType>({ dataPath, filePath }: { 
 	return { fileCount, toDelete, filePath, core, updatedTs };
 
 }
-function tsToDate(ts?: number) { return ts ? ` (${getDateStrings(new Date(ts)).date})` : ""; }
+
+function tsToDate(ts?: number) {
+	return ts ? ` (${getDateStrings(new Date(ts)).date})` : "";
+}
+
 async function processObjects<Type extends ObjectType>(objectType: Type, processor: Processor<Type>, yearArgs: string[]): Promise<void> {
 	const dirName = objectTypeToDirName(objectType);
 
@@ -156,7 +217,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 			if (deletedSet.has(filePath)) return;
 
 			// get newest core for the filePath
-			const meta = await getNewestCore({ dataPath, filePath });
+			const meta = await getNewestCore(filePath);
 
 			// get the returned core
 			const oldCore = meta.core;
@@ -191,10 +252,20 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 				return;
 			}
 
+			// if ("uuid" in oldCore && oldCore.uuid === "0e4e4474-14ba-4922-a481-eb659721bf1d") debug(filePath);
+
 			// save for comparison later
 			const before = stringifyJson(oldCore);
 
 			const updatedCore = processor(oldCore) as SageCore<Type, Snowflake>;
+
+			// this looked for the old uuid in all the files to help show that we have to expand the logic
+			// if (updatedCore.uuid) {
+			// 	const keysUsing = isIdInUse(updatedCore.uuid);
+			// 	if (keysUsing.some(key => key !== updatedCore.objectType)) {
+			// 		verbose(`${updatedCore.objectType} Uuid in use: ${updatedCore.uuid}; ${keysUsing}`);
+			// 	}
+			// }
 
 			// delete incomplete
 			if (isMessage(updatedCore, objectType) && !updatedCore.userId) {
@@ -242,6 +313,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 			// ddbTable.save(updatedCore);
 			// ddbQueue.push(updatedCore);
 		});
+		await writeFile(`./${objectType}-to-delete.txt`, [...deletedSet].map(p => "rm ./" + p.split("/").slice(-2).join("/")).join("\n"));
 		// ddbPromises.push(ddbTable.save(ddbQueue));
 	}
 
@@ -264,6 +336,8 @@ async function main() {
 	const years = ["2021", "2022", "2023", "2024", "2025", "2026"];
 	const yearArgs = process.argv.filter(arg => years.includes(arg));
 	if (!yearArgs.length) yearArgs.push(...years);
+
+	await populateIdsArray(objectTypeArgs as "User"[]);
 
 	for (const objectType of objectTypeArgs) {
 		await processObjects(objectType, processors[objectType], yearArgs);
