@@ -1,6 +1,6 @@
 import { debug, initializeConsoleUtilsByEnvironment, verbose } from "@rsc-utils/core-utils";
 import { deleteFile } from "@rsc-utils/io-utils";
-import { getDuplicates, getIdsArrayFilePath, writeIdsArray } from "./validation/IdsArray.js";
+import { getDuplicates, getIdsArrayFilePath, getIdsStats, writeIdsArray } from "./validation/IdsArray.js";
 
 initializeConsoleUtilsByEnvironment();
 
@@ -17,6 +17,8 @@ async function main() {
 	if (duplicates.length) {
 		debug({duplicates});
 	}
+
+	debug(getIdsStats());
 }
 
 // make sure we don't trigger this with an index.ts include

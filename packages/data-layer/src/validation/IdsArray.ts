@@ -19,13 +19,25 @@ type ArrayCore = Core & { filePath?:string; };
 
 const idsArray: ArrayCore[] = [];
 
+const idsStats = {} as Record<ObjectType, { count:number; did:{ id:number; did:number; }; uuid:{ id:number; uuid:number; }; }>;
+export function getIdsStats() { return idsStats; }
+
 function pushIds(core: Core, filePath?: string) {
 	if (!core.objectType) {
 		debug(`Invalid Core: `, core);
 		return;
 	}
 
-	const id = parseUuid(core.id) ?? parseSnowflake(core.id);
+	const stats = idsStats[core.objectType] ??= { count:0, did:{ id:0, did:0 }, uuid:{ id:0, uuid:0 } };
+	stats.count++;
+
+	const uuidId = parseUuid(core.id);
+	if (uuidId) stats.uuid.id++;
+
+	const didId = parseSnowflake(core.id);
+	if (didId) stats.did.id++;
+
+	const id = uuidId ?? didId;
 	if (!id) {
 		if (core.objectType !== "Character") {
 			debug(`Invalid Core: `, core);
@@ -34,7 +46,11 @@ function pushIds(core: Core, filePath?: string) {
 	}
 
 	const did = parseSnowflake(core.did);
+	if (did) stats.did.did++;
+
 	const uuid = parseUuid(core.uuid);
+	if (uuid) stats.uuid.uuid++;
+
 	idsArray.push({ id, did, uuid, objectType:core.objectType, filePath });
 }
 
