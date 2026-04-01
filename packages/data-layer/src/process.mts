@@ -2,7 +2,7 @@ import { forEachAsync, getDataRoot, getDateStrings, initializeConsoleUtilsByEnvi
 import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { stat, Stats } from "node:fs";
 import { basename, join } from "node:path";
-import { getDdbTable } from "./cache/internal/DdbRepo.js";
+// import { getDdbTable } from "./cache/internal/DdbRepo.js";
 import { objectTypeToDirName } from "./cache/types.js";
 import { ensureSageGameCore, ensureSageMessageReferenceCore, ensureSageServerCore, ensureSageUserCore, type SageCore, type SageMessageReferenceCore } from "./types/index.js";
 import { getFilePaths, populateIdsArray, type EnsureContext } from "./validation/index.js";
@@ -196,8 +196,8 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 		verbose(`  ${objectType} Children: ${children}`);
 	}
 
-	const ddbTable = getDdbTable(objectType);
-	await ddbTable.ensure(true);
+	// const ddbTable = getDdbTable(objectType);
+	// await ddbTable.ensure(true);
 
 	const ddbPromises: Promise<any>[] = [];
 	for (const child of children) {

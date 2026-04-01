@@ -245,8 +245,10 @@ export class DataTable<
 			return false;
 		}
 
-		// set the updatedTs
-		item.updatedTs = Date.now();
+		// set the updatedTs; Dice and Message are "one and done"
+		if (item.objectType !== "Dice" && item.objectType !== "Message") {
+			item.updatedTs = Date.now();
+		}
 
 		const saved = await this.writeHandler(this, item);
 
