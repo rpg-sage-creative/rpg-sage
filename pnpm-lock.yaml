@@ -35,7 +35,7 @@ catalogs:
       version: 1.4.2
     '@rsc-utils/discord-utils':
       specifier: ./packages/discord-utils
-      version: 1.3.1
+      version: 1.4.0
     '@rsc-utils/game-utils':
       specifier: ./packages/game-utils
       version: 0.0.0
@@ -61,7 +61,7 @@ catalogs:
       specifier: ^0.38.41
       version: 0.38.44
     discord.js:
-      specifier: ^14.25.1
+      specifier: ^14.26.2
       version: 14.26.2
     emoji-regex-xs:
       specifier: ^2.0.1
