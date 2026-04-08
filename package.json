@@ -92,7 +92,7 @@
 		"scrub::node_modules": "rm -rf node_modules",
 		"scrub::npm": "rm -f package-lock.json",
 		"scrub::pnpm": "rm -f pnpm-lock.yaml",
-		"postscrub": "pnpm install --prefer-offline",
+		"postscrub": "git submodule update --init --recursive && pnpm install --prefer-offline",
 		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
 		"prebuild": "pnpm scrubIfMissing && pnpm run '/^build::.*/'",
 		"build::packages": "pnpm -r run '/^build::.*/'",
