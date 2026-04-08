@@ -1,2 +1,28 @@
 packages:
   - 'packages/*'
+
+catalog:
+  "@aws-sdk/client-sns": "^3.1003.0"
+  "@discordjs/builders": "^1.13.1"
+  "@discordjs/rest": "^2.6.0"
+  "@napi-rs/canvas": "^0.1.88"
+  "@rsc-sage/data-layer": "./packages/data-layer"
+  "@rsc-sage/env": "./packages/sage-env"
+  "@rsc-sage/localization": "./packages/sage-localization"
+  "@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.6.0"
+  "@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2"
+  "@rsc-utils/discord-utils": "./packages/discord-utils"
+  "@rsc-utils/game-utils": "./packages/game-utils"
+  "@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.5.0"
+  "@rsc-utils/map-utils": "./packages/map-utils"
+  "@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.1"
+  "@types/follow-redirects": "^1.14.4"
+  "@types/jest": "^30.0.0"
+  "@types/node": "^24.12.0"
+  "discord-api-types": "^0.38.41"
+  "discord.js": "^14.25.1"
+  "emoji-regex-xs": "^2.0.1"
+  "jest": "^30.2.0"
+  "regex": "^6.1.0"
+  "typescript": "^5.9.3"
+  "zlib-sync": "^0.1.10"

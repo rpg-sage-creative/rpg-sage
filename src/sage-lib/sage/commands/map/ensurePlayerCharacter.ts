@@ -1,31 +1,15 @@
 import { generateSnowflake, isDefined, type Optional } from "@rsc-utils/core-utils";
+import { isDiscordAttachmentCdnUrl, simplifyDiscordAttachmentUrl } from "@rsc-utils/discord-utils";
 import type { SageInteraction } from "../../model/SageInteraction.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { GameMap } from "./GameMap.js";
 import { LayerType, type TGameMapToken } from "./GameMapBase.js";
 
-/**
- * Assists in comparing discord attachment image urls.
- * Removes querystring from links grabbed from the web (usually width/height).
- * Changes media.discordapp.net to cdn.discordapp.com.
- */
-function simplifyDiscordAttachmentUrl(url: string): string {
-	// app https://cdn.discordapp.com/attachments/1140421024777781340/1141450682545745930/opal.png
-	// web https://media.discordapp.net/attachments/1140421024777781340/1141450682545745930/opal.png?width=211&height=211
-	const appPrefix = "https://cdn.discordapp.com";
-	const webPrefix = "https://media.discordapp.net";
-	if (url.startsWith(webPrefix)) {
-		const endIndex = url.includes("?") ? url.indexOf("?") : undefined;
-		return appPrefix + url.slice(webPrefix.length, endIndex);
-	}
-	return url;
-}
-
 /** Compares urls only after simplifying them (if they are discord attachment urls from the web). */
 function urlsMatch(tokenUrl: string, ...otherUrls: Optional<string>[]): boolean {
 	if (tokenUrl) {
 		const simpleTokenUrl = simplifyDiscordAttachmentUrl(tokenUrl);
-		return otherUrls.some(otherUrl => otherUrl && simpleTokenUrl === simplifyDiscordAttachmentUrl(otherUrl));
+		return otherUrls.some(otherUrl => simpleTokenUrl === simplifyDiscordAttachmentUrl(otherUrl));
 	}
 	return false;
 }
@@ -65,8 +49,10 @@ export function ensurePlayerCharacter(sageCommand: SageInteraction | SageMessage
 			const { tokenUrl, avatarUrl } = char;
 			// grab primary image
 			const charUrl = tokenUrl ?? avatarUrl;
-			// we only ensure chars with images
-			if (charUrl) {
+			// discord cdn urls are gonna 404
+			const isUsableUrl = charUrl && !isDiscordAttachmentCdnUrl(charUrl);
+			// we only ensure chars with usable images
+			if (isUsableUrl) {
 				const charName = char.name;
 				// look for char by id before looking for tokens without ids that match the name before looking for tokens without ids that match the urls
 				const found = gameMap.tokens.find(token => token.characterId === char.id)

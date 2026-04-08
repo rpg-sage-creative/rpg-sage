@@ -5,12 +5,12 @@
 	"main": "build/index.js",
 	"type": "module",
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2"
+		"@rsc-utils/dev-scripts": "catalog:"
 	},
 	"dependencies": {
-		"@rsc-sage/data-layer": "workspace:*",
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.6.0",
-		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.1"
+		"@rsc-sage/data-layer": "catalog:",
+		"@rsc-utils/core-utils": "catalog:",
+		"@rsc-utils/random-utils": "catalog:"
 	},
 	"scripts": {
 		"scrub::node_modules": "rm -rf node_modules",

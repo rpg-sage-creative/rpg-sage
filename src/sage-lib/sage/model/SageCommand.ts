@@ -63,7 +63,7 @@ export abstract class SageCommand<
 		if (this.isSageInteraction("MODAL")) {
 			const form = { } as { [key:string]: string | undefined; };
 			this.interaction.fields.fields.forEach(comp => {
-				if ("value" in comp) {
+				if ("value" in comp && typeof(comp.value) === "string") {
 					form[comp.customId] = stringOrUndefined(comp.value);
 				}
 			});
