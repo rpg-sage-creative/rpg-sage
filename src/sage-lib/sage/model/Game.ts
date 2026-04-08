@@ -661,13 +661,12 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	}
 	// #endregion
 
-	// #region IHasColorsCore
+	// #region HasColorsCore
 
 	private _colors?: Colors;
 
 	public get colors(): Colors {
-		this._colors ??= new Colors(this.core.colors ??= []);
-		return this._colors;
+		return this._colors ??= new Colors(this.core.colors ??= []);
 	}
 
 	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
@@ -681,13 +680,12 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	// #endregion
 
-	// #region IHasEmoji
+	// #region HasEmoji
 
 	private _emoji?: Emojis;
 
 	public get emoji(): Emojis {
-		this._emoji ??= new Emojis(this.core.emoji ??= []);
-		return this._emoji;
+		return this._emoji ??= new Emojis(this.core.emoji ??= []);
 	}
 
 	public emojify(text: string): string {
@@ -700,7 +698,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		return text;
 	}
 
-	public getEmoji(emojiType: EmojiType): string | null {
+	public getEmoji(emojiType: EmojiType): string | undefined {
 		return this.emoji.get(emojiType)
 			?? this.server.getEmoji(emojiType);
 	}

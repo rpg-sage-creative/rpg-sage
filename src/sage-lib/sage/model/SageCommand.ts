@@ -504,7 +504,7 @@ export abstract class SageCommand<
 	//#region emoji
 
 	/** Get the given emoji, checking first the game, then server, then the bot. */
-	public getEmoji(emojiType: EmojiType): string | null {
+	public getEmoji(emojiType: EmojiType): string | undefined {
 		return this.game?.emoji.get(emojiType)
 			?? this.server?.emoji.get(emojiType)
 			?? this.bot.emoji.get(emojiType);

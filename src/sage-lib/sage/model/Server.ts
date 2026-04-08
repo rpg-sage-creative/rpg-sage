@@ -1,7 +1,7 @@
 import type { AdminRole, AdminRoleType, AdminUser, DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, EmbedColorType, EmojiType, GameCreatorType, GameSystem, GameSystemType, SageChannel, SageCharacterCore, SageServerCore, SageServerCoreOld, ServerOptions } from "@rsc-sage/data-layer";
 import { DiceSortType, ensureSageServerCore, parseGameSystem } from "@rsc-sage/data-layer";
 import { getHomeServerId } from "@rsc-sage/env";
-import { applyChanges, generateSnowflake, warn, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, error, generateSnowflake, warn, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
@@ -363,15 +363,12 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 	}
 	//#endregion
 
-	// #region IHasColorsCore
+	// #region HasColorsCore
 
 	private _colors?: Colors;
 
 	public get colors(): Colors {
-		if (!this._colors) {
-			this._colors = new Colors(this.core.colors ??= []);
-		}
-		return this._colors;
+		return this._colors ??= new Colors(this.core.colors ??= []);
 	}
 
 	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
@@ -385,23 +382,27 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 
 	// #endregion
 
-	// #region IHasEmoji
+	// #region HasEmoji
 
 	private _emoji?: Emojis;
 
 	public get emoji(): Emojis {
-		if (!this._emoji) {
-			this._emoji = new Emojis(this.core.emoji ?? (this.core.emoji = []));
-		}
-		return this._emoji;
+		return this._emoji ??= new Emojis(this.core.emoji ??= []);
 	}
 
 	public emojify(text: string): string {
-		return this.sageCache.bot.emojify(this.emoji.emojify(text));
+		try {
+			text = this.emoji.emojify(text);
+			text = this.sageCache.bot.emojify(text);
+		}catch(ex) {
+			error({ serverId:this.id }, ex);
+		}
+		return text;
 	}
 
-	public getEmoji(emojiType: EmojiType): string | null {
-		return this.emoji.get(emojiType) ?? this.sageCache.bot.getEmoji(emojiType);
+	public getEmoji(emojiType: EmojiType): string | undefined {
+		return this.emoji.get(emojiType)
+			?? this.sageCache.bot.getEmoji(emojiType);
 	}
 
 	// #endregion

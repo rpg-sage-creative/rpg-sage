@@ -4,9 +4,6 @@ import { fileExists, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { Colors, type HasColorsCore } from "./Colors.js";
 import { Emojis, type HasEmojiCore } from "./Emojis.js";
 
-export type TCoreAuthor = { iconUrl?: string; name?: string; url?: string; };
-export type TCorePrefixes = { command?: string; search?: string; };
-
 /**
  * key = GameType
  * undefined | false = no search for this game
@@ -30,34 +27,38 @@ export interface BotCore extends IdCore<"Bot">, HasEmbedColors, HasEmoji {
 }
 
 export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCore {
+
 	public constructor(core: BotCore) { super(core); }
+
 	public get codeName(): CodeName { return this.core.codeName; }
+
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
+
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
-	public get macros() { return this.core.macros ?? (this.core.macros = []); }
+
+	public get macros() { return this.core.macros ??= []; }
 
 	/** returns true if we can search the given game */
 	public canSearch(gameType: GameSystemType): boolean { return this.core.searchStatus?.[gameType] === true; }
+
 	/** returns string if disabled, true if enabled, or false if gameType not found (no search logic for this game) */
 	public getSearchStatus(gameType: GameSystemType): boolean | string {
 		const status = this.core.searchStatus?.[gameType];
 		return typeof(status) === "string" ? status : status === true;
 	}
+
 	public setSearchStatus(gameType: GameSystemType, status: boolean | string): Promise<boolean> {
 		const searchStatus = this.core.searchStatus ?? (this.core.searchStatus = {});
 		searchStatus[gameType] = status;
 		return this.save();
 	}
 
-	// #region IHasColorsCore
+	// #region HasColorsCore
 
 	private _colors?: Colors;
 
 	public get colors(): Colors {
-		if (!this._colors) {
-			this._colors = new Colors(this.core.colors ?? (this.core.colors = []));
-		}
-		return this._colors;
+		return this._colors ??= new Colors(this.core.colors ??= []);
 	}
 
 	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
@@ -70,7 +71,7 @@ export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCo
 
 	// #endregion
 
-	// #region IHasEmoji
+	// #region HasEmoji
 
 	private _emoji?: Emojis;
 
@@ -82,8 +83,8 @@ export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCo
 		return this.emoji.emojify(text);
 	}
 
-	public getEmoji(emojiType: EmojiType): string | null {
-		return this.emoji.get(emojiType) ?? null;
+	public getEmoji(emojiType: EmojiType): string | undefined {
+		return this.emoji.get(emojiType);
 	}
 
 	// #endregion

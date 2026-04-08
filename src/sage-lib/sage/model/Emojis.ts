@@ -45,8 +45,8 @@ export class Emojis {
 
 	// #region get/set/unset
 
-	public get(type: EmojiType): string | null {
-		return this.findEmoji(type)?.replacement ?? null;
+	public get(type: EmojiType): string | undefined {
+		return this.findEmoji(type)?.replacement ?? undefined;
 	}
 
 	public set(emoji: Emoji): boolean {
