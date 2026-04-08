@@ -1,5 +1,5 @@
 import { getText } from "@rsc-utils/io-utils";
-import { type Attachment } from "discord.js";
+import type { Attachment } from "discord.js";
 import { deleteMessage } from "../../../discord/deletedMessages.js";
 import { registerMessageListener } from "../../../discord/handlers.js";
 import type { TCommandAndArgsAndData } from "../../../discord/index.js";
