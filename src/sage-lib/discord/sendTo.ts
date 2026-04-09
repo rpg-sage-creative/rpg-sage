@@ -1,8 +1,8 @@
-import { DialogPostType } from "@rsc-sage/data-layer";
-import { error, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, splitMessageOptions, type EmbedResolvable, type SplitOptions, type SupportedTarget } from "@rsc-utils/discord-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import { DiscordApiError, sendTo as sendToDiscord, type EmbedResolvable, type SplitOptions, type SupportedTarget } from "@rsc-utils/discord-utils";
 import { ActionRow, Attachment, AttachmentBuilder, Message, Webhook, type MessageActionRowComponent } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
+// import { sendTo as sendToStoat } from "@rsc-utils/stoat-utils";
 
 export type AttachmentResolvable = Attachment | AttachmentBuilder;
 
@@ -32,36 +32,6 @@ type Results = Result[] | undefined;
 export async function sendTo(sendArgs: SendToArgs, splitOptions: SplitOptions): Promise<(Message | DiscordApiError | undefined)[] | undefined>;
 export async function sendTo(sendArgs: SendToArgs, splitOptions: SplitOptions, catchHandler: (err: unknown) => void): Promise<Message[] | undefined>;
 export async function sendTo(sendArgs: SendToArgs, splitOptions: SplitOptions, catchHandler?: (err: unknown) => void): Promise<Results> {
-	const { avatarURL, components, content, embedContent, embeds, files, replyingTo, sageCache, target, threadId, username } = sendArgs;
-
-	// if we can check permissions then let's do so first
-	const canTest = target && ("permissionsFor" in target);
-	const canSend = canTest ? await sageCache.canSendMessageToChannel(target) : true;
-	if (canTest && !canSend) {
-		/** @todo do i warn() here or am i doing it elsewhere? */
-		return Promise.resolve(undefined);
-	}
-
-	// check for a user post type override
-	const contentToEmbeds = splitOptions.contentToEmbeds === true || sageCache.user.sagePostType === DialogPostType.Embed;
-	const embedsToContent = splitOptions.embedsToContent === true || sageCache.user.sagePostType === DialogPostType.Post;
-
-	// create post length safe payloads
-	const payloads = splitMessageOptions({ avatarURL, components, content, embedContent, embeds, files, replyingTo, threadId, username }, { ...splitOptions, contentToEmbeds, embedsToContent });
-
-	const catcher = catchHandler
-		? (reason: unknown) => { DiscordApiError.process(reason) ? void 0 : catchHandler(reason); return undefined; } // NOSONAR
-		: (reason: unknown) => { const apiErr = DiscordApiError.from(reason); if (!apiErr) error(reason); return apiErr; }; // NOSONAR
-
-	const results: Result[] = [];
-	for (const payload of payloads) {
-		const message = await target.send(payload).catch(catcher);
-		if (message || !catchHandler) {
-			results.push(message);
-		}else {
-			// let's stop sending if we have an error (which is most likely a username issue)
-			break;
-		}
-	}
-	return results;
+	/** @todo include some indication of the chat client to know where to send the message: discord v stoat v fluxer */
+	return sendToDiscord(sendArgs, splitOptions, catchHandler as (err: unknown) => void);
 }
