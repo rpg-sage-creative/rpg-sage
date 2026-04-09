@@ -39,5 +39,6 @@ catalog:
   "jest": "^30.2.0"
   "pdf2json": "^4.0.2"
   "regex": "^6.1.0"
+  "stoat.js": "^7.3.6"
   "typescript": "^5.9.3"
   "zlib-sync": "^0.1.10"

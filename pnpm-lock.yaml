@@ -117,6 +117,9 @@ catalogs:
     regex:
       specifier: ^6.1.0
       version: 6.1.0
+    stoat.js:
+      specifier: ^7.3.6
+      version: 7.3.6
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
@@ -164,6 +167,9 @@ importers:
       regex:
         specifier: 'catalog:'
         version: 6.1.0
+      stoat.js:
+        specifier: 'catalog:'
+        version: 7.3.6
     devDependencies:
       '@rsc-utils/dev-scripts':
         specifier: 'catalog:'
@@ -411,6 +417,40 @@ importers:
       '@rsc-utils/dev-scripts':
         specifier: 'catalog:'
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
+
+  packages/stoat-utils:
+    dependencies:
+      '@rsc-utils/core-utils':
+        specifier: 'catalog:'
+        version: link:packages/core-utils
+      '@rsc-utils/io-utils':
+        specifier: 'catalog:'
+        version: link:packages/io-utils
+      emoji-regex-xs:
+        specifier: 'catalog:'
+        version: 2.0.1
+      regex:
+        specifier: 'catalog:'
+        version: 6.1.0
+      stoat.js:
+        specifier: 'catalog:'
+        version: 7.3.6
+    devDependencies:
+      '@rsc-utils/dev-scripts':
+        specifier: 'catalog:'
+        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
+      '@types/jest':
+        specifier: 'catalog:'
+        version: 30.0.0
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.12.2
+      jest:
+        specifier: 'catalog:'
+        version: 30.3.0(@types/node@24.12.2)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
 
 packages:
 
@@ -1195,6 +1235,26 @@ packages:
     resolution: {integrity: sha512-O/IEdcCUKkubz60tFbGA7ceITTAJsty+lBjNoorP4Z6XRqaFb/OjQjZODophEcuq68nKm6/0r+6/lLQ+XVpk8g==}
     engines: {node: '>=18.0.0'}
 
+  '@solid-primitives/map@0.7.2':
+    resolution: {integrity: sha512-sXK/rS68B4oq3XXNyLrzVhLtT1pnimmMUahd2FqhtYUuyQsCfnW058ptO1s+lWc2k8F/3zQSNVkZ2ifJjlcNbQ==}
+    peerDependencies:
+      solid-js: ^1.6.12
+
+  '@solid-primitives/set@0.7.2':
+    resolution: {integrity: sha512-E4UzC1cQtPWicnbK9ulG0G27d8802DFi4OSC6HZm+yyQOVAb0ebkfJq9FKSYpFxE+gb6M2lM6Zh4ulXRna35CA==}
+    peerDependencies:
+      solid-js: ^1.6.12
+
+  '@solid-primitives/trigger@1.2.2':
+    resolution: {integrity: sha512-IWoptVc0SWYgmpBPpCMehS5b07+tpFcvw15tOQ3QbXedSYn6KP8zCjPkHNzMxcOvOicTneleeZDP7lqmz+PQ6g==}
+    peerDependencies:
+      solid-js: ^1.6.12
+
+  '@solid-primitives/utils@6.3.2':
+    resolution: {integrity: sha512-hZ/M/qr25QOCcwDPOHtGjxTD8w2mNyVAYvcfgwzBHq2RwNqHNdDNsMZYap20+ruRwW4A3Cdkczyoz0TSxLCAPQ==}
+    peerDependencies:
+      solid-js: ^1.6.12
+
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
 
@@ -1495,6 +1555,9 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  csstype@3.2.3:
+    resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
   csv-parser@3.2.0:
     resolution: {integrity: sha512-fgKbp+AJbn1h2dcAHKIdKNSSjfp43BZZykXsCjzALjKy80VXQNHPFJ6T9Afwdzoj24aMkq8GwDS7KGcDPpejrA==}
@@ -1864,6 +1927,9 @@ packages:
   json-parse-even-better-errors@2.3.1:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
 
+  json-with-bigint@3.5.8:
+    resolution: {integrity: sha512-eq/4KP6K34kwa7TcFdtvnftvHCD9KvHOGGICWwMFc4dOOKF5t4iYqnfLK8otCRCRv06FXOzGGyqE8h8ElMvvdw==}
+
   json5@2.2.3:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
@@ -2065,6 +2131,16 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  seroval-plugins@1.5.0:
+    resolution: {integrity: sha512-EAHqADIQondwRZIdeW2I636zgsODzoBDwb3PT/+7TLDWyw1Dy/Xv7iGUIEXXav7usHDE9HVhOU61irI3EnyyHA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      seroval: ^1.0
+
+  seroval@1.5.0:
+    resolution: {integrity: sha512-OE4cvmJ1uSPrKorFIH9/w/Qwuvi/IMcGbv5RKgcJ/zjA/IohDLU6SVaxFN9FwajbP7nsX0dQqMDes1whk3y+yw==}
+    engines: {node: '>=10'}
+
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
     engines: {node: '>=8'}
@@ -2084,6 +2160,9 @@ packages:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
 
+  solid-js@1.9.11:
+    resolution: {integrity: sha512-WEJtcc5mkh/BnHA6Yrg4whlF8g6QwpmXXRg4P2ztPmcKeHHlH4+djYecBLhSpecZY2RRECXYUwIc/C2r3yzQ4Q==}
+
   source-map-support@0.5.13:
     resolution: {integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==}
 
@@ -2097,6 +2176,12 @@ packages:
   stack-utils@2.0.6:
     resolution: {integrity: sha512-XlkWvfIm6RmsWtNJx+uqtKLS8eqFbxUg0ZzLXqY0caEy9l7hruX8IpiDnjsLavoBgqCCR71TqWO8MaXYheJ3RQ==}
     engines: {node: '>=10'}
+
+  stoat-api@0.8.9-4:
+    resolution: {integrity: sha512-6N4kfE1x+j/XYVaBuvYqzbWxjgqbxSarvNjMv8GEcBaqbkiyPzUwsCj12NJsNNp4uyZmsqoUYUj2jIq018uqiA==}
+
+  stoat.js@7.3.6:
+    resolution: {integrity: sha512-q2+00tjuaGHVSBA5Sg8vBDp73k3yZtsfDyS8OUqYgHYT2uL8x5RZHsrViuloPwHHuKNldzQjib/VdQMISZIfOg==}
 
   string-length@4.0.2:
     resolution: {integrity: sha512-+l6rNN5fYHNhZZy41RXsYptCjA2Igmq4EG7kZAYFQI1E1VTXarr6ZPXBg6eq7Y6eK4FEhY6AJlyuFIb/v/S0VQ==}
@@ -2169,6 +2254,10 @@ packages:
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
+    hasBin: true
+
+  ulid@2.4.0:
+    resolution: {integrity: sha512-fIRiVTJNcSRmXKPZtGzFQv9WRrZ3M9eoptl/teFJvjOzmpU+/K/JH6HZ8deBfb5vMEpicJcLn7JmvdknlMq7Zg==}
     hasBin: true
 
   undici-types@7.16.0:
@@ -3528,6 +3617,25 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  '@solid-primitives/map@0.7.2(solid-js@1.9.11)':
+    dependencies:
+      '@solid-primitives/trigger': 1.2.2(solid-js@1.9.11)
+      solid-js: 1.9.11
+
+  '@solid-primitives/set@0.7.2(solid-js@1.9.11)':
+    dependencies:
+      '@solid-primitives/trigger': 1.2.2(solid-js@1.9.11)
+      solid-js: 1.9.11
+
+  '@solid-primitives/trigger@1.2.2(solid-js@1.9.11)':
+    dependencies:
+      '@solid-primitives/utils': 6.3.2(solid-js@1.9.11)
+      solid-js: 1.9.11
+
+  '@solid-primitives/utils@6.3.2(solid-js@1.9.11)':
+    dependencies:
+      solid-js: 1.9.11
+
   '@tybys/wasm-util@0.10.1':
     dependencies:
       tslib: 2.8.1
@@ -3805,6 +3913,8 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  csstype@3.2.3: {}
 
   csv-parser@3.2.0: {}
 
@@ -4339,6 +4449,8 @@ snapshots:
 
   json-parse-even-better-errors@2.3.1: {}
 
+  json-with-bigint@3.5.8: {}
+
   json5@2.2.3: {}
 
   leven@3.1.0: {}
@@ -4493,6 +4605,12 @@ snapshots:
 
   semver@7.7.4: {}
 
+  seroval-plugins@1.5.0(seroval@1.5.0):
+    dependencies:
+      seroval: 1.5.0
+
+  seroval@1.5.0: {}
+
   shebang-command@2.0.0:
     dependencies:
       shebang-regex: 3.0.0
@@ -4504,6 +4622,12 @@ snapshots:
   signal-exit@4.1.0: {}
 
   slash@3.0.0: {}
+
+  solid-js@1.9.11:
+    dependencies:
+      csstype: 3.2.3
+      seroval: 1.5.0
+      seroval-plugins: 1.5.0(seroval@1.5.0)
 
   source-map-support@0.5.13:
     dependencies:
@@ -4517,6 +4641,20 @@ snapshots:
   stack-utils@2.0.6:
     dependencies:
       escape-string-regexp: 2.0.0
+
+  stoat-api@0.8.9-4:
+    dependencies:
+      json-with-bigint: 3.5.8
+
+  stoat.js@7.3.6:
+    dependencies:
+      '@solid-primitives/map': 0.7.2(solid-js@1.9.11)
+      '@solid-primitives/set': 0.7.2(solid-js@1.9.11)
+      '@vladfrangu/async_event_emitter': 2.4.7
+      json-with-bigint: 3.5.8
+      solid-js: 1.9.11
+      stoat-api: 0.8.9-4
+      ulid: 2.4.0
 
   string-length@4.0.2:
     dependencies:
@@ -4580,6 +4718,8 @@ snapshots:
   type-fest@0.21.3: {}
 
   typescript@5.9.3: {}
+
+  ulid@2.4.0: {}
 
   undici-types@7.16.0: {}
 

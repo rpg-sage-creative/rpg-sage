@@ -74,7 +74,8 @@
 		"@rsc-utils/map-utils": "catalog:",
 		"@rsc-utils/random-utils": "catalog:",
 		"discord.js": "catalog:",
-		"regex": "catalog:"
+		"regex": "catalog:",
+		"stoat.js": "catalog:"
 	},
 	"exifreader": {
 		"include": {

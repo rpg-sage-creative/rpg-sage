@@ -1,0 +1,18 @@
+// Place your settings in this file to overwrite the default settings
+{
+	"diffEditor.ignoreTrimWhitespace": false,
+
+	"editor.folding": true,
+	"editor.insertSpaces": false,
+	"editor.renderWhitespace": "all",
+	"editor.tabSize": 4,
+	"editor.wordWrap": "off",
+	"editor.minimap.enabled": false,
+	"editor.autoIndent": "full",
+
+	"files.trimTrailingWhitespace": true,
+	"window.autoDetectColorScheme": true,
+
+	"typescript.preferences.importModuleSpecifier": "project-relative",
+	"typescript.preferences.importModuleSpecifierEnding": "js"
+}

@@ -1,0 +1,50 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"alwaysStrict": true,
+		"allowSyntheticDefaultImports": true,
+
+		"composite": true,
+
+		// "exactOptionalPropertyTypes": true,
+
+		"forceConsistentCasingInFileNames": true,
+
+		"lib": [ "ES2024" ],
+
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+
+		"newLine": "LF",
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		// "noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+
+		"outDir": "./build",
+
+		"pretty": true,
+
+		"removeComments": true,
+		"rootDir": "./src",
+
+		"skipLibCheck": true,
+
+		"strict": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"stripInternal": true,
+
+		"target": "ES2024",
+
+		"verbatimModuleSyntax": true
+	},
+	"include": ["src"]
+}

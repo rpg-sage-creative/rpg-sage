@@ -1,0 +1,52 @@
+{
+	"name": "@rpg-sage-creative/stoat-utils",
+	"version": "0.0.0",
+	"license": "LGPL-3.0-or-later",
+	"main": "build/index.js",
+	"type": "module",
+	"publishConfig": {
+		"@rpg-sage-creative:registry": "https://npm.pkg.github.com"
+	},
+	"scripts": {
+		"scrub": "pnpm run '/^scrub::.*/'",
+		"scrub::node_modules": "rm -rf node_modules",
+		"scrub::npm": "rm -f package-lock.json",
+		"scrub::pnpm": "rm -f pnpm-lock.yaml",
+		"postscrub": "pnpm install",
+		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
+		"prebuild": "pnpm scrubIfMissing && pnpm run '/^build::.*/'",
+		"build::clean-build-folder": "rm -rf build",
+		"-build::clean-build-folders": "find . -type d -name 'build' -not -path './node_modules/*' -not -path './modules/*'  -exec rm -rf {} +",
+		"build::clean-build-info": "rm -f *.tsbuildinfo",
+		"-build::clean-build-infos": "find . -type f -name '*.tsbuildinfo' -not -path './node_modules/*' -exec rm -rf {} +",
+		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes",
+		"build": "[ -f './tsconfig.json' ] && tsc --build --force tsconfig.json",
+		"postbuild": "[ -f './tsconfig.d.json' ] && tsc --build --force tsconfig.d.json",
+		"buildIfMissing": "[ -d './build' ] || pnpm build",
+		"build:fresh": "pnpm scrub && pnpm build",
+		"pretest": "[ -d './test' ] && pnpm build && node -e \"import * as utils from './build/index.js';\"",
+		"test": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
+		"test:one": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
+		"release": "pnpm dev-scripts create-release",
+		"refresh-tags": "pnpm dev-scripts refresh-tags"
+	},
+	"devDependencies": {
+		"@rsc-utils/dev-scripts": "catalog:",
+		"@types/jest": "catalog:",
+		"@types/node": "catalog:",
+		"jest": "catalog:",
+		"typescript": "catalog:"
+	},
+	"dependencies": {
+		"@rsc-utils/core-utils": "catalog:",
+		"@rsc-utils/io-utils": "catalog:",
+		"emoji-regex-xs": "catalog:",
+		"regex": "catalog:",
+		"stoat.js": "catalog:"
+	},
+	"jest": {
+		"setupFiles": [
+			"<rootDir>/test/jest-global.mjs"
+		]
+	}
+}
