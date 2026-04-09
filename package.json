@@ -140,7 +140,6 @@
 		"postscrub": "git submodule update --init --recursive && pnpm install --prefer-offline",
 		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
 		"prebuild": "pnpm scrubIfMissing && pnpm run '/^build::.*/'",
-		"build::packages": "pnpm --filter=core-utils run build && pnpm --filter=io-utils run build && pnpm --filter=discord-utils run build",
 		"build::clean-build-folder": "rm -rf build",
 		"build::clean-build-info": "rm -f *.tsbuildinfo",
 		"build": "[ -f './tsconfig.json' ] && tsc --build --force --verbose tsconfig.json",
