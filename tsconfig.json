@@ -17,9 +17,6 @@
 		"test"
 	],
 	"references": [
-		{ "path": "./packages/core-utils" },
-		{ "path": "./packages/io-utils" },
-		{ "path": "./packages/discord-utils" },
 		{ "path": "./packages/data-layer" },
 		{ "path": "./packages/game-utils" },
 		{ "path": "./packages/map-utils" },

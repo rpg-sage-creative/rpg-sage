@@ -4,452 +4,371 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-catalogs:
-  default:
-    '@aws-sdk/client-dynamodb':
-      specifier: ^3.1003.0
-      version: 3.1027.0
-    '@aws-sdk/client-sns':
-      specifier: ^3.1003.0
-      version: 3.1027.0
-    '@discordjs/builders':
-      specifier: ^1.13.1
-      version: 1.14.1
-    '@discordjs/rest':
-      specifier: ^2.6.0
-      version: 2.6.1
-    '@napi-rs/canvas':
-      specifier: ^0.1.88
-      version: 0.1.93
-    '@rsc-sage/data-layer':
-      specifier: ./packages/data-layer
-      version: 0.0.0
-    '@rsc-sage/env':
-      specifier: ./packages/sage-env
-      version: 0.0.0
-    '@rsc-sage/localization':
-      specifier: ./packages/sage-localization
-      version: 0.0.0
-    '@rsc-utils/cache-utils':
-      specifier: github:rpg-sage-creative/cache-utils#semver:^1.1.0
-      version: 1.1.0
-    '@rsc-utils/color-utils':
-      specifier: github:rpg-sage-creative/color-utils#semver:^1.1.0
-      version: 1.1.0
-    '@rsc-utils/core-utils':
-      specifier: ./packages/core-utils
-      version: 0.0.0
-    '@rsc-utils/dev-scripts':
-      specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
-      version: 1.4.2
-    '@rsc-utils/discord-utils':
-      specifier: ./packages/discord-utils
-      version: 1.4.0
-    '@rsc-utils/game-utils':
-      specifier: ./packages/game-utils
-      version: 0.0.0
-    '@rsc-utils/git-utils':
-      specifier: github:rpg-sage-creative/git-utils#semver:^0.1.0
-      version: 0.1.0
-    '@rsc-utils/id-utils':
-      specifier: github:rpg-sage-creative/id-utils#semver:^1.1.0
-      version: 1.2.0
-    '@rsc-utils/io-utils':
-      specifier: ./packages/io-utils
-      version: 0.0.0
-    '@rsc-utils/iterator-utils':
-      specifier: github:rpg-sage-creative/iterator-utils#semver:^1.1.0
-      version: 1.1.0
-    '@rsc-utils/json-utils':
-      specifier: github:rpg-sage-creative/json-utils#semver:^1.2.1
-      version: 1.2.1
-    '@rsc-utils/language-utils':
-      specifier: github:rpg-sage-creative/language-utils#semver:^1.2.0
-      version: 1.2.0
-    '@rsc-utils/map-utils':
-      specifier: ./packages/map-utils
-      version: 0.0.0
-    '@rsc-utils/random-utils':
-      specifier: github:rpg-sage-creative/random-utils#semver:^0.1.1
-      version: 0.1.1
-    '@rsc-utils/template-literal-utils':
-      specifier: github:rpg-sage-creative/template-literal-utils#semver:^1.2.0
-      version: 1.2.0
-    '@rsc-utils/type-utils':
-      specifier: github:rpg-sage-creative/type-utils#semver:^1.3.0
-      version: 1.3.0
-    '@rsc-utils/whitespace-utils':
-      specifier: github:rpg-sage-creative/whitespace-utils#semver:^1.0.0
-      version: 1.0.0
-    '@types/follow-redirects':
-      specifier: ^1.14.4
-      version: 1.14.4
-    '@types/jest':
-      specifier: ^30.0.0
-      version: 30.0.0
-    '@types/node':
-      specifier: ^24.12.0
-      version: 24.12.2
-    csv-parser:
-      specifier: ^3.2.0
-      version: 3.2.0
-    discord-api-types:
-      specifier: ^0.38.41
-      version: 0.38.44
-    discord.js:
-      specifier: ^14.26.2
-      version: 14.26.2
-    emoji-regex-xs:
-      specifier: ^2.0.1
-      version: 2.0.1
-    exifreader:
-      specifier: ^4.36.2
-      version: 4.38.0
-    follow-redirects:
-      specifier: ^1.15.11
-      version: 1.15.11
-    jest:
-      specifier: ^30.2.0
-      version: 30.3.0
-    pdf2json:
-      specifier: ^4.0.2
-      version: 4.0.2
-    regex:
-      specifier: ^6.1.0
-      version: 6.1.0
-    stoat.js:
-      specifier: ^7.3.6
-      version: 7.3.6
-    typescript:
-      specifier: ^5.9.3
-      version: 5.9.3
-    zlib-sync:
-      specifier: ^0.1.10
-      version: 0.1.10
+overrides:
+  '@aws-sdk/client-dynamodb': ^3.1003.0
+  '@aws-sdk/client-sns': ^3.1003.0
+  '@discordjs/builders': ^1.13.1
+  '@discordjs/rest': ^2.6.0
+  '@napi-rs/canvas': ^0.1.88
+  '@rsc-sage/data-layer': ./packages/data-layer
+  '@rsc-sage/env': ./packages/sage-env
+  '@rsc-sage/localization': ./packages/sage-localization
+  '@rsc-utils/cache-utils': github:rpg-sage-creative/cache-utils#semver:^1.1.0
+  '@rsc-utils/color-utils': github:rpg-sage-creative/color-utils#semver:^1.1.0
+  '@rsc-utils/core-utils': ./packages/core-utils
+  '@rsc-utils/dev-scripts': github:rpg-sage-creative/dev-scripts#semver:^1.4.2
+  '@rsc-utils/discord-utils': ./packages/discord-utils
+  '@rsc-utils/game-utils': ./packages/game-utils
+  '@rsc-utils/git-utils': github:rpg-sage-creative/git-utils#semver:^0.1.0
+  '@rsc-utils/id-utils': github:rpg-sage-creative/id-utils#semver:^1.1.0
+  '@rsc-utils/io-utils': ./packages/io-utils
+  '@rsc-utils/iterator-utils': github:rpg-sage-creative/iterator-utils#semver:^1.1.0
+  '@rsc-utils/json-utils': github:rpg-sage-creative/json-utils#semver:^1.2.1
+  '@rsc-utils/language-utils': github:rpg-sage-creative/language-utils#semver:^1.2.0
+  '@rsc-utils/map-utils': ./packages/map-utils
+  '@rsc-utils/random-utils': github:rpg-sage-creative/random-utils#semver:^0.1.1
+  '@rsc-utils/template-literal-utils': github:rpg-sage-creative/template-literal-utils#semver:^1.2.0
+  '@rsc-utils/type-utils': github:rpg-sage-creative/type-utils#semver:^1.3.0
+  '@rsc-utils/whitespace-utils': github:rpg-sage-creative/whitespace-utils#semver:^1.0.0
+  '@types/follow-redirects': ^1.14.4
+  '@types/jest': ^30.0.0
+  '@types/node': ^24.12.0
+  discord-api-types: ^0.38.41
+  discord.js: ^14.26.2
+  csv-parser: ^3.2.0
+  emoji-regex-xs: ^2.0.1
+  exifreader: ^4.36.2
+  follow-redirects: ^1.15.11
+  jest: ^30.2.0
+  pdf2json: ^4.0.2
+  regex: ^6.1.0
+  stoat.js: ^7.3.6
+  typescript: ^5.9.3
+  zlib-sync: ^0.1.10
 
 importers:
 
   .:
     dependencies:
       '@aws-sdk/client-sns':
-        specifier: 'catalog:'
-        version: 3.1027.0
+        specifier: ^3.1003.0
+        version: 3.1028.0
       '@rsc-sage/data-layer':
-        specifier: 'catalog:'
+        specifier: ./packages/data-layer
         version: link:packages/data-layer
       '@rsc-sage/env':
-        specifier: 'catalog:'
+        specifier: ./packages/sage-env
         version: link:packages/sage-env
       '@rsc-sage/localization':
-        specifier: 'catalog:'
+        specifier: ./packages/sage-localization
         version: link:packages/sage-localization
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
       '@rsc-utils/discord-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/discord-utils
         version: link:packages/discord-utils
       '@rsc-utils/game-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/game-utils
         version: link:packages/game-utils
       '@rsc-utils/io-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/io-utils
         version: link:packages/io-utils
       '@rsc-utils/map-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/map-utils
         version: link:packages/map-utils
       '@rsc-utils/random-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/random-utils#semver:^0.1.1
         version: '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/879853ca21cd4939f687ef2ecce01ade22b67cd2'
       discord.js:
-        specifier: 'catalog:'
+        specifier: ^14.26.2
         version: 14.26.2
       regex:
-        specifier: 'catalog:'
+        specifier: ^6.1.0
         version: 6.1.0
       stoat.js:
-        specifier: 'catalog:'
+        specifier: ^7.3.6
         version: 7.3.6
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
       '@types/follow-redirects':
-        specifier: 'catalog:'
+        specifier: ^1.14.4
         version: 1.14.4
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^24.12.0
         version: 24.12.2
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.9.3
         version: 5.9.3
       zlib-sync:
-        specifier: 'catalog:'
+        specifier: ^0.1.10
         version: 0.1.10
 
   packages/app-commands:
     dependencies:
       '@rsc-sage/data-layer':
-        specifier: 'catalog:'
+        specifier: ./packages/data-layer
         version: link:packages/data-layer
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
       '@rsc-utils/discord-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/discord-utils
         version: link:packages/discord-utils
       '@rsc-utils/game-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/game-utils
         version: link:packages/game-utils
       '@rsc-utils/io-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/io-utils
         version: link:packages/io-utils
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/core-utils:
     dependencies:
       '@rsc-utils/cache-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/cache-utils#semver:^1.1.0
         version: '@rpg-sage-creative/cache-utils@https://codeload.github.com/rpg-sage-creative/cache-utils/tar.gz/145bc9860dfe3e54e5311bbd29e94763436ff728'
       '@rsc-utils/color-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/color-utils#semver:^1.1.0
         version: '@rpg-sage-creative/color-utils@https://codeload.github.com/rpg-sage-creative/color-utils/tar.gz/782556193811afb809fe572a1e211502a7e58e05'
       '@rsc-utils/git-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/git-utils#semver:^0.1.0
         version: '@rpg-sage-creative/git-utils@https://codeload.github.com/rpg-sage-creative/git-utils/tar.gz/f24d0841c58e367014223bc52910a25f1a2268d6'
       '@rsc-utils/id-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/id-utils#semver:^1.1.0
         version: '@rpg-sage-creative/id-utils@https://codeload.github.com/rpg-sage-creative/id-utils/tar.gz/e0ad2fa05ab8716b224bd89de1970ea247ffca86'
       '@rsc-utils/iterator-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/iterator-utils#semver:^1.1.0
         version: '@rpg-sage-creative/iterator-utils@https://codeload.github.com/rpg-sage-creative/iterator-utils/tar.gz/ee5f73b0d6ae90f04ee9e1079bbe5564f73cd2c1'
       '@rsc-utils/json-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/json-utils#semver:^1.2.1
         version: '@rpg-sage-creative/json-utils@https://codeload.github.com/rpg-sage-creative/json-utils/tar.gz/19389a0bda7ea3a58f242bfaf71c42acc6976e31'
       '@rsc-utils/language-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/language-utils#semver:^1.2.0
         version: '@rpg-sage-creative/language-utils@https://codeload.github.com/rpg-sage-creative/language-utils/tar.gz/b34ae849fb17513fbf4effc3cfea6dc70c82ba4a'
       '@rsc-utils/template-literal-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/template-literal-utils#semver:^1.2.0
         version: '@rpg-sage-creative/template-literal-utils@https://codeload.github.com/rpg-sage-creative/template-literal-utils/tar.gz/5532b51ff83a9c8c0b38600e0e721a37335b7d50'
       '@rsc-utils/type-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/type-utils#semver:^1.3.0
         version: '@rpg-sage-creative/type-utils@https://codeload.github.com/rpg-sage-creative/type-utils/tar.gz/6805eb97913b61e01f4d30fd9d1c4b82b220a4c1'
       '@rsc-utils/whitespace-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/whitespace-utils#semver:^1.0.0
         version: '@rpg-sage-creative/whitespace-utils@https://codeload.github.com/rpg-sage-creative/whitespace-utils/tar.gz/7c13c974b4d6d647765c60a8b03b286421329cc7'
       regex:
-        specifier: 'catalog:'
+        specifier: ^6.1.0
         version: 6.1.0
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
       '@types/jest':
-        specifier: 'catalog:'
+        specifier: ^30.0.0
         version: 30.0.0
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^24.12.0
         version: 24.12.2
       jest:
-        specifier: 'catalog:'
+        specifier: ^30.2.0
         version: 30.3.0(@types/node@24.12.2)
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.9.3
         version: 5.9.3
 
   packages/data-layer:
     dependencies:
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
       '@rsc-utils/io-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/io-utils
         version: link:packages/io-utils
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/discord-utils:
     dependencies:
       '@discordjs/builders':
-        specifier: 'catalog:'
+        specifier: ^1.13.1
         version: 1.14.1
       '@discordjs/rest':
-        specifier: 'catalog:'
+        specifier: ^2.6.0
         version: 2.6.1
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
       '@rsc-utils/io-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/io-utils
         version: link:packages/io-utils
       discord.js:
-        specifier: 'catalog:'
+        specifier: ^14.26.2
         version: 14.26.2
       emoji-regex-xs:
-        specifier: 'catalog:'
+        specifier: ^2.0.1
         version: 2.0.1
       regex:
-        specifier: 'catalog:'
+        specifier: ^6.1.0
         version: 6.1.0
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
       '@types/jest':
-        specifier: 'catalog:'
+        specifier: ^30.0.0
         version: 30.0.0
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^24.12.0
         version: 24.12.2
       discord-api-types:
-        specifier: 'catalog:'
-        version: 0.38.44
+        specifier: ^0.38.41
+        version: 0.38.45
       jest:
-        specifier: 'catalog:'
+        specifier: ^30.2.0
         version: 30.3.0(@types/node@24.12.2)
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.9.3
         version: 5.9.3
 
   packages/game-utils:
     dependencies:
       '@rsc-sage/data-layer':
-        specifier: 'catalog:'
+        specifier: ./packages/data-layer
         version: link:packages/data-layer
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
       '@rsc-utils/random-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/random-utils#semver:^0.1.1
         version: '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/879853ca21cd4939f687ef2ecce01ade22b67cd2'
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/io-utils:
     dependencies:
       '@aws-sdk/client-dynamodb':
-        specifier: 'catalog:'
-        version: 3.1027.0
+        specifier: ^3.1003.0
+        version: 3.1028.0
       '@aws-sdk/client-sns':
-        specifier: 'catalog:'
-        version: 3.1027.0
+        specifier: ^3.1003.0
+        version: 3.1028.0
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
       csv-parser:
-        specifier: 'catalog:'
+        specifier: ^3.2.0
         version: 3.2.0
       exifreader:
-        specifier: 'catalog:'
-        version: 4.38.0
+        specifier: ^4.36.2
+        version: 4.38.1
       follow-redirects:
-        specifier: 'catalog:'
+        specifier: ^1.15.11
         version: 1.15.11
       pdf2json:
-        specifier: 'catalog:'
+        specifier: ^4.0.2
         version: 4.0.2
       regex:
-        specifier: 'catalog:'
+        specifier: ^6.1.0
         version: 6.1.0
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
       '@types/follow-redirects':
-        specifier: 'catalog:'
+        specifier: ^1.14.4
         version: 1.14.4
       '@types/jest':
-        specifier: 'catalog:'
+        specifier: ^30.0.0
         version: 30.0.0
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^24.12.0
         version: 24.12.2
       jest:
-        specifier: 'catalog:'
+        specifier: ^30.2.0
         version: 30.3.0(@types/node@24.12.2)
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.9.3
         version: 5.9.3
 
   packages/map-utils:
     dependencies:
       '@napi-rs/canvas':
-        specifier: 'catalog:'
+        specifier: ^0.1.88
         version: 0.1.93
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
       '@rsc-utils/random-utils':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/random-utils#semver:^0.1.1
         version: '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/879853ca21cd4939f687ef2ecce01ade22b67cd2'
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/sage-env:
     dependencies:
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
       '@rsc-utils/io-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/io-utils
         version: link:packages/io-utils
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/sage-localization:
     dependencies:
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
 
   packages/stoat-utils:
     dependencies:
       '@rsc-utils/core-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/core-utils
         version: link:packages/core-utils
       '@rsc-utils/io-utils':
-        specifier: 'catalog:'
+        specifier: ./packages/io-utils
         version: link:packages/io-utils
       emoji-regex-xs:
-        specifier: 'catalog:'
+        specifier: ^2.0.1
         version: 2.0.1
       regex:
-        specifier: 'catalog:'
+        specifier: ^6.1.0
         version: 6.1.0
       stoat.js:
-        specifier: 'catalog:'
+        specifier: ^7.3.6
         version: 7.3.6
     devDependencies:
       '@rsc-utils/dev-scripts':
-        specifier: 'catalog:'
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
       '@types/jest':
-        specifier: 'catalog:'
+        specifier: ^30.0.0
         version: 30.0.0
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^24.12.0
         version: 24.12.2
       jest:
-        specifier: 'catalog:'
+        specifier: ^30.2.0
         version: 30.3.0(@types/node@24.12.2)
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.9.3
         version: 5.9.3
 
 packages:
@@ -467,12 +386,12 @@ packages:
   '@aws-crypto/util@5.2.0':
     resolution: {integrity: sha512-4RkU9EsI6ZpBve5fseQlGNUWKMa1RLPQ1dnjnQoe07ldfIzcsGb5hC5W0Dm7u423KWzawlrpbjXBrXCEv9zazQ==}
 
-  '@aws-sdk/client-dynamodb@3.1027.0':
-    resolution: {integrity: sha512-tB+4nzxpfvUA7ZgIu/FaYFS9WPnRIf5KNVIuJnxxm5JXXx6nOnmcmHjsbFH9W9uye6AH2HcQtgSqZlKd8dR+IQ==}
+  '@aws-sdk/client-dynamodb@3.1028.0':
+    resolution: {integrity: sha512-OkO2p9Wm+6CccOfQcdYjvCAJdUfBSWbmrIKXGh/qbBjp0B8d1MsYl1Exps5OzRSzqLVuTUVjPJCkgSMJF/mPqg==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/client-sns@3.1027.0':
-    resolution: {integrity: sha512-EdL2Rvwwj22Ot/Uf4QC/VOvI/v2nj+e9LexL8LBE7x8ZmL5DozWMg2VK0xXt50VnQwBoMjhAlMeTVvzv/eq/gQ==}
+  '@aws-sdk/client-sns@3.1028.0':
+    resolution: {integrity: sha512-izYwsbiPwCQxmGAl2KAT2ZWcZd6Gg2+ylw51zOblwxRZIJ0xXHiltDr5gXadXaa3B5h02oW3TNe8Qq/PNK7iBg==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/core@3.973.27':
@@ -1473,8 +1392,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  baseline-browser-mapping@2.10.16:
-    resolution: {integrity: sha512-Lyf3aK28zpsD1yQMiiHD4RvVb6UdMoo8xzG2XzFIfR9luPzOpcBlAsT/qfB1XWS1bxWT+UtE4WmQgsp297FYOA==}
+  baseline-browser-mapping@2.10.17:
+    resolution: {integrity: sha512-HdrkN8eVG2CXxeifv/VdJ4A4RSra1DTW8dc/hdxzhGHN8QePs6gKaWM9pHPcpCoxYZJuOZ8drHmbdpLHjCYjLA==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -1589,8 +1508,8 @@ packages:
     resolution: {integrity: sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==}
     engines: {node: '>=8'}
 
-  discord-api-types@0.38.44:
-    resolution: {integrity: sha512-q91MgBzP/gRaCLIbQTaOrOhbD8uVIaPKxpgX2sfFB2nZ9nSiTYM9P3NFQ7cbO6NCxctI6ODttc67MI+YhIfILg==}
+  discord-api-types@0.38.45:
+    resolution: {integrity: sha512-DiI01i00FPv6n+hXcFkFxK8Y/rFRpKs6U6aP32N4T73nTbj37Eua3H/95TBpLktLWB6xnLXhYDGvyLq6zzYY2w==}
 
   discord.js@14.26.2:
     resolution: {integrity: sha512-feShi+gULJ6R2MAA4/KkCFnkJcuVrROJrKk4czplzq8gE1oqhqgOy9K0Scu44B8oGeWKe04egquzf+ia6VtXAw==}
@@ -1636,8 +1555,8 @@ packages:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
     engines: {node: '>=10'}
 
-  exifreader@4.38.0:
-    resolution: {integrity: sha512-uUFJS7H1mToAUoqO8uX/EkAYRYyvwr+JuRBKtWv6kDbTJoB+woiddDULGm42Em02N0CIwk/TTJqLwzM2Iygbiw==}
+  exifreader@4.38.1:
+    resolution: {integrity: sha512-VUQ8pnWJHpnQXPQLgx4XBwjhj+eE0f5t4KhVFn6BnnTYKLf79DfjVRntR5061qE9NZgx2ohvE+JLXe/FWfCaAA==}
 
   exit-x@0.2.2:
     resolution: {integrity: sha512-+I6B/IkJc1o/2tiURyz/ivu/O0nKNEArIUB5O7zBrlDVJr22SCLH3xTeEry428LvFhRzIA1g8izguxJ/gbNcVQ==}
@@ -1806,7 +1725,7 @@ packages:
     resolution: {integrity: sha512-WPMAkMAtNDY9P/oKObtsRG/6KTrhtgPJoBTmk20uDn4Uy6/3EJnnaZJre/FMT1KVRx8cve1r7/FlMIOfRVWL4w==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
     peerDependencies:
-      '@types/node': '*'
+      '@types/node': ^24.12.0
       esbuild-register: '>=3.4.0'
       ts-node: '>=9.0.0'
     peerDependenciesMeta:
@@ -2369,7 +2288,7 @@ snapshots:
       '@smithy/util-utf8': 2.3.0
       tslib: 2.8.1
 
-  '@aws-sdk/client-dynamodb@3.1027.0':
+  '@aws-sdk/client-dynamodb@3.1028.0':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
@@ -2416,7 +2335,7 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-sns@3.1027.0':
+  '@aws-sdk/client-sns@3.1028.0':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
@@ -2933,7 +2852,7 @@ snapshots:
       '@discordjs/formatters': 0.6.2
       '@discordjs/util': 1.2.0
       '@sapphire/shapeshift': 4.0.0
-      discord-api-types: 0.38.44
+      discord-api-types: 0.38.45
       fast-deep-equal: 3.1.3
       ts-mixer: 6.0.4
       tslib: 2.8.1
@@ -2944,7 +2863,7 @@ snapshots:
 
   '@discordjs/formatters@0.6.2':
     dependencies:
-      discord-api-types: 0.38.44
+      discord-api-types: 0.38.45
 
   '@discordjs/rest@2.6.1':
     dependencies:
@@ -2953,14 +2872,14 @@ snapshots:
       '@sapphire/async-queue': 1.5.5
       '@sapphire/snowflake': 3.5.5
       '@vladfrangu/async_event_emitter': 2.4.7
-      discord-api-types: 0.38.44
+      discord-api-types: 0.38.45
       magic-bytes.js: 1.13.0
       tslib: 2.8.1
       undici: 6.24.1
 
   '@discordjs/util@1.2.0':
     dependencies:
-      discord-api-types: 0.38.44
+      discord-api-types: 0.38.45
 
   '@discordjs/ws@1.2.3':
     dependencies:
@@ -2970,7 +2889,7 @@ snapshots:
       '@sapphire/async-queue': 1.5.5
       '@types/ws': 8.18.1
       '@vladfrangu/async_event_emitter': 2.4.7
-      discord-api-types: 0.38.44
+      discord-api-types: 0.38.45
       tslib: 2.8.1
       ws: 8.20.0
     transitivePeerDependencies:
@@ -3842,7 +3761,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  baseline-browser-mapping@2.10.16: {}
+  baseline-browser-mapping@2.10.17: {}
 
   bowser@2.14.1: {}
 
@@ -3857,7 +3776,7 @@ snapshots:
 
   browserslist@4.28.2:
     dependencies:
-      baseline-browser-mapping: 2.10.16
+      baseline-browser-mapping: 2.10.17
       caniuse-lite: 1.0.30001787
       electron-to-chromium: 1.5.334
       node-releases: 2.0.37
@@ -3928,7 +3847,7 @@ snapshots:
 
   detect-newline@3.1.0: {}
 
-  discord-api-types@0.38.44: {}
+  discord-api-types@0.38.45: {}
 
   discord.js@14.26.2:
     dependencies:
@@ -3939,7 +3858,7 @@ snapshots:
       '@discordjs/util': 1.2.0
       '@discordjs/ws': 1.2.3
       '@sapphire/snowflake': 3.5.3
-      discord-api-types: 0.38.44
+      discord-api-types: 0.38.45
       fast-deep-equal: 3.1.3
       lodash.snakecase: 4.1.1
       magic-bytes.js: 1.13.0
@@ -3983,7 +3902,7 @@ snapshots:
       signal-exit: 3.0.7
       strip-final-newline: 2.0.0
 
-  exifreader@4.38.0:
+  exifreader@4.38.1:
     optionalDependencies:
       '@xmldom/xmldom': 0.9.9
 
