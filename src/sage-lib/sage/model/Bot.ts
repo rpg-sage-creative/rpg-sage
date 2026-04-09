@@ -10,20 +10,25 @@ import { Emojis, type HasEmojiCore } from "./Emojis.js";
  * string = description for why search is disabled for this game
  * true = search is enabled for this game
  */
-type TSearchStatus = { [key: number]: undefined | boolean | string; };
+type SearchStatus = { [key: number]: boolean | string | undefined; };
+
+type PathbuilderImportStatus = boolean | string | undefined;
 
 /** @todo can safely stop using did and uuid and set id as discord snowflake */
 export interface BotCore extends IdCore<"Bot">, HasEmbedColors, HasEmoji {
 	codeName: CodeName;
+
 	commandPrefix?: string;
+
+	macros?: MacroBase[];
+
+	pathbuilderImportStatus?: PathbuilderImportStatus;
+
+	/** Current status of the search engine by game. */
+	searchStatus?: SearchStatus;
 
 	/** Url to the Sage avatar/token. */
 	tokenUrl: string;
-
-	/** Current status of the search engine by game. */
-	searchStatus: TSearchStatus;
-
-	macros?: MacroBase[];
 }
 
 export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCore {
@@ -34,12 +39,34 @@ export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCo
 
 	public get commandPrefix(): string { return this.core.commandPrefix ?? "sage"; }
 
+		public get macros() { return this.core.macros ??= []; }
+
 	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
 
-	public get macros() { return this.core.macros ??= []; }
+	//#region Pathbuilder Import Status
+
+	public canPathbuilderImport(): boolean {
+		return this.core.pathbuilderImportStatus === true;
+	}
+
+	public getPathbuilderImportStatus(): boolean | string {
+		const status = this.core.pathbuilderImportStatus;
+		return typeof(status) === "string" ? status : status === true;
+	}
+
+	public setPathbuilderImportStatus(status: boolean | string): Promise<boolean> {
+		this.core.pathbuilderImportStatus = status;
+		return this.save();
+	}
+
+	//#endregion
+
+	//#region Search Status
 
 	/** returns true if we can search the given game */
-	public canSearch(gameType: GameSystemType): boolean { return this.core.searchStatus?.[gameType] === true; }
+	public canSearch(gameType: GameSystemType): boolean {
+		return this.core.searchStatus?.[gameType] === true;
+	}
 
 	/** returns string if disabled, true if enabled, or false if gameType not found (no search logic for this game) */
 	public getSearchStatus(gameType: GameSystemType): boolean | string {
@@ -48,10 +75,12 @@ export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCo
 	}
 
 	public setSearchStatus(gameType: GameSystemType, status: boolean | string): Promise<boolean> {
-		const searchStatus = this.core.searchStatus ?? (this.core.searchStatus = {});
+		const searchStatus = this.core.searchStatus ??= {};
 		searchStatus[gameType] = status;
 		return this.save();
 	}
+
+	//#endregion
 
 	// #region HasColorsCore
 

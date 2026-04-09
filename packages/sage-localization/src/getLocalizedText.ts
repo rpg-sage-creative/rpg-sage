@@ -37,6 +37,7 @@ const enUS = {
 	"NAME": `Name`,
 	"NEW": `New`,
 	"NO": `No`, // context: for a "yes" or "no" confirmation prompt
+	"NONE": `None`,
 	"NOTE": `Note`,
 	"NPC": "NPC",
 	"OWNERS": `Owners`,
@@ -51,6 +52,7 @@ const enUS = {
 	"TABLE": `Table`,
 	"TO": `To`, // context: we are changing a value "from" something "to" something else
 	"UNCATEGORIZED": `Uncategorized`,
+	"UNKNOWN": `Unknown`,
 	"UPDATE": `Update`,
 	"USAGE": `Usage`,
 	"USER": `User`,
@@ -67,13 +69,12 @@ const enUS = {
 	"NONE_FOUND": `None found.`,
 
 	"TABLE_URL": `Table Url`,
-	"UNKNOWN": `Unknown`,
-	"NONE": `None`,
 
 	"IMPORT_ERROR": "Import Error!",
 	"REIMPORT_ERROR": "Reimport Error!",
 
 	"FEATURE_NOT_IMPLEMENTED": `Sorry, that feature hasn't been implemented yet!`,
+	"STILL_INVESTIGATING": `Sorry, we are still investigating.`,
 
 	"SORRY_WE_DONT_KNOW": "Sorry, we don't know what went wrong!",
 	"AT_LEAST_ONE_OCCURRED": `Sorry, at least one of the following occurred:`,
@@ -275,6 +276,52 @@ const enUS = {
 
 	//#region dice limits and test tool
 	"DICE_LIMITS_X_X_S": `## RPG Sage Dice Limits\nRPG Sage limits dice rolls to #{0}d#{1} to avoid wasted processing.\n\nIf you were rolling more dice than that legitimately, please let us know what game system you are playing at: https://discord.gg/rpgsage.\n\nIf you were simply try to "reset the RNG", then we have a tool for that you can use that *also* provides some interesting stats about the distribution of rolls.\n\`\`\`#{2}! dice test sides="20"\`\`\`\n*Valid values for sides are: 2, 3, 4, 6, 8, 10, 12, 20*`,
+	//#endregion
+
+	//#region pathbuilder import status
+	"PATHBUILDER_IMPORT_STATUS_S_X":
+`
+We are sorry, but importing your character directly from Pathbuilder 2e is disabled:
+> #{0}
+### Steps to import manually:
+1. Open your browser to <https://pathbuilder2e.com/json.php?id=#{1}>
+2. Copy all the json content on that page
+  - macOS cmd + a then cmd + c
+  - Win ctrl + a then ctrl + c
+3. Create a simple plain text file
+  - any name will do, as long as it ends with \`.json\`
+  - for simplicity, you can use \`#{1}.json\`
+4. Paste all the json into the file
+  - macOS cmd + v
+  - Win ctrl + v
+5. Start a new discord message
+  - drag/drop or attach the file to the message
+  - for Pathfinder 2e, type: \`sage! import pf2e\`
+  - for Starfinder 2e, type: \`sage! import sf2e\`
+6. Send the message to trigger an import
+-# *For more help, visit us at <https://discord.gg/rpgsage>*
+`,
+	"PATHBUILDER_REIMPORT_STATUS_S_X":
+`
+We are sorry, but reimporting your character directly from Pathbuilder 2e is disabled:
+> #{0}
+### Steps to reimport manually:
+1. Open your browser to <https://pathbuilder2e.com/json.php?id=#{1}>
+2. Copy all the json content on that page
+  - macOS cmd + a then cmd + c
+  - Win ctrl + a then ctrl + c
+3. Create a simple plain text file
+  - any name will do, as long as it ends with \`.json\`
+  - for simplicity, you can use \`#{1}.json\`
+4. Paste all the json into the file
+  - macOS cmd + v
+  - Win ctrl + v
+5. Reply to the message with your imported character
+  - drag/drop or attach the file to your reply
+  - type: \`sage! reimport\`
+6. Send the reply to trigger a reimport
+-# *For more help, visit us at <https://discord.gg/rpgsage>*
+`,
 	//#endregion
 };
 

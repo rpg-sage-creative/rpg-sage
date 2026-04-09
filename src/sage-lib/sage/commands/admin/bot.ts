@@ -13,6 +13,15 @@ async function botDetails(sageMessage: SageMessage): Promise<void> {
 	return sendBot(sageMessage);
 }
 
+function statusToEmoji(status: string | boolean): string {
+	if (status === true) {
+		return ":green_circle:";
+	}else if (status === false) {
+		return ":no_entry_sign:";
+	}
+	return ":yellow_circle:";
+}
+
 function searchStatusToReadable(status: string | boolean): string {
 	if (status === true) {
 		return "Search currently active.";
@@ -23,14 +32,32 @@ function searchStatusToReadable(status: string | boolean): string {
 }
 
 function keyAndStatusToOutput(gameSystem: GameSystemType, status: boolean | string): string {
-	const emoji = status === true ? ":green_circle:" : status === false ? ":no_entry_sign:" : ":yellow_circle:";
-	return `[spacer] ${emoji} <b>${GameSystemType[gameSystem]}</b> ${searchStatusToReadable(status)}`;
+	const emoji = statusToEmoji(status);
+	const gameLabel = GameSystemType[gameSystem];
+	const statusLabel = searchStatusToReadable(status);
+	return `[spacer] ${emoji} <b>${gameLabel}</b> ${statusLabel}`;
 }
 
 function getBotSearchStatus(bot: Bot): string[] {
 	return Object.keys(GameSystemType)
 		.filter(key => +key)
 		.map(key => keyAndStatusToOutput(+key, bot.getSearchStatus(+key)));
+}
+
+function pathbuilderImportStatusToReadable(status: string | boolean): string {
+	if (status === true) {
+		return "Pathbuilder Search Enabled";
+	}else if (status === false) {
+		return "Pathbuilder Search Disabled";
+	}
+	return status;
+}
+
+function getBotPathbuilderImportStatus(bot: Bot): string[] {
+	const status = bot.getPathbuilderImportStatus();
+	const emoji = status === true ? ":green_circle:" : status === false ? ":no_entry_sign:" : ":yellow_circle:";
+	const statusLabel = pathbuilderImportStatusToReadable(status);
+	return [`[spacer] ${emoji} ${statusLabel}`];
 }
 
 async function sendBot(sageMessage: SageMessage): Promise<void> {
@@ -54,6 +81,7 @@ async function sendBot(sageMessage: SageMessage): Promise<void> {
 		renderableContent.append(`<b>User Id</b> ${bot.id || "<i>NOT SET</i>"}`);
 		renderableContent.append(`<b>Status</b> ${"<i>NOT FOUND</i>"}`);
 	}
+	renderableContent.appendTitledSection("Pathbuilder Import Status", ...getBotPathbuilderImportStatus(bot));
 	renderableContent.appendTitledSection("Search Engine Status by Game", ...getBotSearchStatus(bot));
 	await sageMessage.send(renderableContent);
 }
@@ -72,6 +100,25 @@ async function setBotSearchStatus(sageMessage: SageMessage): Promise<void> {
 
 	const status = enabled ? true : message ?? false;
 	const saved = await sageMessage.bot.setSearchStatus(gameSystem, status);
+	await sageMessage.reactSuccessOrFailure(saved);
+	if (saved) {
+		return sendBot(sageMessage);
+	}
+}
+
+async function setBotPathbuilderImportstatus(sageMessage: SageMessage): Promise<void> {
+	if (!sageMessage.actor.sage.isSuperUser) {
+		return sageMessage.reactBlock();
+	}
+	const enabled = sageMessage.args.getBoolean("enabled");
+	if (!isDefined(enabled)) {
+		return sageMessage.whisper("Invalid or `enabled` value.");
+	}
+
+	const message = sageMessage.args.getString("message");
+
+	const status = enabled ? true : message ?? false;
+	const saved = await sageMessage.bot.setPathbuilderImportStatus(status);
 	await sageMessage.reactSuccessOrFailure(saved);
 	if (saved) {
 		return sendBot(sageMessage);
@@ -117,4 +164,5 @@ export function registerBot(): void {
 	registerListeners({ commands:["bot|details"], message:botDetails });
 	registerListeners({ commands:["code|version"], message:botCodeVersion });
 	registerListeners({ commands:["bot|set|search|status"], message:setBotSearchStatus });
+	registerListeners({ commands:["bot|set|pathbuilder|import|status"], message:setBotPathbuilderImportstatus });
 }

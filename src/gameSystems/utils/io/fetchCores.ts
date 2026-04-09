@@ -1,5 +1,6 @@
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
+import { noop } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername, parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
+import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
 import { getJson, PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import type { FetchResultError } from "./handleImportErrors.js";
@@ -45,7 +46,10 @@ export function coreToResult<T extends CharacterBaseCore, U extends CharacterBas
 }
 
 export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string, error: FetchResultError, handlers: ImportHandlers<T>): Promise<FetchCoreResult<T>> {
-	const json = await getJson(jsonUrl).catch(() => undefined);
+	const headers = {
+		"User-Agent": "RPG Sage Pathbuilder Character Importer - rpgsage.app",
+	};
+	const json = await getJson(jsonUrl, undefined, { headers }).catch(noop);
 	if (!json) {
 		return { error };
 	}
