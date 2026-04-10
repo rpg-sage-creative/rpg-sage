@@ -46,9 +46,9 @@ function getBotSearchStatus(bot: Bot): string[] {
 
 function pathbuilderImportStatusToReadable(status: string | boolean): string {
 	if (status === true) {
-		return "Pathbuilder Search Enabled";
+		return "Pathbuilder Import Enabled";
 	}else if (status === false) {
-		return "Pathbuilder Search Disabled";
+		return "Pathbuilder Import Disabled";
 	}
 	return status;
 }
