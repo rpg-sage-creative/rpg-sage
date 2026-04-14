@@ -8,7 +8,7 @@ import type { CacheItemDirName } from "../types.js";
 export function getJsonPath(dirName: CacheItemDirName, id: string): string {
 	const dataPath = ["sage", dirName];
 	if (dirName === "messages") {
-		dataPath.push(snowflakeToDate(id as Snowflake).getFullYear().toString());
+		dataPath.push(snowflakeToDate(id as Snowflake).getUTCFullYear().toString());
 	}
 	return formatDataFilePath(dataPath, id);
 }

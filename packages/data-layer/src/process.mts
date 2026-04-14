@@ -278,8 +278,12 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 
 			// messages are stored by year
 			if (isMessage(updatedCore, objectType)) {
-				const idYear = new Date(updatedCore.ts).getFullYear();
-				writeFilePath = `${objectRoot}/${idYear}/${updatedCore.id}.json`;
+				const tsDate = new Date(updatedCore.ts);
+				const tsYear = tsDate.getUTCFullYear();
+				writeFilePath = `${objectRoot}/${tsYear}/${updatedCore.id}.json`;
+				// const idDate = snowflakeToDate(updatedCore.id);
+				// const idYear = idDate.getUTCFullYear();
+				// if (filePath !== writeFilePath) debug({filePath,idDate,idYear,tsDate,tsYear,writeFilePath});
 			}
 
 			const wrongPath = filePath !== writeFilePath;

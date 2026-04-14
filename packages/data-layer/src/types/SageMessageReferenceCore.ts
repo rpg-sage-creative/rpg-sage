@@ -54,9 +54,9 @@ export const SageMessageReferenceKeys: (keyof SageMessageReferenceCore)[] = [
 	"characterId",
 	"gameId",
 	"guildId",
-	"id",           // id from SageCore
+	"id",           // from SageCore
 	"messageIds",
-	"objectType",   // id from SageCore
+	"objectType",   // from SageCore
 	"ts",
 	"userId",
 ];
