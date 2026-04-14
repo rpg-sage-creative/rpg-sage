@@ -19,6 +19,8 @@ const GlobalTrackerDots = {
 	triangles: { off: "△", on: "▲", unknown: "?" }
 };
 
+type GlobalTrackerDotsKey = keyof typeof GlobalTrackerDots;
+
 type TrackerBarValues = {
 	min: string;
 	increments: string[];
@@ -94,16 +96,32 @@ type TrackerDotValues = {
 	unknown: string;
 };
 
-function parseTrackerDots(trackerDotValues?: string): TrackerDotValues {
+function statKeyToDotsKey(statKey: string): GlobalTrackerDotsKey | undefined {
+	// if the statKey is focuspoints, heropoints, manapoints, or staminapoints
+	const lower = statKey.toLowerCase();
+	if (lower in GlobalTrackerDots) {
+		return lower as GlobalTrackerDotsKey;
+	}
+
+	// if the statKey is focus, hero, mana, or stamina
+	const lowerPoints = lower + "points";
+	if (lowerPoints in GlobalTrackerDots) {
+		return lowerPoints as GlobalTrackerDotsKey;
+	}
+
+	return undefined;
+}
+
+function parseTrackerDots(statKey: string, trackerDotValues?: string): TrackerDotValues {
 	// don't waste time if we don't have anything to work with
 	if (!trackerDotValues) {
-		return GlobalTrackerDots.dots;
+		return GlobalTrackerDots[statKeyToDotsKey(statKey) ?? "dots"];
 	}
 
 	// start by trying to grab a predefined dots
-	const key = trackerDotValues.toLowerCase();
-	if (key in GlobalTrackerDots) {
-		return GlobalTrackerDots[key as keyof typeof GlobalTrackerDots];
+	const dotsKey = trackerDotValues.toLowerCase();
+	if (dotsKey in GlobalTrackerDots) {
+		return GlobalTrackerDots[dotsKey as keyof typeof GlobalTrackerDots];
 	}
 
 	// split values
@@ -111,14 +129,14 @@ function parseTrackerDots(trackerDotValues?: string): TrackerDotValues {
 
 	// we need an "on" or an "off" value, but we can allow one of them to be "empty"
 	if (!on && !off) {
-		return GlobalTrackerDots.dots;
+		return GlobalTrackerDots[statKeyToDotsKey(statKey) ?? "dots"];
 	}
 
 	return { off, on, unknown };
 }
 
-export function toTrackerDots(value?: number, maxValue?: number, trackerDotValues?: string): string {
-	const { off, on, unknown } = parseTrackerDots(trackerDotValues);
+export function toTrackerDots(statKey: string, value?: number, maxValue?: number, trackerDotValues?: string): string {
+	const { off, on, unknown } = parseTrackerDots(statKey, trackerDotValues);
 
 	if (!isFiniteNumber(value)) {
 		return unknown;

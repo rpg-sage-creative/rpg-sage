@@ -699,7 +699,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 
 		let prefix: GetStatPrefix | "arch" | "full" = "";
 		let statLower = keyLower;
-		if (keyLower.includes(".")) {
+		if (keyLower.includes(".") && keyLower !== "hp.max") {
 			const parts = keyLower.split(".");
 			if (["dc", "ext", "label", "labeled", "mod", "p", "prof", "proficiency"].includes(parts[0])) {
 				prefix = parts.shift() as GetStatPrefix;
@@ -750,8 +750,9 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 					return ret("languages", this.core.languages?.join(", "));
 				case "level":
 					return ret("level", this.level);
+				case "hp.max":
 				case "maxhp":
-					return ret("maxHp", this.maxHp);
+					return ret("hp.max", this.maxHp);
 				case "size":
 					return ret("size", this.core.sizeName ?? SizeType[this.core.size ?? 2]);
 				case "xp":

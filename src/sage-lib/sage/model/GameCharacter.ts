@@ -97,11 +97,47 @@ export type AutoChannelResult = {
 };
 
 export class GameCharacter {
+	//#region GameCharacterPartial (to be removed when GameCharacter extends GameCharacterPartial)
+
+	/** stores the clean alias used for matching */
+	private _aliasMatcher?: StringMatcher;
+
+	/** returns the clean alias used for matching */
+	public get aliasMatcher(): StringMatcher {
+		return this._aliasMatcher ??= StringMatcher.from(this.core.alias);
+	}
+
+	/** stores the clean name used for matching */
+	private _nameMatcher?: StringMatcher;
+
+	/** returns the clean name used for matching */
+	public get nameMatcher(): StringMatcher {
+		return this._nameMatcher ??= StringMatcher.from(this.core.name);
+	}
+
+	public readonly partial = false;
+
 	public equals(other: Optional<string | GameCharacter>): boolean {
-		if (!other) return false;
 		if (other instanceof GameCharacter) return other.id === this.core.id;
 		return this.core.id === other;
 	}
+
+	public async fetch(): Promise<GameCharacter | undefined> {
+		return this;
+	}
+
+	/** Compares id, name literal, alias literal, then nameMatcher and aliasMatcher. If recursive, it also checks companions. */
+	public matches(value: string, recursive = false): boolean {
+		if (this.name === value || this.alias === value || this.id === value) {
+			return true;
+		}
+		if (StringMatcher.from(value).matchesAny(this.nameMatcher, this.aliasMatcher)) {
+			return true;
+		}
+		return recursive && this.companions.hasMatching(value, true);
+	}
+
+	//#endregion
 
 	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
 		const companionType = this.isPcOrCompanion ? "companion" : "minion";
@@ -132,12 +168,6 @@ export class GameCharacter {
 	public set alias(alias: string | undefined) {
 		this.core.alias = alias;
 		delete this._aliasMatcher;
-	}
-	/** stores the clean alias used for matching */
-	private _aliasMatcher?: StringMatcher;
-	/** returns the clean alias used for matching */
-	public get aliasMatcher(): StringMatcher {
-		return this._aliasMatcher ??= StringMatcher.from(this.core.alias);
 	}
 
 	/** Channels to automatically treat input as dialog */
@@ -179,12 +209,6 @@ export class GameCharacter {
 	public set name(name: string) {
 		this.core.name = name;
 		delete this._nameMatcher;
-	}
-	/** stores the clean name used for matching */
-	private _nameMatcher?: StringMatcher;
-	/** returns the clean name used for matching */
-	public get nameMatcher(): StringMatcher {
-		return this._nameMatcher ??= StringMatcher.from(this.core.name);
 	}
 
 	/** The character's notes */
@@ -356,17 +380,6 @@ export class GameCharacter {
 	}
 
 	//#endregion
-
-	/** Compares id, name literal, alias literal, then nameMatcher and aliasMatcher. If recursive, it also checks companions. */
-	public matches(value: string, recursive = false): boolean {
-		if (this.name === value || this.alias === value || this.id === value) {
-			return true;
-		}
-		if (StringMatcher.from(value).matchesAny(this.nameMatcher, this.aliasMatcher)) {
-			return true;
-		}
-		return recursive && this.companions.hasMatching(value, true);
-	}
 
 	public toDisplayName({ processor, overrideTemplate, raw }: { overrideTemplate?: string; processor?:StatBlockProcessor; raw?:boolean; } = { }): string {
 		const templatedValue = StatBlockProcessor.processTemplate({ char:this, processor, overrideTemplate, templateKey:"displayName", templatesOnly:raw });
@@ -598,7 +611,7 @@ export class GameCharacter {
 	public getTrackerDots(key: string): string {
 		const { val, max } = this.getNumbers(key, { val:true, max:true });
 		const dotValues = this.getString(`${key}.dots.values`);
-		return toTrackerDots(val, max, dotValues);
+		return toTrackerDots(key, val, max, dotValues);
 	}
 
 	public hasTrackerDots(key: string): boolean {
@@ -838,6 +851,19 @@ export class GameCharacter {
 		// get stats from underlying pathbuilder character
 		const { pathbuilder } = this;
 		if (pathbuilder) {
+			// there is a special problem with maxhp and pathbuilder characters
+			// internally, they store it as maxhp
+			// our meta key logic sees that as old, and that it should be checked first for old chars using manual stats
+			// but this presents an issue when folks use the newer hp.max on imported chars
+			if (keyLower === "maxhp") {
+				const hpKey = this.getKey("hitPoints");
+				const hpStat = this.getNoteKeyAndStat(hpKey + ".max");
+				if (hpStat !== undefined) {
+					return ret(hpStat.key, hpStat.value);
+				}
+			}
+
+			// process the rest of pathbuilder stats normally
 			let pbKey = key;
 			if (keyLower === "explorationmode") pbKey = "activeExploration";
 			else if (keyLower === "explorationskill") pbKey = "initSkill";
@@ -930,6 +956,11 @@ export class GameCharacter {
 			if (stat.isDefined) {
 				return ret(`dc.${stat.key}`, doStatMath(`(${stat.value}+10)`));
 			}
+		}
+
+		// passthrough for new hp.max to old maxhp
+		if (keyLower === "hp.max") {
+			return ret(keyLower, this.getStat("maxHp", true).value);
 		}
 
 		return ret();
