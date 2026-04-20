@@ -37,7 +37,7 @@ export type SageCharacterCore = SageCore<"Character", Snowflake> & {
 	notes?: Note[];
 	pathbuilder?: unknown;
 	pathbuilderId?: string;
-	tags?: string[];
+	tags?: Lowercase<string>[];
 	tokenUrl?: string;
 	userDid?: Snowflake;
 };
