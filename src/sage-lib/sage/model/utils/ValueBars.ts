@@ -16,8 +16,23 @@ const GlobalTrackerDots = {
 	hearts: { off: "♡", on: "♥", unknown: "?" },
 	hexes: { off: "⬡", on: "⬢", unknown: "?" },
 	squares: { off: "▫", on: "▪", unknown: "?" },
-	triangles: { off: "△", on: "▲", unknown: "?" }
+	triangles: { off: "△", on: "▲", unknown: "?" },
 };
+
+// const SpellTrackerDots = {
+// 	cantrips: { off:"Ⓒ", on:"🅒", unknown:"?" },
+// 	zeroth: { off:"⓪", on:"⓿", unknown:"?" },
+// 	first: { off:"①", on:"❶", unknown:"?" },
+// 	second: { off:"②", on:"❷", unknown:"?" },
+// 	third: { off:"③", on:"❸", unknown:"?" },
+// 	fourth: { off:"④", on:"❹", unknown:"?" },
+// 	fifth: { off:"⑤", on:"❺", unknown:"?" },
+// 	sixth: { off:"⑥", on:"❻", unknown:"?" },
+// 	seventh: { off:"⑦", on:"❼", unknown:"?" },
+// 	eigth: { off:"⑧", on:"❽", unknown:"?" },
+// 	ninth: { off:"⑨", on:"❾", unknown:"?" },
+// 	tenth: { off:"⑩", on:"❿", unknown:"?" },
+// };
 
 type GlobalTrackerDotsKey = keyof typeof GlobalTrackerDots;
 
