@@ -15,7 +15,7 @@ overrides:
   '@rsc-sage/localization': ./packages/sage-localization
   '@rsc-utils/cache-utils': github:rpg-sage-creative/cache-utils#semver:^1.1.0
   '@rsc-utils/color-utils': github:rpg-sage-creative/color-utils#semver:^1.1.0
-  '@rsc-utils/core-utils': github:rpg-sage-creative/core-utils#semver:^1.6.0
+  '@rsc-utils/core-utils': github:rpg-sage-creative/core-utils#semver:^1.7.0
   '@rsc-utils/dev-scripts': github:rpg-sage-creative/dev-scripts#semver:^1.4.2
   '@rsc-utils/discord-utils': github:rpg-sage-creative/discord-utils#semver:^1.4.0
   '@rsc-utils/game-utils': ./packages/game-utils
@@ -63,8 +63,8 @@ importers:
         specifier: ./packages/sage-localization
         version: link:packages/sage-localization
       '@rsc-utils/core-utils':
-        specifier: github:rpg-sage-creative/core-utils#semver:^1.6.0
-        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+        specifier: github:rpg-sage-creative/core-utils#semver:^1.7.0
+        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
       '@rsc-utils/discord-utils':
         specifier: github:rpg-sage-creative/discord-utils#semver:^1.4.0
         version: '@rpg-sage-creative/discord-utils@https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/ab84902e384d8d052d7d2fa198fe7012a9eb8305'
@@ -112,8 +112,8 @@ importers:
         specifier: ./packages/data-layer
         version: link:packages/data-layer
       '@rsc-utils/core-utils':
-        specifier: github:rpg-sage-creative/core-utils#semver:^1.6.0
-        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+        specifier: github:rpg-sage-creative/core-utils#semver:^1.7.0
+        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
       '@rsc-utils/discord-utils':
         specifier: github:rpg-sage-creative/discord-utils#semver:^1.4.0
         version: '@rpg-sage-creative/discord-utils@https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/ab84902e384d8d052d7d2fa198fe7012a9eb8305'
@@ -131,8 +131,8 @@ importers:
   packages/data-layer:
     dependencies:
       '@rsc-utils/core-utils':
-        specifier: github:rpg-sage-creative/core-utils#semver:^1.6.0
-        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+        specifier: github:rpg-sage-creative/core-utils#semver:^1.7.0
+        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
       '@rsc-utils/io-utils':
         specifier: github:rpg-sage-creative/io-utils#semver:^1.5.1
         version: '@rpg-sage-creative/io-utils@https://codeload.github.com/rpg-sage-creative/io-utils/tar.gz/772020c8f8d891e8d869302d78873791c50bb475'
@@ -147,8 +147,8 @@ importers:
         specifier: ./packages/data-layer
         version: link:packages/data-layer
       '@rsc-utils/core-utils':
-        specifier: github:rpg-sage-creative/core-utils#semver:^1.6.0
-        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+        specifier: github:rpg-sage-creative/core-utils#semver:^1.7.0
+        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
       '@rsc-utils/random-utils':
         specifier: github:rpg-sage-creative/random-utils#semver:^0.1.1
         version: '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/879853ca21cd4939f687ef2ecce01ade22b67cd2'
@@ -163,8 +163,8 @@ importers:
         specifier: ^0.1.88
         version: 0.1.93
       '@rsc-utils/core-utils':
-        specifier: github:rpg-sage-creative/core-utils#semver:^1.6.0
-        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+        specifier: github:rpg-sage-creative/core-utils#semver:^1.7.0
+        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
       '@rsc-utils/random-utils':
         specifier: github:rpg-sage-creative/random-utils#semver:^0.1.1
         version: '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/879853ca21cd4939f687ef2ecce01ade22b67cd2'
@@ -176,8 +176,8 @@ importers:
   packages/sage-env:
     dependencies:
       '@rsc-utils/core-utils':
-        specifier: github:rpg-sage-creative/core-utils#semver:^1.6.0
-        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+        specifier: github:rpg-sage-creative/core-utils#semver:^1.7.0
+        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
       '@rsc-utils/io-utils':
         specifier: github:rpg-sage-creative/io-utils#semver:^1.5.1
         version: '@rpg-sage-creative/io-utils@https://codeload.github.com/rpg-sage-creative/io-utils/tar.gz/772020c8f8d891e8d869302d78873791c50bb475'
@@ -189,8 +189,8 @@ importers:
   packages/sage-localization:
     dependencies:
       '@rsc-utils/core-utils':
-        specifier: github:rpg-sage-creative/core-utils#semver:^1.6.0
-        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+        specifier: github:rpg-sage-creative/core-utils#semver:^1.7.0
+        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
     devDependencies:
       '@rsc-utils/dev-scripts':
         specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
@@ -199,8 +199,8 @@ importers:
   packages/stoat-utils:
     dependencies:
       '@rsc-utils/core-utils':
-        specifier: github:rpg-sage-creative/core-utils#semver:^1.6.0
-        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+        specifier: github:rpg-sage-creative/core-utils#semver:^1.7.0
+        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
       '@rsc-utils/io-utils':
         specifier: github:rpg-sage-creative/io-utils#semver:^1.5.1
         version: '@rpg-sage-creative/io-utils@https://codeload.github.com/rpg-sage-creative/io-utils/tar.gz/772020c8f8d891e8d869302d78873791c50bb475'
@@ -767,9 +767,9 @@ packages:
     resolution: {tarball: https://codeload.github.com/rpg-sage-creative/color-utils/tar.gz/782556193811afb809fe572a1e211502a7e58e05}
     version: 1.1.0
 
-  '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25':
-    resolution: {tarball: https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25}
-    version: 1.6.0
+  '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e':
+    resolution: {tarball: https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e}
+    version: 1.7.0
 
   '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297':
     resolution: {tarball: https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297}
@@ -3066,7 +3066,7 @@ snapshots:
     dependencies:
       '@rsc-utils/type-utils': '@rpg-sage-creative/type-utils@https://codeload.github.com/rpg-sage-creative/type-utils/tar.gz/6805eb97913b61e01f4d30fd9d1c4b82b220a4c1'
 
-  '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25':
+  '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e':
     dependencies:
       '@rsc-utils/cache-utils': '@rpg-sage-creative/cache-utils@https://codeload.github.com/rpg-sage-creative/cache-utils/tar.gz/145bc9860dfe3e54e5311bbd29e94763436ff728'
       '@rsc-utils/color-utils': '@rpg-sage-creative/color-utils@https://codeload.github.com/rpg-sage-creative/color-utils/tar.gz/782556193811afb809fe572a1e211502a7e58e05'
@@ -3086,7 +3086,7 @@ snapshots:
     dependencies:
       '@discordjs/builders': 1.14.1
       '@discordjs/rest': 2.6.1
-      '@rsc-utils/core-utils': '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+      '@rsc-utils/core-utils': '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
       '@rsc-utils/io-utils': '@rpg-sage-creative/io-utils@https://codeload.github.com/rpg-sage-creative/io-utils/tar.gz/772020c8f8d891e8d869302d78873791c50bb475'
       discord.js: 14.26.2
       emoji-regex-xs: 2.0.1
@@ -3111,7 +3111,7 @@ snapshots:
     dependencies:
       '@aws-sdk/client-dynamodb': 3.1028.0
       '@aws-sdk/client-sns': 3.1028.0
-      '@rsc-utils/core-utils': '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/31ef903a05a3a8ba186bfa81d8150e0950f83f25'
+      '@rsc-utils/core-utils': '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
       csv-parser: 3.2.0
       exifreader: 4.38.1
       follow-redirects: 1.15.11
