@@ -12,7 +12,7 @@ import type { SageCommandArgs } from "../model/SageCommandArgs.js";
 import type { SageButtonInteraction } from "../model/SageInteraction.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createMessageDeleteButton } from "../model/utils/deleteButton.js";
-import { toTrackerBar } from "../model/utils/ValueBars.js";
+import { toTrackerBar } from "../model/utils/TrackerBars.js";
 
 function getStringArg({ args }: SageCommand, ...keys: string[]): string | undefined {
 	for (const key of keys) {

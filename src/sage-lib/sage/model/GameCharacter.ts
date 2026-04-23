@@ -17,7 +17,8 @@ import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TE
 import { SageMessageReference } from "../repo/SageMessageReference.js";
 import { CharacterManager } from "./CharacterManager.js";
 import { NoteManager } from "./NoteManager.js";
-import { toTrackerBar, toTrackerDots } from "./utils/ValueBars.js";
+import { toTrackerBar } from "./utils/TrackerBars.js";
+import { parseTrackerDots, toTrackerDots } from "./utils/TrackerDots.js";
 import { getMetaStat } from "./utils/getMetaStat.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
 import { processCharStatsAndMods } from "./utils/processCharStatsAndMods.js";
@@ -308,7 +309,7 @@ export class GameCharacter {
 		const autoChannel = this.getAutoChannel(data);
 		if (autoChannel && autoChannel.dialogPostType !== data.dialogPostType) {
 			this.removeAutoChannel(data);
-		}
+	}
 		this.autoChannels.push(data);
 		if (save) {
 			return this.save();
@@ -604,16 +605,40 @@ export class GameCharacter {
 		return toTrackerBar(val, max, barValues);
 	}
 
+	/** Returns true if the user has set a `.bar.value` for the given key. */
 	public hasTrackerBar(key: string): boolean {
 		return this.getString(`${key}.bar.values`) !== undefined;
 	}
 
-	public getTrackerDots(key: string): string {
-		const { val, max } = this.getNumbers(key, { val:true, max:true });
-		const dotValues = this.getString(`${key}.dots.values`);
-		return toTrackerDots(key, val, max, dotValues);
+	public getTrackerDots(key: string, statKey?: string): string {
+		const explicitKey = statKey ?? key;
+		const explicitDotsValues = this.getString(`${explicitKey}.dots.values`);
+		if (explicitDotsValues) {
+			const { val, max } = this.getNumbers(explicitKey, { val:true, max:true });
+			return toTrackerDots({
+				maxValue: max,
+				statKey: explicitKey,
+				trackerDotValues: explicitDotsValues,
+				value: val
+			});
+		}
+
+		const implicitDots = parseTrackerDots(key);
+		if (implicitDots) {
+			const { dotsValues, statKey } = implicitDots;
+			const { val, max } = this.getNumbers(statKey, { val:true, max:true });
+			return toTrackerDots({
+				maxValue: max,
+				statKey: key,
+				trackerDotValues: dotsValues,
+				value: val
+			});
+		}
+
+		return "?";
 	}
 
+	/** Returns true if the user has set a `.dots.value` for the given key. */
 	public hasTrackerDots(key: string): boolean {
 		return this.getString(`${key}.dots.values`) !== undefined;
 	}
@@ -730,42 +755,6 @@ export class GameCharacter {
 		if (keyLower === "alias") {
 			return ret("alias", this.alias);
 		}
-
-		//#region tracker bars
-
-		const isDeprecatedHpBar = ["hpgauge", "hpbar"].includes(keyLower);
-		if (keyLower.endsWith(".bar") || isDeprecatedHpBar) {
-			const statKey = isDeprecatedHpBar ? this.getKey("hitPoints") : keyLower.slice(0, -4);
-			const { val, max } = this.getNumbers(statKey);
-			if (val !== undefined || max !== undefined) {
-				/** @todo do i wanna try to case this key? */
-				return ret(key, this.getTrackerBar(statKey));
-			}
-		}
-
-		if (keyLower.endsWith(".dots")) {
-			const statKey = keyLower.slice(0, -5);
-			if (this.getNumber(statKey) !== undefined) {
-				return ret(key, this.getTrackerDots(statKey));
-			}
-		}
-
-		if (keyLower.endsWith(".indexed")) {
-			const statKey = keyLower.slice(0, -8);
-			const value = this.getNumber(statKey);
-			if (value !== undefined) {
-				const valuesString = this.getString(`${statKey}.indexed.values`);
-				const values = valuesString?.split(",").map(s => s.trim()) ?? [];
-				return ret(key, values[value!] ?? "?");
-			}
-		}
-
-		// shim for initial offering
-		if (keyLower === "hp.bar.values") {
-			return ret(key, this.getNoteStat(key, "hpbar.values"));
-		}
-
-		//#endregion
 
 		// enforce sheet.url and stop using sheeturl
 		if (keyLower === "sheet.url" || keyLower === "sheeturl") {
@@ -911,21 +900,72 @@ export class GameCharacter {
 		}
 
 		const { gameSystem } = this;
+
+		// process pf2e/sf2e
 		if (pathbuilder || gameSystem?.isP20) {
 			const p20Stat = this.getStatP20(key, keyLower);
-			return ret(p20Stat.key, p20Stat.value);
-		}
+			if (p20Stat.isDefined) {
+				return ret(p20Stat.key, p20Stat.value);
+			}
 
-		if (hephaistos || gameSystem?.code === "SF1e") {
+		// process sf1e
+		}else if (hephaistos || gameSystem?.code === "SF1e") {
 			const sf1eStat = this.getStatSF1e(key, keyLower);
-			return ret(sf1eStat.key, sf1eStat.value);
+			if (sf1eStat.isDefined) {
+				return ret(sf1eStat.key, sf1eStat.value);
+			}
+
+		// this ensures that users are able to keep using these functions that they may not have known were specific to pf2e
+		}else if (!gameSystem) {
+			const p20Stat = this.getStatP20(key, keyLower);
+			if (p20Stat.isDefined) {
+				return ret(p20Stat.key, p20Stat.value);
+			}
+
 		}
 
-		/** @todo by doing this we are ensuring that users are able to keep using these functions that they may not have known were specific to pf2e */
-		if (!gameSystem) {
-			const p20Stat = this.getStatP20(key, keyLower);
-			return ret(p20Stat.key, p20Stat.value);
+		//#region tracker bars
+
+		/** @deprecated @todo can the data to find these outdated values to see if we can remove them */
+		const isDeprecatedHpBar = ["hpgauge", "hpbar"].includes(keyLower);
+		if (keyLower.endsWith(".bar") || isDeprecatedHpBar) {
+			const statKey = isDeprecatedHpBar ? hpKey : keyLower.slice(0, -4);
+			const { val, max } = this.getNumbers(statKey);
+			if (val !== undefined || max !== undefined) {
+				/** @todo do i wanna try to case this key? */
+				return ret(key, this.getTrackerBar(statKey));
+			}
 		}
+
+		// we have to exclude keys ending in ".dots.values" to avoid recursion from this.hasTrackerDots(key)
+		if (!keyLower.endsWith(".dots.values")) {
+			const dotsStatKey = this.hasTrackerDots(key)
+				? key
+				: parseTrackerDots(key)?.statKey;
+			if (dotsStatKey) {
+				const value = this.getNumber(dotsStatKey);
+				if (value !== undefined) {
+					return ret(key, this.getTrackerDots(key, dotsStatKey));
+				}
+			}
+		}
+
+		if (keyLower.endsWith(".indexed")) {
+			const statKey = keyLower.slice(0, -8);
+			const value = this.getNumber(statKey);
+			if (value !== undefined) {
+				const valuesString = this.getString(`${statKey}.indexed.values`);
+				const values = valuesString?.split(",").map(s => s.trim()) ?? [];
+				return ret(key, values[value!] ?? "?");
+			}
+		}
+
+		// shim for initial offering
+		if (keyLower === "hp.bar.values") {
+			return ret(key, this.getNoteStat(key, "hpbar.values"));
+		}
+
+		//#endregion
 
 		return ret();
 	}
