@@ -8,6 +8,7 @@ import type { SageMessage } from "../../model/SageMessage.js";
 import { GameMap } from "./GameMap.js";
 import { type TGameMapCore } from "./GameMapBase.js";
 import { gameMapImporter, validateMapCore, type TParsedGameMapCore } from "./gameMapImporter.js";
+import { getRenderMapResultsContent } from "./getRenderMapResultsContent.js";
 import { renderMap } from "./renderMap.js";
 
 function getValidUrl(attachment: Attachment): string | null {
@@ -67,9 +68,11 @@ async function mapImportHandler(sageMessage: SageMessage, mapCore: TGameMapCore 
 			if (!mapCore.userId) {
 				mapCore.userId = sageMessage.sageUser.did;
 			}
-			const success = await renderMap(channel, new GameMap(mapCore as TGameMapCore, mapCore.userId));
-			if (!success) {
-				await channel.send(`Sorry, something went wrong importing the map.`);
+			const renderResults = await renderMap(channel, new GameMap(mapCore as TGameMapCore, mapCore.userId));
+			if (!renderResults.success) {
+				const updateContent = `Sorry, something went wrong importing the map.`;
+				const content = getRenderMapResultsContent({ localize:sageMessage.getLocalizer(), renderResults, updateContent });
+				await channel.send(content);
 			}
 		}
 

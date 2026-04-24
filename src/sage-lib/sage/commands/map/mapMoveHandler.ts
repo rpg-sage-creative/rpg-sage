@@ -9,6 +9,7 @@ import type { SageMessage } from "../../model/SageMessage.js";
 import { ensurePlayerCharacter } from "./ensurePlayerCharacter.js";
 import { GameMap } from "./GameMap.js";
 import { LayerType, type TGameMapImage } from "./GameMapBase.js";
+import { getRenderMapResultsContent } from "./getRenderMapResultsContent.js";
 import { MoveDirection, MoveDirectionOutputType, type Direction } from "./MoveDirection.js";
 import { renderMap } from "./renderMap.js";
 
@@ -347,19 +348,17 @@ async function mapMoveHandler(sageMessage: SageMessage): Promise<void> {
 		const shuffled = gameMap.tokens.some((token, index) => unshuffled[index] !== token);
 
 		// only render if we moved/shuffled tokens
-		let rendered = false;
 		if (moved || shuffled) {
-			rendered = await renderMap(await sageMessage.message.fetchReference(), gameMap);
-		}
-
-		// let them know there was an error
-		if (!rendered) {
-			const errorContent = localize("ERROR_MOVING_IMAGE");
-			return stack.editReply(errorContent);
+			const renderResults = await renderMap(await sageMessage.message.fetchReference(), gameMap);
+			if (renderResults.hasError) {
+				const content = getRenderMapResultsContent({ localize, renderResults })!;
+				return stack.editReply(content);
+			}
 		}
 	}
 
 	await stack.deleteReply();
+
 	await deleteMessage(sageMessage.message);
 }
 

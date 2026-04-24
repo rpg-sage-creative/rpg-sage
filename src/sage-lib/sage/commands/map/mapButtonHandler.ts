@@ -7,9 +7,10 @@ import { createMessageDeleteButtonComponents, createMessageDeleteButtonRow } fro
 import { ensurePlayerCharacter } from "./ensurePlayerCharacter.js";
 import { GameMap } from "./GameMap.js";
 import { LayerType } from "./GameMapBase.js";
+import { getRenderMapResultsContent } from "./getRenderMapResultsContent.js";
 import { isMapAction, type MapAction } from "./MapActions.js";
 import { MoveDirection, type ArrowDirection } from "./MoveDirection.js";
-import { renderMap } from "./renderMap.js";
+import { renderMap, type RenderMapResults } from "./renderMap.js";
 
 async function actionHandlerMapTerrain(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
 	const localize = sageInteraction.getLocalizer();
@@ -39,10 +40,17 @@ async function actionHandlerMapAura(sageInteraction: SageInteraction, gameMap: G
 
 	stack.editReply(localize("SETTING_ACTIVE_AURA_FOR_S_TO_S", activeToken?.name ?? localize("UNKNOWN"), toggledAura?.name ?? localize("NONE")), true);
 
-	const updated = (ensureResults.added.length || toggled)
-		&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
-	if (updated) {
-		return stack.editReply(localize("YOUR_ACTIVE_AURA_FOR_S_IS_S", activeToken?.name ?? localize("UNKNOWN"), toggledAura?.name ?? localize("NONE")));
+	if (ensureResults.added.length || toggled) {
+		const renderResults = await renderMap(sageInteraction.interaction.message as Message, gameMap);
+
+		const updateContent = renderResults.saved
+			? localize("YOUR_ACTIVE_AURA_FOR_S_IS_S", activeToken?.name ?? localize("UNKNOWN"), toggledAura?.name ?? localize("NONE"))
+			: undefined;
+
+		const content = getRenderMapResultsContent({ localize, renderResults, updateContent });
+		if (content) {
+			return stack.editReply(content);
+		}
 	}
 
 	return stack.deleteReply();
@@ -83,28 +91,45 @@ async function handleTokenSelect(sageInteraction: SageStringSelectInteraction, g
 		stack.editReply(localize("SETTING_S_AS_ACTIVE", activeToken?.name ?? localize("UNKNOWN")), true);
 	}
 
-	let updated = false;
+	let saved = false;
+	let renderResults: RenderMapResults | undefined;
 
 	if (ensureResults.added.length) {
 		const message = await sageInteraction.fetchMessage(gameMap.messageId);
-		updated = await renderMap(message as Message, gameMap);
+		renderResults = await renderMap(message as Message, gameMap);
+		saved = renderResults.saved === true;
+
 	}else {
-		updated = selected && await gameMap.save();
+		saved = selected && await gameMap.save();
 	}
 
-	if (!selected || updated) {
+	if (!selected || saved) {
+		const updateContent = localize("YOUR_ACTIVE_TOKEN_IS_S", activeToken?.name ?? localize("UNKNOWN"));
+
+		const content = renderResults
+			? getRenderMapResultsContent({ localize, renderResults, updateContent })
+			: updateContent;
+
 		if (selectMessage) {
 			await selectMessage.edit({
-				content:localize("YOUR_ACTIVE_TOKEN_IS_S", activeToken?.name ?? localize("UNKNOWN")),
+				content,
 				components: createMessageDeleteButtonComponents(sageInteraction.actorId)
 			});
+
 		}else {
-			await stack.editReply(localize("YOUR_ACTIVE_TOKEN_IS_S", activeToken?.name ?? localize("UNKNOWN")));
+			await stack.editReply(content);
+
 		}
+
 		return;
 	}
 
-	return stack.editReply(localize("ERROR_SETTING_ACTIVE_TOKEN"));
+	const errorContent = localize("ERROR_SETTING_ACTIVE_TOKEN");
+	const content = renderResults
+		? getRenderMapResultsContent({ additionalErrors:[errorContent], localize, renderResults })
+		: errorContent;
+
+	return stack.editReply(content);
 }
 
 async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
@@ -130,7 +155,7 @@ async function actionHandlerMapToken(sageInteraction: SageInteraction, gameMap: 
 	// let updated = false;
 
 	// if (ensureResults.added.length) {
-	// 	updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
+	// 	updated = await renderMap(sageInteraction.interaction.message as Message, gameMap).saved === true;
 	// }else {
 	// 	updated = toggled && await gameMap.save();
 	// }
@@ -168,15 +193,19 @@ async function actionHandlerMapRaise(sageInteraction: SageInteraction, gameMap: 
 			break;
 	}
 
-	if (updated) {
-		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
-	}
-
-	if (updated) {
+	if (!updated) {
 		return stack.deleteReply();
 	}
 
-	return stack.editReply(localize("ERROR_MANIPULATING_IMAGE"));
+	const renderResults = await renderMap(sageInteraction.interaction.message as Message, gameMap);
+
+	if (renderResults.success) {
+		return stack.deleteReply();
+	}
+
+	const content = getRenderMapResultsContent({ localize, renderResults })!;
+
+	return stack.editReply(content);
 }
 
 async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: GameMap): Promise<void> {
@@ -205,15 +234,19 @@ async function actionHandlerMapLower(sageInteraction: SageInteraction, gameMap: 
 			break;
 	}
 
-	if (updated) {
-		updated = await renderMap(sageInteraction.interaction.message as Message, gameMap);
-	}
-
-	if (updated) {
+	if (!updated) {
 		return stack.deleteReply();
 	}
 
-	return stack.editReply(localize("ERROR_MANIPULATING_IMAGE"));
+	const renderResults = await renderMap(sageInteraction.interaction.message as Message, gameMap);
+
+	if (renderResults.success) {
+		return stack.deleteReply();
+	}
+
+	const content = getRenderMapResultsContent({ localize, renderResults })!;
+
+	return stack.editReply(content);
 }
 
 async function actionHandlerMapConfig(sageInteraction: SageInteraction, _: GameMap): Promise<void> {
@@ -231,12 +264,22 @@ async function actionHandlerMapDelete(sageInteraction: SageInteraction, gameMap:
 			stack.editReply(localize("DELETING_IMAGE_S", activeImage.name), true);
 
 			const deleted = gameMap.deleteImage(activeImage);
-			const updated = deleted && await renderMap(sageInteraction.interaction.message as Message, gameMap);
-			if (updated) {
+
+			const updateContent = localize("ERROR_DELETING_IMAGE");
+
+			if (!deleted) {
+				return stack.editReply(updateContent);
+			}
+
+			const renderResults = await renderMap(sageInteraction.interaction.message as Message, gameMap);
+
+			if (renderResults.success) {
 				return stack.editReply(localize("DELETED_IMAGE_S", activeImage.name));
 			}
 
-			return stack.editReply(localize("ERROR_DELETING_IMAGE"));
+			const content = getRenderMapResultsContent({ localize, renderResults, updateContent });
+
+			return stack.editReply(content);
 		}
 		return stack.deleteReply();
 
@@ -263,13 +306,23 @@ async function actionHandlerMapMove(sageInteraction: SageInteraction, actionData
 		const moved = gameMap.moveActiveToken(direction);
 		const shuffled = gameMap.activeLayer === LayerType.Token ? gameMap.shuffleActiveToken("top") : false;
 
-		const updated = (ensureResults.added.length || moved || shuffled)
-			&& await renderMap(sageInteraction.interaction.message as Message, gameMap);
-		if (updated) {
+		const updated = ensureResults.added.length || moved || shuffled;
+
+		const updateContent = localize("ERROR_MOVING_IMAGE");
+
+		if (!updated) {
+			return stack.editReply(updateContent);
+		}
+
+		const renderResults = await renderMap(sageInteraction.interaction.message as Message, gameMap);
+
+		if (renderResults.success) {
 			return stack.deleteReply();
 		}
 
-		return stack.editReply(localize("ERROR_MOVING_IMAGE"));
+		const content = getRenderMapResultsContent({ localize, renderResults, updateContent });
+
+		return stack.editReply(content);
 	}
 
 	return sageInteraction.reply(localize("NO_IMAGE_TO_MOVE"), true);

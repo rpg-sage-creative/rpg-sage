@@ -39,12 +39,47 @@ function createMapComponents(gameMap: GameMap): ActionRowBuilder<ButtonBuilder>[
 	];
 }
 
+/** tests to see if the failure means we should remove the image to avoid future errors, such as a 404 */
+// function shouldRemove(_imageUrl: string, err?: any): boolean {
+// 	return isErrorLike(err, "remote source rejected with status code 404");
+// }
+
+export type RenderMapResults = {
+	/** invalidMessageOrChannel or invalidImagesRemoved are true */
+	hasError: boolean;
+	invalidMessageOrChannel?: boolean;
+	invalidImagesRemoved?: boolean;
+	/** the map was rendered */
+	rendered?: boolean;
+	/** the map file was saved */
+	saved?: boolean;
+	/** render and saved are true and hasError is false */
+	success: boolean;
+};
+
 /** Attempts to render the given map. If render was successful, GameMap.save() is returned. */
-export async function renderMap(messageOrChannel: Optional<Message | SupportedTarget>, gameMap: GameMap): Promise<boolean> {
+export async function renderMap(messageOrChannel: Optional<Message | SupportedTarget>, gameMap: GameMap): Promise<RenderMapResults> {
 	if (!messageOrChannel) {
-		return false;
+		return {
+			hasError: true,
+			invalidMessageOrChannel: true,
+			rendered: false,
+			success: false,
+		};
 	}
-	const buffer = await gameMap.toRenderable().render();
+
+	const { buffer, response } = await gameMap.toRenderable().renderWithResponse();
+
+	let invalidImagesRemoved = false;
+	let rendered = false;
+	let saved = false;
+
+	// consider using the following array for removing images instead of all invalidImages
+	// const invalidImageUrlsToRemove = response?.invalidImageUrls?.filter(shouldRemove);
+	if (response?.invalidImageUrls.length) {
+		invalidImagesRemoved = gameMap.removeInvalidImages(response.invalidImageUrls);
+	}
+
 	if (buffer) {
 		const content = `**${gameMap.name}**`;
 		const files = [buffer];
@@ -53,9 +88,20 @@ export async function renderMap(messageOrChannel: Optional<Message | SupportedTa
 			? await messageOrChannel.edit({ content, files, components }).catch(errorReturnUndefined)
 			: await messageOrChannel.send({ content, files, components }).catch(errorReturnUndefined);
 		if (message) {
+			rendered = true;
 			gameMap.messageId = message.id as Snowflake;
-			return gameMap.save();
 		}
 	}
-	return false;
+
+	if (invalidImagesRemoved || rendered) {
+		saved = await gameMap.save();
+	}
+
+	return {
+		hasError: invalidImagesRemoved,
+		invalidImagesRemoved,
+		rendered,
+		saved,
+		success: !invalidImagesRemoved && rendered && saved,
+	};
 }
