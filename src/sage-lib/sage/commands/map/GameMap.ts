@@ -276,6 +276,31 @@ export class GameMap extends GameMapBase {
 		return moveImage(activeImage, ...directions);
 	}
 
+	/** attempts to remove invalid images from the map; returns true if any are removed. */
+	public removeInvalidImages(invalidUrls: string[]): boolean {
+		let removed = 0;
+		if (invalidUrls.includes(this.core.url)) {
+			this.core.url = "";
+			removed++;
+		}
+		const shouldKeep = (image: { auras?:{ url:string; }[]; url:string; }) => {
+			image.auras = image.auras?.filter(shouldKeep);
+			if (invalidUrls.includes(image.url)) {
+				removed++;
+				this.removedImages.add(image.url);
+				return false;
+			}
+			return true;
+		};
+		this.core.terrain = this.core.terrain?.filter(shouldKeep);
+		this.core.auras = this.core.auras?.filter(shouldKeep);
+		this.core.tokens = this.core.tokens?.filter(shouldKeep);
+		return removed > 0;
+	}
+
+	/** keeps track of all images removed  */
+	public removedImages: Set<string> = new Set();
+
 	/** change the active aura's opacity */
 	public shiftOpacity(direction: TShuffleUpDown): boolean {
 		const activeAura = this.activeAura;
