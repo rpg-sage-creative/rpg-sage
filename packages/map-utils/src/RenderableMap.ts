@@ -77,6 +77,12 @@ export abstract class RenderableMap implements GameMap {
 		const response = mapData ? await renderMapData(mapData, mimeType) : null;
 		return response?.base64 ? Buffer.from(response.base64, "base64") : null;
 	}
+	public async renderWithResponse(mimeType?: MimeType): Promise<{ buffer?:Buffer; mapData?:GameMapData; mimeType?:MimeType; response?:MapRenderResponse; }> {
+		const mapData = await Promise.resolve(this.toJSON()).catch(errorReturnUndefined);
+		const response = mapData ? await renderMapData(mapData, mimeType) : undefined;
+		const buffer = response?.base64 ? Buffer.from(response.base64, "base64") : undefined;
+		return { buffer, mapData, mimeType, response };
+	}
 	abstract toJSON(): Awaitable<GameMapData>;
 
 	protected static _testRender(mapData: GameMapData): Promise<MapRenderResponse> {
