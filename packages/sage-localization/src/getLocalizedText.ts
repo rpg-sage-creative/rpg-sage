@@ -260,6 +260,7 @@ const enUS = {
 	"ERROR_SETTING_ACTIVE_TERRAIN": `Error setting active terrain!`,
 	"ERROR_SETTING_ACTIVE_AURA": `Error setting active aura!`,
 	"ERROR_SETTING_ACTIVE_IMAGE": `Error setting active image!`,
+	"INVALID_IMAGES_REMOVED": `Sorry, some images failed to load and were removed!`,
 	// "ADDING_TOKEN_FOR_S": `Adding token for #{0} ...`,
 	// "LINKING_TOKEN_FOR_S": `Linking token for #{0} ...`,
 	//#endregion
