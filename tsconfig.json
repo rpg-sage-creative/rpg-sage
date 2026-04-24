@@ -22,6 +22,8 @@
 		{ "path": "./packages/map-utils" },
 		{ "path": "./packages/sage-env" },
 		{ "path": "./packages/sage-localization" },
-		{ "path": "./packages/app-commands" }
+		{ "path": "./packages/app-commands" },
+		{ "path": "./packages/fluxer-utils" },
+		{ "path": "./packages/stoat-utils" },
 	]
 }

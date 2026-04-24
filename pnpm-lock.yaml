@@ -9,6 +9,7 @@ overrides:
   '@aws-sdk/client-sns': ^3.1003.0
   '@discordjs/builders': ^1.13.1
   '@discordjs/rest': ^2.6.0
+  '@fluxerjs/core': ^1.3.0
   '@napi-rs/canvas': ^0.1.88
   '@rsc-sage/data-layer': ./packages/data-layer
   '@rsc-sage/env': ./packages/sage-env
@@ -18,6 +19,7 @@ overrides:
   '@rsc-utils/core-utils': github:rpg-sage-creative/core-utils#semver:^1.7.0
   '@rsc-utils/dev-scripts': github:rpg-sage-creative/dev-scripts#semver:^1.4.2
   '@rsc-utils/discord-utils': github:rpg-sage-creative/discord-utils#semver:^1.4.0
+  '@rsc-utils/fluxer-utils': ./packages/fluxer-utils
   '@rsc-utils/game-utils': ./packages/game-utils
   '@rsc-utils/git-utils': github:rpg-sage-creative/git-utils#semver:^0.1.0
   '@rsc-utils/id-utils': github:rpg-sage-creative/id-utils#semver:^1.1.0
@@ -27,6 +29,7 @@ overrides:
   '@rsc-utils/language-utils': github:rpg-sage-creative/language-utils#semver:^1.2.0
   '@rsc-utils/map-utils': ./packages/map-utils
   '@rsc-utils/random-utils': github:rpg-sage-creative/random-utils#semver:^0.1.1
+  '@rsc-utils/stoat-utils': ./packages/stoat-utils
   '@rsc-utils/template-literal-utils': github:rpg-sage-creative/template-literal-utils#semver:^1.2.0
   '@rsc-utils/type-utils': github:rpg-sage-creative/type-utils#semver:^1.3.0
   '@rsc-utils/whitespace-utils': github:rpg-sage-creative/whitespace-utils#semver:^1.0.0
@@ -53,6 +56,9 @@ importers:
       '@aws-sdk/client-sns':
         specifier: ^3.1003.0
         version: 3.1028.0
+      '@fluxerjs/core':
+        specifier: ^1.3.0
+        version: 1.3.0
       '@rsc-sage/data-layer':
         specifier: ./packages/data-layer
         version: link:packages/data-layer
@@ -68,6 +74,9 @@ importers:
       '@rsc-utils/discord-utils':
         specifier: github:rpg-sage-creative/discord-utils#semver:^1.4.0
         version: '@rpg-sage-creative/discord-utils@https://codeload.github.com/rpg-sage-creative/discord-utils/tar.gz/ab84902e384d8d052d7d2fa198fe7012a9eb8305'
+      '@rsc-utils/fluxer-utils':
+        specifier: ./packages/fluxer-utils
+        version: link:packages/fluxer-utils
       '@rsc-utils/game-utils':
         specifier: ./packages/game-utils
         version: link:packages/game-utils
@@ -80,6 +89,9 @@ importers:
       '@rsc-utils/random-utils':
         specifier: github:rpg-sage-creative/random-utils#semver:^0.1.1
         version: '@rpg-sage-creative/random-utils@https://codeload.github.com/rpg-sage-creative/random-utils/tar.gz/879853ca21cd4939f687ef2ecce01ade22b67cd2'
+      '@rsc-utils/stoat-utils':
+        specifier: ./packages/stoat-utils
+        version: link:packages/stoat-utils
       discord.js:
         specifier: ^14.26.2
         version: 14.26.2
@@ -140,6 +152,40 @@ importers:
       '@rsc-utils/dev-scripts':
         specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
         version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
+
+  packages/fluxer-utils:
+    dependencies:
+      '@fluxerjs/core':
+        specifier: ^1.3.0
+        version: 1.3.0
+      '@rsc-utils/core-utils':
+        specifier: github:rpg-sage-creative/core-utils#semver:^1.7.0
+        version: '@rpg-sage-creative/core-utils@https://codeload.github.com/rpg-sage-creative/core-utils/tar.gz/1259fb344ba972c67c61b58805ba7a7c0d872d3e'
+      '@rsc-utils/io-utils':
+        specifier: github:rpg-sage-creative/io-utils#semver:^1.5.1
+        version: '@rpg-sage-creative/io-utils@https://codeload.github.com/rpg-sage-creative/io-utils/tar.gz/772020c8f8d891e8d869302d78873791c50bb475'
+      emoji-regex-xs:
+        specifier: ^2.0.1
+        version: 2.0.1
+      regex:
+        specifier: ^6.1.0
+        version: 6.1.0
+    devDependencies:
+      '@rsc-utils/dev-scripts':
+        specifier: github:rpg-sage-creative/dev-scripts#semver:^1.4.2
+        version: '@rpg-sage-creative/dev-scripts@https://codeload.github.com/rpg-sage-creative/dev-scripts/tar.gz/21ba74dcfd4b8358cc919c534a0b2145b09f1297'
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
+      '@types/node':
+        specifier: ^24.12.0
+        version: 24.12.2
+      jest:
+        specifier: ^30.2.0
+        version: 30.3.0(@types/node@24.12.2)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/game-utils:
     dependencies:
@@ -562,6 +608,28 @@ packages:
 
   '@emnapi/wasi-threads@1.2.1':
     resolution: {integrity: sha512-uTII7OYF+/Mes/MrcIOYp5yOtSMLBWSIoLPpcgwipoiKbli6k322tcoFsxoIIxPDqW01SQGAgko4EzZi2BNv2w==}
+
+  '@fluxerjs/builders@1.3.0':
+    resolution: {integrity: sha512-EcgnttHauIqNoWC/ohcbtiC8ppkQC7eJlaNS4YT3ygvaBdRDR0v4gqUNlE4YSPTFafKJjKrCKtOvrkQ/wbixEw==}
+
+  '@fluxerjs/collection@1.3.0':
+    resolution: {integrity: sha512-a42tmtPlgVz25tJndmDQKz8btB1oEmxlYhOO/Prt1vbwn32dJR0Nxlksfn4U5X4lGSTKFfwKzEx3Ng8Nza0FLQ==}
+
+  '@fluxerjs/core@1.3.0':
+    resolution: {integrity: sha512-sRoBEb0Lhtd0O+LR7GfE1tJOde0Q4Va64l0VE+OIO16y+l5sk5hRmQbwdcjbWftEPPKdcjLQstsZG63/a1aQqg==}
+    engines: {node: '>=18.0.0'}
+
+  '@fluxerjs/rest@1.3.0':
+    resolution: {integrity: sha512-iZC0ul0N/JUN6Sg4DgYcoLErutl2Q8UTaGlkyTt9UW/Q2pWGUTiG9XnjAs08u1Xt6KKEopzC1flpMlGC6gTE9w==}
+
+  '@fluxerjs/types@1.3.0':
+    resolution: {integrity: sha512-Vo7lW3+PCZgg8XnE7mux6iLcGp2J2w9HbT40VOAH4cPAD1tcIoQtaCwiahtBdgWa+97J3L3a7gjkcEo7L5DIYQ==}
+
+  '@fluxerjs/util@1.3.0':
+    resolution: {integrity: sha512-/k8rcLDU+Vok45erKTP8j9Ib8+jyOzVkjV2ebUgtvmqGsbzx82LIOGzaJjOqJ+P2uAlo1lOTpDdvG/Bdr0+hqw==}
+
+  '@fluxerjs/ws@1.3.0':
+    resolution: {integrity: sha512-bAFRystaX3vEZXzi+/h3OgCYR3QisvYVBfuezntkQQ37if5V6GJmhWUh+zL8XNosRBpWxjo8igf+0w1clyHqxQ==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -2782,6 +2850,44 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@fluxerjs/builders@1.3.0':
+    dependencies:
+      '@fluxerjs/types': 1.3.0
+      '@fluxerjs/util': 1.3.0
+
+  '@fluxerjs/collection@1.3.0': {}
+
+  '@fluxerjs/core@1.3.0':
+    dependencies:
+      '@fluxerjs/builders': 1.3.0
+      '@fluxerjs/collection': 1.3.0
+      '@fluxerjs/rest': 1.3.0
+      '@fluxerjs/types': 1.3.0
+      '@fluxerjs/util': 1.3.0
+      '@fluxerjs/ws': 1.3.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  '@fluxerjs/rest@1.3.0':
+    dependencies:
+      '@fluxerjs/types': 1.3.0
+
+  '@fluxerjs/types@1.3.0': {}
+
+  '@fluxerjs/util@1.3.0':
+    dependencies:
+      '@fluxerjs/types': 1.3.0
+
+  '@fluxerjs/ws@1.3.0':
+    dependencies:
+      '@fluxerjs/types': 1.3.0
+      '@fluxerjs/util': 1.3.0
+      ws: 8.20.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   '@isaacs/cliui@8.0.2':
     dependencies:

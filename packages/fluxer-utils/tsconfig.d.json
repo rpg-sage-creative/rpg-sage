@@ -1,0 +1,13 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"removeComments": false,
+
+		"disableSolutionSearching": true,
+		"skipLibCheck": true,
+		"skipDefaultLibCheck": true
+	},
+	"include": ["src"]
+}

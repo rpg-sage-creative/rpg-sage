@@ -1,5 +1,5 @@
 {
-	"name": "@rpg-sage-creative/stoat-utils",
+	"name": "@rpg-sage-creative/fluxer-utils",
 	"version": "0.0.0",
 	"license": "LGPL-3.0-or-later",
 	"main": "build/index.js",
@@ -38,10 +38,10 @@
 		"typescript": "catalog:"
 	},
 	"dependencies": {
+		"@fluxerjs/core": "catalog:",
 		"@rsc-utils/core-utils": "catalog:",
 		"@rsc-utils/io-utils": "catalog:",
 		"emoji-regex-xs": "catalog:",
-		"regex": "catalog:",
-		"stoat.js": "catalog:"
+		"regex": "catalog:"
 	}
 }
