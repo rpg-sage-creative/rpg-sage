@@ -8,10 +8,10 @@
 		"@rsc-utils/dev-scripts": "catalog:"
 	},
 	"dependencies": {
-		"@rsc-sage/data-layer": "catalog:",
+  		"@rsc-sage/data-layer": "../data-layer",
 		"@rsc-utils/core-utils": "catalog:",
 		"@rsc-utils/discord-utils": "catalog:",
-		"@rsc-utils/game-utils": "catalog:",
+		"@rsc-utils/game-utils": "../game-utils",
 		"@rsc-utils/io-utils": "catalog:"
 	},
 	"scripts": {

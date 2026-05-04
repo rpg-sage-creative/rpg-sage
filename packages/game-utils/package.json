@@ -8,7 +8,7 @@
 		"@rsc-utils/dev-scripts": "catalog:"
 	},
 	"dependencies": {
-		"@rsc-sage/data-layer": "catalog:",
+		"@rsc-sage/data-layer": "../data-layer",
 		"@rsc-utils/core-utils": "catalog:",
 		"@rsc-utils/random-utils": "catalog:"
 	},
