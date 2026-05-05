@@ -87,7 +87,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 		renderableContent.append(`<b>Auto Dialog</b> <i>none</i>`);
 	}
 
-	const processor = StatMacroProcessor.withStats(sageMessage).for(character);
+	const processor = await StatMacroProcessor.withStats(sageMessage, character);
 
 	if (character.hasStats) {
 		let isGmChannel = false;

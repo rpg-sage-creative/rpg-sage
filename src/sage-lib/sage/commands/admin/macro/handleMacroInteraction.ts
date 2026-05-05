@@ -170,7 +170,7 @@ async function showNewMacroModal(sageInteraction: SageButtonInteraction, args: A
 async function rollMacro(sageInteraction: SageButtonInteraction, args: Args<true, true>): Promise<void> {
 	sageInteraction.replyStack.defer();
 	const macro = args.macro;
-	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(macro.owner.id));
+	const processor = await StatMacroProcessor.withMacros(sageInteraction, macro.owner.id);
 	const matches = await parseDiceMatches(`[${macro.name}]`, { processor, sageCommand:sageInteraction });
 	const outputs = matches.map(m => m.output).flat();
 	await sendDice(sageInteraction, outputs);
@@ -219,7 +219,7 @@ async function rollMacroArgs(sageInteraction: SageButtonInteraction, args: Args<
 	});
 
 	const macro = args.macro;
-	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(macro.owner.id));
+	const processor = await StatMacroProcessor.withMacros(sageInteraction, macro.owner.id);
 	const matches = await parseDiceMatches(`[${macro.name} ${macroArgs.join(" ")}]`, { processor, sageCommand:sageInteraction });
 	const outputs = matches.map(m => m.output).flat();
 	await sendDice(sageInteraction, outputs);

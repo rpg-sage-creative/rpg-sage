@@ -20,7 +20,7 @@ import type { SageCommand } from "../SageCommand.js";
  * @param characterId
  * @returns
  */
-export function findActiveCharacter(sageCommand: SageCommand, characterId?: Snowflake): GameCharacter | undefined {
+export async function findActiveCharacter(sageCommand: SageCommand, characterId?: Snowflake): Promise<GameCharacter | undefined> {
 	debug({fn:"findActiveCharacter",characterId});
 	const { actor, channel } = sageCommand;
 	if (!actor.id || !channel?.type) return undefined;

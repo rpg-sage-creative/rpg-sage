@@ -18,11 +18,11 @@ export type StatMacroCharacters = {
 	encounters?: EncounterManager;
 };
 
-function getStatMacroCharacters(sageCommand: SageCommand): StatMacroCharacters {
+async function getStatMacroCharacters(sageCommand: SageCommand): Promise<StatMacroCharacters> {
 	const { game, server, isPlayer, sageUser, canAdminGame } = sageCommand;
 	// if a game exists but we don't belong to it or aren't an admin, we don't need stats
 	if (!game || canAdminGame || isPlayer) {
-		const actingCharacter = sageCommand.getActiveCharacter();
+		const actingCharacter = await sageCommand.getActiveCharacter();
 
 		const primaryPlayerCharacter = game ? game.playerCharacters.findByUser(sageUser.did) : sageUser.playerCharacters[0];
 		const primaryCompanionCharacter = primaryPlayerCharacter?.companions[0];
@@ -118,14 +118,28 @@ export class StatMacroProcessor extends StatBlockProcessor {
 		return super.for(char) as StatMacroProcessor;
 	}
 
-	public static withStats(sageCommand: SageCommand): StatBlockProcessor {
-		const chars = getStatMacroCharacters(sageCommand);
-		return new StatBlockProcessor(chars);
+	public static async withStats(sageCommand: SageCommand, forChar?: string | Optional<GameCharacter>): Promise<StatBlockProcessor> {
+		const chars = await getStatMacroCharacters(sageCommand);
+		const processor = new StatBlockProcessor(chars);
+		if (forChar) {
+			if (typeof(forChar) === "string") {
+				return processor.for(sageCommand.findCharacter(forChar));
+			}
+			return processor.for(forChar);
+		}
+		return processor;
 	}
 
-	public static withMacros(sageCommand: SageCommand): StatMacroProcessor {
-		const chars = getStatMacroCharacters(sageCommand);
+	public static async withMacros(sageCommand: SageCommand, forChar?: string | Optional<GameCharacter>): Promise<StatMacroProcessor> {
+		const chars = await getStatMacroCharacters(sageCommand);
 		const macros = getMacrosFromChars(chars, sageCommand.actor);
-		return new StatMacroProcessor(chars, macros);
+		const processor = new StatMacroProcessor(chars, macros);
+		if (forChar) {
+			if (typeof(forChar) === "string") {
+				return processor.for(sageCommand.findCharacter(forChar));
+			}
+			return processor.for(forChar);
+		}
+		return processor;
 	}
 }

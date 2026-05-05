@@ -185,7 +185,7 @@ export async function parseDiceMatches(content: string, { processor, sageCommand
 	let execArray: RegExpExecArray | null;
 	while (execArray = regex.exec(redacted)) {
 		// we only need to ensure the processor and options *IF* we have something to parse
-		processor ??= StatMacroProcessor.withMacros(sageCommand);
+		processor ??= await StatMacroProcessor.withMacros(sageCommand);
 		parseOptions ??= { processor, sageCommand };
 
 		const match = execArray[0];

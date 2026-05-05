@@ -136,7 +136,7 @@ export class DialogProcessor<HasActingCharacter extends boolean = false> extends
 	public static async forDialog(sageCommand: SageCommand): Promise<DialogProcessor>;
 	public static async forDialog(sageCommand: SageCommand, char: GameCharacter): Promise<DialogProcessor<true>>;
 	public static async forDialog(sageCommand: SageCommand, char?: GameCharacter): Promise<DialogProcessor<boolean>> {
-		const { chars, macros } = StatMacroProcessor.withMacros(sageCommand);
+		const { chars, macros } = await StatMacroProcessor.withMacros(sageCommand);
 		const { game, mentionPrefix, sageUser } = sageCommand;
 		const gameMasters = await game?.gmGuildMembers();
 		const players = await game?.pGuildMembers();

@@ -65,15 +65,21 @@ function buildCharForm(sageCommand: SageCommand, charId?: CharId, compId?: CharI
 	return components;
 }
 
-function buildFormEmbed(sageCommand: SageCommand, char: GameCharacter): EmbedBuilder {
+async function buildFormEmbed(sageCommand: SageCommand, char: GameCharacter): Promise<EmbedBuilder> {
 	const embed = createMessageEmbed({ title:char.name, thumbnailUrl:char.avatarUrl });
+
 	embed.appendDescription(`**Alias** ${char.alias ?? "*none*"}`, "\n");
+
+	const processor = await StatMacroProcessor.withStats(sageCommand);
+
+	const displayName = char.toDisplayName({ processor });
+
 	const displayNameTemplate = char.getTemplate("displayName");
-	const displayName = char.toDisplayName({ processor:StatMacroProcessor.withStats(sageCommand) });
 	if (displayNameTemplate) {
 		embed.appendDescription(`**Display Name**`, "\n");
 		embed.appendDescription(`- Template: ${"`" + displayNameTemplate + "`"}`, "\n");
 		embed.appendDescription(`- Output: ${displayName}`, "\n");
+
 	}else {
 		embed.appendDescription(`**Display Name**`, "\n");
 		embed.appendDescription(`- Template: *none*`, "\n");
@@ -100,7 +106,7 @@ export async function showCharForm(sageCommand: SageCommand, charId?: CharId): P
 	let options: MessagePayloadOption | undefined;
 	if (char) {
 		if (char.tokenUrl) options = { avatarURL:char.tokenUrl };
-		embeds.push(buildFormEmbed(sageCommand, char));
+		embeds.push(await buildFormEmbed(sageCommand, char));
 	}
 
 	const exists = getActionRows(message).find(row => row.components.find(comp => parseCustomId(comp.customId)))

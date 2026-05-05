@@ -474,7 +474,7 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: He
 	const skillMod = character.createCheck(skill)?.modifier ?? 0;
 	const incredibleMod = 0; //character.hasFeat("Incredible Initiative") ? 2 : 0;
 	const dice = `[1d20+${skillMod+incredibleMod} ${character.name}${secret ? " Secret" : ""} ${skill}${init ? " (Initiative)" : ""}]`;
-	const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(character.characterId));
+	const processor = await StatMacroProcessor.withMacros(sageInteraction, character.characterId);
 	const matches = await parseDiceMatches(dice, { processor, sageCommand:sageInteraction });
 	const output = matches.map(match => match.output).flat();
 	const sendResults = await sendDice(sageInteraction, output);
@@ -498,7 +498,7 @@ async function macroRollHandler(sageInteraction: SageButtonInteraction, characte
 
 	if (macro) {
 		const dice = replaceMacroArgsWithDefaultValues(macro.dice);
-		const processor = StatMacroProcessor.withMacros(sageInteraction).for(sageInteraction.findCharacter(character.characterId));
+		const processor = await StatMacroProcessor.withMacros(sageInteraction, character.characterId);
 		const matches = await parseDiceMatches(dice, { processor, sageCommand:sageInteraction });
 		const output = matches.map(match => match.output).flat();
 		await sendDice(sageInteraction, output);

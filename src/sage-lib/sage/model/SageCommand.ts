@@ -423,12 +423,12 @@ export abstract class SageCommand<
 
 	private activeCharacterId?: Snowflake;
 	private activeCharacter?: GameCharacter;
-	public getActiveCharacter(): GameCharacter | undefined {
+	public async getActiveCharacter(): Promise<GameCharacter | undefined> {
 		let { activeCharacter, activeCharacterId } = this;
 
 		// go look if we have no character or the ids don't match
 		if (!activeCharacter || (activeCharacterId && activeCharacterId !== activeCharacter?.id)) {
-			this.activeCharacter = activeCharacter = findActiveCharacter(this, activeCharacterId);
+			this.activeCharacter = activeCharacter = await findActiveCharacter(this, activeCharacterId);
 		}
 
 		return activeCharacter;
