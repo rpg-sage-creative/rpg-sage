@@ -1,6 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { StatBlockProcessor, type DiceMacroBase } from "@rsc-utils/game-utils";
-import type { CharacterManager } from "../../../model/CharacterManager.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { EncounterManager } from "../../trackers/encounter/EncounterManager.js";
@@ -12,8 +11,7 @@ export type StatMacroCharacters = {
 	primaryCompanionCharacter?: GameCharacter;
 
 	gmCharacters?: GameCharacter[];
-	playerCharacters?: CharacterManager;
-	nonPlayerCharacters?: CharacterManager;
+	characters?: GameCharacter[];
 
 	encounters?: EncounterManager;
 };
@@ -31,7 +29,9 @@ async function getStatMacroCharacters(sageCommand: SageCommand): Promise<StatMac
 		const serverGmCharacter = server?.gmCharacter;
 		const gmCharacters = [gameGmCharacter, serverGmCharacter].filter(char => char) as GameCharacter[];
 
-		const { playerCharacters, nonPlayerCharacters } = game ?? sageUser;
+		const characters = game
+			? Array.from(game.playerCharacters).concat(game.nonPlayerCharacters)
+			: Array.from(sageUser.playerCharacters);
 
 		const encounters = game?.encounters;
 
@@ -42,8 +42,7 @@ async function getStatMacroCharacters(sageCommand: SageCommand): Promise<StatMac
 			primaryCompanionCharacter,
 
 			gmCharacters,
-			playerCharacters,
-			nonPlayerCharacters,
+			characters,
 
 			encounters,
 		};
@@ -61,11 +60,8 @@ function getMacrosFromChars(chars: StatMacroCharacters, actor: { id?:Snowflake, 
 			macros.push(...getMacrosFromChar(gmChar, actor.id, true))
 		);
 	}
-	chars.playerCharacters?.forEach(pcChar =>
-		macros.push(...getMacrosFromChar(pcChar, actor.id))
-	);
-	chars.nonPlayerCharacters?.forEach(npcChar =>
-		macros.push(...getMacrosFromChar(npcChar, actor.id))
+	chars.characters?.forEach(char =>
+		macros.push(...getMacrosFromChar(char, actor.id))
 	);
 	return macros;
 }
