@@ -1,7 +1,7 @@
 import { debug, generateSnowflake, generateUuid, parseSnowflake, parseUuid } from "@rsc-utils/core-utils";
 
 type Core = { id:string; did?:string; uuid?:string; createdTs?:number; objectType?:string; };
-type Options = { didTs?:number; uuidTs?:number; }
+type Options = { didTs?:number; uuidTs?:number; validKeys?:string[]; }
 
 /**
  * We are phasing out UUID.
@@ -28,4 +28,10 @@ export function ensureIds(core: Core, options?: Options): void {
 	if (id) core.id = id;
 
 	if (id === did) delete core.did;
+
+	const validKeys = options?.validKeys;
+	if (validKeys?.length) {
+		if (!validKeys.includes("did")) delete core.did;
+		if (!validKeys.includes("uuid")) delete core.uuid;
+	}
 }
