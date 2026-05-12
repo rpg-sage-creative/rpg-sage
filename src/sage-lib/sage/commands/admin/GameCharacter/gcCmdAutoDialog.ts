@@ -1,387 +1,387 @@
-import { autoChannelDataMatches, DialogPostType, type AutoChannelData, type SageChannel } from "@rsc-sage/data-layer";
-import { debug, type Snowflake } from "@rsc-utils/core-utils";
-import { toHumanReadable, type SupportedTextChannel } from "@rsc-utils/discord-utils";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type SelectMenuComponentOptionData } from "discord.js";
-import { getSelectedOrDefault } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
-import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
-import type { GameCharacter } from "../../../model/GameCharacter.js";
-import type { SageCommand } from "../../../model/SageCommand.js";
-import { type SageButtonInteraction, type SageStringSelectInteraction } from "../../../model/SageInteraction.js";
-import type { SageMessage } from "../../../model/SageMessage.js";
-import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
-import { cannotManageCharacter } from "./cannotManageCharacter.js";
-import { getCharacter } from "./getCharacter.js";
-import { getCharacterTypeMeta, type TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
-import { toReadableOwner } from "./toReadableOwner.js";
+// import { autoChannelDataMatches, DialogPostType, type AutoChannelData, type SageChannel } from "@rsc-sage/data-layer";
+// import { debug, type Snowflake } from "@rsc-utils/core-utils";
+// import { toHumanReadable, type SupportedTextChannel } from "@rsc-utils/discord-utils";
+// import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type SelectMenuComponentOptionData } from "discord.js";
+// import { getSelectedOrDefault } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
+// import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
+// import type { GameCharacter } from "../../../model/GameCharacter.js";
+// import type { SageCommand } from "../../../model/SageCommand.js";
+// import { type SageButtonInteraction, type SageStringSelectInteraction } from "../../../model/SageInteraction.js";
+// import type { SageMessage } from "../../../model/SageMessage.js";
+// import { createMessageDeleteButton } from "../../../model/utils/deleteButton.js";
+// import { cannotManageCharacter } from "./cannotManageCharacter.js";
+// import { getCharacter } from "./getCharacter.js";
+// import { getCharacterTypeMeta, type TCharacterTypeMeta } from "./getCharacterTypeMeta.js";
+// import { toReadableOwner } from "./toReadableOwner.js";
 
-//#region customId
+// //#region customId
 
-type Action = "channel" | "off" | "on" | "embed" | "post";
+// type Action = "channel" | "off" | "on" | "embed" | "post";
 
-function createCustomId(userId: Snowflake, action: Action, characterId: string | undefined): string {
-	return ["autoDialog", userId, action].concat(characterId ? [characterId] : []).join("|");
-}
-
-function customIdParser(customId?: string | null) {
-	if (!customId) return undefined;
-	const [indicator, userId, action, characterId] = customId.split("|");
-	return { indicator, userId:userId as Snowflake, action:action as Action, characterId:characterId as Snowflake | undefined };
-}
-
-//#endregion
-
-//#region AutoChannel
-
-type State = "off" | "on" | "embed" | "post";
-
-type ChannelData = `${Snowflake}|${State}|${Snowflake}`;
-
-function stringifyAutoChannel(autoChannel: AutoChannelData): ChannelData {
-	return [
-		autoChannel.channelId,
-		DialogPostType[autoChannel.dialogPostType!]?.toLowerCase() ?? "",
-		autoChannel.userId ?? ""
-	].join("|") as ChannelData;
-}
-
-type SelectedChannelData = AutoChannelData & { state:State; };
-
-function parseAutoChannel(channelData: ChannelData | undefined): SelectedChannelData | undefined {
-	if (channelData) {
-		const [channelId, state, userId] = channelData.split("|") as [Snowflake, State, Snowflake];
-		return {
-			channelId,
-			dialogPostType: state === "embed" ? DialogPostType.Embed : state === "post" ? DialogPostType.Post : undefined,
-			userId: userId ? userId : undefined,
-			state: state ? state : "on"
-		};
-	}
-	return undefined;
-}
-
-function isSameChannel(autoChannel: AutoChannelData | undefined, gameChannel: SageChannel | undefined): boolean {
-	return autoChannel && gameChannel ? autoChannel.channelId === gameChannel.id : false;
-}
-
-//#endregion
-
-// function getAutoCharactersForChannel(charManager: CharacterManager, channelId: Snowflake, userId?: Snowflake): GameCharacter[] {
-// 	const characters: GameCharacter[] = [];
-
-// 	const genericAutoChannel = { channelDid:channelId };
-// 	const specificAutoChannel = { channelDid:channelId, userDid:userId };
-// 	const testChar = (char: GameCharacter) => char.hasAutoChannel(genericAutoChannel) || char.hasAutoChannel(specificAutoChannel);
-
-// 	// get user characters of this type with auto channels in this channel
-// 	charManager.forEach(char => {
-// 		if (testChar(char)) characters.push(char);
-// 		char.companions.forEach(comp => {
-// 			if (testChar(comp)) characters.push(comp);
-// 		});
-// 	});
-
-// 	return characters;
+// function createCustomId(userId: Snowflake, action: Action, characterId: string | undefined): string {
+// 	return ["autoDialog", userId, action].concat(characterId ? [characterId] : []).join("|");
 // }
 
-// async function getCharacters(sageCommand: SageCommand, characterTypeMeta: TCharacterTypeMeta): Promise<GameCharacter[]> {
+// function customIdParser(customId?: string | null) {
+// 	if (!customId) return undefined;
+// 	const [indicator, userId, action, characterId] = customId.split("|");
+// 	return { indicator, userId:userId as Snowflake, action:action as Action, characterId:characterId as Snowflake | undefined };
+// }
+
+// //#endregion
+
+// //#region AutoChannel
+
+// type State = "off" | "on" | "embed" | "post";
+
+// type ChannelData = `${Snowflake}|${State}|${Snowflake}`;
+
+// function stringifyAutoChannel(autoChannel: AutoChannelData): ChannelData {
+// 	return [
+// 		autoChannel.channelId,
+// 		DialogPostType[autoChannel.dialogPostType!]?.toLowerCase() ?? "",
+// 		autoChannel.userId ?? ""
+// 	].join("|") as ChannelData;
+// }
+
+// type SelectedChannelData = AutoChannelData & { state:State; };
+
+// function parseAutoChannel(channelData: ChannelData | undefined): SelectedChannelData | undefined {
+// 	if (channelData) {
+// 		const [channelId, state, userId] = channelData.split("|") as [Snowflake, State, Snowflake];
+// 		return {
+// 			channelId,
+// 			dialogPostType: state === "embed" ? DialogPostType.Embed : state === "post" ? DialogPostType.Post : undefined,
+// 			userId: userId ? userId : undefined,
+// 			state: state ? state : "on"
+// 		};
+// 	}
+// 	return undefined;
+// }
+
+// function isSameChannel(autoChannel: AutoChannelData | undefined, gameChannel: SageChannel | undefined): boolean {
+// 	return autoChannel && gameChannel ? autoChannel.channelId === gameChannel.id : false;
+// }
+
+// //#endregion
+
+// // function getAutoCharactersForChannel(charManager: CharacterManager, channelId: Snowflake, userId?: Snowflake): GameCharacter[] {
+// // 	const characters: GameCharacter[] = [];
+
+// // 	const genericAutoChannel = { channelDid:channelId };
+// // 	const specificAutoChannel = { channelDid:channelId, userDid:userId };
+// // 	const testChar = (char: GameCharacter) => char.hasAutoChannel(genericAutoChannel) || char.hasAutoChannel(specificAutoChannel);
+
+// // 	// get user characters of this type with auto channels in this channel
+// // 	charManager.forEach(char => {
+// // 		if (testChar(char)) characters.push(char);
+// // 		char.companions.forEach(comp => {
+// // 			if (testChar(comp)) characters.push(comp);
+// // 		});
+// // 	});
+
+// // 	return characters;
+// // }
+
+// // async function getCharacters(sageCommand: SageCommand, characterTypeMeta: TCharacterTypeMeta): Promise<GameCharacter[]> {
+// // 	if (characterTypeMeta.isGm) {
+// // 		return [sageCommand.gmCharacter];
+// // 	}
+
+// // 	const characters: GameCharacter[] = [];
+
+// // 	const { game, sageUser } = sageCommand;
+// // 	const gameChannels = game?.channels ?? [];
+
+// // 	// we primarily want game characters, but we need to let them turn off accidental user characters
+// // 	if (game) {
+// // 		if (characterTypeMeta.isGmOrNpcOrMinion) {
+// // 			characters.push(...game.nonPlayerCharacters);
+// // 			game.nonPlayerCharacters.forEach(char => characters.push(...char.companions));
+// // 		}
+// // 		if (characterTypeMeta.isPcOrCompanion) {
+// // 			characters.push(...game.playerCharacters);
+// // 			game.playerCharacters.forEach(char => characters.push(...char.companions));
+// // 		}
+
+// // 		// get user characters of this type with auto channels in this game
+
+// // 		// get user characters of this type with auto channels in this channel
+
+// // 	// here we are just dealing with user characters
+// // 	}else {
+
+// // 	}
+
+// // 	const channelId: Snowflake | undefined = sageCommand.dChannel?.id as Snowflake;
+// // 	const channelIsInGame = channelId ? gameChannels.some(gameChannel => gameChannel.did === channelId || gameChannel.id === channelId) : false;
+// // 	if (characterTypeMeta.isPcOrCompanion && channelId && !channelIsInGame) {
+// // 		const genericAutoChannel = { channelDid:channelId };
+// // 		const specificAutoChannel = { channelDid:channelId, userDid:sageUser.did??sageUser.id };
+// // 		sageUser.playerCharacters.forEach(char => {
+// // 			if (char.hasAutoChannel(genericAutoChannel) || char.hasAutoChannel(specificAutoChannel)) characters.push(char);
+// // 			char.companions.forEach(comp => {
+// // 				if (comp.hasAutoChannel(genericAutoChannel) || comp.hasAutoChannel(specificAutoChannel)) characters.push(comp);
+// // 			});
+// // 		});
+// // 	}
+
+// // 	return characters;
+// // }
+
+// async function getAutoCharacter(sageCommand: SageCommand, characterTypeMeta: TCharacterTypeMeta): Promise<GameCharacter | undefined> {
 // 	if (characterTypeMeta.isGm) {
-// 		return [sageCommand.gmCharacter];
+// 		if (sageCommand.isGameMaster) return sageCommand.gmCharacter;
+// 		return undefined;
 // 	}
 
-// 	const characters: GameCharacter[] = [];
-
-// 	const { game, sageUser } = sageCommand;
-// 	const gameChannels = game?.channels ?? [];
-
-// 	// we primarily want game characters, but we need to let them turn off accidental user characters
-// 	if (game) {
-// 		if (characterTypeMeta.isGmOrNpcOrMinion) {
-// 			characters.push(...game.nonPlayerCharacters);
-// 			game.nonPlayerCharacters.forEach(char => characters.push(...char.companions));
-// 		}
-// 		if (characterTypeMeta.isPcOrCompanion) {
-// 			characters.push(...game.playerCharacters);
-// 			game.playerCharacters.forEach(char => characters.push(...char.companions));
-// 		}
-
-// 		// get user characters of this type with auto channels in this game
-
-// 		// get user characters of this type with auto channels in this channel
-
-// 	// here we are just dealing with user characters
-// 	}else {
-
+// 	const userId = sageCommand.sageUser.did;
+// 	const names = sageCommand.args.getNames();
+// 	const character = await getCharacter(sageCommand, characterTypeMeta, userId, names);
+// 	if (character) {
+// 		return character;
 // 	}
-
-// 	const channelId: Snowflake | undefined = sageCommand.dChannel?.id as Snowflake;
-// 	const channelIsInGame = channelId ? gameChannels.some(gameChannel => gameChannel.did === channelId || gameChannel.id === channelId) : false;
-// 	if (characterTypeMeta.isPcOrCompanion && channelId && !channelIsInGame) {
-// 		const genericAutoChannel = { channelDid:channelId };
-// 		const specificAutoChannel = { channelDid:channelId, userDid:sageUser.did??sageUser.id };
-// 		sageUser.playerCharacters.forEach(char => {
-// 			if (char.hasAutoChannel(genericAutoChannel) || char.hasAutoChannel(specificAutoChannel)) characters.push(char);
-// 			char.companions.forEach(comp => {
-// 				if (comp.hasAutoChannel(genericAutoChannel) || comp.hasAutoChannel(specificAutoChannel)) characters.push(comp);
-// 			});
-// 		});
+// 	if (characterTypeMeta.isPc) {
+// 		return sageCommand.playerCharacter;
 // 	}
-
-// 	return characters;
+// 	return undefined;
 // }
 
-async function getAutoCharacter(sageCommand: SageCommand, characterTypeMeta: TCharacterTypeMeta): Promise<GameCharacter | undefined> {
-	if (characterTypeMeta.isGm) {
-		if (sageCommand.isGameMaster) return sageCommand.gmCharacter;
-		return undefined;
-	}
+// type Char = { id:Snowflake; char:GameCharacter; game?:GameCharacter; user?:GameCharacter; };
+// function getCharacterById(sageCommand: SageCommand, id: Snowflake): Char | undefined {
+// 	if (sageCommand.gmCharacter?.equals(id)) {
+// 		return { id, char:sageCommand.gmCharacter, game:sageCommand.gmCharacter };
+// 	}
 
-	const userId = sageCommand.sageUser.did;
-	const names = sageCommand.args.getNames();
-	const character = await getCharacter(sageCommand, characterTypeMeta, userId, names);
-	if (character) {
-		return character;
-	}
-	if (characterTypeMeta.isPc) {
-		return sageCommand.playerCharacter;
-	}
-	return undefined;
-}
+// 	const game = sageCommand.game?.playerCharacters.findById(id)
+// 		?? sageCommand.game?.nonPlayerCharacters.findById(id);
+// 	if (game) {
+// 		return { id, char:game, game };
+// 	}
 
-type Char = { id:Snowflake; char:GameCharacter; game?:GameCharacter; user?:GameCharacter; };
-function getCharacterById(sageCommand: SageCommand, id: Snowflake): Char | undefined {
-	if (sageCommand.gmCharacter?.equals(id)) {
-		return { id, char:sageCommand.gmCharacter, game:sageCommand.gmCharacter };
-	}
+// 	const user = sageCommand.sageUser.playerCharacters.findById(id);
+// 	if (user) {
+// 		return { id, char:user, user };
+// 	}
 
-	const game = sageCommand.game?.playerCharacters.findById(id)
-		?? sageCommand.game?.nonPlayerCharacters.findById(id);
-	if (game) {
-		return { id, char:game, game };
-	}
+// 	return undefined;
+// }
 
-	const user = sageCommand.sageUser.playerCharacters.findById(id);
-	if (user) {
-		return { id, char:user, user };
-	}
+// function getGameCharacterByName(sageCommand: SageCommand, name: string): GameCharacter | undefined {
+// 	if (sageCommand.gmCharacter?.matches(name)) {
+// 		return sageCommand.gmCharacter;
+// 	}
+// 	return sageCommand.game?.playerCharacters.findByName(name)
+// 		?? sageCommand.game?.playerCharacters.findCompanion(name)
+// 		?? sageCommand.game?.nonPlayerCharacters.findByName(name)
+// 		?? sageCommand.game?.nonPlayerCharacters.findCompanion(name);
+// }
 
-	return undefined;
-}
+// function getUserCharacterByName(sageCommand: SageCommand, name: string): GameCharacter | undefined {
+// 	return sageCommand.sageUser.playerCharacters.findByName(name)
+// 		?? sageCommand.sageUser.playerCharacters.findCompanion(name);
+// }
 
-function getGameCharacterByName(sageCommand: SageCommand, name: string): GameCharacter | undefined {
-	if (sageCommand.gmCharacter?.matches(name)) {
-		return sageCommand.gmCharacter;
-	}
-	return sageCommand.game?.playerCharacters.findByName(name)
-		?? sageCommand.game?.playerCharacters.findCompanion(name)
-		?? sageCommand.game?.nonPlayerCharacters.findByName(name)
-		?? sageCommand.game?.nonPlayerCharacters.findCompanion(name);
-}
+// type Chars = { id:Snowflake; name:string; byId:Char; byName?:Char; all:GameCharacter[]; };
+// function getCharsById(sageCommand: SageCommand, id: Snowflake): Chars;
+// function getCharsById(sageCommand: SageCommand, id?: Snowflake): Chars | undefined;
+// function getCharsById(sageCommand: SageCommand, id?: Snowflake): Chars | undefined {
+// 	if (!id) return undefined;
 
-function getUserCharacterByName(sageCommand: SageCommand, name: string): GameCharacter | undefined {
-	return sageCommand.sageUser.playerCharacters.findByName(name)
-		?? sageCommand.sageUser.playerCharacters.findCompanion(name);
-}
+// 	const byId = getCharacterById(sageCommand, id);
+// 	if (!byId) return undefined;
 
-type Chars = { id:Snowflake; name:string; byId:Char; byName?:Char; all:GameCharacter[]; };
-function getCharsById(sageCommand: SageCommand, id: Snowflake): Chars;
-function getCharsById(sageCommand: SageCommand, id?: Snowflake): Chars | undefined;
-function getCharsById(sageCommand: SageCommand, id?: Snowflake): Chars | undefined {
-	if (!id) return undefined;
+// 	const { game, user } = byId;
 
-	const byId = getCharacterById(sageCommand, id);
-	if (!byId) return undefined;
+// 	const name = game?.name ?? user?.name!;
 
-	const { game, user } = byId;
+// 	const gameByName = !game ? getGameCharacterByName(sageCommand, name) : undefined;
+// 	const userByName = !user ? getUserCharacterByName(sageCommand, name) : undefined;
+// 	const byName = gameByName || userByName
+// 		? { id:gameByName?.id ?? userByName?.id!, char:gameByName ?? userByName!, game:gameByName, user:userByName }
+// 		: undefined;
 
-	const name = game?.name ?? user?.name!;
+// 	const all = [game!, user!, gameByName!, userByName!].filter(c => c);
 
-	const gameByName = !game ? getGameCharacterByName(sageCommand, name) : undefined;
-	const userByName = !user ? getUserCharacterByName(sageCommand, name) : undefined;
-	const byName = gameByName || userByName
-		? { id:gameByName?.id ?? userByName?.id!, char:gameByName ?? userByName!, game:gameByName, user:userByName }
-		: undefined;
+// 	return { id, name, byId, byName, all };
+// }
 
-	const all = [game!, user!, gameByName!, userByName!].filter(c => c);
+// async function createChannelList(sageCommand: SageCommand, chars: Chars, selectedValue?: ChannelData): Promise<ActionRowBuilder<StringSelectMenuBuilder>> {
+// 	const userId = sageCommand.sageUser.did;
+// 	const serverId = sageCommand.server?.did;
 
-	return { id, name, byId, byName, all };
-}
+// 	const select = new StringSelectMenuBuilder();
+// 	select.setCustomId(createCustomId(userId, "channel", chars.id));
+// 	select.setPlaceholder(`Select a Channel ...`);
 
-async function createChannelList(sageCommand: SageCommand, chars: Chars, selectedValue?: ChannelData): Promise<ActionRowBuilder<StringSelectMenuBuilder>> {
-	const userId = sageCommand.sageUser.did;
-	const serverId = sageCommand.server?.did;
+// 	const addOption = (data: SelectMenuComponentOptionData) => {
+// 		data.default = data.value === selectedValue;
+// 		select.addOptions(new StringSelectMenuOptionBuilder(data));
+// 	};
 
-	const select = new StringSelectMenuBuilder();
-	select.setCustomId(createCustomId(userId, "channel", chars.id));
-	select.setPlaceholder(`Select a Channel ...`);
+// 	const toUserName = async (userId: Snowflake) => {
+// 		const userName = await toReadableOwner(sageCommand, userId);
+// 		return userName ?? `@${userId}`;
+// 	};
 
-	const addOption = (data: SelectMenuComponentOptionData) => {
-		data.default = data.value === selectedValue;
-		select.addOptions(new StringSelectMenuOptionBuilder(data));
-	};
+// 	const labelAutoChannel = async (autoChannel: AutoChannelData, force?: boolean) => {
+// 		const channel = await sageCommand.discord.fetchGuildChannel<SupportedTextChannel>({ guildId:serverId, channelId:autoChannel.channelId });
+// 		if (!channel && !force) return undefined;
+// 		const channelLabel = channel?.name ?? `#${autoChannel.channelId}`;
+// 		const userName = autoChannel.userId ? ` ${await toUserName(autoChannel.userId)}` : "";
+// 		const postType = autoChannel.dialogPostType !== undefined ? ` (${DialogPostType[autoChannel.dialogPostType]})` : "";
+// 		return channelLabel + userName + postType;
+// 	};
 
-	const toUserName = async (userId: Snowflake) => {
-		const userName = await toReadableOwner(sageCommand, userId);
-		return userName ?? `@${userId}`;
-	};
+// 	// add game channels first
 
-	const labelAutoChannel = async (autoChannel: AutoChannelData, force?: boolean) => {
-		const channel = await sageCommand.discord.fetchGuildChannel<SupportedTextChannel>({ guildId:serverId, channelId:autoChannel.channelId });
-		if (!channel && !force) return undefined;
-		const channelLabel = channel?.name ?? `#${autoChannel.channelId}`;
-		const userName = autoChannel.userId ? ` ${await toUserName(autoChannel.userId)}` : "";
-		const postType = autoChannel.dialogPostType !== undefined ? ` (${DialogPostType[autoChannel.dialogPostType]})` : "";
-		return channelLabel + userName + postType;
-	};
+// 	const gameChannels = sageCommand.game?.channels ?? [];
+// 	for (const gameChannel of gameChannels) {
+// 		let added = false;
+// 		for (const character of chars.all) {
+// 			const autoChannels = character.autoChannels.filter(autoChannel => isSameChannel(autoChannel, gameChannel));
+// 			if (autoChannels.length) {
+// 				for (const autoChannel of autoChannels) {
+// 					const label = await labelAutoChannel(autoChannel, true);
+// 					const value = stringifyAutoChannel(autoChannel);
+// 					const description = character === chars.byId.game || character === chars.byName?.game ? "Game Character" : "User Character";
+// 					if (label) {
+// 						addOption({ label, value, description });
+// 						added = true;
+// 					}
+// 				}
+// 			}
+// 		}
 
-	// add game channels first
+// 		if (!added) {
+// 			const autoChannel = { channelId:gameChannel.id };
+// 			const label = await labelAutoChannel(autoChannel);
+// 			const value = stringifyAutoChannel(autoChannel);
+// 			if (label) addOption({ label, value });
+// 		}
+// 	}
 
-	const gameChannels = sageCommand.game?.channels ?? [];
-	for (const gameChannel of gameChannels) {
-		let added = false;
-		for (const character of chars.all) {
-			const autoChannels = character.autoChannels.filter(autoChannel => isSameChannel(autoChannel, gameChannel));
-			if (autoChannels.length) {
-				for (const autoChannel of autoChannels) {
-					const label = await labelAutoChannel(autoChannel, true);
-					const value = stringifyAutoChannel(autoChannel);
-					const description = character === chars.byId.game || character === chars.byName?.game ? "Game Character" : "User Character";
-					if (label) {
-						addOption({ label, value, description });
-						added = true;
-					}
-				}
-			}
-		}
+// 	// add non-game auto channels last
+// 	for (const character of chars.all) {
+// 		const autoChannels = character.autoChannels.filter(autoChannel => !gameChannels.some(gameChannel => isSameChannel(autoChannel, gameChannel)));
+// 		for (const autoChannel of autoChannels) {
+// 			const label = await labelAutoChannel(autoChannel, true);
+// 			const value = stringifyAutoChannel(autoChannel);
+// 			if (label) addOption({ label, value });
+// 		}
+// 	}
 
-		if (!added) {
-			const autoChannel = { channelId:gameChannel.id };
-			const label = await labelAutoChannel(autoChannel);
-			const value = stringifyAutoChannel(autoChannel);
-			if (label) addOption({ label, value });
-		}
-	}
+// 	return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+// }
 
-	// add non-game auto channels last
-	for (const character of chars.all) {
-		const autoChannels = character.autoChannels.filter(autoChannel => !gameChannels.some(gameChannel => isSameChannel(autoChannel, gameChannel)));
-		for (const autoChannel of autoChannels) {
-			const label = await labelAutoChannel(autoChannel, true);
-			const value = stringifyAutoChannel(autoChannel);
-			if (label) addOption({ label, value });
-		}
-	}
+// function createButtonRow(sageCommand: SageCommand, chars: Chars, selectedValue?: ChannelData): ActionRowBuilder<ButtonBuilder> {
+// 	const userId = sageCommand.sageUser.did;
+// 	const acParsed = parseAutoChannel(selectedValue);
+// 	const character = chars.all.find(char => char.id === chars.id);
+// 	const acFound = character?.autoChannels.find(ac => autoChannelDataMatches(ac, acParsed));
+// 	const state = acFound ? acParsed?.state : "off";
 
-	return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
-}
+// 	const createButton = (action: Action, label: string) => new ButtonBuilder().setCustomId(createCustomId(userId, action, character?.id)).setLabel(label).setStyle(ButtonStyle.Primary).setDisabled(!selectedValue || state === action);
 
-function createButtonRow(sageCommand: SageCommand, chars: Chars, selectedValue?: ChannelData): ActionRowBuilder<ButtonBuilder> {
-	const userId = sageCommand.sageUser.did;
-	const acParsed = parseAutoChannel(selectedValue);
-	const character = chars.all.find(char => char.id === chars.id);
-	const acFound = character?.autoChannels.find(ac => autoChannelDataMatches(ac, acParsed));
-	const state = acFound ? acParsed?.state : "off";
+// 	const offButton = createButton("off", "Off");
+// 	const onButton = createButton("on", "On (Default)");
+// 	const embedButton = createButton("embed", " On (Embed)");
+// 	const postButton = createButton("post", "On (Post)");
+// 	const deleteButton = createMessageDeleteButton(userId, { label:"Done" });
 
-	const createButton = (action: Action, label: string) => new ButtonBuilder().setCustomId(createCustomId(userId, action, character?.id)).setLabel(label).setStyle(ButtonStyle.Primary).setDisabled(!selectedValue || state === action);
+// 	return new ActionRowBuilder<ButtonBuilder>().setComponents(offButton, onButton, embedButton, postButton, deleteButton);
+// }
 
-	const offButton = createButton("off", "Off");
-	const onButton = createButton("on", "On (Default)");
-	const embedButton = createButton("embed", " On (Embed)");
-	const postButton = createButton("post", "On (Post)");
-	const deleteButton = createMessageDeleteButton(userId, { label:"Done" });
+// async function createComponents(sageCommand: SageCommand, chars: Chars, selectedValue?: ChannelData): Promise<[ActionRowBuilder<StringSelectMenuBuilder>, ActionRowBuilder<ButtonBuilder>]> {
+// 	const selectRow = await createChannelList(sageCommand, chars, selectedValue);
+// 	const buttonRow = createButtonRow(sageCommand, chars, selectedValue);
+// 	return [selectRow, buttonRow];
+// }
 
-	return new ActionRowBuilder<ButtonBuilder>().setComponents(offButton, onButton, embedButton, postButton, deleteButton);
-}
+// async function handleAction(sageInteraction: SageButtonInteraction|SageStringSelectInteraction): Promise<void> {
+// 	sageInteraction.replyStack.defer();
 
-async function createComponents(sageCommand: SageCommand, chars: Chars, selectedValue?: ChannelData): Promise<[ActionRowBuilder<StringSelectMenuBuilder>, ActionRowBuilder<ButtonBuilder>]> {
-	const selectRow = await createChannelList(sageCommand, chars, selectedValue);
-	const buttonRow = createButtonRow(sageCommand, chars, selectedValue);
-	return [selectRow, buttonRow];
-}
+// 	const { sageUser } = sageInteraction;
 
-async function handleAction(sageInteraction: SageButtonInteraction|SageStringSelectInteraction): Promise<void> {
-	sageInteraction.replyStack.defer();
+// 	const { userId, action, characterId } = sageInteraction.parseCustomId(customIdParser)!;
+// 	if (!sageUser.equals(userId)) {
+// 		await sageInteraction.replyStack.reply("Please don't touch another user's control.");
+// 		return;
+// 	}
 
-	const { sageUser } = sageInteraction;
+// 	const chars = getCharsById(sageInteraction, characterId);
+// 	const character = chars?.byId.char;
+// 	let channelData = getSelectedOrDefault(sageInteraction as SageStringSelectInteraction, createCustomId(userId, "channel", characterId)) as ChannelData;
+// 	const autoChannel = parseAutoChannel(channelData);
+// 	if (!character || !autoChannel) return;
 
-	const { userId, action, characterId } = sageInteraction.parseCustomId(customIdParser)!;
-	if (!sageUser.equals(userId)) {
-		await sageInteraction.replyStack.reply("Please don't touch another user's control.");
-		return;
-	}
+// 	const channelId = autoChannel.channelId;
+// 	const removeAutoChannel = async (save?: boolean, force?: boolean) => {
+// 		if (force || sageUser.equals(autoChannel.userId)) {
+// 			await character.removeAutoChannel(autoChannel, save);
+// 		}
+// 	};
+// 	const setAutoChannel = async (channelId: Snowflake, userId: Snowflake, dialogPostType?: DialogPostType) => {
+// 		await character.setAutoChannel({ channelId, userId, dialogPostType }, true);
+// 		channelData = `${channelId}|${DialogPostType[dialogPostType!]?.toLowerCase() ?? ""}|${userId}` as ChannelData;
+// 	};
 
-	const chars = getCharsById(sageInteraction, characterId);
-	const character = chars?.byId.char;
-	let channelData = getSelectedOrDefault(sageInteraction as SageStringSelectInteraction, createCustomId(userId, "channel", characterId)) as ChannelData;
-	const autoChannel = parseAutoChannel(channelData);
-	if (!character || !autoChannel) return;
+// 	switch(action) {
+// 		case "channel":
+// 			// do nothing
+// 			break;
 
-	const channelId = autoChannel.channelId;
-	const removeAutoChannel = async (save?: boolean, force?: boolean) => {
-		if (force || sageUser.equals(autoChannel.userId)) {
-			await character.removeAutoChannel(autoChannel, save);
-		}
-	};
-	const setAutoChannel = async (channelId: Snowflake, userId: Snowflake, dialogPostType?: DialogPostType) => {
-		await character.setAutoChannel({ channelId, userId, dialogPostType }, true);
-		channelData = `${channelId}|${DialogPostType[dialogPostType!]?.toLowerCase() ?? ""}|${userId}` as ChannelData;
-	};
+// 		case "off":
+// 			await removeAutoChannel(true, true);
+// 			channelData = `${channelId}||` as ChannelData;
+// 			break;
 
-	switch(action) {
-		case "channel":
-			// do nothing
-			break;
+// 		case "on":
+// 			await removeAutoChannel();
+// 			await setAutoChannel(channelId, userId);
+// 			break;
 
-		case "off":
-			await removeAutoChannel(true, true);
-			channelData = `${channelId}||` as ChannelData;
-			break;
+// 		case "embed":
+// 			await removeAutoChannel();
+// 			await setAutoChannel(channelId, userId, DialogPostType.Embed);
+// 			break;
 
-		case "on":
-			await removeAutoChannel();
-			await setAutoChannel(channelId, userId);
-			break;
+// 		case "post":
+// 			await removeAutoChannel();
+// 			await setAutoChannel(channelId, userId, DialogPostType.Post);
+// 			break;
 
-		case "embed":
-			await removeAutoChannel();
-			await setAutoChannel(channelId, userId, DialogPostType.Embed);
-			break;
+// 		default:
+// 			debug(`Invalid customId: ${sageInteraction.interaction.customId}`);
+// 			break;
+// 	}
 
-		case "post":
-			await removeAutoChannel();
-			await setAutoChannel(channelId, userId, DialogPostType.Post);
-			break;
+// 	const message = sageInteraction.interaction.message;
+// 	message.edit({ content:message.content, components:await createComponents(sageInteraction, chars, channelData)})
+// }
 
-		default:
-			debug(`Invalid customId: ${sageInteraction.interaction.customId}`);
-			break;
-	}
+// export async function showForm(sageMessage: SageMessage): Promise<void> {
+// 	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
 
-	const message = sageInteraction.interaction.message;
-	message.edit({ content:message.content, components:await createComponents(sageInteraction, chars, channelData)})
-}
+// 	// initial check of permission to manage characters
+// 	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "AUTO")) {
+// 		return;
+// 	}
 
-export async function showForm(sageMessage: SageMessage): Promise<void> {
-	const characterTypeMeta = getCharacterTypeMeta(sageMessage);
+// 	const character = await getAutoCharacter(sageMessage, characterTypeMeta);
+// 	if (!character) {
+// 		const nameLabel = sageMessage.args.getNames().name ?? characterTypeMeta.singularDescriptor;
+// 		await sageMessage.replyStack.whisper(`Unable to find character: ${nameLabel}`);
+// 		return;
+// 	}
 
-	// initial check of permission to manage characters
-	if (await cannotManageCharacter(sageMessage, characterTypeMeta, "AUTO")) {
-		return;
-	}
+// 	const content = `Configuring Auto Dialog for:\n> **User** ${toHumanReadable(sageMessage.message.author)}\n> **Character** ${character.name}`;
+// 	const components = await createComponents(sageMessage, getCharsById(sageMessage, character.id));
 
-	const character = await getAutoCharacter(sageMessage, characterTypeMeta);
-	if (!character) {
-		const nameLabel = sageMessage.args.getNames().name ?? characterTypeMeta.singularDescriptor;
-		await sageMessage.replyStack.whisper(`Unable to find character: ${nameLabel}`);
-		return;
-	}
+// 	await sageMessage.replyStack.send({ content, components });
+// }
 
-	const content = `Configuring Auto Dialog for:\n> **User** ${toHumanReadable(sageMessage.message.author)}\n> **Character** ${character.name}`;
-	const components = await createComponents(sageMessage, getCharsById(sageMessage, character.id));
-
-	await sageMessage.replyStack.send({ content, components });
-}
-
-export function registerGcCmdAutoDialog(): void {
-	registerListeners({ commands:["pc|auto|dialog", "gm|auto|dialog", "npc|auto|dialog", "minion|auto|dialog", "companion|auto|dialog"], message:showForm });
-	registerListeners({ commands:[/autoDialog\|\d{16,}\|(channel|off|on|embed|post)(\|[\w-]+)*/], interaction:handleAction });
-}
+// export function registerGcCmdAutoDialog(): void {
+// 	registerListeners({ commands:["pc|auto|dialog", "gm|auto|dialog", "npc|auto|dialog", "minion|auto|dialog", "companion|auto|dialog"], message:showForm });
+// 	registerListeners({ commands:[/autoDialog\|\d{16,}\|(channel|off|on|embed|post)(\|[\w-]+)*/], interaction:handleAction });
+// }
