@@ -5,27 +5,42 @@ import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
 import { evalMath } from "./evalMath.js";
 
 export const SimpleMathRegExp = regex()`
-	(?<! \g<wordChar> )                   # ignore the entire thing if preceded a word character
+	(?<! \g<wordChar> )          # ignore the entire thing if preceded a word character
+	\g<optPosNegSigns>
 	(
-		\g<orWrappedNumber>               # pos/neg decimal number
-		\g<additionalMath>+               # required additional math
+		\g<orWrappedNumber>      # pos/neg decimal number
+		\g<additionalMath>+      # required additional math
 		|
-		${OrSpoileredPosNegNumberRegExp}  # decimal number w/ multiple +/- chars
-		\g<additionalMath>*               # optional additional math
+		\g<orSpoiledPosNeg>      # decimal number w/ multiple +/- chars
+		\g<additionalMath>*      # optional additional math
 	)
-	(?! \g<wordChar> )                    # ignore the entire thing if followed a word character
+	(?! \g<wordChar> )           # ignore the entire thing if followed a word character
 
 	(?(DEFINE)
 		(?<wordChar> [a-zA-Z] )  # previous \w was causing "1d1-1++2" to split as "1d1-" and "1++2"
+
+		(?<optPosNegSigns> [\-+\s]* )
+
 		(?<number> ${NumberRegExp} )
-		(?<orSpoileredNumber> \|\| \g<number> \|\| | \g<number> )
+		(?<signedNumber>
+			(
+				\s*              # optional whitespace
+				[\-+]            # pos/neg signs
+				\s*              # optional whitespace
+			)?
+			\g<number>           # base number regex
+		)
+		(?<orSpoileredNumber> \|\| \g<signedNumber> \|\| | \g<signedNumber> )
 		(?<orWrappedNumber> \( \g<orSpoileredNumber> \) | \g<orSpoileredNumber> )
+
 		(?<additionalMath>
 			\s*                  # optional whitespace
 			[\-+\/*%^]           # operator
-			[\-+\s]*             # possible extra pos/neg signs
+			\g<optPosNegSigns>   # possible extra pos/neg signs
 			\g<orWrappedNumber>  # pos/neg decimal number
 		)
+
+		(?<orSpoiledPosNeg> ${OrSpoileredPosNegNumberRegExp} )
 	)
 `;
 
@@ -73,6 +88,9 @@ export function doSimple(input: string): string {
 
 	// iterate while we have matches
 	while (SimpleMathRegExp.test(output)) {
+		// track value before changes
+		const before = output;
+
 		// replace all matches
 		output = output.replace(SimpleMathRegExpG, value => {
 			const { hasPipes, unpiped } = unpipe(unwrapNumbers(value));
@@ -83,6 +101,9 @@ export function doSimple(input: string): string {
 
 			return hasPipes ? `||${result}||` : result;
 		});
+
+		// if nothing changed, break out of the loop
+		if (before === output) break;
 	}
 	return output;
 }
