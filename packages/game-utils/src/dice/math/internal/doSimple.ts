@@ -5,17 +5,18 @@ import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
 import { evalMath } from "./evalMath.js";
 
 export const SimpleMathRegExp = regex()`
-	(?<! \w )                    # ignore the entire thing if preceded a word character
+	(?<! \g<wordChar> )                   # ignore the entire thing if preceded a word character
 	(
-		\g<orWrappedNumber>      # pos/neg decimal number
-		\g<additionalMath>+      # required additional math
+		\g<orWrappedNumber>               # pos/neg decimal number
+		\g<additionalMath>+               # required additional math
 		|
-		${OrSpoileredPosNegNumberRegExp} # decimal number w/ multiple +/- chars
-		\g<additionalMath>*              # optional additional math
+		${OrSpoileredPosNegNumberRegExp}  # decimal number w/ multiple +/- chars
+		\g<additionalMath>*               # optional additional math
 	)
-	(?! \w )                     # ignore the entire thing if followed a word character
+	(?! \g<wordChar> )                    # ignore the entire thing if followed a word character
 
 	(?(DEFINE)
+		(?<wordChar> [a-zA-Z] )  # previous \w was causing "1d1-1++2" to split as "1d1-" and "1++2"
 		(?<number> ${NumberRegExp} )
 		(?<orSpoileredNumber> \|\| \g<number> \|\| | \g<number> )
 		(?<orWrappedNumber> \( \g<orSpoileredNumber> \) | \g<orSpoileredNumber> )
