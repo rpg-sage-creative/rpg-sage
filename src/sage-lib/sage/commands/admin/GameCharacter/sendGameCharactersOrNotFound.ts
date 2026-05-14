@@ -1,11 +1,11 @@
 import { Arg, escapeRegex, type Optional } from "@rsc-utils/core-utils";
-import type { CharacterManager } from "../../../model/CharacterManager.js";
+import type { CharacterArray } from "../../../model/CharacterArray.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";
 import { toReadableOwner } from "./toReadableOwner.js";
 
-function filterCharacters(characters: Optional<CharacterManager>, value: Optional<string>): GameCharacter[] {
+function filterCharacters(characters: Optional<CharacterArray>, value: Optional<string>): GameCharacter[] {
 	if (characters) {
 		if (value) {
 			const regex = new RegExp(escapeRegex(value), "i");
@@ -25,7 +25,7 @@ function charToDetails(character: GameCharacter): string {
 	return `\`sage! ${character.type} details ${parentNameKeyValue}${charNameKeyValue}\``;
 }
 
-export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterManager: Optional<CharacterManager>, entityNamePlural?: string): Promise<void> {
+export async function sendGameCharactersOrNotFound(sageMessage: SageMessage, characterManager: Optional<CharacterArray>, entityNamePlural?: string): Promise<void> {
 		const isCompanionOrMinion = characterManager?.characterType === "companion" || characterManager?.characterType === "minion";
 
 	const { charName, name } = sageMessage.args.getNames();

@@ -197,8 +197,3 @@ export class CharacterArray extends Array<GameCharacter> {
 		return characterManager;
 	}
 }
-
-export {
-	/** @deprecated use CharacterArray */
-	CharacterArray as CharacterManager
-};

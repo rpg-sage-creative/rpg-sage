@@ -5,7 +5,7 @@ import { Deck, type DeckPlayArgs, type StackCard, type StackKey, type StackWhere
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { deleteMessage } from "../../discord/deletedMessages.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
-import type { CharacterManager } from "../model/CharacterManager.js";
+import type { CharacterArray } from "../model/CharacterArray.js";
 import type { GameCharacter } from "../model/GameCharacter.js";
 import { SageCommand } from "../model/SageCommand.js";
 import type { SageCommandArgs } from "../model/SageCommandArgs.js";
@@ -22,7 +22,7 @@ function getStringArg({ args }: SageCommand, ...keys: string[]): string | undefi
 	return undefined;
 }
 
-function findCharByDeck(chars: CharacterManager, deckId: string): GameCharacter | undefined {
+function findCharByDeck(chars: CharacterArray, deckId: string): GameCharacter | undefined {
 	for (const char of chars) {
 		if (char.hasDeck(deckId)) return char;
 		const descendant = findCharByDeck(char.companions, deckId);
@@ -30,7 +30,7 @@ function findCharByDeck(chars: CharacterManager, deckId: string): GameCharacter 
 	}
 	return undefined;
 }
-function findCharsWithDecks(chars: CharacterManager): GameCharacter[] {
+function findCharsWithDecks(chars: CharacterArray): GameCharacter[] {
 	const withDecks: GameCharacter[] = [];
 	for (const char of chars) {
 		if (char.hasDecks) withDecks.push(char);

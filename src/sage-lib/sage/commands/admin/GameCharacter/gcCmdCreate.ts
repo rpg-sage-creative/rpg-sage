@@ -1,5 +1,5 @@
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
-import type { CharacterManager } from "../../../model/CharacterManager.js";
+import type { CharacterArray } from "../../../model/CharacterArray.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { cannotManageCharacter } from "./cannotManageCharacter.js";
@@ -33,7 +33,7 @@ export async function gcCmdCreate(sageMessage: SageMessage): Promise<void> {
 
 	const hasCharacters = sageMessage.game ?? sageMessage.sageUser;
 
-	let characterManager: CharacterManager | undefined = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
+	let characterManager: CharacterArray | undefined = characterTypeMeta.isGmOrNpcOrMinion ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 	if (characterTypeMeta.isCompanion) {
 		const character = characterManager?.findByUser(userId, names.charName) ?? characterManager.findByUser(userId);
 		core.userDid = character?.userDid;

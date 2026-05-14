@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import { CharacterManager } from "../../../model/CharacterManager.js";
+import { CharacterArray } from "../../../model/CharacterArray.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { cannotManageCharacter } from "./cannotManageCharacter.js";
 import { getCharacterTypeMeta } from "./getCharacterTypeMeta.js";
@@ -16,7 +16,7 @@ export async function gcCmdList(sageMessage: SageMessage): Promise<void> {
 
 	const hasCharacters = sageMessage.game ?? sageMessage.sageUser;
 
-	let characterManager: Optional<CharacterManager> = characterTypeMeta.isGmOrNpcOrMinion
+	let characterManager: Optional<CharacterArray> = characterTypeMeta.isGmOrNpcOrMinion
 		? hasCharacters.nonPlayerCharacters
 		: hasCharacters.playerCharacters;
 
@@ -38,7 +38,7 @@ export async function gcCmdList(sageMessage: SageMessage): Promise<void> {
 
 		// let's grab all the minions
 		}else {
-			const minionManager = new CharacterManager();
+			const minionManager = new CharacterArray();
 			minionManager.characterType = "minion";
 			characterManager.forEach(char => char.companions.forEach(comp => minionManager.push(comp)));
 			characterManager = minionManager;

@@ -15,7 +15,7 @@ import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/i
 import { PathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { SageMessageReference } from "../repo/SageMessageReference.js";
-import { CharacterManager } from "./CharacterManager.js";
+import { CharacterArray } from "./CharacterArray.js";
 import { NoteManager } from "./NoteManager.js";
 import { toTrackerBar } from "./utils/TrackerBars.js";
 import { parseTrackerDots, toTrackerDots } from "./utils/TrackerDots.js";
@@ -140,9 +140,9 @@ export class GameCharacter {
 
 	//#endregion
 
-	public constructor(private core: GameCharacterCore, protected owner?: CharacterManager) {
+	public constructor(private core: GameCharacterCore, protected owner?: CharacterArray) {
 		const companionType = this.isPcOrCompanion ? "companion" : "minion";
-		this.core.companions = CharacterManager.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
+		this.core.companions = CharacterArray.from(this.core.companions as GameCharacterCore[] ?? [], this, companionType);
 		this.core.lastMessages = this.core.lastMessages?.map(SageMessageReference.fromCore) ?? [];
 
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
@@ -179,7 +179,7 @@ export class GameCharacter {
 	public set avatarUrl(avatarUrl: string | undefined) { this.core.avatarUrl = avatarUrl; }
 
 	/** The character's companion characters. */
-	public get companions(): CharacterManager { return this.core.companions as CharacterManager; }
+	public get companions(): CharacterArray { return this.core.companions as CharacterArray; }
 
 	/** Discord compatible color: #001122 */
 	public get embedColor(): HexColorString | undefined { return this.core.embedColor; }
@@ -475,10 +475,10 @@ export class GameCharacter {
 	}
 
 	public async remove(): Promise<boolean> {
-		let manager: CharacterManager | undefined;
+		let manager: CharacterArray | undefined;
 		if (this.owner instanceof GameCharacter) {
 			manager = this.owner.companions;
-		} else if (this.owner instanceof CharacterManager) {
+		} else if (this.owner instanceof CharacterArray) {
 			manager = this.owner;
 		}
 		if (!manager) return false;
