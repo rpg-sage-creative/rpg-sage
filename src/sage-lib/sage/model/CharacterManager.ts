@@ -8,7 +8,7 @@ import type { User } from "./User.js";
 
 type TGameCharacterOwner = Game | GameCharacter | Server | User;
 
-export class CharacterManager extends Array<GameCharacter> {
+export class CharacterArray extends Array<GameCharacter> {
 
 	/** The type of character represented by this manager. */
 	public characterType?: TGameCharacterType;
@@ -180,10 +180,10 @@ export class CharacterManager extends Array<GameCharacter> {
 	//#endregion
 
 	/** Creates a new CharacterManager from the given values and optional owner / type. */
-	public static from<T extends GameCharacterCore>(arrayLike: ArrayLike<T> | Iterable<T>): CharacterManager;
-	public static from<T extends GameCharacterCore>(arrayLike: ArrayLike<T> | Iterable<T>, owner: TGameCharacterOwner, characterType: TGameCharacterType): CharacterManager;
-	public static from<T extends GameCharacterCore>(values: ArrayLike<T> | Iterable<T>, owner?: TGameCharacterOwner, characterType?: TGameCharacterType): CharacterManager {
-		const characterManager = new CharacterManager();
+	public static from<T extends GameCharacterCore>(arrayLike: ArrayLike<T> | Iterable<T>): CharacterArray;
+	public static from<T extends GameCharacterCore>(arrayLike: ArrayLike<T> | Iterable<T>, owner: TGameCharacterOwner, characterType: TGameCharacterType): CharacterArray;
+	public static from<T extends GameCharacterCore>(values: ArrayLike<T> | Iterable<T>, owner?: TGameCharacterOwner, characterType?: TGameCharacterType): CharacterArray {
+		const characterManager = new CharacterArray();
 		characterManager.owner = owner ?? undefined;
 		characterManager.characterType = characterType ?? undefined;
 
@@ -197,3 +197,8 @@ export class CharacterManager extends Array<GameCharacter> {
 		return characterManager;
 	}
 }
+
+export {
+	/** @deprecated use CharacterArray */
+	CharacterArray as CharacterManager
+};
