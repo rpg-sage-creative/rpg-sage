@@ -5,7 +5,8 @@ import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
 import { evalMath } from "./evalMath.js";
 
 export const SimpleMathRegExp = regex()`
-	(?<! \g<wordChar> )          # ignore the entire thing if preceded a word character
+	(?<! [a-zA-Z]\d* )           # ignore the entire thing if preceded a letter (and possibly numbers, such as d20)
+	                             # this saves us from d20+16 getting captured as 0+16 and turning into d216
 	\g<optPosNegSigns>
 	(
 		\g<orWrappedNumber>      # pos/neg decimal number
@@ -14,11 +15,9 @@ export const SimpleMathRegExp = regex()`
 		\g<orSpoiledPosNeg>      # decimal number w/ multiple +/- chars
 		\g<additionalMath>*      # optional additional math
 	)
-	(?! \g<wordChar> )           # ignore the entire thing if followed a word character
+	(?! \w )                     # ignore the entire thing if followed by a word character
 
 	(?(DEFINE)
-		(?<wordChar> [a-zA-Z] )  # previous \w was causing "1d1-1++2" to split as "1d1-" and "1++2"
-
 		(?<optPosNegSigns> [\-+\s]* )
 
 		(?<number> ${NumberRegExp} )
@@ -97,7 +96,16 @@ export function doSimple(input: string): string {
 
 			const prepped = prepExponents(prepPosNegSigns(unpiped));
 
-			const result = evalMath(prepped);
+			const startedWithPlus = prepped.trimStart().startsWith("+");
+
+			let result = evalMath(prepped);
+
+			if (startedWithPlus) {
+				// const firstChar = result.trimStart()[0];
+				// if (firstChar !== "+" && firstChar !== "-") {
+				// 	result = "+" + result;
+				// }
+			}
 
 			return hasPipes ? `||${result}||` : result;
 		});
