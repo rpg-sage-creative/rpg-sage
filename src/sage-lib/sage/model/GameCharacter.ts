@@ -1,5 +1,5 @@
 import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type AutoChannelData, type DeckCore, type DeckType, type GameSystem, type SageCharacterCore, type SageMessageReferenceCore } from "@rsc-sage/data-layer";
-import { applyChanges, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, partition, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -1212,11 +1212,26 @@ export class GameCharacter {
 			forNotes.push({ key:correctedKey??key, value:correctedValue??value });
 		}
 
-		// iterate the stat pairs to double check bounds
-		forNotes.forEach(pair => pair.value = checkStatBounds(this, pair) ?? pair.value);
+		// split pairs into bounds pairs and stat pairs
+		const [boundsPairs = [], statPairs = []] = partition(forNotes, pair => {
+			const lower = pair.key.toLowerCase();
+			return lower.endsWith(".min") || lower.endsWith(".max")
+				? 0
+				: 1;
+		});
 
-		const updatedNoteKeys = this.notes.updateStats(forNotes);
-		updatedNoteKeys.forEach(noteKey => keysUpdated.add(noteKey));
+		// update the notes for the bounds pairs
+		this.notes
+			.updateStats(boundsPairs)
+			.forEach(noteKey => keysUpdated.add(noteKey));
+
+		// iterate the stat pairs to double check updated bounds
+		statPairs.forEach(pair => pair.value = checkStatBounds(this, pair) ?? pair.value);
+
+		// update the notes for the stat pairs
+		this.notes
+			.updateStats(statPairs)
+			.forEach(noteKey => keysUpdated.add(noteKey));
 
 		return keysUpdated;
 	}
