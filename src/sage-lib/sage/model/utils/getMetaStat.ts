@@ -1,6 +1,7 @@
 import type { CharacterShell } from "../CharacterShell.js";
 import type { GameCharacter } from "../GameCharacter.js";
 
+/** @todo stop allowing temp */
 /** In addition to returning "maxhp" for "hp", this returns "alt.maxhp" for "alt.hp" */
 function getOldMetaKey(key: string, prefix: "min" | "max" | "tmp" | "temp"): string {
 	const parts = key.split(".");
@@ -19,6 +20,7 @@ export function getMetaStat(char: GameCharacter | CharacterShell, key: string, m
 		metaValue = char.getStat(key + "." + metaKey, true);
 	}
 
+	/** @todo stop allowing temp */
 	// this allows for folks to use temp OR tmp
 	if (!metaValue.isDefined && metaKey === "tmp") {
 		// old way
