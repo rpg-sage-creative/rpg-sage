@@ -19,7 +19,7 @@ import { CharacterManager } from "./CharacterManager.js";
 import { NoteManager } from "./NoteManager.js";
 import { toTrackerBar } from "./utils/TrackerBars.js";
 import { parseTrackerDots, toTrackerDots } from "./utils/TrackerDots.js";
-import { getMetaStat } from "./utils/getMetaStat.js";
+import { getMetaStat, isMetaStatKey } from "./utils/getMetaStat.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
 import { processCharStatsAndMods } from "./utils/processCharStatsAndMods.js";
 
@@ -607,6 +607,7 @@ export class GameCharacter {
 
 	/** Returns true if the user has set a `.bar.value` for the given key. */
 	public hasTrackerBar(key: string): boolean {
+		if (isMetaStatKey(key)) return false;
 		return this.getString(`${key}.bar.values`) !== undefined;
 	}
 
@@ -640,10 +641,12 @@ export class GameCharacter {
 
 	/** Returns true if the user has set a `.dots.value` for the given key. */
 	public hasTrackerDots(key: string): boolean {
+		if (isMetaStatKey(key)) return false;
 		return this.getString(`${key}.dots.values`) !== undefined;
 	}
 
 	public hasIndexedValues(key: string): boolean {
+		if (isMetaStatKey(key)) return false;
 		return this.getString(`${key}.indexed.values`) !== undefined;
 	}
 
@@ -938,7 +941,7 @@ export class GameCharacter {
 		}
 
 		// we have to exclude keys ending in ".dots.values" to avoid recursion from this.hasTrackerDots(key)
-		if (!keyLower.endsWith(".dots.values")) {
+		if (!isMetaStatKey(key, keyLower)) {
 			const dotsStatKey = this.hasTrackerDots(key)
 				? key
 				: parseTrackerDots(key)?.statKey;

@@ -1,8 +1,8 @@
 import { numberOrUndefined } from "@rsc-utils/core-utils";
-import type { StatNumbersOptions, StatNumbersResults } from "@rsc-utils/game-utils";
+import type { StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-utils/game-utils";
 import type { CharacterShell } from "../CharacterShell.js";
 import type { GameCharacter } from "../GameCharacter.js";
-import { getMetaStat } from "./getMetaStat.js";
+import { getMetaStat, isMetaStatKey } from "./getMetaStat.js";
 
 type Options = StatNumbersOptions & {
 	char: GameCharacter | CharacterShell;
@@ -18,10 +18,18 @@ type Options = StatNumbersOptions & {
 export function getStatNumbers(opts: Options): StatNumbersResults {
 	const allOpts = !opts.val && !opts.min && !opts.max && !opts.tmp;
 
-	const max = allOpts || opts?.max ? getMetaStat(opts.char, opts.key, "max") : undefined;
-	const min = allOpts || opts?.min ? getMetaStat(opts.char, opts.key, "min") : undefined;
-	const tmp = allOpts || opts?.tmp ? getMetaStat(opts.char, opts.key, "tmp") : undefined;
-	const val = allOpts || opts?.val ? opts.char.getStat(opts.key, true) : undefined;
+	// attempt to get the primary value
+	const val = (allOpts || opts?.val) ? opts.char.getStat(opts.key, true) : undefined;
+
+	// meta stats should not be retrieved for meta stats
+	let max: StatResults<string> | undefined;
+	let min: StatResults<string> | undefined;
+	let tmp: StatResults<string> | undefined;
+	if (!isMetaStatKey(opts.key)) {
+		max = allOpts || opts?.max ? getMetaStat(opts.char, opts.key, "max") : undefined;
+		min = (allOpts || opts?.min) ? getMetaStat(opts.char, opts.key, "min") : undefined;
+		tmp = (allOpts || opts?.tmp) ? getMetaStat(opts.char, opts.key, "tmp") : undefined;
+	}
 
 	return {
 		hasPipes: val?.hasPipes || min?.hasPipes || max?.hasPipes || tmp?.hasPipes,
