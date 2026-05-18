@@ -21,7 +21,7 @@ export const OrSpoileredPosNegNumberRegExp = regex()`
 const OrSpoileredPosNegNumberRegExpG = globalizeRegex(OrSpoileredPosNegNumberRegExp);
 
 /** for prepPosNegSigns() */
-const SpacerRegExpG = /-+|\++/g;
+const SpacerRegExpG = /[\-+]+/g;
 
 /** by spacing the -- or ++ characters, the eval can properly process them */
 export function prepPosNegSigns(input: string): string {

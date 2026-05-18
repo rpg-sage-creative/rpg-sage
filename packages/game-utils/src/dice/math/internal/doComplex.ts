@@ -38,10 +38,18 @@ export const ComplexMathRegExp = regex("i")`
 		\s*\)
 
 	|
-		# implicit multiplication
-		(?<multiplier>
-			\g<orSpoileredNumber>
-			\s*
+		(
+			# implicit multiplication
+			(?<multiplier>
+				\g<orSpoileredNumber>
+				\s*
+			)
+			|
+			(?<posNegSigns>
+				\s*
+				[\-+]
+				[\-+\s]*
+			)
 		)?
 		\(\s*
 		(?<simpleMath>
@@ -74,7 +82,7 @@ export function doComplex(input: string): string {
 	let output = input;
 	while (ComplexMathRegExp.test(output)) {
 		// because of the way the capture groups use or "|" our array args seem to be the same regardless of the capture group names ...
-		output = output.replace(ComplexMathRegExpG, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _simpleMath: string) => {
+		output = output.replace(ComplexMathRegExpG, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _posNegSigns: string | undefined, _simpleMath: string) => {
 			// if (!allowSpoilers && unpipe(_).hasPipes) return _;
 
 			let hasPipes = false;
@@ -107,6 +115,11 @@ export function doComplex(input: string): string {
 			if (_multiplier !== undefined) {
 				// return the new math so that it can be reprocessed
 				return retVal(`${_multiplier}*${doSimple(simpleMathPipeInfo.unpiped)}`);
+			}
+
+			if (_posNegSigns !== undefined) {
+				//
+				return retVal(`${doSimple(_posNegSigns + simpleMathPipeInfo.unpiped)}`);
 			}
 
 			// handle parentheses

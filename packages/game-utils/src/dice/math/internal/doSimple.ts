@@ -5,8 +5,7 @@ import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
 import { evalMath } from "./evalMath.js";
 
 export const SimpleMathRegExp = regex()`
-	(?<! [a-zA-Z]\d* )           # ignore the entire thing if preceded a letter (and possibly numbers, such as d20)
-	                             # this saves us from d20+16 getting captured as 0+16 and turning into d216
+	(^|\b)                           # ensure there is a wordbreak at the start
 	\g<optPosNegSigns>
 	(
 		\g<orWrappedNumber>      # pos/neg decimal number
@@ -14,8 +13,9 @@ export const SimpleMathRegExp = regex()`
 		|
 		\g<orSpoiledPosNeg>      # decimal number w/ multiple +/- chars
 		\g<additionalMath>*      # optional additional math
+
 	)
-	(?! \w )                     # ignore the entire thing if followed by a word character
+	(\b|$)                           # ensure there is a wordbreak at the end
 
 	(?(DEFINE)
 		(?<optPosNegSigns> [\-+\s]* )
@@ -96,15 +96,11 @@ export function doSimple(input: string): string {
 
 			const prepped = prepExponents(prepPosNegSigns(unpiped));
 
-			const startedWithPlus = prepped.trimStart().startsWith("+");
-
 			let result = evalMath(prepped);
 
-			if (startedWithPlus) {
-				// const firstChar = result.trimStart()[0];
-				// if (firstChar !== "+" && firstChar !== "-") {
-				// 	result = "+" + result;
-				// }
+			const firstChar = result.trimStart()[0];
+			if (firstChar !== "-" && firstChar !== "+") {
+				result = "+" + result;
 			}
 
 			return hasPipes ? `||${result}||` : result;

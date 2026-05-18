@@ -5,6 +5,8 @@ import { doPosNeg, PosNegNumberRegExp } from "../math/internal/doPosNeg.js";
 import { SimpleMathRegExp } from "../math/internal/doSimple.js";
 import { processMath } from "../math/processMath.js";
 
+const DiceRegExp = /\b(\(\d+\))?\d*d\d+\b/i;
+
 /**
  * Checks the stat value for math.
  * If no math is found, then the value is returned.
@@ -14,7 +16,10 @@ import { processMath } from "../math/processMath.js";
  */
 export function doStatMath(value: string): string {
 	const parsers = {
+		/** we don't want to do math on urls */
 		url: UrlRegExp,
+		/** we need to avoid dice values messing with regex tests */
+		dice: DiceRegExp,
 		complex: ComplexMathRegExp,
 		simple: SimpleMathRegExp,
 		posNeg: PosNegNumberRegExp,
