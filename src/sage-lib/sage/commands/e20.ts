@@ -457,6 +457,9 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: TP
 		}
 		const activeEdgeSnagShift = getActiveEdgeSnagShiftValues(character);
 		const skillDie = skill?.die ?? "d20";
+		if (activeSkill === "Initiative" && !skill?.die && !activeEdgeSnagShift.includes("Snag")) {
+			activeEdgeSnagShift.push("Snag");
+		}
 		const { shiftedDie, shiftArrow, rollable, label } = shiftDie(skillDie, activeEdgeSnagShift);
 		const plus = shiftedDie === "d20" ? "" : "+";
 		const specStar = specialization ? "*" : "";
