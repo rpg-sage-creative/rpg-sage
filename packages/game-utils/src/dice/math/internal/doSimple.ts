@@ -100,7 +100,11 @@ export function doSimple(input: string): string {
 
 			const firstChar = result.trimStart()[0];
 			if (firstChar !== "-" && firstChar !== "+") {
-				result = "+" + result;
+				// remove () from prepped and trim so we can see if it had a leading +/-
+				const cleanedPrepped = prepped.replaceAll("(", "").replaceAll(")", "").trim()
+				if (cleanedPrepped.startsWith("+") || cleanedPrepped.startsWith("-")) {
+					result = "+" + result;
+				}
 			}
 
 			return hasPipes ? `||${result}||` : result;
