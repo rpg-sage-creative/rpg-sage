@@ -653,7 +653,7 @@ export class GameCharacter {
 	/** returns the value for the first key that has a defined value */
 	public getNumber(...keys: string[]): number | undefined {
 		for (const key of keys) {
-			const stat = this.getStat(key, true);
+			const stat = this.getStat(key, { includeKey:true, isGetNumber:true });
 			if (stat.isDefined) {
 				return stat.hasPipes
 					? numberOrUndefined(stat.unpiped)
@@ -721,8 +721,16 @@ export class GameCharacter {
 	public getStat(key: string): string | null;
 	/** @deprecated start using getNumber or getString */
 	public getStat(key: string, includeKey: true): StatResults<string>;
-	public getStat(key: string, includeKey?: boolean): StatResults<string> | string | null {
-		const keyLower = key.toLowerCase() as Lowercase<string>;
+	public getStat<Options extends { includeKey:true; }>(key: string, options: Options): StatResults<string>;
+	public getStat(key: string, options?: true | { includeKey?:boolean; isGetNumber?:boolean; keyLower?:Lowercase<string>; }): StatResults<string> | string | null;
+	public getStat(key: string, options?: true | { includeKey?:boolean; isGetNumber?:boolean; keyLower?:Lowercase<string>; }): StatResults<string> | string | null {
+		const {
+			includeKey,
+			isGetNumber,
+			keyLower = key.toLowerCase() as Lowercase<string>
+		} = options === true
+			? { includeKey:true }
+			: options ?? {};
 
 		// shortcut to easily return as the args request
 		const ret = (casedKey = key, value: Optional<number | string> = null): StatResults<string> | string | null => {
@@ -941,7 +949,7 @@ export class GameCharacter {
 		}
 
 		// we have to exclude keys ending in ".dots.values" to avoid recursion from this.hasTrackerDots(key)
-		if (!isMetaStatKey(key, keyLower)) {
+		if (!isGetNumber) {
 			const dotsStatKey = this.hasTrackerDots(key)
 				? key
 				: parseTrackerDots(key)?.statKey;
