@@ -8,16 +8,17 @@ import type { DiceCore as baseDiceCore, DiceGroupCore as baseDiceGroupCore, Dice
 type DiceSystem = { DiceGroup:typeof baseDiceGroup; DiceGroupRoll:typeof baseDiceGroupRoll; };
 const diceSystems = new Map<GameSystemType, DiceSystem>();
 
-let gameSystems: GameSystem[] | undefined = getGameSystems();
-for (const gameSystem of gameSystems) {
-	// we only have a dice for systems that have a their code and dice the same
-	if (gameSystem.dice === gameSystem.code) {
-		const diceCode = gameSystem.type ? gameSystem.dice.toLowerCase() : "base";
-		const { DiceGroup, DiceGroupRoll } = await import(`../${diceCode}/index.js`) as DiceSystem;
-		diceSystems.set(gameSystem.type, { DiceGroup, DiceGroupRoll });
+(async () => {
+	let gameSystems: GameSystem[] | undefined = getGameSystems();
+	for (const gameSystem of gameSystems) {
+		// we only have a dice for systems that have a their code and dice the same
+		if (gameSystem.dice === gameSystem.code) {
+			const diceCode = gameSystem.type ? gameSystem.dice.toLowerCase() : "base";
+			const { DiceGroup, DiceGroupRoll } = await import(`../${diceCode}/index.js`) as DiceSystem;
+			diceSystems.set(gameSystem.type, { DiceGroup, DiceGroupRoll });
+		}
 	}
-}
-gameSystems = undefined;
+})();
 
 type DiceGroupParser<T extends baseTDiceGroup = baseTDiceGroup> = (diceString: string, diceOutputType?: DiceOutputType, diceSecretMethodType?: DiceSecretMethodType, critMethodType?: DiceCriticalMethodType) => T;
 
