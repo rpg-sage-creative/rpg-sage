@@ -24,16 +24,22 @@ export function doStatMath(value: string): string {
 		simple: SimpleMathRegExp,
 		posNeg: PosNegNumberRegExp,
 	};
-	const tokens = tokenize(value, parsers);
-	// process other math functions on non-dice parts of the value
-	const processed = tokens.map(({ token, key }) => {
-		switch(key) {
-			case "url": // we detect urls so that we can avoid processing / as division
-			case "complex": return processMath(token);
-			case "simple": return processMath(token);
-			case "posNeg": return doPosNeg(token);
-			default: return token;
-		}
-	});
-	return processed.join("");
+	let before = value;
+	let after = value;
+	do {
+		before = after;
+		const tokens = tokenize(before, parsers);
+		// process other math functions on non-dice parts of the value
+		const processed = tokens.map(({ token, key }) => {
+			switch(key) {
+				case "url": // we detect urls so that we can avoid processing / as division
+				case "complex": return processMath(token);
+				case "simple": return processMath(token);
+				case "posNeg": return doPosNeg(token);
+				default: return token;
+			}
+		});
+		after = processed.join("");
+	}while (before !== after);
+	return after;
 }

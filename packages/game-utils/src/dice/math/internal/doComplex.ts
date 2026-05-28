@@ -3,6 +3,7 @@ import { regex } from "regex";
 import { cleanPipes } from "../../../utils/pipes/cleanPipes.js";
 import { unpipe } from "../../../utils/pipes/unpipe.js";
 import { doSimple, OrSpoileredSimpleMathRegExp } from "./doSimple.js";
+import { reapplySign } from "./reapplySign.js";
 
 type SageMathFunction = keyof typeof SageMath;
 
@@ -85,10 +86,11 @@ export function doComplex(input: string): string {
 		output = output.replace(ComplexMathRegExpG, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _posNegSigns: string | undefined, _simpleMath: string) => {
 			// if (!allowSpoilers && unpipe(_).hasPipes) return _;
 
-			let hasPipes = false;
+			// do we need pipes in the return value?
+			let retPipes = false;
 
 			const retVal = (result: string | number) => {
-				return hasPipes ? `||${result}||` : String(result);
+				return retPipes ? `||${result}||` : String(result);
 			};
 
 			// handle a math function
@@ -98,7 +100,7 @@ export function doComplex(input: string): string {
 				// check function args for pipes
 				const functionArgsPipeInfo = unpipe(_functionArgs);
 				// update hasPips for the retVal
-				hasPipes = functionArgsPipeInfo.hasPipes;
+				retPipes = functionArgsPipeInfo.hasPipes;
 				// split on space,space and convert to numbers
 				const functionArgs = functionArgsPipeInfo.unpiped.split(",").map(s => +doSimple(s.trim()));
 				// do the math
@@ -107,23 +109,25 @@ export function doComplex(input: string): string {
 				return retVal(result);
 			}
 
-			const simpleMathPipeInfo = unpipe(_simpleMath);
+			const { hasPipes, unpiped } = unpipe(_simpleMath);
 
-			hasPipes = simpleMathPipeInfo.hasPipes;
+			retPipes = hasPipes;
 
 			// handle a multiplier
 			if (_multiplier !== undefined) {
 				// return the new math so that it can be reprocessed
-				return retVal(`${_multiplier}*${doSimple(simpleMathPipeInfo.unpiped)}`);
+				return retVal(`${_multiplier}*${doSimple(unpiped)}`);
 			}
 
 			if (_posNegSigns !== undefined) {
 				//
-				return retVal(`${doSimple(_posNegSigns + simpleMathPipeInfo.unpiped)}`);
+				return retVal(`${doSimple(_posNegSigns + unpiped)}`);
 			}
 
-			// handle parentheses
-			return retVal(`${doSimple(simpleMathPipeInfo.unpiped)}`);
+			// handle parentheses with simple math
+			const simpleResults = doSimple(unpiped);
+			const reapplyResults = reapplySign("("+unpiped+")", simpleResults);
+			return retVal(`${reapplyResults}`);
 		});
 	}
 

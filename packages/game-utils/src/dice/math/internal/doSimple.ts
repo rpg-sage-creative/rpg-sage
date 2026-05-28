@@ -3,6 +3,7 @@ import { regex } from "regex";
 import { unpipe } from "../../../utils/pipes/unpipe.js";
 import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
 import { evalMath } from "./evalMath.js";
+import { reapplySign } from "./reapplySign.js";
 
 export const SimpleMathRegExp = regex()`
 	(^|\b)                           # ensure there is a wordbreak at the start
@@ -13,22 +14,13 @@ export const SimpleMathRegExp = regex()`
 		|
 		\g<orSpoiledPosNeg>      # decimal number w/ multiple +/- chars
 		\g<additionalMath>*      # optional additional math
-
 	)
-	(\b|$)                           # ensure there is a wordbreak at the end
+	#(\b|$)                           # ensure there is a wordbreak at the end
 
 	(?(DEFINE)
 		(?<optPosNegSigns> [\-+\s]* )
 
-		(?<number> ${NumberRegExp} )
-		(?<signedNumber>
-			(
-				\s*              # optional whitespace
-				[\-+]            # pos/neg signs
-				\s*              # optional whitespace
-			)?
-			\g<number>           # base number regex
-		)
+		(?<signedNumber> ${NumberRegExp} )
 		(?<orSpoileredNumber> \|\| \g<signedNumber> \|\| | \g<signedNumber> )
 		(?<orWrappedNumber> \( \g<orSpoileredNumber> \) | \g<orSpoileredNumber> )
 
@@ -59,14 +51,6 @@ export function hasSimple(value: string): boolean {
 	return SimpleMathRegExp.test(value);
 }
 
-/** for unwrapNumbers() */
-const unwrapper = /\(\s*\d+\s*\)/g;
-
-/** unwraps whole numbers; (4) becomes 4 */
-function unwrapNumbers(input: string): string {
-	return input.replace(unwrapper, match => match.slice(1, -1));
-}
-
 /** for prepExponents() */
 const caretMatcher = /\^/g;
 
@@ -92,22 +76,14 @@ export function doSimple(input: string): string {
 
 		// replace all matches
 		output = output.replace(SimpleMathRegExpG, value => {
-			const { hasPipes, unpiped } = unpipe(unwrapNumbers(value));
+			const { hasPipes, unpiped } = unpipe(value);
 
 			const prepped = prepExponents(prepPosNegSigns(unpiped));
 
-			let result = evalMath(prepped);
+			const evalResults = evalMath(prepped);
+			const reapplyResults = reapplySign(prepped, evalResults);
 
-			const firstChar = result.trimStart()[0];
-			if (firstChar !== "-" && firstChar !== "+") {
-				// remove () from prepped and trim so we can see if it had a leading +/-
-				const cleanedPrepped = prepped.replaceAll("(", "").replaceAll(")", "").trim()
-				if (cleanedPrepped.startsWith("+") || cleanedPrepped.startsWith("-")) {
-					result = "+" + result;
-				}
-			}
-
-			return hasPipes ? `||${result}||` : result;
+			return hasPipes ? `||${reapplyResults}||` : reapplyResults;
 		});
 
 		// if nothing changed, break out of the loop
