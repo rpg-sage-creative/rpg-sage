@@ -1,9 +1,12 @@
 import { globalizeRegex, PipedContentRegExp, type Optional, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { trimWithPadding } from "../trimWithPadding.js";
 
 const PipedContentRegExpG = globalizeRegex(PipedContentRegExp);
 
 export type UnpipeResults<Type extends string | undefined | null> = {
+	endPad: string;
 	hasPipes: boolean;
+	startPad: string;
 	unpiped: Type;
 	value: Type;
 };
@@ -15,18 +18,20 @@ export function unpipe(value: OrUndefined<string>): UnpipeResults<OrUndefined<st
 export function unpipe(value: Optional<string>): UnpipeResults<Optional<string>>;
 export function unpipe(value: Optional<string>): UnpipeResults<Optional<string>> {
 	if (!value) {
-		return { value, hasPipes:false, unpiped:value };
+		return { value, hasPipes:false, unpiped:value, startPad:"", endPad:"" };
 	}
+
+	const { endPad, startPad, trimmed } = trimWithPadding(value);
 
 	// check for piped "hidden" values
 	let hasPipes = false;
 
 	// remove pipes
-	let unpiped = value;
+	let unpiped = trimmed;
 	while (PipedContentRegExp.test(unpiped)) {
 		hasPipes = true;
 		unpiped = unpiped.replace(PipedContentRegExpG, piped => piped.slice(2, -2));
 	};
 
-	return { value, hasPipes, unpiped };
+	return { value, hasPipes, unpiped, startPad, endPad };
 }

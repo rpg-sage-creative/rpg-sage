@@ -1,11 +1,8 @@
-function parse(value: string) {
-	// trim start and capture padding
-	const startTrimmed = value.trimStart();
-	const startPad = value.slice(0, value.length - startTrimmed.length);
+import { trimWithPadding } from "../../../utils/trimWithPadding.js";
 
-	// trim end and capture padding
-	const trimmed = value.trimEnd();
-	const endPad = value.slice(trimmed.length);
+/** Parses a string by trimming (and keeping padding) and testing for leading +/- as well as () wrapping. */
+function parse(value: string) {
+	const { endPad, startPad, trimmed } = trimWithPadding(value);
 
 	const prefix = trimmed[0];
 	const minus = prefix === "-";

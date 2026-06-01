@@ -88,9 +88,12 @@ export function doComplex(input: string): string {
 
 			// do we need pipes in the return value?
 			let retPipes = false;
+			let startPad = "";
+			let endPad = "";
 
 			const retVal = (result: string | number) => {
-				return retPipes ? `||${result}||` : String(result);
+				const resultString = retPipes ? `||${result}||` : String(result);
+				return startPad + resultString + endPad;
 			};
 
 			// handle a math function
@@ -109,9 +112,13 @@ export function doComplex(input: string): string {
 				return retVal(result);
 			}
 
-			const { hasPipes, unpiped } = unpipe(_simpleMath);
+			const unpipeResults = unpipe(_simpleMath);
 
-			retPipes = hasPipes;
+			retPipes = unpipeResults.hasPipes;
+			startPad = unpipeResults.startPad;
+			endPad = unpipeResults.endPad;
+
+			const { unpiped } = unpipeResults;
 
 			// handle a multiplier
 			if (_multiplier !== undefined) {

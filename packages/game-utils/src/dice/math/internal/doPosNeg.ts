@@ -40,14 +40,15 @@ export function doPosNeg(input: string): string {
 	while (OrSpoileredPosNegNumberRegExp.test(output)) {
 		// replace all matches
 		output = output.replace(OrSpoileredPosNegNumberRegExpG, value => {
-			const { hasPipes, unpiped } = unpipe(value);
+			const { hasPipes, unpiped, startPad, endPad } = unpipe(value);
 
 			// by spacing the -- or ++ characters, the eval can properly process them
 			const prepped = prepPosNegSigns(unpiped);
 
 			const result = evalMath(prepped);
 
-			return hasPipes ? `||${result}||` : result;
+			const resultString = hasPipes ? `||${result}||` : result;
+			return startPad + resultString + endPad;
 		});
 	}
 	return output;

@@ -6,7 +6,7 @@ import { evalMath } from "./evalMath.js";
 import { reapplySign } from "./reapplySign.js";
 
 export const SimpleMathRegExp = regex()`
-	(^|\b)                           # ensure there is a wordbreak at the start
+	(^|\b|(?<!\w))                           # ensure there is a wordbreak at the start
 	\g<optPosNegSigns>
 	(
 		\g<orWrappedNumber>      # pos/neg decimal number
@@ -76,14 +76,15 @@ export function doSimple(input: string): string {
 
 		// replace all matches
 		output = output.replace(SimpleMathRegExpG, value => {
-			const { hasPipes, unpiped } = unpipe(value);
+			const { hasPipes, unpiped, startPad, endPad } = unpipe(value);
 
 			const prepped = prepExponents(prepPosNegSigns(unpiped));
 
 			const evalResults = evalMath(prepped);
 			const reapplyResults = reapplySign(prepped, evalResults);
 
-			return hasPipes ? `||${reapplyResults}||` : reapplyResults;
+			const resultString = hasPipes ? `||${reapplyResults}||` : reapplyResults;
+			return startPad + resultString + endPad;
 		});
 
 		// if nothing changed, break out of the loop
