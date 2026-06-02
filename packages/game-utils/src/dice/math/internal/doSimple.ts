@@ -1,9 +1,8 @@
 import { globalizeRegex, NumberRegExp } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { unpipe } from "../../../utils/pipes/unpipe.js";
-import { OrSpoileredPosNegNumberRegExp, prepPosNegSigns } from "./doPosNeg.js";
-import { evalMath } from "./evalMath.js";
-import { reapplySign } from "./reapplySign.js";
+import { doPipedMath } from "./doPipedMath.js";
+import { OrSpoileredPosNegNumberRegExp } from "./doPosNeg.js";
+import { wrapRegex } from "./wrapRegex.js";
 
 export const SimpleMathRegExp = regex()`
 	(^|\b|(?<!\w))                           # ensure there is a wordbreak at the start
@@ -20,9 +19,7 @@ export const SimpleMathRegExp = regex()`
 	(?(DEFINE)
 		(?<optPosNegSigns> [\-+\s]* )
 
-		(?<signedNumber> ${NumberRegExp} )
-		(?<orSpoileredNumber> \|\| \g<signedNumber> \|\| | \g<signedNumber> )
-		(?<orWrappedNumber> \( \g<orSpoileredNumber> \) | \g<orSpoileredNumber> )
+		(?<orWrappedNumber> ${wrapRegex(NumberRegExp, { parens:true, pipes:true, or:true })} )
 
 		(?<additionalMath>
 			\s*                  # optional whitespace
@@ -35,11 +32,7 @@ export const SimpleMathRegExp = regex()`
 	)
 `;
 
-export const OrSpoileredSimpleMathRegExp = regex()`
-	\|\| ${SimpleMathRegExp} \|\|
-	|
-	${SimpleMathRegExp}
-`;
+export const OrSpoileredSimpleMathRegExp = wrapRegex(SimpleMathRegExp, { pipes:true, or:true });
 
 const SimpleMathRegExpG = globalizeRegex(SimpleMathRegExp);
 
@@ -51,14 +44,6 @@ export function hasSimple(value: string): boolean {
 	return SimpleMathRegExp.test(value);
 }
 
-/** for prepExponents() */
-const caretMatcher = /\^/g;
-
-/** replace the caret (math exponent) with ** (code exponent) */
-function prepExponents(input: string): string {
-	return input.replace(caretMatcher, "**");
-}
-
 /**
  * @internal
  * Replaces all instances of simple math with the resulting calculated value.
@@ -67,28 +52,5 @@ function prepExponents(input: string): string {
  * Any math that throws an error will have "(ERR)" instead of a numeric result.
  */
 export function doSimple(input: string): string {
-	let output = input;
-
-	// iterate while we have matches
-	while (SimpleMathRegExp.test(output)) {
-		// track value before changes
-		const before = output;
-
-		// replace all matches
-		output = output.replace(SimpleMathRegExpG, value => {
-			const { hasPipes, unpiped, startPad, endPad } = unpipe(value);
-
-			const prepped = prepExponents(prepPosNegSigns(unpiped));
-
-			const evalResults = evalMath(prepped);
-			const reapplyResults = reapplySign(prepped, evalResults);
-
-			const resultString = hasPipes ? `||${reapplyResults}||` : reapplyResults;
-			return startPad + resultString + endPad;
-		});
-
-		// if nothing changed, break out of the loop
-		if (before === output) break;
-	}
-	return output;
+	return doPipedMath(input, SimpleMathRegExp, SimpleMathRegExpG);
 }

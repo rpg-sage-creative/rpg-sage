@@ -19,8 +19,8 @@ export function trimWithPadding(value: Optional<string>): Result<Optional<string
 	const startPad = value.slice(0, value.length - startTrimmed.length);
 
 	// trim end and capture padding
-	const trimmed = value.trimEnd();
-	const endPad = value.slice(trimmed.length);
+	const trimmed = startTrimmed.trimEnd();
+	const endPad = startTrimmed.slice(trimmed.length);
 
 	return { endPad, startPad, trimmed };
 }

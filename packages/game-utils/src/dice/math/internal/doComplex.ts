@@ -4,6 +4,7 @@ import { cleanPipes } from "../../../utils/pipes/cleanPipes.js";
 import { unpipe } from "../../../utils/pipes/unpipe.js";
 import { doSimple, OrSpoileredSimpleMathRegExp } from "./doSimple.js";
 import { reapplySign } from "./reapplySign.js";
+import { wrapRegex } from "./wrapRegex.js";
 
 type SageMathFunction = keyof typeof SageMath;
 
@@ -64,9 +65,7 @@ export const ComplexMathRegExp = regex("i")`
 	(?(DEFINE)
 		(?<numberOrSimple> \g<orSpoileredNumber> | \g<orSpoileredSimpleMath> )
 		(?<orSpoileredSimpleMath> ${OrSpoileredSimpleMathRegExp} )
-		(?<orWrappedNumber> \( \g<orSpoileredNumber> \) | \g<orSpoileredNumber> )
-		(?<orSpoileredNumber> \|\| \g<number> \|\| | \g<number> )
-		(?<number> ${NumberRegExp} )
+		(?<orSpoileredNumber> ${wrapRegex(NumberRegExp, { pipes:true, or:true })} )
 	)
 `;
 
