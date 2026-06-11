@@ -1,6 +1,6 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { generateSnowflake, isDefined, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceDropKeepType, isGradeFailure } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, createTestRegExp, DiceDropKeepType, isGradeFailure } from "@rsc-utils/game-utils";
 import {
 	createValueTestData,
 	decreaseGrade,
@@ -29,15 +29,15 @@ import type {
 //#region Tokenizer
 
 const Pf2eParsers = {
-	"special": /(deadly|fatal)\s*\d?d\d+/i,
-	"target": /(?<![a-z])(vs\s*ac|vs\s*dc|ac|dc|vs)\s*(\d+\b|\|\|\d+\|\|)/i,
+	special: /(deadly|fatal)\s*\d?d\d+/i,
+	target: createTestRegExp(["vs ac", "vs dc", "ac", "dc", "vs"]),
 
 	// vs type
-	"concealed": /(?<![a-z])(vs\s*conceal(?:ed|ment)?)\b/i,
-	"deafened": /(?<![a-z])(vs\s*deaf(?:ened)?)\b/i,
-	"hidden": /(?<![a-z])(vs\s*hidden)\b/i,
-	"stupefied": /(?<![a-z])(vs\s*stup[ie]fied)\s*(\d+)\b/i,
-	"undetected": /(?<![a-z])(vs\s*undetected)\b/i,
+	concealed: /(?<![a-z])(vs\s*conceal(?:ed|ment)?)\b/i,
+	deafened: /(?<![a-z])(vs\s*deaf(?:ened)?)\b/i,
+	hidden: /(?<![a-z])(vs\s*hidden)\b/i,
+	stupefied: /(?<![a-z])(vs\s*stup[ie]fied)\s*(\d+)\b/i,
+	undetected: /(?<![a-z])(vs\s*undetected)\b/i,
 
 	// vs or just type
 	// "concealed": /((?:vs\s*)?conceal(?:ed|ment)?)/i,
@@ -113,6 +113,7 @@ function parseTargetData(token: TokenData): OrUndefined<TTargetData> {
 	if (token.matches) {
 		const type = parseTargetType(token.matches[0] ?? "");
 		let { value, hidden } = parseTestTargetValue(token.matches[1] ?? "");
+		// corrects static dcs like concealed, updates stupefied by adding 5, keeps ac/dc/vs
 		value = parseTargetValue(type, value);
 		return { type, value, hidden, raw:token.token };
 	}

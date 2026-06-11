@@ -1,6 +1,6 @@
 import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { generateSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, createTestRegExp } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import {
 	createValueTestData,
@@ -23,13 +23,16 @@ import type {
 } from "../base/types.js";
 
 //#region Tokenizer
+
 const QuestParsers = {
 	dice: /\s*(1)?\s*d\s*(20)/i,
-	target: /(?<![a-z])(vs)\s*(\d+\b|\|\|\d+\|\|)/i,
+	target: createTestRegExp(["vs"]),
 };
+
 function getParsers(): TokenParsers {
 	return QuestParsers;
 }
+
 function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData): T {
 	if (token.key === "dice") {
 		core.count = 1;

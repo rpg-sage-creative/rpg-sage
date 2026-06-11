@@ -1,7 +1,7 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, generateSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
-import { DiceDropKeep, DiceDropKeepType, cleanDicePartDescription, removeDesc, type DiceDropKeepData } from "@rsc-utils/game-utils";
+import { DiceDropKeep, DiceDropKeepType, cleanDicePartDescription, createTestRegExp, removeDesc, type DiceDropKeepData } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import {
 	DieRollGrade,
@@ -35,12 +35,14 @@ function strike(value: string): string {
 	return `<s>${value}</s>`;
 }
 
-function detick(value: string): string {
-	return value.replace(/`/g, "");
+function dequoteDetickSpoil(value: Optional<string>): string {
+	if (!value) return "";
+	return replaceSpoiler(dequote(value).replaceAll("`", ""));
 }
 
+const ReplaceSpoilerRegExp = /\|{2}[^|]+\|{2}/g;
 function replaceSpoiler(value: string): string {
-	return value.replace(/\|{2}[^|]+\|{2}/g, "??");
+	return value.replace(ReplaceSpoilerRegExp, "??");
 }
 
 //#endregion
@@ -59,7 +61,7 @@ const _parsers = {
 	noSort: /(ns)/i,
 	mod: /([-+*/])\s*(\d+)(?!d\d)/i,
 	quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
-	test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i,
+	test: createTestRegExp(["gteq","gte","gt","lteq","lte","lt","eq","=","==",">=",">","<=","<"]),
 };
 
 /** Returns a new object with the default dice parsers for use with Tokenizer */
@@ -614,12 +616,12 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			const escapedTotal = `\` ${total} \``;
 
 			const output = desc
-				? `${emoji} '${replaceSpoiler(detick(dequote(desc)))}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(removeDesc(description, desc))}`
+				? `${emoji} '${dequoteDetickSpoil(desc)}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(removeDesc(description, desc))}`
 				: `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(description)}`;
 			return correctEscapedMentions(cleanWhitespace(output), { emoji:true, users:true });
 		}else {
 			const output = desc
-				? `${xxs} ${ZERO_WIDTH_SPACE}  \`${replaceSpoiler(detick(dequote(desc)))}\` ${UNICODE_LEFT_ARROW} ${replaceSpoiler(removeDesc(description, desc))}`
+				? `${xxs} ${ZERO_WIDTH_SPACE}  \`${dequoteDetickSpoil(desc)}\` ${UNICODE_LEFT_ARROW} ${replaceSpoiler(removeDesc(description, desc))}`
 				: `${xxs} ${ZERO_WIDTH_SPACE} ${UNICODE_LEFT_ARROW} ${replaceSpoiler(description)}`;
 			return correctEscapedMentions(cleanWhitespace(output), { emoji:true, users:true });
 		}
@@ -628,7 +630,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 		const xxs = this.toStringXXS(hideRolls);
 		const desc = this.dice.diceParts.find(dp => dp.hasDescription)?.description;
 		const output = desc
-			? `${xxs} ${ZERO_WIDTH_SPACE} \`${replaceSpoiler(detick(dequote(desc))) ?? ""}\``
+			? `${xxs} ${ZERO_WIDTH_SPACE} \`${dequoteDetickSpoil(desc)}\``
 			: xxs;
 		return correctEscapedMentions(cleanWhitespace(output), { emoji:true, users:true });
 	}

@@ -12,7 +12,7 @@ export const PosNegNumberRegExp = regex()`
 	(\.\d+)?   # optional decimal
 `;
 
-export const OrSpoileredPosNegNumberRegExp = wrapRegex(PosNegNumberRegExp, { pipes:true, or:true });
+export const OrSpoileredPosNegNumberRegExp = wrapRegex(PosNegNumberRegExp, ["||||"], { or:true });
 
 const OrSpoileredPosNegNumberRegExpG = globalizeRegex(OrSpoileredPosNegNumberRegExp);
 

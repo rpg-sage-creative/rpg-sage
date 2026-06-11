@@ -5,7 +5,7 @@ import { OrSpoileredPosNegNumberRegExp } from "./doPosNeg.js";
 import { wrapRegex } from "./wrapRegex.js";
 
 export const SimpleMathRegExp = regex()`
-	(^|\b|(?<!\w))                           # ensure there is a wordbreak at the start
+	(^|\b|(?<!\w))               # ensure there is a wordbreak at the start
 	\g<optPosNegSigns>
 	(
 		\g<orWrappedNumber>      # pos/neg decimal number
@@ -14,12 +14,12 @@ export const SimpleMathRegExp = regex()`
 		\g<orSpoiledPosNeg>      # decimal number w/ multiple +/- chars
 		\g<additionalMath>*      # optional additional math
 	)
-	#(\b|$)                           # ensure there is a wordbreak at the end
+	#(\b|$)                      # ensure there is a wordbreak at the end
 
 	(?(DEFINE)
 		(?<optPosNegSigns> [\-+\s]* )
 
-		(?<orWrappedNumber> ${wrapRegex(NumberRegExp, { parens:true, pipes:true, or:true })} )
+		(?<orWrappedNumber> ${wrapRegex(NumberRegExp, ["||||", "()"], { or:true })} )
 
 		(?<additionalMath>
 			\s*                  # optional whitespace
@@ -32,7 +32,7 @@ export const SimpleMathRegExp = regex()`
 	)
 `;
 
-export const OrSpoileredSimpleMathRegExp = wrapRegex(SimpleMathRegExp, { pipes:true, or:true });
+export const OrSpoileredSimpleMathRegExp = wrapRegex(SimpleMathRegExp, ["||||"], { or:true });
 
 const SimpleMathRegExpG = globalizeRegex(SimpleMathRegExp);
 

@@ -1,6 +1,6 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { generateSnowflake, mapFirst, numberOrUndefined, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, createTestRegExp } from "@rsc-utils/game-utils";
 import {
 	createValueTestData,
 	DieRollGrade,
@@ -26,7 +26,7 @@ import type {
 
 const Sf1eParsers = {
 	crits: /crit\s*(?:(\d+)\+?)?\s*(?:x(\d+))?/i,
-	target: /(?<![a-z])(eac|kac|ac|dc)\s*(\d+\b|\|\|\d+\|\|)/i,
+	target: createTestRegExp(["eac", "kac", "ac", "dc"]),
 };
 
 let _parsers: TokenParsers;

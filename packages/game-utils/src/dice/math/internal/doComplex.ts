@@ -22,7 +22,7 @@ const SageMath = {
 };
 
 export const ComplexMathRegExp = regex("i")`
-	(?<! \w )               # ignore the entire thing if preceded by a word character
+	(^|\b|(?<!\w))                           # ensure there is a wordbreak at the start
 
 	(
 		# functions
@@ -65,7 +65,7 @@ export const ComplexMathRegExp = regex("i")`
 	(?(DEFINE)
 		(?<numberOrSimple> \g<orSpoileredNumber> | \g<orSpoileredSimpleMath> )
 		(?<orSpoileredSimpleMath> ${OrSpoileredSimpleMathRegExp} )
-		(?<orSpoileredNumber> ${wrapRegex(NumberRegExp, { pipes:true, or:true })} )
+		(?<orSpoileredNumber> ${wrapRegex(NumberRegExp, ["||||"], { or:true })} )
 	)
 `;
 
