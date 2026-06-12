@@ -5,7 +5,7 @@ import { reapplySign } from "./internal/reapplySign.js";
 const UnsafeMathRegExp = /[^\d\s\.\-+\/*%^()]/;
 
 /** for stripLeadingZeros() */
-const LeadingZeroRegExpG = /\b(?<!\d\.)0+([1-9])/g;
+const LeadingZeroRegExpG = /\b(?<!\d\.)0+(\d)/g;
 
 /**
  * Finds all numbers with leading zeros and removes the leading zeros.
