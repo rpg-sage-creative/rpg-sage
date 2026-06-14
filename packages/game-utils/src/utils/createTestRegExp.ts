@@ -49,5 +49,8 @@ export function createTestRegExp(aliases: string[]): RegExp {
 		+ valueRegExpSource
 		// end value capture group
 		+ ")"
+
+		,
+		"i"
 	);
 }
