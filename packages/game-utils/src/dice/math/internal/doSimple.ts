@@ -14,7 +14,7 @@ export const SimpleMathRegExp = regex()`
 		\g<orSpoiledPosNeg>      # decimal number w/ multiple +/- chars
 		\g<additionalMath>*      # optional additional math
 	)
-	#(\b|$)                      # ensure there is a wordbreak at the end
+	((?!\w)|\b|$)                # ensure there is a wordbreak at the end
 
 	(?(DEFINE)
 		(?<optPosNegSigns> [\-+\s]* )

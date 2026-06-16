@@ -61,6 +61,7 @@ export const ComplexMathRegExp = regex("i")`
 	)
 
 	(?! \w )                # ignore the entire thing if followed by a word character
+	#((?!\w)|\b|$)           # ensure there is a wordbreak at the end
 
 	(?(DEFINE)
 		(?<numberOrSimple> \g<orSpoileredNumber> | \g<orSpoileredSimpleMath> )
