@@ -188,6 +188,9 @@ export class DicePart<
 			return withoutDescription;
 		}
 		const sign = index && !this.isEmpty ? `${this.sign ?? "+"}` : ``;
+		// @todo consider replacing "*" (normal asterisk/multiply) with "∗" (asterisk operator; I don't like vertical alignment)
+		// @todo consider replacing "*" (normal asterisk/multiply) with "×" (times operator)
+		// @todo consider replacing "*" (normal asterisk/multiply) with escaped "\\*"
 		return `${sign} ${withoutDescription} ${this.description}`.trim();
 	}
 
