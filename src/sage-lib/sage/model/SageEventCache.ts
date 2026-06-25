@@ -15,6 +15,7 @@ import { Game, type GameCore } from "./Game.js";
 import { Server } from "./Server.js";
 import { User } from "./User.js";
 import { createClientEventLabel, type ClientEvent, type ClientEventsKey } from "./utils/createClientEventLabel.js";
+import type { GameCharacter } from "./GameCharacter.js";
 
 export type ContentFormatter = (content?: Optional<string>) => string;
 
@@ -820,6 +821,10 @@ export class SageEventCache {
 		return game as Game;
 	}
 
+	public async getOrFetchCharacter(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<GameCharacter | undefined> {
+		return await this.core.repo.getById("Character", id as Snowflake, did, uuid) as GameCharacter ?? undefined;
+	}
+
 	public async getOrFetchGame(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<Game | undefined> {
 		return await this.core.repo.getById("Game", id as Snowflake, did, uuid) as Game ?? undefined;
 	}
@@ -830,6 +835,10 @@ export class SageEventCache {
 
 	public async getOrFetchUser(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<User | undefined> {
 		return await this.core.repo.getById("User", id as Snowflake, did, uuid) as User ?? undefined;
+	}
+
+	public async saveCharacter(character: GameCharacter): Promise<boolean> {
+		return this.core.repo.write(character);
 	}
 
 	public async saveGame(game: Game): Promise<boolean> {
