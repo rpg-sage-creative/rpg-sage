@@ -12,10 +12,10 @@ import { IdRepository } from "../repo/base/IdRepository.js";
 import { ActiveBot } from "./ActiveBot.js";
 import type { Bot } from "./Bot.js";
 import { Game, type GameCore } from "./Game.js";
+import type { GameCharacter } from "./GameCharacter.js";
 import { Server } from "./Server.js";
 import { User } from "./User.js";
 import { createClientEventLabel, type ClientEvent, type ClientEventsKey } from "./utils/createClientEventLabel.js";
-import type { GameCharacter } from "./GameCharacter.js";
 
 export type ContentFormatter = (content?: Optional<string>) => string;
 
