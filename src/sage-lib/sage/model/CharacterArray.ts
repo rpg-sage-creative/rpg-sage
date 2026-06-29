@@ -10,7 +10,7 @@ type TGameCharacterOwner = Game | GameCharacter | Server | User;
 
 export class CharacterArray extends Array<GameCharacter> {
 
-	/** The type of character represented by this manager. */
+	/** The type of character represented by this array. */
 	public characterType?: TGameCharacterType;
 
 	public get gameSystem() {
@@ -29,16 +29,16 @@ export class CharacterArray extends Array<GameCharacter> {
 		if (!owner) {
 			return "Unknown";
 		}
-		if ("objectType" in owner) {
-			switch(owner.objectType) {
-				case "Game": return "Game";
-				case "Server": return "Server";
-				case "User": return "User";
-				default:
-					return "Unknown";
-			}
+		if ("scope" in owner) {
+			return owner.scope;
 		}
-		return owner.scope;
+		switch(owner.objectType) {
+			case "Game": return "Game";
+			case "Server": return "Server";
+			case "User": return "User";
+			default:
+				return "Unknown";
+		}
 	}
 
 	/** Tests to see if any characters match the given name, defaults to no recursion. */
@@ -179,21 +179,21 @@ export class CharacterArray extends Array<GameCharacter> {
 
 	//#endregion
 
-	/** Creates a new CharacterManager from the given values and optional owner / type. */
+	/** Creates a new CharacterArray from the given values and optional owner / type. */
 	public static from<T extends GameCharacterCore>(arrayLike: ArrayLike<T> | Iterable<T>): CharacterArray;
 	public static from<T extends GameCharacterCore>(arrayLike: ArrayLike<T> | Iterable<T>, owner: TGameCharacterOwner, characterType: TGameCharacterType): CharacterArray;
 	public static from<T extends GameCharacterCore>(values: ArrayLike<T> | Iterable<T>, owner?: TGameCharacterOwner, characterType?: TGameCharacterType): CharacterArray {
-		const characterManager = new CharacterArray();
-		characterManager.owner = owner ?? undefined;
-		characterManager.characterType = characterType ?? undefined;
+		const characterArray = new CharacterArray();
+		characterArray.owner = owner ?? undefined;
+		characterArray.characterType = characterType ?? undefined;
 
 		Array.from(values).forEach(core => {
 			if (!core.id) {
 				core.id = generateSnowflake();
 			}
-			characterManager.push(new GameCharacter(core, characterManager));
+			characterArray.push(new GameCharacter(core, characterArray));
 		});
 
-		return characterManager;
+		return characterArray;
 	}
 }
