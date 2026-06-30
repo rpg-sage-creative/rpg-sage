@@ -148,6 +148,7 @@ export class GameCharacter {
 		this.notes = new NoteManager(this.core.notes ?? (this.core.notes = []));
 
 		this.core.decks = this.core.decks?.map(Deck.from) ?? [];
+		this.core.objectType = "Character";
 	}
 
 	public getOrCreateDeck(deckId?: string, deckType?: DeckType): Deck {
@@ -214,6 +215,8 @@ export class GameCharacter {
 
 	/** The character's notes */
 	public notes: NoteManager;
+
+	public get objectType() { return this.core.objectType; }
 
 	private _parent?: GameCharacter | null;
 	/** The parent of a companion. */
