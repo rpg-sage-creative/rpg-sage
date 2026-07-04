@@ -77,6 +77,12 @@ export abstract class CharacterBase<
 		if (this.core.messageId) return { messageId:this.core.messageId } as MessageReference;
 		return undefined;
 	}
+
+	/**
+	 * Updates the sheetRef data if different.
+	 * Deletes legacy messageId.
+	 * Returns true if the new value is different from the original value.
+	 */
 	public setSheetRef(msgRef: Optional<MessageReference>): boolean {
 		let changed = false;
 		if (msgRef) {
@@ -98,6 +104,8 @@ export abstract class CharacterBase<
 		if (this.core.messageId) delete this.core.messageId;
 		return changed;
 	}
+
+	/** Returns true if sheetRef is defined (or legacy messageId is defined). */
 	public get hasSheetRef(): boolean { return this.core.sheetRef !== undefined || this.core.messageId !== undefined; }
 
 	/** The id value from the characterId's User. */
