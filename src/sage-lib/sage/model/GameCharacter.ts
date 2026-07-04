@@ -202,7 +202,15 @@ export class GameCharacter {
 	/** A list of the character's last messages by channel. */
 	public get lastMessages(): SageMessageReference[] { return this.core.lastMessages as SageMessageReference[]; }
 
-	public get macros() { return this.core.macros ?? (this.core.macros = []); }
+	public get macros() { return this.core.macros ??= []; }
+
+	/** this combines user defined character macros with automatically created macros (attack/spell from imported data) */
+	public getAllMacros() {
+		const p20 = this.pathbuilder;
+		const attackMacros = p20?.getAttackMacros() ?? [];
+		const spellMacros = p20?.getSpellMacros() ?? [];
+		return this.macros.concat(attackMacros, spellMacros);
+	}
 
 	/** The character's name */
 	public get name(): string {

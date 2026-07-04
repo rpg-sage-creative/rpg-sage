@@ -70,11 +70,7 @@ function getMacrosFromChar(char: Optional<GameCharacter>, userId?: Snowflake, ov
 	const out: DiceMacroBase[] = [];
 	if (!char) return out;
 
-	const macros = [
-		...char.macros,
-		...(char.pathbuilder?.getAttackMacros() ?? []),
-		...(char.pathbuilder?.getSpellMacros() ?? []),
-	];
+	const macros = char.getAllMacros();
 
 	// if the char belongs to the active user
 	if (char.userDid === userId || override) {
