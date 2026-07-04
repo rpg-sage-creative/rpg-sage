@@ -248,7 +248,7 @@ export class GameCharacter {
 	}
 
 	private _essence20: TEssence20Character | null | undefined;
-	public get essence20(): TEssence20Character | null {
+	private get essence20(): TEssence20Character | null {
 		if (this._essence20 === undefined) {
 			if (this.core.essence20) {
 				this._essence20 = loadCharacterCore(this.core.essence20 as TEssence20CharacterCore) ?? null;
@@ -265,7 +265,7 @@ export class GameCharacter {
 	public set essence20Id(essence20Id: Optional<string>) { this.core.essence20Id = essence20Id ?? undefined; }
 
 	private _hephaistos: HephaistosCharacterSF1e | null | undefined;
-	public get hephaistos(): HephaistosCharacterSF1e | null {
+	private get hephaistos(): HephaistosCharacterSF1e | null {
 		if (this._hephaistos === undefined) {
 			if (this.core.hephaistos) {
 				this._hephaistos = new HephaistosCharacterSF1e(this.core.hephaistos as HephaistosCharacterCoreSF1e);
@@ -282,7 +282,7 @@ export class GameCharacter {
 	public set hephaistosId(hephaistosId: Optional<string>) { this.core.hephaistosId = hephaistosId ?? undefined; }
 
 	private _pathbuilder: PathbuilderCharacter | null | undefined;
-	public get pathbuilder(): PathbuilderCharacter | null {
+	private get pathbuilder(): PathbuilderCharacter | null {
 		if (this._pathbuilder === undefined) {
 			if (this.core.pathbuilder) {
 				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder as PathbuilderCharacterCore);
@@ -297,6 +297,10 @@ export class GameCharacter {
 	/** @todo figure out what this id is and what it represents */
 	public get pathbuilderId(): string | undefined { return this.core.pathbuilderId; }
 	public set pathbuilderId(pathbuilderId: Optional<string>) { this.core.pathbuilderId = pathbuilderId ?? undefined; }
+
+	public async fetchImportedCharacter(_eventCache: unknown): Promise<PathbuilderCharacter | HephaistosCharacterSF1e | TEssence20Character | undefined> {
+		return this.pathbuilder ?? this.essence20 ?? this.hephaistos ?? undefined;
+	}
 
 	/** The image used to represent the character to the left of the post. */
 	public get tokenUrl(): string | undefined { return this.core.tokenUrl; }

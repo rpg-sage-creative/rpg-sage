@@ -54,7 +54,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 
 	renderableContent.append("");
 
-	const { sheetRef } = character.essence20 ?? character.pathbuilder ?? character.hephaistos ?? { };
+	const { sheetRef } = await character.fetchImportedCharacter(sageMessage.eventCache) ?? { };
 	if (sheetRef) {
 		renderableContent.append(`<b>Char Sheet</b> ${toMessageUrl(sheetRef)}`);
 	}
