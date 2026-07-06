@@ -1,5 +1,5 @@
 import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type AutoChannelData, type DeckCore, type DeckType, type GameSystem, type SageCharacterCore, type SageMessageReferenceCore } from "@rsc-sage/data-layer";
-import { applyChanges, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, debug, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
@@ -13,7 +13,7 @@ import { HephaistosCharacterSF1e } from "../../../gameSystems/sf1e/characters/He
 import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/import/types.js";
 import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
-import { loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
+import { loadCharacter, loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
 import { SageMessageReference } from "../repo/SageMessageReference.js";
 import { CharacterArray } from "./CharacterArray.js";
 import { NoteManager } from "./NoteManager.js";
@@ -95,6 +95,20 @@ export type GameCharacterCore = Omit<SageCharacterCore, keyof SageCharacterCoreO
 export type AutoChannelResult = {
 	char: GameCharacter;
 	data: AutoChannelData;
+};
+
+type ImportedCharacter = {
+	byId?: boolean;
+	char: TEssence20Character;
+	type: "E20";
+} | {
+	byId?: boolean;
+	char: HephaistosCharacterSF1e;
+	type: "H1E";
+} | {
+	byId?: boolean;
+	char: PathbuilderCharacter;
+	type: "PB2E";
 };
 
 export class GameCharacter {
@@ -206,10 +220,14 @@ export class GameCharacter {
 
 	/** this combines user defined character macros with automatically created macros (attack/spell from imported data) */
 	public getAllMacros() {
-		const p20 = this.pathbuilder;
-		const attackMacros = p20?.getAttackMacros() ?? [];
-		const spellMacros = p20?.getSpellMacros() ?? [];
-		return this.macros.concat(attackMacros, spellMacros);
+		const { importedChar } = this;
+		if (importedChar?.type === "PB2E") {
+			const { char } = importedChar;
+			const attackMacros = char.getAttackMacros();
+			const spellMacros = char.getSpellMacros();
+			return this.macros.concat(attackMacros, spellMacros);
+		}
+		return this.macros.slice();
 	}
 
 	/** The character's name */
@@ -247,60 +265,211 @@ export class GameCharacter {
 		return owner.scope;
 	}
 
-	private _essence20: TEssence20Character | null | undefined;
-	private get essence20(): TEssence20Character | null {
-		if (this._essence20 === undefined) {
-			if (this.core.essence20) {
-				this._essence20 = loadCharacterCore(this.core.essence20 as TEssence20CharacterCore) ?? null;
-			}
-			if (this.core.essence20Id) {
-				this._essence20 = loadCharacterSync(this.core.essence20Id) ?? null;
-			}
-		}
-		return this._essence20 ?? null;
-	}
+
+	//#region imported character logic
 
 	/** @todo figure out what this id is and what it represents */
 	public get essence20Id(): string | undefined { return this.core.essence20Id; }
 	public set essence20Id(essence20Id: Optional<string>) { this.core.essence20Id = essence20Id ?? undefined; }
 
-	private _hephaistos: HephaistosCharacterSF1e | null | undefined;
-	private get hephaistos(): HephaistosCharacterSF1e | null {
-		if (this._hephaistos === undefined) {
-			if (this.core.hephaistos) {
-				this._hephaistos = new HephaistosCharacterSF1e(this.core.hephaistos as HephaistosCharacterCoreSF1e);
-			}
-			if (this.core.hephaistosId) {
-				this._hephaistos = HephaistosCharacterSF1e.loadCharacterSync(this.core.hephaistosId) ?? null;
-			}
-		}
-		return this._hephaistos ?? null;
-	}
-
 	/** @todo figure out what this id is and what it represents */
 	public get hephaistosId(): string | undefined { return this.core.hephaistosId; }
 	public set hephaistosId(hephaistosId: Optional<string>) { this.core.hephaistosId = hephaistosId ?? undefined; }
-
-	private _pathbuilder: PathbuilderCharacter | null | undefined;
-	private get pathbuilder(): PathbuilderCharacter | null {
-		if (this._pathbuilder === undefined) {
-			if (this.core.pathbuilder) {
-				this._pathbuilder = new PathbuilderCharacter(this.core.pathbuilder as PathbuilderCharacterCore);
-			}
-			if (this.core.pathbuilderId) {
-				this._pathbuilder = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId) ?? null;
-			}
-		}
-		return this._pathbuilder ?? null;
-	}
 
 	/** @todo figure out what this id is and what it represents */
 	public get pathbuilderId(): string | undefined { return this.core.pathbuilderId; }
 	public set pathbuilderId(pathbuilderId: Optional<string>) { this.core.pathbuilderId = pathbuilderId ?? undefined; }
 
-	public async fetchImportedCharacter(_eventCache: unknown): Promise<PathbuilderCharacter | HephaistosCharacterSF1e | TEssence20Character | undefined> {
-		return this.pathbuilder ?? this.essence20 ?? this.hephaistos ?? undefined;
+	/** undefined means we haven't fetched, null means we fetched but failed */
+	private _importedChar?: ImportedCharacter | null;
+
+	/**
+	 * @deprecated
+	 * This is temporary until imported data is part of the base character.
+	 */
+	private get importedChar(): ImportedCharacter | undefined {
+		// null means we already tried to fetch it, so return undefined
+		if (this._importedChar === null) {
+			return undefined;
+		}
+
+		// we have a character, so return it
+		if (this._importedChar) {
+			return this._importedChar;
+		}
+
+		//#region loaders (delete when IdRepo.read fetches imported character)
+
+		if (this.core.essence20) {
+			const char = loadCharacterCore(this.core.essence20 as TEssence20CharacterCore);
+			if (char) {
+				this._importedChar = { char, type:"E20" };
+				return;
+			}
+		}
+
+		if (this.core.essence20Id) {
+			const char = loadCharacterSync(this.core.essence20Id) ?? undefined;
+			if (char) {
+				this._importedChar = { byId:true, char, type:"E20" };
+				return;
+			}
+		}
+
+		if (this.core.hephaistos) {
+			const char = new HephaistosCharacterSF1e(this.core.hephaistos as HephaistosCharacterCoreSF1e);
+			if (char) {
+				this._importedChar = { char, type:"H1E" };
+				return;
+			}
+		}
+
+		if (this.core.hephaistosId) {
+			const char = HephaistosCharacterSF1e.loadCharacterSync(this.core.hephaistosId);
+			if (char) {
+				this._importedChar = { byId:true, char, type:"H1E" };
+				return;
+			}
+		}
+
+		if (this.core.pathbuilder) {
+			const char = new PathbuilderCharacter(this.core.hephaistos as PathbuilderCharacterCore);
+			if (char) {
+				this._importedChar = { char, type:"PB2E" };
+				return;
+			}
+		}
+
+		if (this.core.pathbuilderId) {
+			const char = PathbuilderCharacter.loadCharacterSync(this.core.pathbuilderId);
+			if (char) {
+				this._importedChar = { char, type:"PB2E" };
+				return;
+			}
+		}
+
+		// this tells us we tried so we don't try again
+		this._importedChar = null;
+
+		//#endregion
+
+		// the following debug lines are meant to let us know if we managed to load the GameCharacter w/o loading the imported character
+		// this is part of the temporary transition of how we manage characters
+
+		if (this.core.essence20 || this.core.essence20Id) {
+			debug({ ev:"importedChar fetch failed", essence20:!!this.core.essence20, essence20Id:this.core.essence20Id });
+		}
+
+		if (this.core.hephaistos || this.core.hephaistosId) {
+			debug({ ev:"importedChar fetch failed", hephaistos:!!this.core.hephaistos, hephaistosId:this.core.hephaistosId });
+		}
+
+		if (this.core.pathbuilder || this.core.pathbuilderId) {
+			debug({ ev:"importedChar fetch failed", pathbuilder:!!this.core.pathbuilder, pathbuilderId:this.core.pathbuilderId });
+		}
+
+		return undefined;
 	}
+
+	/**
+	 * @deprecated
+	 * This is temporary until imported data is part of the base character.
+	 * SageEventCache is given so that when the import data is properly accessible via DataLayer it can be fetched
+	 */
+	public async fetchImportedCharacter(_sageCache: unknown): Promise<TEssence20Character | HephaistosCharacterSF1e | PathbuilderCharacter | undefined> {
+		// null means we already tried to fetch it, so return undefined
+		if (this._importedChar === null) {
+			return undefined;
+		}
+
+		// if we already fetched the char, return it
+		if (this._importedChar) {
+			return this._importedChar.char;
+		}
+
+		if (this.core.essence20) {
+			const char = loadCharacterCore(this.core.essence20 as TEssence20CharacterCore);
+			if (char) {
+				this._importedChar = { char, type:"E20" };
+				return char;
+			}
+		}
+
+		if (this.core.essence20Id) {
+			const char = await loadCharacter(this.core.essence20Id) ?? undefined;
+			if (char) {
+				this._importedChar = { byId:true, char, type:"E20" };
+				return char;
+			}
+		}
+
+		if (this.core.hephaistos) {
+			const char = new HephaistosCharacterSF1e(this.core.hephaistos as HephaistosCharacterCoreSF1e);
+			if (char) {
+				this._importedChar = { char, type:"H1E" };
+				return char;
+			}
+		}
+
+		if (this.core.hephaistosId) {
+			const char = await HephaistosCharacterSF1e.loadCharacter(this.core.hephaistosId);
+			if (char) {
+				this._importedChar = { byId:true, char, type:"H1E" };
+				return char;
+			}
+		}
+
+		if (this.core.pathbuilder) {
+			const char = new PathbuilderCharacter(this.core.hephaistos as PathbuilderCharacterCore);
+			if (char) {
+				this._importedChar = { char, type:"PB2E" };
+				return char;
+			}
+		}
+
+		if (this.core.pathbuilderId) {
+			const char = await PathbuilderCharacter.loadCharacter(this.core.pathbuilderId);
+			if (char) {
+				this._importedChar = { char, type:"PB2E" };
+				return char;
+			}
+		}
+
+		// this tells us we tried so we don't try again
+		this._importedChar = null;
+
+
+		// the following debug lines are meant to let us know if we managed to load the GameCharacter w/o loading the imported character
+		// this is part of the temporary transition of how we manage characters
+
+		if (this.core.essence20 || this.core.essence20Id) {
+			debug({ ev:"importedChar fetch failed", essence20:!!this.core.essence20, essence20Id:this.core.essence20Id });
+		}
+
+		if (this.core.hephaistos || this.core.hephaistosId) {
+			debug({ ev:"importedChar fetch failed", hephaistos:!!this.core.hephaistos, hephaistosId:this.core.hephaistosId });
+		}
+
+		if (this.core.pathbuilder || this.core.pathbuilderId) {
+			debug({ ev:"importedChar fetch failed", pathbuilder:!!this.core.pathbuilder, pathbuilderId:this.core.pathbuilderId });
+		}
+
+		return undefined;
+	}
+
+	/**
+	 * @deprecated
+	 * This is temporary until imported data is part of the base character.
+	 * SageEventCache is given so that when the import data is properly accessible via DataLayer it can be fetched
+	 */
+	public async fetchImportedCharacters(sageCache: unknown): Promise<void> {
+		await this.fetchImportedCharacter(sageCache);
+		for (const comp of this.companions) {
+			await comp.fetchImportedCharacters(sageCache);
+		}
+	}
+
+	//#endregion
 
 	/** The image used to represent the character to the left of the post. */
 	public get tokenUrl(): string | undefined { return this.core.tokenUrl; }
@@ -513,8 +682,10 @@ export class GameCharacter {
 		// if they explicitly set None, honor it
 		if (gameSystem?.type === 0) return gameSystem;
 
+		const importedCharType = this.importedChar?.type;
+
 		// ensure a pathbuilder import uses a p20 system
-		if (this.pathbuilder) {
+		if (importedCharType === "PB2E") {
 			if (gameSystem?.isP20) {
 				return gameSystem;
 			}
@@ -523,12 +694,12 @@ export class GameCharacter {
 		}
 
 		// ensure a hephaistos import uses sf1e
-		if (this.hephaistos) {
+		if (importedCharType === "H1E") {
 			return parseGameSystem("SF1E")
 		}
 
 		// ensure an essence20 import uses a e20 system
-		if (this.essence20) {
+		if (importedCharType === "E20") {
 			if (gameSystem?.code === "E20") {
 				return gameSystem;
 			}
@@ -540,9 +711,7 @@ export class GameCharacter {
 
 	public get hasStats(): boolean {
 		return this.getNoteStats().length > 0
-			|| !!this.pathbuilder
-			|| !!this.hephaistos
-			|| !!this.essence20;
+			|| !!this.importedChar;
 	}
 
 	public toStatsOutput(options?: { custom?:boolean; processor?:StatBlockProcessor, raw?:boolean; simple?:boolean; stats?:boolean; templates?:boolean; }) {
@@ -775,7 +944,7 @@ export class GameCharacter {
 		if (keyLower === "sheet.url" || keyLower === "sheeturl") {
 			let sheetUrl = this.getNoteStat("sheet.url", "sheeturl");
 			if (sheetUrl === "on") {
-				const { sheetRef } = this.essence20 ?? this.pathbuilder ?? this.hephaistos ?? { };
+				const sheetRef = this.importedChar?.char?.sheetRef;
 				if (sheetRef?.channelId) {
 					sheetUrl = toMessageUrl(sheetRef);
 				}
@@ -835,26 +1004,25 @@ export class GameCharacter {
 			return ret(noteStat.key, noteStat.value);
 		}
 
+		const { importedChar } = this;
+
 		// get stats from underlying e20 character
-		const { essence20 } = this;
-		if (essence20) {
-			const e20Stat = essence20.getStat(key, keyLower);
+		if (importedChar?.type === "E20") {
+			const e20Stat = importedChar.char.getStat(key, keyLower);
 			if (e20Stat.isDefined) {
 				return ret(e20Stat.key, String(e20Stat.value));
 			}
 		}
 
-		const { hephaistos } = this;
-		// if (hephaistos) {
-		// 	const hephStat = hephaistos.getStat(key, keyLower);
-		// 	if (hephaistos.isDefined) {
+		// if (importedChar?.type === "H1E") {
+		// 	const hephStat = importedChar.char.getStat(key, keyLower);
+		// 	if (hephStat.isDefined) {
 		// 		return ret(hephStat.key, String(hephStat.value));
 		// 	}
 		// }
 
 		// get stats from underlying pathbuilder character
-		const { pathbuilder } = this;
-		if (pathbuilder) {
+		if (importedChar?.type === "PB2E") {
 			// there is a special problem with maxhp and pathbuilder characters
 			// internally, they store it as maxhp
 			// our meta key logic sees that as old, and that it should be checked first for old chars using manual stats
@@ -871,7 +1039,7 @@ export class GameCharacter {
 			let pbKey = key;
 			if (keyLower === "explorationmode") pbKey = "activeExploration";
 			else if (keyLower === "explorationskill") pbKey = "initSkill";
-			const pbStat = pathbuilder.getStat(pbKey);
+			const pbStat = importedChar.char.getStat(pbKey);
 			if (pbStat.isDefined) {
 				return ret(pbStat.key, String(pbStat.value));
 			}
@@ -917,14 +1085,14 @@ export class GameCharacter {
 		const { gameSystem } = this;
 
 		// process pf2e/sf2e
-		if (pathbuilder || gameSystem?.isP20) {
+		if (importedChar?.type === "PB2E" || gameSystem?.isP20) {
 			const p20Stat = this.getStatP20(key, keyLower);
 			if (p20Stat.isDefined) {
 				return ret(p20Stat.key, p20Stat.value);
 			}
 
 		// process sf1e
-		}else if (hephaistos || gameSystem?.code === "SF1e") {
+		}else if (importedChar?.type === "H1E" || gameSystem?.code === "SF1e") {
 			const sf1eStat = this.getStatSF1e(key, keyLower);
 			if (sf1eStat.isDefined) {
 				return ret(sf1eStat.key, sf1eStat.value);
@@ -1146,7 +1314,7 @@ export class GameCharacter {
 		const keysUpdated = new StringSet();
 
 		const forNotes: KeyValuePair<string,null>[] = [];
-		const { gameSystem, pathbuilder:p20, hephaistos:h1e, essence20:e20 } = this;
+		const { gameSystem, importedChar } = this;
 		for (const { key, value:valueOrNull } of pairs) {
 			const keyLower = key.toLowerCase();
 
@@ -1156,15 +1324,13 @@ export class GameCharacter {
 				&& value.trim()
 				&& (
 					this.name !== value
-					|| (p20 && p20.name !== value)
-					|| (h1e && h1e.name !== value)
-					|| (e20 && e20.name !== value)
+					|| (importedChar && importedChar.char.name !== value)
 					)
 				) {
 				this.name = value;
-				if (p20) p20.name = value;
-				if (h1e) h1e.name = value;
-				if (e20) e20.name = value;
+				if (importedChar) {
+					importedChar.char.name = value;
+				}
 				keysUpdated.add(keyLower);
 				continue;
 			}
@@ -1186,9 +1352,9 @@ export class GameCharacter {
 			}
 
 			/** @todo duplicate some of the following for h1e */
-			if (p20) {
+			if (importedChar?.type === "PB2E") {
 				if (keyLower === "level" && +value) {
-					const updatedLevel = await p20.setLevel(+value, save);
+					const updatedLevel = await importedChar.char.setLevel(+value, save);
 					if (updatedLevel) {
 						this.notes.setStat("level", "");
 						keysUpdated.add(keyLower);
@@ -1199,7 +1365,7 @@ export class GameCharacter {
 				if (Currency.isDenominationKey(gameSystem, keyLower)) {
 					const money = { } as TPathbuilderCharacterMoney;
 					money[keyLower as keyof TPathbuilderCharacterMoney] = +value;
-					const updatedMoney = await p20.setMoney(money, save);
+					const updatedMoney = await importedChar.char.setMoney(money, save);
 					if (updatedMoney) {
 						this.notes.setStat(keyLower, "");
 						keysUpdated.add(keyLower);
@@ -1208,14 +1374,14 @@ export class GameCharacter {
 				}
 
 				if (isExplorationMode) {
-					p20.setSheetValue("activeExploration", correctedValue ?? "Other");
+					importedChar.char.setSheetValue("activeExploration", correctedValue ?? "Other");
 					const unset = this.notes.setStat(correctedKey ?? key, "");
 					if (unset) keysUpdated.add(correctedKey ?? key);
 					continue;
 				}
 
 				if (isExplorationSkill) {
-					p20.setSheetValue("activeSkill", correctedValue ?? "Perception");
+					importedChar.char.setSheetValue("activeSkill", correctedValue ?? "Perception");
 					const unset = this.notes.setStat(correctedKey ?? key, "");
 					if (unset) keysUpdated.add(correctedKey ?? key);
 					continue;
@@ -1236,7 +1402,9 @@ export class GameCharacter {
 		return keysUpdated;
 	}
 
-	public async update({ alias, avatarUrl, embedColor, name, pathbuilder, pathbuilderId, tokenUrl, userDid }: Args<GameCharacterCore>, save = true): Promise<boolean> {
+	public async update(args: Args<GameCharacterCore>, save = true): Promise<boolean> {
+		const { alias, avatarUrl, embedColor, name, pathbuilder, pathbuilderId, tokenUrl, userDid } = args;
+
 		// we only use the values that are changable, leaving the needed arrays intact
 		let changed = applyChanges(this.core, { alias, avatarUrl, embedColor, pathbuilder, pathbuilderId, tokenUrl, userDid });
 
@@ -1255,7 +1423,7 @@ export class GameCharacter {
 		if (changed) {
 			delete this._aliasMatcher;
 			delete this._nameMatcher;
-			delete this._pathbuilder;
+			delete this._importedChar;
 			if (save) {
 				return this.save();
 			}
@@ -1266,14 +1434,9 @@ export class GameCharacter {
 	public async save(saveImported?: boolean): Promise<boolean> {
 		const ownerSaved = await this.owner?.save() ?? false;
 		if (ownerSaved && saveImported) {
-			if (this.pathbuilderId) {
-				return await this.pathbuilder?.save() ?? false;
-			}
-			if (this.hephaistosId) {
-				return await this.hephaistos?.save() ?? false;
-			}
-			if (this.essence20Id) {
-				return await this.essence20?.save() ?? false;
+			const { importedChar } = this;
+			if (importedChar?.byId) {
+				return await importedChar.char.save();
 			}
 		}
 		return ownerSaved;
