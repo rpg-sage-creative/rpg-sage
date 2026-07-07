@@ -821,8 +821,8 @@ export class SageEventCache {
 		return game as Game;
 	}
 
-	public async getOrFetchCharacter(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<GameCharacter | undefined> {
-		return await this.core.repo.getById("Character", id as Snowflake, did, uuid) as GameCharacter ?? undefined;
+	public async getOrFetchCharacter(_id: Optional<string>, _did?: Optional<Snowflake>, _uuid?: Optional<UUID>): Promise<GameCharacter | undefined> {
+		return undefined;
 	}
 
 	public async getOrFetchGame(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<Game | undefined> {
@@ -837,8 +837,8 @@ export class SageEventCache {
 		return await this.core.repo.getById("User", id as Snowflake, did, uuid) as User ?? undefined;
 	}
 
-	public async saveCharacter(character: GameCharacter): Promise<boolean> {
-		return this.core.repo.write(character);
+	public async saveCharacter(_character: GameCharacter): Promise<boolean> {
+		return false;
 	}
 
 	public async saveGame(game: Game): Promise<boolean> {
