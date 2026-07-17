@@ -1,6 +1,5 @@
 import { type Optional, type Snowflake, errorReturnUndefined } from "@rsc-utils/core-utils";
 import { EmbedBuilder, type SupportedTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
-import { readJsonFile, readJsonFileSync } from "@rsc-utils/io-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/e20/index.js";
 import { PlayerCharacterE20, type TSkillE20, type TSkillSpecialization, type TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
@@ -14,6 +13,7 @@ import type { SageButtonInteraction, SageInteraction, SageStringSelectInteractio
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
+import { type ParsedCustomId, parseImportCharacterSheetCustomId } from "./sheets/parseImportCharacterSheetCustomId.js";
 
 export type TEssence20Character = TPlayerCharacter;
 type TPlayerCharacter = PlayerCharacterJoe | PlayerCharacterPR | PlayerCharacterTransformer;
@@ -28,27 +28,6 @@ function createSelectMenuRow(selectMenu: StringSelectMenuBuilder): ActionRowBuil
 		selectMenu.setMaxValues(selectMenu.options.length);
 	}
 	return new ActionRowBuilder<StringSelectMenuBuilder>().setComponents(selectMenu);
-}
-
-export async function loadCharacter(characterId: string): Promise<TPlayerCharacter | null> {
-	const core = await readJsonFile<TPlayerCharacterCore>(PlayerCharacterE20.createFilePath(characterId)).catch(errorReturnUndefined);
-	return loadCharacterCore(core) ?? null;
-}
-export function loadCharacterSync(characterId: string): TPlayerCharacter | null {
-	const core = readJsonFileSync<TPlayerCharacterCore>(PlayerCharacterE20.createFilePath(characterId));
-	return loadCharacterCore(core) ?? null;
-}
-export function loadCharacterCore(core: Optional<TPlayerCharacterCore>): TPlayerCharacter | undefined {
-	if (core?.gameType === "E20 - G.I. Joe") {
-		return new PlayerCharacterJoe(core);
-	}
-	if (core?.gameType === "E20 - Power Rangers") {
-		return new PlayerCharacterPR(core);
-	}
-	if (core?.gameType === "E20 - Transformers") {
-		return new PlayerCharacterTransformer(core);
-	}
-	return undefined;
 }
 
 type TOutput = { embeds:EmbedBuilder[], components:ActionRowBuilder<ButtonBuilder|StringSelectMenuBuilder>[] };
@@ -372,24 +351,6 @@ function createComponents(character: TPlayerCharacter): ActionRowBuilder<ButtonB
 	]);
 }
 
-export function getValidE20CharacterId(customId?: string | null): string | undefined {
-	const actionRegex = /^E20\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Skill|Spec|EdgeSnag|EdgeSnagShift|Roll|Secret|Init|Untrained)$/i;
-	if (!customId || !actionRegex.test(customId)) {
-		return undefined;
-	}
-
-	const [_e20, characterId] = customId.split("|");
-	if (_e20 === "E20" && PlayerCharacterE20.exists(characterId)) {
-		return characterId;
-	}
-	return undefined;
-}
-
-function sheetTester(sageInteraction: SageInteraction): boolean {
-	const customId = sageInteraction.interaction.customId;
-	return getValidE20CharacterId(customId) !== undefined;
-}
-
 async function viewHandler(sageInteraction: SageStringSelectInteraction, character: TPlayerCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
@@ -425,6 +386,11 @@ async function edgeSnagShiftHandler(sageInteraction: SageInteraction, character:
 	await character.save();
 	return updateSheet(sageInteraction, character);
 }
+
+/**
+ * Tests the values to see if they result in Edge, Snag, or neither.
+ * Edge/Snag cancel each other out, so one must be present without the other to be used.
+ */
 function testEdgeSnag<T>(testValues: TEdgeSnagShift[], outValues: { edge: T, snag: T, none: T }): T {
 	const hasEdge = testValues.includes("Edge");
 	const hasSnag = testValues.includes("Snag");
@@ -490,10 +456,26 @@ async function rollHandler(sageInteraction: SageButtonInteraction, character: TP
 	}
 }
 
-async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
+const ValidCommands = [ 'View', 'Skill', 'Spec', 'EdgeSnag', 'EdgeSnagShift', 'Roll', 'Secret', 'Init', 'Untrained' ] as const;
+type ValidParsedCommand = ParsedCustomId<typeof ValidCommands[number]>;
+
+/**
+ * Attempts to parse the given customId into a ParsedCustomId object by calling parseCustomId().
+ * If successful, then the characterId is validated to ensure the character exists.
+ */
+export async function parseValidCustomId(customId: Optional<string>): Promise<ValidParsedCommand | undefined> {
+	return await parseImportCharacterSheetCustomId("e20", ValidCommands, customId);
+}
+
+/** Validates if the iteraction is a sheet command with a valid customId/characterId */
+async function sheetTester(sageInteraction: SageInteraction): Promise<ValidParsedCommand | undefined> {
+	return await parseValidCustomId(sageInteraction.interaction.customId);
+}
+
+async function sheetHandler(sageInteraction: SageInteraction, validAction: ValidParsedCommand): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
-	const [_E20, characterId, command] = sageInteraction.interaction.customId.split("|");
-	const character = await loadCharacter(characterId);
+	const { characterId, command } = validAction;
+	const character = await PlayerCharacterE20.loadCharacter<TPlayerCharacter>(characterId);
 	if (character) {
 		switch(command as "View" | "Skill" | "Spec" | "EdgeSnag" | "EdgeSnagShift" | "Roll" | "Secret" | "Init" | "Untrained") {
 			case "View": return viewHandler(sageInteraction, character);
@@ -505,7 +487,6 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 			case "Untrained": return rollHandler(sageInteraction, character, false, false, true);
 		}
 	}
-	return Promise.resolve();
 }
 
 export function registerE20(): void {

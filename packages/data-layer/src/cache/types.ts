@@ -1,6 +1,9 @@
 export type CacheItemObjectType = "Character" | "Dice" | "Game" | "Message" | "Server" | "User";
 
-export type CacheItemDirName = Lowercase<`${CacheItemObjectType}s`>;
+/** The variant of CacheItemObjectType used for managing where json files are stored. */
+export type CacheItemDirName = Lowercase<`${CacheItemObjectType}s`>
+	// temp until we merge imported characters into characters
+	| "e20" | "heph" | "pb2e";
 
 /** ddb and file should be the only options when this is done; the others are for testing */
 export type DataMode = "both" | "ddb" | "file";

@@ -1,5 +1,7 @@
-import { error, getCodeName, tagLiterals } from "@rsc-utils/core-utils";
+import { error, errorReturnFalse, errorReturnUndefined, getCodeName, tagLiterals } from "@rsc-utils/core-utils";
+import { fileExists, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { ensureNonNilId } from "./internal/ensureNonNilId.js";
+import { getJsonPath } from "./internal/getJsonPath.js";
 import { getPopulateHandler, type PopulateHandler } from "./internal/getPopulateHandler.js";
 import { getReadHandler, type ReadHandler } from "./internal/getReadHandler.js";
 import { getWriteHandler, type WriteHandler } from "./internal/getWriteHandler.js";
@@ -313,7 +315,7 @@ export class DataTable<
 		return DataTable;
 	}
 
-	/** if not objectTypes are given, then all are populated. */
+	/** if no objectTypes are given, then all are populated. */
 	public static async populate(...objectTypes: CacheItemObjectType[]): Promise<boolean> {
 		if (!objectTypes.length) {
 			objectTypes = Object.keys(DataTable.config) as CacheItemObjectType[];
@@ -333,5 +335,62 @@ export class DataTable<
 		return populated;
 	}
 
+	/**
+	 * @deprecated
+	 * Temporary solution for checking existance of imported characters.
+	 * Will be removed when all imported character data is stored as part of the SageCharacter.
+	 * Handles the data source (json file vs ddb) so that main Sage code can stop reading files.
+	 */
+	public static async characterImportExists(which: "e20" | "heph" | "pb2e", characterId: string): Promise<boolean> {
+		const jsonPath = getJsonPath(which, characterId);
+		return await fileExists(jsonPath).catch(errorReturnFalse);
+	}
+
+	/**
+	 * @deprecated
+	 * Temporary solution for reading imported characters.
+	 * Will be removed when all imported character data is stored as part of the SageCharacter.
+	 * Handles the data source (json file vs ddb) so that main Sage code can stop reading files.
+	 */
+	public static async readCharacterImport<T>(which: "e20" | "heph" | "pb2e", characterId: string): Promise<T | undefined> {
+		const jsonPath = getJsonPath(which, characterId);
+		return await readJsonFile<T>(jsonPath).catch(errorReturnUndefined) ?? undefined;
+	}
+
+	/**
+	 * @deprecated
+	 * Temporary solution for reading imported characters.
+	 * Will be removed when all imported character data is stored as part of the SageCharacter.
+	 * Handles the data source (json file vs ddb) so that main Sage code can stop reading files.
+	 */
+	public static readCharacterImportSync<T>(which: "e20" | "heph" | "pb2e", characterId: string): T | undefined {
+		const jsonPath = getJsonPath(which, characterId);
+		try {
+			return readJsonFileSync<T>(jsonPath) ?? undefined;
+		}catch(ex) {
+			return errorReturnUndefined(ex);
+		}
+	}
+
+	/**
+	 * @deprecated
+	 * Temporary solution for writing imported characters.
+	 * Will be removed when all imported character data is stored as part of the SageCharacter.
+	 * Handles the data source (json file vs ddb) so that main Sage code can stop writing files.
+	 */
+	public static async writeCharacterImport(which: "e20" | "heph" | "pb2e", character: ImportedCharacterOrJson): Promise<boolean> {
+		const json = "toJSON" in character ? character.toJSON() : character;
+		const jsonPath = getJsonPath(which, json.id);
+		return await writeFile(jsonPath, json, { makeDir:true }).catch(errorReturnFalse);
+	}
+
 	//#endregion
+}
+
+/** @deprecated Used only for DataTable.writeCharacterImport */
+type ImportedCharacterOrJson = {
+	id: string;
+	toJSON: () => { id:string; };
+} | {
+	id: string;
 }

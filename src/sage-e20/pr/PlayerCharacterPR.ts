@@ -422,3 +422,6 @@ export class PlayerCharacterPR extends PlayerCharacterE20<PlayerCharacterCorePR>
 	}
 
 }
+
+// add as child of PlayerCharacterE20 to simplify character loading via PlayerCharacterE20.loadCharacter
+PlayerCharacterE20.Children["E20 - Power Rangers"] = PlayerCharacterPR;

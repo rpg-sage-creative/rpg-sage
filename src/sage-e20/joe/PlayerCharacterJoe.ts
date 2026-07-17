@@ -212,3 +212,6 @@ export class PlayerCharacterJoe extends PlayerCharacterE20<PlayerCharacterCoreJo
 	}
 
 }
+
+// add as child of PlayerCharacterE20 to simplify character loading via PlayerCharacterE20.loadCharacter
+PlayerCharacterE20.Children["E20 - G.I. Joe"] = PlayerCharacterJoe;

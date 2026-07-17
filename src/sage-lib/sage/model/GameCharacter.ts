@@ -11,9 +11,10 @@ import type { PathbuilderCharacterCore, TPathbuilderCharacterMoney } from "../..
 import { processSimpleSheet } from "../../../gameSystems/processSimpleSheet.js";
 import { HephaistosCharacterSF1e } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";
 import type { HephaistosCharacterCoreSF1e } from "../../../gameSystems/sf1e/import/types.js";
+import { PlayerCharacterE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";
 import { getExplorationModes, getSkills, toModifier } from "../../../sage-pf2e/index.js";
 import { PathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
-import { loadCharacter, loadCharacterCore, loadCharacterSync, type TEssence20Character, type TEssence20CharacterCore } from "../commands/e20.js";
+import type { TEssence20CharacterCore } from "../commands/e20.js";
 import { SageMessageReference } from "../repo/SageMessageReference.js";
 import { CharacterArray } from "./CharacterArray.js";
 import { NoteManager } from "./NoteManager.js";
@@ -99,7 +100,7 @@ export type AutoChannelResult = {
 
 type ImportedCharacter = {
 	byId?: boolean;
-	char: TEssence20Character;
+	char: PlayerCharacterE20<any>;
 	type: "E20";
 } | {
 	byId?: boolean;
@@ -301,7 +302,7 @@ export class GameCharacter {
 		//#region loaders (delete when IdRepo.read fetches imported character)
 
 		if (this.core.essence20) {
-			const char = loadCharacterCore(this.core.essence20 as TEssence20CharacterCore);
+			const char = PlayerCharacterE20.from(this.core.essence20 as TEssence20CharacterCore);
 			if (char) {
 				this._importedChar = { char, type:"E20" };
 				return;
@@ -309,7 +310,7 @@ export class GameCharacter {
 		}
 
 		if (this.core.essence20Id) {
-			const char = loadCharacterSync(this.core.essence20Id) ?? undefined;
+			const char = PlayerCharacterE20.loadCharacterSync(this.core.essence20Id) ?? undefined;
 			if (char) {
 				this._importedChar = { byId:true, char, type:"E20" };
 				return;
@@ -317,7 +318,7 @@ export class GameCharacter {
 		}
 
 		if (this.core.hephaistos) {
-			const char = new HephaistosCharacterSF1e(this.core.hephaistos as HephaistosCharacterCoreSF1e);
+			const char = HephaistosCharacterSF1e.from(this.core.hephaistos as HephaistosCharacterCoreSF1e);
 			if (char) {
 				this._importedChar = { char, type:"H1E" };
 				return;
@@ -333,7 +334,7 @@ export class GameCharacter {
 		}
 
 		if (this.core.pathbuilder) {
-			const char = new PathbuilderCharacter(this.core.hephaistos as PathbuilderCharacterCore);
+			const char = PathbuilderCharacter.from(this.core.pathbuilder as PathbuilderCharacterCore);
 			if (char) {
 				this._importedChar = { char, type:"PB2E" };
 				return;
@@ -376,7 +377,7 @@ export class GameCharacter {
 	 * This is temporary until imported data is part of the base character.
 	 * SageEventCache is given so that when the import data is properly accessible via DataLayer it can be fetched
 	 */
-	public async fetchImportedCharacter(_sageCache: unknown): Promise<TEssence20Character | HephaistosCharacterSF1e | PathbuilderCharacter | undefined> {
+	public async fetchImportedCharacter(_sageCache: unknown): Promise<PlayerCharacterE20<any> | HephaistosCharacterSF1e | PathbuilderCharacter | undefined> {
 		// null means we already tried to fetch it, so return undefined
 		if (this._importedChar === null) {
 			return undefined;
@@ -388,7 +389,7 @@ export class GameCharacter {
 		}
 
 		if (this.core.essence20) {
-			const char = loadCharacterCore(this.core.essence20 as TEssence20CharacterCore);
+			const char = PlayerCharacterE20.from(this.core.essence20 as TEssence20CharacterCore);
 			if (char) {
 				this._importedChar = { char, type:"E20" };
 				return char;
@@ -396,7 +397,7 @@ export class GameCharacter {
 		}
 
 		if (this.core.essence20Id) {
-			const char = await loadCharacter(this.core.essence20Id) ?? undefined;
+			const char = await PlayerCharacterE20.loadCharacter(this.core.essence20Id) ?? undefined;
 			if (char) {
 				this._importedChar = { byId:true, char, type:"E20" };
 				return char;
@@ -404,7 +405,7 @@ export class GameCharacter {
 		}
 
 		if (this.core.hephaistos) {
-			const char = new HephaistosCharacterSF1e(this.core.hephaistos as HephaistosCharacterCoreSF1e);
+			const char = HephaistosCharacterSF1e.from(this.core.hephaistos as HephaistosCharacterCoreSF1e);
 			if (char) {
 				this._importedChar = { char, type:"H1E" };
 				return char;
@@ -420,7 +421,7 @@ export class GameCharacter {
 		}
 
 		if (this.core.pathbuilder) {
-			const char = new PathbuilderCharacter(this.core.hephaistos as PathbuilderCharacterCore);
+			const char = PathbuilderCharacter.from(this.core.pathbuilder as PathbuilderCharacterCore);
 			if (char) {
 				this._importedChar = { char, type:"PB2E" };
 				return char;
