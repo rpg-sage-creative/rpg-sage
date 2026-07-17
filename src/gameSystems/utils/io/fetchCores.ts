@@ -1,7 +1,8 @@
-import { errorReturnUndefined, noop } from "@rsc-utils/core-utils";
+import { readJsonFetchHeaders } from "@rsc-sage/env";
+import { noop } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername, parseReference, type MessageOrPartial } from "@rsc-utils/discord-utils";
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
-import { getJson, PdfCacher, readJsonFile, type PdfJson } from "@rsc-utils/io-utils";
+import { getJson, PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import type { FetchResultError } from "./handleImportErrors.js";
 
@@ -45,13 +46,8 @@ export function coreToResult<T extends CharacterBaseCore, U extends CharacterBas
 	return { core, char:toChar(core) };
 }
 
-let jsonFetchHeaders: Record<string, string> | undefined;
-async function getJsonFetchHeaders() {
-	return jsonFetchHeaders ??= await readJsonFile<Record<string, string>>("./config/json-fetch-headers.json").catch(errorReturnUndefined) ?? {};
-}
-
 export async function fetchJsonCore<T extends CharacterBaseCore>(jsonUrl: string, error: FetchResultError, handlers: ImportHandlers<T>): Promise<FetchCoreResult<T>> {
-	const headers = await getJsonFetchHeaders();
+	const headers = await readJsonFetchHeaders();
 	const json = await getJson(jsonUrl, undefined, { headers }).catch(noop);
 	if (!json) {
 		return { error };
