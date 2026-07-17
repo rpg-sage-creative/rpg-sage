@@ -10,28 +10,6 @@ export function createPfsRenderableContent(sageMessage: SageMessage): Renderable
 	return createRenderableContent(sageMessage.getHasColors(), EmbedColorType.PfsCommand);
 }
 
-// #region Links
-// type TLink = { category: string; title: string; url: string; details: string[] };
-// let links: TLink[] = [];
-// function linkToUrl(link: TLink): string { return `<a href="${link.url}">${link.title}</a>`; }
-// async function pfsLinks(sageMessage: SageMessage): Promise<void> {
-// 	if (!links || !links.length) {
-// 		links = await readJsonFile<TLink[]>("getDataRoot("pf2e")/json/links.json");
-// 	}
-// 	let renderableContent = createPfsRenderableContent(sageMessage);
-// 	renderableContent.setTitle("<b>Helpful Links (Second Edition)</b>");
-
-// 	let _pfsLinks = links.filter(link => link.category === "PFS").map(linkToUrl);
-// 	renderableContent.append(`<b>Pathfinder Society</b>`, `${_pfsLinks[0]}<ul><li>${_pfsLinks.slice(1).join("</li><li>")}</li></ul>`);
-
-// 	let commUseItems = links.filter(link => link.category === "CU").map(linkToUrl);
-// 	renderableContent.appendTitledSection(`<b>Community Use</b>`, `<ul><li>${commUseItems.join("</li><li>")}</li></ul>`);
-
-// 	sageMessage.send(renderableContent);
-// }
-// registerCommandRegex(/^\s*(pfs\s*)?links\s*$/, pfsLinks);
-// #endregion Links
-
 // #region Tier Calculator
 function levelToPoints(level: number, tierMin: number, tierMax: number): number {
 	if (level === tierMin) return 2;
