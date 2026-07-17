@@ -1,36 +1,38 @@
+import { DataTable } from "@rsc-sage/data-layer";
 import { stringifyJson, warn } from "@rsc-utils/core-utils";
 import { getText } from "@rsc-utils/io-utils";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import type { Aon1eSearchResultsCat, Aon1eSearchResultsLink } from "./types.js";
 
 const NonWordCharRegExpG = /\W/g;
 
-async function getSearchResults(url: string) {
-	return getText(url).catch(ex => warn(ex) as any || "");
+async function getSearchResults(url: string): Promise<string> {
+	return await getText(url)
+		.catch(ex => warn(ex) as any || "");
 }
 
 async function getOrCreateHtmlCache(url: string): Promise<string> {
 	const cleanUrl = url.replace(NonWordCharRegExpG, "");
-	const filePath = `../${cleanUrl}.full.html`;
-	if (existsSync(filePath)) {
-		return readFileSync(filePath).toString();
+	const fileName = `${cleanUrl}.full.html`;
+
+	let html = await DataTable.readSearchHtmlCache(fileName);
+	if (!html) {
+		html = await getSearchResults(url);
+		await DataTable.writeSearchHtmlCache(fileName, html);
 	}
 
-	const html = await getSearchResults(url);
-	writeFileSync(filePath, html);
 	return html;
 }
 
 async function getOrCreateAonSearchResultsCache(url: string): Promise<string> {
 	const cleanUrl = url.replace(NonWordCharRegExpG, "");
-	const filePath = `../${cleanUrl}.results.html`;
-	if (existsSync(filePath)) {
-		return readFileSync(filePath).toString();
+	const fileName = `${cleanUrl}.results.html`;
+
+	let resultsHtml = await DataTable.readSearchHtmlCache(fileName);
+	if (!resultsHtml) {
+		resultsHtml = parseAonSearchResults(await getOrCreateHtmlCache(url));
+		await DataTable.writeSearchHtmlCache(fileName, resultsHtml);
 	}
 
-	const html = await getOrCreateHtmlCache(url),
-		resultsHtml = parseAonSearchResults(html);
-	writeFileSync(filePath, resultsHtml);
 	return resultsHtml;
 }
 
@@ -66,9 +68,9 @@ function parseResultsLine(line: string): Aon1eSearchResultsCat {
 	return { label, links, unique, exact, objectType:"Aon1eSearchResultsCategory" };
 }
 
-function parseResultsHtml(html: string, writeDevCache: boolean): Aon1eSearchResultsLink[] {
+async function parseResultsHtml(html: string, writeDevCache: boolean): Promise<Aon1eSearchResultsLink[]> {
 	if (writeDevCache) {
-		writeFileSync("../aon-results-lines.html", html);
+		await DataTable.writeSearchHtmlCache("aon-results-lines.html", html);
 	}
 	const categories = html
 		.replaceAll("<h1", `\n<h1`)
@@ -89,7 +91,7 @@ function parseResultsHtml(html: string, writeDevCache: boolean): Aon1eSearchResu
 		});
 	});
 	if (writeDevCache) {
-		writeFileSync("../aon-results.json", stringifyJson(results));
+		await DataTable.writeSearchHtmlCache("aon-results.json", stringifyJson(results));
 	}
 	return results;
 }
@@ -98,5 +100,5 @@ export async function getAon1eSearchResultsLinks(url: string, useDevCache = fals
 	const html = useDevCache
 		? await getOrCreateAonSearchResultsCache(url)
 		: parseAonSearchResults(await getSearchResults(url));
-	return parseResultsHtml(html, useDevCache);
+	return await parseResultsHtml(html, useDevCache);
 }

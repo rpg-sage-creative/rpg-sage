@@ -1,5 +1,5 @@
 import { error, errorReturnFalse, errorReturnUndefined, getCodeName, tagLiterals, type Snowflake } from "@rsc-utils/core-utils";
-import { fileExists, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
+import { fileExists, readJsonFile, readJsonFileSync, readText, writeFile } from "@rsc-utils/io-utils";
 import { ensureNonNilId } from "./internal/ensureNonNilId.js";
 import { getJsonPath } from "./internal/getJsonPath.js";
 import { getPopulateHandler, type PopulateHandler } from "./internal/getPopulateHandler.js";
@@ -7,6 +7,7 @@ import { getReadHandler, type ReadHandler } from "./internal/getReadHandler.js";
 import { getWriteHandler, type WriteHandler } from "./internal/getWriteHandler.js";
 import { simplifyCacheItem, simplifyForLogging } from "./internal/simplify.js";
 import { objectTypeToTableName, type BaseCacheItem, type CacheItemObjectType, type CharacterCacheItem, type DataMode, type GameCacheItem } from "./types.js";
+import { join } from "node:path";
 
 type DataTableConfigItem = {
 	/** default: "file" */
@@ -399,6 +400,22 @@ export class DataTable<
 
 	public static async readTempData<T>(_id: string): Promise<T | undefined> {
 		return undefined;
+	}
+
+	//#endregion
+
+	//#region dev cache files
+
+	public static async readSearchHtmlCache(fileName: string): Promise<string | undefined> {
+		const cacheDirPath = "../";
+		const cacheFilePath = join(cacheDirPath, fileName);
+		return await readText(cacheFilePath).catch(() => undefined);
+	}
+
+	public static async writeSearchHtmlCache(fileName: string, content: string): Promise<void> {
+		const cacheDirPath = "../";
+		const cacheFilePath = join(cacheDirPath, fileName);
+		await writeFile(cacheFilePath, content);
 	}
 
 	//#endregion
