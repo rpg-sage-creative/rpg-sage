@@ -1,4 +1,4 @@
-import { error, errorReturnFalse, errorReturnUndefined, getCodeName, tagLiterals } from "@rsc-utils/core-utils";
+import { error, errorReturnFalse, errorReturnUndefined, getCodeName, tagLiterals, type Snowflake } from "@rsc-utils/core-utils";
 import { fileExists, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { ensureNonNilId } from "./internal/ensureNonNilId.js";
 import { getJsonPath } from "./internal/getJsonPath.js";
@@ -382,6 +382,23 @@ export class DataTable<
 		const json = "toJSON" in character ? character.toJSON() : character;
 		const jsonPath = getJsonPath(which, json.id);
 		return await writeFile(jsonPath, json, { makeDir:true }).catch(errorReturnFalse);
+	}
+
+	//#endregion
+
+	//#region temp files
+
+	public static async writeTempData(_core: unknown, _tempId?: Snowflake): Promise<string | undefined> {
+		// const id = tempId ?? generateSnowflake();
+		// const tempCore = { id, core, objectType:"TempData" };
+		// const dataTable = DataTable.for("TempData");
+		// const saved = await dataTable.write(tempCore);
+		// return saved ? id : undefined;
+		return undefined;
+	}
+
+	public static async readTempData<T>(_id: string): Promise<T | undefined> {
+		return undefined;
 	}
 
 	//#endregion

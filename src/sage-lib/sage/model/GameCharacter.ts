@@ -1,9 +1,8 @@
 import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type AutoChannelData, type DeckCore, type DeckType, type GameSystem, type SageCharacterCore, type SageMessageReferenceCore } from "@rsc-sage/data-layer";
-import { applyChanges, debug, getDataRoot, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, debug, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
-import { fileExistsSync, isUrl, readJsonFile, writeFile } from "@rsc-utils/io-utils";
-import { mkdirSync } from "node:fs";
+import { isUrl } from "@rsc-utils/io-utils";
 import { Condition } from "../../../gameSystems/Condition.js";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
@@ -60,27 +59,6 @@ export function toDiscordKey(channelDidOrDiscordKey: DiscordKey | Snowflake, thr
 	}
 	return new DiscordKey(null, channelDidOrDiscordKey, threadDid);
 }
-
-//#region temp files
-
-type TempIds = {
-	charId: string;
-	gameId?: string;
-	userId: string;
-};
-
-function createTempPath({ charId, gameId, userId }: TempIds): string {
-	const sageRoot = getDataRoot("sage");
-	const path = gameId
-		? `${sageRoot}/games/${gameId}/characters`
-		: `${sageRoot}/users/${userId}/characters`;
-	if (!fileExistsSync(path)) {
-		mkdirSync(path, { recursive:true });
-	}
-	return `${path}/${charId}.json.tmp`;
-}
-
-//#endregion
 
 type SageCharacterCoreOverrides = {
 	/** The character's companion characters */
@@ -1445,21 +1423,5 @@ export class GameCharacter {
 
 	public static readonly defaultGmCharacterName = DEFAULT_GM_CHARACTER_NAME;
 
-	public static async fromTemp(ids: TempIds): Promise<GameCharacter | undefined> {
-		const path = createTempPath(ids);
-		if (fileExistsSync(path)) {
-			const core = await readJsonFile<GameCharacterCore>(path);
-			if (core) {
-				return new GameCharacter(core);
-			}
-		}
-		return undefined;
-	}
-
-	public async saveTemp(ids: Omit<TempIds, "charId">): Promise<boolean> {
-		const path = createTempPath({ charId:this.id, ...ids });
-		return writeFile(path, this.core);
-
-	}
 }
 
