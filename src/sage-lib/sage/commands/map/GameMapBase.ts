@@ -1,5 +1,5 @@
-import { errorReturnFalse, errorReturnNull, formatDataFilePath, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { deleteFileSync, fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
+import { DataTable } from "@rsc-sage/data-layer";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { RenderableGameMap } from "./RenderableGameMap.js";
 
 //#region types
@@ -95,11 +95,6 @@ export type TGameMapCore = {
 
 //#endregion
 
-/** returns path to the json file */
-function getMapFilePath(messageId: Snowflake): string {
-	return formatDataFilePath(["sage", "maps"], messageId);
-}
-
 export abstract class GameMapBase {
 	/** constructs a map for the given core */
 	public constructor(protected core: TGameMapCore) { }
@@ -152,33 +147,24 @@ export abstract class GameMapBase {
 	public toRenderable(): RenderableGameMap { return new RenderableGameMap(this.core); }
 
 	/** saves the maps core to file */
-	public save() {
-		return writeFile(getMapFilePath(this.messageId), this.core, { makeDir:true })
-			.catch(errorReturnFalse);
+	public async save() {
+		return await DataTable.writeMap(this.messageId, this.core);
 	}
 
 	//#endregion
 
 	//#region static
 
-	/** returns true if a map for the given id exists */
-	public static exists(messageId: Optional<string>): messageId is Snowflake {
-		return messageId ? fileExistsSync(getMapFilePath(messageId as Snowflake)) : false;
+	public static async delete(messageId: string): Promise<boolean> {
+		return await DataTable.deleteMap(messageId);
 	}
 
-	public static delete(messageId: Snowflake): boolean {
-		const path = getMapFilePath(messageId);
-		return deleteFileSync(path);
+	public static async exists(messageId: string | undefined): Promise<boolean> {
+		return await DataTable.mapExists(messageId);
 	}
 
-	/** returns true if a map for the given id has the given name */
-	public static matches(messageId: Snowflake, name: string): boolean {
-		const core = this.exists(messageId) ? readJsonFileSync<TGameMapCore>(getMapFilePath(messageId)) : null;
-		return core?.name === name;
-	}
-
-	public static readCore(messageId: Snowflake) {
-		return readJsonFile<TGameMapCore>(getMapFilePath(messageId)).catch(errorReturnNull);
+	public static async readCore(messageId: string): Promise<TGameMapCore | undefined> {
+		return await DataTable.readMap(messageId);
 	}
 
 	public static toRenderable(mapCore: TGameMapCore): RenderableGameMap {

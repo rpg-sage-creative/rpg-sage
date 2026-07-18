@@ -11,7 +11,7 @@ async function mapActivateHandler(sageMessage: SageMessage): Promise<void> {
 	const stack = sageMessage.replyStack;
 
 	const mapMessageId = sageMessage.message.reference?.messageId;
-	const mapExists = mapMessageId && GameMap.exists(mapMessageId);
+	const mapExists = await GameMap.exists(mapMessageId);
 	if (!mapExists) {
 		const content = localize("REPLY_TO_MAP_TO_ACTIVATE");
 		return stack.whisper({ content });

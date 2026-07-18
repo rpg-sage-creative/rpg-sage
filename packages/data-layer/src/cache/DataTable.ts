@@ -1,5 +1,5 @@
-import { error, errorReturnFalse, errorReturnUndefined, getCodeName, tagLiterals, type Snowflake } from "@rsc-utils/core-utils";
-import { fileExists, readJsonFile, readJsonFileSync, readText, writeFile } from "@rsc-utils/io-utils";
+import { error, errorReturnFalse, errorReturnUndefined, formatDataFilePath, getCodeName, tagLiterals, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { deleteFile, fileExists, readJsonFile, readJsonFileSync, readText, writeFile } from "@rsc-utils/io-utils";
 import { ensureNonNilId } from "./internal/ensureNonNilId.js";
 import { getJsonPath } from "./internal/getJsonPath.js";
 import { getPopulateHandler, type PopulateHandler } from "./internal/getPopulateHandler.js";
@@ -336,6 +336,10 @@ export class DataTable<
 		return populated;
 	}
 
+	//#endregion
+
+	//#region Character Import logic
+
 	/**
 	 * @deprecated
 	 * Temporary solution for checking existance of imported characters.
@@ -387,7 +391,7 @@ export class DataTable<
 
 	//#endregion
 
-	//#region temp files
+	//#region temp data logic
 
 	public static async writeTempData(_core: unknown, _tempId?: Snowflake): Promise<string | undefined> {
 		// const id = tempId ?? generateSnowflake();
@@ -406,16 +410,100 @@ export class DataTable<
 
 	//#region dev cache files
 
-	public static async readSearchHtmlCache(fileName: string): Promise<string | undefined> {
-		const cacheDirPath = "../";
-		const cacheFilePath = join(cacheDirPath, fileName);
-		return await readText(cacheFilePath).catch(() => undefined);
+	/** @deprecated @todo rework the search cache strategy */
+	private static createCacheFilePath(fileName: string): string {
+		return join("../", fileName);
 	}
 
+	/** @deprecated @todo rework the search cache strategy */
+	public static async readSearchHtmlCache(fileName: string): Promise<string | undefined> {
+		// instead of checking that the file exists before reading, simply ignore a failed read
+		return await readText(DataTable.createCacheFilePath(fileName)).catch(() => undefined);
+	}
+
+	/** @deprecated @todo rework the search cache strategy */
 	public static async writeSearchHtmlCache(fileName: string, content: string): Promise<void> {
-		const cacheDirPath = "../";
-		const cacheFilePath = join(cacheDirPath, fileName);
-		await writeFile(cacheFilePath, content);
+		await writeFile(DataTable.createCacheFilePath(fileName), content);
+	}
+
+	//#endregion
+
+	//#region map data files
+
+	/**
+	 * Creates the filePath for the given messageId.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 */
+	private static createMapFilePath(messageId: string): string {
+		return formatDataFilePath(["sage", "maps"], messageId);
+	}
+
+	/**
+	 * Returns true if a map exists for the given messageId.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 */
+	public static async mapExists(messageId: Optional<string>): Promise<boolean>;
+	/**
+	 * Returns true if a map exists for the given messageId and the name matches the given mapName.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 * @param mapName the name to compare to the map core's name
+	 */
+	public static async mapExists(messageId: string, mapName: string): Promise<boolean>
+	public static async mapExists(messageId: Optional<string>, mapName?: string): Promise<boolean> {
+		// ensure a messageId
+		if (!messageId) {
+			return false;
+		}
+
+		const filePath = DataTable.createMapFilePath(messageId);
+
+		// if we don't have a mapName, we are just checking the map exists
+		if (!mapName) {
+			return await fileExists(filePath);
+		}
+
+		// read the core and compare names
+		const mapCore = await readJsonFile<{ name?:string; }>(filePath).catch(() => undefined);
+		return mapCore?.name === mapName
+	}
+
+	/**
+	 * Deletes the map for the given messageId.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 */
+	public static async deleteMap(messageId: string): Promise<boolean> {
+		const filePath = DataTable.createMapFilePath(messageId);
+		return await deleteFile(filePath).catch(errorReturnFalse);
+	}
+
+	/**
+	 * Reads the map core/json for the given messageId.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 */
+	public static async readMap<MapCore>(messageId: string): Promise<MapCore | undefined> {
+		const filePath = DataTable.createMapFilePath(messageId);
+		return await readJsonFile<MapCore>(filePath).catch(errorReturnUndefined) ?? undefined;
+	}
+
+	/**
+	 * Saves the given map using the given messageId.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 * @param mapCore the json object to write to file
+	 */
+	public static async writeMap(messageId: string, mapCore: unknown): Promise<boolean> {
+		const filePath = DataTable.createMapFilePath(messageId);
+		return await writeFile(filePath, mapCore, { makeDir:true }).catch(errorReturnFalse);
 	}
 
 	//#endregion
