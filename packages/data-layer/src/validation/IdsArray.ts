@@ -3,6 +3,8 @@ import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { join } from "node:path";
 import type { SageCharacterCore } from "../types/SageCharacterCore.js";
 
+// id-arrays is meant to help manage/ensure unique ids across the original Sage data (which clumsily started switching from uuid to snowflake)
+
 const ObjectTypes = ["Bot", "Character", "E20", "Game", "Heph", "Map", "PB2e", "Server", "User"] as const;
 type ObjectType = typeof ObjectTypes[number];
 const DirNames = ["bots", "characters", "e20", "games", "heph", "maps", "pb2e", "servers", "users"] as const;
