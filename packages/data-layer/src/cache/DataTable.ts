@@ -1,5 +1,6 @@
-import { error, errorReturnFalse, errorReturnUndefined, formatDataFilePath, getCodeName, tagLiterals, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { deleteFile, fileExists, readJsonFile, readJsonFileSync, readText, writeFile } from "@rsc-utils/io-utils";
+import { error, errorReturnEmptyArray, errorReturnFalse, errorReturnUndefined, formatDataFilePath, getCodeName, getDataRoot, partition, tagLiterals, warnReturnUndefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { deleteFile, fileExists, filterFiles, readJsonFile, readJsonFileSync, readText, writeFile } from "@rsc-utils/io-utils";
+import { join } from "node:path";
 import { ensureNonNilId } from "./internal/ensureNonNilId.js";
 import { getJsonPath } from "./internal/getJsonPath.js";
 import { getPopulateHandler, type PopulateHandler } from "./internal/getPopulateHandler.js";
@@ -7,7 +8,6 @@ import { getReadHandler, type ReadHandler } from "./internal/getReadHandler.js";
 import { getWriteHandler, type WriteHandler } from "./internal/getWriteHandler.js";
 import { simplifyCacheItem, simplifyForLogging } from "./internal/simplify.js";
 import { objectTypeToTableName, type BaseCacheItem, type CacheItemObjectType, type CharacterCacheItem, type DataMode, type GameCacheItem } from "./types.js";
-import { join } from "node:path";
 
 type DataTableConfigItem = {
 	/** default: "file" */
@@ -504,6 +504,48 @@ export class DataTable<
 	public static async writeMap(messageId: string, mapCore: unknown): Promise<boolean> {
 		const filePath = DataTable.createMapFilePath(messageId);
 		return await writeFile(filePath, mapCore, { makeDir:true }).catch(errorReturnFalse);
+	}
+
+	//#endregion
+
+	//#region PF2E data (hand typed by Sage staff; deprecated; moving to foundry data)
+
+	/**
+	 * @deprecated
+	 * PF2e data used to be hand typed so that we could search for and display individual items.
+	 * That task was too time consuming, and so we stopped doing it with the plan to switch to using the freely available Foundry data.
+	 * This code is legacy that cannot be ripped out quite yet because we still use weapon data for a couple things.
+	 * But, since we are moving the data layer, the data / file read logic is going to live here until it is removed.
+	 */
+	public static async populatePf2eData<Core>(coreHandler: (core: Optional<Core>, filePath: string) => number) {
+		const pf2DataPath = getDataRoot("pf2e");
+
+		const files: string[] = await filterFiles(pf2DataPath, { fileExt:"json", recursive:true })
+			.catch(errorReturnEmptyArray);
+
+		const loaded = {
+			other: 0,
+			source: 0,
+			total: files.length,
+		};
+
+		if (!files.length) {
+			return loaded;
+		}
+
+		const [sources, others] = partition(files, file => file.includes("/Source/") ? 0 : 1);
+
+		for (const source of sources) {
+			const core = await readJsonFile<Core>(source).catch(warnReturnUndefined);
+			loaded.source += coreHandler(core, source);
+		}
+
+		for (const other of others) {
+			const core = await readJsonFile<Core>(other).catch(warnReturnUndefined);
+			loaded.other += coreHandler(core, other);
+		}
+
+		return loaded;
 	}
 
 	//#endregion
