@@ -1,6 +1,6 @@
 import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { cleanWhitespace, generateSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceExplode } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, createTestRegExp, DiceExplode } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import {
 	DieRollGrade,
@@ -46,8 +46,9 @@ final success/failure
 
 const CnCParsers = {
 	dice: /\s*(\d+)?\s*d\s*(12)/i,
-	target: /(?<![a-z])(vs)\s*(\d+)\b/i,
+	target: createTestRegExp(["vs"]),
 };
+
 function getParsers(): TokenParsers {
 	return CnCParsers;
 }
@@ -73,8 +74,8 @@ enum TargetType { None = 0, VS = 1 }
 
 type TTargetData = { type:TargetType; value:number; hidden:boolean; };
 
-function targetDataToTestData(targetData: TTargetData): OrNull<TTestData> {
-	if (!targetData) return null;
+function targetDataToTestData(targetData: TTargetData): TTestData | undefined {
+	if (!targetData) return undefined;
 	const { value, hidden } = targetData;
 	return { alias:"vs", type: TestType.GreaterThanOrEqual, value, hidden };
 }
@@ -183,8 +184,8 @@ export class DicePart extends baseDicePart<DicePartCore, DicePartRoll> {
 			noSort: false,
 			sides: 12,
 			sign: undefined,
-			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as TTestData ?? null,
-			target: testOrTarget as TTargetData ?? null
+			test: targetDataToTestData(testOrTarget as TTargetData) ?? testOrTarget as TTestData ?? undefined,
+			target: testOrTarget as TTargetData ?? undefined
 		});
 	}
 	public static fromCore(core: DicePartCore): DicePart {

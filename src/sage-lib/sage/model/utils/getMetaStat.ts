@@ -1,6 +1,32 @@
 import type { CharacterShell } from "../CharacterShell.js";
 import type { GameCharacter } from "../GameCharacter.js";
 
+/**
+ * Some keys are special and we should avoid trying to find meta stats for them.
+ * Ex: we don't need to find a .min or .max for displayName.template or hitPoints.bar.values.
+ */
+export function isMetaStatKey(key: string, lower = key.toLowerCase()): boolean {
+	if (lower.endsWith(".min")) return true;
+	if (lower.endsWith(".max")) return true;
+	if (lower.endsWith(".tmp")) return true;
+	/** @todo stop allowing temp */
+	if (lower.endsWith(".temp")) return true;
+
+	// templates
+	if (lower.endsWith(".template")) return true;
+	if (lower.endsWith(".template.title")) return true;
+
+	// bars, dots, indexed
+	if (lower.endsWith(".bar")) return true;
+	if (lower.endsWith(".bar.values")) return true;
+	if (lower.endsWith(".dots")) return true;
+	if (lower.endsWith(".dots.values")) return true;
+	if (lower.endsWith(".indexed")) return true;
+	if (lower.endsWith(".indexed.values")) return true;
+	return false;
+}
+
+/** @todo stop allowing temp */
 /** In addition to returning "maxhp" for "hp", this returns "alt.maxhp" for "alt.hp" */
 function getOldMetaKey(key: string, prefix: "min" | "max" | "tmp" | "temp"): string {
 	const parts = key.split(".");
@@ -19,6 +45,7 @@ export function getMetaStat(char: GameCharacter | CharacterShell, key: string, m
 		metaValue = char.getStat(key + "." + metaKey, true);
 	}
 
+	/** @todo stop allowing temp */
 	// this allows for folks to use temp OR tmp
 	if (!metaValue.isDefined && metaKey === "tmp") {
 		// old way

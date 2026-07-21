@@ -1,5 +1,5 @@
 import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type AutoChannelData, type DeckCore, type DeckType, type GameSystem, type SageCharacterCore, type SageMessageReferenceCore } from "@rsc-sage/data-layer";
-import { applyChanges, debug, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, debug, isDefined, isNotBlank, isString, numberOrUndefined, partition, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { isUrl } from "@rsc-utils/io-utils";
@@ -19,7 +19,7 @@ import { CharacterArray } from "./CharacterArray.js";
 import { NoteManager } from "./NoteManager.js";
 import { toTrackerBar } from "./utils/TrackerBars.js";
 import { parseTrackerDots, toTrackerDots } from "./utils/TrackerDots.js";
-import { getMetaStat } from "./utils/getMetaStat.js";
+import { getMetaStat, isMetaStatKey } from "./utils/getMetaStat.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
 import { processCharStatsAndMods } from "./utils/processCharStatsAndMods.js";
 
@@ -770,6 +770,7 @@ export class GameCharacter {
 
 	/** Returns true if the user has set a `.bar.value` for the given key. */
 	public hasTrackerBar(key: string): boolean {
+		if (isMetaStatKey(key)) return false;
 		return this.getString(`${key}.bar.values`) !== undefined;
 	}
 
@@ -803,17 +804,19 @@ export class GameCharacter {
 
 	/** Returns true if the user has set a `.dots.value` for the given key. */
 	public hasTrackerDots(key: string): boolean {
+		if (isMetaStatKey(key)) return false;
 		return this.getString(`${key}.dots.values`) !== undefined;
 	}
 
 	public hasIndexedValues(key: string): boolean {
+		if (isMetaStatKey(key)) return false;
 		return this.getString(`${key}.indexed.values`) !== undefined;
 	}
 
 	/** returns the value for the first key that has a defined value */
 	public getNumber(...keys: string[]): number | undefined {
 		for (const key of keys) {
-			const stat = this.getStat(key, true);
+			const stat = this.getStat(key, { includeKey:true, isGetNumber:true });
 			if (stat.isDefined) {
 				return stat.hasPipes
 					? numberOrUndefined(stat.unpiped)
@@ -881,8 +884,16 @@ export class GameCharacter {
 	public getStat(key: string): string | null;
 	/** @deprecated start using getNumber or getString */
 	public getStat(key: string, includeKey: true): StatResults<string>;
-	public getStat(key: string, includeKey?: boolean): StatResults<string> | string | null {
-		const keyLower = key.toLowerCase() as Lowercase<string>;
+	public getStat<Options extends { includeKey:true; }>(key: string, options: Options): StatResults<string>;
+	public getStat(key: string, options?: true | { includeKey?:boolean; isGetNumber?:boolean; keyLower?:Lowercase<string>; }): StatResults<string> | string | null;
+	public getStat(key: string, options?: true | { includeKey?:boolean; isGetNumber?:boolean; keyLower?:Lowercase<string>; }): StatResults<string> | string | null {
+		const {
+			includeKey,
+			isGetNumber,
+			keyLower = key.toLowerCase() as Lowercase<string>
+		} = options === true
+			? { includeKey:true }
+			: options ?? {};
 
 		// shortcut to easily return as the args request
 		const ret = (casedKey = key, value: Optional<number | string> = null): StatResults<string> | string | null => {
@@ -1100,7 +1111,7 @@ export class GameCharacter {
 		}
 
 		// we have to exclude keys ending in ".dots.values" to avoid recursion from this.hasTrackerDots(key)
-		if (!keyLower.endsWith(".dots.values")) {
+		if (!isGetNumber) {
 			const dotsStatKey = this.hasTrackerDots(key)
 				? key
 				: parseTrackerDots(key)?.statKey;
@@ -1372,11 +1383,26 @@ export class GameCharacter {
 			forNotes.push({ key:correctedKey??key, value:correctedValue??value });
 		}
 
-		// iterate the stat pairs to double check bounds
-		forNotes.forEach(pair => pair.value = checkStatBounds(this, pair) ?? pair.value);
+		// split pairs into bounds pairs and stat pairs
+		const [boundsPairs = [], statPairs = []] = partition(forNotes, pair => {
+			const lower = pair.key.toLowerCase();
+			return lower.endsWith(".min") || lower.endsWith(".max")
+				? 0
+				: 1;
+		});
 
-		const updatedNoteKeys = this.notes.updateStats(forNotes);
-		updatedNoteKeys.forEach(noteKey => keysUpdated.add(noteKey));
+		// update the notes for the bounds pairs
+		this.notes
+			.updateStats(boundsPairs)
+			.forEach(noteKey => keysUpdated.add(noteKey));
+
+		// iterate the stat pairs to double check updated bounds
+		statPairs.forEach(pair => pair.value = checkStatBounds(this, pair) ?? pair.value);
+
+		// update the notes for the stat pairs
+		this.notes
+			.updateStats(statPairs)
+			.forEach(noteKey => keysUpdated.add(noteKey));
 
 		return keysUpdated;
 	}

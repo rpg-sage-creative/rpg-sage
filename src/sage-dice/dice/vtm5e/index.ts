@@ -1,6 +1,6 @@
 import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { cleanWhitespace, generateSnowflake, getCodeName, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, createTestRegExp } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import {
 	parseTestTargetValue,
@@ -42,11 +42,13 @@ hunger takes priority in critical pairings ...
 
 //#region Tokenizer
 
+const Vtm5eParsers = {
+	dice: /(\d+)?\s*d\s*10\s*(?:h\s*(\d+)|(\d+)\s*h)?/i,
+	target: createTestRegExp(["vs"]),
+};
+
 function getParsers(): TokenParsers {
-	return {
-		dice: /(\d+)?\s*d\s*10\s*(?:h\s*(\d+)|(\d+)\s*h)?/i,
-		target: /(?<![a-z])(vs)\s*(\d+\b|\|\|\d+\|\|)/i
-	};
+	return Vtm5eParsers;
 }
 
 type TokenType = TokenData<"dice" | "target" | "desc">;

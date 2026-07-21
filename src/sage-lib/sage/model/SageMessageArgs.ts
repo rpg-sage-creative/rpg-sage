@@ -109,8 +109,13 @@ export class SageMessageArgs extends SageCommandArgs<SageMessage> {
 		if (keyValueArg.hasValue) {
 			const channelId = parseId(keyValueArg.value.trim(), "channel");
 			if (channelId) {
-				const channel = this.sageCommand.message.mentions.channels.get(channelId) ?? null;
-				return channel as unknown as T;
+				// first try to get the channel from the message mentions
+				let channel = this.sageCommand.message.mentions.channels.get(channelId) as T;
+				// if that fails, try fetching from guild by id
+				if (!channel) {
+					channel = this.sageCommand.message.guild?.channels.cache.get(channelId) as T;
+				}
+				return channel ?? null;
 			}
 		}
 		return null;

@@ -1,6 +1,6 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { generateSnowflake, mapFirst, numberOrUndefined, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, createTestRegExp } from "@rsc-utils/game-utils";
 import {
 	createValueTestData,
 	DieRollGrade,
@@ -26,7 +26,7 @@ import type {
 
 const D20Parsers = {
 	crits: /crit\s*(?:(\d+)\+?)?\s*(?:x(\d+))?\s*(?:conf(?:irm(?:ation)?)?\s*([\-\+]\d+))?/i,
-	target: /(?<![a-z])(ac|dc)\s*(\d+\b|\|\|\d+\|\|)/i,
+	target: createTestRegExp(["ac", "dc"]),
 };
 
 let _parsers: TokenParsers;
@@ -49,10 +49,15 @@ export enum TargetType { None = 0, AC = 1, DC = 2 }
 export type TTargetData = { type:TargetType; value:number; hidden:boolean; raw:string; };
 function parseTargetType(targetType: string): TargetType {
 	const targetTypeLower = targetType.toLowerCase();
+
+	// using endsWith allows "ac" *and* "vs ac"
 	if (targetTypeLower.endsWith("ac")) {
 		return TargetType.AC;
+
+	// using endsWith allows "dc" *and* "vs dc"
 	}else if (targetTypeLower.endsWith("dc")) {
 		return TargetType.DC;
+
 	}else {
 		return TargetType.None;
 	}

@@ -1,6 +1,7 @@
 import { DiceOutputType, type GameSystemType } from "@rsc-sage/data-layer";
 import { HasIdCore, sortPrimitive, sum, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
-import { DiceDropKeepType, type DiceDropKeepData } from "@rsc-utils/game-utils";
+import { DiceDropKeepType, unpipe, type DiceDropKeepData } from "@rsc-utils/game-utils";
+import { evalMath } from "@rsc-utils/game-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
 //#region rpg.dice.common.ts
@@ -83,10 +84,15 @@ export function createValueTestData(type: TestType, value: number, hidden: boole
 	return { type, value, hidden, alias };
 }
 
+/** Parses the value, allowing for ||pipes|| and (parens), and returns { value, hidden } (hidden:true if there were pipes). */
 export function parseTestTargetValue(rawValue: string): { value:number; hidden:boolean; } {
-	const hidden = rawValue.length > 4 && rawValue.startsWith("||") && rawValue.endsWith("||");
-	const value = +(hidden ? rawValue.slice(2, -2) : rawValue) || 0;
-	return { value, hidden };
+	// unpipe
+	const { hasPipes, unpiped } = unpipe(rawValue);
+
+	// evalMath allows/handles parens
+	const value = +evalMath(unpiped) || 0;
+
+	return { hidden:hasPipes, value };
 }
 export function parseValueTestData(token: TokenData): TTestData | undefined {
 	if (token.matches) {

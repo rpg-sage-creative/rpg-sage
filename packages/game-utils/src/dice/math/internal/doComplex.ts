@@ -3,6 +3,8 @@ import { regex } from "regex";
 import { cleanPipes } from "../../../utils/pipes/cleanPipes.js";
 import { unpipe } from "../../../utils/pipes/unpipe.js";
 import { doSimple, OrSpoileredSimpleMathRegExp } from "./doSimple.js";
+import { reapplySign } from "./reapplySign.js";
+import { wrapRegex } from "./wrapRegex.js";
 
 type SageMathFunction = keyof typeof SageMath;
 
@@ -20,7 +22,7 @@ const SageMath = {
 };
 
 export const ComplexMathRegExp = regex("i")`
-	(?<! \w )               # ignore the entire thing if preceded by a word character
+	(^|\b|(?<!\w))                           # ensure there is a wordbreak at the start
 
 	(
 		# functions
@@ -38,10 +40,18 @@ export const ComplexMathRegExp = regex("i")`
 		\s*\)
 
 	|
-		# implicit multiplication
-		(?<multiplier>
-			\g<orSpoileredNumber>
-			\s*
+		(
+			# implicit multiplication
+			(?<multiplier>
+				\g<orSpoileredNumber>
+				\s*
+			)
+			|
+			(?<posNegSigns>
+				\s*
+				[\-+]
+				[\-+\s]*
+			)
 		)?
 		\(\s*
 		(?<simpleMath>
@@ -51,13 +61,12 @@ export const ComplexMathRegExp = regex("i")`
 	)
 
 	(?! \w )                # ignore the entire thing if followed by a word character
+	#((?!\w)|\b|$)           # ensure there is a wordbreak at the end
 
 	(?(DEFINE)
 		(?<numberOrSimple> \g<orSpoileredNumber> | \g<orSpoileredSimpleMath> )
 		(?<orSpoileredSimpleMath> ${OrSpoileredSimpleMathRegExp} )
-		(?<orWrappedNumber> \( \g<orSpoileredNumber> \) | \g<orSpoileredNumber> )
-		(?<orSpoileredNumber> \|\| \g<number> \|\| | \g<number> )
-		(?<number> ${NumberRegExp} )
+		(?<orSpoileredNumber> ${wrapRegex(NumberRegExp, ["||||"], { or:true })} )
 	)
 `;
 
@@ -74,13 +83,17 @@ export function doComplex(input: string): string {
 	let output = input;
 	while (ComplexMathRegExp.test(output)) {
 		// because of the way the capture groups use or "|" our array args seem to be the same regardless of the capture group names ...
-		output = output.replace(ComplexMathRegExpG, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _simpleMath: string) => {
+		output = output.replace(ComplexMathRegExpG, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _posNegSigns: string | undefined, _simpleMath: string) => {
 			// if (!allowSpoilers && unpipe(_).hasPipes) return _;
 
-			let hasPipes = false;
+			// do we need pipes in the return value?
+			let retPipes = false;
+			let startPad = "";
+			let endPad = "";
 
 			const retVal = (result: string | number) => {
-				return hasPipes ? `||${result}||` : String(result);
+				const resultString = retPipes ? `||${result}||` : String(result);
+				return startPad + resultString + endPad;
 			};
 
 			// handle a math function
@@ -90,7 +103,7 @@ export function doComplex(input: string): string {
 				// check function args for pipes
 				const functionArgsPipeInfo = unpipe(_functionArgs);
 				// update hasPips for the retVal
-				hasPipes = functionArgsPipeInfo.hasPipes;
+				retPipes = functionArgsPipeInfo.hasPipes;
 				// split on space,space and convert to numbers
 				const functionArgs = functionArgsPipeInfo.unpiped.split(",").map(s => +doSimple(s.trim()));
 				// do the math
@@ -99,18 +112,29 @@ export function doComplex(input: string): string {
 				return retVal(result);
 			}
 
-			const simpleMathPipeInfo = unpipe(_simpleMath);
+			const unpipeResults = unpipe(_simpleMath);
 
-			hasPipes = simpleMathPipeInfo.hasPipes;
+			retPipes = unpipeResults.hasPipes;
+			startPad = unpipeResults.startPad;
+			endPad = unpipeResults.endPad;
+
+			const { unpiped } = unpipeResults;
 
 			// handle a multiplier
 			if (_multiplier !== undefined) {
 				// return the new math so that it can be reprocessed
-				return retVal(`${_multiplier}*${doSimple(simpleMathPipeInfo.unpiped)}`);
+				return retVal(`${_multiplier}*${doSimple(unpiped)}`);
 			}
 
-			// handle parentheses
-			return retVal(`${doSimple(simpleMathPipeInfo.unpiped)}`);
+			if (_posNegSigns !== undefined) {
+				//
+				return retVal(`${doSimple(_posNegSigns + unpiped)}`);
+			}
+
+			// handle parentheses with simple math
+			const simpleResults = doSimple(unpiped);
+			const reapplyResults = reapplySign("("+unpiped+")", simpleResults);
+			return retVal(`${reapplyResults}`);
 		});
 	}
 

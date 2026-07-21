@@ -1,6 +1,6 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
 import { generateSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
-import { cleanDicePartDescription, DiceDropKeepType } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, createTestRegExp, DiceDropKeepType } from "@rsc-utils/game-utils";
 import {
 	createValueTestData,
 	DieRollGrade,
@@ -29,7 +29,7 @@ import type {
 function getParsers(): TokenParsers {
 	return {
 		...baseGetParsers(),
-		target: /(?<![a-z])(ac|dc)\s*(\d+\b|\|\|\d+\|\|)/i
+		target: createTestRegExp(["ac", "dc"]),
 	};
 }
 const ADVANTAGE = "Advantage";

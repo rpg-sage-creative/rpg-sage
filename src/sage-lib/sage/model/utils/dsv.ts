@@ -7,9 +7,17 @@ type StringRecord = Record<string, string>;
 export async function parseFormattedDsv<T extends StringRecord>(raw: Optional<string>, separator: DsvDelimiter = "\t"): Promise<DsvResults<T> | undefined> {
 	if (raw) {
 		const mapHeaders = ({ header }: { header:string; }) => {
-			return header.split(WhitespaceRegExp).map((s, i) =>
-				i ? s[0].toUpperCase() + s.slice(1).toLowerCase() : s.toLowerCase()
-			).join("");
+			return header
+				// when splitting on tabs, leading/trailing spaces become problematic, so we .trim()
+				.trim()
+				// split on whitespace to ensure we can strays that aren't space/tab
+				.split(WhitespaceRegExp)
+				// convert spaced words into a single camelCase key
+				.map((s, i) =>
+					i
+						? s[0].toUpperCase() + s.slice(1).toLowerCase()
+						: s.toLowerCase()
+				).join("");
 		}
 		const mapValues = ({ value }: { value:string; }) => value.trim();
 		return parseDsv(raw, { separator, mapHeaders, mapValues });
