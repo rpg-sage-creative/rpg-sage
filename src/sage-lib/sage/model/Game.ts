@@ -10,7 +10,7 @@ import { EncounterManager } from "../commands/trackers/encounter/EncounterManage
 import type { PartyCore } from "../commands/trackers/party/Party.js";
 import { PartyManager } from "../commands/trackers/party/PartyManager.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
-import { CharacterManager } from "./CharacterManager.js";
+import { CharacterArray } from "./CharacterArray.js";
 import type { CharacterShell } from "./CharacterShell.js";
 import { Colors, type HasColorsCore } from "./Colors.js";
 import { Emojis, type HasEmojiCore } from "./Emojis.js";
@@ -21,9 +21,9 @@ import type { Server } from "./Server.js";
 type GameCoreOverrides = {
 	encounters?: EncounterCore[] | EncounterManager;
 	gmCharacter?: GameCharacter | GameCharacterCore;
-	nonPlayerCharacters?: GameCharacterCore[] | CharacterManager;
+	nonPlayerCharacters?: GameCharacterCore[] | CharacterArray;
 	parties?: PartyCore[] | PartyManager;
-	playerCharacters?: GameCharacterCore[] | CharacterManager;
+	playerCharacters?: GameCharacterCore[] | CharacterArray;
 };
 
 export type GameCore = Omit<SageGameCore, keyof GameCoreOverrides> & GameCoreOverrides;
@@ -122,8 +122,8 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 	public constructor(core: GameCore, public server: Server, sageCache: SageCache) {
 		super(updateCore(core), sageCache);
 
-		this.core.nonPlayerCharacters = CharacterManager.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
-		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
+		this.core.nonPlayerCharacters = CharacterArray.from(this.core.nonPlayerCharacters as GameCharacterCore[] ?? [], this, "npc");
+		this.core.playerCharacters = CharacterArray.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 		this.core.encounters = EncounterManager.from(this.core.encounters as EncounterCore[] ?? [], this);
 		this.core.parties = PartyManager.from(this.core.parties as PartyCore[] ?? [], this);
 
@@ -141,7 +141,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 			}
 			this.core.gmCharacter = gmCharacterCore;
 		}
-		this.core.gmCharacter = CharacterManager.from([this.core.gmCharacter as GameCharacterCore], this, "gm")[0];
+		this.core.gmCharacter = CharacterArray.from([this.core.gmCharacter as GameCharacterCore], this, "gm")[0];
 	}
 
 	public get createdDate(): Date { return new Date(this.core.createdTs ?? 283305600000); }
@@ -177,7 +177,12 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	//#region derived
 	private _gameSystem?: GameSystem | null;
-	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
+	public get gameSystem(): GameSystem | undefined {
+		if (this._gameSystem === undefined) {
+			this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null;
+		}
+		return this._gameSystem ?? undefined;
+	}
 	//#endregion
 
 	//#endregion
@@ -197,8 +202,8 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	public get channels(): SageChannel[] { return this.core.channels ??= []; }
 	public get gmCharacter(): GameCharacter { return this.core.gmCharacter as GameCharacter; }
-	public get nonPlayerCharacters(): CharacterManager { return this.core.nonPlayerCharacters as CharacterManager; }
-	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
+	public get nonPlayerCharacters(): CharacterArray { return this.core.nonPlayerCharacters as CharacterArray; }
+	public get playerCharacters(): CharacterArray { return this.core.playerCharacters as CharacterArray; }
 	public findCharacterOrCompanion(name: string): GameCharacter | CharacterShell | undefined {
 		if (this.gmCharacter.matches(name)) return this.gmCharacter;
 		return this.playerCharacters.findByName(name)

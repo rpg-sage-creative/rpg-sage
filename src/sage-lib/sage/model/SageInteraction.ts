@@ -3,7 +3,6 @@ import { DiscordKey, type SupportedAutocompleteInteraction, type SupportedButton
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { InteractionType } from "../../discord/index.js";
-import type { HasGame } from "./index.js";
 import { SageCommand, type IdPartsBase, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageEventCache } from "./SageEventCache.js";
 import { SageInteractionArgs } from "./SageInteractionArgs.js";
@@ -47,8 +46,7 @@ export type SageStringSelectInteraction = SageInteraction<SupportedStringSelectI
 export type SageUserContextInteraction = SageInteraction<SupportedUserContextInteraction>;
 
 export class SageInteraction<T extends SupportedInteraction = any>
-	extends SageCommand<SageInteractionCore, SageInteractionArgs>
-	implements HasGame {
+	extends SageCommand<SageInteractionCore, SageInteractionArgs> {
 
 	private constructor(protected core: SageInteractionCore, cache?: Cache) {
 		super(core, cache);

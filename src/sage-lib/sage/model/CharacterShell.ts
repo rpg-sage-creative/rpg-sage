@@ -2,7 +2,7 @@ import { isDefined, isString, numberOrUndefined, stringArrayOrEmpty, StringSet, 
 import type { StatKey, StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-utils/game-utils";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
-import type { CharacterManager } from "./CharacterManager.js";
+import type { CharacterArray } from "./CharacterArray.js";
 import type { GameCharacter, TGameCharacterType } from "./GameCharacter.js";
 import { getStatNumbers } from "./utils/getStatNumbers.js";
 
@@ -26,7 +26,7 @@ export type CharacterShellCore = {
 export class CharacterShell {
 	public constructor(public core: CharacterShellCore, public game: GameCharacter | undefined) { }
 
-	public get companions(): CharacterManager | undefined {
+	public get companions(): CharacterArray | undefined {
 		return this.game?.companions;
 	}
 	public get id(): string {

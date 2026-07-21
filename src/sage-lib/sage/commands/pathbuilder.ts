@@ -14,6 +14,7 @@ import type { User } from "../model/User.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
+import { parseImportCharacterSheetCustomId, type ParsedCustomId } from "./sheets/parseImportCharacterSheetCustomId.js";
 
 function createActionRow<T extends ButtonBuilder | StringSelectMenuBuilder>(...components: T[]): ActionRowBuilder<T> {
 	components.forEach(comp => {
@@ -421,57 +422,6 @@ function prepareOutput({ eventCache }: SageCommand, character: PathbuilderCharac
 	return { embeds, components };
 }
 
-//#region button command
-
-type TActionIdType = ["PB2E", string, "View" | "Exploration" | "Skill" | "Macro" | "Roll" | "Secret" | "Init" | "MacroRoll" | "Link" | "Unlink"];
-
-function matchesOldActionRegex(customId: string): boolean {
-	const actionRegex = /^(?:PB2E\|)*(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll)$/i;
-	return actionRegex.test(customId);
-}
-
-function matchesActionRegex(customId: string): boolean {
-	const actionRegex = /^(?:PB2E)\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Exploration|Skill|Macro|Roll|Secret|Init|MacroRoll|Link|Unlink)$/i;
-	return actionRegex.test(customId);
-}
-
-function parseCustomId(customId: string): TActionIdType {
-	const parts = customId.split("|");
-	while (parts[0] === "PB2E") {
-		parts.shift();
-	}
-	parts.unshift("PB2E");
-	return parts as TActionIdType;
-}
-
-export function getValidPathbuilderCharacterId(customId?: string | null): string | undefined {
-	if (!customId) {
-		return undefined;
-	}
-
-	// old regex didn't include PB2E, which was added when E20 importer was made
-	const matches = matchesActionRegex(customId) || matchesOldActionRegex(customId);
-	if (matches) {
-		/*
-		house of cards!
-		parseCustomId allows for old and new regex by stripping PB2E off and adding it back on
-		there might be a stray character sheet that is E20
-		so we check that the file exists in the PB2E folder
-		TODO: figure out when this can go away!
-		*/
-		const [_pb2e, characterId] = parseCustomId(customId);
-		if (_pb2e === "PB2E" && PathbuilderCharacter.exists(characterId)) {
-			return characterId;
-		};
-	}
-	return undefined;
-}
-
-function sheetTester(sageInteraction: SageButtonInteraction): boolean {
-	const customId = sageInteraction.interaction.customId;
-	return getValidPathbuilderCharacterId(customId) !== undefined;
-}
-
 async function viewHandler(sageInteraction: SageStringSelectInteraction, character: PathbuilderCharacter): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
@@ -515,7 +465,6 @@ async function macroHandler(sageInteraction: SageStringSelectInteraction, charac
 	await character.save();
 	return updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 }
-
 
 async function rollHandler(sageInteraction: SageButtonInteraction, character: PathbuilderCharacter, secret = false, init = false): Promise<void> {
 	const skill = init ? character.getInitSkill() : character.getSheetValue("activeSkill") ?? "Perception";
@@ -633,15 +582,30 @@ async function unlinkHandler(sageInteraction: SageButtonInteraction, character: 
 	}
 }
 
-async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
+const ValidCommands = [ 'View', 'Exploration', 'Skill', 'Macro', 'Roll', 'Secret', 'Init', 'MacroRoll', 'Link', 'Unlink' ] as const;
+type ValidParsedCommand = ParsedCustomId<typeof ValidCommands[number]>;
+
+/**
+ * Attempts to parse the given customId into a ParsedCustomId object by calling parseCustomId().
+ * If successful, then the characterId is validated to ensure the character exists.
+ */
+export async function parseValidCustomId(customId: Optional<string>): Promise<ValidParsedCommand | undefined> {
+	return await parseImportCharacterSheetCustomId("pb2e", ValidCommands, customId);
+}
+
+/** Validates if the iteraction is a sheet command with a valid customId/characterId */
+async function sheetTester(sageInteraction: SageInteraction): Promise<ValidParsedCommand | undefined> {
+	return await parseValidCustomId(sageInteraction.interaction.customId);
+}
+
+async function sheetHandler(sageInteraction: SageInteraction, validAction: ValidParsedCommand): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
-	const customId = sageInteraction.interaction.customId;
-	const [_PB2E, characterId, command] = parseCustomId(customId);
+	const { characterId, command, deprecated } = validAction;
 	const character = await PathbuilderCharacter.loadCharacter(characterId);
 	if (character) {
 
 		// if we matched the old regex, force the sheet to update
-		if (!matchesActionRegex(customId)) {
+		if (deprecated) {
 			await updateSheet(sageInteraction, character, sageInteraction.interaction.message);
 		}
 
@@ -658,10 +622,7 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 			case "Unlink": return unlinkHandler(sageInteraction, character);
 		}
 	}
-	return Promise.resolve();
 }
-
-//#endregion
 
 export function registerPathbuilder(): void {
 	registerInteractionListener(sheetTester, sheetHandler);

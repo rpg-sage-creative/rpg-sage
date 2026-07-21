@@ -12,6 +12,7 @@ import { IdRepository } from "../repo/base/IdRepository.js";
 import { ActiveBot } from "./ActiveBot.js";
 import type { Bot } from "./Bot.js";
 import { Game, type GameCore } from "./Game.js";
+import type { GameCharacter } from "./GameCharacter.js";
 import { Server } from "./Server.js";
 import { User } from "./User.js";
 import { createClientEventLabel, type ClientEvent, type ClientEventsKey } from "./utils/createClientEventLabel.js";
@@ -820,6 +821,10 @@ export class SageEventCache {
 		return game as Game;
 	}
 
+	public async getOrFetchCharacter(_id: Optional<string>, _did?: Optional<Snowflake>, _uuid?: Optional<UUID>): Promise<GameCharacter | undefined> {
+		return undefined;
+	}
+
 	public async getOrFetchGame(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<Game | undefined> {
 		return await this.core.repo.getById("Game", id as Snowflake, did, uuid) as Game ?? undefined;
 	}
@@ -830,6 +835,10 @@ export class SageEventCache {
 
 	public async getOrFetchUser(id: Optional<string>, did?: Optional<Snowflake>, uuid?: Optional<UUID>): Promise<User | undefined> {
 		return await this.core.repo.getById("User", id as Snowflake, did, uuid) as User ?? undefined;
+	}
+
+	public async saveCharacter(_character: GameCharacter): Promise<boolean> {
+		return false;
 	}
 
 	public async saveGame(game: Game): Promise<boolean> {

@@ -51,7 +51,7 @@ export async function eCmdStatus(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.denyByProv("Encounter Status", "Encounter commands not allowed outside a Game.");
 	}
 
-	if (!sageMessage.canAdminGame && !sageMessage.playerCharacter) {
+	if (!sageMessage.canAdminGame && !sageMessage.actor.isGamePlayer) {
 		return sageMessage.denyForGame("Encounter Status");
 	}
 

@@ -1,8 +1,11 @@
-import { errorReturnFalse, formatDataFilePath, isDefined, numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import { DataTable } from "@rsc-sage/data-layer";
+import { isDefined, numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import type { StatResults } from "@rsc-utils/game-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/game-utils";
-import { fileExistsSync, writeFile } from "@rsc-utils/io-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
+import type { PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../joe/PlayerCharacterJoe.js";
+import type { PlayerCharacterPR } from "../pr/PlayerCharacterPR.js";
+import type { PlayerCharacterTransformer } from "../transformer/PlayerCharacterTransformer.js";
 
 export type TArmorE20 = {
 	name?: string;
@@ -349,20 +352,48 @@ export abstract class PlayerCharacterE20<T extends PlayerCharacterCoreE20> exten
 		return [];
 	}
 
-	public static createFilePath(characterId: string): string {
-		return formatDataFilePath(["sage", "e20"], characterId);
-	}
-
-	public static exists(characterId: string): boolean {
-		return fileExistsSync(PlayerCharacterE20.createFilePath(characterId));
-	}
-
-	public static async saveCharacter(character: PlayerCharacterE20<any> | PlayerCharacterCoreE20): Promise<boolean> {
-		const json = "toJSON" in character ? character.toJSON() : character;
-		return writeFile(PlayerCharacterE20.createFilePath(character.id), json, { makeDir:true }).catch(errorReturnFalse);
-	}
-
 	public async save(): Promise<boolean> {
-		return PlayerCharacterE20.saveCharacter(this);
+		return await PlayerCharacterE20.saveCharacter(this);
+	}
+
+	/** Attempts to validate if the core for the give characterId exists. */
+	public static async exists(characterId: string): Promise<boolean> {
+		return await DataTable.characterImportExists("e20", characterId);
+	}
+
+	/** Saves the given imported character core. */
+	public static async saveCharacter(character: PlayerCharacterE20<any> | PlayerCharacterCoreE20): Promise<boolean> {
+		return await DataTable.writeCharacterImport("e20", character);
+	}
+
+	/** Stores the descended PlayerCharacterE20 classes used in loadCharacterCore(). */
+	public static Children: {
+		"E20 - G.I. Joe"?: typeof PlayerCharacterJoe;
+		"E20 - Power Rangers"?: typeof PlayerCharacterPR;
+		"E20 - Transformers"?: typeof PlayerCharacterTransformer;
+	} = { };
+
+	/** Loads the core into the character PlayerCharacterE20 class by using `gameType`. */
+	public static from(core: Optional<PlayerCharacterCoreE20>): PlayerCharacterE20<any> | undefined {
+		if (!core) return undefined;
+
+		// cast as Joe to avoid type errors
+
+		const childClass = PlayerCharacterE20.Children[core.gameType] as typeof PlayerCharacterJoe;
+		if (!childClass) return undefined;
+
+		return new childClass(core as PlayerCharacterCoreJoe);
+	}
+
+	/** Fetches the E20 core for the given characterId and returns an appropriate PlayerCharacterE20 class by using `gameType`. */
+	public static async loadCharacter<PlayerCharacter extends PlayerCharacterE20<any>>(characterId: string): Promise<PlayerCharacter | undefined> {
+		const core = await DataTable.readCharacterImport<PlayerCharacterCoreE20>("e20", characterId);
+		return core ? PlayerCharacterE20.from(core) as PlayerCharacter : undefined;
+	}
+
+	/** @deprecated Fetches the E20 core for the given characterId and returns an appropriate PlayerCharacterE20 class by using `gameType`. */
+	public static loadCharacterSync<PlayerCharacter extends PlayerCharacterE20<any>>(characterId: string): PlayerCharacter | undefined {
+		const core = DataTable.readCharacterImportSync<PlayerCharacterCoreE20>("e20", characterId);
+		return core ? PlayerCharacterE20.from(core) as PlayerCharacter : undefined;
 	}
 }

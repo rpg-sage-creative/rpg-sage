@@ -3,7 +3,7 @@ import { isSuperAdminId, isSuperUserId } from "@rsc-sage/env";
 import { applyChanges, stringOrUndefined, type Args, type Snowflake } from "@rsc-utils/core-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
-import { CharacterManager } from "./CharacterManager.js";
+import { CharacterArray } from "./CharacterArray.js";
 import type { AutoChannelResult, GameCharacter, GameCharacterCore } from "./GameCharacter.js";
 import { NamedCollection } from "./NamedCollection.js";
 import { NoteManager } from "./NoteManager.js";
@@ -49,7 +49,7 @@ export class User extends HasSageCacheCore<UserCore> {
 
 		this.core.aliases = NamedCollection.from(this.core.aliases ?? [], this);
 
-		this.core.playerCharacters = CharacterManager.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
+		this.core.playerCharacters = CharacterArray.from(this.core.playerCharacters as GameCharacterCore[] ?? [], this, "pc");
 
 		this.notes = new NoteManager(this.core.notes ??= []);
 
@@ -59,9 +59,9 @@ export class User extends HasSageCacheCore<UserCore> {
 
 	public get aliases(): NamedCollection<Alias> { return this.core.aliases as NamedCollection<Alias>; }
 	public get macros() { return this.core.macros ??= []; }
-	public nonPlayerCharacters = CharacterManager.from([], this, "npc");
+	public nonPlayerCharacters = CharacterArray.from([], this, "npc");
 	public notes: NoteManager;
-	public get playerCharacters(): CharacterManager { return this.core.playerCharacters as CharacterManager; }
+	public get playerCharacters(): CharacterArray { return this.core.playerCharacters as CharacterArray; }
 
 	//#region settings
 

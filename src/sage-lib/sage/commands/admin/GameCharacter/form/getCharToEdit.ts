@@ -1,15 +1,17 @@
 import type { Snowflake, UUID } from "@rsc-utils/core-utils";
 import { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../../model/SageCommand.js";
+import { DataTable } from "@rsc-sage/data-layer";
 
 type CharId = Snowflake | UUID | string;
 
 export async function getCharToEdit(sageCommand: SageCommand, charId: CharId): Promise<GameCharacter | undefined> {
 	const game = sageCommand.game;
-	const gameId = game?.id;
-	const userId = sageCommand.actorId;
+	// const gameId = game?.id;
+	// const userId = sageCommand.actorId;
 
-	const char = await GameCharacter.fromTemp({ charId, gameId, userId });
+	// const char = await GameCharacter.fromTemp({ charId, gameId, userId });
+	const char = await DataTable.readTempData<GameCharacter>("");
 	if (char) {
 		return char;
 	}
@@ -18,5 +20,6 @@ export async function getCharToEdit(sageCommand: SageCommand, charId: CharId): P
 	if (charOrShell) {
 		return "game" in charOrShell ? charOrShell.game : charOrShell;
 	}
+
 	return undefined;
 }

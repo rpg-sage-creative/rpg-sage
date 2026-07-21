@@ -6,7 +6,7 @@ import { DiscordKey } from "@rsc-utils/discord-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
-import { CharacterManager } from "./CharacterManager.js";
+import { CharacterArray } from "./CharacterArray.js";
 import { Colors, type HasColorsCore } from "./Colors.js";
 import { Emojis, type HasEmojiCore } from "./Emojis.js";
 import type { Game } from "./Game.js";
@@ -39,7 +39,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 			this.core.gmCharacter = { id:generateSnowflake(), name:"", objectType:"Character" };
 		}
 		this.core.gmCharacter.name = this.core.gmCharacterName ?? GameCharacter.defaultGmCharacterName;
-		this.core.gmCharacter = CharacterManager.from([this.core.gmCharacter as GameCharacterCore], this, "gm")[0];
+		this.core.gmCharacter = CharacterArray.from([this.core.gmCharacter as GameCharacterCore], this, "gm")[0];
 	}
 
 	// #region Public Properties
@@ -74,7 +74,12 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 
 	//#region derived
 	private _gameSystem?: GameSystem | null;
-	public get gameSystem(): GameSystem | undefined { return this._gameSystem === null ? undefined : (this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null) ?? undefined; }
+	public get gameSystem(): GameSystem | undefined {
+		if (this._gameSystem === undefined) {
+			this._gameSystem = parseGameSystem(this.core.gameSystemType) ?? null;
+		}
+		return this._gameSystem ?? undefined;
+	}
 	//#endregion
 
 	//#endregion

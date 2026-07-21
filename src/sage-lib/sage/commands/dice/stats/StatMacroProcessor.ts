@@ -1,6 +1,6 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { StatBlockProcessor, type DiceMacroBase } from "@rsc-utils/game-utils";
-import type { CharacterManager } from "../../../model/CharacterManager.js";
+import type { CharacterArray } from "../../../model/CharacterArray.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { EncounterManager } from "../../trackers/encounter/EncounterManager.js";
@@ -12,8 +12,8 @@ export type StatMacroCharacters = {
 	primaryCompanionCharacter?: GameCharacter;
 
 	gmCharacters?: GameCharacter[];
-	playerCharacters?: CharacterManager;
-	nonPlayerCharacters?: CharacterManager;
+	playerCharacters?: CharacterArray;
+	nonPlayerCharacters?: CharacterArray;
 
 	encounters?: EncounterManager;
 };
@@ -74,11 +74,7 @@ function getMacrosFromChar(char: Optional<GameCharacter>, userId?: Snowflake, ov
 	const out: DiceMacroBase[] = [];
 	if (!char) return out;
 
-	const macros = [
-		...char.macros,
-		...(char.pathbuilder?.getAttackMacros() ?? []),
-		...(char.pathbuilder?.getSpellMacros() ?? []),
-	];
+	const macros = char.getAllMacros();
 
 	// if the char belongs to the active user
 	if (char.userDid === userId || override) {

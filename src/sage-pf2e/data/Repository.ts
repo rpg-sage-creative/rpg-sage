@@ -1,6 +1,6 @@
+import { DataTable } from "@rsc-sage/data-layer";
 import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { debug, errorReturnEmptyArray, getDataRoot, initializeNoiseUS, initializeUKtoUS, isDefined, SnowflakeMatcher, StringMatcher, UuidMatcher, verbose, warn } from "@rsc-utils/core-utils";
-import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
+import { debug, initializeNoiseUS, initializeUKtoUS, isDefined, SnowflakeMatcher, StringMatcher, UuidMatcher, verbose, warn } from "@rsc-utils/core-utils";
 import { randomItem } from "@rsc-utils/random-utils";
 import type { AonBase } from "../model/base/AonBase.js";
 import type { Base, BaseCore } from "../model/base/Base.js";
@@ -253,40 +253,24 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 }
 
 export async function loadData(): Promise<void> {
-	const pf2DataPath = getDataRoot("pf2e");
+	verbose(`Loading PF2e Data ...`);
 
-	const files: string[] = await filterFiles(pf2DataPath, { fileExt:"json", recursive:true })
-		.catch(errorReturnEmptyArray);
-	if (!files.length) {
-		warn(`No files in "${pf2DataPath}" ...`);
-		return Promise.resolve();
+	const loaded = await DataTable.populatePf2eData(loadCore);
+
+	if (!loaded.total) {
+		warn(`No PF2e data files ...`);
+		return;
 	}
 
-	verbose(`Loading Data from: ${pf2DataPath}`);
-
-	let coresLoaded = 0;
-
-	const sources = files.filter(file => file.includes("/Source/"));
-	verbose(`Loading Data: ${sources.length} sources`);
-	for (const source of sources) {
-		await readJsonFile<BaseCore>(source).then(core => coresLoaded += loadCore(core, source), warn);
-	}
-
-	const others = files.filter(file => !file.includes("/Source/"));
-	verbose(`Loading Data: ${others.length} objects`);
-	for (const other of others) {
-		await readJsonFile<BaseCore>(other).then(core => coresLoaded += loadCore(core, other), warn);
-	}
-
-	verbose(`\t\t${coresLoaded} Total Cores loaded`);
+	verbose(`\t\t${loaded.source} Source Cores loaded`);
+	verbose(`\t\t${loaded.other} Other Cores loaded`);
+	verbose(`\t\t${loaded.total} Total Cores loaded`);
 
 	const pairs = initializeUKtoUS();
 	verbose(`UK to US pairs loaded: ${pairs}`);
 
 	const noise = initializeNoiseUS();
 	verbose(`US noise words loaded: ${noise}`);
-
-	return Promise.resolve();
 }
 
 //#endregion

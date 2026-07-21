@@ -10,7 +10,6 @@ import { createAdminRenderableContent } from "../commands/cmd.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageEventCache } from "./SageEventCache.js";
 import { SageMessageArgs } from "./SageMessageArgs.js";
-import type { HasGame } from "./index.js";
 import type { ClientEventsKey } from "./utils/createClientEventLabel.js";
 import { addMessageDeleteButton } from "./utils/deleteButton.js";
 
@@ -22,8 +21,7 @@ interface SageMessageCore extends SageCommandCore {
 }
 
 export class SageMessage
-	extends SageCommand<SageMessageCore, SageMessageArgs>
-	implements HasGame {
+	extends SageCommand<SageMessageCore, SageMessageArgs> {
 
 	private constructor(protected core: SageMessageCore, cache?: Cache) {
 		super(core, cache);

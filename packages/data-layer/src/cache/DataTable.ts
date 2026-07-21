@@ -1,5 +1,8 @@
-import { error, getCodeName, tagLiterals } from "@rsc-utils/core-utils";
+import { error, errorReturnEmptyArray, errorReturnFalse, errorReturnUndefined, formatDataFilePath, getCodeName, getDataRoot, partition, tagLiterals, warnReturnUndefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { deleteFile, fileExists, filterFiles, readJsonFile, readJsonFileSync, readText, writeFile } from "@rsc-utils/io-utils";
+import { join } from "node:path";
 import { ensureNonNilId } from "./internal/ensureNonNilId.js";
+import { getJsonPath } from "./internal/getJsonPath.js";
 import { getPopulateHandler, type PopulateHandler } from "./internal/getPopulateHandler.js";
 import { getReadHandler, type ReadHandler } from "./internal/getReadHandler.js";
 import { getWriteHandler, type WriteHandler } from "./internal/getWriteHandler.js";
@@ -37,6 +40,18 @@ type CachedDataTable<
 	has(id: string | CacheItem): boolean;
 	populate(): Promise<boolean>;
 };
+
+/**
+ * @deprecated
+ * Used only for temp read/write logic.
+ * Represents a Core with id or an entity with id that can become a Core via toJSON().
+ */
+type EntityOrCore = {
+	id: string;
+	toJSON: () => { id:string; };
+} | {
+	id: string;
+}
 
 /**
  * Represents a cache for a specific ObjectType, as specified by ObjectCache.key
@@ -313,7 +328,7 @@ export class DataTable<
 		return DataTable;
 	}
 
-	/** if not objectTypes are given, then all are populated. */
+	/** if no objectTypes are given, then all are populated. */
 	public static async populate(...objectTypes: CacheItemObjectType[]): Promise<boolean> {
 		if (!objectTypes.length) {
 			objectTypes = Object.keys(DataTable.config) as CacheItemObjectType[];
@@ -331,6 +346,263 @@ export class DataTable<
 			}
 		}
 		return populated;
+	}
+
+	//#endregion
+
+	//#region Character Import logic
+
+	/**
+	 * @deprecated
+	 * Temporary solution for checking existance of imported characters.
+	 * Will be removed when all imported character data is stored as part of the SageCharacter.
+	 * Handles the data source (json file vs ddb) so that main Sage code can stop reading files.
+	 */
+	public static async characterImportExists(which: "e20" | "heph" | "pb2e", characterId: string): Promise<boolean> {
+		const jsonPath = getJsonPath(which, characterId);
+		return await fileExists(jsonPath).catch(errorReturnFalse);
+	}
+
+	/**
+	 * @deprecated
+	 * Temporary solution for reading imported characters.
+	 * Will be removed when all imported character data is stored as part of the SageCharacter.
+	 * Handles the data source (json file vs ddb) so that main Sage code can stop reading files.
+	 */
+	public static async readCharacterImport<T>(which: "e20" | "heph" | "pb2e", characterId: string): Promise<T | undefined> {
+		const jsonPath = getJsonPath(which, characterId);
+		return await readJsonFile<T>(jsonPath).catch(errorReturnUndefined) ?? undefined;
+	}
+
+	/**
+	 * @deprecated
+	 * Temporary solution for reading imported characters.
+	 * Will be removed when all imported character data is stored as part of the SageCharacter.
+	 * Handles the data source (json file vs ddb) so that main Sage code can stop reading files.
+	 */
+	public static readCharacterImportSync<T>(which: "e20" | "heph" | "pb2e", characterId: string): T | undefined {
+		const jsonPath = getJsonPath(which, characterId);
+		try {
+			return readJsonFileSync<T>(jsonPath) ?? undefined;
+		}catch(ex) {
+			return errorReturnUndefined(ex);
+		}
+	}
+
+	/**
+	 * @deprecated
+	 * Temporary solution for writing imported characters.
+	 * Will be removed when all imported character data is stored as part of the SageCharacter.
+	 * Handles the data source (json file vs ddb) so that main Sage code can stop writing files.
+	 */
+	public static async writeCharacterImport(which: "e20" | "heph" | "pb2e", character: EntityOrCore): Promise<boolean> {
+		const json = "toJSON" in character ? character.toJSON() : character;
+		const jsonPath = getJsonPath(which, json.id);
+		return await writeFile(jsonPath, json, { makeDir:true }).catch(errorReturnFalse);
+	}
+
+	//#endregion
+
+	//#region temp data logic
+
+	public static async writeTempData(_core: unknown, _tempId?: Snowflake): Promise<string | undefined> {
+		// const id = tempId ?? generateSnowflake();
+		// const tempCore = { id, core, objectType:"TempData" };
+		// const dataTable = DataTable.for("TempData");
+		// const saved = await dataTable.write(tempCore);
+		// return saved ? id : undefined;
+		return undefined;
+	}
+
+	public static async readTempData<T>(_id: string): Promise<T | undefined> {
+		return undefined;
+	}
+
+	//#endregion
+
+	//#region dev cache files
+
+	/** @deprecated @todo rework the search cache strategy */
+	private static createCacheFilePath(fileName: string): string {
+		return join("../", fileName);
+	}
+
+	/** @deprecated @todo rework the search cache strategy */
+	public static async readSearchHtmlCache(fileName: string): Promise<string | undefined> {
+		// instead of checking that the file exists before reading, simply ignore a failed read
+		return await readText(DataTable.createCacheFilePath(fileName)).catch(() => undefined);
+	}
+
+	/** @deprecated @todo rework the search cache strategy */
+	public static async writeSearchHtmlCache(fileName: string, content: string): Promise<void> {
+		await writeFile(DataTable.createCacheFilePath(fileName), content);
+	}
+
+	//#endregion
+
+	//#region map data files
+
+	/**
+	 * Creates the filePath for the given messageId.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 */
+	private static createMapFilePath(messageId: string): string {
+		return formatDataFilePath(["sage", "maps"], messageId);
+	}
+
+	/**
+	 * Returns true if a map exists for the given messageId.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 */
+	public static async mapExists(messageId: Optional<string>): Promise<boolean>;
+	/**
+	 * Returns true if a map exists for the given messageId and the name matches the given mapName.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 * @param mapName the name to compare to the map core's name
+	 */
+	public static async mapExists(messageId: string, mapName: string): Promise<boolean>
+	public static async mapExists(messageId: Optional<string>, mapName?: string): Promise<boolean> {
+		// ensure a messageId
+		if (!messageId) {
+			return false;
+		}
+
+		const filePath = DataTable.createMapFilePath(messageId);
+
+		// if we don't have a mapName, we are just checking the map exists
+		if (!mapName) {
+			return await fileExists(filePath);
+		}
+
+		// read the core and compare names
+		const mapCore = await readJsonFile<{ name?:string; }>(filePath).catch(() => undefined);
+		return mapCore?.name === mapName
+	}
+
+	/**
+	 * Deletes the map for the given messageId.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 */
+	public static async deleteMap(messageId: string): Promise<boolean> {
+		const filePath = DataTable.createMapFilePath(messageId);
+		return await deleteFile(filePath).catch(errorReturnFalse);
+	}
+
+	/**
+	 * Reads the map core/json for the given messageId.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 */
+	public static async readMap<MapCore>(messageId: string): Promise<MapCore | undefined> {
+		const filePath = DataTable.createMapFilePath(messageId);
+		return await readJsonFile<MapCore>(filePath).catch(errorReturnUndefined) ?? undefined;
+	}
+
+	/**
+	 * Saves the given map using the given messageId.
+	 * Handles errors.
+	 * @deprecated @todo maps should get their own DataTable
+	 * @param messageId the id of the message the map is rendered in
+	 * @param mapCore the json object to write to file
+	 */
+	public static async writeMap(messageId: string, mapCore: unknown): Promise<boolean> {
+		const filePath = DataTable.createMapFilePath(messageId);
+		return await writeFile(filePath, mapCore, { makeDir:true }).catch(errorReturnFalse);
+	}
+
+	//#endregion
+
+	//#region PF2E data (hand typed by Sage staff; deprecated; moving to foundry data)
+
+	/**
+	 * @deprecated
+	 * PF2e data used to be hand typed so that we could search for and display individual items.
+	 * That task was too time consuming, and so we stopped doing it with the plan to switch to using the freely available Foundry data.
+	 * This code is legacy that cannot be ripped out quite yet because we still use weapon data for a couple things.
+	 * But, since we are moving the data layer, the data / file read logic is going to live here until it is removed.
+	 */
+	public static async populatePf2eData<Core>(coreHandler: (core: Optional<Core>, filePath: string) => number) {
+		const pf2DataPath = getDataRoot("pf2e");
+
+		const files: string[] = await filterFiles(pf2DataPath, { fileExt:"json", recursive:true })
+			.catch(errorReturnEmptyArray);
+
+		const loaded = {
+			other: 0,
+			source: 0,
+			total: files.length,
+		};
+
+		if (!files.length) {
+			return loaded;
+		}
+
+		const [sources, others] = partition(files, file => file.includes("/Source/") ? 0 : 1);
+
+		for (const source of sources) {
+			const core = await readJsonFile<Core>(source).catch(warnReturnUndefined);
+			loaded.source += coreHandler(core, source);
+		}
+
+		for (const other of others) {
+			const core = await readJsonFile<Core>(other).catch(warnReturnUndefined);
+			loaded.other += coreHandler(core, other);
+		}
+
+		return loaded;
+	}
+
+	//#endregion
+
+	//#region bot config read/write
+
+	/** Reusable single location to create filePath for a bot. */
+	private static createBotFilePath(id: string): string {
+		return formatDataFilePath(["sage", "bots"], id);
+	}
+
+	/**
+	 * Creates a bot core from the template only if the json file is missing.
+	 * Returns true if a core was created.
+	 */
+	public static async createBotCoreIfMissing<BotCore>(id: string): Promise<BotCore | undefined> {
+		const botFilePath = DataTable.createBotFilePath(id);
+		const exists = await fileExists(botFilePath);
+		if (!exists) {
+			const botTemplatePath = DataTable.createBotFilePath("bot.template");
+			const templateCore = await readJsonFile<{ id:string; codeName:string; }>(botTemplatePath);
+			if (templateCore) {
+				templateCore.id = id;
+				templateCore.codeName = getCodeName();
+				const created = await DataTable.writeBotCore(templateCore);
+				if (created) {
+					return templateCore as BotCore;
+				}
+			}
+		}
+		return undefined;
+	}
+
+	/** Reads the bot core for the given id. */
+	public static async readBotCore<BotCore>(id: string): Promise<BotCore | undefined> {
+		const botFilePath = DataTable.createBotFilePath(id);
+		return await readJsonFile<BotCore>(botFilePath) ?? undefined;
+	}
+
+	/** Writes the given bot core. The JSON is formatted ("pretty") if the codeName is "dev". */
+	public static async writeBotCore(bot: EntityOrCore & { codeName:string; }): Promise<boolean> {
+		const botFilePath = DataTable.createBotFilePath(bot.id);
+		const formatted = bot.codeName === "dev";
+		const core = "toJSON" in bot ? bot.toJSON() : bot;
+		return await writeFile(botFilePath, core, { makeDir:true, formatted }).catch(errorReturnFalse);
 	}
 
 	//#endregion

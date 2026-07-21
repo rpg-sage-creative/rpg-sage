@@ -15,6 +15,7 @@ import type { User } from "../model/User.js";
 import { createMessageDeleteButtonComponents } from "../model/utils/deleteButton.js";
 import { parseDiceMatches, sendDice } from "./dice.js";
 import { StatMacroProcessor } from "./dice/stats/StatMacroProcessor.js";
+import { parseImportCharacterSheetCustomId, type ParsedCustomId } from "./sheets/parseImportCharacterSheetCustomId.js";
 
 function createActionRow<T extends ButtonBuilder | StringSelectMenuBuilder>(...components: T[]): ActionRowBuilder<T> {
 	components.forEach(comp => {
@@ -411,26 +412,6 @@ function prepareOutput({ eventCache }: SageCommand, character: HephaistosCharact
 	return { embeds, components };
 }
 
-//#region button command
-
-export function getValidHephaistosCharacterSF1eId(customId?: string | null): string | undefined {
-	const actionRegex = /^HEPH1E\|(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|\d{16,})\|(?:View|Skill|Macro|Roll|Secret|Init|MacroRoll|Link|Unlink)$/i;
-	if (!customId || !actionRegex.test(customId)) {
-		return undefined;
-	}
-
-	const [_heph1e, characterId] = customId.split("|");
-	if (_heph1e === "HEPH1E" && HephaistosCharacterSF1e.exists(characterId)) {
-		return characterId;
-	}
-	return undefined;
-}
-
-function sheetTester(sageInteraction: SageButtonInteraction): boolean {
-	const customId = sageInteraction.interaction.customId;
-	return getValidHephaistosCharacterSF1eId(customId) !== undefined;
-}
-
 async function viewHandler(sageInteraction: SageStringSelectInteraction, character: HephaistosCharacterSF1e): Promise<void> {
 	const values = sageInteraction.interaction.values;
 	const activeSections: string[] = [];
@@ -583,9 +564,25 @@ async function unlinkHandler(sageInteraction: SageButtonInteraction, character: 
 	}
 }
 
-async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
+const ValidCommands = [ 'View', 'Skill', 'Macro', 'Roll', 'Secret', 'Init', 'MacroRoll', 'Link', 'Unlink' ] as const;
+type ValidParsedCommand = ParsedCustomId<typeof ValidCommands[number]>;
+
+/**
+ * Attempts to parse the given customId into a ParsedCustomId object by calling parseCustomId().
+ * If successful, then the characterId is validated to ensure the character exists.
+ */
+export async function parseValidCustomId(customId: Optional<string>): Promise<ValidParsedCommand | undefined> {
+	return await parseImportCharacterSheetCustomId("heph", ValidCommands, customId);
+}
+
+/** Validates if the iteraction is a sheet command with a valid customId/characterId */
+async function sheetTester(sageInteraction: SageInteraction): Promise<ValidParsedCommand | undefined> {
+	return await parseValidCustomId(sageInteraction.interaction.customId);
+}
+
+async function sheetHandler(sageInteraction: SageInteraction, validAction: ValidParsedCommand): Promise<void> {
 	await sageInteraction.interaction.deferUpdate();
-	const [_HEPH1E, characterId, command] = sageInteraction.interaction.customId.split("|");
+	const { characterId, command } = validAction;
 	const character = await HephaistosCharacterSF1e.loadCharacter(characterId);
 	if (character) {
 		switch(command) {
@@ -603,10 +600,6 @@ async function sheetHandler(sageInteraction: SageInteraction): Promise<void> {
 	return Promise.resolve();
 }
 
-//#endregion
-
 export function registerHephaistos(): void {
 	registerInteractionListener(sheetTester, sheetHandler);
-
 }
-

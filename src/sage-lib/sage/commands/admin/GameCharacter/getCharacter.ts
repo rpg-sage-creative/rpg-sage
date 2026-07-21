@@ -1,5 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import type { CharacterManager } from "../../../model/CharacterManager.js";
+import type { CharacterArray } from "../../../model/CharacterArray.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import type { Names } from "../../../model/SageCommandArgs.js";
@@ -13,7 +13,7 @@ export async function getCharacter(sageCommand: SageCommand, characterTypeMeta: 
 
 	const hasCharacters = sageCommand.game ?? sageCommand.sageUser;
 
-	let characterManager: CharacterManager | undefined = characterTypeMeta.isGmOrNpcOrMinion
+	let characterManager: CharacterArray | undefined = characterTypeMeta.isGmOrNpcOrMinion
 		? hasCharacters.nonPlayerCharacters
 		: hasCharacters.playerCharacters;
 

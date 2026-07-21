@@ -5,6 +5,7 @@ export * from "./getSuperUserId.js";
 export * from "./getToken.js";
 export * from "./ghostEvent.js";
 export * from "./isSuperAdminId.js";
+export * from "./readJsonFetchHeaders.js";
 export * from "./SageId.js";
 export * from "./TupperBoxId.js";
 export * from "./WebhookName.js";

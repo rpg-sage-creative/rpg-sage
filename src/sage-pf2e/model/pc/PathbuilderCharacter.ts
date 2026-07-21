@@ -1,6 +1,6 @@
-import { addCommas, capitalize, cleanWhitespace, debug, errorReturnFalse, errorReturnUndefined, formatDataFilePath, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { DataTable } from "@rsc-sage/data-layer";
+import { addCommas, capitalize, cleanWhitespace, debug, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { CharacterBase, type DiceMacroBase, type StatResults } from "@rsc-utils/game-utils";
-import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import type { IHasAbilities } from "../../../gameSystems/p20/lib/Abilities.js";
@@ -1141,6 +1141,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 			}
 		}
 	}
+
 	public getValidSections<V extends string = TCharacterSectionType>(): V[] {
 		const outputTypes: TCharacterSectionType[] = [
 			"Traits",
@@ -1197,6 +1198,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 
 		return outputTypes as V[];
 	}
+
 	public getValidViews<V extends string = TCharacterViewType>(): V[] {
 		const outputTypes: TCharacterViewType[] = [];
 
@@ -1235,33 +1237,37 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 
 	//#region save/load
 
-	public static createFilePath(characterId: string): string {
-		return formatDataFilePath(["sage", "pb2e"], characterId);
+	/** Attempts to validate if the core for the give characterId exists. */
+	public static async exists(characterId: string): Promise<boolean> {
+		return await DataTable.characterImportExists("pb2e", characterId);
 	}
 
-	public static exists(characterId: string): boolean {
-		return fileExistsSync(PathbuilderCharacter.createFilePath(characterId));
+	/** Fetches the character core for the given characterId and returns a HephaistosCharacterSF1e. */
+	public static async loadCharacter(characterId: string): Promise<PathbuilderCharacter | undefined> {
+		const core = await DataTable.readCharacterImport<TPathbuilderCharacter>("pb2e", characterId);
+		return PathbuilderCharacter.from(core);
 	}
 
+	/** @deprecated all data loading should be async */
 	public static loadCharacterSync(characterId: string): PathbuilderCharacter | undefined {
-		try {
-			const core = readJsonFileSync<TPathbuilderCharacter>(PathbuilderCharacter.createFilePath(characterId));
-			return core ? new PathbuilderCharacter(core) : undefined;
-		}catch(ex) {
-			return errorReturnUndefined(ex);
-		}
+		const core = DataTable.readCharacterImportSync<TPathbuilderCharacter>("pb2e", characterId);
+		return PathbuilderCharacter.from(core);
 	}
 
-	public static async loadCharacter(characterId: string): Promise<PathbuilderCharacter | null> {
-		const core = await readJsonFile<TPathbuilderCharacter>(PathbuilderCharacter.createFilePath(characterId)).catch(errorReturnUndefined);
-		return core ? new PathbuilderCharacter(core) : null;
+	/**
+	 * Convenience method for: `core ? new PathbuilderCharacter(core) : undefined`.
+	 * @todo look into doing validation of the core to ensure app integrity.
+	 */
+	public static from(core: Optional<TPathbuilderCharacter>): PathbuilderCharacter | undefined {
+		return core ? new PathbuilderCharacter(core) : undefined;
 	}
 
+	/** Saves the given imported character core. */
 	public static async saveCharacter(character: TPathbuilderCharacter | PathbuilderCharacter): Promise<boolean> {
-		const json = "toJSON" in character ? character.toJSON() : character;
-		return writeFile(PathbuilderCharacter.createFilePath(character.id), json).catch(errorReturnFalse);
+		return await DataTable.writeCharacterImport("pb2e", character);
 	}
 
+	/** Saves the current imported character. */
 	public async save(): Promise<boolean> {
 		return PathbuilderCharacter.saveCharacter(this);
 	}

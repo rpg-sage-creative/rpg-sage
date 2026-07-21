@@ -338,3 +338,6 @@ export class PlayerCharacterTransformer extends PlayerCharacterE20<PlayerCharact
 	}
 
 }
+
+// add as child of PlayerCharacterE20 to simplify character loading via PlayerCharacterE20.loadCharacter
+PlayerCharacterE20.Children["E20 - Transformers"] = PlayerCharacterTransformer;

@@ -1,6 +1,6 @@
-import { addCommas, errorReturnFalse, errorReturnUndefined, formatDataFilePath, type Optional } from "@rsc-utils/core-utils";
+import { DataTable } from "@rsc-sage/data-layer";
+import { addCommas, type Optional } from "@rsc-utils/core-utils";
 import { CharacterBase, type DiceMacroBase, type MacroBase } from "@rsc-utils/game-utils";
-import { fileExistsSync, readJsonFile, readJsonFileSync, writeFile } from "@rsc-utils/io-utils";
 import { Ability } from "../../d20/lib/Ability.js";
 import { Check } from "../../d20/lib/Check.js";
 import { SavingThrow } from "../../d20/lib/SavingThrow.js";
@@ -259,14 +259,14 @@ export class HephaistosCharacterSF1e extends CharacterBase<HephaistosCharacterCo
 	public getFeats() { return this.core.feats.acquiredFeats; }
 	public getMoney() { const { credits, upbs } = this.core; return { credits, upbs, isEmpty:!credits&&!upbs }; }
 
-		public getSheetMacros(type: "attack" | "spell"): DiceMacroBase[];
-		public getSheetMacros<User extends { id:string; macros: MacroBase[]; }>(type: "user", macroUser: Optional<User>): DiceMacroBase[];
-		public getSheetMacros<User extends { id:string; macros: MacroBase[]; }>(type: "attack" | "spell" | "user", macroUser?: Optional<User>): DiceMacroBase[] {
-			if (type === "attack") {
-				return this.getWeapons().map(wpn => weaponToMacro(this, wpn));
-			}
-			return super.getSheetMacros(type as "user", macroUser);
+	public getSheetMacros(type: "attack" | "spell"): DiceMacroBase[];
+	public getSheetMacros<User extends { id:string; macros: MacroBase[]; }>(type: "user", macroUser: Optional<User>): DiceMacroBase[];
+	public getSheetMacros<User extends { id:string; macros: MacroBase[]; }>(type: "attack" | "spell" | "user", macroUser?: Optional<User>): DiceMacroBase[] {
+		if (type === "attack") {
+			return this.getWeapons().map(wpn => weaponToMacro(this, wpn));
 		}
+		return super.getSheetMacros(type as "user", macroUser);
+	}
 
 
 	public getValidSections<V extends string = CharacterSectionType>(): V[] {
@@ -480,36 +480,42 @@ export class HephaistosCharacterSF1e extends CharacterBase<HephaistosCharacterCo
 		}
 	}
 
-	public static async saveCharacter(character: HephaistosCharacterCoreSF1e | HephaistosCharacterSF1e): Promise<boolean> {
-		const json = "toJSON" in character ? character.toJSON() : character;
-		return writeFile(HephaistosCharacterSF1e.createFilePath(character.id), json, { makeDir:true }).catch(errorReturnFalse);
-	}
+	/** Saves the current imported character. */
 	public save(): Promise<boolean> {
 		return HephaistosCharacterSF1e.saveCharacter(this);
 	}
 
-	public static createFilePath(characterId: string): string {
-		return formatDataFilePath(["sage", "heph"], characterId);
+	/** Attempts to validate if the core for the give characterId exists. */
+	public static async exists(characterId: string): Promise<boolean> {
+		return await DataTable.characterImportExists("heph", characterId);
 	}
 
-	public static exists(characterId: string): boolean {
-		return fileExistsSync(HephaistosCharacterSF1e.createFilePath(characterId));
+	/** Fetches the character core for the given characterId and returns a HephaistosCharacterSF1e. */
+	public static async loadCharacter(characterId: string): Promise<HephaistosCharacterSF1e | undefined> {
+		const core = await DataTable.readCharacterImport<HephaistosCharacterCoreSF1e>("heph", characterId);
+		return HephaistosCharacterSF1e.from(core);
 	}
 
-	public static async loadCharacter(characterId: string): Promise<HephaistosCharacterSF1e | null> {
-		const core = await readJsonFile<HephaistosCharacterCoreSF1e>(HephaistosCharacterSF1e.createFilePath(characterId)).catch(errorReturnUndefined);
-		return core ? new HephaistosCharacterSF1e(core) : null;
-	}
-
+	/** @deprecated all data loading should be async */
 	public static loadCharacterSync(characterId: string): HephaistosCharacterSF1e | undefined {
-		try {
-			const core = readJsonFileSync<HephaistosCharacterCoreSF1e>(HephaistosCharacterSF1e.createFilePath(characterId));
-			return core ? new HephaistosCharacterSF1e(core) : undefined;
-		}catch(ex) {
-			return errorReturnUndefined(ex);
-		}
+		const core = DataTable.readCharacterImportSync<HephaistosCharacterCoreSF1e>("heph", characterId);
+		return HephaistosCharacterSF1e.from(core);
 	}
 
+	/**
+	 * Convenience method for: `core ? new HephaistosCharacterSF1e(core) : undefined`.
+	 * @todo look into doing validation of the core to ensure app integrity.
+	 */
+	public static from(core: Optional<HephaistosCharacterCoreSF1e>): HephaistosCharacterSF1e | undefined {
+		return core ? new HephaistosCharacterSF1e(core) : undefined;
+	}
+
+	/** Saves the given imported character core. */
+	public static async saveCharacter(character: HephaistosCharacterCoreSF1e | HephaistosCharacterSF1e): Promise<boolean> {
+		return await DataTable.writeCharacterImport("heph", character);
+	}
+
+	/** Returns the list of character sheet sections that should be displayed for the given ViewType. */
 	public static getCharacterSections<SectionType, ViewType>(view: Optional<ViewType>): SectionType[] | undefined {
 		switch(view) {
 			case "All": return ["All"] as SectionType[];
