@@ -42,6 +42,18 @@ type CachedDataTable<
 };
 
 /**
+ * @deprecated
+ * Used only for temp read/write logic.
+ * Represents a Core with id or an entity with id that can become a Core via toJSON().
+ */
+type EntityOrCore = {
+	id: string;
+	toJSON: () => { id:string; };
+} | {
+	id: string;
+}
+
+/**
  * Represents a cache for a specific ObjectType, as specified by ObjectCache.key
  */
 export class DataTable<
@@ -383,7 +395,7 @@ export class DataTable<
 	 * Will be removed when all imported character data is stored as part of the SageCharacter.
 	 * Handles the data source (json file vs ddb) so that main Sage code can stop writing files.
 	 */
-	public static async writeCharacterImport(which: "e20" | "heph" | "pb2e", character: ImportedCharacterOrJson): Promise<boolean> {
+	public static async writeCharacterImport(which: "e20" | "heph" | "pb2e", character: EntityOrCore): Promise<boolean> {
 		const json = "toJSON" in character ? character.toJSON() : character;
 		const jsonPath = getJsonPath(which, json.id);
 		return await writeFile(jsonPath, json, { makeDir:true }).catch(errorReturnFalse);
@@ -549,12 +561,49 @@ export class DataTable<
 	}
 
 	//#endregion
-}
 
-/** @deprecated Used only for DataTable.writeCharacterImport */
-type ImportedCharacterOrJson = {
-	id: string;
-	toJSON: () => { id:string; };
-} | {
-	id: string;
+	//#region bot config read/write
+
+	/** Reusable single location to create filePath for a bot. */
+	private static createBotFilePath(id: string): string {
+		return formatDataFilePath(["sage", "bots"], id);
+	}
+
+	/**
+	 * Creates a bot core from the template only if the json file is missing.
+	 * Returns true if a core was created.
+	 */
+	public static async createBotCoreIfMissing<BotCore>(id: string): Promise<BotCore | undefined> {
+		const botFilePath = DataTable.createBotFilePath(id);
+		const exists = await fileExists(botFilePath);
+		if (!exists) {
+			const botTemplatePath = DataTable.createBotFilePath("bot.template");
+			const templateCore = await readJsonFile<{ id:string; codeName:string; }>(botTemplatePath);
+			if (templateCore) {
+				templateCore.id = id;
+				templateCore.codeName = getCodeName();
+				const created = await DataTable.writeBotCore(templateCore);
+				if (created) {
+					return templateCore as BotCore;
+				}
+			}
+		}
+		return undefined;
+	}
+
+	/** Reads the bot core for the given id. */
+	public static async readBotCore<BotCore>(id: string): Promise<BotCore | undefined> {
+		const botFilePath = DataTable.createBotFilePath(id);
+		return await readJsonFile<BotCore>(botFilePath) ?? undefined;
+	}
+
+	/** Writes the given bot core. The JSON is formatted ("pretty") if the codeName is "dev". */
+	public static async writeBotCore(bot: EntityOrCore & { codeName:string; }): Promise<boolean> {
+		const botFilePath = DataTable.createBotFilePath(bot.id);
+		const formatted = bot.codeName === "dev";
+		const core = "toJSON" in bot ? bot.toJSON() : bot;
+		return await writeFile(botFilePath, core, { makeDir:true, formatted }).catch(errorReturnFalse);
+	}
+
+	//#endregion
 }

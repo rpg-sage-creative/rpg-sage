@@ -1,6 +1,5 @@
-import type { EmbedColorType, EmojiType, GameSystemType, HasEmbedColors, HasEmoji, MacroBase } from "@rsc-sage/data-layer";
-import { errorReturnFalse, formatDataFilePath, getCodeName, HasIdCore, warn, type CodeName, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
-import { fileExists, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { DataTable, type EmbedColorType, type EmojiType, type GameSystemType, type HasEmbedColors, type HasEmoji, type MacroBase } from "@rsc-sage/data-layer";
+import { HasIdCore, warn, type CodeName, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
 import { Colors, type HasColorsCore } from "./Colors.js";
 import { Emojis, type HasEmojiCore } from "./Emojis.js";
 
@@ -123,25 +122,12 @@ export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCo
 	}
 
 	public static async readOrCreate(id: Snowflake): Promise<Bot | undefined> {
-		const botPath = formatDataFilePath(["sage", "bots"], id);
-		const exists = await fileExists(botPath);
-		if (!exists) {
-			const botTemplatePath = formatDataFilePath(["sage", "bots"], "bot.template.json");
-			const templateCore = await readJsonFile<BotCore>(botTemplatePath);
-			if (templateCore) {
-				templateCore.id = id;
-				templateCore.codeName = getCodeName();
-				await Bot.write(templateCore);
-			}
-		}
-		const botCore = await readJsonFile<BotCore>(botPath);
+		const botCore = await DataTable.createBotCoreIfMissing<BotCore>(id)
+			?? await DataTable.readBotCore<BotCore>(id);
 		return botCore ? new Bot(botCore) : undefined;
 	}
 
 	public static async write(bot: BotCore | Bot): Promise<boolean> {
-		const botPath = formatDataFilePath(["sage", "bots"], bot.id);
-		const formatted = bot.codeName === "dev";
-		const core = "toJSON" in bot ? bot.toJSON() : bot;
-		return writeFile(botPath, core, { makeDir:true, formatted }).catch(errorReturnFalse);
+		return await DataTable.writeBotCore(bot);
 	}
 }
