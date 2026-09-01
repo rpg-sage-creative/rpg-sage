@@ -24,5 +24,8 @@
 		{ "path": "./packages/sage-localization" },
 		{ "path": "./packages/app-commands" },
 		{ "path": "./packages/sage-core" },
+		{ "path": "./packages/bot" },
+		{ "path": "./packages/map-server" },
+		{ "path": "./packages/pixels-relay-server" },
 	]
 }

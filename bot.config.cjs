@@ -9,7 +9,7 @@ function getJson(...args) {
 
 const apps = [{
 	name: `sage-bot`,
-	script: `./build/bot.mjs`,
+	script: `./packages/bot/build/app.js`,
 	// args: `--max-memory-restart ${restartMB}M`,
 	node_args: "--experimental-modules --es-module-specifier-resolution=node",
 

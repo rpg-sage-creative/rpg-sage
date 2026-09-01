@@ -9,24 +9,24 @@ initializeConsoleUtilsByEnvironment();
 
 DiscordCache.setSageId(getSageId());
 
-const services = ["Map"];
+const services = {
+	"Map": RenderableMap,
+};
 
 /*
 	By default, maps are rendered in Sage's primary thread.
 	We can run them in separate processes using pm2 and services.config.cjs.
 	The --spawnServices flag tells Sage to run those services as child processes of Sage to simplify starting/stopping for testing.
 */
-if (process.argv.includes("--spawnServices")) {
-	services.forEach(serviceName => {
-		RenderableMap.startServer(getPort(serviceName));
-	});
-}
+const spawnServices = process.argv.includes("--spawnServices");
 
-/*
-	Whether we spawn the services or not, we need to set the endpoints
-*/
-services.forEach(serviceName => {
-	RenderableMap.setEndpoint(getEndpoint(serviceName));
+Object.entries(services).forEach(([ serviceName, service ]) => {
+	// Whether we spawn the services or not, we need to set the endpoints
+	service.setEndpoint(getEndpoint(serviceName));
+
+	if (spawnServices) {
+		service.startServer(getPort(serviceName));
+	}
 });
 
 const bot = await ActiveBot.prepBot().catch(error);

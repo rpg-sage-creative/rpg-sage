@@ -1,17 +1,17 @@
 {
-	"name": "@rsc-utils/game-utils",
+	"name": "@rsc-apps/map-server",
 	"version": "0.0.0",
 	"private": true,
-	"main": "build/index.js",
+	"main": "build/app.js",
 	"type": "module",
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2"
+		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2",
+		"@types/node": "^24.12.0",
+		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"@rsc-sage/data-layer": "../data-layer",
 		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.7.0",
-		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.1",
-		"regex": "^6.1.0"
+		"@rsc-sage/core": "../sage-core"
 	},
 	"scripts": {
 		"scrub::node_modules": "rm -rf node_modules",
@@ -20,6 +20,6 @@
 
 		"build::clean-build-folder": "rm -rf build",
 		"build::clean-build-info": "rm -f *.tsbuildinfo",
-		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
+		"-build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
 	}
 }
