@@ -64,6 +64,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-sns": "^3.1053.0",
+		"@rsc-sage/core": "./packages/sage-core",
 		"@rsc-sage/data-layer": "./packages/data-layer",
 		"@rsc-sage/env": "./packages/sage-env",
 		"@rsc-sage/localization": "./packages/sage-localization",
