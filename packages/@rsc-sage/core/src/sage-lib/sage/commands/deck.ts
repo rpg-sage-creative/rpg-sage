@@ -1,4 +1,4 @@
-import type { CardBase } from "@rsc-sage/data-layer";
+import type { CardBase } from "@rsc-sage/data";
 import { BULLET, capitalize, error, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
 import { Deck, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "@rsc-utils/game-utils";

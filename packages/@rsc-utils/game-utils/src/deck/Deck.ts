@@ -1,4 +1,4 @@
-import type { CardBase, DeckCore, DeckType } from "@rsc-sage/data-layer";
+import type { CardBase, DeckCore, DeckType } from "@rsc-sage/data";
 import { capitalize, generateSnowflake, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { randomItems, shuffle } from "@rsc-utils/random-utils";
 import { getCards } from "./decks/getCards.js";

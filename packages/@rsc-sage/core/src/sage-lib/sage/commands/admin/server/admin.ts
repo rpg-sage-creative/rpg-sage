@@ -1,4 +1,4 @@
-import { AdminRoleType, type AdminUser } from "@rsc-sage/data-layer";
+import { AdminRoleType, type AdminUser } from "@rsc-sage/data";
 import { forEachAsync, isDefined, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";

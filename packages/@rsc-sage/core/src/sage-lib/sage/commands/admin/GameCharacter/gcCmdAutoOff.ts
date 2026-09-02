@@ -1,4 +1,4 @@
-import { autoChannelDataMatches } from "@rsc-sage/data-layer";
+import { autoChannelDataMatches } from "@rsc-sage/data";
 import { quote } from "@rsc-utils/core-utils";
 import { parseIds, toChannelMention, toUserMention } from "@rsc-utils/discord-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";

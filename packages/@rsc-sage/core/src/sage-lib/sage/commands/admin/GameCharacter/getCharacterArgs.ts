@@ -1,4 +1,4 @@
-import { GameUserType } from "@rsc-sage/data-layer";
+import { GameUserType } from "@rsc-sage/data";
 import { Arg, Color, debug, error, isBlank, warn, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";

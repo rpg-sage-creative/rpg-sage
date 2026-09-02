@@ -1,4 +1,4 @@
-import type { AutoChannelData } from "@rsc-sage/data-layer";
+import type { AutoChannelData } from "@rsc-sage/data";
 import { generateSnowflake, type Optional, type OrUndefined, type Snowflake } from "@rsc-utils/core-utils";
 import { resolveSnowflake, type CanBeSnowflakeResolvable } from "@rsc-utils/discord-utils";
 import type { Game } from "./Game.js";

@@ -1,4 +1,4 @@
-import { DataTable } from "@rsc-sage/data-layer";
+import { DataTable } from "@rsc-sage/data";
 import { info, type Optional } from "@rsc-utils/core-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../../model/ActiveBot.js";

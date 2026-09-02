@@ -1,4 +1,4 @@
-import { DialogPostType } from "@rsc-sage/data-layer";
+import { DialogPostType } from "@rsc-sage/data";
 import { error, RenderableContent, warn, warnReturnUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { addInvalidWebhookUsername, DiscordKey, isMessage, isUser, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedTarget } from "@rsc-utils/discord-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";

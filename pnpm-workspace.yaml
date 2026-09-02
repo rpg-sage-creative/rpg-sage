@@ -32,7 +32,7 @@ overrides:
 #   "@discordjs/builders": "^1.13.1"
 #   "@discordjs/rest": "^2.6.0"
 #   "@napi-rs/canvas": "^0.1.88"
-#   "@rsc-sage/data-layer": "./packages/data-layer"
+#   "@rsc-sage/data": "./packages/data-layer"
 #   "@rsc-sage/env": "./packages/sage-env"
 #   "@rsc-sage/localization": "./packages/sage-localization"
 #   "@rsc-utils/game-utils": "./packages/game-utils"

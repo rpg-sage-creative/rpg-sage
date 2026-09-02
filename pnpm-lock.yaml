@@ -43,7 +43,7 @@ importers:
       '@rsc-sage/core':
         specifier: 'workspace:'
         version: link:../../@rsc-sage/core
-      '@rsc-sage/data-layer':
+      '@rsc-sage/data':
         specifier: 'workspace:'
         version: link:../../@rsc-sage/data
       '@rsc-sage/env':
@@ -71,7 +71,7 @@ importers:
 
   packages/@rsc-apps/commands:
     dependencies:
-      '@rsc-sage/data-layer':
+      '@rsc-sage/data':
         specifier: 'workspace:'
         version: link:../../@rsc-sage/data
       '@rsc-sage/env':
@@ -140,7 +140,7 @@ importers:
       '@aws-sdk/client-sns':
         specifier: ^3.1053.0
         version: 3.1123.0
-      '@rsc-sage/data-layer':
+      '@rsc-sage/data':
         specifier: 'workspace:'
         version: link:../data
       '@rsc-sage/env':
@@ -228,7 +228,7 @@ importers:
 
   packages/@rsc-utils/game-utils:
     dependencies:
-      '@rsc-sage/data-layer':
+      '@rsc-sage/data':
         specifier: 'workspace:'
         version: link:../../@rsc-sage/data
       '@rsc-utils/core-utils':

@@ -1,4 +1,4 @@
-import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data-layer";
+import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data";
 import { warn, ZERO_WIDTH_SPACE, type RenderableContent, type Snowflake, type SortResult } from "@rsc-utils/core-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from "discord.js";
 import { deleteMessage } from "../../sage-lib/discord/deletedMessages.js";

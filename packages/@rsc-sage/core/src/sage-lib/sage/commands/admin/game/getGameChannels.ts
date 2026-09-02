@@ -1,4 +1,4 @@
-import { SageChannelType, type SageChannel } from "@rsc-sage/data-layer";
+import { SageChannelType, type SageChannel } from "@rsc-sage/data";
 import type { Snowflake } from "@rsc-utils/core-utils";
 import { toChannelMention } from "@rsc-utils/discord-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";

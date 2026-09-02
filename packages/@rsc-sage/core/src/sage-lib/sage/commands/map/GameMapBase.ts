@@ -1,4 +1,4 @@
-import { DataTable } from "@rsc-sage/data-layer";
+import { DataTable } from "@rsc-sage/data";
 import type { Snowflake } from "@rsc-utils/core-utils";
 import { RenderableGameMap } from "./RenderableGameMap.js";
 

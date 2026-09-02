@@ -1,4 +1,4 @@
-import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
+import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
 import { cleanWhitespace, generateSnowflake, tokenize, type OrNull, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { cleanDicePartDescription, createTestRegExp, DiceExplode } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";

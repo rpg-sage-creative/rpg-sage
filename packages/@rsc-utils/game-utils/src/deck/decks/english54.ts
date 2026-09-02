@@ -1,4 +1,4 @@
-import type { CardBase } from "@rsc-sage/data-layer";
+import type { CardBase } from "@rsc-sage/data";
 
 function getEnglish54Names(): string[] {
 	return [

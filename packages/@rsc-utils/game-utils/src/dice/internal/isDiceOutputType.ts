@@ -1,4 +1,4 @@
-import { DiceOutputType } from "@rsc-sage/data-layer";
+import { DiceOutputType } from "@rsc-sage/data";
 
 /** @internal */
 export function isDiceOutputType(value: unknown): value is DiceOutputType {

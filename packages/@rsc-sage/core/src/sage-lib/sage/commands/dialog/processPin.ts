@@ -1,4 +1,4 @@
-import { EmojiType } from "@rsc-sage/data-layer";
+import { EmojiType } from "@rsc-sage/data";
 import { registerReactionListener } from "../../../discord/handlers.js";
 import { ReactionType, type TCommand } from "../../../discord/index.js";
 import type { SageReaction } from "../../model/SageReaction.js";

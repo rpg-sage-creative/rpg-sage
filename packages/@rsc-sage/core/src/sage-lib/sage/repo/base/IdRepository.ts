@@ -1,4 +1,4 @@
-import { DataTable, type BaseCacheItem, type CacheItemObjectType } from "@rsc-sage/data-layer";
+import { DataTable, type BaseCacheItem, type CacheItemObjectType } from "@rsc-sage/data";
 import { debug, EphemeralMap, error, getDataRoot, isNonNilSnowflake, isNonNilUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { Game, type GameCore } from "../../model/Game.js";
 import { GameCharacter, type GameCharacterCore } from "../../model/GameCharacter.js";

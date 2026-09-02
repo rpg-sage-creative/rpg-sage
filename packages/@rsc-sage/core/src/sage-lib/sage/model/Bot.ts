@@ -1,4 +1,4 @@
-import { DataTable, type EmbedColorType, type EmojiType, type GameSystemType, type HasEmbedColors, type HasEmoji, type MacroBase } from "@rsc-sage/data-layer";
+import { DataTable, type EmbedColorType, type EmojiType, type GameSystemType, type HasEmbedColors, type HasEmoji, type MacroBase } from "@rsc-sage/data";
 import { HasIdCore, warn, type CodeName, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
 import { Colors, type HasColorsCore } from "./Colors.js";
 import { Emojis, type HasEmojiCore } from "./Emojis.js";

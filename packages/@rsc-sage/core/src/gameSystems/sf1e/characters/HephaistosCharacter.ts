@@ -1,4 +1,4 @@
-import { DataTable } from "@rsc-sage/data-layer";
+import { DataTable } from "@rsc-sage/data";
 import { addCommas, type Optional } from "@rsc-utils/core-utils";
 import { CharacterBase, type DiceMacroBase, type MacroBase } from "@rsc-utils/game-utils";
 import { Ability } from "../../d20/lib/Ability.js";

@@ -1,4 +1,4 @@
-import { AdminRoleType, DataTable, GameUserType, type GameCacheItem } from "@rsc-sage/data-layer";
+import { AdminRoleType, DataTable, GameUserType, type GameCacheItem } from "@rsc-sage/data";
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
 import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";

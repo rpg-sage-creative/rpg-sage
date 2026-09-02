@@ -1,4 +1,4 @@
-import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, getGameSystems, parseGameSystem, type GameSystem } from "@rsc-sage/data-layer";
+import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, getGameSystems, parseGameSystem, type GameSystem } from "@rsc-sage/data";
 import { debug, generateSnowflake, HasCore, parseEnum, type IdCore, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
 import { matchBasicDice } from "@rsc-utils/game-utils";
 import type { TDiceOutput } from "../../common.js";

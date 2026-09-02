@@ -1,4 +1,4 @@
-import { DiceOutputType, type GameSystemType } from "@rsc-sage/data-layer";
+import { DiceOutputType, type GameSystemType } from "@rsc-sage/data";
 import { HasIdCore, sortPrimitive, sum, warn, type IdCore, type TokenData } from "@rsc-utils/core-utils";
 import { DiceDropKeepType, unpipe, type DiceDropKeepData } from "@rsc-utils/game-utils";
 import { evalMath } from "@rsc-utils/game-utils";

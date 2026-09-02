@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "@rsc-sage/data-layer";
+import type { GameSystemCode } from "@rsc-sage/data";
 import { addCommas } from "@rsc-utils/core-utils";
 import type { Currency, CurrencyCore, DenominationsCore } from "../Currency.js";
 import { getDenominations } from "./getDenominations.js";

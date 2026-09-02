@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "@rsc-sage/data-layer";
+import type { GameSystemCode } from "@rsc-sage/data";
 import type { AonBase, AonBaseCore } from "../../../sage-pf2e/model/base/AonBase.js";
 import type { SearchScore } from "@rsc-utils/core-utils";
 

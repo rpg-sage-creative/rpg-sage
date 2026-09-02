@@ -1,4 +1,4 @@
-import { DataTable, type SageMessageReferenceCore } from "@rsc-sage/data-layer";
+import { DataTable, type SageMessageReferenceCore } from "@rsc-sage/data";
 import { error, errorReturnUndefined, noop, snowflakeToDate, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { Message, MessageReference, PartialMessage } from "discord.js";
 

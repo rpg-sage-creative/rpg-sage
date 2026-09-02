@@ -1,1 +1,1 @@
-// export { type GameSystem, type GameSystemCode, GameSystemType } from "@rsc-sage/data-layer";
+// export { type GameSystem, type GameSystemCode, GameSystemType } from "@rsc-sage/data";

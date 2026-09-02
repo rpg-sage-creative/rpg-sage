@@ -1,7 +1,7 @@
 import type { Snowflake, UUID } from "@rsc-utils/core-utils";
 import { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageCommand } from "../../../../model/SageCommand.js";
-import { DataTable } from "@rsc-sage/data-layer";
+import { DataTable } from "@rsc-sage/data";
 
 type CharId = Snowflake | UUID | string;
 

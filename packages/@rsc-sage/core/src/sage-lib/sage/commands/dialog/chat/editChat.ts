@@ -1,4 +1,4 @@
-import { DialogPostType } from "@rsc-sage/data-layer";
+import { DialogPostType } from "@rsc-sage/data";
 import { error, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
 import type { DialogContent } from "@rsc-utils/game-utils";

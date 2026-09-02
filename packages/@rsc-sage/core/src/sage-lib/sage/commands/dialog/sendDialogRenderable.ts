@@ -1,4 +1,4 @@
-import type { DialogPostType } from "@rsc-sage/data-layer";
+import type { DialogPostType } from "@rsc-sage/data";
 import { getLocalizedText } from "@rsc-sage/localization";
 import { errorReturnEmptyArray, type RenderableContent } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";

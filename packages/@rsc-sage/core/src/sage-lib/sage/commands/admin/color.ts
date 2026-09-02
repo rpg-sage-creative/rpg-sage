@@ -1,4 +1,4 @@
-import { EmbedColorType, type EmbedColor } from "@rsc-sage/data-layer";
+import { EmbedColorType, type EmbedColor } from "@rsc-sage/data";
 import { Color, error, errorReturnUndefined, getEnumValues, isDefined, partition, stringifyJson } from "@rsc-utils/core-utils";
 import { EmbedBuilder } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";

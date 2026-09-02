@@ -1,4 +1,4 @@
-import { DataTable } from "@rsc-sage/data-layer";
+import { DataTable } from "@rsc-sage/data";
 import { stringifyJson, warn } from "@rsc-utils/core-utils";
 import { getText } from "@rsc-utils/io-utils";
 import type { Aon1eSearchResultsCat, Aon1eSearchResultsLink } from "./types.js";

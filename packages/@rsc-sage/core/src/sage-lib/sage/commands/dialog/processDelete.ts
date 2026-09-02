@@ -1,4 +1,4 @@
-import { EmojiType } from "@rsc-sage/data-layer";
+import { EmojiType } from "@rsc-sage/data";
 import type { Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder, User } from "discord.js";

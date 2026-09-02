@@ -1,4 +1,4 @@
-import type { EmbedColorType } from "@rsc-sage/data-layer";
+import type { EmbedColorType } from "@rsc-sage/data";
 import { error } from "@rsc-utils/core-utils";
 import type { DialogContent } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";

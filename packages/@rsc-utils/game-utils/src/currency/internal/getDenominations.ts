@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "@rsc-sage/data-layer";
+import type { GameSystemCode } from "@rsc-sage/data";
 import type { Currency, CurrencyConstructor, CurrencyCore, Denomination, DenominationsCore } from "../Currency.js";
 
 /**

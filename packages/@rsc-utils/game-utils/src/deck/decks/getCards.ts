@@ -1,4 +1,4 @@
-import type { CardBase, DeckType } from "@rsc-sage/data-layer";
+import type { CardBase, DeckType } from "@rsc-sage/data";
 import { getEnglish52Cards } from "./english52.js";
 import { getEnglish54Cards } from "./english54.js";
 

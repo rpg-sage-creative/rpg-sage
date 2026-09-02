@@ -1,4 +1,4 @@
-import { AdminRoleType, DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameCreatorType, getCriticalMethodText, type AdminRole } from "@rsc-sage/data-layer";
+import { AdminRoleType, DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameCreatorType, getCriticalMethodText, type AdminRole } from "@rsc-sage/data";
 import { mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
 import type { Role } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";

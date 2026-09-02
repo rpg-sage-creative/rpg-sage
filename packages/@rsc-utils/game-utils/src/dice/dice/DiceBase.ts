@@ -1,4 +1,4 @@
-import type { DiceOutputType } from "@rsc-sage/data-layer";
+import type { DiceOutputType } from "@rsc-sage/data";
 import type { Snowflake, TokenData } from "@rsc-utils/core-utils";
 
 export type TDiceBaseCore = DiceBaseCore<any, any>;

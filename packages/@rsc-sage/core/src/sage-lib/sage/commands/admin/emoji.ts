@@ -1,4 +1,4 @@
-import { EmojiType } from "@rsc-sage/data-layer";
+import { EmojiType } from "@rsc-sage/data";
 import { errorReturnUndefined, getEnumValues, isDefined } from "@rsc-utils/core-utils";
 import { splitMessageOptions } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";

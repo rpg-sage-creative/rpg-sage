@@ -1,4 +1,4 @@
-import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data-layer";
+import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data";
 import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { findComponent, toUserMention } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";

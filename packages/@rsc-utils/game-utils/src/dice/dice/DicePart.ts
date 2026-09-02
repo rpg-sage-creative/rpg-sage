@@ -1,4 +1,4 @@
-import { DiceOutputType } from "@rsc-sage/data-layer";
+import { DiceOutputType } from "@rsc-sage/data";
 import { generateSnowflake, type TokenData } from "@rsc-utils/core-utils";
 import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
 import { cleanDicePartDescription } from "../cleanDicePartDescription.js";

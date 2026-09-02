@@ -1,4 +1,4 @@
-import { DialogPostType, type Alias } from "@rsc-sage/data-layer";
+import { DialogPostType, type Alias } from "@rsc-sage/data";
 import { isNotBlank } from "@rsc-utils/core-utils";
 import { parseDialogContent, type DialogContent } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";

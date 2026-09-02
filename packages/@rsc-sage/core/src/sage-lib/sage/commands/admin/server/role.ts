@@ -1,4 +1,4 @@
-import { AdminRoleType, type AdminRole } from "@rsc-sage/data-layer";
+import { AdminRoleType, type AdminRole } from "@rsc-sage/data";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { createAdminRenderableContent } from "../../cmd.js";

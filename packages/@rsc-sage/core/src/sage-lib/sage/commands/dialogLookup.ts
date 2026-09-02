@@ -1,4 +1,4 @@
-import { EmbedColorType, EmojiType, GameUserType } from "@rsc-sage/data-layer";
+import { EmbedColorType, EmojiType, GameUserType } from "@rsc-sage/data";
 import { isSageId, isTupperBoxId } from "@rsc-sage/env";
 import { errorReturnUndefined, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";

@@ -1,4 +1,4 @@
-import type { GameOptions, GameUserData, SageChannel } from "@rsc-sage/data-layer";
+import type { GameOptions, GameUserData, SageChannel } from "@rsc-sage/data";
 import { applyChanges, cloneJson, isEmpty, type Args, type Snowflake } from "@rsc-utils/core-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import { Game, type GameCore } from "../../../model/Game.js";

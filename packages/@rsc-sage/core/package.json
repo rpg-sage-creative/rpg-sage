@@ -13,7 +13,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-sns": "^3.1053.0",
-		"@rsc-sage/data-layer": "workspace:",
+		"@rsc-sage/data": "workspace:",
 		"@rsc-sage/env": "workspace:",
 		"@rsc-sage/localization": "workspace:",
 		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.7.0",

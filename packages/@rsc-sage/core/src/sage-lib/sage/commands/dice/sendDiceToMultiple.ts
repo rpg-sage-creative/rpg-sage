@@ -1,4 +1,4 @@
-import { EmbedColorType } from "@rsc-sage/data-layer";
+import { EmbedColorType } from "@rsc-sage/data";
 import type { Optional } from "@rsc-utils/core-utils";
 import { toMessageUrl, type SupportedMessagesChannel, type SupportedTarget } from "@rsc-utils/discord-utils";
 import { sendTo } from "../../../discord/sendTo.js";

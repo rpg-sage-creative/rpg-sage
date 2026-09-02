@@ -1,4 +1,4 @@
-import { EmbedColorType } from "@rsc-sage/data-layer";
+import { EmbedColorType } from "@rsc-sage/data";
 import { error, isDefined, warn, type RenderableContent } from "@rsc-utils/core-utils";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { registerCommandRegex } from "../cmd.js";

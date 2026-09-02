@@ -1,4 +1,4 @@
-import { EmbedColorType } from "@rsc-sage/data-layer";
+import { EmbedColorType } from "@rsc-sage/data";
 import type { DialogContent } from "@rsc-utils/game-utils";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { findPc } from "../find/findPc.js";

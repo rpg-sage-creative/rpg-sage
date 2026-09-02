@@ -1,4 +1,4 @@
-import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType } from "@rsc-sage/data-layer";
+import type { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType } from "@rsc-sage/data";
 import type { DiceDropKeepData } from "@rsc-utils/game-utils";
 import type { DieCore, TSign, TTestData } from "../../index.js";
 import type { Dice, DiceGroup, DiceGroupRoll, DicePart, DicePartRoll, DiceRoll } from "./index.js";

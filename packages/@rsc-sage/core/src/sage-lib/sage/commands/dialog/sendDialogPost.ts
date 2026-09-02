@@ -1,4 +1,4 @@
-import { DialogDiceBehaviorType, DialogPostType, EmojiType, type EmbedColorType } from "@rsc-sage/data-layer";
+import { DialogDiceBehaviorType, DialogPostType, EmojiType, type EmbedColorType } from "@rsc-sage/data";
 import { errorReturnEmptyArray, errorReturnUndefined, RenderableContent, warnReturnUndefined, type HexColorString, type Snowflake } from "@rsc-utils/core-utils";
 import { getBuffer } from "@rsc-utils/io-utils";
 import { AttachmentBuilder, type Message } from "discord.js";

@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "@rsc-sage/data-layer";
+import type { GameSystemCode } from "@rsc-sage/data";
 import type { TypedRegExp } from "@rsc-utils/core-utils";
 import { OptionalHorizontalWhitespaceRegExp as HWS } from "@rsc-utils/core-utils";
 import { pattern, regex } from "regex";

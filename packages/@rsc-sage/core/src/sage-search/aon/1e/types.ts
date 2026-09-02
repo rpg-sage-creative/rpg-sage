@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "@rsc-sage/data-layer";
+import type { GameSystemCode } from "@rsc-sage/data";
 
 export type Aon1eGameSystemCode = GameSystemCode & ("PF1e" | "SF1e");
 

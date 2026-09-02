@@ -1,4 +1,4 @@
-import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data-layer";
+import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
 import { cleanWhitespace, generateSnowflake, tokenize, type OrNull, type OrUndefined, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
 import { cleanDicePartDescription, createTestRegExp, DiceDropKeepType } from "@rsc-utils/game-utils";

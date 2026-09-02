@@ -1,4 +1,4 @@
-import { GameSystemType } from "@rsc-sage/data-layer";
+import { GameSystemType } from "@rsc-sage/data";
 import { isDefined, readRepo } from "@rsc-utils/core-utils";
 import { toDiscordDate, toHumanReadable } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";

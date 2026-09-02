@@ -1,4 +1,4 @@
-import type { GameSystem } from "@rsc-sage/data-layer";
+import type { GameSystem } from "@rsc-sage/data";
 import type { Optional } from "@rsc-utils/core-utils";
 import type { StatBlockProcessor } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";

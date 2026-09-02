@@ -1,4 +1,4 @@
-import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameRoleType, getCriticalMethodText } from "@rsc-sage/data-layer";
+import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameRoleType, getCriticalMethodText } from "@rsc-sage/data";
 import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
 import { getDateStrings, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, toHumanReadable, type SupportedTextChannel } from "@rsc-utils/discord-utils";

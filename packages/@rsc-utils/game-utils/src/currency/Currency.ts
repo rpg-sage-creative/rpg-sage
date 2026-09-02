@@ -1,4 +1,4 @@
-import type { GameSystemCode, GameSystem as GameSystemObj } from "@rsc-sage/data-layer";
+import type { GameSystemCode, GameSystem as GameSystemObj } from "@rsc-sage/data";
 import { applyChanges, debug, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type Optional, type SortResult } from "@rsc-utils/core-utils";
 import { addValues } from "./internal/addValues.js";
 import { convertCurrency } from "./internal/convertCurrency.js";

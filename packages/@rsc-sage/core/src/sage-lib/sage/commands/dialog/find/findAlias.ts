@@ -1,4 +1,4 @@
-import type { Alias } from "@rsc-sage/data-layer";
+import type { Alias } from "@rsc-sage/data";
 import { isBlank, StringMatcher, type Optional } from "@rsc-utils/core-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { findCompanion } from "./findCompanion.js";

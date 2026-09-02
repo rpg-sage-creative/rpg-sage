@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "@rsc-sage/data-layer";
+import type { GameSystemCode } from "@rsc-sage/data";
 import { generateSnowflake, HasIdCore, StringMatcher, type IdCore, type Optional } from "@rsc-utils/core-utils";
 import type { DiceMacroBase, MacroBase } from "../dice/index.js";
 

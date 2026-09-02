@@ -1,4 +1,4 @@
-import { EmbedColorType } from "@rsc-sage/data-layer";
+import { EmbedColorType } from "@rsc-sage/data";
 import type { DialogType } from "@rsc-utils/game-utils";
 
 export function getColorType(dialogType?: DialogType): EmbedColorType | null {

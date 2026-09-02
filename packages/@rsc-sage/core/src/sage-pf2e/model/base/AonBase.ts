@@ -1,4 +1,4 @@
-import type { GameSystemCode } from "@rsc-sage/data-layer";
+import type { GameSystemCode } from "@rsc-sage/data";
 import { capitalize, error, sortPrimitive, type Comparable, type SearchInfo, type SearchScore, type Searchable, type SortResult } from "@rsc-utils/core-utils";
 import { parseSources, type TParsedSource } from "../../data/Repository.js";
 import type { Base } from "./Base.js";

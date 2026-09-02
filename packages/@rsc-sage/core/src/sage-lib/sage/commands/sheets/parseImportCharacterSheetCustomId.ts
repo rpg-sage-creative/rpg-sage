@@ -1,4 +1,4 @@
-import { DataTable } from "@rsc-sage/data-layer";
+import { DataTable } from "@rsc-sage/data";
 import { isNonNilSnowflake, isNonNilUuid, type Optional } from "@rsc-utils/core-utils";
 
 type ImportCharacterType = "e20" | "heph" | "pb2e";

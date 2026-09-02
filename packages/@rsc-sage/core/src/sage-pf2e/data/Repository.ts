@@ -1,4 +1,4 @@
-import { DataTable } from "@rsc-sage/data-layer";
+import { DataTable } from "@rsc-sage/data";
 import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
 import { debug, initializeNoiseUS, initializeUKtoUS, isDefined, SnowflakeMatcher, StringMatcher, UuidMatcher, verbose, warn } from "@rsc-utils/core-utils";
 import { randomItem } from "@rsc-utils/random-utils";

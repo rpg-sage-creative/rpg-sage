@@ -1,4 +1,4 @@
-import { DialogPostType, SageChannelType } from "@rsc-sage/data-layer";
+import { DialogPostType, SageChannelType } from "@rsc-sage/data";
 import { mapAsync, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import { toChannelMention, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";

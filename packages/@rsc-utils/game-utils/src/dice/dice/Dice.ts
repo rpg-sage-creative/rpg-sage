@@ -1,4 +1,4 @@
-import { DiceOutputType } from "@rsc-sage/data-layer";
+import { DiceOutputType } from "@rsc-sage/data";
 import { cleanWhitespace, generateSnowflake, isBoolean, sum } from "@rsc-utils/core-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
