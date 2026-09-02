@@ -1,5 +1,7 @@
 packages:
-  - 'packages/*'
+  - 'packages/@rsc-apps/*'
+  - 'packages/@rsc-sage/*'
+  - 'packages/@rsc-utils/*'
 
 allowBuilds:
   exifreader: true

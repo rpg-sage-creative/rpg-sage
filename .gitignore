@@ -3,8 +3,7 @@ build/
 node_modules/
 
 .DS_Store
-tsconfig.tsbuildinfo
-tsconfig.d.tsbuildinfo
+*.tsbuildinfo
 
 # ignore config files
 config/

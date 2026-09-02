@@ -1,0 +1,7 @@
+{
+	"extends": "./tsconfig.json",
+	"references": [
+		{ "path": "../../@rsc-sage/data/tsconfig.mono.json" },
+		{ "path": "../../@rsc-utils/game-utils/tsconfig.mono.json" },
+	]
+}

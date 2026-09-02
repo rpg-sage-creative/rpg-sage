@@ -62,14 +62,6 @@
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"@rsc-sage/core": "./packages/sage-core",
-		"@rsc-sage/data-layer": "./packages/data-layer",
-		"@rsc-sage/env": "./packages/sage-env",
-		"@rsc-sage/localization": "./packages/sage-localization",
-
-		"@rsc-utils/game-utils": "./packages/game-utils",
-		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.5.1",
-		"@rsc-utils/map-utils": "./packages/map-utils"
 	},
 	"exifreader": {
 		"include": {
@@ -92,7 +84,7 @@
 		"prebuild": "pnpm scrubIfMissing && pnpm run '/^build::.*/'",
 		"build::clean-build-folder": "rm -rf build",
 		"build::clean-build-info": "rm -f *.tsbuildinfo",
-		"build": "[ -f './tsconfig.json' ] && tsc --build --force --verbose tsconfig.json",
+		"build": "[ -f './tsconfig.mono.json' ] && tsc -b --force tsconfig.mono.json",
 		"-postbuild": "pnpm -r run postbuild; [ ! -f './tsconfig.d.json' ] || tsc --build --force tsconfig.d.json",
 		"buildIfMissing": "[ -d './build' ] || pnpm build",
 		"build:fresh": "pnpm scrub && pnpm build",
@@ -100,7 +92,7 @@
 		"-test": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
 		"-test:one": "[ -d './test' ] && node --no-warnings --experimental-vm-modules ./node_modules/jest/bin/jest",
 		"pretest": "pnpm buildIfMissing",
-		"test": "[ -f './packages/bot/build/app.js' ] && echo 'Build exists' || exit 1",
+		"test": "[ -f './packages/@rsc-apps/bot/build/app.js' ] && echo 'Build exists' || exit 1",
 		"release": "pnpm dev-scripts create-release",
 		"refresh-tags": "pnpm dev-scripts refresh-tags",
 		"deploy:dev": "pnpm dev-scripts deploy dev",
@@ -109,13 +101,13 @@
 		"prestart": "pnpm run '/^start::.*/'",
 		"start::env": "pnpm dev-scripts write-env-json local",
 		"start::build": "pnpm build",
-		"start": "node ./packages/bot/build/app.js codeName=dev --getFromEnvJson",
+		"start": "node ./packages/@rsc-apps/bot/build/app.js codeName=dev --getFromEnvJson",
 		"predocker:setup": "docker compose down; docker compose up -d",
 		"docker:setup": "pm2 deploy bot.config.cjs docker setup",
 		"docker:start": "pnpm deploy docker dev bot pnpm --noPrompt",
 		"docker:stop": "pm2 deploy bot.config.cjs docker run 'pm2 stop sage-bot-dev'",
 		"data:stack": "bash ./scripts/data-update.sh",
-		"commands:build": "node ./packages/app-commands/build/build.mjs codeName=dev --getFromEnvJson",
-		"-start:dev:all": "node ./packages/bot/build/app.js codeName=dev --getFromEnvJson --spawnServices"
+		"commands:build": "node ./packages/@rsc-apps/app-commands/build/build.mjs codeName=dev --getFromEnvJson",
+		"-start:dev:all": "node ./packages/@rsc-apps/bot/build/app.js codeName=dev --getFromEnvJson --spawnServices"
 	}
 }

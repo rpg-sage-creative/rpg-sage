@@ -1,0 +1,32 @@
+{
+	"extends": "./tsconfig.base.json",
+	"compilerOptions": {
+		"composite": true,
+		"outDir": "./build",
+		"rootDir": "./src"
+	},
+	"exclude": [
+		"build",
+		"config",
+		"data",
+		"docker",
+		"docs",
+		"logs",
+		"node_modules",
+		"packages",
+		"scripts",
+		"test"
+	],
+	"references": [
+		{ "path": "./packages/@rsc-sage/core/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-sage/data/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-sage/env/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-sage/localization/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-utils/game-utils/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-utils/map-utils/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-apps/bot/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-apps/commands/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-apps/map-server/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-apps/pixels-relay-server/tsconfig.mono.json" },
+	]
+}

@@ -1,0 +1,6 @@
+{
+	"extends": "./tsconfig.json",
+	"references": [
+		{ "path": "../../@rsc-sage/core/tsconfig.mono.json" },
+	]
+}
