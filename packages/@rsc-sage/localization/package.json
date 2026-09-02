@@ -5,18 +5,46 @@
 	"main": "build/index.js",
 	"type": "module",
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2"
+		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2",
+		"@types/node": "^24.12.0",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.10"
 	},
 	"dependencies": {
 		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.7.0"
 	},
 	"scripts": {
+		"scrub": "pnpm run '/^scrub::.*/'",
 		"scrub::node_modules": "rm -rf node_modules",
 		"scrub::npm": "rm -f package-lock.json",
 		"scrub::pnpm": "rm -f pnpm-lock.yaml",
+		"scrub::logs": "rm -rf ./logs/*.log",
+		"postscrub": "pnpm install",
 
+		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
+
+		"prebuild": "pnpm scrubIfMissing && pnpm run '/^build::.*/'",
 		"build::clean-build-folder": "rm -rf build",
 		"build::clean-build-info": "rm -f *.tsbuildinfo",
-		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
+		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes",
+		"build": "[ -f './tsconfig.json' ] && tsc --build --force tsconfig.json",
+		"-postbuild": "[ -f './tsconfig.d.json' ] && tsc --build --force tsconfig.d.json",
+
+		"prebuild:mono": "pnpm scrubIfMissing && pnpm run '/^build::.*/'",
+		"build:mono": "[ -f './tsconfig.mono.json' ] && tsc --build --force tsconfig.mono.json",
+		"-postbuild:mono": "[ -f './tsconfig.mono.d.json' ] && tsc --build --force tsconfig.mono.d.json",
+
+		"buildIfMissing": "[ -d './build' ] || pnpm build",
+		"build:fresh": "pnpm scrub && pnpm build",
+
+		"pretest": "[ -d './test' ] && pnpm build && node -e \"import * as utils from './build/index.js';\" && pnpm scrub::logs",
+		"test": "pnpm vitest --run --globals",
+		"pretest:dot-test-dot-js": "[ -d './test' ] && pnpm scrub::logs",
+		"test:dot-test-dot-js": "pnpm vitest --run --globals",
+		"pretest:dot-test-dot-ts": "[ -d './test' ] && pnpm scrub::logs",
+		"test:dot-test-dot-ts": "pnpm vitest --run --globals",
+		"pretest:one-ts": "pnpm pretest",
+		"test:one-ts": "pnpm pretest && pnpm vitest --run --globals"
+
 	}
 }

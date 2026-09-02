@@ -10,6 +10,10 @@ allowBuilds:
 blockExoticSubdeps: false
 
 overrides:
+  "@types/node": "^24.12.0"
+  "typescript": "^7.0.2"
+  "vitest": "^4.1.10"
+
   "@rsc-utils/cache-utils": "github:rpg-sage-creative/cache-utils#semver:^1.1.0"
   "@rsc-utils/color-utils": "github:rpg-sage-creative/color-utils#semver:^1.1.0"
   "@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.7.0"
