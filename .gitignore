@@ -1,8 +1,10 @@
 .VSCodeCounter/
 build/
+logs/
 node_modules/
 
 .DS_Store
+pnpm-lock.yaml
 *.tsbuildinfo
 
 # ignore config files
