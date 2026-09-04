@@ -4,7 +4,7 @@
 		"alwaysStrict": true,
 		"allowSyntheticDefaultImports": true,
 
-		"composite": true,
+		"composite": false,
 
 		"declaration": true,
 		// "declarationDir": "./types",
@@ -35,13 +35,19 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 
+		// must be overidden build extended tsconfig.mono.json files
+		"outDir": "./build",
+
 		"pretty": true,
 
-		"removeComments": true,
+		"removeComments": false,
+
+		// must be overidden build extended tsconfig.mono.json files
+		"rootDir": "./src",
 
 		"skipLibCheck": true,
 
-		"sourceMap": true,
+		"sourceMap": false,
 		"strict": true,
 		"strictBindCallApply": true,
 		"strictFunctionTypes": true,
@@ -50,7 +56,15 @@
 		"stripInternal": true,
 
 		"target": "ES2024",
+		"types": ["node"],
 
 		"verbatimModuleSyntax": true
-	}
+	},
+	// must be overidden build extended tsconfig.mono.json files
+	"exclude": [
+	],
+	// must be overidden build extended tsconfig.mono.json files
+	"include": [
+		"./src"
+	]
 }

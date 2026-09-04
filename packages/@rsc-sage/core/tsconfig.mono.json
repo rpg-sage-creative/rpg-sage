@@ -1,10 +1,21 @@
+/*
+Each package/submodule in rpg-sage will use tsconfig.mono.json to ensure proper build order.
+*/
 {
-	"extends": "./tsconfig.json",
+	"extends": "../../../tsconfig.json",
+	"compilerOptions": {
+		"composite": true,
+		"outDir": "./build",
+		"rootDir": "./src",
+	},
+	"include": [
+		"./src"
+	],
 	"references": [
 		{ "path": "../../@rsc-sage/data/tsconfig.mono.json" },
 		{ "path": "../../@rsc-utils/game-utils/tsconfig.mono.json" },
 		{ "path": "../../@rsc-utils/map-utils/tsconfig.mono.json" },
 		{ "path": "../../@rsc-sage/env/tsconfig.mono.json" },
 		{ "path": "../../@rsc-sage/localization/tsconfig.mono.json" },
-	]
+	],
 }

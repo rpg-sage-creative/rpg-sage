@@ -85,12 +85,10 @@
 
 		"prebuild": "pnpm scrubIfMissing && pnpm run -r '/^build::.*/'",
 		"build": "[ -f './tsconfig.mono.json' ] && tsc -b --force tsconfig.mono.json",
-		"-postbuild": "pnpm -r run postbuild; [ ! -f './tsconfig.d.json' ] || tsc --build --force tsconfig.d.json",
 		"build:fresh": "pnpm scrub && pnpm build",
 
 		"pretest": "pnpm scrub::logs",
 		"test": "pnpm build && pnpm vitest --run --globals",
-		"-test": "[ -f './packages/@rsc-apps/bot/build/app.js' ] && echo 'Build exists' || exit 1",
 
 		"release": "pnpm dev-scripts create-release",
 		"refresh-tags": "pnpm dev-scripts refresh-tags",

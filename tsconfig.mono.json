@@ -1,23 +1,10 @@
 {
-	"extends": "./tsconfig.base.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"composite": true,
-		"outDir": "./build",
-		"rootDir": "./src"
 	},
-	"exclude": [
-		"build",
-		"config",
-		"data",
-		"docker",
-		"docs",
-		"logs",
-		"node_modules",
-		"packages",
-		"scripts",
-		"test"
-	],
 	"references": [
+		{ "path": "./packages/@rsc-utils/core-utils/tsconfig.mono.json" },
 		{ "path": "./packages/@rsc-sage/core/tsconfig.mono.json" },
 		{ "path": "./packages/@rsc-sage/data/tsconfig.mono.json" },
 		{ "path": "./packages/@rsc-sage/env/tsconfig.mono.json" },
