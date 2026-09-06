@@ -4,7 +4,8 @@
 		"composite": true,
 	},
 	"references": [
-		{ "path": "./packages/@rsc-utils/io-utils/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-utils/discord-utils/tsconfig.mono.json" },
+		// @rsc-utils/discord-utils triggers @rsc-utils/io-utils
 		// @rsc-utils/io-utils triggers @rsc-utils/core-utils
 
 		{ "path": "./packages/@rsc-sage/core/tsconfig.mono.json" },
