@@ -7,3 +7,12 @@
 [submodule "packages/@rsc-utils/discord-utils"]
 	path = packages/@rsc-utils/discord-utils
 	url = https://github.com/rpg-sage-creative/discord-utils.git
+[submodule "packages/@rsc-utils/type-utils"]
+	path = packages/@rsc-utils/type-utils
+	url = https://github.com/rpg-sage-creative/type-utils.git
+[submodule "packages/@rsc-utils/dev-scripts"]
+	path = packages/@rsc-utils/dev-scripts
+	url = https://github.com/rpg-sage-creative/dev-scripts.git
+[submodule "packages/@rsc-utils/template-literal-utils"]
+	path = packages/@rsc-utils/template-literal-utils
+	url = https://github.com/rpg-sage-creative/template-literal-utils.git
