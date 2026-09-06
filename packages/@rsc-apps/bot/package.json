@@ -11,8 +11,8 @@
 		"vitest": "^4.1.10"
 	},
 	"dependencies": {
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.7.0",
-		"@rsc-utils/discord-utils": "github:rpg-sage-creative/discord-utils#semver:^1.4.1",
+		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.8.0",
+		"@rsc-utils/discord-utils": "github:rpg-sage-creative/discord-utils#semver:^1.5.0",
 		"@rsc-sage/core": "workspace:",
 		"@rsc-sage/data": "workspace:",
 		"@rsc-sage/env": "workspace:",
