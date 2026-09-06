@@ -5,7 +5,7 @@
 	"main": "build/app.js",
 	"type": "module",
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2",
+		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.5.0",
 		"@types/node": "^24.12.0",
 		"typescript": "^7.0.2",
 		"vitest": "^4.1.10"
