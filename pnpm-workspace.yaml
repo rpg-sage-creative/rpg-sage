@@ -4,24 +4,27 @@ packages:
   - 'packages/@rsc-utils/*'
 
 allowBuilds:
+  '@parcel/watcher': true
   exifreader: true
+  unrs-resolver: true
   zlib-sync: true
 
 blockExoticSubdeps: false
 
 overrides:
-  "@types/node": "^24.12.0"
-  "typescript": "^7.0.2"
-  "vitest": "^4.1.10"
+  "@types/node": "^24"
+  "regex": "^6"
+  "typescript": "^7"
+  "vitest": "^4"
 
   "@rsc-utils/cache-utils": "github:rpg-sage-creative/cache-utils#semver:^1.1.0"
   "@rsc-utils/color-utils": "github:rpg-sage-creative/color-utils#semver:^1.1.0"
   "@rsc-utils/core-utils": "../../@rsc-utils/core-utils"
-  "@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.4.2"
+  "@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.5.0"
   "@rsc-utils/discord-utils": "github:rpg-sage-creative/discord-utils#semver:^1.4.1"
   "@rsc-utils/git-utils": "github:rpg-sage-creative/git-utils#semver:^0.1.0"
   "@rsc-utils/id-utils": "github:rpg-sage-creative/id-utils#semver:^1.1.0"
-  "@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.5.1"
+  "@rsc-utils/io-utils": "../../@rsc-utils/io-utils"
   "@rsc-utils/iterator-utils": "github:rpg-sage-creative/iterator-utils#semver:^1.1.0"
   "@rsc-utils/json-utils": "github:rpg-sage-creative/json-utils#semver:^1.2.1"
   "@rsc-utils/language-utils": "github:rpg-sage-creative/language-utils#semver:^1.2.0"

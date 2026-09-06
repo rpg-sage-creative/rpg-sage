@@ -4,7 +4,9 @@
 		"composite": true,
 	},
 	"references": [
-		{ "path": "./packages/@rsc-utils/core-utils/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-utils/io-utils/tsconfig.mono.json" },
+		// @rsc-utils/io-utils triggers @rsc-utils/core-utils
+
 		{ "path": "./packages/@rsc-sage/core/tsconfig.mono.json" },
 		{ "path": "./packages/@rsc-sage/data/tsconfig.mono.json" },
 		{ "path": "./packages/@rsc-sage/env/tsconfig.mono.json" },

@@ -23,23 +23,14 @@
 		"scrub::pnpm": "rm -f pnpm-lock.yaml",
 		"scrub::logs": "rm -rf ./logs/*.log",
 		"postscrub": "pnpm install",
-
 		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
-
 		"prebuild": "pnpm scrubIfMissing && pnpm run '/^build::.*/'",
 		"build::clean-build-folder": "rm -rf build",
 		"build::clean-build-info": "rm -f *.tsbuildinfo",
 		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes",
-		"build": "[ -f './tsconfig.json' ] && tsc --build --force tsconfig.json",
-		"-postbuild": "[ -f './tsconfig.d.json' ] && tsc --build --force tsconfig.d.json",
-
-		"prebuild:mono": "pnpm scrubIfMissing && pnpm run '/^build::.*/'",
-		"build:mono": "[ -f './tsconfig.mono.json' ] && tsc --build --force tsconfig.mono.json",
-		"-postbuild:mono": "[ -f './tsconfig.mono.d.json' ] && tsc --build --force tsconfig.mono.d.json",
-
+		"build": "[ -f './tsconfig.json' ] && tsc -b --force tsconfig.json",
 		"buildIfMissing": "[ -d './build' ] || pnpm build",
 		"build:fresh": "pnpm scrub && pnpm build",
-
 		"pretest": "[ -d './test' ] && pnpm build && node -e \"import * as utils from './build/index.js';\" && pnpm scrub::logs",
 		"test": "pnpm vitest --run --globals",
 		"pretest:dot-test-dot-js": "[ -d './test' ] && pnpm scrub::logs",
@@ -48,6 +39,5 @@
 		"test:dot-test-dot-ts": "pnpm vitest --run --globals",
 		"pretest:one-ts": "pnpm pretest",
 		"test:one-ts": "pnpm pretest && pnpm vitest --run --globals"
-
 	}
 }

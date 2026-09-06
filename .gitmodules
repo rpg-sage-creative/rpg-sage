@@ -1,0 +1,6 @@
+[submodule "packages/@rsc-utils/core-utils"]
+	path = packages/@rsc-utils/core-utils
+	url = https://github.com/rpg-sage-creative/core-utils.git
+[submodule "packages/@rsc-utils/io-utils"]
+	path = packages/@rsc-utils/io-utils
+	url = https://github.com/rpg-sage-creative/io-utils.git
