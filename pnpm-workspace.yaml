@@ -20,7 +20,7 @@ overrides:
   "@rsc-utils/cache-utils": "github:rpg-sage-creative/cache-utils#semver:^1.1.0"
   "@rsc-utils/color-utils": "github:rpg-sage-creative/color-utils#semver:^1.1.0"
   "@rsc-utils/core-utils": "../../@rsc-utils/core-utils"
-  "@rsc-utils/dev-scripts": "../../@rsc-utils/dev-scripts"
+  "@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.6.0"
   "@rsc-utils/discord-utils": "../../@rsc-utils/discord-utils"
   "@rsc-utils/git-utils": "github:rpg-sage-creative/git-utils#semver:^0.1.0"
   "@rsc-utils/id-utils": "github:rpg-sage-creative/id-utils#semver:^1.1.0"

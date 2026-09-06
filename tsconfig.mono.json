@@ -10,7 +10,6 @@
 		// @rsc-utils/io-utils triggers @rsc-utils/core-utils
 		// @rsc-utils/core-utils triggers @rsc-utils/type-utils
 		// @rsc-utils/type-utils triggers @rsc-utils/template-literal-utils
-		// @rsc-utils/template-literal-utils triggers @rsc-utils/dev-scripts
 
 		{ "path": "./packages/@rsc-sage/core/tsconfig.mono.json" },
 		{ "path": "./packages/@rsc-sage/data/tsconfig.mono.json" },
