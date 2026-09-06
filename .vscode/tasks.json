@@ -2,9 +2,10 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "pnpm-run-test",
+			"label": "test-all",
 			"command": "pnpm",
 			"args": ["test"],
+			"type": "shell",
 			"group": "test",
 			"presentation": {
 				"echo": true,
@@ -33,8 +34,61 @@
 			}
 		},
 		{
-			"label": "pnpm-run-build",
+			"label": "test-test-dot-js",
+			"command": "pnpm",
+			"args": ["test:dot-test-dot-js", "${file}"],
 			"type": "shell",
+			"group": {
+				"kind": "test",
+				"isDefault": "**/test/**/*.test.js"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false
+			}
+		},
+		{
+			"label": "test-test-dot-ts",
+			"command": "pnpm",
+			"args": ["test:dot-test-dot-ts", "${file}"],
+			"type": "shell",
+			"group": {
+				"kind": "test",
+				"isDefault": "**/test/**/*.test.ts"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false
+			}
+		},
+		{
+			"label": "test-src-dot-ts",
+			"command": "pnpm",
+			"args": [ "dev-scripts", "test-src-ts-file", "${file}"],
+			"type": "shell",
+			"group": {
+				"kind": "test",
+				"isDefault": "**/src/**/*.ts"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false
+			}
+		},
+		{
+			"label": "run-build",
 			"command": "pnpm",
 			"args": ["build"],
 			"group": {

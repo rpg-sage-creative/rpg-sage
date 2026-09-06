@@ -56,7 +56,7 @@
 		"pnpm": ">=10"
 	},
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.6.0",
+		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.6.1",
 		"@types/node": "^24.12.0",
 		"typescript": "^7.0.2",
 		"vitest": "^4.1.10"
