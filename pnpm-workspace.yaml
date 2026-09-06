@@ -11,6 +11,14 @@ allowBuilds:
 
 blockExoticSubdeps: false
 
+# tasks:
+#   build:
+#     dependsOn:
+#       - ^build # wait for dependency build tasks before building
+#   test:
+#     dependsOn:
+#       - build # wait for build task before testing
+
 overrides:
   "@types/node": "^24"
   "regex": "^6"
@@ -20,7 +28,7 @@ overrides:
   "@rsc-utils/cache-utils": "github:rpg-sage-creative/cache-utils#semver:^1.1.0"
   "@rsc-utils/color-utils": "github:rpg-sage-creative/color-utils#semver:^1.1.0"
   "@rsc-utils/core-utils": "../../@rsc-utils/core-utils"
-  "@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.6.0"
+  "@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.6.1"
   "@rsc-utils/discord-utils": "../../@rsc-utils/discord-utils"
   "@rsc-utils/git-utils": "github:rpg-sage-creative/git-utils#semver:^0.1.0"
   "@rsc-utils/id-utils": "github:rpg-sage-creative/id-utils#semver:^1.1.0"
@@ -30,7 +38,7 @@ overrides:
   "@rsc-utils/language-utils": "github:rpg-sage-creative/language-utils#semver:^1.2.0"
   "@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.1"
   "@rsc-utils/template-literal-utils": "../../@rsc-utils/template-literal-utils"
-  "@rsc-utils/type-utils": "../../@rsc-utils/type-utils"
+  "@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils#semver:^1.5.2"
   "@rsc-utils/whitespace-utils": "github:rpg-sage-creative/whitespace-utils#semver:^1.0.0"
 
 # catalog:
