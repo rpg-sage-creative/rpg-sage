@@ -19,7 +19,7 @@
 		// "importsNotUsedAsValues": "error",
 		// "verbatimModuleSyntax": true,
 
-		"lib": [ "ES2024" ],
+		"lib": [ "ES2025" ],
 		// "locale": "en-US",
 
 		"module": "nodenext",
@@ -55,7 +55,7 @@
 		"strictPropertyInitialization": true,
 		"stripInternal": true,
 
-		"target": "ES2024",
+		"target": "ES2025",
 		"types": ["node"],
 
 		"verbatimModuleSyntax": true
