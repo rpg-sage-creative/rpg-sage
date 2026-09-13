@@ -4,6 +4,13 @@
 		"composite": true,
 	},
 	"references": [
+
+		{ "path": "./packages/@rsc-utils/cache-utils/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-utils/iterator-utils/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-utils/snowflake-utils/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-utils/uuid-utils/tsconfig.mono.json" },
+
+
 		// ensure the rsc-utils stack
 		{ "path": "./packages/@rsc-utils/discord-utils/tsconfig.mono.json" },
 		// @rsc-utils/discord-utils triggers @rsc-utils/io-utils
