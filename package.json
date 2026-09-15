@@ -90,6 +90,7 @@
 
 		"pretest": "pnpm scrub::logs",
 		"test": "pnpm build && pnpm vitest --run --globals",
+		"test-nobuild": "pnpm vitest --run --globals",
 		"pretest:dot-test-dot-js": "[ -d './test' ] && pnpm scrub::logs",
 		"test:dot-test-dot-js": "pnpm vitest --run --globals",
 		"pretest:dot-test-dot-ts": "[ -d './test' ] && pnpm scrub::logs",
