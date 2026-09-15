@@ -31,9 +31,6 @@
 [submodule "packages/@rsc-utils/random-utils"]
 	path = packages/@rsc-utils/random-utils
 	url = https://github.com/rpg-sage-creative/random-utils.git
-[submodule "packages/@rsc-utils/snowflake-utils"]
-	path = packages/@rsc-utils/snowflake-utils
-	url = https://github.com/rpg-sage-creative/snowflake-utils.git
 [submodule "packages/@rsc-utils/template-literal-utils"]
 	path = packages/@rsc-utils/template-literal-utils
 	url = https://github.com/rpg-sage-creative/template-literal-utils.git
@@ -43,6 +40,3 @@
 [submodule "packages/@rsc-utils/whitespace-utils"]
 	path = packages/@rsc-utils/whitespace-utils
 	url = https://github.com/rpg-sage-creative/whitespace-utils.git
-[submodule "packages/@rsc-utils/uuid-utils"]
-	path = packages/@rsc-utils/uuid-utils
-	url = https://github.com/rpg-sage-creative/uuid-utils.git

@@ -7,8 +7,7 @@
 
 		{ "path": "./packages/@rsc-utils/cache-utils/tsconfig.mono.json" },
 		{ "path": "./packages/@rsc-utils/iterator-utils/tsconfig.mono.json" },
-		{ "path": "./packages/@rsc-utils/snowflake-utils/tsconfig.mono.json" },
-		{ "path": "./packages/@rsc-utils/uuid-utils/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-utils/id-utils/tsconfig.mono.json" },
 
 
 		// ensure the rsc-utils stack
