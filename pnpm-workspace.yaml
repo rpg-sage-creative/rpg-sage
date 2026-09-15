@@ -38,11 +38,8 @@ overrides:
   "@rsc-utils/json-utils": "../../@rsc-utils/json-utils"
   "@rsc-utils/language-utils": "../../@rsc-utils/language-utils"
   "@rsc-utils/random-utils": "../../@rsc-utils/random-utils"
-  "@rsc-utils/snowflake-utils": "../../@rsc-utils/snowflake-utils"
   "@rsc-utils/template-literal-utils": "../../@rsc-utils/template-literal-utils"
   "@rsc-utils/type-utils": "../../@rsc-utils/type-utils"
-  "@rsc-utils/uuid-utils": "../../@rsc-utils/uuid-utils"
-  "@rsc-utils/whitespace-utils": "../../@rsc-utils/whitespace-utils"
 
 # catalog:
 #   "@aws-sdk/client-dynamodb": "^3.1053.0"
