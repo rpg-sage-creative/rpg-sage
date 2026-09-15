@@ -11,7 +11,7 @@
 
 
 		// ensure the rsc-utils stack
-		{ "path": "./packages/@rsc-utils/discord-utils/tsconfig.mono.json" },
+		{ "path": "./packages/@rsc-chat/discord-utils/tsconfig.mono.json" },
 		// @rsc-utils/discord-utils triggers @rsc-utils/io-utils
 		// @rsc-utils/io-utils triggers @rsc-utils/core-utils
 		// @rsc-utils/core-utils triggers @rsc-utils/type-utils

@@ -5,7 +5,7 @@ import { resolve, join } from "node:path";
 
 // allows the tests to load data file when in mono repo
 function resolveDiscordPath(relPath) {
-  return resolve(join("packages/@rsc-utils/discord-utils", relPath));
+  return resolve(join("packages/@rsc-chat/discord-utils", relPath));
 }
 
 export default defineConfig({

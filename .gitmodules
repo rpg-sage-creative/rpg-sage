@@ -7,8 +7,8 @@
 [submodule "packages/@rsc-utils/core-utils"]
 	path = packages/@rsc-utils/core-utils
 	url = https://github.com/rpg-sage-creative/core-utils.git
-[submodule "packages/@rsc-utils/discord-utils"]
-	path = packages/@rsc-utils/discord-utils
+[submodule "packages/@rsc-chat/discord-utils"]
+	path = packages/@rsc-chat/discord-utils
 	url = https://github.com/rpg-sage-creative/discord-utils.git
 [submodule "packages/@rsc-utils/git-utils"]
 	path = packages/@rsc-utils/git-utils
