@@ -20,11 +20,17 @@ RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 RUN curl -fsSL https://rpm.nodesource.com/setup_24.x | bash - && yum install -y nodejs
 RUN npm install -g pnpm pm2
 
+# used by zlib-sync
+RUN npm install -g node-gyp
+
 # ensure rpg-sage folder exists
 RUN mkdir /rpg-sage
 
 # ensure base bot folder exists
 RUN mkdir -p /rpg-sage/bot/config
+
+# ensure deploy folder exists
+RUN mkdir -p /rpg-sage/bot/docker/source
 
 # ensure data folder / tree exists
 RUN mkdir -p /rpg-sage/data/cache/pdf
