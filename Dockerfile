@@ -60,7 +60,12 @@ RUN usermod -aG wheel ec2-user
 # make ec2-user owner of /rpg-sage so that pm2 deploy can function
 RUN chown -R ec2-user /rpg-sage
 
+# do initial clone as ec2-user to enable pm2 deploy to work
+USER ec2-user
 RUN git clone -b mono --single-branch https://github.com/rpg-sage-creative/rpg-sage.git /rpg-sage/bot/docker/source
+
+# return to root to finish
+USER root
 
 # SSH port (optional, change if needed)
 EXPOSE 22
