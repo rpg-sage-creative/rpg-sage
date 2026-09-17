@@ -3,14 +3,14 @@ FROM amazonlinux:2023
 
 RUN yum update
 
+# includes git and gcc
+RUN yum groupinstall -y "Development Tools"
+
 # in case you need to edit files
 RUN yum install -y vim
 
 # some build scripts use "find"
 RUN yum install -y findutils
-
-# kind of an important thing
-RUN yum install -y git
 
 # Install SSH server
 RUN yum install -y openssh-server
@@ -62,7 +62,9 @@ RUN chown -R ec2-user /rpg-sage
 
 # do initial clone as ec2-user to enable pm2 deploy to work
 USER ec2-user
-RUN git clone -b mono --single-branch https://github.com/rpg-sage-creative/rpg-sage.git /rpg-sage/bot/docker/source
+RUN git clone --recurse-submodules -b mono --single-branch https://github.com/rpg-sage-creative/rpg-sage.git /rpg-sage/bot/docker/source
+RUN cd /rpg-sage/bot/docker/source && git submodule update --init --recursive
+RUN cd /rpg-sage/bot/docker/source && pnpm build:fresh
 
 # return to root to finish
 USER root
