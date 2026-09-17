@@ -76,11 +76,11 @@
 	},
 	"scripts": {
 		"scrub": "pnpm run '/^scrub::.*/'",
-		"scrub::packages": "pnpm -r run '/^scrub::.*/'",
-		"scrub::node_modules": "rm -rf node_modules",
-		"scrub::npm": "rm -f package-lock.json",
-		"scrub::pnpm": "rm -f pnpm-lock.yaml",
-		"scrub::logs": "rm -rf ./logs/*.log",
+		"scrub::packages": "pnpm -r run '/^scrub::.*/' || true",
+		"scrub::node_modules": "rm -rf node_modules || true",
+		"scrub::npm": "rm -f package-lock.json || true",
+		"scrub::pnpm": "rm -f pnpm-lock.yaml || true",
+		"scrub::logs": "rm -rf ./logs/*.log || true",
 		"postscrub": "git submodule update --init --recursive && pnpm install --prefer-offline",
 		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
 
