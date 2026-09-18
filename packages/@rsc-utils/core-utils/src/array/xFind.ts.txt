@@ -1,0 +1,30 @@
+type OptionX<T, U> = { predicate:(value: T, index: number, values: T[]) => unknown; callbackfn?:never; orelse?:never; }
+	| { predicate?:never; callbackfn:(value: T, index: number, values: T[]) => U; orelse?:never; }
+	| { predicate?:never; callbackfn?:never; orelse:(value: T|U, index: number, values: (T|U)[]) => T|U; };
+
+/** Perform multiple tests and maps using a single loop iteration of the Array. Includes an "or else" component. */
+export function xFind<T, U = T>(values: T[], options: OptionX<T, U>[]): U | undefined {
+	let orElse: T | U | undefined;
+	for (let i = 0, len = values.length; i < len; i++) {
+		let value: T | U = values[i];
+		let goNext = false;
+		for (const { predicate, callbackfn, orelse } of options) {
+			if (predicate) {
+				if (!predicate(value as T, i, values)) {
+					goNext = true;
+					break;
+				}
+			}else if (callbackfn) {
+				value = callbackfn(value as T, i, values);
+			}else if (orelse) {
+				orElse ??= orelse(value, i, values);
+			}else {
+				throw new RangeError(`Invalid OptionX`);
+			}
+		}
+		if (!goNext) {
+			return value as U;
+		}
+	}
+	return orElse as U;
+}

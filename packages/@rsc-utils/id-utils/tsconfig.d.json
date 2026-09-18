@@ -1,0 +1,24 @@
+/*
+Two-Pass Build: Displays Declaration & Removes Comments
+1. tsc -b tsconfig.json
+  - "composite": false
+  - "declaration": false
+  - "removeComments": true
+2. tsc -b tsconfig.d.json
+  - "declaration": true
+  - "emitDeclarationOnly": true
+  - "removeComments": false
+*/
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		// values for first pass (tsconfig.json)
+		// "declaration": false,
+		// "removeComments": true,
+
+		// values for second pass (tsconfig.d.json)
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"removeComments": false,
+	}
+}

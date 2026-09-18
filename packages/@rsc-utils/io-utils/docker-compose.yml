@@ -1,0 +1,9 @@
+services:
+  ddb:
+    container_name: io-utils-ddb
+    image: amazon/dynamodb-local:latest
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data/
+    volumes:
+      - "./docker-volumes/dynamodb:/home/dynamodblocal/data"
+    ports:
+      - "8000:8000"

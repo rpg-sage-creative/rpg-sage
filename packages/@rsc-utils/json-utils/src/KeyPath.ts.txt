@@ -1,0 +1,134 @@
+namespace types {
+	export namespace json {
+
+		const numberRegex = /^\d+$/;
+
+		type NavigateResults<IsFull extends boolean = boolean, ValueType = any, ObjectType = any> = {
+			/** number of keys successfully navigated */
+			depth: number;
+			/** path successfully navigated */
+			path: string;
+			/** was the path fully navigated? */
+			isFull: IsFull;
+			/** last object/array successfully navigated */
+			object: IsFull extends true ? ObjectType : unknown;
+			/** last key successfully navigated */
+			key: string;
+			/** requested value; only present if isFull === true */
+			value: IsFull extends true ? ValueType : never;
+		};
+
+		type KeyPathKey = number | string;
+
+		type RawKeyPath = number | string | string[];
+
+		export class KeyPath {
+
+			public constructor(public keyPath: string) { }
+
+			public get depth() { return this.keyStack.length; }
+
+			/** Is this key an array index. */
+			private _isArrayValue: boolean;
+			public get isArrayValue() { return this._isArrayValue ??= numberRegex.test(this.key); }
+
+			/** Is this key a child/descendant of an array */
+			private _isArrayDescendant: boolean;
+			public get isArrayDescendant() { return this._isArrayDescendant ??= this.keyStack.slice(0, -1).some(key => numberRegex.test(key)); }
+
+			private _key: string;
+			public get key() { return this._key ??= this.keyStack[this.depth - 1]; }
+
+			private _keyStack: string[];
+			public get keyStack() { return (this._keyStack ??= this.keyPath.split(".")).slice(); }
+
+			private _parent: KeyPath;
+			public get parent() { return this._parent ??= KeyPath.from(this.keyStack.slice(0, -1).join(".")); }
+
+			/** Navigates both objects to see if we reach the same depth and have the same value. */
+			public areIdentical<T>(a: T, b: T) {
+				const _a = this.navigate(a);
+				const _b = this.navigate(b);
+				// we have to make sure we navigated the same depth or the comparison is useless
+				return _a.depth === _b.depth
+					&& areIdentical(_a.value, _b.value);
+			}
+
+			/** Create a new KeyPath by safelu concatenating the given key. */
+			public concat(key: KeyPathKey) {
+				if (this.depth) {
+					return KeyPath.from(`${this.keyPath}.${key}`);
+				}
+				return KeyPath.from(key);
+			}
+
+			/** Is this keyPath the same as the given one? */
+			public equals(keyPath: string) {
+				return this.keyPath === keyPath;
+			}
+
+			/** Navigate the appropriate data to find the object/key/value for this keyPath */
+			public navigate(object: unknown): NavigateResults;
+			public navigate(object: any): NavigateResults {
+				if ("toJSON" in object) object = object.toJSON();
+				const inObject = (key: string) => object && key && key in object;
+
+				// store navigated keys for early returns
+				const navigated: string[] = [];
+
+				// slice/clone the path for navigating
+				const keys = this.keyStack;
+
+				// reusable fn for safely shifting/checking keys
+				const shiftKey = () => {
+					const key = keys.shift();
+					if (inObject(key)) {
+						navigated.push(key);
+						return { key, value:object[key] };
+					}
+					return { key };
+				};
+
+				// reusable fn for creating NavigateResults
+				const ret = (key: string, value?: any) => {
+					const _path = navigated.join(".")
+					return {
+						depth: navigated.length,
+						path: _path,
+						isFull: _path === this.keyPath,
+						object,
+						key,
+						value
+					} as NavigateResults;
+				};
+
+				// navigate the keys while we keep getting objects
+				while (keys.length > 1) {
+					const { key, value } = shiftKey();
+					if (!inObject(key)) {
+						return ret(key);
+					}
+					object = value;
+				}
+
+				// get final key/val
+				const { key, value } = shiftKey();
+				return ret(key, value);
+			}
+
+			public startsWith(key: KeyPathKey) {
+				return key ? this.keyStack[0] === String(key) : false;
+			}
+
+			public toString() { return this.keyPath; }
+
+			public static from(keyPath: RawKeyPath) {
+				if (Array.isArray(keyPath)) {
+					return new KeyPath(keyPath.map(s => s?.trim()).filter(s => s).join("."))
+				}
+				return new KeyPath(String(keyPath).trim());
+			}
+		}
+
+	}
+}
