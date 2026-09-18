@@ -1,5 +1,5 @@
 {
-	"name": "@rpg-sage-creative/core-utils",
+	"name": "@rsc-utils/core-utils",
 	"version": "1.8.0",
 	"license": "LGPL-3.0-or-later",
 	"main": "build/index.js",

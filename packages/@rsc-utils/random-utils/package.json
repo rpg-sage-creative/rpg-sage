@@ -1,5 +1,5 @@
 {
-	"name": "@rpg-sage-creative/random-utils",
+	"name": "@rsc-utils/random-utils",
 	"version": "1.0.0",
 	"description": "All your random number and selection needs in one place.",
 	"license": "LGPL-3.0-or-later",

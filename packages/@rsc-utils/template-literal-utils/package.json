@@ -1,5 +1,5 @@
 {
-	"name": "@rpg-sage-creative/template-literal-utils",
+	"name": "@rsc-utils/template-literal-utils",
 	"version": "1.3.1",
 	"description": "String template literal manipulation tools. Designed for debug/test output.",
 	"license": "LGPL-3.0-or-later",

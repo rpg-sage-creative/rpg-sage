@@ -1,5 +1,5 @@
 {
-	"name": "@rpg-sage-creative/type-utils",
+	"name": "@rsc-utils/type-utils",
 	"version": "1.5.2",
 	"description": "A collection of TypeScript types, type guard functions, and object manipulation helper functions.",
 	"license": "LGPL-3.0-or-later",
