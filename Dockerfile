@@ -62,8 +62,7 @@ RUN chown -R ec2-user /rpg-sage
 
 # do initial clone as ec2-user to enable pm2 deploy to work
 USER ec2-user
-RUN git clone --recurse-submodules -b mono --single-branch https://github.com/rpg-sage-creative/rpg-sage.git /rpg-sage/bot/docker/source
-RUN cd /rpg-sage/bot/docker/source && git submodule update --init --recursive
+RUN git clone https://github.com/rpg-sage-creative/rpg-sage.git /rpg-sage/bot/docker/source
 RUN cd /rpg-sage/bot/docker/source && pnpm build:fresh
 
 # return to root to finish
