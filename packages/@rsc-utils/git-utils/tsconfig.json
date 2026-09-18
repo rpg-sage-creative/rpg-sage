@@ -11,6 +11,6 @@
 		"./src"
 	],
 	"references": [
-		{ "path": "../../@rsc-utils/json-utils/tsconfig.mono.json" },
+		{ "path": "../../@rsc-utils/json-utils" },
 	],
 }

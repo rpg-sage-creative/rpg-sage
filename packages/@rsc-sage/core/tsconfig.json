@@ -1,0 +1,19 @@
+{
+	"extends": "../../../tsconfig.json",
+	"compilerOptions": {
+		"composite": true,
+		"outDir": "./build",
+		"rootDir": "./src",
+	},
+	"include": [
+		"./src"
+	],
+	"references": [
+		{ "path": "../../@rsc-chat/discord-utils" },
+		{ "path": "../../@rsc-sage/data" },
+		{ "path": "../../@rsc-utils/game-utils" },
+		{ "path": "../../@rsc-utils/map-utils" },
+		{ "path": "../../@rsc-sage/env" },
+		{ "path": "../../@rsc-sage/localization" },
+	],
+}

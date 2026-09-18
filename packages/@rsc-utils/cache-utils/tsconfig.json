@@ -11,6 +11,6 @@
 		"./src"
 	],
 	"references": [
-		{ "path": "../../@rsc-utils/iterator-utils/tsconfig.mono.json" },
+		{ "path": "../../@rsc-utils/iterator-utils" },
 	],
 }

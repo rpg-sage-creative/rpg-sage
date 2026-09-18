@@ -12,9 +12,9 @@
 	},
 	"dependencies": {
 		"@rsc-sage/data": "workspace:",
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.8.0",
-		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.6.0",
-		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils#semver:^0.1.1",
+		"@rsc-utils/core-utils": "workspace:",
+		"@rsc-utils/io-utils": "workspace:",
+		"@rsc-utils/random-utils": "workspace:",
 		"regex": "^6.1.0"
 	},
 	"scripts": {

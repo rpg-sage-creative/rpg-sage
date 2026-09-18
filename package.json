@@ -85,7 +85,7 @@
 		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
 
 		"prebuild": "pnpm scrubIfMissing && pnpm run -r '/^build::.*/'",
-		"build": "[ -f './tsconfig.mono.json' ] && tsc -b --force tsconfig.mono.json",
+		"build": "[ -f './tsconfig.json' ] && tsc -b --force tsconfig.json",
 		"build:fresh": "pnpm scrub && pnpm build",
 
 		"pretest": "pnpm scrub::logs",

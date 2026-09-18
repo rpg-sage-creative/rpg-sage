@@ -35,14 +35,14 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 
-		// must be overidden build extended tsconfig.mono.json files
+		// must be overidden by extended tsconfig.*.json files
 		"outDir": "./build",
 
 		"pretty": true,
 
 		"removeComments": false,
 
-		// must be overidden build extended tsconfig.mono.json files
+		// must be overidden by extended tsconfig.*.json files
 		"rootDir": "./src",
 
 		"skipLibCheck": true,
@@ -60,10 +60,10 @@
 
 		"verbatimModuleSyntax": true
 	},
-	// must be overidden build extended tsconfig.mono.json files
+	// must be overidden by extended tsconfig.*.json files
 	"exclude": [
 	],
-	// must be overidden build extended tsconfig.mono.json files
+	// must be overidden by extended tsconfig.*.json files
 	"include": [
 		"./src"
 	],

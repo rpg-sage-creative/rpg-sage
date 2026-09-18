@@ -15,8 +15,8 @@
 	"dependencies": {
 		"@discordjs/builders": "^1.13.1",
 		"@discordjs/rest": "^2.6.0",
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils#semver:^1.8.0",
-		"@rsc-utils/io-utils": "github:rpg-sage-creative/io-utils#semver:^1.6.0",
+		"@rsc-utils/core-utils": "workspace:",
+		"@rsc-utils/io-utils": "workspace:",
 		"discord.js": "^14.25.1",
 		"emoji-regex-xs": "^2.0.1",
 		"regex": "^6.1.0"

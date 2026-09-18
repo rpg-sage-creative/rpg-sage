@@ -4,13 +4,11 @@
 		"outDir": "./build",
 		"rootDir": "./src",
 	},
-	"exclude": [
-		"./test"
-	],
 	"include": [
 		"./src"
 	],
 	"references": [
-		{ "path": "../../@rsc-utils/core-utils" },
+		{ "path": "../../@rsc-utils/io-utils" },
+		{ "path": "../../@rsc-utils/random-utils" },
 	],
 }
