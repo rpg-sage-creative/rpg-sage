@@ -1,61 +1,16 @@
 {
-	"compileOnSave": false,
+	"extends": "../../../tsconfig.json",
 	"compilerOptions": {
-		"alwaysStrict": true,
-		"allowSyntheticDefaultImports": true,
-
-		"composite": false,
-
-		"declaration": true,
-		// "declarationDir": "./types",
-		// "declarationMap": true,
-
-		// "esModuleInterop": true,
-
-		"forceConsistentCasingInFileNames": true,
-
-		"incremental": true,
-
-		// "importsNotUsedAsValues": "error",
-		// "verbatimModuleSyntax": true,
-
-		"lib": [ "ES2025" ],
-		// "locale": "en-US",
-
-		"module": "nodenext",
-		"moduleResolution": "nodenext",
-
-		"newLine": "LF",
-		"noFallthroughCasesInSwitch": true,
-		"noImplicitAny": true,
-		// "noImplicitOverride": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
-		// "noUncheckedIndexedAccess": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-
 		"outDir": "./build",
-
-		"pretty": true,
-
-		"removeComments": false,
 		"rootDir": "./src",
-
-		"skipLibCheck": true,
-
-		"sourceMap": false,
-		"strict": true,
-		"strictBindCallApply": true,
-		"strictFunctionTypes": true,
-		"strictNullChecks": true,
-		"strictPropertyInitialization": true,
-		"stripInternal": true,
-
-		"target": "ES2025",
-		"types": ["node"],
-
-		"verbatimModuleSyntax": true
 	},
-	"include": ["src"]
+	"exclude": [
+		"./test"
+	],
+	"include": [
+		"./src"
+	],
+	"references": [
+		{ "path": "../../@rsc-utils/json-utils/tsconfig.mono.json" },
+	],
 }

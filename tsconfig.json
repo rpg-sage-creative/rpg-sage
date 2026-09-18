@@ -4,7 +4,7 @@
 		"alwaysStrict": true,
 		"allowSyntheticDefaultImports": true,
 
-		"composite": false,
+		"composite": true,
 
 		"declaration": true,
 		// "declarationDir": "./types",
@@ -66,5 +66,30 @@
 	// must be overidden build extended tsconfig.mono.json files
 	"include": [
 		"./src"
+	],
+	"references": [
+
+		{ "path": "./packages/@rsc-utils/cache-utils" },
+		{ "path": "./packages/@rsc-utils/iterator-utils" },
+		{ "path": "./packages/@rsc-utils/id-utils" },
+
+
+		// ensure the rsc-utils stack
+		{ "path": "./packages/@rsc-chat/discord-utils" },
+		// @rsc-utils/discord-utils triggers @rsc-utils/io-utils
+		// @rsc-utils/io-utils triggers @rsc-utils/core-utils
+		// @rsc-utils/core-utils triggers @rsc-utils/type-utils
+		// @rsc-utils/type-utils triggers @rsc-utils/template-literal-utils
+
+		{ "path": "./packages/@rsc-sage/core" },
+		{ "path": "./packages/@rsc-sage/data" },
+		{ "path": "./packages/@rsc-sage/env" },
+		{ "path": "./packages/@rsc-sage/localization" },
+		{ "path": "./packages/@rsc-utils/game-utils" },
+		{ "path": "./packages/@rsc-utils/map-utils" },
+		{ "path": "./packages/@rsc-apps/bot" },
+		{ "path": "./packages/@rsc-apps/commands" },
+		{ "path": "./packages/@rsc-apps/map-server" },
+		{ "path": "./packages/@rsc-apps/pixels-relay-server" },
 	]
 }
