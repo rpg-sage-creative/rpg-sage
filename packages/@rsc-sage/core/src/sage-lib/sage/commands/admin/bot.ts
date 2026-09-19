@@ -150,9 +150,17 @@ async function botCodeVersion(sageMessage: SageMessage): Promise<void> {
 				lines.push("**buildDate** `unknown`");
 			}
 
-			lines.push(`### rsc-utils`);
-			repoInfo?.rscUtils?.sort().forEach(lib => {
-				lines.push(`- **${lib.name}** \`${lib.version}\``);
+			[
+				"rscApps" as "rscApps",
+				"rscChat" as "rscChat",
+				"rscSage" as "rscSage",
+				"rscUtils" as "rscUtils",
+				"rscTools" as "rscTools",
+			].forEach(key => {
+				lines.push(`### ${key.slice(0, 3)}-${key.slice(3).toLowerCase()}`);
+				repoInfo?.[key]?.sort().forEach(lib => {
+					lines.push(`- **${lib.name}** \`${lib.version}\``);
+				});
 			});
 
 			await sageMessage.send(lines.join("\n"));

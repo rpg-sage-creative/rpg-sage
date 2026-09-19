@@ -26,24 +26,21 @@ async function readBuildDate(repoPath: string): Promise<BuildDate | undefined> {
 	).catch(() => undefined);
 }
 
-async function readRscUtilsPackages(rootPath: string): Promise<PackageJson[]> {
+/** readPackages("./", ["packages", "@rsc-utils"]) */
+async function readPackages(rootPath: string, packagesPathParts: string[]): Promise<PackageJson[]> {
 	const packageMap = new Map<string, PackageJson>();
 
-	const nodeModulesPath = join(rootPath, "node_modules", "@rsc-utils");
-	const packagesPath = join(rootPath, "packages", "@rsc-utils");
-	const utilPaths = [packagesPath, nodeModulesPath,];
+	const packagesPath = join(rootPath, ...packagesPathParts);
 
-	for (const utilPath of utilPaths) {
-		const fileNames = await new Promise<string[]>(resolve =>
-			readdir(utilPath, (err, files) => resolve(err ? [] : files))
-		).catch(() => []);
+	const fileNames = await new Promise<string[]>(resolve =>
+		readdir(packagesPath, (err, files) => resolve(err ? [] : files))
+	).catch(() => []);
 
-		const utilNames = fileNames.filter(dirName => dirName !== ".");
-		for (const utilName of utilNames) {
-			const pkg = await readPackageJson(join(utilPath, utilName));
-			if (pkg) {
-				packageMap.set(pkg.name, { name:pkg.name, version:pkg.version });
-			}
+	const utilNames = fileNames.filter(dirName => dirName !== ".");
+	for (const utilName of utilNames) {
+		const pkg = await readPackageJson(join(packagesPath, utilName));
+		if (pkg) {
+			packageMap.set(pkg.name, { name:pkg.name, version:pkg.version });
 		}
 	}
 
@@ -51,12 +48,16 @@ async function readRscUtilsPackages(rootPath: string): Promise<PackageJson[]> {
 	return keys.map(key => packageMap.get(key)!);
 }
 
-type GitRepoData = {
+export type GitRepoData = {
 	package?: PackageJson;
 	branch?: string;
 	build?: BuildDate;
 	commit?: CommitData;
+	rscApps: PackageJson[];
+	rscChat: PackageJson[];
+	rscSage: PackageJson[];
 	rscUtils: PackageJson[];
+	rscTools: PackageJson[];
 };
 
 export async function readRepo(repoPath: string): Promise<GitRepoData | undefined> {
@@ -65,6 +66,10 @@ export async function readRepo(repoPath: string): Promise<GitRepoData | undefine
 		branch: await readBranchName(repoPath),
 		build: await readBuildDate(repoPath),
 		commit: await readCommit(repoPath),
-		rscUtils: await readRscUtilsPackages(repoPath)
+		rscApps: await readPackages(repoPath, ["packages", "@rsc-apps"]),
+		rscChat: await readPackages(repoPath, ["packages", "@rsc-chat"]),
+		rscSage: await readPackages(repoPath, ["packages", "@rsc-sage"]),
+		rscUtils: await readPackages(repoPath, ["packages", "@rsc-utils"]),
+		rscTools: await readPackages(repoPath, ["tools", "@rsc-tools"]),
 	};
 }
