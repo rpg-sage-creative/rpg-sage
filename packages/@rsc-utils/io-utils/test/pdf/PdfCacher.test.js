@@ -85,3 +85,10 @@ describe("pdf", () => {
 // 	// const nameFour = managerFour.getValue(1);
 // 	// assert(nameFour === "Tjut!", `Wrong Character_Name: ${nameFour}`);
 // }, true);
+
+		// test(`/Users/randaltmeyer/git/rsc/io-utils/test/pdf/in/Nitrobytev2.pdf`, async () => {
+		// 	const url = "file:/Users/randaltmeyer/git/rsc/io-utils/test/pdf/in/Nitrobytev2.pdf";
+		// 	const content = await PdfCacher.read(url).catch(error);
+		// 	expect(content).toBeDefined();
+		// 	console.debug(content);
+		// });
