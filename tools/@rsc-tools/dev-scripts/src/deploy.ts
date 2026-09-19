@@ -1,4 +1,4 @@
-import { execCli } from "./internal/execCli.js";
+import { exec } from "node:child_process";
 import { getArgs } from "./internal/getArgs.js";
 import { promptUser } from "./internal/promptUser.js";
 import type { Action, ArgData, CodeName, Force, Ghost, What, Where } from "./internal/types.js";
@@ -15,6 +15,15 @@ type Args = {
 	force?: Force;
 };
 
+async function execCli(...args: string[]): Promise<string> {
+	return new Promise((resolve, reject) => {
+		exec(args.join(" "), { cwd:undefined }, (error, stdout, stderr) => {
+			if (error) reject(error);
+			else if (stderr) reject(stderr);
+			else resolve(stdout.toString());
+		});
+	});
+}
 
 async function readBranches() {
 	const gitBranchesRaw = await execCli("git", "branch").catch(() => "");
@@ -22,7 +31,7 @@ async function readBranches() {
 }
 
 async function readCurrentBranch() {
-	const branch = await execCli("git branch --show-current").catch(() => "");
+	const branch = await execCli("git", "branch", "--show-current").catch(() => "");
 	return branch?.trim() ?? "develop";
 }
 
