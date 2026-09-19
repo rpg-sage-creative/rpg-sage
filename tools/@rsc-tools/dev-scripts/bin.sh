@@ -5,8 +5,7 @@
 # echo "dirname : [$(dirname "$0")]"
 # echo "pwd     : [$(pwd)]"
 
-SH_PATH=$(dirname "$0")
-MJS_PATH="$SH_PATH/../mjs"
+JS_PATH="$(dirname "$0")/build"
 
 WHICH="$1"
 # echo "WHICH=$WHICH"
@@ -15,16 +14,16 @@ FLAG="$2"
 # echo "FLAG=$FLAG"
 
 if [ "$WHICH" == "create-indexes" ]; then
-	node "$MJS_PATH/createIndexes.mjs" "$@"
+	node "$JS_PATH/createIndexes.js" "$@"
 
 elif [ "$WHICH" == "create-test-todos" ]; then
-	node "$MJS_PATH/createTestTodos.mjs" "$@"
+	node "$JS_PATH/createTestTodos.js" "$@"
 
 elif [ "$WHICH" == "deploy" ]; then
-	node "$MJS_PATH/deploy.mjs" "$@"
+	node "$JS_PATH/deploy.js" "$@"
 
 elif [ "$WHICH" == "write-env-json" ]; then
-	node "$MJS_PATH/writeEnvJson.mjs" "$@"
+	node "$JS_PATH/writeEnvJson.js" "$@"
 
 else
 	echo "dev-scripts usage:"

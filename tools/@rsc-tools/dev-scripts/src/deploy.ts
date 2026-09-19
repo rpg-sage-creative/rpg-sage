@@ -1,7 +1,6 @@
 import { execCli } from "./internal/execCli.js";
 import { getArgs } from "./internal/getArgs.js";
 import { promptUser } from "./internal/promptUser.js";
-import { readBranches } from "./internal/readBranches.js";
 import type { Action, ArgData, CodeName, Force, Ghost, What, Where } from "./internal/types.js";
 import { writeDeployJson } from "./internal/writeDeployJson.js";
 import { writeEnvJson } from "./internal/writeEnvJson.js";
@@ -17,13 +16,26 @@ type Args = {
 };
 
 
+async function readBranches() {
+	const gitBranchesRaw = await execCli("git", "branch").catch(() => "");
+	return gitBranchesRaw.split("\n").map(s => s.replace(/^\*/, "").trim()).filter(s => s);
+}
+
+async function readCurrentBranch() {
+	const branch = await execCli("git branch --show-current").catch(() => "");
+	return branch?.trim() ?? "develop";
+}
+
 async function main() {
+
+	const branches = await readBranches();
+	const defBranch = await readCurrentBranch();
 
 	const argData: ArgData = {
 		where: { argIndex:0, prompt:"Where:", values:["local","docker","dev","beta","stable"], defValue:"local" },
 		codeName: { argIndex:1, prompt:"Code Name:", values:["dev","beta","stable"], defValue:"dev" },
 		what: { argIndex:2, prompt:"What:", values:["bot","map","pdf","random","search","all","services"], defValue:"bot" },
-		branch: { argIndex:3, prompt:"Branch:", values:readBranches(), defValue:"develop" },
+		branch: { argIndex:3, prompt:"Branch:", values:branches, defValue:defBranch },
 		ghost: { prompt:"Ghost Mode?", values:["ghost"], defValue:undefined },
 		force: { prompt:"Force Deploy?", values:["--force"], defValue:undefined },
 	};

@@ -102,6 +102,7 @@
 		"refresh-tags": "git tag -l | xargs git tag -d; git fetch --tags",
 
 		"deploy:dev": "pnpm dev-scripts deploy dev",
+		"deploy:docker": "pnpm dev-scripts deploy docker",
 		"deploy:beta": "git checkout beta && git merge develop && git push && git checkout develop && pnpm dev-scripts deploy beta",
 		"deploy:stable": "pnpm dev-scripts deploy stable",
 

@@ -1,19 +1,25 @@
-import { spawn } from "node:child_process";
+import { exec } from "node:child_process";
 
-export async function execCli(cmd: string, ...args: string[]) {
-	const proc = spawn(cmd, args, { stdio: 'inherit' });
+type Options = { cwd?:string; };
 
-	await new Promise<void>((resolve, reject) => {
-		proc.on('close', (code) => {
-			if (code === 0) {
-				resolve();
-			} else {
-				reject(new Error(`${cmd} compose exited with code ${code}`));
-			}
-		});
+export async function execCli(cmd: string, ...args: string[]): Promise<string>;
+export async function execCli(cmd: string, opts: Options): Promise<string>;
+export async function execCli(...args: unknown[]): Promise<string> {
+	let cmd: string;
+	let opts: Options | undefined;
 
-		proc.on('error', (error) => {
-			reject(error);
+	if (args[1] && typeof(args[1]) === "object") {
+		cmd = args.shift() as string;
+		opts = args.shift() as Options;
+	}else {
+		cmd = args.join(" ");
+	}
+
+	return new Promise((resolve, reject) => {
+		exec(cmd, opts, (error, stdout, stderr) => {
+			if (error) reject(error);
+			else if (stderr) reject(stderr);
+			else resolve(stdout.toString());
 		});
 	});
 }

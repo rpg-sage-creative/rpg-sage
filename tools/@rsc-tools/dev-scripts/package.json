@@ -4,7 +4,7 @@
 	"description": "Scripts used by RSC repos to manage repositories.",
 	"license": "LGPL-3.0-or-later",
 	"type": "module",
-	"bin": "./sh/bin.sh",
+	"bin": "./bin.sh",
 	"devDependencies": {
 		"@types/node": "^24.12.2",
 		"typescript": "^7.0.2"
