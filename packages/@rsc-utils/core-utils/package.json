@@ -5,7 +5,7 @@
 	"main": "build/index.js",
 	"type": "module",
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "workspace:",
+		"@rsc-tools/dev-scripts": "workspace:",
 		"@rsc-utils/template-literal-utils": "workspace:",
 		"@types/node": "^24.12.2",
 		"typescript": "^7.0.2",

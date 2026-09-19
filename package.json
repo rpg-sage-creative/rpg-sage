@@ -56,7 +56,9 @@
 		"pnpm": ">=10"
 	},
 	"devDependencies": {
-		"@rsc-tools/dev-scripts": "workspace:",
+		"@rsc/dev-scripts": "./tools/@rsc-tools/dev-scripts",
+		"@rsc-tools/dynamic-test": "./tools/@rsc-tools/dynamic-test",
+		"@rsc-tools/release": "./tools/@rsc-tools/release",
 		"@types/node": "^24.12.0",
 		"discord.js": "^14.26.2",
 		"typescript": "^7.0.2",
@@ -97,14 +99,6 @@
 		"test": "pnpm build && pnpm vitest --run --globals",
 		"test:nobuild": "pnpm pretest && pnpm vitest --run --globals",
 
-		"pretest:dot-test-dot-js": "[ -d './test' ] && pnpm scrub::logs",
-		"test:dot-test-dot-js": "pnpm vitest --run --globals",
-		"pretest:dot-test-dot-ts": "[ -d './test' ] && pnpm scrub::logs",
-		"test:dot-test-dot-ts": "pnpm vitest --run --globals",
-		"pretest:one-ts": "pnpm pretest",
-		"test:one-ts": "pnpm pretest && pnpm vitest --run --globals",
-
-		"release": "pnpm dev-scripts create-release",
 		"refresh-tags": "pnpm dev-scripts refresh-tags",
 		"deploy:dev": "pnpm dev-scripts deploy dev",
 		"deploy:beta": "git checkout beta && git merge develop && git push && git checkout develop && pnpm dev-scripts deploy beta",

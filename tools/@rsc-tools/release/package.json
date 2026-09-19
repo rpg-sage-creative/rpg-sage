@@ -1,0 +1,7 @@
+{
+	"name": "@rsc-tools/release",
+	"version": "0.0.1",
+	"description": "Used to create RPG Sage releases.",
+	"license": "LGPL-3.0-or-later",
+	"bin": "./bin.sh"
+}

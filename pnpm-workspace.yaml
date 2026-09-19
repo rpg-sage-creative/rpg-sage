@@ -27,10 +27,11 @@ overrides:
   "typescript": "^7"
   "vitest": "^4"
 
+  "@rsc-tools/dev-scripts": "../../../tools/@rsc-tools/dev-scripts"
+
   "@rsc-utils/cache-utils": "../../@rsc-utils/cache-utils"
   "@rsc-utils/color-utils": "../../@rsc-utils/color-utils"
   "@rsc-utils/core-utils": "../../@rsc-utils/core-utils"
-  "@rsc-utils/dev-scripts": "../../../tools/@rsc-tools/dev-scripts"
   "@rsc-utils/discord-utils": "../../@rsc-chat/discord-utils"
   "@rsc-utils/git-utils": "../../@rsc-utils/git-utils"
   "@rsc-utils/id-utils": "../../@rsc-utils/id-utils"

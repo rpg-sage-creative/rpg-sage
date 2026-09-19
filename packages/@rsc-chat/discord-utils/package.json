@@ -6,7 +6,7 @@
 	"main": "build/index.js",
 	"type": "module",
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "workspace:",
+		"@rsc-tools/dev-scripts": "workspace:",
 		"@types/node": "^24.12.2",
 		"discord-api-types": "^0.38.39",
 		"typescript": "^7.0.2",

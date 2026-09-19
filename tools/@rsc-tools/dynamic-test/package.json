@@ -1,0 +1,7 @@
+{
+	"name": "@rsc-tools/dynamic-test",
+	"version": "0.0.1",
+	"description": "Used to dynamically test individual files.",
+	"license": "LGPL-3.0-or-later",
+	"bin": "./bin.sh"
+}

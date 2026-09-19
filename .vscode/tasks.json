@@ -17,12 +17,12 @@
 			}
 		},
 		{
-			"label": "pnpm-run-start",
+			"label": "bot-start",
 			"command": "pnpm",
 			"args": ["start"],
 			"group": {
 				"kind": "test",
-				"isDefault": true
+				"isDefault": "packages/@rsc-apps/bot/**/*.*"
 			},
 			"presentation": {
 				"echo": true,
@@ -34,9 +34,9 @@
 			}
 		},
 		{
-			"label": "test-test-dot-js",
+			"label": "dynamic-test.test.js",
 			"command": "pnpm",
-			"args": ["test:dot-test-dot-js", "${file}"],
+			"args": ["dynamic-test", "${file}"],
 			"type": "shell",
 			"group": {
 				"kind": "test",
@@ -52,9 +52,9 @@
 			}
 		},
 		{
-			"label": "test-test-dot-ts",
+			"label": "dynamic-test.test.ts",
 			"command": "pnpm",
-			"args": ["test:dot-test-dot-ts", "${file}"],
+			"args": ["dynamic-test", "${file}"],
 			"type": "shell",
 			"group": {
 				"kind": "test",
@@ -70,13 +70,31 @@
 			}
 		},
 		{
-			"label": "test-src-dot-ts",
+			"label": "dynamic-test",
 			"command": "pnpm",
-			"args": [ "dev-scripts", "test-src-ts-file", "${file}"],
+			"args": [ "dynamic-test", "${file}"],
 			"type": "shell",
 			"group": {
 				"kind": "test",
 				"isDefault": "**/src/**/*.ts"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false
+			}
+		},
+		{
+			"label": "full-test",
+			"command": "pnpm",
+			"args": [ "test" ],
+			"type": "shell",
+			"group": {
+				"kind": "test",
+				"isDefault": true
 			},
 			"presentation": {
 				"echo": true,
