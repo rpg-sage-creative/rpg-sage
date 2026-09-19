@@ -23,10 +23,6 @@ elif [ "$WHICH" == "create-test-todos" ]; then
 elif [ "$WHICH" == "deploy" ]; then
 	node "$MJS_PATH/deploy.mjs" "$@"
 
-elif [ "$WHICH" == "refresh-tags" ]; then
-	git tag -l | xargs git tag -d
-	git fetch --tags
-
 elif [ "$WHICH" == "write-env-json" ]; then
 	node "$MJS_PATH/writeEnvJson.mjs" "$@"
 
@@ -35,6 +31,5 @@ else
 	echo "    pnpm dev-scripts create-indexes"
 	echo "    pnpm dev-scripts create-test-todos"
 	echo "    pnpm dev-scripts deploy"
-	echo "    pnpm dev-scripts refresh-tags"
 	echo "    pnpm dev-scripts write-env-json"
 fi

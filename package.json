@@ -99,7 +99,8 @@
 		"test": "pnpm build && pnpm vitest --run --globals",
 		"test:nobuild": "pnpm pretest && pnpm vitest --run --globals",
 
-		"refresh-tags": "pnpm dev-scripts refresh-tags",
+		"refresh-tags": "git tag -l | xargs git tag -d; git fetch --tags",
+
 		"deploy:dev": "pnpm dev-scripts deploy dev",
 		"deploy:beta": "git checkout beta && git merge develop && git push && git checkout develop && pnpm dev-scripts deploy beta",
 		"deploy:stable": "pnpm dev-scripts deploy stable",
