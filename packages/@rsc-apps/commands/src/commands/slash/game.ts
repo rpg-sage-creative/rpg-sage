@@ -11,8 +11,10 @@ function getCreateUpdateOptions(isUpdate: boolean) {
 		{ name:"gm-channel", description:"GM Only Channel", isChannel:true },
 		// { name:"dice-channel", description:"Dice Only Channel", isChannel:true },
 		{ name:"misc-channel", description:"Misc Channel", isChannel:true },
-		{ name:"gms", description:"Game Masters", isMentionable:true },
-		{ name:"players", description:"Players", isMentionable:true },
+		{ name:"gm", description:"User to add to the Game as Game Master", isMentionable:true },
+		{ name:"gms", description:"Users to add to the Game as Game Masters" },
+		{ name:"player", description:"User to add to the Game as a Player", isMentionable:true },
+		{ name:"players", description:"Users to add to the Game as Players" },
 		{ name:"dialogPost", choices:["Embed", "Post"] },
 		{ name:"gmCharName", description:"Game Master Character Name" },
 		{ name:"diceCrit", choices:getEnumKeys(DiceCriticalMethodType), description:"Critical Hit Method, ex: RollTwice, TimesTwo" },
@@ -29,24 +31,25 @@ function getCreateUpdateOptions(isUpdate: boolean) {
 export function registerCommand(): SlashCommand {
 	return {
 		name: "Game",
+		description: "Create and manage RPG Sage Games.",
 		children: [
 			{
 				name: "Create",
-				description: "Create a new RPG Sage Game",
+				description: "Create a new RPG Sage Game.",
 				options: getCreateUpdateOptions(false),
 			},
 			{
 				name: "Details",
-				description: "View an RPG Sage Game",
+				description: "View an RPG Sage Game.",
 			},
 			{
 				name: "Update",
-				description: "Update an RPG Sage Game",
+				description: "Update an RPG Sage Game.",
 				options: getCreateUpdateOptions(true),
 			},
 			{
 				name: "Archive",
-				description: "Archive an RPG Sage Game",
+				description: "Archive an RPG Sage Game.",
 			}
 		]
 	};
