@@ -6,12 +6,17 @@ enableLogLevels("development");
 describe("https", () => {
 	describe("getJson", () => {
 
-		const url = "https://pf2.rpgsage.io/abc/some.json";
-
-		test(tagLiterals`getJson(${url})`, async () => {
-			const json = await getJson(url, undefined, { logPercent:true });
+		const urlOne = "https://pf2.rpgsage.io/abc/some.json";
+		test(tagLiterals`getJson(${urlOne})`, async () => {
+			const json = await getJson(urlOne, undefined, { logPercent:true });
 			expect(Array.isArray(json)).toBe(true);
 		});
+
+		// const urlTwo = "https://pathbuilder2e.com/json.php?id=310526";
+		// test(tagLiterals`getJson(${urlTwo})`, async () => {
+		// 	const json = await getJson(urlTwo);
+		// 	expect(json?.success).toBe(true);
+		// });
 
 		const urlSF1e = "https://hephaistos.online/query";
 		const dataSF1e = {"query":`{\n\tcharacters(readOnlyPermalinkId: "213430835") {\n\t\tjson\n\t}\n}`};
