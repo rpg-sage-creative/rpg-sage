@@ -56,7 +56,7 @@
 		"pnpm": ">=10"
 	},
 	"devDependencies": {
-		"@rsc-utils/dev-scripts": "github:rpg-sage-creative/dev-scripts#semver:^1.6.1",
+		"@rsc-tools/dev-scripts": "workspace:",
 		"@types/node": "^24.12.0",
 		"discord.js": "^14.26.2",
 		"typescript": "^7.0.2",
@@ -76,21 +76,27 @@
 	},
 	"scripts": {
 		"scrub": "pnpm run '/^scrub::.*/'",
-		"scrub::packages": "pnpm -r run '/^scrub::.*/' || true",
-		"scrub::node_modules": "rm -rf node_modules || true",
-		"scrub::npm": "rm -f package-lock.json || true",
-		"scrub::pnpm": "rm -f pnpm-lock.yaml || true",
-		"scrub::logs": "rm -rf ./logs/*.log || true",
-		"postscrub": "git submodule update --init --recursive && pnpm install --prefer-offline",
+		"scrub::node_modules": "rm -rf node_modules packages/*/*/node_modules || true",
+		"scrub::npm": "rm -f package-lock.json packages/*/*/package-lock.json || true",
+		"scrub::pnpm": "rm -f pnpm-lock.yaml packages/*/*/pnpm-lock.yaml || true",
+		"scrub::logs": "rm -rf ./logs/*.log packages/*/*/logs/*.log || true",
+		"postscrub": "pnpm install --prefer-offline",
 		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
 
-		"prebuild": "pnpm scrubIfMissing && pnpm run -r '/^build::.*/'",
+		"prebuild-tools": "rm -rf tools/*/*/build tools/*/*/mjs tools/*/*/*.tsbuildinfo",
+		"build-tools": "tsc -b --force tools/@rsc-tools/dev-scripts/tsconfig.json",
+
+		"prebuild": "pnpm scrubIfMissing && pnpm build-tools && pnpm run '/^build::.*/'",
+		"build::clean-build-folder": "rm -rf build packages/*/*/build || true",
+		"build::clean-build-info": "rm -f *.tsbuildinfo packages/*/*/*.tsbuildinfo || true",
+		"build::create-indexes": "pnpm run -r '/^build::.*/'",
 		"build": "[ -f './tsconfig.json' ] && tsc -b --force tsconfig.json",
 		"build:fresh": "pnpm scrub && pnpm build",
 
 		"pretest": "pnpm scrub::logs",
 		"test": "pnpm build && pnpm vitest --run --globals",
 		"test:nobuild": "pnpm pretest && pnpm vitest --run --globals",
+
 		"pretest:dot-test-dot-js": "[ -d './test' ] && pnpm scrub::logs",
 		"test:dot-test-dot-js": "pnpm vitest --run --globals",
 		"pretest:dot-test-dot-ts": "[ -d './test' ] && pnpm scrub::logs",

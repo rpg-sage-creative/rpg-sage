@@ -1,0 +1,16 @@
+{
+	"extends": "../../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./mjs",
+		"rootDir": "./src",
+	},
+	"exclude": [
+		"./test"
+	],
+	"include": [
+		"./src"
+	],
+	"references": [
+		// { "path": "" },
+	],
+}
