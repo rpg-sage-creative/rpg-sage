@@ -1,5 +1,4 @@
-import { tagLiterals } from "@rsc-utils/template-literal-utils";
-import { isBigInt, isBoolean, isDefined, isFiniteNumber, isNull, isNullOrUndefined, isNumber, isNumeric, isPrimitive, isString, isUndefined } from "../build/index.js";
+import { isBigInt, isBoolean, isDefined, isFiniteNumber, isNull, isNullOrUndefined, isNumber, isNumeric, isPrimitive, isString, isUndefined, tagLiterals } from "../build/index.js";
 
 describe("typeGuards", () => {
 	const tests = [

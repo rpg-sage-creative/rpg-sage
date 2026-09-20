@@ -10,6 +10,9 @@ function resolveDiscordPath(relPath) {
 
 export default defineConfig({
   test: {
+	// --globals flag (needed to run older jest test files)
+	injectCjsGlobals: true,
+
 	provide: {
 		// token for Sage to connect to Discord
 		token: readFileSync(resolveDiscordPath("./config/token.txt")).toString("utf-8"),

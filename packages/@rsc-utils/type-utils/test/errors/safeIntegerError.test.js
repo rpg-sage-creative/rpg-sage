@@ -1,5 +1,4 @@
-import { tagLiterals } from "@rsc-utils/template-literal-utils";
-import { safeIntegerError } from "../../build/index.js";
+import { safeIntegerError, tagLiterals } from "../../build/index.js";
 
 describe("errors", () => {
 	describe("safeIntegerError", () => {

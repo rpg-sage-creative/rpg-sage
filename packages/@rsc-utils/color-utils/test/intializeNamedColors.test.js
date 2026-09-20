@@ -1,5 +1,5 @@
-import { resolve, join } from "node:path";
-import { tagLiterals } from "@rsc-utils/template-literal-utils";
+import { tagLiterals } from "@rsc-utils/type-utils";
+import { join, resolve } from "node:path";
 import { Color, getNamedColors, intializeNamedColors } from "../build/index.js";
 
 // allows the tests to load data file when in mono repo

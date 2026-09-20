@@ -7,7 +7,7 @@
 	"type": "module",
 	"devDependencies": {
 		"@rsc-tools/dev-scripts": "workspace:",
-		"@rsc-utils/template-literal-utils": "workspace:",
+		"@rsc-utils/type-utils": "workspace:",
 		"@types/node": "^24.12.2",
 		"typescript": "^7.0.2",
 		"vitest": "^4.1.11"

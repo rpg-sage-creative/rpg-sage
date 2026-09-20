@@ -11,6 +11,6 @@
 		"./src"
 	],
 	"references": [
-		{ "path": "../../@rsc-utils/template-literal-utils" },
+		// { "path": "" },
 	],
 }

@@ -40,7 +40,6 @@ overrides:
   "@rsc-utils/json-utils": "../../@rsc-utils/json-utils"
   "@rsc-utils/language-utils": "../../@rsc-utils/language-utils"
   "@rsc-utils/random-utils": "../../@rsc-utils/random-utils"
-  "@rsc-utils/template-literal-utils": "../../@rsc-utils/template-literal-utils"
   "@rsc-utils/type-utils": "../../@rsc-utils/type-utils"
 
 # catalog:

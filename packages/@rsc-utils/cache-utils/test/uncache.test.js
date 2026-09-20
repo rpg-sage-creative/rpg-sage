@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/template-literal-utils";
+import { tagLiterals as _ } from "@rsc-utils/type-utils";
 import { uncache } from "../build/index.js";
 
 describe("uncache", () => {
@@ -10,7 +10,7 @@ describe("uncache", () => {
 	];
 
 	tests.forEach(([input, args, output]) => {
-		test(tagLiterals`uncache(${input}, ${args}) equals ${output}`, () => {
+		test(_`uncache(${input}, ${args}) equals ${output}`, () => {
 			const ret = uncache(input, args);
 			expect(ret).toBe(args?.undefine ? undefined : null);
 			expect(input).toEqual(output);

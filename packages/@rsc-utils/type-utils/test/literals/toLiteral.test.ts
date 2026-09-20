@@ -1,6 +1,7 @@
-import { tagLiterals } from "../build/index.js";
+import { describe, expect, test } from "vitest";
+import { tagLiterals as _, toLiteral } from "../../build/index.js";
 
-describe("tagLiterals", () => {
+describe("toLiteral", () => {
 
 	const now = new Date();
 
@@ -14,6 +15,7 @@ describe("tagLiterals", () => {
 		{ input:["a"], expected:`["a"]` },
 		{ input:["a",1], expected:`["a",1]` },
 		{ input:["a",[1,2]], expected:`["a",[1,2]]` },
+		{ input:["a",[1,2]], expected:`["a",[…]]`, options:{ellipses:["1"]} },
 
 		{ input:now, expected:`Date("${now.toISOString()}")` },
 
@@ -45,20 +47,33 @@ describe("tagLiterals", () => {
 			input: { "childObject": { "b":"C" }, "bigint": 123n },
 			expected: `{"childObject":{"b":"C"},"bigint":123n}`
 		},
+		{
+			input: { "childObject": { "b":"C" }, "bigint": 123n },
+			expected: `{"childObject":{…},"bigint":123n}`,
+			options: { ellipses:["childObject"] }
+		},
+		{
+			input: { "childObject": { "b":{"c":"D"} }, "bigint": 123n },
+			expected: `{"childObject":{"b":{…}},"bigint":123n}`,
+			options: { ellipses:["childObject.b"] }
+		},
+		{
+			input: { "childObject": { "b":{"c":"D"} }, "bigint": 123n, "other":{"b":"B"} },
+			expected: `{"childObject":{"b":{…}},"bigint":123n,"other":{"b":"B"}}`,
+			options: { ellipses:["*.b"] }
+		},
+		{
+			input: { "childObject": { "b":{"c":"D"} }, "bigint": 123n, "other":{"b":{"e":"E"}} },
+			expected: `{"childObject":{"b":{…}},"bigint":123n,"other":{"b":{…}}}`,
+			options: { ellipses:["*.b"] }
+		},
 
 	];
 
-	tests.forEach(({input, expected, options}, index) => {
-		test(`test index: ${index}`, () => {
-			expect(tagLiterals(options)`${input}`).toBe(expected);
-		});
-		tests.forEach(({input:input2, expected:expected2, options:options2}, index2) => {
-			test(`test indexes: [${index}, ${index2}]`, () => {
-				const ellipses = [];
-				ellipses.push(...options?.ellipses??[]);
-				ellipses.push(...options2?.ellipses??[]);
-				expect(tagLiterals({ellipses})`${input} ${input2}`).toBe(expected + " " + expected2);
-			});
+	tests.forEach(({ input, expected, options }) => {
+		test(_`toLiteral(${input}, ${options}) === ` + expected, () => {
+			expect(toLiteral(input, options)).toBe(expected);
 		});
 	});
+
 });

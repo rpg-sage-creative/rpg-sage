@@ -6,7 +6,6 @@
 	"type": "module",
 	"devDependencies": {
 		"@rsc-tools/dev-scripts": "workspace:",
-		"@rsc-utils/template-literal-utils": "workspace:",
 		"@types/follow-redirects": "^1.14.4",
 		"@types/node": "^24.12.2",
 		"typescript": "^7.0.2",

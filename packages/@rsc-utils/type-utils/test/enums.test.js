@@ -1,5 +1,4 @@
-import { tagLiterals } from "@rsc-utils/template-literal-utils";
-import { getEnumKeys, getEnumValues, parseEnum } from "../build/index.js";
+import { getEnumKeys, getEnumValues, parseEnum, tagLiterals } from "../build/index.js";
 
 describe("enums", () => {
 
