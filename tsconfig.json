@@ -70,7 +70,6 @@
 	"references": [
 
 		{ "path": "./packages/@rsc-utils/cache-utils" },
-		{ "path": "./packages/@rsc-utils/iterator-utils" },
 		{ "path": "./packages/@rsc-utils/id-utils" },
 
 

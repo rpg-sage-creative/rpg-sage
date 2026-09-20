@@ -1,4 +1,4 @@
-import { wrapSetIterator } from "@rsc-utils/iterator-utils";
+import { wrapSetIterator } from "@rsc-utils/type-utils";
 import { EphemeralBase } from "./EphemeralBase.js";
 
 export class EphemeralSet<V>

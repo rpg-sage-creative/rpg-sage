@@ -11,6 +11,6 @@
 		"./src"
 	],
 	"references": [
-		{ "path": "../../@rsc-utils/iterator-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
 	],
 }

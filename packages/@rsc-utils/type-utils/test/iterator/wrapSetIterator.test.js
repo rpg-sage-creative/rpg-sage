@@ -1,4 +1,4 @@
-import { wrapSetIterator } from "../build/index.js";
+import { wrapSetIterator } from "../../build/index.js";
 
 describe("wrapSetIterator", () => {
 

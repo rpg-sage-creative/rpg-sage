@@ -36,7 +36,6 @@ overrides:
   "@rsc-utils/git-utils": "../../@rsc-utils/git-utils"
   "@rsc-utils/id-utils": "../../@rsc-utils/id-utils"
   "@rsc-utils/io-utils": "../../@rsc-utils/io-utils"
-  "@rsc-utils/iterator-utils": "../../@rsc-utils/iterator-utils"
   "@rsc-utils/json-utils": "../../@rsc-utils/json-utils"
   "@rsc-utils/language-utils": "../../@rsc-utils/language-utils"
   "@rsc-utils/random-utils": "../../@rsc-utils/random-utils"

@@ -1,4 +1,4 @@
-import { wrapMapIterator } from "@rsc-utils/iterator-utils";
+import { wrapMapIterator } from "@rsc-utils/type-utils";
 import { EphemeralBase } from "./EphemeralBase.js";
 
 export class EphemeralMap<K, V>

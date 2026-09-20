@@ -15,7 +15,6 @@
 		"@rsc-utils/color-utils": "workspace:",
 		"@rsc-utils/git-utils": "workspace:",
 		"@rsc-utils/id-utils": "workspace:",
-		"@rsc-utils/iterator-utils": "workspace:",
 		"@rsc-utils/json-utils": "workspace:",
 		"@rsc-utils/language-utils": "workspace:",
 		"@rsc-utils/type-utils": "workspace:",

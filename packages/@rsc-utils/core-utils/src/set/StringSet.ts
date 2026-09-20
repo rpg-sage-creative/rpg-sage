@@ -1,5 +1,4 @@
-import { wrapSetIterator } from "@rsc-utils/iterator-utils";
-import type { Optional } from "@rsc-utils/type-utils";
+import { wrapSetIterator, type Optional } from "@rsc-utils/type-utils";
 
 type SetLike<T> = {
 	size: number;
