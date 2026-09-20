@@ -1,4 +1,4 @@
-import { Cache } from "../build/index.js";
+import { Cache } from "../../build/index.js";
 
 describe("Cache", () => {
 

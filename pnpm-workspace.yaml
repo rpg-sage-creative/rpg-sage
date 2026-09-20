@@ -29,7 +29,6 @@ overrides:
 
   "@rsc-tools/dev-scripts": "../../../tools/@rsc-tools/dev-scripts"
 
-  "@rsc-utils/cache-utils": "../../@rsc-utils/cache-utils"
   "@rsc-utils/color-utils": "../../@rsc-utils/color-utils"
   "@rsc-utils/core-utils": "../../@rsc-utils/core-utils"
   "@rsc-utils/discord-utils": "../../@rsc-chat/discord-utils"

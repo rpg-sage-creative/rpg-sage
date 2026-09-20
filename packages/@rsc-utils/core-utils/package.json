@@ -11,7 +11,6 @@
 		"vitest": "^4.1.11"
 	},
 	"dependencies": {
-		"@rsc-utils/cache-utils": "workspace:",
 		"@rsc-utils/color-utils": "workspace:",
 		"@rsc-utils/git-utils": "workspace:",
 		"@rsc-utils/id-utils": "workspace:",

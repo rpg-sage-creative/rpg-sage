@@ -1,4 +1,4 @@
-import { EphemeralSet } from "../build/index.js";
+import { EphemeralSet } from "../../build/index.js";
 
 async function pause(...args) {
 	const first = args[0];

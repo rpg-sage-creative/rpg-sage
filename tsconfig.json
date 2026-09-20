@@ -69,7 +69,6 @@
 	],
 	"references": [
 
-		{ "path": "./packages/@rsc-utils/cache-utils" },
 		{ "path": "./packages/@rsc-utils/id-utils" },
 
 
