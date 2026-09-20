@@ -120,6 +120,13 @@ implements Comparable<AnyCurrency> {
 		this.updateValues();
 	}
 
+	// [Symbol.toPrimitive](hint: "number" | "string" | "default") {
+	// 	if (hint === "number") {
+	// 		return this.toValue();
+	// 	}
+	// 	return this.toString();
+	// }
+
 	public get denominationKeys(): DenomKeys[] {
 		return getDenominations<GameSystem, DenomKeys>(this).map(({ denom }) => denom);
 	}
