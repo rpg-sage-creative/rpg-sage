@@ -10,6 +10,9 @@ Rolemaster has a system called "open-ended" rolls, where if you roll a high enou
 
 Open-Ended High: If you roll above a 95 on a d100, roll again and add the second roll to the result. If the second roll is also above 95, you roll again and add it, continuing until you roll 95 or less. Most d100 rolls in RM use this.
 Open-Ended Low: If you roll a 1-5 on the d100, you roll again and subtract the result, very likely ending in a negative number. If the second roll is above 95, roll again and subtract; continue doing so until you roll 95 or less. (If you roll 1-5 on the second roll, you don't reverse it again.) In RM, this mostly only applies to skill checks.
+
+We can alter the x trigger to be oex (open ended explosion) or maybe rmx (rolemaster explosion).
+We can add a dice setting specific to exploding dice for this.
 */
 
 const DiceExplodeRegExp = /(x)(?:\s*(<=|<|>=|>|=)?\s*(\d+))?/i;
@@ -70,8 +73,11 @@ export class DiceExplode extends DiceManipulation<DiceExplodeData> {
 		if (!this.isEmpty) {
 			switch(this.type) {
 				case DiceTestType.GreaterThan: return value > this.value;
+				// exclude 1 to avoid infinite explosion
 				case DiceTestType.GreaterThanOrEqual: return value >= this.value && this.value !== 1;
 				case DiceTestType.Equal: return value === this.value;
+				// exclude MAX to avoid infinite explosion
+				/** @todo get and test MAX */
 				case DiceTestType.LessThanOrEqual: return value <= this.value;
 				case DiceTestType.LessThan: return value < this.value;
 				case DiceTestType.None: return false;
