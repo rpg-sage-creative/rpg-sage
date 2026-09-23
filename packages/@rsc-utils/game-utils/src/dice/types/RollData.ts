@@ -31,6 +31,9 @@ export type RollData = {
 	/** Is the roll the max value. */
 	isMax?: boolean;
 
+	// isReroll?: boolean;
+	// isRerolled?: boolean;
+
 	/** String output to be marked as: min, max, dropped, etc. */
 	text: string;
 
