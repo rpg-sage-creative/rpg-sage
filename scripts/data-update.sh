@@ -40,21 +40,21 @@ function dataProcess() {
 	local objectType="$1"
 	local year="$2"
 	resetPath
-	node ./packages/data-layer/build/process.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$objectType" "$year"
+	node ./packages/@rsc-sage/data/build/process.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$objectType" "$year"
 }
 
 function dataValidate() {
 	local objectType="$1"
 	local year="$2"
 	resetPath
-	node ./packages/data-layer/build/validate.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$objectType" "$year"
+	node ./packages/@rsc-sage/data/build/validate.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$objectType" "$year"
 }
 
 function dataUpload() {
 	local objectType="$1"
 	local year="$2"
 	resetPath
-	node ./packages/data-layer/build/upload.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$objectType" "$year"
+	node ./packages/@rsc-sage/data/build/upload.mjs codeName=dev "dataRoot=$TMP_DATA_PATH" "$objectType" "$year"
 }
 
 function dataCompare() {
@@ -67,7 +67,7 @@ function dataStack() {
 	dataReset "$objectType" "$year"
 	dataProcess "$objectType" "$year"
 	dataValidate "$objectType" "$year"
-	# dataUpload
+	dataUpload "$objectType" "$year"
 	# dataCompare
 }
 

@@ -1,7 +1,7 @@
 import { forEachAsync, getDataRoot, initializeConsoleUtilsByEnvironment, noop, tagLiterals, verbose } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile, type RepoItem } from "@rsc-utils/io-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
-import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType } from "./cache/types.js";
+import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType, objectTypeToDirName } from "./cache/types.js";
 
 initializeConsoleUtilsByEnvironment();
 
@@ -26,42 +26,48 @@ async function main() {
 		verbose(tagLiterals`Uploading to DDB: ${objectType} ...`);
 
 		verbose(`  Ensuring table exists and is empty ...`);
-		await ddbTable.drop(true);
+		await ddbTable.drop(true).catch(noop);
 		await ddbTable.ensure(true);
 
 		// iterate the json files and load cache data into memory
-		const dirPath = getDataRoot(["sage", tableName]);
+		const dirPaths: string[] = [];
+		if (objectType === "Message") {
+			yearArgs.forEach(year => dirPaths.push(getDataRoot(["sage", objectTypeToDirName(objectType), year])));
+		}else {
+			dirPaths.push(getDataRoot(["sage", objectTypeToDirName(objectType)]));
+		}
+		for (const dirPath of dirPaths) {
+			verbose(tagLiterals`  Reading from ${dirPath} ...`);
 
-		verbose(tagLiterals`  Reading from ${dirPath} ...`);
+			const files = await filterFiles(dirPath, { fileExt:"json" });
 
-		const files = await filterFiles(dirPath, { fileExt:"json" });
+			verbose(tagLiterals`  Found ${files.length} files ...`);
 
-		verbose(tagLiterals`  Found ${files.length} files ...`);
+			// const cores: BaseCacheItem[] = [];
+			const errors: string[] = [];
 
-		// const cores: BaseCacheItem[] = [];
-		const errors: string[] = [];
+			await forEachAsync(`  Reading files`, files, async file => {
 
-		await forEachAsync(`  Reading files`, files, async file => {
+				const core = await readJsonFile<BaseCacheItem>(file).catch(noop);
+				if (core) {
 
-			const core = await readJsonFile<BaseCacheItem>(file).catch(noop);
-			if (core) {
+					// cores.push(core);
+					// if (cores.length === DdbRepo.BatchGetMaxItemCount) {
+					// }
+					const saved = await ddbTable.save(core as RepoItem);
+					if (!saved) {
+						errors.push(file);
+					}
 
-				// cores.push(core);
-				// if (cores.length === DdbRepo.BatchGetMaxItemCount) {
-				// }
-				const saved = await ddbTable.save(core as RepoItem);
-				if (!saved) {
+				}else {
 					errors.push(file);
 				}
 
-			}else {
-				errors.push(file);
-			}
+			});
 
-		});
-
-		// send to the logs so we can see if something is amiss
-		verbose({ tableName, dirPath, files:files.length, errors:errors.length });
+			// send to the logs so we can see if something is amiss
+			verbose({ tableName, dirPath, files:files.length, errors:errors.length });
+		}
 	}
 }
 
