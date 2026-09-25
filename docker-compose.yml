@@ -1,4 +1,5 @@
 services:
+
   mono:
     container_name: "mono"
     build:
@@ -10,3 +11,12 @@ services:
       - "~/.npmrc:/home/ec2-user/.npmrc"
     ports:
       - "127.0.0.1:2222:22"
+
+  ddb:
+    container_name: ddb
+    image: amazon/dynamodb-local:latest
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data/
+    volumes:
+      - "./docker-volumes/dynamodb:/home/dynamodblocal/data"
+    ports:
+      - "8000:8000"

@@ -1,1 +1,0 @@
-This ensures the folder is available for shared-local-instance.db when running the container to test ddb logic.
