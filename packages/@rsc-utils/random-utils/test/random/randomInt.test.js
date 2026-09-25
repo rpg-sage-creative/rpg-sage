@@ -25,6 +25,7 @@ describe("random", () => {
 			{ min:0n, max:0, values:[0], throws:true },
 			{ min:0, max:0n, values:[0], throws:true },
 
+			// the numbers aren't ints and throw
 			{ min:1.49, max:6.49, values:[1,2,3,4,5,6], throws:true },
 			{ min:1.5, max:6.5, values:[2,3,4,5,6,7], throws:true },
 

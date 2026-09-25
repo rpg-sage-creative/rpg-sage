@@ -16,16 +16,16 @@ export function setRandomIntResults(...values: number[]): void {
  * Convenience for `crypto.randomInt(Math.min(min, max), Math.max(min, max) + 1)`
  */
 export function randomInt(min: number, max: number): number {
+	// if they are the same, return it
+	if (min === max) {
+		return min;
+	}
+
 	// make sure we have the correct min value and round it
 	const minInt = Math.min(min, max);
 
 	// make sure we have the correct max value and round it
 	const maxInt = Math.max(min, max);
-
-	// if they are the same, return it
-	if (minInt === maxInt) {
-		return minInt;
-	}
 
 	if (hasTestRoll) {
 		const testInt = TestRolls.shift()!;
