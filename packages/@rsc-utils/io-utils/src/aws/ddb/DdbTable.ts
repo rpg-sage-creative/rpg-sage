@@ -159,12 +159,18 @@ export class DdbTable<Id extends RepoId = RepoId, Item extends RepoItem<Id> = Re
 		return undefined;
 	}
 
-	/** returns all the items in the table */
+	/**
+	 * Returns all the items in the table by doing a query with no filters.
+	 * Added for testing/debugging.
+	 * Highly Recommend Against Using This!
+	 */
 	public async getAll<T extends Item = Item>(): Promise<T[]> {
 		return this.query({}) as Promise<T[]>;
 	}
 
-	/** A prebuilt query conmand that returns all table items of the objecttype that match the given filter arguments (archived/relatedId) */
+	/**
+	 * A prebuilt query conmand that returns all table items of the objecttype that match the given filter arguments (archived/relatedId).
+	 */
 	public async query({ archived, relatedId }: { archived?:boolean; relatedId?:Snowflake; }): Promise<Item[]> {
 		//#region create input
 
