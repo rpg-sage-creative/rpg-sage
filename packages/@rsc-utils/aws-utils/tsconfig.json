@@ -4,11 +4,13 @@
 		"outDir": "./build",
 		"rootDir": "./src",
 	},
+	"exclude": [
+		"./test"
+	],
 	"include": [
 		"./src"
 	],
 	"references": [
-		{ "path": "../../@rsc-utils/aws-utils" },
 		{ "path": "../../@rsc-utils/core-utils" },
 	],
 }

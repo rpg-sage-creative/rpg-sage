@@ -11,6 +11,7 @@
 	"references": [
 		{ "path": "../../@rsc-chat/discord-utils" },
 		{ "path": "../../@rsc-sage/data" },
+		{ "path": "../../@rsc-utils/aws-utils" },
 		{ "path": "../../@rsc-utils/game-utils" },
 		{ "path": "../../@rsc-utils/map-utils" },
 		{ "path": "../../@rsc-sage/env" },

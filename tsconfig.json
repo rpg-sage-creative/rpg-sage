@@ -70,6 +70,7 @@
 	"references": [
 
 		{ "path": "./packages/@rsc-utils/id-utils" },
+		{ "path": "./packages/@rsc-utils/aws-utils" },
 
 
 		// ensure the rsc-utils stack

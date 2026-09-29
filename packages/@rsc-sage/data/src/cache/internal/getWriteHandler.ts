@@ -1,5 +1,6 @@
+import type { RepoItem } from "@rsc-utils/aws-utils";
 import { errorReturnFalse } from "@rsc-utils/core-utils";
-import { writeFile, type RepoItem } from "@rsc-utils/io-utils";
+import { writeFile } from "@rsc-utils/io-utils";
 import type { DataTable } from "../DataTable.js";
 import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
 import { getDdbTable } from "./DdbRepo.js";

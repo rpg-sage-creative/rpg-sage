@@ -309,6 +309,7 @@ export class DataTable<
 			const opts = options?.[objectType];
 			return {
 				dataMode: opts?.dataMode ?? "file",
+				// dataMode: opts?.dataMode ?? "both",
 				formatFiles: opts?.formatFiles ?? formatFiles,
 				isCached: opts?.isCached ?? !["Dice", "Message"].includes(objectType),
 				objectType: opts?.objectType ?? objectType,

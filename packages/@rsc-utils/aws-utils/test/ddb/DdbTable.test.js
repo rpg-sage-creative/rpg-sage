@@ -1,5 +1,5 @@
 import { enableLogLevels, pause, tagLiterals } from "@rsc-utils/core-utils";
-import { DdbRepo } from "../../../build/index.js";
+import { DdbRepo } from "../../build/index.js";
 import { getJsonObjects } from "./data.js";
 
 /*

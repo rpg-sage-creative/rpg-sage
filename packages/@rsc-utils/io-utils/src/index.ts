@@ -1,4 +1,3 @@
-export * from "./aws/index.js";
 export * from "./dsv/index.js";
 export * from "./fs/index.js";
 export * from "./https/index.js";

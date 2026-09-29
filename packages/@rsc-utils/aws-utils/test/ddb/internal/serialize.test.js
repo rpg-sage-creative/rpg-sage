@@ -1,5 +1,5 @@
 import { tagLiterals } from "@rsc-utils/core-utils";
-import { serialize } from "../../../../build/aws/ddb/internal/serialize.js";
+import { serialize } from "../../../build/ddb/internal/serialize.js";
 import { getTests } from "../data.js";
 
 describe("ddb", () => {

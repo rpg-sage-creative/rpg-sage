@@ -1,5 +1,6 @@
+import type { RepoItem } from "@rsc-utils/aws-utils";
 import { forEachAsync, getDataRoot, initializeConsoleUtilsByEnvironment, noop, tagLiterals, verbose } from "@rsc-utils/core-utils";
-import { filterFiles, readJsonFile, type RepoItem } from "@rsc-utils/io-utils";
+import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
 import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType, objectTypeToDirName } from "./cache/types.js";
 
@@ -26,7 +27,7 @@ async function main() {
 		verbose(tagLiterals`Uploading to DDB: ${objectType} ...`);
 
 		verbose(`  Ensuring table exists and is empty ...`);
-		await ddbTable.drop(true).catch(noop);
+		// await ddbTable.drop(true).catch(noop);
 		await ddbTable.ensure(true);
 
 		// iterate the json files and load cache data into memory

@@ -1,5 +1,6 @@
+import type { RepoId } from "@rsc-utils/aws-utils";
 import { areEqual, debug, error, isDefined, noop, warn } from "@rsc-utils/core-utils";
-import { readJsonFile, type RepoId } from "@rsc-utils/io-utils";
+import { readJsonFile } from "@rsc-utils/io-utils";
 import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
 import { getDdbTable } from "./DdbRepo.js";
 import { getJsonPath } from "./getJsonPath.js";

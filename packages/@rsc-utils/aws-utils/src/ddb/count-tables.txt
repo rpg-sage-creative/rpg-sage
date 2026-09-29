@@ -1,0 +1,80 @@
+First, we need to check whether the count is there, and add if not:
+
+const item = await client.send(new GetItemCommand({
+	TableName: COUNTS_TABLE,
+	Key: marshall({type: "users"}),
+}));
+
+if (!item.Item) {
+	// initialize count to 0
+	await client.send(new PutItemCommand({
+		TableName: COUNTS_TABLE,
+		Item: marshall({type: "users", count: 0}),
+		ConditionExpression: "attribute_not_exists(#pk)",
+		ExpressionAttributeNames: {"#pk": "type"},
+	}));
+}
+
+// the user object
+const item = ...;
+
+// insert new user
+await client.send(new TransactWriteItemsCommand({
+	TransactItems: [
+		{
+			Put: {
+				TableName: USERS_TABLE,
+				ConditionExpression: "attribute_not_exists(#pk)",
+				ExpressionAttributeNames: {"#pk": "ID"},
+				Item: marshall(item),
+			}
+		},
+		{
+			Update: {
+				TableName: COUNTS_TABLE,
+				UpdateExpression: "ADD #count :count",
+				ExpressionAttributeNames: {"#count": "count"},
+				ExpressionAttributeValues: marshall({":count": 1}),
+				Key: marshall({type: "users"}),
+			}
+		}
+	]
+}));
+
+// the user object
+const item = ...;
+
+// update existing user
+await client.send(new PutItemCommand({
+	TableName: USERS_TABLE,
+	ConditionExpression: "attribute_exists(#pk)",
+	ExpressionAttributeNames: {"#pk": "ID"},
+	Item: marshall(item),
+}));
+
+It needs to do 3 things:
+
+check that the item exists (ConditionExpression: "attribute_exists(#pk)")
+decrement the count
+delete the item
+await client.send(new TransactWriteItemsCommand({
+	TransactItems: [
+		{
+			Delete: {
+				TableName: USERS_TABLE,
+				ConditionExpression: "attribute_exists(#pk)",
+				ExpressionAttributeNames: {"#pk": "ID"},
+				Key: marshall({ID}),
+			}
+		},
+		{
+			Update: {
+				TableName: COUNTS_TABLE,
+				UpdateExpression: "ADD #count :count",
+				ExpressionAttributeNames: {"#count": "count"},
+				ExpressionAttributeValues: marshall({":count": -1}),
+				Key: marshall({type: "users"}),
+			}
+		}
+	]
+}));

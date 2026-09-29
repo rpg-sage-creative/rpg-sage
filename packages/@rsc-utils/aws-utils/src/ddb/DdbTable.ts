@@ -169,7 +169,7 @@ export class DdbTable<Id extends RepoId = RepoId, Item extends RepoItem<Id> = Re
 	}
 
 	/**
-	 * A prebuilt query conmand that returns all table items of the objecttype that match the given filter arguments (archived/relatedId).
+	 * A prebuilt query command that returns all table items of the objecttype that match the given filter arguments (archived/relatedId).
 	 */
 	public async query({ archived, relatedId }: { archived?:boolean; relatedId?:Snowflake; }): Promise<Item[]> {
 		//#region create input

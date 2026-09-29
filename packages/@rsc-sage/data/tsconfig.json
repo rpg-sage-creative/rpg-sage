@@ -8,6 +8,7 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/aws-utils" },
 		{ "path": "../../@rsc-utils/io-utils" },
 	],
 }

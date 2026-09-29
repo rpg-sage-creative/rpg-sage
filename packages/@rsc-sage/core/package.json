@@ -17,6 +17,7 @@
 		"@rsc-sage/data": "workspace:",
 		"@rsc-sage/env": "workspace:",
 		"@rsc-sage/localization": "workspace:",
+		"@rsc-utils/aws-utils": "workspace:",
 		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/discord-utils": "workspace:",
 		"@rsc-utils/game-utils": "workspace:",

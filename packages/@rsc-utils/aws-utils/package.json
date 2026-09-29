@@ -1,19 +1,20 @@
 {
-	"name": "@rsc-sage/env",
+	"name": "@rsc-utils/aws-utils",
 	"version": "0.0.0",
-	"private": true,
+	"license": "LGPL-3.0-or-later",
 	"main": "build/index.js",
 	"type": "module",
 	"devDependencies": {
 		"@rsc-tools/dev-scripts": "workspace:",
-		"@types/node": "^24.12.0",
+		"@types/follow-redirects": "^1.14.4",
+		"@types/node": "^24.12.2",
 		"typescript": "^7.0.2",
-		"vitest": "^4.1.10"
+		"vitest": "^4.1.11"
 	},
 	"dependencies": {
-		"@rsc-utils/aws-utils": "workspace:",
-		"@rsc-utils/core-utils": "workspace:",
-		"@rsc-utils/io-utils": "workspace:"
+		"@aws-sdk/client-dynamodb": "^3.1053.0",
+		"@aws-sdk/client-sns": "^3.1053.0",
+		"@rsc-utils/core-utils": "workspace:"
 	},
 	"scripts": {
 		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"

@@ -1,7 +1,7 @@
 import { getSageId, getSnsClientConfig, getSuperUserId, getToken } from "@rsc-sage/env";
+import { sendSns } from "@rsc-utils/aws-utils";
 import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, tagLiterals, verbose, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, getRegisteredIntents, getRegisteredPartials, wrapUrls } from "@rsc-utils/discord-utils";
-import { sendSns } from "@rsc-utils/io-utils";
 import { ActivityType, Client, type ClientOptions } from "discord.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";

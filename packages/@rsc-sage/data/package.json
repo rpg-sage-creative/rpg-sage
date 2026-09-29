@@ -11,6 +11,7 @@
 		"vitest": "^4.1.10"
 	},
 	"dependencies": {
+		"@rsc-utils/aws-utils": "workspace:",
 		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:"
 	},
