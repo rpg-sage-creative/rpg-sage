@@ -68,27 +68,27 @@ export function objectTypeToDirName<
 export function objectTypeToTableName<
 	ObjectType extends CacheItemObjectType,
 >(
-	_objectType: ObjectType,
+	objectType: ObjectType,
 ): string {
 
 	// Ddb was designed for a single table per app (mostly).
 	// The only reason to break stuff off would be to move messages (or dice?) to their own.
 	// Also, to share characters across platforms, I might want to put characters in their own???
 	// Splitting characters into their own table would also require ensuring users have a single/unique "sage id" again ...
-	// switch(objectType) {
-	// 	// separate table for all dice from all platforms for better stats?
-	// 	case "Dice": return "rpg_sage_dice";
-	// 	// separate table for all messages from all platforms for better stats?
-	// 	case "Message": return "rpg_sage_messages";
-	// 	// separate table for all characters from all platforms for better reuse?
-	// 	case "Character":
-	// 	case "Game":
-	// 	case "Server":
-	// 	// separate table for all users from all platforms for better global settings?
-	// 	case "User":
-	// 	default: return "rpg_sage_discord";
-	// }
-	return "rpg_sage_discord";
+	switch(objectType) {
+		// separate table for all dice from all platforms for better stats?
+		case "Dice": return "rpg_sage_dice";
+		// separate table for all messages from all platforms for better stats?
+		case "Message": return "rpg_sage_messages";
+		// separate table for all characters from all platforms for better reuse?
+		case "Character":
+		case "Game":
+		case "Server":
+		// separate table for all users from all platforms for better global settings?
+		case "User":
+		default: return "rpg_sage_discord";
+	}
+	// return "rpg_sage_discord";
 
 }
 

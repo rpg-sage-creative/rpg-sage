@@ -1,5 +1,5 @@
 import type { RepoItem } from "@rsc-utils/aws-utils";
-import { forEachAsync, getDataRoot, initializeConsoleUtilsByEnvironment, noop, tagLiterals, verbose } from "@rsc-utils/core-utils";
+import { forBatchAsync, getDataRoot, initializeConsoleUtilsByEnvironment, tagLiterals, verbose } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
 import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType, objectTypeToDirName } from "./cache/types.js";
@@ -27,7 +27,7 @@ async function main() {
 		verbose(tagLiterals`Uploading to DDB: ${objectType} ...`);
 
 		verbose(`  Ensuring table exists and is empty ...`);
-		// await ddbTable.drop(true).catch(noop);
+		// await ddbTable.drop(true).catch(() => {});
 		await ddbTable.ensure(true);
 
 		// iterate the json files and load cache data into memory
@@ -47,21 +47,23 @@ async function main() {
 			// const cores: BaseCacheItem[] = [];
 			const errors: string[] = [];
 
-			await forEachAsync(`  Reading files`, files, async file => {
+			await forBatchAsync(`  Uploading files`, files, ddbTable.repo.batchPutMaxItemCount, async batchFiles => {
 
-				const core = await readJsonFile<BaseCacheItem>(file).catch(noop);
-				if (core) {
+				const cores: RepoItem[] = [];
+				const coreFiles: string[] = [];
+				await Promise.all(batchFiles.map(file =>
+					// grab em in bulk
+					readJsonFile<BaseCacheItem>(file)
+						// store core to save, store coreFiles in case the save fails
+						.then(core => { cores.push(core as RepoItem); coreFiles.push(file); })
+						// send the file directly to errors
+						.catch(() => errors.push(file))
+				));
 
-					// cores.push(core);
-					// if (cores.length === DdbRepo.BatchGetMaxItemCount) {
-					// }
-					const saved = await ddbTable.save(core as RepoItem);
-					if (!saved) {
-						errors.push(file);
-					}
-
-				}else {
-					errors.push(file);
+				// try uploading the files in bulk
+				const saved = await ddbTable.save(cores as RepoItem[]);
+				if (!saved) {
+					coreFiles.forEach(file => errors.push(file));
 				}
 
 			});
