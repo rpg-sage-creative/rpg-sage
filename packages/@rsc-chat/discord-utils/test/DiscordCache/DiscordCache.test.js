@@ -10,9 +10,9 @@ let client;
 let discordCache;
 
 const injected = {
-	ids: inject("ids"),
-	intents: inject("intents"),
-	token: inject("token"),
+	ids: inject("packages.@rsc-chat.discord-utils.ids"),
+	intents: inject("packages.@rsc-chat.discord-utils.intents"),
+	token: inject("packages.@rsc-chat.discord-utils.token"),
 };
 
 beforeAll(async () => {

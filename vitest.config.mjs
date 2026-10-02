@@ -15,13 +15,13 @@ export default defineConfig({
 
 	provide: {
 		// token for Sage to connect to Discord
-		token: readFileSync(resolveDiscordPath("./config/token.txt")).toString("utf-8"),
+		"packages.@rsc-chat.discord-utils.token": readFileSync(resolveDiscordPath("./config/token.txt")).toString("utf-8"),
 
 		// snowflakes for things we use to test DiscordCache
-		ids: JSON.parse(readFileSync(resolveDiscordPath("./config/ids.json")).toString("utf-8")),
+		"packages.@rsc-chat.discord-utils.ids": JSON.parse(readFileSync(resolveDiscordPath("./config/ids.json")).toString("utf-8")),
 
 		// the intents flags for connecting to Discord
-		intents: [
+		"packages.@rsc-chat.discord-utils.intents": [
 			IntentsBitField.Flags.Guilds,
 			IntentsBitField.Flags.GuildMembers,
 			IntentsBitField.Flags.GuildModeration,
@@ -44,7 +44,7 @@ export default defineConfig({
 			// IntentsBitField.Flags.AutoModerationExecution,
 			IntentsBitField.Flags.GuildMessagePolls,
 			IntentsBitField.Flags.DirectMessagePolls,
-		]
+		],
 	  },
 	},
 });
