@@ -2,15 +2,13 @@ import { join, resolve } from "node:path";
 import { error, tagLiterals } from "@rsc-utils/core-utils";
 import { PdfCacher, PdfJsonFieldManager, PdfJsonManager, writeFileSync } from "../../build/index.js";
 
-beforeAll(() => {
-	process.env.dataRoot = "./test";
-});
+console.log({args:process.argv})
+// beforeAll(() => {
+// 	process.env.dataRoot = "./test";
+// });
 
 function toTestFilePath(...parts) {
-	if (resolve(".").includes("/rpg-sage")) {
-		return "file://" + resolve(join("packages/@rsc-utils/io-utils", "test", ...parts));
-	}
-	return "file://" + resolve(join(".", "test", ...parts));
+	return "file://" + resolve(join("packages", "@rsc-utils", "io-utils", "test", ...parts));
 }
 
 describe("pdf", () => {

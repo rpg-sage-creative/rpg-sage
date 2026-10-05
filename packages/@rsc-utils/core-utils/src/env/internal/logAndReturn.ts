@@ -1,5 +1,5 @@
 import { stringifyJson } from "@rsc-utils/json-utils";
-import { verbose } from "../../console/loggers/verbose.js";
+import { verbose } from "@rsc-utils/logger-utils";
 import type { ValidatorArg } from "../types.js";
 
 /**

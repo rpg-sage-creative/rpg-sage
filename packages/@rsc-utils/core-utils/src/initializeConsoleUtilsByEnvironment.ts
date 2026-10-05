@@ -1,4 +1,4 @@
-import { captureProcessExit } from "./console/captureProcessExit.js";
+import { captureProcessExit } from "@rsc-utils/logger-utils";
 import { getCodeName } from "./env/getCodeName.js";
 
 /**

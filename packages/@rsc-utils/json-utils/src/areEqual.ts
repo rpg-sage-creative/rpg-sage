@@ -1,4 +1,4 @@
-import { isPrimitive } from "@rsc-utils/type-utils";
+import { isPrimitive } from "./internal/isPrimitive.js";
 import { stringifyJson } from "./stringifyJson.js";
 
 type KeyOf<T> = keyof T & string;

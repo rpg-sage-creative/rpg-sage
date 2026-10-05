@@ -1,4 +1,4 @@
-import { debug, isLogLevelEnabled } from "../console/index.js";
+import { debug, isLogLevelEnabled } from "@rsc-utils/logger-utils";
 import { splitWrapChars } from "../string/wrap/splitWrapChars.js";
 import { escapeRegex } from "./escapeRegex.js";
 import type { RegExpAnchorOptions, RegExpCaptureOptions, RegExpFlagOptions, RegExpQuantifyOptions, RegExpSpoilerOptions, RegExpWrapOptions } from "./RegExpOptions.js";

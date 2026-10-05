@@ -38,6 +38,7 @@ overrides:
   "@rsc-utils/io-utils": "../../@rsc-utils/io-utils"
   "@rsc-utils/json-utils": "../../@rsc-utils/json-utils"
   "@rsc-utils/language-utils": "../../@rsc-utils/language-utils"
+  "@rsc-utils/logger-utils": "../../@rsc-utils/logger-utils"
   "@rsc-utils/random-utils": "../../@rsc-utils/random-utils"
   "@rsc-utils/type-utils": "../../@rsc-utils/type-utils"
 

@@ -1,7 +1,5 @@
-import { colorPrefix } from "../colors/colorPrefix.js";
-import { getHandlers } from "../handlers/getHandlers.js";
-import type { LogLevelName } from "../logLevels/LogLevel.js";
-import { isLogLevelEnabled } from "../logLevels/isLogLevelEnabled.js";
+import { getHandlers } from "./handlers.js";
+import { isLogLevelEnabled, type LogLevelName } from "./logLevels.js";
 
 /** Common interface to ensure all logging functions are accessible. */
 export interface Logger {
@@ -28,7 +26,7 @@ export function getLogger(): Logger {
 			}
 
 			// we only want logLevel:: if we have args; otherwise we want a blank line ...
-			const outArgs = args.length ? [colorPrefix(logLevel)].concat(args) : [``];
+			const outArgs = args.length ? [logLevel].concat(args) : [``];
 
 			// send updated outArgs to the proper logger function
 			if (logLevel === "error") {
@@ -55,4 +53,39 @@ export function getLogger(): Logger {
 		};
 	}
 	return _logger;
+}
+
+/** Convenience for getLogger().debug(...args) */
+export function debug(...args: any[]) {
+	getLogger().debug(...args);
+}
+
+/** Convenience for getLogger().error(...args) */
+export function error(...args: any[]) {
+	getLogger().error(...args);
+}
+
+/** Convenience for getLogger().http(...args) */
+export function http(...args: any[]) {
+	getLogger().http(...args);
+}
+
+/** Convenience for getLogger().info(...args) */
+export function info(...args: any[]) {
+	getLogger().info(...args);
+}
+
+/** Convenience for getLogger().silly(...args) */
+export function silly(...args: any[]) {
+	getLogger().silly(...args);
+}
+
+/** Convenience for getLogger().verbose(...args) */
+export function verbose(...args: any[]) {
+	getLogger().verbose(...args);
+}
+
+/** Convenience for getLogger().warn(...args) */
+export function warn(...args: any[]) {
+	getLogger().warn(...args);
 }

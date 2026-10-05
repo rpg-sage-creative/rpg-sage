@@ -2,7 +2,7 @@ import type { HexColorString } from "@rsc-utils/color-utils";
 import { stringifyJson } from "@rsc-utils/json-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { toUnique } from "../array/index.js";
-import { error } from "../console/index.js";
+import { error } from "@rsc-utils/logger-utils";
 import type { Renderable, RenderableContentSection, RenderableContentSectionColumn } from "./types.js";
 
 function createSection(index = 0, title?: string, content = <string[]>[], columns = <RenderableContentSectionColumn[]>[]): RenderableContentSection {

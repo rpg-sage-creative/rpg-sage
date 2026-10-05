@@ -1,4 +1,4 @@
-import { silly } from "../console/index.js";
+import { silly } from "@rsc-utils/logger-utils";
 
 type PauseOptions<T> = {
 	data: T;

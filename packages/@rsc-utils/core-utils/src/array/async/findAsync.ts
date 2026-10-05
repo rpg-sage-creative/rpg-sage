@@ -1,6 +1,6 @@
+import { warn } from "@rsc-utils/logger-utils";
 import type { Awaitable } from "@rsc-utils/type-utils";
 import { isPromise } from "node:util/types";
-import { warn } from "../../console/index.js";
 
 /**
  * Uses asynchronous logic to perform a find on an array.

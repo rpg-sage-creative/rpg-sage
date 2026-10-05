@@ -1,4 +1,4 @@
-import { isPrimitive } from "@rsc-utils/type-utils";
+import { isPrimitive } from "./internal/isPrimitive.js";
 
 //#region types
 

@@ -1,6 +1,4 @@
-import type { Awaitable } from "@rsc-utils/type-utils";
-import { error } from "./loggers/error.js";
-import { info } from "./loggers/info.js";
+import { error, info } from "./loggers.js";
 
 type SignalEventName =
 	/** interrupt from keyboard (such as Ctrl+C): do normal shutdown and cleanup processes */
@@ -65,6 +63,9 @@ async function onSignal(eventName: SignalEventName, code?: number): Promise<void
 }
 
 let captured = false;
+
+/** Represents an object or a promise to get that object. */
+type Awaitable<T> = T | PromiseLike<T>;
 
 type Destroyable = { destroy:() => Awaitable<void>; };
 let destroyables: Set<Destroyable> | undefined;
