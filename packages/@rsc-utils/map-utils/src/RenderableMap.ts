@@ -1,4 +1,4 @@
-import { error, errorReturnUndefined, toLiteral, verbose, warn, type Awaitable } from "@rsc-utils/core-utils";
+import { error, errorReturnUndefined, toLiteral, trace, warn, type Awaitable } from "@rsc-utils/core-utils";
 import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/io-utils";
 import { renderMap, serverHandler } from "./internal/index.js";
 import type { GameMap, GameMapBackgroundImage, GameMapData, GameMapLayer, MapRenderPayload, MapRenderResponse, MimeType } from "./types.js";
@@ -24,35 +24,28 @@ async function renderMapData(mapData: GameMapData, mimeType: MimeType = "image/w
 
 	const awsEndpoint = RenderableMap.awsEndpointUrl;
 	if (awsEndpoint) {
-		verbose(`Rendering Map via AWS Lambda.`);
+		trace(`Rendering Map via AWS Lambda.`);
 		response = await getJson<MapRenderResponse>(awsEndpoint, payload).catch(catchBufferFetch);
 	}
 
 	if (!response) {
 		const serverEndpoint = RenderableMap.endpointUrl;
 		if (serverEndpoint) {
-			verbose(`Rendering Map via AppServer.`);
+			trace(`Rendering Map via AppServer.`);
 			response = await getJson<MapRenderResponse>(serverEndpoint, payload).catch(catchBufferFetch);
 		}
 	}
 
 	if (response === false) {
-		verbose(`Rendering Map in main thread.`);
+		trace(`Rendering Map in main thread.`);
 		response = await renderMap(mapData, mimeType);
 	}
 
 	// we have a response, let's use it
 	if (response !== null) {
 		/** @todo do something about these bad images */
-		verbose(`${response.invalidImageUrls.length ?? 0} invalidImageUrls`);
-		if (response.invalidImageUrls.length) {
-			response.invalidImageUrls.forEach(url => verbose(`\tinvalidImageUrl: ${url}`));
-		}
-		verbose(`${response.invalidImages.length ?? 0} invalidImages`);
-		if (response.invalidImages.length) {
-			response.invalidImages.forEach(url => verbose(`\tinvalidImage: ${url}`));
-		}
-
+		trace({ invalidImageUrls:response.invalidImageUrls }, `${response.invalidImageUrls.length ?? 0} invalidImageUrls`);
+		trace({ invalidImages:response.invalidImages }, `${response.invalidImages.length ?? 0} invalidImages`);
 		return response;
 	}
 
@@ -92,7 +85,7 @@ export abstract class RenderableMap implements GameMap {
 	public static awsEndpointUrl: string = "";
 	public static setAwsEndpointUrl(awsEndpointUrl: string): void {
 		RenderableMap.awsEndpointUrl = awsEndpointUrl;
-		verbose(`RenderableMap.setEndpoint("${awsEndpointUrl}") = ${RenderableMap.awsEndpointUrl}`);
+		trace(`RenderableMap.setEndpoint("${awsEndpointUrl}") = ${RenderableMap.awsEndpointUrl}`);
 	}
 
 	public static endpointUrl: string = "";
@@ -107,7 +100,7 @@ export abstract class RenderableMap implements GameMap {
 			const port = endpointOrUrl.port ?? 0;
 			RenderableMap.endpointUrl = `${protocol}://${hostname}:${port}`;
 		}
-		verbose(`RenderableMap.setEndpoint(${toLiteral(endpointOrUrl)}) = ${RenderableMap.endpointUrl}`);
+		trace(`RenderableMap.setEndpoint(${toLiteral(endpointOrUrl)}) = ${RenderableMap.endpointUrl}`);
 	}
 
 	public static setEndpoints(data: { aws:string; port:number; }): void {

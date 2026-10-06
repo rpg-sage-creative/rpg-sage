@@ -1,4 +1,4 @@
-import { errorReturnUndefined, forEachAsync, getDataRoot, verbose } from "@rsc-utils/core-utils";
+import { errorReturnUndefined, forEachAsync, getDataRoot, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { assertSageCharacterCore } from "../../types/SageCharacterCore.js";
 import { assertSageGameCore } from "../../types/SageGameCore.js";
@@ -12,27 +12,27 @@ export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(
 	const invalid: string[] = [];
 	let fileCount = 0;
 
-	verbose(`ObjectType: ${objectType}`);
+	trace(`ObjectType: ${objectType}`);
 
 	const dirName = objectTypeToDirName(objectType);
 
 	const dataPath = getDataRoot(["sage", dirName]);
-	verbose(`  ${objectType} Path: ${dataPath}`);
+	trace(`  ${objectType} Path: ${dataPath}`);
 
 	const children = objectType === "Message" ? yearArgs ?? ["2021", "2022", "2023", "2024", "2025", "2026"] : [""];
 	if (children[0]) {
-		verbose(`  ${objectType} Children: ${children}`);
+		trace(`  ${objectType} Children: ${children}`);
 	}
 
 	for (const child of children) {
 		const childPath = child ? getDataRoot(["sage", dirName, child]) : dataPath;
 		if (child) {
-			verbose(`  ${objectType} ${child} Path: ${childPath}`);
+			trace(`  ${objectType} ${child} Path: ${childPath}`);
 		}
 
-		verbose(`  Counting ${objectType} ...`);
+		trace(`  Counting ${objectType} ...`);
 		const files = await filterFiles(childPath, { fileExt:"json", recursive:true });
-		verbose(`                 ... ${files.length} found.`);
+		trace(`                 ... ${files.length} found.`);
 
 		fileCount += files.length;
 
@@ -53,7 +53,7 @@ export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(
 	}
 
 	// send to the logs so we can see if something is amiss
-	verbose({ objectType, dataPath, files:fileCount, errors:errors.length, invalid:invalid.length });
+	trace({ objectType, dataPath, files:fileCount, errors:errors.length, invalid:invalid.length });
 
 	return !errors.length && !invalid.length;
 }

@@ -94,7 +94,7 @@ export class Logger {
 					// set all default / environment settings here
 					this.pino = pino({ level, transport: { targets }, });
 
-					this.pino.info("Logger initialized: pino; async; file");
+					this.pino.info("Logger initialized: pino; async; file; %s", level);
 
 				}
 
@@ -110,7 +110,7 @@ export class Logger {
 						pretty({ sync:true, colorize:true, ignore:"package", messageFormat:"{if package}{package}:: {end}{msg}", })
 					);
 
-					this.pino.info("Logger initialized: pino-pretty; sync; console");
+					this.pino.info("Logger initialized: pino-pretty; sync; console; %s", level);
 
 				// no test mode means a normal async transport
 				}else {
@@ -123,7 +123,7 @@ export class Logger {
 					// set all default / environment settings here
 					this.pino = pino({ level, transport: { targets }, });
 
-					this.pino.info("Logger initialized: pino-pretty; async; console");
+					this.pino.info("Logger initialized: pino-pretty; async; console; %s", level);
 
 				}
 
@@ -213,9 +213,9 @@ export class Logger {
 // } = Logger.exportLoggers();
 
 /** @deprecated Start using .trace() */
-export const verbose: PinoLogFn = function(...args: unknown[]) {
-	Logger.instance.pino.trace(...args as [object, string]);
-}
+// export const verbose: PinoLogFn = function(...args: unknown[]) {
+// 	Logger.instance.pino.trace(...args as [object, string]);
+// }
 
 /** @deprecated Figure this out !? */
 export const http: PinoLogFn = function(...args: unknown[]) {

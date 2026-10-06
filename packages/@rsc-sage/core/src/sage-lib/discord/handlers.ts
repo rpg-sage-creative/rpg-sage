@@ -1,5 +1,5 @@
 import { ghostEvent } from "@rsc-sage/env";
-import { debug, error, isNullOrUndefined, stringOrUndefined, verbose, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { debug, error, isNullOrUndefined, stringOrUndefined, trace, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { isDiscordApiError, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SMessage, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { DialogTypeOrAliasRegExp } from "@rsc-utils/game-utils";
 import { ChannelType, MessageType as DMessageType, GatewayIntentBits, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
@@ -87,9 +87,9 @@ function registerListener<T extends TListenerType>(listener: T): void {
 	const listeners: T[] = getListeners(listener.which);
 
 	if (isNullOrUndefined(listener.priorityIndex)) {
-		verbose(`Registering ${listener.which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
+		trace(`Registering ${listener.which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
 	} else {
-		verbose(`Registering ${listener.which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
+		trace(`Registering ${listener.which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
 		if (listeners.find(l => l.priorityIndex === listener.priorityIndex)) {
 			warn(`${listener.which} at priorityIndex ${listener.priorityIndex} already exists!`);
 		}

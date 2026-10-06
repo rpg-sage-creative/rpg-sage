@@ -1,4 +1,4 @@
-import { verbose } from "@rsc-utils/logger-utils";
+import { trace } from "@rsc-utils/logger-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
@@ -52,7 +52,7 @@ function _getDataPath(dataPath: string): string {
 
 		// create the dir if it doesn't exist
 		if (!existsSync(dataDir)) {
-			verbose(`Creating dataPath: ${dataDir}`);
+			trace(`Creating dataPath: ${dataDir}`);
 
 			mkdirSync(dataDir, { recursive:true });
 		}

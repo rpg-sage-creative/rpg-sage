@@ -1,6 +1,6 @@
 import { getSageId, getSnsClientConfig, getSuperUserId, getToken } from "@rsc-sage/env";
 import { sendSns } from "@rsc-utils/aws-utils";
-import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, tagLiterals, verbose, type Snowflake } from "@rsc-utils/core-utils";
+import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, tagLiterals, trace, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, getRegisteredIntents, getRegisteredPartials, wrapUrls } from "@rsc-utils/discord-utils";
 import { ActivityType, Client, type ClientOptions } from "discord.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
@@ -104,7 +104,7 @@ export class ActiveBot extends Bot {
 		client.on("guildCreate", guild => {
 			initializeServer(guild).then(initialized => {
 				const guildArg = { id:guild.id, name:guild.name };
-				verbose(tagLiterals`Discord.Client.on("guildCreate", ${guildArg}) => ${initialized}`);
+				trace(tagLiterals`Discord.Client.on("guildCreate", ${guildArg}) => ${initialized}`);
 			});
 		});
 
@@ -129,7 +129,7 @@ export class ActiveBot extends Bot {
 						const interactionArg = "message" in interaction
 							? { id:interaction.id, message:{ id:interaction.message?.id }, user:{ id:interaction.user.id } }
 							: { id:interaction.id, user:{ id:interaction.user.id } };
-						verbose(tagLiterals`Discord.Client.on(${clientEvent}, interaction:${interactionArg}) => ${data.tested}.${data.handled}`);
+						trace(tagLiterals`Discord.Client.on(${clientEvent}, interaction:${interactionArg}) => ${data.tested}.${data.handled}`);
 					}
 				});
 			});
@@ -142,7 +142,7 @@ export class ActiveBot extends Bot {
 					if (data.handled > 0) {
 						const originalMessageArg = { id:originalMessage.id, author:{ id:originalMessage.author?.id } };
 						const updatedMessageArg = { id:updatedMessage?.id, author:{ id:updatedMessage?.author?.id } };
-						verbose(tagLiterals`Discord.Client.on(${ev}, originalMessage:${originalMessageArg}, updatedMessage:${updatedMessageArg}) => ${data.tested}.${data.handled}`);
+						trace(tagLiterals`Discord.Client.on(${ev}, originalMessage:${originalMessageArg}, updatedMessage:${updatedMessageArg}) => ${data.tested}.${data.handled}`);
 					}
 				});
 			});
@@ -163,7 +163,7 @@ export class ActiveBot extends Bot {
 					if (data.handled > 0) {
 						const messageReactionArg = { message:{ id:messageReaction.message.id }, emoji:{ name:messageReaction.emoji.name } };
 						const userArg = { id:user.id };
-						verbose(tagLiterals`Discord.Client.on(${ev}, messageReaction:${messageReactionArg}, user:${userArg}) => ${data.tested}.${data.handled}`);
+						trace(tagLiterals`Discord.Client.on(${ev}, messageReaction:${messageReactionArg}, user:${userArg}) => ${data.tested}.${data.handled}`);
 					}
 				});
 			});

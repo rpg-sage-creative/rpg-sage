@@ -1,4 +1,4 @@
-import { debug, getDataRoot, isDefined, noop, parseSnowflake, parseUuid, toUnique, verbose, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { debug, getDataRoot, isDefined, noop, parseSnowflake, parseUuid, toUnique, trace, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { join } from "node:path";
 import type { SageCharacterCore } from "../types/SageCharacterCore.js";
@@ -64,14 +64,14 @@ function pushCharIds({ id, did, uuid }: Core, _parent?: Core) {
 export async function populateIdsArray(objectTypeArgs?: ObjectType[]) {
 	if (idsArray.length) return false;
 
-	verbose(`Populating ids-array.json`);
+	trace(`Populating ids-array.json`);
 
 	const root = getDataRoot("sage");
 
 	for (const objectType of ObjectTypes) {
 		if (objectTypeArgs && !objectTypeArgs.includes(objectType)) continue;
 		const dir = objectTypeToDirName(objectType);
-		verbose(`Mapping Ids from ${dir} ...`);
+		trace(`Mapping Ids from ${dir} ...`);
 		const path = join(root, dir);
 		const files = await listFiles(path, "json");
 		for (const fileName of files) {
@@ -111,7 +111,7 @@ export async function writeIdsArray() {
 
 	if (!populated) return false;
 
-	verbose(`Writing ids-array.json ...`);
+	trace(`Writing ids-array.json ...`);
 
 	await writeFile(getIdsArrayFilePath(), idsArray);
 
@@ -122,17 +122,17 @@ export async function writeIdsArray() {
 export async function readIdsArray() {
 	if (idsArray.length) return false;
 
-	verbose("Opening ids-array.json ...");
+	trace("Opening ids-array.json ...");
 
 	const cores = await readJsonFile<Core[]>(getIdsArrayFilePath()).catch(noop);
 
 	if (!cores?.length) return false;
 
-	verbose("Reading ids-array.json ...");
+	trace("Reading ids-array.json ...");
 
 	cores.forEach(core => pushIds(core));
 
-	verbose("                    ... done.");
+	trace("                    ... done.");
 
 	return true;
 }

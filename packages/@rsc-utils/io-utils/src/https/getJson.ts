@@ -1,4 +1,4 @@
-import { parseJson, verbose } from "@rsc-utils/core-utils";
+import { parseJson, trace } from "@rsc-utils/core-utils";
 import { getText, type GetTextOpts } from "./getText.js";
 
 type GetJsonOpts = GetTextOpts;
@@ -22,7 +22,7 @@ export function getJson<T = any, U = any>(url: string, postData?: U, opts?: GetJ
 				if (text === "Internal Server Error") {
 					reject(text);
 				}else {
-					verbose(text?.slice(0, 50) + "...");
+					trace(text?.slice(0, 50) + "...");
 					reject(ex);
 				}
 			}

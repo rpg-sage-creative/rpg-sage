@@ -1,4 +1,4 @@
-import { debug, EphemeralSet, verbose, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { debug, EphemeralSet, trace, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, isDiscordApiError } from "@rsc-utils/discord-utils";
 import type { Channel, Collection, Message, PartialMessage } from "discord.js";
 import { GameMapBase } from "../sage/commands/map/GameMapBase.js";
@@ -9,7 +9,7 @@ const deleted = new EphemeralSet<Snowflake>(1000 * 60);
 /** Marks the given messageIds as deleted and attempts to delete map data if it exists. */
 export function setDeleted(...messageIds: Snowflake[]): void {
 	const idList = messageIds.map(id => `"${id}"`).join(", ");
-	verbose(`${Date.now()}: setDeleted(${idList})`);
+	trace(`${Date.now()}: setDeleted(${idList})`);
 	for (const messageId of messageIds) {
 		deleted.add(messageId);
 		GameMapBase.delete(messageId);
@@ -18,7 +18,7 @@ export function setDeleted(...messageIds: Snowflake[]): void {
 
 /** Checks to see if the given messageId is currently in our deleted set. */
 export function isDeleted(messageId: Snowflake): boolean {
-	verbose(`${Date.now()}: isDeleted("${messageId}") = ${deleted.has(messageId)}`);
+	trace(`${Date.now()}: isDeleted("${messageId}") = ${deleted.has(messageId)}`);
 	return deleted.has(messageId);
 }
 

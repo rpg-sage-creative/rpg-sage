@@ -1,6 +1,6 @@
 import { DataTable } from "@rsc-sage/data";
 import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { debug, initializeNoiseUS, initializeUKtoUS, isDefined, SnowflakeMatcher, StringMatcher, UuidMatcher, verbose, warn } from "@rsc-utils/core-utils";
+import { debug, initializeNoiseUS, initializeUKtoUS, isDefined, SnowflakeMatcher, StringMatcher, UuidMatcher, trace, warn } from "@rsc-utils/core-utils";
 import { randomItem } from "@rsc-utils/random-utils";
 import type { AonBase } from "../model/base/AonBase.js";
 import type { Base, BaseCore } from "../model/base/Base.js";
@@ -62,7 +62,7 @@ export function registerObject(itemConstructor: typeof Base): void {
 		objects: [],
 		erratad: []
 	});
-	verbose(`Registering Object #${repoMap.size}: ${objectType}`);
+	trace(`Registering Object #${repoMap.size}: ${objectType}`);
 }
 
 /** Returns the objectType values (sorted) currently loaded. */
@@ -129,7 +129,7 @@ export function findById<T extends Base>(id: OrUndefined<string>): OrUndefined<T
 					return <T>found;
 				}
 			}
-			verbose(`findById(${uuidMatcher?.value ?? id}) not found!`);
+			trace(`findById(${uuidMatcher?.value ?? id}) not found!`);
 		}else {
 			const snowflakeMatcher = SnowflakeMatcher.from(id);
 			if (snowflakeMatcher.isValid) {
@@ -139,11 +139,11 @@ export function findById<T extends Base>(id: OrUndefined<string>): OrUndefined<T
 						return <T>found;
 					}
 				}
-				verbose(`findById(${snowflakeMatcher?.value ?? id}) not found!`);
+				trace(`findById(${snowflakeMatcher?.value ?? id}) not found!`);
 			}
 		}
 	}else {
-		verbose(`findById(${id}) not found!`);
+		trace(`findById(${id}) not found!`);
 	}
 	return undefined;
 }
@@ -253,7 +253,7 @@ function loadCore(core: Optional<BaseCore>, fromLabel: string): number {
 }
 
 export async function loadData(): Promise<void> {
-	verbose(`Loading PF2e Data ...`);
+	trace(`Loading PF2e Data ...`);
 
 	const loaded = await DataTable.populatePf2eData(loadCore);
 
@@ -262,15 +262,15 @@ export async function loadData(): Promise<void> {
 		return;
 	}
 
-	verbose(`\t\t${loaded.source} Source Cores loaded`);
-	verbose(`\t\t${loaded.other} Other Cores loaded`);
-	verbose(`\t\t${loaded.total} Total Cores loaded`);
+	trace(`\t\t${loaded.source} Source Cores loaded`);
+	trace(`\t\t${loaded.other} Other Cores loaded`);
+	trace(`\t\t${loaded.total} Total Cores loaded`);
 
 	const pairs = initializeUKtoUS();
-	verbose(`UK to US pairs loaded: ${pairs}`);
+	trace(`UK to US pairs loaded: ${pairs}`);
 
 	const noise = initializeNoiseUS();
-	verbose(`US noise words loaded: ${noise}`);
+	trace(`US noise words loaded: ${noise}`);
 }
 
 //#endregion

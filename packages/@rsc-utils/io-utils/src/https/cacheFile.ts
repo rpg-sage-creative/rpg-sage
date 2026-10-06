@@ -1,4 +1,4 @@
-import { typeError, verbose, type Optional, type ProgressTracker } from "@rsc-utils/core-utils";
+import { typeError, trace, type Optional, type ProgressTracker } from "@rsc-utils/core-utils";
 import type { FollowResponse, RedirectableRequest } from "follow-redirects";
 import type { IncomingMessage } from "node:http";
 import { WriteStream, createWriteStream, existsSync, mkdirSync, rmSync, statSync } from "node:fs";
@@ -48,12 +48,12 @@ export function cacheFile(...args: (string | Opts)[]): Promise<boolean> {
 
 		if (!existsSync(dirPath)) {
 
-			verbose(`Creating folder: ${dirPath}`);
+			trace(`Creating folder: ${dirPath}`);
 			mkdirSync(dirPath, { recursive:true });
 
 		}else if (existsSync(filePath)) {
 
-			verbose(`Removing old file: ${filePath}`);
+			trace(`Removing old file: ${filePath}`);
 			rmSync(filePath);
 
 		}
@@ -211,7 +211,7 @@ function processResponse({ filePath, response, resolve, reject, progressTracker 
 			reject("readStream.error", err)
 		);
 
-		verbose(`Opening file for stream: ${filePath}`);
+		trace(`Opening file for stream: ${filePath}`);
 
 		writeStream = createWriteStream(filePath, { encoding:"utf8" });
 

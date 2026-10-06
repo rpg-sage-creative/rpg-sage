@@ -1,5 +1,5 @@
 import type { RepoItem } from "@rsc-utils/aws-utils";
-import { forBatchAsync, getDataRoot, initializeConsoleUtilsByEnvironment, tagLiterals, verbose } from "@rsc-utils/core-utils";
+import { forBatchAsync, getDataRoot, initializeConsoleUtilsByEnvironment, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
 import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType, objectTypeToDirName } from "./cache/types.js";
@@ -24,9 +24,9 @@ async function main() {
 		const ddbTable = getDdbTable(objectType);
 		const { tableName } = ddbTable;
 
-		verbose(tagLiterals`Uploading to DDB: ${objectType} ...`);
+		trace(`Uploading to DDB: %s ...`, objectType);
 
-		verbose(`  Ensuring table exists and is empty ...`);
+		trace(`  Ensuring table exists and is empty ...`);
 		// await ddbTable.drop(true).catch(() => {});
 		await ddbTable.ensure(true);
 
@@ -38,11 +38,11 @@ async function main() {
 			dirPaths.push(getDataRoot(["sage", objectTypeToDirName(objectType)]));
 		}
 		for (const dirPath of dirPaths) {
-			verbose(tagLiterals`  Reading from ${dirPath} ...`);
+			trace(`  Reading from %s ...`, dirPath);
 
 			const files = await filterFiles(dirPath, { fileExt:"json" });
 
-			verbose(tagLiterals`  Found ${files.length} files ...`);
+			trace(`  Found %d files ...`, files.length);
 
 			// const cores: BaseCacheItem[] = [];
 			const errors: string[] = [];
@@ -69,7 +69,7 @@ async function main() {
 			});
 
 			// send to the logs so we can see if something is amiss
-			verbose({ tableName, dirPath, files:files.length, errors:errors.length });
+			trace({ tableName, dirPath, files:files.length, errors:errors.length });
 		}
 	}
 }

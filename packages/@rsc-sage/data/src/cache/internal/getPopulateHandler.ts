@@ -1,4 +1,4 @@
-import { forEachAsync, getDataRoot, noop, tagLiterals, verbose } from "@rsc-utils/core-utils";
+import { forEachAsync, getDataRoot, noop, tagLiterals, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import type { DataTable } from "../DataTable.js";
 import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
@@ -36,11 +36,11 @@ async function populateFromDdb<
 
 	const { objectType, tableName } = dataTable;
 
-	verbose(tagLiterals`Populating ${objectType} ...`);
+	trace(tagLiterals`Populating ${objectType} ...`);
 
 	const ddbTable = getDdbTable(objectType);
 
-	verbose(tagLiterals`  Reading from ${tableName} ...`);
+	trace(tagLiterals`  Reading from ${tableName} ...`);
 
 	let files = 0;
 	let errors = 0;
@@ -57,7 +57,7 @@ async function populateFromDdb<
 	});
 
 	// send to the logs so we can see if something is amiss
-	verbose({ objectType, tableName, files, errors });
+	trace({ objectType, tableName, files, errors });
 
 	/** @todo decide what makes a failed populate. errors.length > 0 ??? */
 
@@ -73,17 +73,17 @@ async function populateFromFile<
 
 	const { objectType } = dataTable;
 
-	verbose(tagLiterals`Populating ${objectType} ...`);
+	trace(tagLiterals`Populating ${objectType} ...`);
 
 	// iterate the json files and load cache data into memory
 	const dirName = objectTypeToDirName(objectType);
 	const dirPath = getDataRoot(["sage", dirName]);
 
-	verbose(tagLiterals`  Reading from ${dirPath} ...`);
+	trace(tagLiterals`  Reading from ${dirPath} ...`);
 
 	const files = await filterFiles(dirPath, { fileExt:"json" });
 
-	verbose(tagLiterals`  Found ${files.length} files ...`);
+	trace(tagLiterals`  Found ${files.length} files ...`);
 
 	const errors: string[] = [];
 
@@ -98,7 +98,7 @@ async function populateFromFile<
 	});
 
 	// send to the logs so we can see if something is amiss
-	verbose({ objectType, dirName, dirPath, files:files.length, errors:errors.length });
+	trace({ objectType, dirName, dirPath, files:files.length, errors:errors.length });
 
 	/** @todo decide what makes a failed populate. errors.length > 0 ??? */
 

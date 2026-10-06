@@ -1,17 +1,17 @@
-import { debug, initializeConsoleUtilsByEnvironment, verbose } from "@rsc-utils/core-utils";
+import { debug, initializeConsoleUtilsByEnvironment, trace } from "@rsc-utils/core-utils";
 import { deleteFile } from "@rsc-utils/io-utils";
 import { getDuplicates, getIdsArrayFilePath, getIdsStats, writeIdsArray } from "./validation/IdsArray.js";
 
 initializeConsoleUtilsByEnvironment();
 
 async function main() {
-	verbose("Deleting ...");
+	trace("Deleting ...");
 	await deleteFile(getIdsArrayFilePath());
 
-	verbose("Writing ...");
+	trace("Writing ...");
 	await writeIdsArray();
 
-	verbose("Looking for duplicates ...");
+	trace("Looking for duplicates ...");
 	const duplicates = getDuplicates();
 
 	if (duplicates.length) {

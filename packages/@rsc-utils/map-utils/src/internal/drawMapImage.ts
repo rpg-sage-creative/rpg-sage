@@ -1,4 +1,4 @@
-import { error, toLiteral, verbose } from "@rsc-utils/core-utils";
+import { error, toLiteral } from "@rsc-utils/core-utils";
 import type { GameMapLayerImage } from "../types.js";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { gridOffsetToZeroZero } from "./gridOffsetToZeroZero.js";
@@ -27,9 +27,8 @@ export async function drawMapImage(mapArgs: MapCache, mapLayerMeta: MapLayerMeta
 		try {
 			mapArgs.context.globalAlpha = opacity;
 			mapArgs.context.drawImage(imgImage, imgClipX, imgClipY, imgClipWidth, imgClipHeight, mapLayerMeta.layerOffsetX + scaledImgOffsetX, mapLayerMeta.layerOffsetY + scaledImgOffsetY, scaledImgWidth, scaledImgHeight);
-		}catch(ex) {
-			verbose(`mapArgs.context.drawImage(imgImage = ${toLiteral(mapLayerImage)}, ${imgClipX}, ${imgClipY}, ${imgClipWidth}, ${imgClipHeight}, ${mapLayerMeta.layerOffsetX + imgOffsetX}, ${mapLayerMeta.layerOffsetY + imgOffsetY}, ${imgWidth}, ${imgHeight});`);
-			error(ex);
+		}catch(err) {
+			error({ err }, `mapArgs.context.drawImage(imgImage = ${toLiteral(mapLayerImage)}, ${imgClipX}, ${imgClipY}, ${imgClipWidth}, ${imgClipHeight}, ${mapLayerMeta.layerOffsetX + imgOffsetX}, ${mapLayerMeta.layerOffsetY + imgOffsetY}, ${imgWidth}, ${imgHeight});`);
 			mapArgs.invalidImages.add(mapLayerImage.url);
 		}
 	}

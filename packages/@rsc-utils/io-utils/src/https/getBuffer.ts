@@ -1,4 +1,4 @@
-import { stringifyJson, typeError, verbose, type Optional, type ProgressTracker } from "@rsc-utils/core-utils";
+import { stringifyJson, typeError, trace, type Optional, type ProgressTracker } from "@rsc-utils/core-utils";
 import type { FollowResponse, RedirectableRequest } from "follow-redirects";
 import type { IncomingMessage } from "node:http";
 import { pipeline } from "node:stream";
@@ -126,13 +126,7 @@ export function getBuffer<T = any>(url: string, postData?: T, opts?: GetBufferOp
 			method: "GET"
 		};
 
-		verbose(`${options.method} ${url}`);
-		if (options) {
-			verbose({options});
-		}
-		if (postData) {
-			verbose({postData});
-		}
+		trace({ options, postData }, `${options.method} ${url}`);
 
 		const functionName = postData ? "request" : "get";
 		request = protocol[functionName](url, options, _response => {
