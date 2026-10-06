@@ -1,0 +1,108 @@
+import build from "pino-abstract-transport";
+import {
+  WebhookClient,
+  EmbedBuilder,
+  AttachmentBuilder,
+  codeBlock,
+} from "discord.js";
+import type { ColorResolvable } from "discord.js";
+
+const embedColors: Record<string, ColorResolvable> = {
+  10: "#c100ff", //trace
+  20: "#c100ff", //debug
+  30: "#8be836", //info
+  40: "#ffc142", //warn
+  50: "#e83938", //error
+  60: "#e83938", //fatal
+};
+
+// https://discordjs.guide/legacy/popular-topics/embeds#embed-limits
+const MAX_FIELD_VALUE = 1024,
+  MAX_FIELD_NAME = 256,
+  MAX_FIELDS = 25,
+  MAX_CONTENT = 4000;
+
+const trim = (str: string, max: number) => {
+  return str.length > max ? `${str.slice(0, max - 3)}...` : str;
+};
+
+async function discordTransport(options: {
+  webhookURL: string;
+  threadId?: string;
+  excludeFields?: string[];
+}) {
+  if (!options.webhookURL) {
+    throw new Error("The required option: webhookURL is missing.");
+  }
+
+  const webhook = new WebhookClient({
+    url: options.webhookURL,
+  });
+
+  return build(async function (source) {
+    for await (const message of source) {
+      const { msg, err, time, level, ...rest } = message;
+
+      const fields = Object.entries(rest)
+        .filter(([name]) => !options.excludeFields?.includes(name))
+        .map(([name, value]) => ({
+          name: trim(
+            name.charAt(0).toUpperCase() + name.slice(1),
+            MAX_FIELD_NAME,
+          ),
+          value: trim(String(value), MAX_FIELD_VALUE),
+        }));
+
+      const fieldsExceedingLimit = fields.length > MAX_FIELDS;
+
+      const parsedTime =
+        typeof time === "number" || typeof time === "string"
+          ? new Date(time)
+          : null;
+
+      const embed = new EmbedBuilder()
+        .setColor(embedColors[level]!)
+        .setTitle(String(msg))
+        .addFields(fieldsExceedingLimit ? fields.slice(0, MAX_FIELDS) : fields)
+        .setTimestamp(
+          parsedTime && !Number.isNaN(parsedTime.getTime())
+            ? parsedTime
+            : null,
+        );
+
+      if (fieldsExceedingLimit) {
+        embed.setFooter({
+          text: `Some fields have been excluded from the log. The maximum allowed is ${MAX_FIELDS} fields.`,
+        });
+      }
+
+      let content = undefined;
+      const files = [];
+
+      if (level === 50 && err && err.stack) {
+        if (err.stack.length > MAX_CONTENT) {
+          files.push(
+            new AttachmentBuilder(Buffer.from(err.stack), {
+              name: `error.txt`,
+            }),
+          );
+        } else {
+          content = codeBlock("js", err.stack);
+        }
+      }
+
+      await webhook
+        .send({
+          content,
+          files,
+          embeds: [embed],
+          threadId: options.threadId,
+        })
+        .catch((error) => {
+          console.error("[DISCORD_TRANSPORT] Send failed:", error);
+        });
+    }
+  });
+}
+
+export default discordTransport;
