@@ -399,8 +399,8 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 		try {
 			text = this.emoji.emojify(text);
 			text = this.sageCache.bot.emojify(text);
-		}catch(ex) {
-			error({ serverId:this.id }, ex);
+		}catch(err) {
+			error({ err, serverId:this.id }, "Server.emojify()");
 		}
 		return text;
 	}

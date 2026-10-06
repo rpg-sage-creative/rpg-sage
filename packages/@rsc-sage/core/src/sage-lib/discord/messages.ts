@@ -75,7 +75,11 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 	return sendTo(
 		{ sageCache, target:webhook, embeds, files, threadId, ...authorOptions },
 		{ contentToEmbeds, embedsToContent },
-		(err: unknown) => error(`${toHumanReadable(targetChannel)}${threadId?" "+threadId:""}: sendWebhook`, err)
+		(err: unknown) => error({
+			err,
+			targetChannel: toHumanReadable(targetChannel) ?? "#UnknownTargetChannel",
+			threadId,
+		}, `sendWebhook() error`)
 	);
 }
 
@@ -138,7 +142,11 @@ export async function replaceWebhook(originalMessage: SMessageOrPartial, webhook
 			error({ fn:"replaceWebhook", invalidUsername, updated });
 
 		}else if (result && !result.process()) {
-			error(`${toHumanReadable(originalMessage.channel)}${threadId?" "+threadId:""}: replaceWebhook`, result.error);
+			error({
+				err: result.error,
+				originalChannel: toHumanReadable(originalMessage.channel) ?? "#UnknownOriginalMessageChannel",
+				threadId,
+			}, `replaceWebhook() error`);
 		}
 	}
 
@@ -185,16 +193,38 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: Re
 	if (embeds.length > 2) {
 		if (isUser(targetChannel)) {
 			const embed = createMessageEmbed({ description:"*Long reply sent via direct message!*" });
-			const sent = await sendTo({ sageCache, target:targetChannel, embeds:[embed] }, { }, (err: unknown) => error(`${toHumanReadable(targetChannel)}: Notifying of sendRenderableContent DM`, err));
-			messages.push(...sent ?? []);
+			const sent = await sendTo(
+				{ sageCache, target:targetChannel, embeds:[embed] },
+				{ },
+				(err: unknown) => error({
+					err,
+					targetChannel: toHumanReadable(targetChannel) ?? "#UnknownTargetChannel",
+				}, `sendRenderableContent(): Unable to notify long content will be sent as DM`)
+			);
+			sent?.forEach(msg => messages.push(msg));
 		}
 		if (originalAuthor) {
-			const sent = await sendTo({ sageCache, target:originalAuthor, embeds }, { }, (err: unknown) => error(`${toHumanReadable(originalAuthor)}: Sending sendRenderableContent as DM`, err));
-			messages.push(...sent ?? []);
+			const sent = await sendTo(
+				{ sageCache, target:originalAuthor, embeds },
+				{ },
+				(err: unknown) => error({
+					err,
+					originalAuthor: toHumanReadable(originalAuthor) ?? "@UnknownOriginalAuthor",
+				}, `sendRenderableContent(): Unable to send long content as DM`)
+			);
+			sent?.forEach(msg => messages.push(msg));
 		}
 	}else {
-		const sent = await sendTo({ sageCache, target:targetChannel, embeds }, { }, (err: unknown) => error(`${toHumanReadable(originalAuthor)}: Sending sendRenderableContent`, err));
-		messages.push(...sent ?? []);
+		const sent = await sendTo(
+			{ sageCache, target:targetChannel, embeds },
+			 { },
+			  (err: unknown) => error({
+				err,
+				originalAuthor: toHumanReadable(originalAuthor) ?? "@UnknownOriginalAuthor",
+				targetChannel: toHumanReadable(targetChannel) ?? "#UnknownTargetChannel",
+			}, `sendRenderableContent(): Unable to send content`)
+		);
+		sent?.forEach(msg => messages.push(msg));
 	}
 	return messages as SMessage[];
 }

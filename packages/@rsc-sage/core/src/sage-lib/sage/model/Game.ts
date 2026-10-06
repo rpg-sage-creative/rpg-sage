@@ -697,8 +697,8 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 		try {
 			text = this.emoji.emojify(text);
 			text = this.server.emojify(text);
-		}catch(ex) {
-			error({ gameId:this.id, serverDid:this.serverDid }, ex);
+		}catch(err) {
+			error({ err, gameId:this.id, serverDid:this.serverDid }, "Game.emojify()");
 		}
 		return text;
 	}

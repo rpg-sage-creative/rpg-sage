@@ -23,7 +23,9 @@ export function ensureIds(core: Core, options?: Options): void {
 	else delete core.uuid;
 
 	let id = did ?? uuid ?? core.id;
-	if (!id && core.objectType !== "Character") debug(`Missing ${core.objectType} Id: `, core);
+	if (!id && core.objectType !== "Character") {
+		debug({core},`Missing %s Id`, core.objectType);
+	}
 	if (!id) id = generateSnowflake(snowflakeOpts);
 	if (id) core.id = id;
 

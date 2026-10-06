@@ -1,8 +1,7 @@
 import type { HexColorString } from "@rsc-utils/color-utils";
-import { stringifyJson } from "@rsc-utils/json-utils";
+import { error } from "@rsc-utils/logger-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { toUnique } from "../array/index.js";
-import { error } from "@rsc-utils/logger-utils";
 import type { Renderable, RenderableContentSection, RenderableContentSectionColumn } from "./types.js";
 
 function createSection(index = 0, title?: string, content = <string[]>[], columns = <RenderableContentSectionColumn[]>[]): RenderableContentSection {
@@ -147,10 +146,16 @@ export class RenderableContent implements Renderable {
 		}else {
 			try {
 				return resolvable.toRenderableContent();
-			}catch(ex) {
+			}catch(err) {
 				const toStringValue = Object.prototype.toString.call(resolvable) ?? "No toString";
 				const constructorName = resolvable?.constructor?.name ?? "No Constructor";
-				error(`Unable to resolve Renderable: ${toStringValue} (${constructorName}); "toRenderableContent in resolvable === ${"toRenderableContent" in resolvable}`, stringifyJson(resolvable));
+				error(
+					{ err, resolvable },
+					`Unable to resolve Renderable: %s (%s); "toRenderableContent in resolvable === %o`,
+					toStringValue,
+					constructorName,
+					"toRenderableContent" in resolvable
+				);
 			}
 		}
 

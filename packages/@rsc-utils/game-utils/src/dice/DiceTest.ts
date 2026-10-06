@@ -182,7 +182,7 @@ export class DiceTest {
 				const key = targetEnum[data.type as unknown as keyof typeof targetEnum] as unknown as Key;
 				return DiceTest.createData(defTestType, data.value, data.hidden, key.toLowerCase());
 			}else {
-				error(`Invalid targetToTest arguments`, { data,targetEnum,defTestType });
+				error({ data, targetEnum, defTestType }, `Invalid targetToTest arguments`);
 			}
 		}
 		return data as DiceTestData;

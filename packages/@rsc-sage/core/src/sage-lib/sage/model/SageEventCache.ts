@@ -1,7 +1,7 @@
 import { AdminRoleType, DataTable, GameUserType, type GameCacheItem } from "@rsc-sage/data";
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
-import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, silly, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { BULLET, debug, error, errorReturnFalse, isDefined, isErrorLike, mapAsync, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, trace, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type SupportedMessagesChannel, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
@@ -601,9 +601,9 @@ export class SageEventCache {
 		const hasTupper = await this.hasTupper(discordKey);
 		if (hasTupper) {
 			// let's pause for a second in case Tupper is involved ...
-			silly(`Pausing for Tupper ...`);
+			trace(`Pausing for Tupper ...`);
 			await (new Promise(res => setTimeout(res, 1000)));
-			silly(`                   ... done pausing for Tupper.`);
+			trace(`                   ... done pausing for Tupper.`);
 		}
 	}
 

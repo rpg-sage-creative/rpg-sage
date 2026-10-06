@@ -197,8 +197,12 @@ function getInteractionFlags(interaction: Optional<Interaction>): InteractionFla
 				return ret(key);
 			}
 		}
-	}catch(ex) {
-		error(toHumanReadable(interaction.user) ?? "@UnknownInteractionUser", interaction.toJSON(), ex);
+	}catch(err) {
+		error({
+			err,
+			interaction,
+			user: toHumanReadable(interaction.user) ?? "@UnknownInteractionUser"
+		});
 	}
 
 	return { canIgnore:false, canHandle:false };
@@ -213,8 +217,12 @@ export async function handleInteraction(clientEvent: ClientEventsKey, interactio
 			const sageInteraction = await SageInteraction.fromInteraction(clientEvent, interaction as SupportedInteraction);
 			await handleInteractions(sageInteraction, output);
 			sageInteraction.clear();
-		}catch(ex) {
-			error(toHumanReadable(interaction.user) ?? "Unknown User", interaction.toJSON(), ex);
+		}catch(err) {
+			error({
+				err,
+				interaction,
+				user: toHumanReadable(interaction.user) ?? "@UnknownInteractionUser"
+			});
 		}
 
 		if (output.ghosted) debug(output);
@@ -394,11 +402,15 @@ export async function handleMessage(clientEvent: HandleMessageClientEventsKey, o
 				if (output.ghosted) debug(output);
 			}
 		}
-	} catch (ex) {
+	} catch (err) {
 		// DiscordAPIError[10008]: Unknown Message <-- probably a deleted message from tupperbox
 		// DiscordAPIError[50001]: Missing Access  <-- probably in a server and getting events but can't see this channel
-		if (!isDiscordApiError(ex, 10008, 50001)) {
-			error(toHumanReadable(oldMessage.author) ?? "Unknown User", `\`${oldMessage.content}\``, ex);
+		if (!isDiscordApiError(err, 10008, 50001)) {
+			error({
+				err,
+				content: oldMessage.content,
+				user: toHumanReadable(oldMessage.author) ?? "@UnknownMessageUser"
+			});
 		}
 	}
 
@@ -475,8 +487,12 @@ export async function handleReaction(clientEvent: HandleReactionClientEventsKey,
 
 		if (output.ghosted) debug(output);
 
-	} catch (ex) {
-		error(toHumanReadable(user), `\`${messageReaction.emoji.name}\``, ex);
+	} catch (err) {
+		error({
+			err,
+			emoji: messageReaction.emoji.name,
+			user: toHumanReadable(user) ?? "@UnknownReactionUser"
+		});
 	}
 
 	return output;

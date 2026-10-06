@@ -137,8 +137,8 @@ function pfsScenario(sageMessage: SageMessage): void {
 			return;
 		}
 		sageMessage.send(scenario.callback(sageMessage, tierInfo));
-	} catch (ex) {
-		error("pfsScenario", ex);
+	} catch (err) {
+		error({ err }, "pfsScenario()");
 	}
 }
 function registerScenarios(): void {

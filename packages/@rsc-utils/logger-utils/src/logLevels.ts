@@ -53,7 +53,7 @@ export function enableLogLevels(env: EnvironmentName): void {
 /**
  * Enables the given log level to actually write to logging.
  */
-export function enableLogLevel(...logLevels: LogLevelName[]): void {
+function enableLogLevel(...logLevels: LogLevelName[]): void {
 	const _logLevels = getLogLevels(true);
 	logLevels.forEach(logLevel => _logLevels.add(logLevel));
 }

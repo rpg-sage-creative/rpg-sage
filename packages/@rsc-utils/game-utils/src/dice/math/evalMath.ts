@@ -70,8 +70,8 @@ export function evalMath(input: string): string {
 
 		return outWithSign;
 
-	}catch(ex) {
-		error(`evalMath threw an exception for: ${input}`, ex);
+	}catch(err) {
+		error({ err, input }, `evalMath(input) exception!`);
 		return `(ERR)`;
 	}
 }

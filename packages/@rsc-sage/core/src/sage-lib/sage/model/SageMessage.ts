@@ -126,7 +126,10 @@ export class SageMessage
 			content: this.eventCache.resolveToContent(renderableContentResolvable).join("\n")
 		};
 		const catchHandler = (err: unknown) => {
-			error(`${toHumanReadable(target)}: SageMessage.sendPost`, err);
+			error({
+				err,
+				targetChannel: toHumanReadable(target) ?? "#UnknownTargetChannel",
+			}, `SageMessage.sendPost(): Error with sendTo()`);
 		};
 		const messages = await sendTo(sendArgs, { }, catchHandler);
 		return messages as SMessage[] ?? [];

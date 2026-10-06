@@ -104,7 +104,7 @@ async function parseDiscordMacro(macroString: string, options: ParseDiscordMacro
 	if (macroAndOutput) {
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
-			error(`Macro Recursion (parseDiscordMacro)`, { macroString, macroStack });
+			error({ macroString, macroStack },`parseDiscordMacro(): Macro Recursion`);
 			const parsedDice = await parseDiscordDice(`[0d0 Recursion!]`, { processor, sageCommand });
 			return parsedDice?.roll().toStrings() ?? [];
 		}

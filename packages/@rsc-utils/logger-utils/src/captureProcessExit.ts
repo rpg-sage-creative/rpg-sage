@@ -1,4 +1,4 @@
-import { error, info } from "./loggers.js";
+import { error, info } from "./Logger.js";
 
 type SignalEventName =
 	/** interrupt from keyboard (such as Ctrl+C): do normal shutdown and cleanup processes */

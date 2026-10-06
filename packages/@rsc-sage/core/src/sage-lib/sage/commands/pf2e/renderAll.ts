@@ -1,4 +1,4 @@
-import { error, filterAndMap, isDefined, sortComparable, toUnique, toUniqueDefined, verbose, type RenderableContent } from "@rsc-utils/core-utils";
+import { error, filterAndMap, isDefined, sortComparable, toUnique, toUniqueDefined, trace, type RenderableContent } from "@rsc-utils/core-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../../sage-pf2e/index.js";
 import { createCommandRenderableContent } from "../cmd.js";
 
@@ -73,7 +73,7 @@ function renderAllBySource(objectType: string, objectTypePlural: string): Render
 }
 
 export function renderAll(objectType: string, objectTypePlural: string, _bySource = false): RenderableContent[] {
-	verbose("renderAll", objectType, objectTypePlural);
+	trace("renderAll(%s, %s)", objectType, objectTypePlural);
 	try {
 		if (objectType === "Source") {
 			return [renderAllSource(objectType, objectTypePlural)];

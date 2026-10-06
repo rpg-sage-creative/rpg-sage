@@ -108,9 +108,9 @@ function hexOrUndefined(value: Optional<string>): HexColorString | undefined {
 		try {
 			const color = Color.from(value);
 			if (color) return color.hex;
-			warn("Unable to parse color:", value, color);
-		}catch(ex) {
-			error("Error parsing color:", value, ex);
+			warn("Unable to parse color: %s", value);
+		}catch(err) {
+			error({ err }, "Error parsing color: %s", value);
 		}
 	}
 	return undefined;
@@ -195,7 +195,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						case "newname": getNames().newName = value; break;
 						case "oldname": getNames().oldName = value; break;
 
-						default: debug({key,value}); break;
+						default: debug("getCharactersArgs(): Unknown core key/value pair: %o", {key,value}); break;
 					}
 				}else {
 					(stats ??= []).push(Arg.from({ raw:`${key}="${value}"`, index, isKeyValue:true, key, value:valueOrNull }));

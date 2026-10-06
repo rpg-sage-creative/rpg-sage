@@ -26,7 +26,7 @@ export function getIdsStats() { return idsStats; }
 
 function pushIds(core: Core, filePath?: string) {
 	if (!core.objectType) {
-		debug(`Invalid Core: `, core);
+		debug({core}, `Invalid Core!`);
 		return;
 	}
 
@@ -42,7 +42,7 @@ function pushIds(core: Core, filePath?: string) {
 	const id = uuidId ?? didId;
 	if (!id) {
 		if (core.objectType !== "Character") {
-			debug(`Invalid Core: `, core);
+			debug({core}, `Invalid Core!`);
 		}
 		return;
 	}

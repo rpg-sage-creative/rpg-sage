@@ -1,4 +1,4 @@
-import { silly } from "@rsc-utils/logger-utils";
+import { trace } from "@rsc-utils/logger-utils";
 
 type PauseOptions<T> = {
 	data: T;
@@ -15,8 +15,8 @@ export async function pause<T>(...args: unknown[]): Promise<void | T> {
 	const label = (first as PauseOptions<T>).label ?? args[1] as string ?? "Unlabeled";
 	const data = (first as PauseOptions<T>).data ?? undefined;
 	const log = (first as PauseOptions<T>).log;
-	if (log) silly(`Pausing for ${ms}ms: ${label} ...`); // NOSONAR
+	if (log) trace("Pausing for %dms: %s ...", ms, label); // NOSONAR
 	await (new Promise(res => setTimeout(res, ms)));
-	if (log) silly(`Pausing for ${ms}ms: ${label} ... done.`); // NOSONAR
+	if (log) trace("Pausing for %dms: %s ... done.", ms, label); // NOSONAR
 	return data;
 }

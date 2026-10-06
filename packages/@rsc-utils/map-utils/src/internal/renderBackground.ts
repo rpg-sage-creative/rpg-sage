@@ -1,5 +1,5 @@
 import { createCanvas, type SKRSContext2D } from "@napi-rs/canvas";
-import { error, stringifyJson, verbose } from "@rsc-utils/core-utils";
+import { error, stringifyJson, trace } from "@rsc-utils/core-utils";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { loadImage } from "./loadImage.js";
 import type { MapCache } from "./types.js";
@@ -22,14 +22,14 @@ export async function renderBackground(mapCache: MapCache): Promise<boolean> {
 
 	// ensure the map data has a background
 	if (!background) {
-		verbose(`!GameMapData.background`, mapCache.mapData);
+		trace({ mapData:mapCache.mapData }, `!GameMapData.background`);
 		return false;
 	}
 
 	// load the background image
 	const bgImage = await loadImage(mapCache, background);
 	if (!bgImage) {
-		verbose(`!bgImage`, background);
+		trace({ background }, `!bgImage`);
 		return false;
 	}
 	// mapCache.bgImage = bgImage;
@@ -70,9 +70,8 @@ export async function renderBackground(mapCache: MapCache): Promise<boolean> {
 
 		return true;
 
-	}catch(ex) {
-		verbose(`mapArgs.context.drawImage(bgImage = ${stringifyJson(background)}, ${bgClipX}, ${bgClipY}, ${bgWidth}, ${bgHeight}, 0, 0, ${bgWidth}, ${bgHeight});`);
-		error(ex);
+	}catch(err) {
+		error({ err }, `mapArgs.context.drawImage(bgImage = ${stringifyJson(background)}, ${bgClipX}, ${bgClipY}, ${bgWidth}, ${bgHeight}, 0, 0, ${bgWidth}, ${bgHeight});`);
 		// remember the bad url
 		mapCache.invalidImages.add(background.url);
 		return false;

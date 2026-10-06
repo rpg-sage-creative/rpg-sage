@@ -204,7 +204,7 @@ function parseChildren(core: BaseCore, fromLabel: string, itemConstructor: typeo
 		childCores.forEach(childCore => {
 			const loaded = loadCore(childCore, fromLabel);
 			if (!loaded) {
-				warn(`Error parsing child core!`, core, childCore);
+				warn({ core, childCore }, `Error parsing child core!`);
 			}
 			childrenLoaded += loaded;
 		});

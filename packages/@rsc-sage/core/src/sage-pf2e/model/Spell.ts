@@ -137,7 +137,7 @@ function heightenSpell(spellId: UUID, core: SpellCore): HeightenedSpell[] {
 		spells.push(last);
 	}
 	if (spells.length !== 11 - core.level) {
-		debug(spellId, core, spells);
+		debug({ core, spells, spellId }, "heightenSpell()");
 	}
 	return spells;
 }

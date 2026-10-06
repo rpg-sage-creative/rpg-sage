@@ -48,7 +48,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 	public constructor(protected core: T) {
 		super(core);
 		if (!core.id && !((core as any).hash)) {
-			warn("NO ID!", core.name ?? core);
+			warn("NO ID! %o", core.name ?? core);
 		}
 	}
 

@@ -55,7 +55,7 @@ async function doDialog(sageMessage: SageMessage, dialogContents: DialogContent[
 				await editChat(sageMessage, dialogContent);
 				break;
 			default:
-				debug(`Invalid dialogContent.type:`, dialogContent);
+				debug({ dialogContent }, `Invalid dialogContent.type`);
 				break;
 		}
 	}

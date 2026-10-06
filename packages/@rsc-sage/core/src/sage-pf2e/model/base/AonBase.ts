@@ -108,7 +108,7 @@ function hackCore(core: AonBaseCore): AonBaseCore {
 			core.aonId = +core.id.split("-")[0];
 			break;
 		default:
-			error("unexpected core.id", core);
+			error({ core }, "unexpected core.id");
 	}
 	return core;
 }

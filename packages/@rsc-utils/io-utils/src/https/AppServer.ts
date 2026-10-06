@@ -1,4 +1,4 @@
-import { captureProcessExit, error, info, stringifyJson, verbose, type Awaitable } from "@rsc-utils/core-utils";
+import { captureProcessExit, error, info, stringifyJson, trace, type Awaitable } from "@rsc-utils/core-utils";
 import { createServer, type IncomingMessage, type Server } from "http";
 import type { BufferHandler, BufferHandlerJsonError, BufferHandlerResponse } from "./types.js";
 
@@ -45,8 +45,8 @@ export class AppServer<T> {
 		const url = req ? `("${req.url}")` : ``;
 		const dot = ev ? `.` : ``;
 		const msg = ev ?? "";
-		const fn = level === "info" ? info : verbose;
-		fn(level, `AppServer<${this.name}>${url}${dot}${msg}`);
+		const fn = level === "info" ? info : trace;
+		fn({ level }, `AppServer<%s>%s%s%s`, this.name, url, dot, msg);
 	}
 
 	protected verbose(ev: string): void;

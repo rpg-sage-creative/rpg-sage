@@ -60,16 +60,16 @@ export async function handleReimport<
 	}
 
 	// fetch new core
-	const result = await handlers.fetchCore(sageCommand);
+	const fetchResult = await handlers.fetchCore(sageCommand);
 
 	// handle errors or no results
-	if (!result) {
+	if (!fetchResult) {
 		return handleImportErrors(sageCommand, "REIMPORT", []);
-	}else if (result.error) {
-		return handleImportErrors(sageCommand, "REIMPORT", [result]);
+	}else if (fetchResult.error) {
+		return handleImportErrors(sageCommand, "REIMPORT", [fetchResult]);
 	}
 
-	const newCore = result.core;
+	const newCore = fetchResult.core;
 
 	// check names
 	if (character.name !== newCore.name && newCore.name !== newName) {
@@ -88,7 +88,7 @@ export async function handleReimport<
 	if (saved) {
 		await handlers.updateSheet(sageCommand, newClass, message);
 	}else {
-		error(`Error saving reimported character:`, result);
+		error({ fetchResult }, `Error saving reimported character`);
 		const localizer = sageCommand.getLocalizer();
 		await sageCommand.replyStack.whisper(localizer("SORRY_WE_DONT_KNOW"));
 	}

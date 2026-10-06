@@ -19,7 +19,7 @@ export function toObjectQuantity<T extends HasBulk>(contentItem: TContentItem, d
 		objectQuantity.quantity = contentItem.quantity || 1;
 	}
 	if (!objectQuantity.object) {
-		warn(defaultObjectType, contentItem);
+		warn({ defaultObjectType, contentItem }, "Invalid objectQuantity.object");
 	}
 	return objectQuantity;
 }
