@@ -1,5 +1,7 @@
 import type { AttributeValue } from "@aws-sdk/client-dynamodb";
-import type { OrUndefined, Snowflake, UUID } from "@rsc-utils/core-utils";
+
+type Snowflake = `${bigint}`;
+type UUID = `${string}-${string}-${string}-${string}-${string}`;
 
 export type RepoId = Snowflake | UUID;
 
@@ -38,7 +40,7 @@ export type BatchGetResults<Item> = {
 	/** individual item errors */
 	errorCount: number;
 	/** the items returned in the order they were requested, with undefined for keys that "missed" */
-	items: OrUndefined<Item>[];
+	items: (Item | undefined)[];
 };
 
 export type BatchWriteRequestItems = Record<string, BatchWriteRequestItem[]>;

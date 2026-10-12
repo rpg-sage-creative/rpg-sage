@@ -1,5 +1,4 @@
 import { CreateTableCommand, DeleteTableCommand, DynamoDB, ListTablesCommand, UpdateTimeToLiveCommand, type CreateTableCommandInput, type CreateTableCommandOutput, type DeleteTableCommandOutput, type ScanCommandInput, type ScanCommandOutput, type UpdateTimeToLiveCommandInput, type UpdateTimeToLiveCommandOutput } from "@aws-sdk/client-dynamodb";
-import { errorReturnUndefined, noop, type Awaitable } from "@rsc-utils/core-utils";
 import type { AwsRegion } from "../AwsRegion.js";
 import type { DdbClientConfig, VALID_URL } from "./DdbClientConfig.js";
 import { DdbTable } from "./DdbTable.js";
@@ -50,7 +49,7 @@ export class DdbRepo<
 		const client = this.getClient();
 
 		const createCommand = new CreateTableCommand(createTableArgs);
-		const createOutput = await client.send(createCommand).catch(errorReturnUndefined);
+		const createOutput = await client.send(createCommand);//.catch(errorReturnUndefined);
 		const created = createOutput?.$metadata.httpStatusCode === 200
 			&& createOutput?.TableDescription?.TableName === createTableArgs.TableName;
 
@@ -71,7 +70,7 @@ export class DdbRepo<
 		}
 
 		const updateCommand = new UpdateTimeToLiveCommand(updateTableArgs);
-		const updateOutput = await client.send(updateCommand).catch(errorReturnUndefined);
+		const updateOutput = await client.send(updateCommand);//.catch(errorReturnUndefined);
 		const updated = updateOutput?.$metadata.httpStatusCode === 200
 			&& updateOutput.TimeToLiveSpecification?.AttributeName === updateTableArgs.TimeToLiveSpecification?.AttributeName
 			&& updateOutput.TimeToLiveSpecification?.Enabled === updateTableArgs.TimeToLiveSpecification?.Enabled;
@@ -94,7 +93,7 @@ export class DdbRepo<
 		const promise = this.getClient().send(command);
 		if (returnOutput) return promise;
 
-		const response = await promise.catch(errorReturnUndefined);
+		const response = await promise;//.catch(errorReturnUndefined);
 		return response?.$metadata.httpStatusCode === 200;
 	}
 
@@ -113,7 +112,7 @@ export class DdbRepo<
 	 * @param thisArg
 	 * @returns
 	 */
-	public async forEachAsync<T extends Item = Item>(tableName: string, callbackfn: (value: T, index: number, array: T[]) => Awaitable<unknown>, thisArg?: any): Promise<void> {
+	public async forEachAsync<T extends Item = Item>(tableName: string, callbackfn: (value: T, index: number, array: T[]) => unknown | Promise<unknown>, thisArg?: any): Promise<void> {
 		const scanArgs: ScanCommandInput = {
 			ExclusiveStartKey: undefined,
 			TableName: tableName,
@@ -243,7 +242,7 @@ export class DdbRepo<
 	/** Tests that a command can be sent successfully. If no client is given, then a client is created using DdbRepo.LocalstackTestConfig */
 	public static async testConnection(client = DdbRepo.getClient()): Promise<boolean> {
 		const command = new ListTablesCommand({});
-		const response = await client.send(command).catch(noop);
+		const response = await client.send(command);//.catch(errorReturnUndefined);
 		return response !== undefined;
 	}
 

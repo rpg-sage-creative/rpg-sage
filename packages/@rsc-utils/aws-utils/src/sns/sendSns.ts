@@ -1,5 +1,4 @@
 import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
-import { warnReturnUndefined } from "@rsc-utils/core-utils";
 import type { SnsClientConfig } from "./SnsClientConfig.js";
 
 type Args = {
@@ -8,7 +7,11 @@ type Args = {
 	subject: string;
 };
 
-/** If SNS info is found in the env, then the subject/content are sent to SNS. */
+/**
+ * If SNS info is found in the env, then the subject/content are sent to SNS.
+ * @throws SNSClient.send() doesn't have a .catch() and will bubble.
+ * @returns true if the SNS was sent successfully.
+ */
 export async function sendSns({ clientConfig, content, subject }: Args): Promise<boolean> {
 	const { topicArn, region, ...credentials } = clientConfig;
 
@@ -23,7 +26,7 @@ export async function sendSns({ clientConfig, content, subject }: Args): Promise
 		TopicArn: topicArn
 	});
 
-	const response = await snsClient.send(command).catch(warnReturnUndefined);
+	const response = await snsClient.send(command);//.catch(warnReturnUndefined);
 
 	return response?.$metadata.httpStatusCode === 200;
 }

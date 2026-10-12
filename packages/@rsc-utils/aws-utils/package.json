@@ -13,8 +13,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-dynamodb": "^3.1053.0",
-		"@aws-sdk/client-sns": "^3.1053.0",
-		"@rsc-utils/core-utils": "workspace:"
+		"@aws-sdk/client-sns": "^3.1053.0"
 	},
 	"scripts": {
 		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"

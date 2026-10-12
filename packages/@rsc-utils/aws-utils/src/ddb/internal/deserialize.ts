@@ -1,5 +1,4 @@
 import type { AttributeValue } from "@aws-sdk/client-dynamodb";
-import { debug } from "@rsc-utils/core-utils";
 
 function deserializeSet(value: AttributeValue.LMember) {
 	const set = new Set();
@@ -10,11 +9,9 @@ function deserializeSet(value: AttributeValue.LMember) {
 /** @internal */
 export function deserializeObject<T>(value: Record<string, AttributeValue>): T {
 	return Object.keys(value).reduce((out, key) => {
-		try {
-			out[key] = deserialize(value[key]!);
-		}catch {
-			debug({key,value:value[key]});
-		}
+		// try {
+		out[key] = deserialize(value[key]!);
+		// }catch (err) { console.debug(err, out[key]); }
 		return out;
 	}, { } as any);
 }

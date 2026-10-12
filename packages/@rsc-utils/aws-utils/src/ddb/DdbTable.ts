@@ -1,5 +1,4 @@
 import { DeleteItemCommand, GetItemCommand, PutItemCommand, QueryCommand, type AttributeValue, type CreateTableCommandOutput, type DeleteItemCommandOutput, type DeleteTableCommandOutput, type GetItemCommandOutput, type PutItemCommandOutput, type QueryCommandInput, type QueryCommandOutput, type ScanCommandOutput, type UpdateTimeToLiveCommandOutput } from "@aws-sdk/client-dynamodb";
-import { errorReturnUndefined, type Awaitable, type OrUndefined, type Snowflake } from "@rsc-utils/core-utils";
 import { DdbRepo } from "./DdbRepo.js";
 import { deserializeObject } from "./internal/deserialize.js";
 import { processInBatches } from "./internal/processInBatches.js";
@@ -52,7 +51,7 @@ export class DdbTable<Id extends RepoId = RepoId, Item extends RepoItem<Id> = Re
 			},
 		});
 
-		const response = await this.send(command).catch(errorReturnUndefined);
+		const response = await this.send(command);//.catch(errorReturnUndefined);
 
 		return response?.$metadata.httpStatusCode === 200;
 	}
@@ -90,7 +89,7 @@ export class DdbTable<Id extends RepoId = RepoId, Item extends RepoItem<Id> = Re
 	 * @param thisArg
 	 * @returns
 	 */
-	public async forEachAsync<T extends Item = Item>(callbackfn: (value: T, index: number, array: T[]) => Awaitable<unknown>, thisArg?: any): Promise<void> {
+	public async forEachAsync<T extends Item = Item>(callbackfn: (value: T, index: number, array: T[]) => unknown | Promise<unknown>, thisArg?: any): Promise<void> {
 		const input = this.createQueryCommandInput();
 
 		let index = -1;
@@ -126,10 +125,10 @@ export class DdbTable<Id extends RepoId = RepoId, Item extends RepoItem<Id> = Re
 	}
 
 	/** returns the item in the table for the given id */
-	public async get<T extends Item = Item>(id: Id): Promise<OrUndefined<T>>;
+	public async get<T extends Item = Item>(id: Id): Promise<T | undefined>;
 	/** returns the items in the table for the given ids */
-	public async get<T extends Item = Item>(ids: Id[]): Promise<OrUndefined<T>[]>;
-	public async get<T extends Item = Item>(idOrIds: Id | Id[]): Promise<OrUndefined<T> | OrUndefined<T>[]> {
+	public async get<T extends Item = Item>(ids: Id[]): Promise<(T | undefined)[]>;
+	public async get<T extends Item = Item>(idOrIds: Id | Id[]): Promise<(T | undefined)[] | T | undefined> {
 		// a single undefined id
 		if (!idOrIds) return undefined;
 
@@ -150,7 +149,7 @@ export class DdbTable<Id extends RepoId = RepoId, Item extends RepoItem<Id> = Re
 			},
 		});
 
-		const response = await this.send(command).catch(errorReturnUndefined);
+		const response = await this.send(command);//.catch(errorReturnUndefined);
 
 		if (response?.Item) {
 			return deserializeObject(response.Item);
@@ -171,7 +170,7 @@ export class DdbTable<Id extends RepoId = RepoId, Item extends RepoItem<Id> = Re
 	/**
 	 * A prebuilt query command that returns all table items of the objecttype that match the given filter arguments (archived/relatedId).
 	 */
-	public async query({ archived, relatedId }: { archived?:boolean; relatedId?:Snowflake; }): Promise<Item[]> {
+	public async query({ archived, relatedId }: { archived?:boolean; relatedId?:string; }): Promise<Item[]> {
 		//#region create input
 
 		const input = this.createQueryCommandInput();
@@ -246,7 +245,7 @@ export class DdbTable<Id extends RepoId = RepoId, Item extends RepoItem<Id> = Re
 			Item: serialize(valueOrValues as object).M,
 		});
 
-		const response = await this.send(command).catch(errorReturnUndefined);
+		const response = await this.send(command);//.catch(errorReturnUndefined);
 
 		return response?.$metadata.httpStatusCode === 200;
 	}

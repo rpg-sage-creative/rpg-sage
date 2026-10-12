@@ -11,6 +11,11 @@ export type SnsClientConfig = {
 	topicArn: string;
 };
 
+/**
+ * TypeGuard for SnsClientConfig
+ * @param config potential SnsClientConfig object
+ * @returns true if all required keys are present (and region is a valid region)
+ */
 export function isSnsClientConfig(config: unknown): config is SnsClientConfig {
 	return typeof(config) === "object" && config !== null
 		&& "accessKeyId" in config && typeof(config.accessKeyId) === "string"

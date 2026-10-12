@@ -2,7 +2,7 @@ import type { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { isDate } from "util/types";
 import type { BatchRequestKey, RepoItem } from "../types.js";
 
-/** attempts to serialize array and sets. returns undefined if the value is neither */
+/** attempts to serialize arrays and sets. returns undefined if the value is neither */
 function serializeArrayOrSet(value: unknown): AttributeValue | undefined {
 	if (Array.isArray(value)) {
 		return { L:value.map(serialize) };

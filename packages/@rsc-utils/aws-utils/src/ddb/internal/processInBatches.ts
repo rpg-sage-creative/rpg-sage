@@ -1,10 +1,155 @@
-import type { BatchGetItemCommandOutput, BatchWriteItemCommandOutput } from "@aws-sdk/client-dynamodb";
-import { errorReturnUndefined, type OrUndefined } from "@rsc-utils/core-utils";
+import { BatchGetItemCommand, BatchWriteItemCommand, type BatchGetItemCommandOutput, type BatchWriteItemCommandOutput } from "@aws-sdk/client-dynamodb";
 import type { DdbRepo } from "../DdbRepo.js";
-import type { BatchGetResults, BatchWriteResults, RepoItem } from "../types.js";
-import { collectItems } from "./collectItems.js";
-import { collectUnprocessedItems } from "./collectUnprocessedItems.js";
-import { createBatchCommand } from "./createBatchCommand.js";
+import type { BatchGetRequestItems, BatchGetResults, BatchWriteRequestItems, BatchWriteResults, RepoItem, TableNameParser } from "../types.js";
+import { deserializeObject } from "./deserialize.js";
+import { serialize, serializeKey } from "./serialize.js";
+
+//#region createBatchCommand logic
+
+/** Creates a BatchWriteItemCommand with a DeleteRequest for each of the given keys. */
+function createBatchDeleteCommand(keys: RepoItem[], tableNameParser: TableNameParser) {
+	const RequestItems: BatchWriteRequestItems = { };
+	for (const item of keys) {
+		const tableName = tableNameParser(item.objectType);
+		const tableItems = RequestItems[tableName] ??= [];
+		tableItems.push({ DeleteRequest: { Key: serializeKey(item) } });
+	}
+	return new BatchWriteItemCommand({ RequestItems });
+}
+
+/** Creates a BatchGetItemCommand with a BatchGetRequestItems for the given keys. */
+function createBatchGetCommand(keys: RepoItem[], tableNameParser: TableNameParser) {
+	const RequestItems: BatchGetRequestItems = { };
+	for (const item of keys) {
+		const tableName = tableNameParser(item.objectType);
+		const tableItems = RequestItems[tableName] ??= { Keys:[] };
+		tableItems.Keys.push(serializeKey(item));
+	}
+	return new BatchGetItemCommand({ RequestItems });
+}
+
+/** Creates a BatchWriteItemCommand with a PutRequest for each of the given items. */
+function createBatchPutCommand(items: RepoItem[], tableNameParser: TableNameParser) {
+	const RequestItems: BatchWriteRequestItems = { };
+	for (const item of items) {
+		const tableName = tableNameParser(item.objectType);
+		const tableItems = RequestItems[tableName] ??= [];
+		tableItems.push({ PutRequest: { Item: serialize(item).M! } });
+	}
+	return new BatchWriteItemCommand({ RequestItems });
+}
+
+/** Creates the correct Batch command for the given type and keys/items. */
+function createBatchCommand(type: "Delete" | "Get" | "Put", keysOrItems: RepoItem[], tableNameParser: TableNameParser) {
+	switch (type) {
+		case "Delete": return createBatchDeleteCommand(keysOrItems, tableNameParser);
+		case "Get": return createBatchGetCommand(keysOrItems, tableNameParser);
+		case "Put": return createBatchPutCommand(keysOrItems, tableNameParser);
+	}
+}
+
+//#endregion
+
+//#region collectItems logic
+
+/** Reusable logic to build out a nested Map by .objectType then .id via an iterator */
+function setItem(
+	itemMap: Map<string, Map<string, RepoItem>>,
+	item: RepoItem | null | undefined,
+) {
+
+	// ignore undefined items
+	if (!item) {
+		return;
+	}
+
+	// cache key variables
+	const { id, objectType } = item;
+
+	// ensure objectType map exists
+	if (!itemMap.has(objectType)) {
+		itemMap.set(objectType, new Map());
+	}
+
+	// add the item
+	itemMap
+		.get(objectType)!
+		.set(id, item);
+
+}
+
+/**
+ * Maps the given BatchGetItemCommandOutput to deserialized objects and then returns them in the order requested via the given keys.
+ */
+function collectItems<Item extends RepoItem>(keys: RepoItem[], output?: BatchGetItemCommandOutput): (Item | undefined)[] {
+	let items: undefined | (Item | undefined)[];
+
+	if (output?.Responses) {
+
+		// initialize item map
+		const itemMap = new Map<string, Map<string, Item>>();
+
+		// add all received items to the map
+		Object
+			.values(output.Responses)
+			.forEach(serialized => {
+				serialized
+					.map<Item>(deserializeObject)
+					.forEach(item => setItem(itemMap, item));
+			});
+
+		// return the items in the order in which they were requested
+		items = keys.map(key =>
+			itemMap.get(key.objectType)?.get(key.id)
+		);
+
+	}
+	return items ?? [];
+}
+
+//#endregion
+
+//#region collectUnprocessedItems logic
+
+/**
+ * Collects all unprocessed items from the given BatcheWriteItemCommandOutput.
+ * BatcheWriteItemCommandOutput contains UnprocessedItems, but Delete/Put requests use different keys, so this simplifies the task of collecting them.
+ */
+function collectUnprocessedItems<
+	Item extends RepoItem
+>(
+	output?: BatchWriteItemCommandOutput
+): Item[] {
+	const unprocessed: Item[] = [];
+
+	// ensure we have unprocessed items
+	if (output?.UnprocessedItems) {
+
+		// iterate each unprocessed item
+		Object.values(output.UnprocessedItems).forEach(writeRequests => {
+
+			// iterate each write request for each unprocessed items
+			writeRequests.forEach(({ DeleteRequest, PutRequest }) => {
+
+				// if delete request, deserialize key
+				if (DeleteRequest) {
+					unprocessed.push(deserializeObject(DeleteRequest!.Key!));
+				}
+
+				// if put request, deserialize entire item
+				if (PutRequest) {
+					unprocessed.push(deserializeObject(PutRequest!.Item!));
+				}
+
+			});
+
+		});
+	}
+
+	return unprocessed;
+}
+
+//#endregion
 
 type ProcessBatchInArgs<
 	Item extends RepoItem,
@@ -19,10 +164,16 @@ type ProcessBatchOutArgs<
 > = {
 	batchCount: number;
 	errorCount: number;
-	items: OrUndefined<Item>[];
+	items: (Item | undefined)[];
 	unprocessed: Item[];
 };
 
+/**
+ * Processes a single batch of ddb commands.
+ * Response / Output is collected and added to the outArgs so that processInBatches has a single response object that covers all batches.
+ * @param inArgs the args needed to process this batch
+ * @param outArgs the object that contains the results of all batches being processed together
+ */
 async function processBatch<
 	Item extends RepoItem,
 >(
@@ -37,7 +188,8 @@ async function processBatch<
 	const response = await ddbRepo
 		.getClient()
 		.send(command as any)
-		.catch(errorReturnUndefined);
+		// .catch(errorReturnUndefined)
+		.catch(() => {});
 
 	outArgs.batchCount++;
 
