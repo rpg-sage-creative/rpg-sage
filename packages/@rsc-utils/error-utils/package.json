@@ -1,0 +1,17 @@
+{
+	"name": "@rsc-utils/error-utils",
+	"version": "0.0.0",
+	"description": "A collection of TypeScript types, type guard functions, and object manipulation helper functions for Error objects.",
+	"license": "LGPL-3.0-or-later",
+	"main": "build/index.js",
+	"type": "module",
+	"devDependencies": {
+		"@rsc-tools/dev-scripts": "workspace:",
+		"@types/node": "^24.12.2",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
+	},
+	"scripts": {
+		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
+	}
+}
