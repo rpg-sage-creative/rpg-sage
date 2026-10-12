@@ -1,14 +1,10 @@
 import { vitest } from "vitest";
-import { getLogger, ProgressTracker } from "../../build/index.js";
+import { Logger, ProgressTracker } from "../../build/index.js";
 
-const error = vitest.spyOn(getLogger(), "error");
-const info = vitest.spyOn(getLogger(), "info");
-const silly = vitest.spyOn(getLogger(), "silly");
-const verbose = vitest.spyOn(getLogger(), "verbose");
-// function error(...args) { console.log("error", ...args); _error(...args); }
-// function info(...args) { console.log("info", ...args); _info(...args); }
-// function silly(...args) { console.log("silly", ...args); _silly(...args); }
-// function verbose(...args) { console.log("verbose", ...args); _verbose(...args); }
+const error = vitest.spyOn(Logger.instance, "error");
+const info = vitest.spyOn(Logger.instance, "info");
+const debug = vitest.spyOn(Logger.instance, "debug");
+const trace = vitest.spyOn(Logger.instance, "trace");
 
 afterEach(() => {
 	// restore the spy created with spyOn
@@ -25,9 +21,9 @@ describe("progress", () => {
 		const pLogger = new ProgressTracker("testProgressTracker", array.length, 5);
 		pLogger.on("error", eventData => error(eventData.message));
 		pLogger.on("finished", eventData => info(eventData.message));
-		pLogger.on("increment", eventData => silly(eventData.message));
+		pLogger.on("increment", eventData => debug(eventData.message));
 		pLogger.on("started", eventData => info(eventData.message));
-		pLogger.on("status", eventData => verbose(eventData.message));
+		pLogger.on("status", eventData => trace(eventData.message));
 
 		pLogger.finish();                        // error++ = 1
 		pLogger.start();                         // info++  = 1
@@ -41,8 +37,8 @@ describe("progress", () => {
 
 		expect(error).toHaveBeenCalledTimes(5);
 		expect(info).toHaveBeenCalledTimes(2);
-		expect(silly).toHaveBeenCalledTimes(14);
-		expect(verbose).toHaveBeenCalledTimes(6); // 0%, 20%, 40%, 60%, 80%, 93%
+		expect(debug).toHaveBeenCalledTimes(14);
+		expect(trace).toHaveBeenCalledTimes(6); // 0%, 20%, 40%, 60%, 80%, 93%
 
 	});
 

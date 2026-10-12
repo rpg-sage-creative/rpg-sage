@@ -1,13 +1,16 @@
-import { getLogger, type PinoLogFn } from "@rsc-utils/logger-utils";
+import { Logger } from "@rsc-utils/logger-utils";
+import type { LogFn } from "pino";
 import { afterEach, beforeAll, describe, expect, test, vitest } from "vitest";
 import { forEach } from "../../build/index.js";
 
-let debug: PinoLogFn;
-let trace: PinoLogFn;
+let debugSpy: LogFn;
+let traceSpy: LogFn;
 
 beforeAll(() => {
-	debug = vitest.spyOn(getLogger(), "debug");
-	trace = vitest.spyOn(getLogger(), "trace");
+	const logger = Logger.init({ dev:true });
+	// const { debug, trace } = Logger.init({ dev:true });
+	debugSpy = vitest.spyOn(logger, "debug");
+	traceSpy = vitest.spyOn(logger, "trace");
 });
 
 afterEach(() => {
@@ -21,15 +24,15 @@ describe("progress", () => {
 		const array = new Array(100);
 		array.fill(1);
 		forEach("forEach", array, () => { });
-		expect(trace).toHaveBeenCalledTimes(11);
+		expect(traceSpy).toHaveBeenCalledTimes(11);
 	});
 
 	test("PercentLogger (log handler)", () => {
 		const array = new Array(100);
 		array.fill(1);
-		forEach("forEach", array, debug);
-		expect(debug).toHaveBeenCalledTimes(100);
-		expect(trace).toHaveBeenCalledTimes(11);
+		forEach("forEach", array, debugSpy);
+		expect(debugSpy).toHaveBeenCalledTimes(100);
+		expect(traceSpy).toHaveBeenCalledTimes(11);
 	});
 
 });
