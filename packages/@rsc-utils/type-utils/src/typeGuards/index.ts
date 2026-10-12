@@ -1,7 +1,6 @@
 export * from "./isBigInt.js";
 export * from "./isBoolean.js";
 export * from "./isDefined.js";
-export * from "./isErrorLike.js";
 export * from "./isFiniteNumber.js";
 export * from "./isNull.js";
 export * from "./isNullOrUndefined.js";
