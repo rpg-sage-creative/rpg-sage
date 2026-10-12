@@ -1,5 +1,7 @@
 import { isDate } from "node:util/types";
 
+// @todo look into this: https://github.com/moll/json-stringify-safe/blob/master/stringify.js
+
 const WhitespaceRegExpG = /\s+/g;
 
 function cleanWhitespaceIfShort(value: string, maxLineLength: number): string {
