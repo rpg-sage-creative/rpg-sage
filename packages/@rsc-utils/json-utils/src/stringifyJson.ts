@@ -1,6 +1,7 @@
 import { isDate } from "node:util/types";
 
 // @todo look into this: https://github.com/moll/json-stringify-safe/blob/master/stringify.js
+// @todo look into thos: https://www.npmjs.com/package/json-beautify
 
 const WhitespaceRegExpG = /\s+/g;
 
