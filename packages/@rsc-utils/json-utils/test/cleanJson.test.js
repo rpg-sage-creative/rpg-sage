@@ -1,5 +1,4 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
-import { cleanJson } from "../build/index.js";
+import { cleanJson,stringifyJson } from "../build/index.js";
 
 describe("json", () => {
 	describe("cleanJson", () => {
@@ -60,7 +59,7 @@ describe("json", () => {
 		];
 
 		tests.forEach(([input, options, output, comparer]) => {
-			test(tagLiterals`cleanJson(${input}, ${options}) strictly equals ${output}`, () => {
+			test(`cleanJson(${stringifyJson(input)}, ${stringifyJson(options)}) strictly equals ${stringifyJson(output)}`, () => {
 				expect(cleanJson(input, options)).toStrictEqual(output);
 			});
 		});

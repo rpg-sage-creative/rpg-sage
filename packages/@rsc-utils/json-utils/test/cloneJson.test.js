@@ -1,6 +1,13 @@
-import { isPrimitive } from "@rsc-utils/type-utils";
+import { isDate } from "node:util/types";
 import { cleanJson, cloneJson } from "../build/index.js";
 import { getTests } from "./data.js";
+
+function isPrimitive(object) {
+	return object === null
+		|| object === undefined
+		|| isDate(object)
+		|| ["bigint", "boolean", "number", "string"].includes(typeof(object));
+}
 
 describe("json", () => {
 	describe("cloneJson", () => {

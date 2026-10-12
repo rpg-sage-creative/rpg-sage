@@ -1,4 +1,3 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
 import { stringifyJson } from "../build/index.js";
 import { getTests } from "./data.js";
 
@@ -9,7 +8,7 @@ describe("json", () => {
 		const tests = getTests("stringifyJson");
 
 		tests.forEach(({ object, string, label, stringifyReplacer, stringifySpace, stringifyMaxLineLength }) => {
-			test(tagLiterals`stringifyJson(${label}) === ${string}`, () => {
+			test(`stringifyJson("${label}") === ${string}`, () => {
 				expect(stringifyJson(object, stringifyReplacer, stringifySpace, stringifyMaxLineLength)).toBe(string);
 			});
 		});

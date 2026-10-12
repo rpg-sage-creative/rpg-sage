@@ -1,5 +1,4 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
-import { applyChanges } from "../build/index.js";
+import { applyChanges, stringifyJson } from "../build/index.js";
 
 describe("json", () => {
 	describe("applyChanges", () => {
@@ -24,7 +23,7 @@ describe("json", () => {
 		];
 
 		tests.forEach(([input, changes, output, changed]) => {
-			test(tagLiterals`applyChanges(${input}, ${changes}) equals ${output}`, () => {
+			test(`applyChanges(${stringifyJson(input)}, ${stringifyJson(changes)}) equals ${stringifyJson(output)}`, () => {
 				const applied = applyChanges(input, changes);
 				expect(applied).toBe(changed);
 				expect(input).toEqual(output);

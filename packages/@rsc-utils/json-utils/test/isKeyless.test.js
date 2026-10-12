@@ -1,5 +1,4 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
-import { isKeyless } from "../build/index.js";
+import { isKeyless, stringifyJson } from "../build/index.js";
 import { getTests } from "./data.js";
 
 describe("json", () => {
@@ -8,8 +7,8 @@ describe("json", () => {
 		/** @type {{ object:object; empty:boolean; keyless:boolean; }[]} */
 		const tests = getTests("isKeyless");
 
-		tests.forEach(({ object, empty, keyless }) => {
-			test(tagLiterals`isKeyless(${object}) === ${keyless}`, () => {
+		tests.forEach(({ object, keyless }) => {
+			test(`isKeyless(${stringifyJson(object)}) === ${keyless}`, () => {
 				expect(isKeyless(object)).toBe(keyless);
 			})
 		});

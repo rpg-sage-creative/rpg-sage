@@ -1,4 +1,3 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
 import { parseJson } from "../build/index.js";
 import { getTests } from "./data.js";
 
@@ -9,7 +8,7 @@ describe("json", () => {
 		const tests = getTests("parseJson");
 
 		tests.forEach(({ object, string, label }) => {
-			test(tagLiterals`parseJson(${string}) equals ${label}`, () => {
+			test(`parseJson(${(string)}) equals ${label}`, () => {
 				expect(parseJson(string)).toEqual(object);
 			});
 		});

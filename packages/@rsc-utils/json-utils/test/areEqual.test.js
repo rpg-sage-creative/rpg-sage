@@ -1,5 +1,4 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
-import { areEqual } from "../build/index.js";
+import { areEqual, stringifyJson } from "../build/index.js";
 
 describe("areEqual", () => {
 
@@ -33,7 +32,7 @@ describe("areEqual", () => {
 	];
 
 	for (const { a, b, options, equal } of tests) {
-		test(tagLiterals`areEqual(${a}, ${b}, ${options}) === ${equal}`, () => {
+		test(`areEqual(${stringifyJson(a)}, ${stringifyJson(b)}, ${stringifyJson(options)}) === ${equal}`, () => {
 			expect(areEqual(a, b, options)).toBe(equal);
 		});
 	}
