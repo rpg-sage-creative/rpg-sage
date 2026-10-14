@@ -1,8 +1,9 @@
+import { isSnsClientConfig } from "@rsc-utils/aws-utils";
 import { join } from "node:path";
-import pino, { type ChildLoggerOptions, type Bindings as PinoBindings, type LogFn as PinoLogFn, type Logger as PinoLogger } from "pino";
+import pino, { type ChildLoggerOptions, type Bindings as PinoBindings, type Logger as PinoLogger } from "pino";
 import pretty from "pino-pretty";
-
-export { type PinoLogFn, type PinoLogger };
+import { PinoWrapper } from "./PinoWrapper.js";
+import type { SnsTransportOptions } from "./createSnsTransport.js";
 
 const DEFAULT_LOG_FILE_NAME = "rpg-sage.log";
 // const DEFAULT_LOG_DIR_NAME = "./logs";
@@ -10,11 +11,46 @@ const DEFAULT_LOG_FILE_NAME = "rpg-sage.log";
 type InitOptions = {
 	/** override dev mode; normally only on when NODE_ENV starts with "dev" */
 	dev?: boolean;
+
 	/** specifies log path and tells Logger to write to log files; normally Logger writes to console */
 	logDirPath?: string;
+
 	/** specifies log fileName; normally repo name (such as "rpg-sage.log") */
 	logFileName?: string;
+
+	sns?: SnsTransportOptions;
 };
+
+/*
+
+/** Attempts to send the errors/args via SNS before falling back to sendToSuperUser (Discord DM). *-/
+async function notifyViaSns(...args: unknown[]): Promise<void> {
+	// check the sns flag
+	if (ActiveBot.sns) {
+		const clientConfig = getSnsClientConfig();
+		if (clientConfig) {
+			// prep content
+			const subject = `RPG Sage Error - ${getCodeName()}`;
+			const content = args.map(formatArg).join("\n");
+
+			// attemp to notify via sns
+			const notifyResults = await sendSns({ clientConfig, content, subject }).catch(ex => {
+				notifyViaDm("SNS Error", ex);
+				return false;
+			});
+
+			// a successful sns means we are done
+			if (notifyResults) return;
+		}
+
+		// a single failure stops sending to sns to avoid a cascade of failures
+		ActiveBot.sns = false;
+	}
+
+	// fallback to discord dm
+	notifyViaDm(`# error`, ...args);
+}
+*/
 
 function getLogDirPathFromProcess(): string | undefined {
 	// if log dir path is in env, use it
@@ -33,123 +69,138 @@ function getLogFileNameFromProcess(): string | undefined {
 	return base ? base + ".log" : undefined;
 }
 
+function initializePino(options?: InitOptions) {
+	let pinoLogger: PinoLogger;
+	try {
+		const isTestMode = process.env.VITEST === "true";
+		const isDevEnv = options?.dev
+			?? process.env.NODE_ENV?.startsWith("dev")
+			?? process.argv.includes("codeName=dev");
+
+		// we want ALL the logs in dev
+		const level = isDevEnv ? "trace" : "info";
+
+		// if we have a log dir, so write all logs to file
+		const logDirPath = options?.logDirPath
+			?? getLogDirPathFromProcess()
+			// ?? DEFAULT_LOG_DIR_NAME
+			;
+
+		if (logDirPath) {
+
+			const logFileName = options?.logFileName
+				?? getLogFileNameFromProcess()
+				?? DEFAULT_LOG_FILE_NAME;
+
+			// test mode implies vitest, which requires a special synchronous transport
+			if (isTestMode) {
+
+				const logFilePathTest = join(logDirPath, logFileName.replace(".log", "-test.log"));
+
+				pinoLogger = pino({ level }, pino.destination({ dest:logFilePathTest, sync:true, mkdir:true }));
+
+				pinoLogger.info("Logger initialized: pino; sync; file");
+
+			// not test mode, so we can do normal transport(s)
+			}else {
+
+				const logFilePath = join(logDirPath, logFileName);
+
+				// create the file transport targets
+				const targets: pino.TransportTargetOptions[] = [
+					{ target: "pino/file", level, options: { destination:logFilePath, mkdir:true, }, },
+				];
+
+				if (isDevEnv) {
+					// in dev we should also write to the console for convenience
+					targets.push(
+						{ target: "pino-pretty", level, options: { colorize:true, ignore:"package", messageFormat:"{if package}{package}:: {end}{msg}", }, },
+					);
+				}
+
+				// if we have sns config, create a transport target for it
+				if (isSnsClientConfig(options?.sns?.clientConfig)) {
+					targets.push({ target:"./createSnsTransport.js", level:"error", options:options.sns });
+				}
+
+				// set all default / environment settings here
+				pinoLogger = pino({ level, transport: { targets }, });
+
+				pinoLogger.info("Logger initialized: pino; async; file; %s", level);
+
+			}
+
+		// we don't have a log dir, so we will just write to console
+		}else {
+
+			// test mode implies vitest, which requires a special synchronous transport
+			if (isTestMode) {
+
+				// if we have sns config, create a transport target for it
+				const transport = isSnsClientConfig(options?.sns?.clientConfig)
+					? { targets:[{ target:"./createSnsTransport.js", level:"error", options:options.sns }] }
+					: undefined;
+
+				// set all default / environment settings here
+				pinoLogger = pino(
+					{ level, transport },
+					// the pretty streams below is only used if the transport above is undefined
+					pretty({ sync:true, colorize:true, ignore:"package", messageFormat:"{if package}{package}:: {end}{msg}", })
+				);
+
+				pinoLogger.info("Logger initialized: pino-pretty; sync; console; %s", level);
+
+			// no test mode means a normal async transport
+			}else {
+
+				// create the console transport
+				const targets: pino.TransportTargetOptions[] = [
+					{ target: "pino-pretty", level, options: { colorize:true, ignore:"package", messageFormat:"{if package}{package}:: {end}{msg}", }, },
+				];
+
+				// if we have sns config, create a transport target for it
+				if (isSnsClientConfig(options?.sns?.clientConfig)) {
+					targets.push({ target:"./createSnsTransport.js", level:"error", options:options.sns });
+				}
+
+				// set all default / environment settings here
+				pinoLogger = pino({ level, transport: { targets }, });
+
+				pinoLogger.info("Logger initialized: pino-pretty; async; console; %s; %d transports", level, targets.length);
+
+			}
+
+		}
+
+	}catch(ex: any) {
+		console.error("Logger initialization error: pino; " + ex?.message);
+
+		// fallback to a generic setup to avoid more errors
+		pinoLogger = pino();
+
+		pinoLogger.info("Logger initialized: pino; async; console");
+	}
+	return pinoLogger;
+}
+
 /** Logger class for simplifying pino configuration that includes a default static instance. */
-export class Logger {
+export class Logger extends PinoWrapper {
 
 	/** the default Logger instance */
 	static #instance?: Logger;
 
-	/** the pino logger for this instance */
-	public readonly pino: PinoLogger;
-
 	/** the pino loggers specific to packages */
-	private packages?: { [key: string]: PinoLogger; };
+	private packages?: { [key: string]: PinoWrapper; };
 
 	public constructor(options?: InitOptions) {
-		try {
-			const isTestMode = process.env.VITEST === "true";
-			const isDevEnv = options?.dev ?? process.env.NODE_ENV?.startsWith("dev");
-
-			// we want ALL the logs in dev
-			const level = isDevEnv ? "trace" : "info";
-
-			// if we have a log dir, so write all logs to file
-			const logDirPath = options?.logDirPath
-				?? getLogDirPathFromProcess()
-				// ?? DEFAULT_LOG_DIR_NAME
-				;
-
-			if (logDirPath) {
-
-				const logFileName = options?.logFileName
-					?? getLogFileNameFromProcess()
-					?? DEFAULT_LOG_FILE_NAME;
-
-				// test mode implies vitest, which requires a special synchronous transport
-				if (isTestMode) {
-
-					const logFilePathTest = join(logDirPath, logFileName.replace(".log", "-test.log"));
-
-					this.pino = pino({ level }, pino.destination({ dest:logFilePathTest, sync:true, mkdir:true }));
-
-					this.pino.info("Logger initialized: pino; sync; file");
-
-				// not test mode, so we can do normal transport(s)
-				}else {
-
-					const logFilePath = join(logDirPath, logFileName);
-
-					// create the file transport targets
-					const targets: pino.TransportTargetOptions[] = [
-						{ target: "pino/file", level, options: { destination:logFilePath, mkdir:true, }, },
-					];
-
-					if (isDevEnv) {
-						// in dev we should also write to the console for convenience
-						targets.push(
-							{ target: "pino-pretty", level, options: { colorize:true, ignore:"package", messageFormat:"{if package}{package}:: {end}{msg}", }, },
-						);
-					}
-
-					// set all default / environment settings here
-					this.pino = pino({ level, transport: { targets }, });
-
-					this.pino.info("Logger initialized: pino; async; file; %s", level);
-
-				}
-
-			// we don't have a log dir, so we will just write to console
-			}else {
-
-				// test mode implies vitest, which requires a special synchronous transport
-				if (isTestMode) {
-
-					// set all default / environment settings here
-					this.pino = pino(
-						{ level },
-						pretty({ sync:true, colorize:true, ignore:"package", messageFormat:"{if package}{package}:: {end}{msg}", })
-					);
-
-					this.pino.info("Logger initialized: pino-pretty; sync; console; %s", level);
-
-				// no test mode means a normal async transport
-				}else {
-
-					// create the console transport
-					const targets: pino.TransportTargetOptions[] = [
-						{ target: "pino-pretty", level, options: { colorize:true, ignore:"package", messageFormat:"{if package}{package}:: {end}{msg}", }, },
-					];
-
-					// set all default / environment settings here
-					this.pino = pino({ level, transport: { targets }, });
-
-					this.pino.info("Logger initialized: pino-pretty; async; console; %s", level);
-
-				}
-
-			}
-
-		}catch(ex: any) {
-			console.error("Logger initialization error: pino; " + ex?.message);
-
-			// fallback to a generic setup to avoid more errors
-			this.pino = pino();
-
-			this.pino.info("Logger initialized: pino; async; console");
-		}
-
-	}
-
-	/** Creates and returns a child of the Logger. */
-	public child(bindings: PinoBindings, options?: ChildLoggerOptions): PinoLogger {
-		return this.pino.child(bindings, options);
+		super(initializePino(options));
 	}
 
 	/**
 	 * Gets or creates a child of the Logger using the packageName as the package binding/identifier.
 	 * Bindings/options only used the first time when creating the child.
 	 */
-	public package(packageName: string, bindings?: PinoBindings, options?: ChildLoggerOptions): PinoLogger {
+	public package(packageName: string, bindings?: PinoBindings, options?: ChildLoggerOptions): PinoWrapper {
 		const packages = this.packages ?? {};
 		if (!packages[packageName]) {
 			packages[packageName] = this.child({ ...bindings, package:packageName }, options);
@@ -158,8 +209,16 @@ export class Logger {
 		return packages[packageName];
 	}
 
-	/** Creates and reutrns a child of the default Logger. */
-	public static child(bindings: PinoBindings): PinoLogger {
+	/**
+	 * Returns an instance of the default Logger.
+	 * If it hasn't been initialized then it will be initialized with the default options.
+	 */
+	public static get instance(): Logger {
+		return Logger.init();
+	}
+
+	/** Creates and returns a child of the default Logger. */
+	public static child(bindings: PinoBindings): PinoWrapper {
 		return Logger.instance.child(bindings);
 	}
 
@@ -172,86 +231,8 @@ export class Logger {
 	 * Gets or creates a child of default the Logger using the packageName as the package binding/identifier.
 	 * Bindings/options only used the first time when creating the child.
 	 */
-	public static package(packageName: string, bindings?: PinoBindings, options?: ChildLoggerOptions): PinoLogger {
+	public static package(packageName: string, bindings?: PinoBindings, options?: ChildLoggerOptions): PinoWrapper {
 		return Logger.instance.package(packageName, bindings, options);
 	}
 
-	/**
-	 * Returns an instance of the default Logger.
-	 * If it hasn't been initialized then it will be initialized with the default options.
-	 */
-	public static get instance(): Logger {
-		return Logger.init();
-	}
-
-	// /** Returns a set of loggers that get initialized only on first use. */
-	// public static exportLoggers(packageName?: string) {
-	// 	let pkg: PinoLogger;
-	// 	const getPkg = () => {
-	// 		return pkg ??= packageName
-	// 			? Logger.instance.package(packageName)
-	// 			: Logger.instance.pino;
-	// 	};
-	// 	return {
-	// 		trace: ((...args: unknown[]) => getPkg().trace(...args as [object, string])) as PinoLogFn,
-	// 		debug: ((...args: unknown[]) => getPkg().debug(...args as [object, string])) as PinoLogFn,
-	// 		info:  ((...args: unknown[]) => getPkg().info(...args  as [object, string])) as PinoLogFn,
-	// 		warn:  ((...args: unknown[]) => getPkg().warn(...args  as [object, string])) as PinoLogFn,
-	// 		error: ((...args: unknown[]) => getPkg().error(...args as [object, string])) as PinoLogFn,
-	// 		fatal: ((...args: unknown[]) => getPkg().fatal(...args as [object, string])) as PinoLogFn,
-	// 	};
-	// }
-}
-
-// export const {
-// 	trace,
-// 	debug,
-// 	info,
-// 	warn,
-// 	error,
-// 	fatal
-// } = Logger.exportLoggers();
-
-/** @deprecated Start using .trace() */
-// export const verbose: PinoLogFn = function(...args: unknown[]) {
-// 	Logger.instance.pino.trace(...args as [object, string]);
-// }
-
-/** @deprecated Figure this out !? */
-export const http: PinoLogFn = function(...args: unknown[]) {
-	Logger.instance.pino.trace(...args as [object, string]);
-}
-
-/** Convenience for Logger.instance.pino.trace() */
-export const trace: PinoLogFn = function(...args: unknown[]) {
-	Logger.instance.pino.trace(...args as [object, string]);
-}
-
-/** Convenience for Logger.instance.pino.debug() */
-export const debug: PinoLogFn = function(...args: unknown[]) {
-	Logger.instance.pino.debug(...args as [object, string]);
-}
-
-/** Convenience for Logger.instance.pino.info() */
-export const info: PinoLogFn = function(...args: unknown[]) {
-	Logger.instance.pino.info(...args as [object, string]);
-}
-
-/** Convenience for Logger.instance.pino.warn() */
-export const warn: PinoLogFn = function(...args: unknown[]) {
-	Logger.instance.pino.warn(...args as [object, string]);
-}
-
-/** Convenience for Logger.instance.pino.error() */
-export const error: PinoLogFn = function(...args: unknown[]) {
-	Logger.instance.pino.error(...args as [object, string]);
-}
-
-/** Convenience for Logger.instance.pino.fatal() */
-export const fatal: PinoLogFn = function(...args: unknown[]) {
-	Logger.instance.pino.fatal(...args as [object, string]);
-}
-
-export function getLogger() {
-	return Logger.instance.pino;
 }

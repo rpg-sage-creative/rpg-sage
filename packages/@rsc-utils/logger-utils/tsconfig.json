@@ -11,7 +11,8 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/aws-utils" },
+		{ "path": "../../@rsc-utils/error-utils" },
 		{ "path": "../../@rsc-utils/json-utils" },
-		{ "path": "../../@rsc-utils/type-utils" },
 	],
 }

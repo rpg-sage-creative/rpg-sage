@@ -1,4 +1,4 @@
-import { error, info } from "./Logger.js";
+import { Logger } from "./Logger.js";
 
 type SignalEventName =
 	/** interrupt from keyboard (such as Ctrl+C): do normal shutdown and cleanup processes */
@@ -10,10 +10,22 @@ type SignalEventName =
 	/** Hangup detected on controlling terminal or death of controlling process: ?? */
 	| "SIGHUP";
 
+let captured = false;
+
+/** Represents an object or a promise to get that object. */
+type Awaitable<T> = T | PromiseLike<T>;
+
+type Destroyable = { destroy:() => Awaitable<void>; };
+let destroyables: Set<Destroyable> | undefined;
+
+type SignalHandler = (eventName: SignalEventName, code?: number) => Awaitable<void>;
+let signalHandlers: Set<SignalHandler> | undefined;
+
+/** Handles the SIGINT event to attempt to call signalHandlers and destroy destroyables as needed. */
 async function onSignal(eventName: SignalEventName, code?: number): Promise<void> {
 	try {
 		// log the event
-		info(`process.on("${eventName}") = ${code}`);
+		Logger.instance.info(`process.on("%s") = %d`, eventName, code ?? -1);
 
 		// if we don't have handlers, just exit
 		if (!signalHandlers?.size && !destroyables) {
@@ -23,7 +35,7 @@ async function onSignal(eventName: SignalEventName, code?: number): Promise<void
 		// setup the exitCode
 		let exitCode = 0;
 		const exitHandler = (err: any) => {
-			error(err);
+			Logger.instance.error(err);
 			exitCode = 1;
 		};
 
@@ -57,21 +69,10 @@ async function onSignal(eventName: SignalEventName, code?: number): Promise<void
 		process.exit(exitCode);
 
 	}catch(outer) {
-		error(outer);
+		Logger.instance.error(outer);
 		process.exit(1);
 	}
 }
-
-let captured = false;
-
-/** Represents an object or a promise to get that object. */
-type Awaitable<T> = T | PromiseLike<T>;
-
-type Destroyable = { destroy:() => Awaitable<void>; };
-let destroyables: Set<Destroyable> | undefined;
-
-type SignalHandler = (eventName: SignalEventName, code?: number) => Awaitable<void>;
-let signalHandlers: Set<SignalHandler> | undefined;
 
 /** Captures SIGINT events to log them before exiting the process. */
 export function captureProcessExit(): void;

@@ -1,40 +1,37 @@
-import { error, Logger, warn } from "./Logger.js";
+import { Logger } from "./Logger.js";
 
-/** Used for catching a Promise. Logs the reason to getLogger().error and then returns []. */
+/**
+ * Used for catching a Promise.
+ * Logs the reason to getLogger().error and then returns [].
+ * Triggers Logger.init() only on the first use.
+ */
 export function errorReturnEmptyArray<T>(reason: T): [] {
-	error({ err:reason });
-	return [];
+	return Logger.instance.errorReturnEmptyArray(reason) as [];
 }
 
-/** Used for catching a Promise. Logs the reason to getLogger().error and then returns false. */
+/**
+ * Used for catching a Promise.
+ * Logs the reason to getLogger().error and then returns false.
+ * Triggers Logger.init() only on the first use.
+ */
 export function errorReturnFalse<T>(reason: T): false {
-	error({ err:reason });
-	return false;
+	return Logger.instance.errorReturnFalse(reason);
 }
 
-/** Used for catching a Promise. Logs the reason to getLogger().error and then returns undefined. */
+/**
+ * Used for catching a Promise.
+ * Logs the reason to getLogger().error and then returns undefined.
+ * Triggers Logger.init() only on the first use.
+ */
 export function errorReturnUndefined<T>(reason: T): undefined {
-	error({ err:reason });
-	return undefined;
+	return Logger.instance.errorReturnUndefined(reason);
 }
 
-/** Used for catching a Promise. Logs the reason to getLogger().warn and then returns undefined. */
+/**
+ * Used for catching a Promise.
+ * Logs the reason to getLogger().warn and then returns undefined.
+ * Triggers Logger.init() only on the first use.
+ */
 export function warnReturnUndefined<T>(reason: T): undefined {
-	warn({ err:reason });
-	return undefined;
+	return Logger.instance.warnReturnUndefined(reason);
 }
-
-/** Used for catching a Promise. Logs the reason to the given handler and then returns the given returnValue. */
-export function createCatcher<T>(handler: "error" | "warn", returnValue: T): (err: any) => T {
-	return (err: any) => {
-		Logger.instance.pino[handler](err);
-		return returnValue;
-	};
-}
-
-/*
-export const errorReturnEmptyArray = createCatcher("error", []);
-export const errorReturnFalse = createCatcher("error", false);
-export const errorReturnUndefined = createCatcher("error", undefined);
-export const warnReturnUndefined = createCatcher("warn", undefined);
-*/
