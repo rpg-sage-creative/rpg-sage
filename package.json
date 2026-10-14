@@ -96,8 +96,8 @@
 		"build:fresh": "pnpm scrub && pnpm build",
 
 		"pretest": "pnpm scrub::logs",
-		"test": "pnpm build && pnpm vitest --run --globals",
-		"test:nobuild": "pnpm pretest && pnpm vitest --run --globals",
+		"test": "pnpm build && pnpm vitest --run --globals -- codeName=dev",
+		"test:nobuild": "pnpm pretest && pnpm vitest --run --globals -- codeName=dev",
 
 		"refresh-tags": "git tag -l | xargs git tag -d; git fetch --tags",
 
