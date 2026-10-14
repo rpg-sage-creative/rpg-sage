@@ -9,6 +9,8 @@ export type SnsClientConfig = {
 	secretAccessKey: string;
 	/** "snsTopicArn":"" */
 	topicArn: string;
+	/** "snsSubject":"" */
+	subject?: string;
 };
 
 /**
@@ -22,5 +24,6 @@ export function isSnsClientConfig(config: unknown): config is SnsClientConfig {
 		&& "region" in config && isAwsRegion(config.region)
 		&& "secretAccessKey" in config && typeof(config.secretAccessKey) === "string"
 		&& "topicArn" in config && typeof(config.topicArn) === "string"
+		&& (!("subject" in config) || typeof(config.subject) === "string")
 		;
 }
