@@ -24,10 +24,14 @@ export function stringifyPinoLogEntry(entry: unknown, maxLineLength = 80): strin
 
 		lines.push(`Log Level: ${levels.labels[entry.level]}`);
 
-		if (entry.err) {
-			const { name, message, stack } = entry.err;
+		if (entry.msg) {
+			lines.push("", "Message", "-------", entry.msg);
+		}
 
-			lines.push("Error Object");
+		if (entry.err) {
+			lines.push("", "Error", "-------");
+
+			const { name, message, stack } = entry.err;
 
 			if (name || message) {
 				lines.push([entry.err.name, entry.err.message].filter(s => s).join(": "));
@@ -38,9 +42,11 @@ export function stringifyPinoLogEntry(entry: unknown, maxLineLength = 80): strin
 			}
 		}
 
-		if (entry.msg)
+		lines.push("", "Raw", "-------");
 
-		stringifyJson(entry, undefined, undefined, maxLineLength).split("\n").forEach(line => lines.push(line));
+		stringifyJson(entry, undefined, undefined, maxLineLength)
+			.split("\n")
+			.forEach(line => lines.push(line));
 
 		return lines.join("\n");
 	}
