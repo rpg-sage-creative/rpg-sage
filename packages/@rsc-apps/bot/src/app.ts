@@ -1,11 +1,17 @@
 import { ActiveBot, registerAndLoadPf2eData, registerCommandHandlers, registerPromptHandler } from "@rsc-sage/core";
 import { DataTable } from "@rsc-sage/data";
-import { getSageId } from "@rsc-sage/env";
-import { error, getEndpoint, getPort, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
+import { getSageId, getSnsClientConfig } from "@rsc-sage/env";
+import { captureProcessExit, error, getCodeName, getEndpoint, getPort, Logger } from "@rsc-utils/core-utils";
 import { DiscordCache } from "@rsc-utils/discord-utils";
 import { RenderableMap } from "@rsc-utils/map-utils";
 
-initializeConsoleUtilsByEnvironment();
+captureProcessExit();
+
+const clientConfig = getSnsClientConfig();
+if (clientConfig) {
+	const subject = `RPG Sage (${getCodeName()}) Logger - {level}`;
+	Logger.init({ sns:{ clientConfig, subject } });
+}
 
 DiscordCache.setSageId(getSageId());
 

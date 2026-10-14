@@ -1,4 +1,4 @@
-import { error, formatArg, warn, type TypedRegExp } from "@rsc-utils/core-utils";
+import { error, isErrorLike, stringifyJson, warn, type TypedRegExp } from "@rsc-utils/core-utils";
 import type { DiscordAPIError as TDiscordApiError } from "discord.js";
 
 /** https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes */
@@ -41,10 +41,30 @@ function isWarnCode(code?: string | number): boolean {
 		;
 }
 
+/** Logging helper for formatting logged objects. */
+export function stringifyError(err: unknown): string {
+
+	// error messages can be formatted by name, message, and stack
+	if (isErrorLike(err)) {
+		const message = [err.name, err.message].filter(s => s).join(": ");
+		return [message, err.stack].filter(s => s).join("\n");
+	}
+
+	// objects that coerce to a string can be returned as a string
+	const asString = String(err);
+	if (!asString.startsWith("[object")) {
+		return asString;
+	}
+
+	// stringify the object
+	return stringifyJson(err);
+
+}
+
 export class DiscordApiError {
 	protected asString: string;
 	protected constructor(public error: TDiscordApiError) {
-		this.asString = formatArg(error);
+		this.asString = stringifyError(error);
 	}
 
 	public get isAvatarUrl() { return this.asString.includes("avatar_url[URL_TYPE_INVALID_URL]"); }

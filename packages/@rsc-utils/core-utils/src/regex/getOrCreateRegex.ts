@@ -1,4 +1,3 @@
-import { debug, isLogLevelEnabled } from "@rsc-utils/logger-utils";
 import { splitWrapChars } from "../string/wrap/splitWrapChars.js";
 import { escapeRegex } from "./escapeRegex.js";
 import type { RegExpAnchorOptions, RegExpCaptureOptions, RegExpFlagOptions, RegExpQuantifyOptions, RegExpSpoilerOptions, RegExpWrapOptions } from "./RegExpOptions.js";
@@ -70,15 +69,15 @@ export function getOrCreateRegex<T extends RegExpGetOptions, U extends RegExp>(c
 		const cacheItem = cache[name] ?? (cache[name] = {});
 		const cacheKey = createCacheKey(options);
 
-		if (isLogLevelEnabled("debug")) {
-			const existing = cacheItem[cacheKey];
-			if (existing) {
-				const updated = createRegex(creator, options);
-				if (existing.source !== updated.source || existing.flags !== updated.flags) {
-					debug(`regex.cache[${name}][${cacheKey}] differs`);
-				}
-			}
-		}
+		// if (isLogLevelEnabled("debug")) {
+		// 	const existing = cacheItem[cacheKey];
+		// 	if (existing) {
+		// 		const updated = createRegex(creator, options);
+		// 		if (existing.source !== updated.source || existing.flags !== updated.flags) {
+		// 			debug(`regex.cache[${name}][${cacheKey}] differs`);
+		// 		}
+		// 	}
+		// }
 
 		return cacheItem[cacheKey] ??= createRegex(creator, options);
 	}

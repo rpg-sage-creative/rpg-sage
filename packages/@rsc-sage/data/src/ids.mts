@@ -1,8 +1,8 @@
-import { debug, initializeConsoleUtilsByEnvironment, trace } from "@rsc-utils/core-utils";
+import { captureProcessExit, debug, trace } from "@rsc-utils/core-utils";
 import { deleteFile } from "@rsc-utils/io-utils";
 import { getDuplicates, getIdsArrayFilePath, getIdsStats, writeIdsArray } from "./validation/IdsArray.js";
 
-initializeConsoleUtilsByEnvironment();
+captureProcessExit();
 
 async function main() {
 	trace("Deleting ...");

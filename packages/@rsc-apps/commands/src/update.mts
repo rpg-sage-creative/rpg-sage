@@ -1,10 +1,10 @@
 import { getToken } from "@rsc-sage/env";
-import { error, getCodeName, getDataRoot, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
+import { captureProcessExit, error, getCodeName, getDataRoot } from "@rsc-utils/core-utils";
 import { updateSlashCommands } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
 import { commandPathValidator } from "./utils/commandPathValidator.js";
 
-initializeConsoleUtilsByEnvironment();
+captureProcessExit();
 
 // const ContextMenuCommandTypeMessage = 3;
 // function buildMapContextMenuCommandBuilder(): ContextMenuCommandBuilder {

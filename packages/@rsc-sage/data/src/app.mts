@@ -1,7 +1,7 @@
-import { initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
+import { captureProcessExit } from "@rsc-utils/core-utils";
 import { DataTable } from "./cache/DataTable.js";
 
-initializeConsoleUtilsByEnvironment();
+captureProcessExit();
 
 async function main() {
 	await DataTable

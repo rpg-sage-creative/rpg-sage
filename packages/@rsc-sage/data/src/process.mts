@@ -1,4 +1,4 @@
-import { forEachAsync, getDataRoot, getDateStrings, initializeConsoleUtilsByEnvironment, stringifyJson, trace, type Snowflake } from "@rsc-utils/core-utils";
+import { forEachAsync, getDataRoot, getDateStrings, captureProcessExit, stringifyJson, trace, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { stat, Stats } from "node:fs";
 import { basename, join } from "node:path";
@@ -66,7 +66,7 @@ import { getFilePaths, populateIdsArray, type EnsureContext } from "./validation
 
 */
 
-initializeConsoleUtilsByEnvironment();
+captureProcessExit();
 
 type ObjectType = "Game" | "Message" | "Server" | "User";
 

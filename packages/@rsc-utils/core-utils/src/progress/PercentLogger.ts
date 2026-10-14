@@ -1,4 +1,4 @@
-import { error, trace } from "@rsc-utils/logger-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { ProgressTracker } from "./ProgressTracker.js";
 
 /**
@@ -8,8 +8,8 @@ export class PercentLogger extends ProgressTracker {
 
 	public constructor(label: string, total?: number, interval?: number) {
 		super(label, total, interval);
-		this.on("status", evData => trace(evData.message));
-		this.on("error", evData => error(evData.message));
+		this.on("status", evData => Logger.instance.trace(evData.message));
+		this.on("error", evData => Logger.instance.error(evData.message));
 	}
 
 }

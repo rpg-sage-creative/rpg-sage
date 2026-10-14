@@ -16,5 +16,4 @@ export * from "./set/index.js";
 export * from "./string/index.js";
 export * from "./temperature/index.js";
 export * from "./whitespace/index.js";
-export * from "./initializeConsoleUtilsByEnvironment.js";
 export * from "./re-exports.js";

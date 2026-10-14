@@ -1,7 +1,6 @@
-import { getSageId, getSnsClientConfig, getSuperUserId, getToken } from "@rsc-sage/env";
-import { sendSns } from "@rsc-utils/aws-utils";
-import { addLogHandler, captureProcessExit, chunk, formatArg, getCodeName, info, tagLiterals, trace, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, getRegisteredIntents, getRegisteredPartials, wrapUrls } from "@rsc-utils/discord-utils";
+import { getSageId, getSuperUserId, getToken } from "@rsc-sage/env";
+import { captureProcessExit, info, trace, type Snowflake } from "@rsc-utils/core-utils";
+import { DiscordApiError, getRegisteredIntents, getRegisteredPartials } from "@rsc-utils/discord-utils";
 import { ActivityType, Client, type ClientOptions } from "discord.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
@@ -16,48 +15,20 @@ function createDiscordClientOptions(): ClientOptions {
 	};
 }
 
-/** Attempts to send the errors/args via SNS before falling back to sendToSuperUser (Discord DM). */
-async function notifyViaSns(...args: unknown[]): Promise<void> {
-	// check the sns flag
-	if (ActiveBot.sns) {
-		const clientConfig = getSnsClientConfig();
-		if (clientConfig) {
-			// prep content
-			const subject = `RPG Sage Error - ${getCodeName()}`;
-			const content = args.map(formatArg).join("\n");
-
-			// attemp to notify via sns
-			const notifyResults = await sendSns({ clientConfig, content, subject }).catch(ex => {
-				notifyViaDm("SNS Error", ex);
-				return false;
-			});
-
-			// a successful sns means we are done
-			if (notifyResults) return;
-		}
-
-		// a single failure stops sending to sns to avoid a cascade of failures
-		ActiveBot.sns = false;
-	}
-
-	// fallback to discord dm
-	notifyViaDm(`# error`, ...args);
-}
-
 /** Tries to send errors/args to the super user as a Discord DM. */
-async function notifyViaDm(...args: unknown[]): Promise<void> {
-	const user = await ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false }).catch(DiscordApiError.process);
-	if (user) {
-		// discord messages have limits, chunk the content to be safe
-		const formatted = args.map(formatArg);
-		const joined = formatted.join("\n");
-		const wrapped = wrapUrls(joined);
-		const contents = chunk(wrapped, { maxChunkLength:2000 });
-		for (const content of contents) {
-			await user.send(content);
-		}
-	}
-}
+// async function notifyViaDm(...args: unknown[]): Promise<void> {
+// 	const user = await ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false }).catch(DiscordApiError.process);
+// 	if (user) {
+// 		// discord messages have limits, chunk the content to be safe
+// 		const formatted = args.map(formatArg);
+// 		const joined = formatted.join("\n");
+// 		const wrapped = wrapUrls(joined);
+// 		const contents = chunk(wrapped, { maxChunkLength:2000 });
+// 		for (const content of contents) {
+// 			await user.send(content);
+// 		}
+// 	}
+// }
 
 export class ActiveBot extends Bot {
 	public static active: ActiveBot;
@@ -87,10 +58,10 @@ export class ActiveBot extends Bot {
 
 			ActiveBot.active = this;
 
-			addLogHandler("error", notifyViaSns);
-
 			info(`Discord.Client.on("clientReady") [success]`);
-			notifyViaDm(`Discord.Client.on("clientReady") [success]`);
+
+			ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false })
+				.then(async user => await user.send(`Discord.Client.on("clientReady") [success]`), DiscordApiError.process);
 		});
 
 		// TODO: if created in a game category i could add or prompt to add?
@@ -104,7 +75,7 @@ export class ActiveBot extends Bot {
 		client.on("guildCreate", guild => {
 			initializeServer(guild).then(initialized => {
 				const guildArg = { id:guild.id, name:guild.name };
-				trace(tagLiterals`Discord.Client.on("guildCreate", ${guildArg}) => ${initialized}`);
+				trace("Discord.Client.on('guildCreate', %o) => %s", guildArg, initialized);
 			});
 		});
 
@@ -129,7 +100,7 @@ export class ActiveBot extends Bot {
 						const interactionArg = "message" in interaction
 							? { id:interaction.id, message:{ id:interaction.message?.id }, user:{ id:interaction.user.id } }
 							: { id:interaction.id, user:{ id:interaction.user.id } };
-						trace(tagLiterals`Discord.Client.on(${clientEvent}, interaction:${interactionArg}) => ${data.tested}.${data.handled}`);
+						trace(`Discord.Client.on(%s, interaction: %o) => %d.%d`, clientEvent, interactionArg, data.tested, data.handled);
 					}
 				});
 			});
@@ -142,7 +113,7 @@ export class ActiveBot extends Bot {
 					if (data.handled > 0) {
 						const originalMessageArg = { id:originalMessage.id, author:{ id:originalMessage.author?.id } };
 						const updatedMessageArg = { id:updatedMessage?.id, author:{ id:updatedMessage?.author?.id } };
-						trace(tagLiterals`Discord.Client.on(${ev}, originalMessage:${originalMessageArg}, updatedMessage:${updatedMessageArg}) => ${data.tested}.${data.handled}`);
+						trace(`Discord.Client.on(%s, originalMessage: %o, updatedMessage: %o) => %d.%d`, ev, originalMessageArg, updatedMessageArg, data.tested, data.handled);
 					}
 				});
 			});
@@ -163,7 +134,7 @@ export class ActiveBot extends Bot {
 					if (data.handled > 0) {
 						const messageReactionArg = { message:{ id:messageReaction.message.id }, emoji:{ name:messageReaction.emoji.name } };
 						const userArg = { id:user.id };
-						trace(tagLiterals`Discord.Client.on(${ev}, messageReaction:${messageReactionArg}, user:${userArg}) => ${data.tested}.${data.handled}`);
+						trace(`Discord.Client.on(%s, messageReaction: %o, user: %o) => %d.%d`, ev, messageReactionArg, userArg, data.tested, data.handled);
 					}
 				});
 			});

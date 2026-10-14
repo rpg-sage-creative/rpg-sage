@@ -1,9 +1,9 @@
-import { error, getCodeName, getDataRoot, info, initializeConsoleUtilsByEnvironment } from "@rsc-utils/core-utils";
+import { captureProcessExit, error, getCodeName, getDataRoot, info } from "@rsc-utils/core-utils";
 import { buildAndCount } from "@rsc-utils/discord-utils";
 import { findJsonFile, writeFileSync } from "@rsc-utils/io-utils";
 import { commandPathValidator } from "./utils/commandPathValidator.js";
 
-initializeConsoleUtilsByEnvironment();
+captureProcessExit();
 
 // const ContextMenuCommandTypeMessage = 3;
 // function buildMapContextMenuCommandBuilder(): ContextMenuCommandBuilder {

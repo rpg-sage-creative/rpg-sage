@@ -1,10 +1,10 @@
 import type { RepoItem } from "@rsc-utils/aws-utils";
-import { forBatchAsync, getDataRoot, initializeConsoleUtilsByEnvironment, trace } from "@rsc-utils/core-utils";
+import { forBatchAsync, getDataRoot, captureProcessExit, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
 import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType, objectTypeToDirName } from "./cache/types.js";
 
-initializeConsoleUtilsByEnvironment();
+captureProcessExit();
 
 async function main() {
 	// const globalCache = GlobalCache.initialize();
