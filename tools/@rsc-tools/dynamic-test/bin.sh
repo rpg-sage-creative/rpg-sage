@@ -3,7 +3,7 @@ function runTest() {
 	# we scrub the logs before every test
 	pnpm scrub::logs
 	# pass the test file to vitest
-	pnpm vitest --run --globals "$1"
+	pnpm vitest --run --globals "$1" codeName=dev
 	# exit successfully so we stop trying to process the file
 	exit 0
 }
