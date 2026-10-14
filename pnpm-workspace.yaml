@@ -23,6 +23,8 @@ blockExoticSubdeps: false
 
 overrides:
   "@types/node": "^24"
+  "pino": "^10"
+  "pino-pretty": "^13"
   "regex": "^6"
   "typescript": "^7"
   "vitest": "^4"
