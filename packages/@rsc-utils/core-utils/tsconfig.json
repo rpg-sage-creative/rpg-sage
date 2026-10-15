@@ -12,6 +12,7 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/color-utils" },
+		{ "path": "../../@rsc-utils/date-utils" },
 		{ "path": "../../@rsc-utils/git-utils" },
 		{ "path": "../../@rsc-utils/id-utils" },
 		{ "path": "../../@rsc-utils/json-utils" },

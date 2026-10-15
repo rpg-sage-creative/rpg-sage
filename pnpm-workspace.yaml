@@ -34,6 +34,7 @@ overrides:
   "@rsc-utils/aws-utils": "../../@rsc-utils/aws-utils"
   "@rsc-utils/color-utils": "../../@rsc-utils/color-utils"
   "@rsc-utils/core-utils": "../../@rsc-utils/core-utils"
+  "@rsc-utils/date-utils": "../../@rsc-utils/date-utils"
   "@rsc-utils/discord-utils": "../../@rsc-chat/discord-utils"
   "@rsc-utils/error-utils": "../../@rsc-utils/error-utils"
   "@rsc-utils/git-utils": "../../@rsc-utils/git-utils"

@@ -1,4 +1,4 @@
-import { getDateStrings, getDayNames, getDayOfYear, getDaysInMonth, getDaysPerMonth, getMonthNames } from "../../build/index.js";
+import { getDateStrings, getDayNames, getDayOfYear, getDaysInMonth, getDaysPerMonth, getMonthNames } from "../build/index.js";
 
 describe("date", () => {
 

@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@rsc-utils/color-utils": "workspace:",
+		"@rsc-utils/date-utils": "workspace:",
 		"@rsc-utils/git-utils": "workspace:",
 		"@rsc-utils/id-utils": "workspace:",
 		"@rsc-utils/json-utils": "workspace:",
