@@ -1,4 +1,5 @@
-import { error, Season } from "@rsc-utils/core-utils";
+import { Season } from "@rsc-utils/date-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { rollDie } from "@rsc-utils/random-utils";
 
 export enum ElevationType { SeaLevel, Lowland, Highland }
@@ -31,7 +32,7 @@ export function getBasePrecipitationFrequency(climate: ClimateType, season: Seas
 			frequency = PrecipitationFrequencyType.Rare;
 			break;
 		default:
-			error("getBasePrecipitationFrequency: " + season);
+			Logger.package("@rsc-sage/core").error("getBasePrecipitationFrequency: " + season);
 			break;
 	}
 	// desert, Drought (Rare a few weeks a year)
@@ -91,7 +92,7 @@ export function testForPrecipitation(frequency: PrecipitationFrequencyType): boo
 		case PrecipitationFrequencyType.Common: return roll <= 60;
 		case PrecipitationFrequencyType.Constant: return roll <= 95;
 		default:
-			error("testforPrecipitation: " + frequency);
+			Logger.package("@rsc-sage/core").error("testforPrecipitation: " + frequency);
 			return false;
 	}
 }

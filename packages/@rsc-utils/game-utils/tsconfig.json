@@ -12,6 +12,7 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/date-utils" },
 		{ "path": "../../@rsc-sage/data" },
 	],
 }

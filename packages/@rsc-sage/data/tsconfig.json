@@ -9,6 +9,7 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/aws-utils" },
+		{ "path": "../../@rsc-utils/date-utils" },
 		{ "path": "../../@rsc-utils/io-utils" },
 	],
 }

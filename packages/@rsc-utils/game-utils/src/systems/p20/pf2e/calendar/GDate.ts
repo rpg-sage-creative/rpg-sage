@@ -1,4 +1,4 @@
-import { TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "@rsc-utils/core-utils";
+import { TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason } from "@rsc-utils/date-utils";
 import { SageDate } from "../../../../calendar/SageDate.js";
 import { DayType, Days, MonthType, Months, type DayName, type MonthName } from "./internal/types.js";
 

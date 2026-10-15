@@ -70,6 +70,7 @@
 	"references": [
 
 		{ "path": "./packages/@rsc-utils/aws-utils" },
+		{ "path": "./packages/@rsc-utils/date-utils" },
 		{ "path": "./packages/@rsc-utils/logger-utils" },
 		{ "path": "./packages/@rsc-utils/id-utils" },
 

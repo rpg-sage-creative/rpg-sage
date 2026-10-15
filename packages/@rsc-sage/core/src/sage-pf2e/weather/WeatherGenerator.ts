@@ -1,4 +1,5 @@
-import { Season, cloneJson, fahrenheitToCelsius, isDefined } from "@rsc-utils/core-utils";
+import { cloneJson, fahrenheitToCelsius, isDefined } from "@rsc-utils/core-utils";
+import { Season } from "@rsc-utils/date-utils";
 import { GDate, type SimpleDice } from "@rsc-utils/game-utils";
 import { rollDiceString, rollDie } from "@rsc-utils/random-utils";
 import { randomInt } from "node:crypto";

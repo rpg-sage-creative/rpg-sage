@@ -9,6 +9,8 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/date-utils" },
+		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-chat/discord-utils" },
 		{ "path": "../../@rsc-sage/data" },
 		{ "path": "../../@rsc-utils/aws-utils" },

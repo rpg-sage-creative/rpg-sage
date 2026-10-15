@@ -13,6 +13,7 @@
 	"dependencies": {
 		"@rsc-utils/aws-utils": "workspace:",
 		"@rsc-utils/core-utils": "workspace:",
+		"@rsc-utils/date-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:"
 	},
 	"scripts": {
