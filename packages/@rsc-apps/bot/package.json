@@ -11,11 +11,12 @@
 		"vitest": "^4.1.10"
 	},
 	"dependencies": {
-		"@rsc-utils/core-utils": "workspace:",
-		"@rsc-utils/discord-utils": "workspace:",
 		"@rsc-sage/core": "workspace:",
 		"@rsc-sage/data": "workspace:",
 		"@rsc-sage/env": "workspace:",
+		"@rsc-utils/core-utils": "workspace:",
+		"@rsc-utils/discord-utils": "workspace:",
+		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/map-utils": "workspace:"
 	},
 	"scripts": {

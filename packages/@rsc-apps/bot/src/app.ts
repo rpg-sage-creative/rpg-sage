@@ -1,8 +1,9 @@
 import { ActiveBot, registerAndLoadPf2eData, registerCommandHandlers, registerPromptHandler } from "@rsc-sage/core";
 import { DataTable } from "@rsc-sage/data";
 import { getSageId, getSnsClientConfig } from "@rsc-sage/env";
-import { captureProcessExit, error, getCodeName, getEndpoint, getPort, Logger } from "@rsc-utils/core-utils";
+import { getCodeName, getEndpoint, getPort } from "@rsc-utils/core-utils";
 import { DiscordCache } from "@rsc-utils/discord-utils";
+import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { RenderableMap } from "@rsc-utils/map-utils";
 
 captureProcessExit();
@@ -35,7 +36,8 @@ Object.entries(services).forEach(([ serviceName, service ]) => {
 	}
 });
 
-const bot = await ActiveBot.prepBot().catch(error);
+const bot = await ActiveBot.prepBot()
+	.catch(err => Logger.instance.error(err));
 if (!bot) {
 	process.exit(1);
 }
