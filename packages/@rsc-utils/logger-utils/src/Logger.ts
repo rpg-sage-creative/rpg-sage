@@ -145,7 +145,7 @@ function initializePino(options?: InitOptions) {
 				pinoLogger = pino(
 					{ level, transport },
 					// the pretty streams below is only used if the transport above is undefined
-					pretty({ sync:true, colorize:true, ignore:"package", messageFormat:"{if package}{package}:: {end}{msg}", })
+					pretty({ sync:true, colorize:true, ignore:"hostname,package,pid", messageFormat:"{if package}{package}:: {end}{msg}", })
 				);
 
 				pinoLogger.info("Logger initialized: pino-pretty; sync; console; %s", level);
@@ -201,7 +201,7 @@ export class Logger extends PinoWrapper {
 	 * Bindings/options only used the first time when creating the child.
 	 */
 	public package(packageName: string, bindings?: PinoBindings, options?: ChildLoggerOptions): PinoWrapper {
-		const packages = this.packages ?? {};
+		const packages = this.packages ??= {};
 		if (!packages[packageName]) {
 			packages[packageName] = this.child({ ...bindings, package:packageName }, options);
 			packages[packageName].info("Package Logger initialized");
