@@ -1,4 +1,4 @@
-import { typeError } from "@rsc-utils/type-utils";
+import { typeError } from "@rsc-utils/error-utils";
 
 type WrapChars = { left:string; right:string; };
 

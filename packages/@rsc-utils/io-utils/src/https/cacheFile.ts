@@ -1,7 +1,8 @@
-import { typeError, trace, type Optional, type ProgressTracker } from "@rsc-utils/core-utils";
+import { trace, type Optional, type ProgressTracker } from "@rsc-utils/core-utils";
+import { typeError } from "@rsc-utils/error-utils";
 import type { FollowResponse, RedirectableRequest } from "follow-redirects";
-import type { IncomingMessage } from "node:http";
 import { WriteStream, createWriteStream, existsSync, mkdirSync, rmSync, statSync } from "node:fs";
+import type { IncomingMessage } from "node:http";
 import { dirname } from "node:path";
 import { pipeline } from "node:stream";
 import { createGunzip, type Gunzip } from "node:zlib";

@@ -16,6 +16,7 @@
 		"@discordjs/builders": "^1.13.1",
 		"@discordjs/rest": "^2.6.0",
 		"@rsc-utils/core-utils": "workspace:",
+		"@rsc-utils/error-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
 		"discord.js": "^14.25.1",
 		"emoji-regex-xs": "^2.0.1",

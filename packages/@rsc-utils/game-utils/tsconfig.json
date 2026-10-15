@@ -13,6 +13,7 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/date-utils" },
+		{ "path": "../../@rsc-utils/error-utils" },
 		{ "path": "../../@rsc-sage/data" },
 	],
 }

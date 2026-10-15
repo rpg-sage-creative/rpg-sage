@@ -1,4 +1,5 @@
-import { stringifyJson, typeError, trace, type Optional, type ProgressTracker } from "@rsc-utils/core-utils";
+import { stringifyJson, trace, type Optional, type ProgressTracker } from "@rsc-utils/core-utils";
+import { typeError } from "@rsc-utils/error-utils";
 import type { FollowResponse, RedirectableRequest } from "follow-redirects";
 import type { IncomingMessage } from "node:http";
 import { pipeline } from "node:stream";

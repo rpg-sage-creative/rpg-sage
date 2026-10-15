@@ -1,4 +1,4 @@
-import { rangeError } from "@rsc-utils/type-utils";
+import { rangeError } from "@rsc-utils/error-utils";
 
 type Options = {
 	/** negative circled letters (white letter on black circle) */

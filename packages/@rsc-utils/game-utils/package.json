@@ -14,6 +14,7 @@
 		"@rsc-sage/data": "workspace:",
 		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/date-utils": "workspace:",
+		"@rsc-utils/error-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
 		"@rsc-utils/random-utils": "workspace:",
 		"regex": "^6.1.0"

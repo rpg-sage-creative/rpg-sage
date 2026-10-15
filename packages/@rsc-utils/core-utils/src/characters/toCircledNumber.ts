@@ -1,4 +1,4 @@
-import { typeError } from "@rsc-utils/type-utils";
+import { typeError } from "@rsc-utils/error-utils";
 import { numberOrUndefined } from "../number/numberOrUndefined.js";
 
 type Options = {

@@ -1,7 +1,8 @@
-import { typeError, trace, type Optional } from "@rsc-utils/core-utils";
-import { getProtocol } from "./getProtocol.js";
+import { trace, type Optional } from "@rsc-utils/core-utils";
+import { typeError } from "@rsc-utils/error-utils";
 import type { FollowResponse, RedirectableRequest } from "follow-redirects";
 import type { IncomingMessage } from "node:http";
+import { getProtocol } from "./getProtocol.js";
 
 type Response = IncomingMessage & FollowResponse;
 

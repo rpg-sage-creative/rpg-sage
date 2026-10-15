@@ -11,6 +11,7 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/error-utils" },
 		{ "path": "../../@rsc-utils/io-utils" },
 	],
 }

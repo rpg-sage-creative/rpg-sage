@@ -69,9 +69,16 @@
 	],
 	"references": [
 
+		// packages with no dependencies should build first
 		{ "path": "./packages/@rsc-utils/aws-utils" },
 		{ "path": "./packages/@rsc-utils/date-utils" },
+		{ "path": "./packages/@rsc-utils/error-utils" },
+		{ "path": "./packages/@rsc-utils/json-utils" },
+
+		// uses/triggers aws/error/json
 		{ "path": "./packages/@rsc-utils/logger-utils" },
+
+		// uses/triggers type
 		{ "path": "./packages/@rsc-utils/id-utils" },
 
 

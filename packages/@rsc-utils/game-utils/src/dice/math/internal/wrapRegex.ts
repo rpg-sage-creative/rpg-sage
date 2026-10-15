@@ -1,4 +1,5 @@
-import { escapeRegex, typeError } from "@rsc-utils/core-utils";
+import { escapeRegex } from "@rsc-utils/core-utils";
+import { typeError } from "@rsc-utils/error-utils";
 
 type Options = {
 	/** make the wrap chars optional: `(regexp)|regex` */
