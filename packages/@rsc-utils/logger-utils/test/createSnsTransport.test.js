@@ -51,8 +51,14 @@ async function doTest() {
 		// enable SNS for error/fatal
 		sns:{ clientConfig, subject }
 	});
+	logger.info("info(Message Only)");
+	logger.info({ a:"A", two:2, big:1n }, "info(Object w/ Message)");
+	logger.error(new Error("Test Error"));
+	logger.error(new Error("Test Error w/ Message"), "error(Test Error w/ Message)");
+	logger.fatal({ a:"A", two:2, big:1n, err:new Error("Test Error in Object") }, "fatal(Test Error in Object)");
 	["trace", "debug", "info", "warn", "error", "fatal"].forEach(level => {
 		logger[level](level + "()");
+		logger.package("logger-utils")[level](level + "()");
 	});
 	if (SNS_ENABLED) {
 		logger.trace("pausing for 1 second");
