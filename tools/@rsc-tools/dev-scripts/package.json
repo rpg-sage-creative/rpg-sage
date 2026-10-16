@@ -4,6 +4,7 @@
 	"description": "Scripts used by RSC repos to manage repositories.",
 	"license": "LGPL-3.0-or-later",
 	"type": "module",
+	"main": "build/index.js",
 	"bin": "./bin.sh",
 	"devDependencies": {
 		"@types/node": "^24.12.2",
