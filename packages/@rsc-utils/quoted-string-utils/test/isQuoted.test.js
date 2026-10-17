@@ -1,0 +1,16 @@
+import { tagLiterals } from "@rsc-tools/dev-scripts";
+import { isQuoted } from "../build/index.js";
+import { getTests } from "./data.js";
+
+describe("isQuoted", () => {
+
+	const tests = getTests("isQuoted");
+	tests.forEach(args => {
+		const quoted = args.quoted;
+		const expected = args.isQuoted ?? true;
+		test(tagLiterals`isQuoted(${quoted}) === ${expected}`, () => {
+			expect(isQuoted(quoted)).toBe(expected);
+		});
+	});
+
+});
