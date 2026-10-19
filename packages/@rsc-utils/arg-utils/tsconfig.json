@@ -1,0 +1,20 @@
+{
+	"extends": "../../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./build",
+		"rootDir": "./src",
+	},
+	"exclude": [
+		"./test"
+	],
+	"include": [
+		"./src"
+	],
+	"references": [
+		{ "path": "../../@rsc-utils/quoted-string-utils" },
+		{ "path": "../../@rsc-utils/regexp-utils" },
+		{ "path": "../../@rsc-utils/token-string-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
+		{ "path": "../../@rsc-utils/whitespace-string-utils" },
+	],
+}
