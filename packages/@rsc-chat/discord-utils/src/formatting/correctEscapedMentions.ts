@@ -1,6 +1,5 @@
+import { tokenize } from "@rsc-utils/token-string-utils";
 import { getEmojiRegex } from "../emoji/getEmojiRegex.js";
-import { tokenize } from "@rsc-utils/core-utils";
-
 
 // <@&number>  role
 const RoleRegExp = /<@&\d{16,}>/;

@@ -1,5 +1,6 @@
-import type { Optional, TokenData, TokenParsers } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { rollDie } from "@rsc-utils/random-utils";
+import type { TokenData, TokenParsers } from "@rsc-utils/token-string-utils";
 import { DiceTestType } from "../DiceTest.js";
 import { rollDataMapper } from "../internal/rollDataMapper.js";
 import type { RollData } from "../types/RollData.js";

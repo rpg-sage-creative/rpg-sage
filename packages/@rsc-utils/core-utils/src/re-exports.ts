@@ -9,5 +9,4 @@ export * from "@rsc-utils/logger-utils";
 export * from "@rsc-utils/number-utils";
 export * from "@rsc-utils/quoted-string-utils";
 export * from "@rsc-utils/string-utils";
-export * from "@rsc-utils/token-string-utils";
 export * from "@rsc-utils/type-utils";

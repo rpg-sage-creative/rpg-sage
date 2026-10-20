@@ -1,4 +1,4 @@
-import type { TokenData } from "@rsc-utils/core-utils";
+import type { TokenData } from "@rsc-utils/token-string-utils";
 import type { DicePartCore } from "../dice/DicePart.js";
 import { DiceDropKeep } from "./DiceDropKeep.js";
 import { DiceExplode } from "./DiceExplode.js";

@@ -1,6 +1,6 @@
 import type { Emoji, EmojiType } from "@rsc-sage/data";
 import type { Optional } from "@rsc-utils/core-utils";
-import { tokenize } from "@rsc-utils/core-utils";
+import { tokenize } from "@rsc-utils/token-string-utils";
 
 export type EmojiAndType = { type: EmojiType; replacement: string; };
 

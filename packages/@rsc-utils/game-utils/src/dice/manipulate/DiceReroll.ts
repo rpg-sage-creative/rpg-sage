@@ -3,10 +3,11 @@ This will be like both Explode and DropKeep.
 We will need to add more dice when the reroll triggers, but we will want to mark the original (as not counted) and rerolled values.
 */
 
-import type { Optional, TokenData, TokenParsers } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { TokenData, TokenParsers } from "@rsc-utils/token-string-utils";
 import { DiceTestType } from "../DiceTest.js";
-import { DiceManipulation, type DiceManipulationArgs, type DiceManipulationResults } from "./DiceManipulation.js";
 import { rollDataMapper } from "../internal/rollDataMapper.js";
+import { DiceManipulation, type DiceManipulationArgs, type DiceManipulationResults } from "./DiceManipulation.js";
 
 const DiceRerollRegExp = /(rr)(?:\s*(<=|<|>=|>|=)?\s*(\d+))?/i;
 

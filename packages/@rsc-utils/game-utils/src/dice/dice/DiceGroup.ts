@@ -1,5 +1,6 @@
 import { DiceOutputType, DiceSecretMethodType, type DiceCriticalMethodType } from "@rsc-sage/data";
-import { generateSnowflake, isBoolean, tokenize, type TokenData } from "@rsc-utils/core-utils";
+import { generateSnowflake, isBoolean } from "@rsc-utils/core-utils";
+import { tokenize, type TokenData } from "@rsc-utils/token-string-utils";
 import { isGradeFailure } from "../grade.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
 import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";

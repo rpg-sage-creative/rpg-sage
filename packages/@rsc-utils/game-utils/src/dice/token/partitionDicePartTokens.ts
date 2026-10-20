@@ -1,4 +1,4 @@
-import type { TokenData } from "@rsc-utils/core-utils";
+import type { TokenData } from "@rsc-utils/token-string-utils";
 
 function isTestOrTarget(token: TokenData): token is TokenData<"target" | "test"> {
 	return ["test", "target"].includes(token.key);

@@ -18,6 +18,7 @@
 		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/error-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
+		"@rsc-utils/token-string-utils": "workspace:",
 		"discord.js": "^14.25.1",
 		"emoji-regex-xs": "^2.0.1",
 		"regex": "^6.1.0"

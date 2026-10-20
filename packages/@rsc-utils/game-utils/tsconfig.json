@@ -14,6 +14,7 @@
 	"references": [
 		{ "path": "../../@rsc-utils/date-utils" },
 		{ "path": "../../@rsc-utils/error-utils" },
+		{ "path": "../../@rsc-utils/token-string-utils" },
 		{ "path": "../../@rsc-sage/data" },
 	],
 }

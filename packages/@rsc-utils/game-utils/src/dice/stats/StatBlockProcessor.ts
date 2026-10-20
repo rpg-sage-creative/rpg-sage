@@ -1,5 +1,6 @@
-import { AllCodeBlocksRegExp, AlphaNumericDashDotArgKeyRegExp, dequote, stringArrayOrEmpty, tokenize, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
+import { AllCodeBlocksRegExp, AlphaNumericDashDotArgKeyRegExp, dequote, stringArrayOrEmpty, type Optional, type TypedRegExp } from "@rsc-utils/core-utils";
 import { isUrl } from "@rsc-utils/io-utils";
+import { tokenize } from "@rsc-utils/token-string-utils";
 import { regex } from "regex";
 import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
 import { doStatMath } from "./doStatMath.js";

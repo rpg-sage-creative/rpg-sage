@@ -1,4 +1,5 @@
-import { error, warn, type EnumLike, type Optional, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { error, warn, type EnumLike, type Optional } from "@rsc-utils/core-utils";
+import type { TokenData, TokenParsers } from "@rsc-utils/token-string-utils";
 import { createTestRegExp } from "../utils/createTestRegExp.js";
 const DiceTestRegExp = createTestRegExp(["gteq","gte","gt","lteq","lte","lt","eq","=","==",">=",">","<=","<"]);
 // const DiceTestRegExp = /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i;

@@ -13,5 +13,6 @@
 	"references": [
 		{ "path": "../../@rsc-utils/error-utils" },
 		{ "path": "../../@rsc-utils/io-utils" },
+		{ "path": "../../@rsc-utils/token-string-utils" }
 	],
 }

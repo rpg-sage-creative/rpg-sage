@@ -1,8 +1,9 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
-import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, generateSnowflake, sortPrimitive, sum, tokenize, warn, type Optional, type OrNull, type OrUndefined, type SortResult, type TokenData, type TokenParsers } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, generateSnowflake, sortPrimitive, sum, warn, type Optional, type OrNull, type OrUndefined, type SortResult } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
 import { DiceDropKeep, DiceDropKeepType, cleanDicePartDescription, createTestRegExp, removeDesc, type DiceDropKeepData } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
+import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/token-string-utils";
 import {
 	DieRollGrade,
 	HasDieCore,

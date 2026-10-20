@@ -1,4 +1,5 @@
-import { escapeRegex, tokenize } from "@rsc-utils/core-utils";
+import { escapeRegex } from "@rsc-utils/core-utils";
+import { tokenize } from "@rsc-utils/token-string-utils";
 
 const HtmlRegExp = /<[^>]+>/;
 const DiceResultsRegExp = /\[[^\]]+\]\d*d\d+/;
