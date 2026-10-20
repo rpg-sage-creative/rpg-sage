@@ -74,13 +74,26 @@
 		{ "path": "./packages/@rsc-utils/date-utils" },
 		{ "path": "./packages/@rsc-utils/error-utils" },
 		{ "path": "./packages/@rsc-utils/json-utils" },
+		{ "path": "./packages/@rsc-utils/token-string-utils" },
+		{ "path": "./packages/@rsc-utils/whitespace-string-utils" },
+
+		// uses/triggers error-utils
+		{ "path": "./packages/@rsc-utils/charset-utils" },
+		{ "path": "./packages/@rsc-utils/regexp-utils" },
 
 		// uses/triggers aws/error/json
 		{ "path": "./packages/@rsc-utils/logger-utils" },
 
 		// uses/triggers type
+		{ "path": "./packages/@rsc-utils/quoted-string-utils" },
 		{ "path": "./packages/@rsc-utils/id-utils" },
 
+		// uses/triggers error/type
+		{ "path": "./packages/@rsc-utils/number-utils" },
+		{ "path": "./packages/@rsc-utils/string-utils" },
+
+		// ?
+		{ "path": "./packages/@rsc-utils/arg-utils" },
 
 		// ensure the rsc-utils stack
 		{ "path": "./packages/@rsc-chat/discord-utils" },

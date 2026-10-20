@@ -1,8 +1,8 @@
 import { oneToUS, reduceNoiseUS } from "@rsc-utils/language-utils";
+import { dequote, QuotedContentRegExp } from "@rsc-utils/quoted-string-utils";
+import { tokenize } from "@rsc-utils/token-string-utils";
 import { pattern, regex } from "regex";
 import { toUniqueDefined } from "../array/index.js";
-import { dequote, QuotedContentRegExp } from "../string/index.js";
-import { tokenize } from "../string/tokenize.js";
 import { cleanWhitespace } from "../whitespace/cleanWhitespace.js";
 import { SearchScore, type SearchTermData } from "./SearchScore.js";
 import type { Searchable } from "./Searchable.js";

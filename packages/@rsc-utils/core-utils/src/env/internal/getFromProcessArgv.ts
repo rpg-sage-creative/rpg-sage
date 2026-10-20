@@ -1,4 +1,4 @@
-import { parseKeyValueArg } from "../../args/parseKeyValueArg.js";
+import { parseKeyValueArg } from "@rsc-utils/arg-utils";
 
 /**
  * @internal

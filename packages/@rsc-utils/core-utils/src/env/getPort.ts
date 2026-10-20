@@ -1,4 +1,4 @@
-import { isWholeNumberString, type Optional } from "@rsc-utils/type-utils";
+import { isSimpleNumberString, type Optional } from "@rsc-utils/type-utils";
 import { getFromProcess } from "./getFromProcess.js";
 import { getFromProcessSafely } from "./getFromProcessSafely.js";
 import type { ValidatorArg } from "./types.js";
@@ -11,7 +11,7 @@ export function getPort(server: string, ignoreMissing: boolean): number | undefi
 export function getPort(server: string, ignoreMissing?: boolean): number | undefined {
 	if (!(server in _ports)) {
 		const numberValidator = (value: Optional<ValidatorArg>): value is number | `${number}` => {
-			if (typeof(value) === "number" || isWholeNumberString(value)) {
+			if (isSimpleNumberString(value)) {
 				const port = +value!;
 				// system ports are 0 - 1023; 65535 is unsigned 16-bit int max
 				// https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers

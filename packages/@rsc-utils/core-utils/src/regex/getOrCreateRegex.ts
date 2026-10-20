@@ -1,4 +1,4 @@
-import { splitWrapChars } from "../string/wrap/splitWrapChars.js";
+import { splitWrapChars } from "@rsc-utils/string-utils";
 import { escapeRegex } from "./escapeRegex.js";
 import type { RegExpAnchorOptions, RegExpCaptureOptions, RegExpFlagOptions, RegExpQuantifyOptions, RegExpSpoilerOptions, RegExpWrapOptions } from "./RegExpOptions.js";
 

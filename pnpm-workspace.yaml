@@ -31,7 +31,9 @@ overrides:
 
   "@rsc-tools/dev-scripts": "../../../tools/@rsc-tools/dev-scripts"
 
+  "@rsc-utils/arg-utils": "../../@rsc-utils/arg-utils"
   "@rsc-utils/aws-utils": "../../@rsc-utils/aws-utils"
+  "@rsc-utils/charset-utils": "../../@rsc-utils/charset-utils"
   "@rsc-utils/color-utils": "../../@rsc-utils/color-utils"
   "@rsc-utils/core-utils": "../../@rsc-utils/core-utils"
   "@rsc-utils/date-utils": "../../@rsc-utils/date-utils"
@@ -43,8 +45,14 @@ overrides:
   "@rsc-utils/json-utils": "../../@rsc-utils/json-utils"
   "@rsc-utils/language-utils": "../../@rsc-utils/language-utils"
   "@rsc-utils/logger-utils": "../../@rsc-utils/logger-utils"
+  "@rsc-utils/number-utils": "../../@rsc-utils/number-utils"
+  "@rsc-utils/quoted-string-utils": "../../@rsc-utils/quoted-string-utils"
   "@rsc-utils/random-utils": "../../@rsc-utils/random-utils"
+  "@rsc-utils/regexp-utils": "../../@rsc-utils/regexp-utils"
+  "@rsc-utils/string-utils": "../../@rsc-utils/string-utils"
+  "@rsc-utils/token-string-utils": "../../@rsc-utils/token-string-utils"
   "@rsc-utils/type-utils": "../../@rsc-utils/type-utils"
+  "@rsc-utils/whitespace-string-utils": "../../@rsc-utils/whitespace-string-utils"
 
 # catalog:
 #   "@aws-sdk/client-dynamodb": "^3.1053.0"
