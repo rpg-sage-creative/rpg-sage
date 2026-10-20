@@ -1,12 +1,13 @@
 import type { GameSystemCode } from "@rsc-sage/data";
-import { capitalize, error, sortPrimitive, type Comparable, type SearchInfo, type SearchScore, type Searchable, type SortResult } from "@rsc-utils/core-utils";
+import { capitalize, error, sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/core-utils";
+import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
+import type { GameSearchInfo } from "../../../sage-search/GameSearchInfo.js";
+import type { Aon2eGameSystemCode } from "../../../sage-search/aon/2e/types.js";
 import { parseSources, type TParsedSource } from "../../data/Repository.js";
 import type { Base } from "./Base.js";
 import { HasSource, type SourcedCore, type TSourceInfo } from "./HasSource.js";
 import type { Source } from "./Source.js";
 import type { IHasArchives, IHasLink, IHasName } from "./interfaces.js";
-import type { GameSearchInfo } from "../../../sage-search/GameSearchInfo.js";
-import type { Aon2eGameSystemCode } from "../../../sage-search/aon/2e/types.js";
 
 /*
 From https://elasticsearch.galdiuz.com/aon/_search

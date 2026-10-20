@@ -1,9 +1,9 @@
+import { toUniqueDefined } from "@rsc-utils/core-utils";
 import { oneToUS, reduceNoiseUS } from "@rsc-utils/language-utils";
 import { dequote, QuotedContentRegExp } from "@rsc-utils/quoted-string-utils";
 import { tokenize } from "@rsc-utils/token-string-utils";
+import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";
 import { pattern, regex } from "regex";
-import { toUniqueDefined } from "../array/index.js";
-import { cleanWhitespace } from "../whitespace/cleanWhitespace.js";
 import { SearchScore, type SearchTermData } from "./SearchScore.js";
 import type { Searchable } from "./Searchable.js";
 
@@ -58,9 +58,9 @@ export class SearchInfo {
 		}
 	}
 
-	public clone<T>(object: T): T {
-		return clone("core", object, this);
-	}
+	// public clone<T>(object: T): T {
+	// 	return clone("core", object, this);
+	// }
 
 	public mark(content: string): string;
 	public mark(content: string[]): string[];
@@ -87,42 +87,42 @@ export class SearchInfo {
 }
 
 //TODO: WHY AM I CLONING TWICE!?
-interface IClone { original: any; clone: any; }
-function clone(objectKey: string, object: any, searchInfo: SearchInfo, clones: IClone[] = []): any {
-	if (object === undefined || object === null) {
-		return object;
-	}
-	if (object instanceof Date) {
-		return new Date(object);
-	}
-	switch (typeof(object)) {
-		case "string": return objectKey === "name" || searchInfo.globalFlag ? searchInfo.mark(object) : object;
-		case "number": case "boolean": return object;
-		case "function": return Error("Cannot clone a function.");
-		default: break;
-	}
-	return _clone(objectKey, object, searchInfo, clones);
-}
+// interface IClone { original: any; clone: any; }
+// function clone(objectKey: string, object: any, searchInfo: SearchInfo, clones: IClone[] = []): any {
+// 	if (object === undefined || object === null) {
+// 		return object;
+// 	}
+// 	if (object instanceof Date) {
+// 		return new Date(object);
+// 	}
+// 	switch (typeof(object)) {
+// 		case "string": return objectKey === "name" || searchInfo.globalFlag ? searchInfo.mark(object) : object;
+// 		case "number": case "boolean": return object;
+// 		case "function": return Error("Cannot clone a function.");
+// 		default: break;
+// 	}
+// 	return _clone(objectKey, object, searchInfo, clones);
+// }
 
-function _clone(objectKey: string, object: any, searchInfo: SearchInfo, clones: IClone[]): any {
-	const pair = clones.find(c => c.original === object);
-	let cloned = pair && pair.clone || null;
-	if (cloned === null) {
-		if (Array.isArray(object)) {
-			cloned = [];
-			clones.push({ original:object, clone:cloned });
-			object.forEach((o, i) => cloned[i] = clone(objectKey, o, searchInfo, clones));
-		}else if (typeof(object.clone) === "function") {
-			cloned = object.clone();
-		}else {
-			cloned = {};
-			clones.push({ original:object, clone:cloned });
-			Object.keys(object).forEach(key => {
-				if (object.hasOwnProperty(key)) {
-					cloned[key] = clone(key, object[key], searchInfo, clones);
-				}
-			});
-		}
-	}
-	return cloned;
-}
+// function _clone(objectKey: string, object: any, searchInfo: SearchInfo, clones: IClone[]): any {
+// 	const pair = clones.find(c => c.original === object);
+// 	let cloned = pair && pair.clone || null;
+// 	if (cloned === null) {
+// 		if (Array.isArray(object)) {
+// 			cloned = [];
+// 			clones.push({ original:object, clone:cloned });
+// 			object.forEach((o, i) => cloned[i] = clone(objectKey, o, searchInfo, clones));
+// 		}else if (typeof(object.clone) === "function") {
+// 			cloned = object.clone();
+// 		}else {
+// 			cloned = {};
+// 			clones.push({ original:object, clone:cloned });
+// 			Object.keys(object).forEach(key => {
+// 				if (object.hasOwnProperty(key)) {
+// 					cloned[key] = clone(key, object[key], searchInfo, clones);
+// 				}
+// 			});
+// 		}
+// 	}
+// 	return cloned;
+// }

@@ -1,6 +1,6 @@
 import type { GameSystemCode } from "@rsc-sage/data";
+import type { SearchScore } from "@rsc-utils/search-utils";
 import type { AonBase, AonBaseCore } from "../../../sage-pf2e/model/base/AonBase.js";
-import type { SearchScore } from "@rsc-utils/core-utils";
 
 export type Aon2eGameSystemCode = GameSystemCode & ("PF2e" | "SF2e");
 

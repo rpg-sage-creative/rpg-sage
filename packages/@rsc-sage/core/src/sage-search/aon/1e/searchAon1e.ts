@@ -1,4 +1,4 @@
-import { SearchScore } from "@rsc-utils/core-utils";
+import { SearchScore } from "@rsc-utils/search-utils";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
 import type { ParsedSearchInfo } from "../../common.js";
 import { sortSearchResults } from "../../sortSearchResults.js";

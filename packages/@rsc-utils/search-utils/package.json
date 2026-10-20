@@ -1,0 +1,25 @@
+{
+	"name": "@rsc-utils/search-utils",
+	"version": "0.0.0",
+	"description": "",
+	"license": "LGPL-3.0-or-later",
+	"main": "build/index.js",
+	"type": "module",
+	"devDependencies": {
+		"@rsc-tools/dev-scripts": "workspace:",
+		"@types/node": "^24.12.2",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
+	},
+	"dependencies": {
+		"@rsc-utils/core-utils": "workspace:",
+		"@rsc-utils/language-utils": "workspace:",
+		"@rsc-utils/quoted-string-utils": "workspace:",
+		"@rsc-utils/token-string-utils": "workspace:",
+		"@rsc-utils/whitespace-string-utils": "workspace:",
+		"regex": "^6"
+	},
+	"scripts": {
+		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
+	}
+}

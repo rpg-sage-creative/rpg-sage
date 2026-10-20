@@ -27,6 +27,7 @@
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/map-utils": "workspace:",
 		"@rsc-utils/random-utils": "workspace:",
+		"@rsc-utils/search-utils": "workspace:",
 		"@rsc-utils/token-string-utils": "workspace:",
 		"discord.js": "^14.26.2",
 		"regex": "^6.1.0"

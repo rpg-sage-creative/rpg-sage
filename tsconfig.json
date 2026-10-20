@@ -94,6 +94,7 @@
 
 		// ?
 		{ "path": "./packages/@rsc-utils/arg-utils" },
+		{ "path": "./packages/@rsc-utils/search-utils" },
 
 		// ensure the rsc-utils stack
 		{ "path": "./packages/@rsc-chat/discord-utils" },

@@ -1,5 +1,5 @@
 import type { GameSystemCode } from "@rsc-sage/data";
-import { SearchInfo, type TSearchFlag } from "@rsc-utils/core-utils";
+import { SearchInfo, type TSearchFlag } from "@rsc-utils/search-utils";
 
 export class GameSearchInfo<Code extends GameSystemCode> extends SearchInfo {
 	public constructor(public gameSystem: Code, searchText: string, flags: TSearchFlag = "") {

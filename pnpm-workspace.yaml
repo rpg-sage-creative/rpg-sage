@@ -49,6 +49,7 @@ overrides:
   "@rsc-utils/quoted-string-utils": "../../@rsc-utils/quoted-string-utils"
   "@rsc-utils/random-utils": "../../@rsc-utils/random-utils"
   "@rsc-utils/regexp-utils": "../../@rsc-utils/regexp-utils"
+  "@rsc-utils/search-utils": "../../@rsc-utils/search-utils"
   "@rsc-utils/string-utils": "../../@rsc-utils/string-utils"
   "@rsc-utils/token-string-utils": "../../@rsc-utils/token-string-utils"
   "@rsc-utils/type-utils": "../../@rsc-utils/type-utils"

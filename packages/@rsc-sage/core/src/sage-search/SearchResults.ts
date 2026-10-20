@@ -1,5 +1,5 @@
-import { addCommas, HasScoredSearchables, RenderableContent, SearchInfo, SearchScore, type OrUndefined, type Renderable, type Searchable } from "@rsc-utils/core-utils";
-import { StringMatcher } from "@rsc-utils/core-utils";
+import { addCommas, RenderableContent, StringMatcher, type OrUndefined, type Renderable } from "@rsc-utils/core-utils";
+import { HasScoredSearchables, SearchInfo, SearchScore, type Searchable } from "@rsc-utils/search-utils";
 import type { IMenuRenderable } from "../sage-lib/discord/index.js";
 import type { IHasName } from "../sage-pf2e/index.js";
 import type { Source } from "../sage-pf2e/model/base/Source.js";

@@ -1,4 +1,5 @@
-import { sortPrimitive, type SearchInfo, type SearchScore, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { sortPrimitive, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { COMMON, MDASH, type IHasContents, type TObjectQuantity } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { findByValue } from "../data/Repository.js";

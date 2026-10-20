@@ -1,4 +1,5 @@
-import type { SearchInfo, SearchScore, RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { Feature } from "./Feature.js";
 import { HasSource, type SourcedCore } from "./base/HasSource.js";

@@ -1,4 +1,4 @@
-import type { SearchInfo, SearchScore } from "@rsc-utils/core-utils";
+import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { HasSource, type SourcedCore } from "./base/HasSource.js";
 
 export interface SnareCore extends SourcedCore<"Snare"> {
