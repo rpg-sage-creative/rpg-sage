@@ -1,3 +1,4 @@
+/** @type {{ quoted:string; unquoted:string; style?:"double"|"single"|"smart"; isQuoted?:boolean; }[]} */
 const quoteTests = [
 	{ unquoted:``,         quoted:`""`,             style:undefined },
 	{ unquoted:` `,        quoted:`" "`,            style:undefined },
@@ -20,6 +21,7 @@ const quoteTests = [
 	{ unquoted:` " \\" \\\\\\" \\" " `, quoted:`" \\" \\\\" \\\\\\\\" \\\\" \\" "`, style:undefined },
 ];
 
+/** @type {{ quoted:string; unquoted:string; style?:"double"|"single"|"smart"; isQuoted?:boolean; }[]} */
 const dequoteTests = [
 	{ quoted:`""`,                  unquoted:``,                    style:undefined, isQuoted:true },
 	{ quoted:` '‘"“„ `,             unquoted:` '‘"“„ `,             style:undefined, isQuoted:false },

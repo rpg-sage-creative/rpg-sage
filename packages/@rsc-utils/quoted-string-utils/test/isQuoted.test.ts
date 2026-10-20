@@ -1,10 +1,12 @@
 import { tagLiterals } from "@rsc-tools/dev-scripts";
+import { describe, expect, test } from "vitest";
 import { isQuoted } from "../build/index.js";
 import { getTests } from "./data.js";
 
 describe("isQuoted", () => {
 
 	const tests = getTests("isQuoted");
+
 	tests.forEach(args => {
 		const quoted = args.quoted;
 		const expected = args.isQuoted ?? true;
