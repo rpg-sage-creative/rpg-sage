@@ -14,6 +14,7 @@
 		"@rsc-utils/arg-utils": "workspace:",
 		"@rsc-utils/charset-utils": "workspace:",
 		"@rsc-utils/error-utils": "workspace:",
+		"@rsc-utils/json-utils": "workspace:",
 		"@rsc-utils/number-utils": "workspace:",
 		"@rsc-utils/quoted-string-utils": "workspace:",
 		"@rsc-utils/regexp-utils": "workspace:",
