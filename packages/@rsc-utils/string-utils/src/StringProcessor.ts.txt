@@ -1,0 +1,11 @@
+StringProcessor
+- similar to StringBuilder
+  - has underlying string
+  - manages actions on the underlying string (replace, slice)
+- can create StringSection objects
+  - index
+  - length
+- manipulating one StringSection updates all other StringSection indexes
+  - StringSection is also StringProcessor (has parent)
+- create sections via regex
+- create sections via tokenization
