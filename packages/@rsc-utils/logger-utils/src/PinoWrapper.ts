@@ -1,6 +1,16 @@
 import type { ChildLoggerOptions, LogFn, Bindings as PinoBindings, Logger as PinoLogger } from "pino";
+import { vitest } from "vitest";
 
-export class PinoWrapper {
+export type LoggerLike = {
+	trace: LogFn;
+	debug: LogFn;
+	info: LogFn;
+	warn: LogFn;
+	error: LogFn;
+	fatal: LogFn;
+};
+
+export class PinoWrapper implements LoggerLike {
 
 	/** the pino logger for this instance */
 	public readonly pino: PinoLogger;
@@ -69,4 +79,14 @@ export class PinoWrapper {
 
 	//#endregion
 
+	/** Used to quickly make a LoggerLike with loggers that have been spied on by vitest specifically for unit testing. */
+	public spyOn(): LoggerLike {
+		const trace = vitest.spyOn(this as { trace:LogFn; }, "trace");
+		const debug = vitest.spyOn(this as { debug:LogFn; }, "debug");
+		const info = vitest.spyOn(this as { info:LogFn; }, "info");
+		const warn = vitest.spyOn(this as { warn:LogFn; }, "warn");
+		const error = vitest.spyOn(this as { error:LogFn; }, "error");
+		const fatal = vitest.spyOn(this as { fatal:LogFn; }, "fatal");
+		return { trace, debug, info, warn, error, fatal };
+	}
 }
