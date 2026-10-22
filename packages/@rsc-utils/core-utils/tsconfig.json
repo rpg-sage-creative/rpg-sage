@@ -11,6 +11,7 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/array-utils" },
 		{ "path": "../../@rsc-utils/arg-utils" },
 		{ "path": "../../@rsc-utils/charset-utils" },
 		{ "path": "../../@rsc-utils/color-utils" },
@@ -21,6 +22,7 @@
 		{ "path": "../../@rsc-utils/language-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/number-utils" },
+		{ "path": "../../@rsc-utils/progress-utils" },
 		{ "path": "../../@rsc-utils/quoted-string-utils" },
 		{ "path": "../../@rsc-utils/regexp-utils" },
 		{ "path": "../../@rsc-utils/string-utils" },

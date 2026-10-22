@@ -1,6 +1,7 @@
-import { isDefined, remove } from "../../build/index.js";
+import { isDefined } from "@rsc-utils/type-utils";
+import { remove } from "../build/index.js";
 
-describe("array", () => {
+describe("remove", () => {
 	// describe("remove", () => {
 
 		test(`remove`, () => {

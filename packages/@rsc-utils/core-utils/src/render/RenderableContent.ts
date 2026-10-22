@@ -1,7 +1,7 @@
+import { toUnique } from "@rsc-utils/array-utils";
 import type { HexColorString } from "@rsc-utils/color-utils";
 import { error } from "@rsc-utils/logger-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { toUnique } from "../array/index.js";
 import type { Renderable, RenderableContentSection, RenderableContentSectionColumn } from "./types.js";
 
 function createSection(index = 0, title?: string, content = <string[]>[], columns = <RenderableContentSectionColumn[]>[]): RenderableContentSection {

@@ -1,6 +1,6 @@
-import { without } from "../../build/index.js";
+import { without } from "../build/index.js";
 
-describe("array", () => {
+describe("without", () => {
 	// describe("without", () => {
 
 		test("without", () => {

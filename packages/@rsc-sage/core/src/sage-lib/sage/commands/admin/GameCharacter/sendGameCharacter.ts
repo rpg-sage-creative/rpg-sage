@@ -1,5 +1,5 @@
 import { DialogPostType, SageChannelType } from "@rsc-sage/data";
-import { mapAsync, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import { GenericIterable, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import { toChannelMention, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
 import type { Message } from "discord.js";
 import { sendWebhook } from "../../../../discord/messages.js";
@@ -68,7 +68,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	}
 
 	const autoChannels = character.autoChannels;
-	const autoChannelItems = await mapAsync(autoChannels, async data => {
+	const autoChannelItems = await GenericIterable.from(autoChannels).mapAsync(async data => {
 		const parts: string[] = [];
 		parts.push(toChannelMention(data.channelId) ?? data.channelId);
 		if (data.dialogPostType !== undefined) {

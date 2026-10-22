@@ -84,6 +84,9 @@
 		// uses/triggers aws/error/json
 		{ "path": "./packages/@rsc-utils/logger-utils" },
 
+		// uses/triggers logger
+		{ "path": "./packages/@rsc-utils/progress-utils" },
+
 		// uses/triggers type
 		{ "path": "./packages/@rsc-utils/quoted-string-utils" },
 		{ "path": "./packages/@rsc-utils/id-utils" },

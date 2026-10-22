@@ -11,6 +11,7 @@
 		"vitest": "^4.1.11"
 	},
 	"dependencies": {
+		"@rsc-utils/array-utils": "workspace:",
 		"@rsc-utils/arg-utils": "workspace:",
 		"@rsc-utils/charset-utils": "workspace:",
 		"@rsc-utils/color-utils": "workspace:",
@@ -21,6 +22,7 @@
 		"@rsc-utils/language-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/number-utils": "workspace:",
+		"@rsc-utils/progress-utils": "workspace:",
 		"@rsc-utils/quoted-string-utils": "workspace:",
 		"@rsc-utils/regexp-utils": "workspace:",
 		"@rsc-utils/string-utils": "workspace:",

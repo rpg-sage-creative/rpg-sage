@@ -1,0 +1,30 @@
+{
+	"extends": "../../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./build",
+		"rootDir": "./src",
+	},
+	"exclude": [
+		"./test"
+	],
+	"include": [
+		"./src"
+	],
+	"references": [
+		{ "path": "../../@rsc-utils/arg-utils" },
+		{ "path": "../../@rsc-utils/charset-utils" },
+		{ "path": "../../@rsc-utils/color-utils" },
+		{ "path": "../../@rsc-utils/error-utils" },
+		{ "path": "../../@rsc-utils/git-utils" },
+		{ "path": "../../@rsc-utils/id-utils" },
+		{ "path": "../../@rsc-utils/json-utils" },
+		{ "path": "../../@rsc-utils/language-utils" },
+		{ "path": "../../@rsc-utils/logger-utils" },
+		{ "path": "../../@rsc-utils/number-utils" },
+		{ "path": "../../@rsc-utils/quoted-string-utils" },
+		{ "path": "../../@rsc-utils/regexp-utils" },
+		{ "path": "../../@rsc-utils/string-utils" },
+		{ "path": "../../@rsc-utils/token-string-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
+	],
+}

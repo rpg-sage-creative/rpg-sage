@@ -1,5 +1,5 @@
 import type { RepoItem } from "@rsc-utils/aws-utils";
-import { forBatchAsync, getDataRoot, captureProcessExit, trace } from "@rsc-utils/core-utils";
+import { captureProcessExit, GenericIterable, getDataRoot, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
 import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType, objectTypeToDirName } from "./cache/types.js";
@@ -47,7 +47,7 @@ async function main() {
 			// const cores: BaseCacheItem[] = [];
 			const errors: string[] = [];
 
-			await forBatchAsync(`  Uploading files`, files, ddbTable.repo.batchPutMaxItemCount, async batchFiles => {
+			await GenericIterable.from(files).forBatchAsync(ddbTable.repo.batchPutMaxItemCount, async batchFiles => {
 
 				const cores: RepoItem[] = [];
 				const coreFiles: string[] = [];

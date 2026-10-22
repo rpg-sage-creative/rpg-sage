@@ -13,5 +13,9 @@
 	"references": [
 		{ "path": "../../@rsc-utils/core-utils" },
 		{ "path": "../../@rsc-utils/error-utils" },
+		{ "path": "../../@rsc-utils/json-utils" },
+		{ "path": "../../@rsc-utils/logger-utils" },
+		{ "path": "../../@rsc-utils/progress-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
 	],
 }

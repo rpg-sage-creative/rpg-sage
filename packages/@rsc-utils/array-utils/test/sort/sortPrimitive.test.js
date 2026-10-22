@@ -1,5 +1,5 @@
-import { sortPrimitive } from "../../../build/index.js";
-describe("array", () => {
+import { sortPrimitive } from "../../build/index.js";
+
 	describe("sort", () => {
 		describe("sortPrimitive", () => {
 			const getInput = () => [2, 1, null, "2", true, null, undefined, 2, null, "1", 1, false, true];
@@ -69,4 +69,3 @@ describe("array", () => {
 			});
 		});
 	});
-});

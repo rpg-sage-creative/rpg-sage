@@ -1,6 +1,6 @@
-import { partition } from "../../build/index.js";
+import { partition } from "../build/index.js";
 
-describe("array", () => {
+describe("partition", () => {
 	// describe("partition", () => {
 
 		test(`partition()`, () => {

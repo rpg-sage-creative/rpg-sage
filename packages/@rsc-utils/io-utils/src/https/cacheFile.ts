@@ -1,5 +1,7 @@
-import { trace, type Optional, type ProgressTracker } from "@rsc-utils/core-utils";
 import { typeError } from "@rsc-utils/error-utils";
+import { trace } from "@rsc-utils/logger-utils";
+import type { ProgressTracker } from "@rsc-utils/progress-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { FollowResponse, RedirectableRequest } from "follow-redirects";
 import { WriteStream, createWriteStream, existsSync, mkdirSync, rmSync, statSync } from "node:fs";
 import type { IncomingMessage } from "node:http";

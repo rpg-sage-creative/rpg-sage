@@ -1,6 +1,6 @@
-import { removeAt } from "../../build/index.js";
+import { removeAt } from "../build/index.js";
 
-describe("array", () => {
+describe("removeAt", () => {
 	// describe("removeAt", () => {
 
 		test(`removeAt`, () => {

@@ -1,6 +1,7 @@
-import { isDefined, mapFirst, tagLiterals } from "../../build/index.js";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
+import { isDefined } from "@rsc-utils/type-utils";
+import { mapFirst } from "../build/index.js";
 
-describe("array", () => {
 	describe("mapFirst", () => {
 		const values = [2,1,null,true];
 		const tests = [
@@ -25,4 +26,3 @@ describe("array", () => {
 			});
 		});
 	});
-});

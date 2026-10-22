@@ -14,6 +14,10 @@
 	"dependencies": {
 		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/error-utils": "workspace:",
+		"@rsc-utils/json-utils": "workspace:",
+		"@rsc-utils/logger-utils": "workspace:",
+		"@rsc-utils/progress-utils": "workspace:",
+		"@rsc-utils/type-utils": "workspace:",
 		"csv-parser": "^3.2.0",
 		"exifreader": "^4.36.2",
 		"follow-redirects": "^1.15.11",

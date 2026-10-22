@@ -1,4 +1,6 @@
-import { captureProcessExit, error, info, stringifyJson, trace, type Awaitable } from "@rsc-utils/core-utils";
+import { stringifyJson } from "@rsc-utils/json-utils";
+import { captureProcessExit, error, info, trace } from "@rsc-utils/logger-utils";
+import type { Awaitable } from "@rsc-utils/type-utils";
 import { createServer, type IncomingMessage, type Server } from "http";
 import type { BufferHandler, BufferHandlerJsonError, BufferHandlerResponse } from "./types.js";
 

@@ -19,21 +19,26 @@ type ProgressTrackerEventHandlers = {
 	status?: ProgressTrackerEventHandler<"status">;
 };
 
-type ProgressTrackerOptions = ProgressTrackerEventHandlers & {
-	total?: number;
-	interval?: number;
-};
-
-type WithEventOptions = ProgressTrackerOptions & {
-	label: string;
-};
-
-export type WithLoggerOptions = {
-	interval?: number;
-	label: string;
-	logger: LoggerLike;
-	total?: number;
+type ProgressTrackerOptions = {
+	/** If true then only the message is reported to event handlers. */
 	compact?: boolean;
+	/** The percentage interval at which to report progress, between 0-100 (1-99); default 10 */
+	interval?: number;
+	/** The label that distinguishes this tracker from other trackers. */
+	label: string;
+	/** A logger to report progress to instead of bespoke handlers. */
+	logger?: LoggerLike;
+	/** Total count of items to track progress of. */
+	total?: number;
+	/** If true then increment events are sent to logger.trace() */
+	verbose?: boolean;
+};
+
+type WithEventOptions = ProgressTrackerOptions & ProgressTrackerEventHandlers;
+
+export type WithLoggerOptions = ProgressTrackerOptions & {
+	/** A logger to report progress to instead of bespoke handlers. */
+	logger: Partial<LoggerLike>;
 };
 
 /**
@@ -43,12 +48,24 @@ export class ProgressTracker {
 	public countComplete = 0;
 	/** The percentage interval at which to report progress, between 0-100 (1-99); default 10 */
 	public interval = 10;
+	/** The label that distinguishes this tracker from other trackers. */
 	public label: string;
+	/** The last interval that was reported. */
 	public lastInterval = 0;
+	/** A logger to report progress to instead of bespoke handlers. */
+	public logger?: Partial<LoggerLike>;
+	/** Current completion percentage (as integer: 0-100) */
 	public percentComplete = 0;
+	/** Has the tracker been started: .start() or .increment() was called. */
 	public started = false;
+	/** Has the tracker finished: .finish() was called. */
 	public finished = false;
+	/** Total count of items to track progress of. */
 	public total = 0;
+	/** If true, the entire eventData is sent to logger functions (along with message). */
+	public compact = false;
+	/** If true, the increment events are sent to logger.debug */
+	public verbose = false;
 
 	protected handlers = new Map<ProgressTrackerEventName, Set<ProgressTrackerEventHandler<any>>>();
 	public on<EventName extends ProgressTrackerEventName>(eventName: EventName, handler: ProgressTrackerEventHandler<EventName>): this {
@@ -60,35 +77,57 @@ export class ProgressTracker {
 	}
 	private handle<EventName extends ProgressTrackerEventName>(eventName: EventName, message: string): void {
 		const eventData = { eventName, tracker:this, message };
+
+		// call bespoke handlers
 		const handlers = this.handlers.get(eventName);
 		handlers?.forEach(handler => handler(eventData));
+
+		// call logger function if we have one
+		const loggerFnName = eventName === "error" ? "error" : eventName !== "increment" ? "info" : undefined;
+		const loggerFn = this.logger?.[loggerFnName as keyof LoggerLike];
+		if (loggerFn) {
+			this.compact ? loggerFn(message) : loggerFn(this.toLoggerObject(), message);
+		}
+	}
+
+	public get totalWithCommas(): string {
+		return new Intl.NumberFormat("en-US").format(this.total);
 	}
 
 	public constructor(label: string, total?: number, interval?: number);
-	public constructor(label: string, options?: ProgressTrackerOptions);
-	public constructor(label: string, optsOrTotal?: number | ProgressTrackerOptions, interval?: number) {
-		this.label = label;
-		if (optsOrTotal) {
-			if (typeof(optsOrTotal) === "number") {
-				if (optsOrTotal > 0) {
-					this.total = optsOrTotal;
-				}
-			}else {
-				ProgressTrackerEventNames.forEach(eventName => {
-					if (typeof(optsOrTotal[eventName]) === "function") {
-						this.on(eventName, optsOrTotal[eventName] as ProgressTrackerEventHandler<ProgressTrackerEventName>);
-					}
-				})
-				if (optsOrTotal.interval && optsOrTotal.interval > 0) {
-					this.interval = optsOrTotal.interval;
-				}
-				if (optsOrTotal.total && optsOrTotal.total > 0) {
-					this.total = optsOrTotal.total;
-				}
+	public constructor(options: ProgressTrackerOptions);
+	public constructor(labelOrOptions: string | ProgressTrackerOptions, totalOrUndefined?: number, intervalOrUndefined?: number) {
+		if (typeof(labelOrOptions) === "string") {
+
+			this.label = labelOrOptions;
+			if (totalOrUndefined! > 0) {
+				this.total = totalOrUndefined!;
 			}
-		}
-		if (typeof(interval) === "number" && interval > 0) {
-			this.interval = interval;
+			if (intervalOrUndefined! > 0) {
+				this.interval = intervalOrUndefined!;
+			}
+
+		}else {
+
+			// set properties
+			const { compact, interval, label, logger, total, verbose } = labelOrOptions;
+			if (compact) {
+				this.compact = true;
+			}
+			if (interval! > 0) {
+				this.interval = interval!;
+			}
+			this.label = label;
+			if (logger) {
+				this.logger = logger;
+			}
+			if (total! > 0) {
+				this.total = total!;
+			}
+			if (verbose) {
+				this.verbose = true;
+			}
+
 		}
 	}
 
@@ -113,7 +152,7 @@ export class ProgressTracker {
 				this.status({ force0:true });
 			}
 			if (!this.started) {
-				this.handle("error", `${this.label} Start Failed: Invalid Total (${this.total})`);
+				this.handle("error", `${this.label} Start Failed: Invalid Total (${this.totalWithCommas})`);
 			}
 		}
 	}
@@ -130,7 +169,7 @@ export class ProgressTracker {
 			if (!this.started) {
 				this.start();
 			}
-			this.handle("increment", `${this.label} increment: count = ${count}`);
+			this.handle("increment", `${this.label} increment(${count}); ${this.countComplete} -> ${this.countComplete + 1}`);
 			this.countComplete += count;
 			if (this.started && !this.finished) {
 				this.percentComplete = Math.floor(100 * this.countComplete / this.total);
@@ -165,7 +204,7 @@ export class ProgressTracker {
 			}else if (options?.force100) {
 				percentComplete = 100;
 			}
-			this.handle("status", `${this.label} (${this.total}) ... ${percentComplete}%`);
+			this.handle("status", `${this.label} (${this.totalWithCommas}) ... ${percentComplete}%`);
 		}
 	}
 
@@ -177,7 +216,7 @@ export class ProgressTracker {
 		const msg = message
 			? `Error: ${message}`
 			: `Error!`;
-		this.handle("error", `${this.label} (${this.total}) ... Error: ${msg}`);
+		this.handle("error", `${this.label} (${this.totalWithCommas}) ... Error: ${msg}`);
 	}
 
 	/**
@@ -209,33 +248,21 @@ export class ProgressTracker {
 
 	/** Creates a ProgressTracker with all the given events wired up. */
 	public static withEvents(options: WithEventOptions): ProgressTracker {
-		return new ProgressTracker(options.label, options);
+		const tracker = new ProgressTracker(options);
+
+		// add event handlers
+		ProgressTrackerEventNames.forEach(eventName => {
+			if (typeof(options[eventName]) === "function") {
+				tracker.on(eventName, options[eventName] as ProgressTrackerEventHandler<ProgressTrackerEventName>);
+			}
+		});
+
+		return tracker;
 	}
 
 	/** Creates a simple ProgressTracker that reports "status" events to logger.trace() and "error" events to logger.error() */
-	public static withLogger(label: string, logger: LoggerLike): ProgressTracker;
-	public static withLogger(options: WithLoggerOptions): ProgressTracker;
-	public static withLogger(labelOrOptions: string | WithLoggerOptions, loggerOrUndefined?: LoggerLike): ProgressTracker {
-		let label: string;
-		let interval: number | undefined;
-		let total: number | undefined;
-		let logger: LoggerLike;
-		let compact: boolean | undefined = false;
-		if (typeof(labelOrOptions) === "string") {
-			label = labelOrOptions;
-			logger = loggerOrUndefined!;
-		}else {
-			({ label, interval, total, logger, compact } = labelOrOptions);
-		}
-		return new ProgressTracker(label, {
-			interval,
-			total,
-			error: compact ? ({ message }) => logger.error(message) : ({ message, tracker }) => logger.error(tracker.toLoggerObject(), message),
-			finished: compact ? ({ message }) => logger.info(message) : ({ message, tracker }) => logger.info(tracker.toLoggerObject(), message),
-			increment: compact ? ({ message }) => logger.debug(message) : ({ message, tracker }) => logger.debug(tracker.toLoggerObject(), message),
-			started: compact ? ({ message }) => logger.info(message) : ({ message, tracker }) => logger.info(tracker.toLoggerObject(), message),
-			status: compact ? ({ message }) => logger.trace(message) : ({ message, tracker }) => logger.trace(tracker.toLoggerObject(), message),
-		});
+	public static withLogger(options: WithLoggerOptions): ProgressTracker {
+		return new ProgressTracker(options);
 	}
 
 }

@@ -1,5 +1,5 @@
 import { AdminRoleType, type AdminUser } from "@rsc-sage/data";
-import { forEachAsync, isDefined, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { GenericIterable, isDefined, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { toHumanReadable } from "@rsc-utils/discord-utils";
 import type { User } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
@@ -37,7 +37,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 		const renderableContent = createAdminRenderableContent(sageMessage.server);
 		renderableContent.setTitle(`<b>admin-list</b>`);
 		if (users.length) {
-			await forEachAsync(users, async user => renderUser(renderableContent, user));
+			await GenericIterable.from(users).forEachAsync(async user => renderUser(renderableContent, user));
 		} else {
 			renderableContent.append(`<blockquote>No Admins Found!</blockquote>`);
 		}

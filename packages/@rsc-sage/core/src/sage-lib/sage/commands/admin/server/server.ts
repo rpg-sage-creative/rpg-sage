@@ -1,5 +1,5 @@
 import { AdminRoleType, DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameCreatorType, getCriticalMethodText, type AdminRole } from "@rsc-sage/data";
-import { mapAsync, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
+import { GenericIterable, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
 import type { Role } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -32,7 +32,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisper("No Server Found!");
 	}
 
-	const roles = <TRole[]>await mapAsync(server.roles, async role => {
+	const roles = <TRole[]>await GenericIterable.from(server.roles).mapAsync(async role => {
 		return {
 			role: role,
 			discordRole: await sageMessage.discord.fetchGuildRole(role.did)

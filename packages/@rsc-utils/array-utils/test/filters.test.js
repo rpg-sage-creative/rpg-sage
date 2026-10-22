@@ -1,4 +1,5 @@
-import { and, isDefined, isNullOrUndefined, or, toUnique, toUniqueDefined } from "../../build/index.js";
+import { isDefined, isNullOrUndefined } from "@rsc-utils/type-utils";
+import { and, or, toUnique, toUniqueDefined } from "../build/index.js";
 
 describe("array", () => {
 	describe("filters", () => {

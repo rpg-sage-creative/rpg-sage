@@ -46,6 +46,7 @@ overrides:
   "@rsc-utils/language-utils": "../../@rsc-utils/language-utils"
   "@rsc-utils/logger-utils": "../../@rsc-utils/logger-utils"
   "@rsc-utils/number-utils": "../../@rsc-utils/number-utils"
+  "@rsc-utils/progress-utils": "../../@rsc-utils/progress-utils"
   "@rsc-utils/quoted-string-utils": "../../@rsc-utils/quoted-string-utils"
   "@rsc-utils/random-utils": "../../@rsc-utils/random-utils"
   "@rsc-utils/regexp-utils": "../../@rsc-utils/regexp-utils"

@@ -1,3 +1,4 @@
+export * from "@rsc-utils/array-utils";
 export * from "@rsc-utils/arg-utils";
 export * from "@rsc-utils/charset-utils";
 export * from "@rsc-utils/color-utils";

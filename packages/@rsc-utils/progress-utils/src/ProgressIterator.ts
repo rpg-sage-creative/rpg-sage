@@ -1,10 +1,16 @@
 import type { LoggerLike } from "@rsc-utils/logger-utils";
 import { ProgressTracker, type WithLoggerOptions } from "./ProgressTracker.js";
 
-type IterableLike<T> = Array<T> | Set<T>;
+// function toError(err: unknown): Error {
+// 	return err instanceof Error ? err : new Error(err as string);
+// }
+
+type IterableLike<T> = ArrayLike<T> | Set<T>;
 
 export class ProgressIterator<T> {
 
+	protected _loggerOptions?: WithLoggerOptions;
+	protected _logger?: LoggerLike;
 	protected _tracker?: ProgressTracker;
 	public get tracker(): ProgressTracker | undefined {
 		if (!this._tracker) {
@@ -12,7 +18,7 @@ export class ProgressIterator<T> {
 				this._tracker = ProgressTracker.withLogger({
 					label: "ProgressIterator.forEach",
 					logger: this._logger,
-					total: "length" in this.iterable ? this.iterable.length : this.iterable.size,
+					total: this.array.length,
 				});
 
 			}else if (this._loggerOptions) {
@@ -21,40 +27,66 @@ export class ProgressIterator<T> {
 					interval: this._loggerOptions.interval,
 					label: this._loggerOptions.label ?? "ProgressIterator.forEach",
 					logger: this._loggerOptions.logger,
-					total: "length" in this.iterable ? this.iterable.length : this.iterable.size,
+					total: this.array.length,
+					verbose: this._loggerOptions.verbose,
 				});
 			}
 		}
 		return this._tracker;
 	}
 
-	protected _logger?: LoggerLike;
-	protected _loggerOptions?: WithLoggerOptions;
-
-	public constructor(public iterable: IterableLike<T>) { }
+	protected array: T[];
+	public constructor(iterable: IterableLike<T>) {
+		this.array = Array.from(iterable);
+	}
 
 	public forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void {
-		const { iterable, tracker } = this;
+		const { array, tracker } = this;
 		tracker?.start();
-		Array.from(iterable).forEach((value, index, array) => {
-			callbackfn.call(thisArg, value, index, array);
+		for (let index = 0, len = array.length; index < len; index++) {
+			callbackfn.call(thisArg, array[index], index, array);
 			tracker?.increment();
-		});
+		}
+		tracker?.finish();
+	}
+
+	public async forEachAsync(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): Promise<void> {
+		const { array, tracker } = this;
+		tracker?.start();
+		for (let index = 0, len = array.length; index < len; index++) {
+			await callbackfn.call(thisArg, array[index], index, array);
+			tracker?.increment();
+		}
+		tracker?.finish();
 	}
 
 	public map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[] {
-		const { iterable, tracker } = this;
+		const { array, tracker } = this;
 		tracker?.start();
-		return Array.from(iterable).map((value, index, array) => {
-			const outValue = callbackfn.call(thisArg, value, index, array);
+		const outValues: U[] = [];
+		for (let index = 0, len = array.length; index < len; index++) {
+			outValues.push(callbackfn.call(thisArg, array[index], index, array));
 			tracker?.increment();
-			return outValue;
-		});
+		}
+		tracker?.finish();
+		return outValues;
 	}
 
-	public static withLogger<T>(iterable: IterableLike<any>, logger: LoggerLike): ProgressIterator<T>;
-	public static withLogger<T>(iterable: IterableLike<any>, options: WithLoggerOptions): ProgressIterator<T>;
-	public static withLogger<T>(iterable: IterableLike<any>, loggerOrOptions: LoggerLike | WithLoggerOptions): ProgressIterator<T> {
+	public async mapAsync<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): Promise<U[]> {
+		const { array, tracker } = this;
+		tracker?.start();
+		const outValues: U[] = [];
+		for (let index = 0, len = array.length; index < len; index++) {
+			outValues.push(await callbackfn.call(thisArg, array[index], index, array));
+			tracker?.increment();
+		}
+		tracker?.finish();
+		return outValues;
+	}
+
+	public static withLogger<T>(iterable: IterableLike<T>, logger: LoggerLike): ProgressIterator<T>;
+	public static withLogger<T>(iterable: IterableLike<T>, options: WithLoggerOptions): ProgressIterator<T>;
+	public static withLogger<T>(iterable: IterableLike<T>, loggerOrOptions: LoggerLike | WithLoggerOptions): ProgressIterator<T> {
 		const iterator = new ProgressIterator(iterable);
 		if ("logger" in loggerOrOptions) {
 			iterator._loggerOptions = loggerOrOptions;
@@ -64,7 +96,7 @@ export class ProgressIterator<T> {
 		return iterator;
 	}
 
-	public static withTracker<T>(iterable: IterableLike<any>, tracker: ProgressTracker): ProgressIterator<T> {
+	public static withTracker<T>(iterable: IterableLike<T>, tracker: ProgressTracker): ProgressIterator<T> {
 		const iterator = new ProgressIterator(iterable);
 		iterator._tracker = tracker;
 		return iterator;

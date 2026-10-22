@@ -1,6 +1,5 @@
-import { or, sortAsPrimitive, sortPrimitive } from "../../../build/index.js";
+import { or, sortAsPrimitive, sortPrimitive } from "../../build/index.js";
 
-describe("array", () => {
 	describe("sorters", () => {
 		const _input = [ 2,1,null,"2",true,null,undefined,2,null,"1",1,false,true];
 
@@ -20,4 +19,3 @@ describe("array", () => {
 			expect(input).toStrictEqual(expected);
 		});
 	});
-});
