@@ -1,4 +1,5 @@
-import type { Awaitable } from "@rsc-utils/type-utils";
+
+import type { Awaitable, OrUndefined } from "@rsc-utils/type-utils";
 
 type IterableLike<T> = ArrayLike<T> | Set<T>;
 
@@ -17,8 +18,11 @@ export class GenericIterable<T> {
 
 	public constructor(public iterable: IterableLike<T>) { }
 
+	/** A shortcut for creating new instances, including child classes. */
 	public static from<T>(iterable: IterableLike<T>) {
-		return new GenericIterable(iterable);
+		// use the current Class (GenericIterable or extended child class), fall back to GenericIterable
+		const constr = this ?? GenericIterable;
+		return new constr(iterable);
 	}
 
 	public get length(): number {
@@ -60,6 +64,8 @@ export class GenericIterable<T> {
 		*/
 	}
 
+	//#region batch iteration, like forEach, but in batches
+
 	public forBatch(batchSize: number, callbackfn: (value: T[], startIndex: number, iterable: IterableLike<T>) => void, thisArg?: any): void {
 		this.start();
 		let startIndex = 0;
@@ -96,7 +102,9 @@ export class GenericIterable<T> {
 		this.finish();
 	}
 
-	public find(predicate: (value: T, index: number, iterable: IterableLike<T>) => unknown, thisArg?: any): T | undefined {
+	//#endregion
+
+	public find(predicate: (value: T, index: number, iterable: IterableLike<T>) => unknown, thisArg?: any): OrUndefined<T> {
 		this.start();
 		let index = 0;
 		const { iterable } = this;
@@ -111,7 +119,7 @@ export class GenericIterable<T> {
 		return undefined;
 	}
 
-	public async findAsync(predicate: (value: T, index: number, iterable: IterableLike<T>) => Awaitable<unknown>, thisArg?: any): Promise<T | undefined> {
+	public async findAsync(predicate: (value: T, index: number, iterable: IterableLike<T>) => Awaitable<unknown>, thisArg?: any): Promise<OrUndefined<T>> {
 		this.start();
 		let index = 0;
 		const { iterable } = this;
@@ -178,30 +186,59 @@ export class GenericIterable<T> {
 		return outValues;
 	}
 
-	public map<U>(callbackfn: (value: T, index: number, iterable: IterableLike<T>) => U, thisArg?: any): U[] {
+	public map
+			<U, V extends T = T>
+			(callbackfn: (value: T, index: number, iterable: IterableLike<V>) => U, thisArg?: any)
+			: U[] {
 		this.start();
 		let index = 0;
 		const { iterable } = this;
 		const outValues: U[] = [];
-		for (const value of iterable as T[]) {
-			outValues.push(callbackfn.call(thisArg, value, index++, iterable));
+		for (const value of iterable as V[]) {
+			outValues.push(callbackfn.call(thisArg, value, index++, iterable as V[]));
 			this.increment();
 		}
 		this.finish();
 		return outValues;
 	}
 
-	public async mapAsync<U>(callbackfn: (value: T, index: number, iterable: IterableLike<T>) => Awaitable<U>, thisArg?: any): Promise<U[]> {
+	public async mapAsync
+			<U, V extends T = T>
+			(callbackfn: (value: T, index: number, iterable: IterableLike<V>) => Awaitable<U>, thisArg?: any)
+			: Promise<U[]> {
 		this.start();
 		let index = 0;
 		const { iterable } = this;
 		const outValues: U[] = [];
-		for (const value of iterable as T[]) {
-			outValues.push(await callbackfn.call(thisArg, value, index++, iterable));
+		for (const value of iterable as V[]) {
+			outValues.push(await callbackfn.call(thisArg, value, index++, iterable as V[]));
 			this.increment();
 		}
 		this.finish();
 		return outValues;
 	}
 
+	/**
+	 * Iterates the given array and returns the first mapped value returned from callbackfn that is !== null and !== undefined.
+	 * A convenience method for array.map(callbackfn).find(obj => obj !== null && obj !== undefined) that uses a single iteration.
+	 * Triggers .found() if a value other than undefined is returned.
+	 */
+	public mapFirst
+			<U, V extends T = T>
+			(callbackfn: (value: T, index: number, iterable: IterableLike<V>) => U, thisArg?: any)
+			: OrUndefined<U> {
+		this.start();
+		let index = 0;
+		const { iterable } = this;
+		for (const value of iterable as V[]) {
+			const outValue = callbackfn.call(thisArg, value, index++, iterable as V[]);
+			if (outValue !== null && outValue !== undefined) {
+				this.found();
+				return outValue;
+			}
+			this.increment();
+		}
+		this.notFound();
+		return undefined;
+	}
 }

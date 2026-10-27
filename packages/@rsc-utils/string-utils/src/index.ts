@@ -9,6 +9,7 @@ export * from "./wrap/index.js";
 export * from "./capitalize.js";
 export * from "./chunk.js";
 export * from "./consts.js";
+export * from "./stringArrayOrEmpty.js";
 export * from "./stringFormat.js";
 export * from "./StringMatcher.js";
 export * from "./truncate.js";

@@ -1,5 +1,5 @@
-import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
+import { stringOrUndefined } from "./blank/stringOrUndefined.js";
 
 type Options = {
 	/** default: "," */

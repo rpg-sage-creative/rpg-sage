@@ -1,5 +1,5 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
-import { generateSnowflake, mapFirst, numberOrUndefined, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { generateSnowflake, GenericIterable, numberOrUndefined, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
 import { cleanDicePartDescription, createTestRegExp } from "@rsc-utils/game-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/token-string-utils";
 import {
@@ -209,7 +209,7 @@ DicePart.Roll = <typeof baseDicePartRoll>DicePartRoll;
 type DiceCore = baseDiceCore;
 export class Dice extends baseDice<DiceCore, DicePart, DiceRoll> {
 	public get critData() {
-		const match = mapFirst(this.diceParts, dicePart => dicePart.description.match(D20Parsers.crits));
+		const match = GenericIterable.from(this.diceParts).mapFirst(dicePart => dicePart.description.match(D20Parsers.crits));
 		if (!match) return null;
 
 		const [_, minRoll, multiplier, confirmationModifier] = match;
