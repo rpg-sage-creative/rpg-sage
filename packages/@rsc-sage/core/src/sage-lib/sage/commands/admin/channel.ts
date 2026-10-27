@@ -1,5 +1,5 @@
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, getCriticalMethodText, parseGameSystem, SageChannelType, type SageChannel } from "@rsc-sage/data";
-import { GenericIterable, isDefined, stringifyJson, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { Arrayish, isDefined, stringifyJson, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, isSupportedTarget, toChannelMention } from "@rsc-utils/discord-utils";
 import { GuildChannel } from "discord.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
@@ -112,7 +112,7 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 //#region list
 
 async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: SageChannel[]): Promise<GuildChannel[]> {
-	const guildChannels = await GenericIterable.from(channels).mapAsync(async channel => sageMessage.sageCache.fetchChannel(channel.id));
+	const guildChannels = await Arrayish.from(channels).mapAsync(async channel => sageMessage.sageCache.fetchChannel(channel.id));
 	const existing = guildChannels.filter(isDefined) as GuildChannel[];
 
 	const filter = sageMessage.args.getString("filter");

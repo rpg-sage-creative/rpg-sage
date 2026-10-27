@@ -3,7 +3,7 @@ import type { Awaitable, OrUndefined } from "@rsc-utils/type-utils";
 
 type IterableLike<T> = ArrayLike<T> | Set<T>;
 
-export class GenericIterable<T> {
+export class Arrayish<T> {
 
 	//#region protected methods for child classes
 
@@ -20,8 +20,8 @@ export class GenericIterable<T> {
 
 	/** A shortcut for creating new instances, including child classes. */
 	public static from<T>(iterable: IterableLike<T>) {
-		// use the current Class (GenericIterable or extended child class), fall back to GenericIterable
-		const constr = this ?? GenericIterable;
+		// use the current Class (Arrayish or extended child class), fall back to Arrayish
+		const constr = this ?? Arrayish;
 		return new constr(iterable);
 	}
 

@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, test, vitest } from "vitest";
-import { GenericIterable } from "../build/index.js";
+import { Arrayish } from "../build/index.js";
 import { tagLiterals } from "@rsc-tools/dev-scripts";
 
 const spies = {
@@ -10,7 +10,7 @@ const spies = {
 	notFound: (...args: any[]) => {},
 };
 
-class SpiedOn<T> extends GenericIterable<T> {
+class SpiedOn<T> extends Arrayish<T> {
 	start(...args: any[]) { spies.start(...args); }
 	increment(...args: any[]) { spies.increment(...args); }
 	finish(...args: any[]) { spies.finish(...args); }

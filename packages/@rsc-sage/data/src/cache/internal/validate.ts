@@ -1,4 +1,4 @@
-import { errorReturnUndefined, GenericIterable, getDataRoot, trace } from "@rsc-utils/core-utils";
+import { Arrayish, errorReturnUndefined, getDataRoot, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { assertSageCharacterCore } from "../../types/SageCharacterCore.js";
 import { assertSageGameCore } from "../../types/SageGameCore.js";
@@ -36,7 +36,7 @@ export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(
 
 		fileCount += files.length;
 
-		await GenericIterable.from(files).forEachAsync(async file => {
+		await Arrayish.from(files).forEachAsync(async file => {
 			const core = await readJsonFile<CacheItem>(file).catch(errorReturnUndefined);
 			if (!core) {
 				errors.push(file);

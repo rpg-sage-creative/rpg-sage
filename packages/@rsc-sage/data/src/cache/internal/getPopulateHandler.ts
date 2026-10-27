@@ -1,4 +1,4 @@
-import { GenericIterable, getDataRoot, noop, tagLiterals, trace } from "@rsc-utils/core-utils";
+import { Arrayish, getDataRoot, noop, tagLiterals, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import type { DataTable } from "../DataTable.js";
 import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
@@ -87,7 +87,7 @@ async function populateFromFile<
 
 	const errors: string[] = [];
 
-	await GenericIterable.from(files).forEachAsync(async file => {
+	await Arrayish.from(files).forEachAsync(async file => {
 
 		const json = await readJsonFile<CacheItem>(file).catch(noop);
 		const cached = json ? dataTable.put(json) : false;

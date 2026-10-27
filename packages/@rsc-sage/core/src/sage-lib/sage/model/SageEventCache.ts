@@ -1,9 +1,9 @@
 import { AdminRoleType, DataTable, GameUserType, type GameCacheItem } from "@rsc-sage/data";
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
-import { BULLET, debug, error, errorReturnFalse, isDefined, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, trace, stringifyJson, toMarkdown, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID, GenericIterable } from "@rsc-utils/core-utils";
-import {isErrorLike}from "@rsc-utils/error-utils";
+import { Arrayish, BULLET, debug, error, errorReturnFalse, isDefined, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, stringifyJson, toMarkdown, trace, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type SupportedMessagesChannel, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { isErrorLike } from "@rsc-utils/error-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
@@ -755,7 +755,7 @@ export class SageEventCache {
 
 		const objectCache = DataTable.for("Game");
 		const cacheItems = objectCache.filter(contentFilter);
-		const cores = await GenericIterable.from(cacheItems).mapAsync(item => objectCache.fetch<GameCore>(item));
+		const cores = await Arrayish.from(cacheItems).mapAsync(item => objectCache.fetch<GameCore>(item));
 		return cores.filter(isDefined).map((core: GameCore) => new Game(core, server, this));
 	}
 

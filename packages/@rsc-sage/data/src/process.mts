@@ -1,4 +1,4 @@
-import { captureProcessExit, GenericIterable, getDataRoot, stringifyJson, trace, type Snowflake } from "@rsc-utils/core-utils";
+import { Arrayish, captureProcessExit, getDataRoot, stringifyJson, trace, type Snowflake } from "@rsc-utils/core-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { stat, Stats } from "node:fs";
@@ -213,7 +213,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 
 		const deletedSet = new Set<string>();
 		// const ddbQueue: any[] = [];
-		await GenericIterable.from(files).forEachAsync(async filePath => {
+		await Arrayish.from(files).forEachAsync(async filePath => {
 			// due to getNewestCore, we might delete a later item
 			if (deletedSet.has(filePath)) return;
 
