@@ -32,7 +32,7 @@ async function serverDetails(sageMessage: SageMessage): Promise<void> {
 		return sageMessage.replyStack.whisper("No Server Found!");
 	}
 
-	const roles = <TRole[]>await Arrayish.from(server.roles).mapAsync(async role => {
+	const roles = <TRole[]>await Arrayish.async(server.roles).map(async role => {
 		return {
 			role: role,
 			discordRole: await sageMessage.discord.fetchGuildRole(role.did)

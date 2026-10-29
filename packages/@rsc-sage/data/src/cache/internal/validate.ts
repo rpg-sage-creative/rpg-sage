@@ -36,7 +36,7 @@ export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(
 
 		fileCount += files.length;
 
-		await Arrayish.from(files).forEachAsync(async file => {
+		await Arrayish.async(files).forEach(async file => {
 			const core = await readJsonFile<CacheItem>(file).catch(errorReturnUndefined);
 			if (!core) {
 				errors.push(file);

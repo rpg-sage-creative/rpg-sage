@@ -755,7 +755,7 @@ export class SageEventCache {
 
 		const objectCache = DataTable.for("Game");
 		const cacheItems = objectCache.filter(contentFilter);
-		const cores = await Arrayish.from(cacheItems).mapAsync(item => objectCache.fetch<GameCore>(item));
+		const cores = await Arrayish.async(cacheItems).map(item => objectCache.fetch<GameCore>(item));
 		return cores.filter(isDefined).map((core: GameCore) => new Game(core, server, this));
 	}
 

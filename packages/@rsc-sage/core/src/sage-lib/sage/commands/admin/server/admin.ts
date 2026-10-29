@@ -37,7 +37,7 @@ async function adminList(sageMessage: SageMessage): Promise<void> {
 		const renderableContent = createAdminRenderableContent(sageMessage.server);
 		renderableContent.setTitle(`<b>admin-list</b>`);
 		if (users.length) {
-			await Arrayish.from(users).forEachAsync(async user => renderUser(renderableContent, user));
+			await Arrayish.async(users).forEach(async user => renderUser(renderableContent, user));
 		} else {
 			renderableContent.append(`<blockquote>No Admins Found!</blockquote>`);
 		}

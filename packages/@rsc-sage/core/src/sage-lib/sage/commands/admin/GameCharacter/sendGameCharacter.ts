@@ -68,7 +68,7 @@ export async function sendGameCharacter(sageMessage: SageMessage, character: Gam
 	}
 
 	const autoChannels = character.autoChannels;
-	const autoChannelItems = await Arrayish.from(autoChannels).mapAsync(async data => {
+	const autoChannelItems = await Arrayish.async(autoChannels).map(async data => {
 		const parts: string[] = [];
 		parts.push(toChannelMention(data.channelId) ?? data.channelId);
 		if (data.dialogPostType !== undefined) {

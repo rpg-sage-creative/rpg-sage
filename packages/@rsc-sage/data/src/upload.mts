@@ -47,7 +47,7 @@ async function main() {
 			// const cores: BaseCacheItem[] = [];
 			const errors: string[] = [];
 
-			await Arrayish.from(files).forBatchAsync(ddbTable.repo.batchPutMaxItemCount, async batchFiles => {
+			await Arrayish.async(files).forBatch(ddbTable.repo.batchPutMaxItemCount, async batchFiles => {
 
 				const cores: RepoItem[] = [];
 				const coreFiles: string[] = [];

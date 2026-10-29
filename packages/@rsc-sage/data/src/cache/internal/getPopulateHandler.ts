@@ -87,7 +87,7 @@ async function populateFromFile<
 
 	const errors: string[] = [];
 
-	await Arrayish.from(files).forEachAsync(async file => {
+	await Arrayish.async(files).forEach(async file => {
 
 		const json = await readJsonFile<CacheItem>(file).catch(noop);
 		const cached = json ? dataTable.put(json) : false;

@@ -112,7 +112,7 @@ export async function channelDetails(sageMessage: SageMessage, channel?: SageCha
 //#region list
 
 async function fetchAndFilterGuildChannels(sageMessage: SageMessage, channels: SageChannel[]): Promise<GuildChannel[]> {
-	const guildChannels = await Arrayish.from(channels).mapAsync(async channel => sageMessage.sageCache.fetchChannel(channel.id));
+	const guildChannels = await Arrayish.async(channels).map(async channel => sageMessage.eventCache.fetchChannel(channel.id));
 	const existing = guildChannels.filter(isDefined) as GuildChannel[];
 
 	const filter = sageMessage.args.getString("filter");

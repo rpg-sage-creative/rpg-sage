@@ -213,7 +213,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 
 		const deletedSet = new Set<string>();
 		// const ddbQueue: any[] = [];
-		await Arrayish.from(files).forEachAsync(async filePath => {
+		await Arrayish.async(files).forEach(async filePath => {
 			// due to getNewestCore, we might delete a later item
 			if (deletedSet.has(filePath)) return;
 
