@@ -1,4 +1,4 @@
-import { error, filterAndMap, isDefined, sortComparable, toUnique, toUniqueDefined, trace, type RenderableContent } from "@rsc-utils/core-utils";
+import { Arrayish, error, isDefined, sortComparable, toUnique, toUniqueDefined, trace, type RenderableContent } from "@rsc-utils/core-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../../sage-pf2e/index.js";
 import { createCommandRenderableContent } from "../cmd.js";
 
@@ -8,7 +8,7 @@ function renderAllSource(objectType: string, objectTypePlural: string): Renderab
 		categories = all.map(source => source.searchResultCategory).filter(toUnique);
 	content.setTitle(`<b>${objectTypePlural} (${all.length})</b>`);
 	categories.forEach(category => {
-		const byCategory = filterAndMap(all, source => source.searchResultCategory === category, source => source.toSearchResult());
+		const byCategory = Arrayish.from(all).filterAndMap(source => source.searchResultCategory === category, source => source.toSearchResult());
 		content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join("\n> ")}`);
 	});
 	return content;
@@ -59,7 +59,7 @@ function renderAllBySource(objectType: string, objectTypePlural: string): Render
 			// categories.sort(sortCatWithRarity);
 			if (categories.length) {
 				categories.forEach(category => {
-					const byCategory = filterAndMap(bySource, item => item.searchResultCategory === category, item => item.toSearchResult());
+					const byCategory = Arrayish.from(bySource).filterAndMap(item => item.searchResultCategory === category, item => item.toSearchResult());
 					content.append(`<b>${category} (${byCategory.length})</b>\n> ${byCategory.join(", ")}`);
 				});
 			} else {

@@ -34,7 +34,20 @@ afterAll(() => {
 	vitest.restoreAllMocks();
 });
 
+function evenValue(v: number) { return v % 2 === 0; }
+function evenIndex(_: unknown, i: number) { return i % 2 === 0; }
+
 describe("Arrayish", () => {
+
+	test(".filterAndMap", () => {
+		// numbers 0 - 9
+		const dataArray = Array.from({ length:10 }, (_, i) => i);
+		const iterator = SpiedOn.from(dataArray);
+
+		// square the even values
+		const mappedValues = iterator.filterAndMap(evenValue, v => v * v);
+		expect(mappedValues).toEqual([0,4,16,36,64]);
+	});
 
 	describe(".forEach", () => {
 

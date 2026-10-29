@@ -125,6 +125,28 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		return outValues;
 	}
 
+	public filterAndMap<V>(
+			predicate: (value: T, index: number, iterableLike: Readonly<U>) => unknown,
+			callbackfn: (value: T, index: number, iterableLike: Readonly<U>) => V,
+			thisArg?: any): V[] {
+		const { iterableLike } = this;
+		const outValues: V[] = [];
+		this.start();
+
+		// start at -1 and use ++index
+		let index = -1;
+		for (const value of this) {
+			if (predicate.call(thisArg, value, ++index, iterableLike)) {
+				outValues.push(callbackfn.call(thisArg, value, index, iterableLike));
+				this.filtered(index);
+			}
+			this.increment();
+		}
+
+		this.finish();
+		return outValues;
+	}
+
 	public find(predicate: (value: T, index: number, iterableLike: Readonly<U>) => unknown, thisArg?: any): OrUndefined<T> {
 		const { iterableLike } = this;
 		this.start();
