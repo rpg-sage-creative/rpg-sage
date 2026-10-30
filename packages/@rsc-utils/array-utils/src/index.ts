@@ -6,4 +6,3 @@ export * from "./partition.js";
 export * from "./remove.js";
 export * from "./removeAt.js";
 export * from "./splitIntoBatches.js";
-export * from "./without.js";
