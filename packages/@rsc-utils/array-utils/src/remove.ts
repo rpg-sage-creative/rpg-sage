@@ -1,4 +1,3 @@
-import { isDefined } from "@rsc-utils/type-utils";
 import { removeAt } from "./removeAt.js";
 
 /** Removes the values that return a truthy value, returning values that are defined (!null && !undefined). */
@@ -11,8 +10,9 @@ export function remove<T, U extends T[] = T[]>(array: T[], predicate: (value: T,
 		}
 	});
 
+	// we only care about values that are defined
+	const isDefined = (value: unknown) => value !== null && value !== undefined;
+
 	// removeAt safely removes values by index
-	return removeAt(array, indexes)
-		// we only care about values that are defined
-		.filter(isDefined) as U;
+	return removeAt(array, indexes).filter(isDefined) as U;
 }

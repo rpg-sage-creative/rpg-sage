@@ -1,4 +1,3 @@
-import { isDefined } from "@rsc-utils/type-utils";
 import { sortPrimitive } from "./sortPrimitive.js";
 import type { Sorter } from "./types.js";
 
@@ -24,7 +23,7 @@ export function sortAsPrimitive(dataType: "date" | "number" | "string"): Sorter<
 	}
 
 	// allows null/undefined to not be converted, ex: "null" / "undefined"
-	const valueConverter = (value: unknown) => isDefined(value) ? dataConverter(value) : value;
+	const valueConverter = (value: unknown) => value !== null && value !== undefined ? dataConverter(value) : value;
 
 	// return final sorter
 	return (a: unknown, b: unknown) => sortPrimitive(valueConverter(a), valueConverter(b));

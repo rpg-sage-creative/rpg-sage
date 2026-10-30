@@ -1,5 +1,6 @@
-import type { OrUndefined } from "@rsc-utils/type-utils";
 import { sortPrimitive } from "./sort/sortPrimitive.js";
+
+type OrUndefined<T> = T | undefined;
 
 /** Remove the value at the given index using .splice(). */
 export function removeAt<T>(array: T[], index: number): OrUndefined<T>;

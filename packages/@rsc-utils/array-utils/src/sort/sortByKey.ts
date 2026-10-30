@@ -1,6 +1,7 @@
-import type { Optional } from "@rsc-utils/type-utils";
 import { sortPrimitive } from "./sortPrimitive.js";
 import type { Sorter, SortResult } from "./types.js";
+
+type Optional<T> = T | null | undefined;
 
 /** Creates a sorter that will sort objects by the values of the given keys. */
 export function sortByKey<T>(...keys: (keyof T)[]): Sorter<T> {

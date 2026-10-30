@@ -1,4 +1,4 @@
-import { isDefined, type Optional } from "@rsc-utils/type-utils";
+type Optional<T> = T | null | undefined;
 
 /**
  * Filter that reduces an array to unique/defined values.
@@ -6,5 +6,5 @@ import { isDefined, type Optional } from "@rsc-utils/type-utils";
  * Keeps only the first instance of a given value.
  */
 export function toUniqueDefined<T>(value: Optional<T> | void, index: number, array: (Optional<T> | void)[]): value is T {
-	return isDefined(value) && array.indexOf(value) === index;
+	return value !== null && value !== undefined && array.indexOf(value) === index;
 }
