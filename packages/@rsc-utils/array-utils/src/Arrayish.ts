@@ -86,7 +86,7 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 	}
 
 	/** Create an Parallel Arrayish with the iterableLike of this Arrayish */
-	public parallel(options: ParallelOptions) {
+	public parallel(options?: ParallelOptions) {
 		return new Parallel<T, U>(this.iterableLike, options).attachEvents(this);
 	}
 
@@ -443,13 +443,13 @@ class Async<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase
 }
 
 type ParallelOptions = {
-	/** default 1, Infinity for all */
+	/** default = Infinity (for all) */
 	concurrency: number;
 };
 
 class Parallel<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase<T, U> {
 
-	public constructor(iterableLike: U, public options: ParallelOptions) {
+	public constructor(iterableLike: U, public options?: ParallelOptions) {
 		super(iterableLike);
 	}
 
