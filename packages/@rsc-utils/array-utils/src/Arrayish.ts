@@ -24,6 +24,12 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 	public found() { }
 	public notFound() { }
 
+	private attachEvents(other: ArrayishBase<any, any>): this {
+		["start", "increment", "filtered", "finish", "found", "notFound"]
+			.forEach(key => other[key as "start"] = this[key as "start"]);
+		return this;
+	}
+
 	//#endregion
 
 	/** stores the result of isArray(this.iterable) */
@@ -76,18 +82,12 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 
 	/** Create an Async Arrayish with the iterableLike of this Arrayish */
 	public async() {
-		const async = new Async<T, U>(this.iterableLike);
-		["start", "increment", "filtered", "finish", "found", "notFound"]
-			.forEach(key => async[key as "start"] = this[key as "start"]);
-		return async;
+		return new Async<T, U>(this.iterableLike).attachEvents(this);
 	}
 
 	/** Create an Parallel Arrayish with the iterableLike of this Arrayish */
 	public parallel(options: ParallelOptions) {
-		const async = new Parallel<T, U>(this.iterableLike, options);
-		["start", "increment", "filtered", "finish", "found", "notFound"]
-			.forEach(key => async[key as "start"] = this[key as "start"]);
-		return async;
+		return new Parallel<T, U>(this.iterableLike, options).attachEvents(this);
 	}
 
 	/** Creates a new Array from the iterableLike of this Arrayish */
@@ -106,7 +106,9 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 
 export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase<T, U> {
 
-	public filter(predicate: (value: T, index: number, iterableLike: U) => unknown, thisArg?: any): T[] {
+	public filter(
+			predicate: (value: T, index: number, iterableLike: U) => unknown,
+			thisArg?: any): T[] {
 		const { iterableLike } = this;
 		const outValues: T[] = [];
 		this.start();
@@ -125,6 +127,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		return outValues;
 	}
 
+	/** performs a .filter().map() with a single iteration */
 	public filterAndMap<V>(
 			predicate: (value: T, index: number, iterableLike: U) => unknown,
 			callbackfn: (value: T, index: number, iterableLike: U) => V,
@@ -147,7 +150,9 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		return outValues;
 	}
 
-	public find(predicate: (value: T, index: number, iterableLike: U) => unknown, thisArg?: any): OrUndefined<T> {
+	public find(
+			predicate: (value: T, index: number, iterableLike: U) => unknown,
+			thisArg?: any): OrUndefined<T> {
 		const { iterableLike } = this;
 		this.start();
 
@@ -165,8 +170,11 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		return undefined;
 	}
 
-	/** batch iteration, like forEach, but in batches */
-	public forBatch(batchSize: number, callbackfn: (values: T[], startIndex: number, iterableLike: U) => void, thisArg?: any): void {
+	/** like forEach, but in batches */
+	public forBatch(
+			batchSize: number,
+			callbackfn: (values: T[], startIndex: number, iterableLike: U) => void,
+			thisArg?: any): void {
 		const { iterableLike } = this;
 		this.start();
 
@@ -186,7 +194,9 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		this.finish();
 	}
 
-	public forEach(callbackfn: (value: T, index: number, iterableLike: U) => void, thisArg?: any): void {
+	public forEach(
+			callbackfn: (value: T, index: number, iterableLike: U) => void,
+			thisArg?: any): void {
 		const { iterableLike } = this;
 		this.start();
 
@@ -200,7 +210,9 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		this.finish();
 	}
 
-	public map<V>(callbackfn: (value: T, index: number, iterableLike: U) => V, thisArg?: any): V[] {
+	public map<V>(
+			callbackfn: (value: T, index: number, iterableLike: U) => V,
+			thisArg?: any): V[] {
 		const { iterableLike } = this;
 		const outValues: V[] = [];
 		this.start();
@@ -221,7 +233,9 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	 * A convenience method for array.map(callbackfn).find(obj => obj !== null && obj !== undefined) that uses a single iteration.
 	 * Triggers .found(index) if a value other than undefined is returned.
 	 */
-	public mapFirst<V>(callbackfn: (value: T, index: number, iterableLike: U) => V, thisArg?: any): OrUndefined<V> {
+	public mapFirst<V>(
+			callbackfn: (value: T, index: number, iterableLike: U) => V,
+			thisArg?: any): OrUndefined<V> {
 		const { iterableLike } = this;
 		this.start();
 
