@@ -106,7 +106,7 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 
 export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase<T, U> {
 
-	public filter(predicate: (value: T, index: number, iterableLike: Readonly<U>) => unknown, thisArg?: any): T[] {
+	public filter(predicate: (value: T, index: number, iterableLike: U) => unknown, thisArg?: any): T[] {
 		const { iterableLike } = this;
 		const outValues: T[] = [];
 		this.start();
@@ -126,8 +126,8 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	}
 
 	public filterAndMap<V>(
-			predicate: (value: T, index: number, iterableLike: Readonly<U>) => unknown,
-			callbackfn: (value: T, index: number, iterableLike: Readonly<U>) => V,
+			predicate: (value: T, index: number, iterableLike: U) => unknown,
+			callbackfn: (value: T, index: number, iterableLike: U) => V,
 			thisArg?: any): V[] {
 		const { iterableLike } = this;
 		const outValues: V[] = [];
@@ -147,7 +147,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		return outValues;
 	}
 
-	public find(predicate: (value: T, index: number, iterableLike: Readonly<U>) => unknown, thisArg?: any): OrUndefined<T> {
+	public find(predicate: (value: T, index: number, iterableLike: U) => unknown, thisArg?: any): OrUndefined<T> {
 		const { iterableLike } = this;
 		this.start();
 
@@ -166,7 +166,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	}
 
 	/** batch iteration, like forEach, but in batches */
-	public forBatch(batchSize: number, callbackfn: (values: T[], startIndex: number, iterableLike: Readonly<U>) => void, thisArg?: any): void {
+	public forBatch(batchSize: number, callbackfn: (values: T[], startIndex: number, iterableLike: U) => void, thisArg?: any): void {
 		const { iterableLike } = this;
 		this.start();
 
@@ -186,7 +186,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		this.finish();
 	}
 
-	public forEach(callbackfn: (value: T, index: number, iterableLike: Readonly<U>) => void, thisArg?: any): void {
+	public forEach(callbackfn: (value: T, index: number, iterableLike: U) => void, thisArg?: any): void {
 		const { iterableLike } = this;
 		this.start();
 
@@ -200,7 +200,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		this.finish();
 	}
 
-	public map<V>(callbackfn: (value: T, index: number, iterableLike: Readonly<U>) => V, thisArg?: any): V[] {
+	public map<V>(callbackfn: (value: T, index: number, iterableLike: U) => V, thisArg?: any): V[] {
 		const { iterableLike } = this;
 		const outValues: V[] = [];
 		this.start();
@@ -221,7 +221,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	 * A convenience method for array.map(callbackfn).find(obj => obj !== null && obj !== undefined) that uses a single iteration.
 	 * Triggers .found(index) if a value other than undefined is returned.
 	 */
-	public mapFirst<V>(callbackfn: (value: T, index: number, iterableLike: Readonly<U>) => V, thisArg?: any): OrUndefined<V> {
+	public mapFirst<V>(callbackfn: (value: T, index: number, iterableLike: U) => V, thisArg?: any): OrUndefined<V> {
 		const { iterableLike } = this;
 		this.start();
 
@@ -307,7 +307,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 
 class Async<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase<T, U> {
 
-	public async filter(predicate: (value: T, index: number, iterableLike: Readonly<U>) => Awaitable<unknown>, thisArg?: any): Promise<T[]> {
+	public async filter(predicate: (value: T, index: number, iterableLike: U) => Awaitable<unknown>, thisArg?: any): Promise<T[]> {
 		const { iterableLike } = this;
 		const outValues: T[] = [];
 		this.start();
@@ -327,7 +327,7 @@ class Async<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase
 	}
 
 	/** Ignores concurrency to ensure the returned value is the lowest index to return truthy. */
-	public async find(predicate: (value: T, index: number, iterableLike: Readonly<U>) => Awaitable<unknown>, thisArg?: any): Promise<OrUndefined<T>> {
+	public async find(predicate: (value: T, index: number, iterableLike: U) => Awaitable<unknown>, thisArg?: any): Promise<OrUndefined<T>> {
 		const { iterableLike } = this;
 		this.start();
 
@@ -346,7 +346,7 @@ class Async<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase
 	}
 
 	/** batch iteration, like forEach, but in batches */
-	public async forBatch(batchSize: number, callbackfn: (values: T[], startIndex: number, iterableLike: Readonly<U>) => Awaitable<void>, thisArg?: any): Promise<void> {
+	public async forBatch(batchSize: number, callbackfn: (values: T[], startIndex: number, iterableLike: U) => Awaitable<void>, thisArg?: any): Promise<void> {
 		const { iterableLike, length } = this;
 		this.start();
 
@@ -366,7 +366,7 @@ class Async<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase
 		this.finish();
 	}
 
-	public async forEach(callbackfn: (value: T, index: number, iterableLike: Readonly<U>) => Awaitable<void>, thisArg?: any): Promise<void> {
+	public async forEach(callbackfn: (value: T, index: number, iterableLike: U) => Awaitable<void>, thisArg?: any): Promise<void> {
 		const { iterableLike } = this;
 		this.start();
 
@@ -380,7 +380,7 @@ class Async<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase
 		this.finish();
 	}
 
-	public async map<V>(callbackfn: (value: T, index: number, iterableLike: Readonly<U>) => Awaitable<V>, thisArg?: any): Promise<V[]> {
+	public async map<V>(callbackfn: (value: T, index: number, iterableLike: U) => Awaitable<V>, thisArg?: any): Promise<V[]> {
 		const { iterableLike } = this;
 		const outValues: V[] = [];
 		this.start();
@@ -409,7 +409,7 @@ class Parallel<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishB
 		super(iterableLike);
 	}
 
-	public async forEach(callbackfn: (value: T, index: number, iterableLike: Readonly<U>) => Awaitable<void>, thisArg?: any): Promise<void> {
+	public async forEach(callbackfn: (value: T, index: number, iterableLike: U) => Awaitable<void>, thisArg?: any): Promise<void> {
 		const { iterableLike, length } = this;
 		this.start();
 
@@ -436,7 +436,7 @@ class Parallel<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishB
 		this.finish();
 	}
 
-	public async map<V>(callbackfn: (value: T, index: number, iterableLike: Readonly<U>) => Awaitable<V>, thisArg?: any): Promise<V[]> {
+	public async map<V>(callbackfn: (value: T, index: number, iterableLike: U) => Awaitable<V>, thisArg?: any): Promise<V[]> {
 		const { iterableLike, length } = this;
 		const outValues: V[] = [];
 		this.start();

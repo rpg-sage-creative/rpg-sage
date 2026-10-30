@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, test, vitest } from "vitest";
-import { Arrayish } from "../build/index.js";
+import { Arrayish, toUnique } from "../build/index.js";
 import { tagLiterals } from "@rsc-tools/dev-scripts";
 
 const spies = {
@@ -39,14 +39,34 @@ function evenIndex(_: unknown, i: number) { return i % 2 === 0; }
 
 describe("Arrayish", () => {
 
-	test(".filterAndMap", () => {
-		// numbers 0 - 9
-		const dataArray = Array.from({ length:10 }, (_, i) => i);
-		const iterator = SpiedOn.from(dataArray);
+	describe(".filterAndMap", () => {
 
-		// square the even values
-		const mappedValues = iterator.filterAndMap(evenValue, v => v * v);
-		expect(mappedValues).toEqual([0,4,16,36,64]);
+		test(`filterAndMap --> "\${val}-\${val}"`, () => {
+			const input = [2,1,null,"2",true,null,undefined,2,null,"1",1,false,true];
+			const expected = [
+				'2-2',
+				'1-1',
+				'null-null',
+				'2-2',
+				'true-true',
+				'undefined-undefined',
+				'1-1',
+				'false-false'
+			];
+			const output = Arrayish.from(input).filterAndMap(toUnique, val => `${val}-${val}`);
+			expect(output).toStrictEqual(expected);
+		});
+
+		test(".filterAndMap --> square the evens", () => {
+			// numbers 0 - 9
+			const dataArray = Array.from({ length:10 }, (_, i) => i);
+			const iterator = SpiedOn.from(dataArray);
+
+			// square the even values
+			const mappedValues = iterator.filterAndMap(evenValue, v => v * v);
+			expect(mappedValues).toEqual([0,4,16,36,64]);
+		});
+
 	});
 
 	describe(".forEach", () => {
