@@ -1,5 +1,5 @@
 import type { Localizer } from "@rsc-sage/localization";
-import { ELLIPSIS, partition, type Snowflake } from "@rsc-utils/core-utils";
+import { Arrayish, ELLIPSIS, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { MacroOwner } from "../../../model/MacroOwner.js";
@@ -242,7 +242,7 @@ export async function createListComponentsAndMode(sageCommand: SageCommand, args
 
 		if (state.ownerType) {
 			const owners = await MacroOwner.getByType(sageCommand, state.ownerType);
-			const ownerPages = partition(owners, (_, index) => Math.floor(index / DiscordMaxValues.component.select.optionCount));
+			const ownerPages = Arrayish.from(owners).partition((_, index) => Math.floor(index / DiscordMaxValues.component.select.optionCount));
 
 			if (ownerPages.length > 1) {
 				const selectOwnerPageSelect = createSelectOwnerPageSelect({ ...baseArgs, ownerPages });

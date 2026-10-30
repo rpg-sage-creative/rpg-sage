@@ -1,4 +1,4 @@
-import { partition, type RenderableContent } from "@rsc-utils/core-utils";
+import { Arrayish, type RenderableContent } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, toUserMention } from "@rsc-utils/discord-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { Macro } from "../../../model/Macro.js";
@@ -34,7 +34,7 @@ async function toRenderableContent(sageCommand: SageCommand, args: Args): Promis
 
 	if (!state.ownerId) {
 		const owners = await MacroOwner.getByType(sageCommand, state.ownerType);
-		const ownerPages = partition(owners, (_, index) => Math.floor(index / DiscordMaxValues.component.select.optionCount));
+		const ownerPages = Arrayish.from(owners).partition((_, index) => Math.floor(index / DiscordMaxValues.component.select.optionCount));
 		const pageIndex = Math.max(0, state.ownerPageIndex);
 		const ownerPage = ownerPages[pageIndex] ?? ownerPages[0];
 

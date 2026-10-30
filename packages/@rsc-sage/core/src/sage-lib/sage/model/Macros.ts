@@ -1,4 +1,4 @@
-import { partition, sortByKey, sortPrimitive, StringMatcher, toUniqueDefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Arrayish, sortByKey, sortPrimitive, StringMatcher, toUniqueDefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues } from "@rsc-utils/discord-utils";
 import type { MacroBase } from "@rsc-utils/game-utils";
 import type { Bot } from "./Bot.js";
@@ -122,13 +122,13 @@ export class Macros<Category extends string = string> {
 		// paginate macros
 		const macroMap = new Map<string, MacroMeta<Category>>();
 		const categoryMap = new Map<string, CategoryMeta<Category>>();
-		const categoryPages = partition(categories, (_, index) => Math.floor(index / Macros.PageSize));
+		const categoryPages = Arrayish.from(categories).partition((_, index) => Math.floor(index / Macros.PageSize));
 		const tree = categoryPages.map((categoryPage, categoryPageIndex) => {
 			const categories = categoryPage.map((category, categoryIndex) => {
 				const categoryMacros = isUncategorized(category)
 					? macros.filter(macro => macro.isUncategorized)
 					: macros.filter(macro => category === macro.category);
-				const categoryMacroPages = partition(categoryMacros, (_, index) => Math.floor(index / Macros.PageSize));
+				const categoryMacroPages = Arrayish.from(categoryMacros).partition((_, index) => Math.floor(index / Macros.PageSize));
 				const macroPages = categoryMacroPages.map((macroPage, macroPageIndex) => {
 					const macros = macroPage.map((macro, macroIndex) => {
 						const macroMeta = { categoryPageIndex, categoryIndex, category, macroPageIndex, macroIndex, macro } as MacroMeta<Category>;

@@ -41,7 +41,7 @@ describe("Arrayish", () => {
 
 	describe(".filterAndMap", () => {
 
-		test(`filterAndMap --> "\${val}-\${val}"`, () => {
+		test(`.filterAndMap --> "\${val}-\${val}"`, () => {
 			const input = [2,1,null,"2",true,null,undefined,2,null,"1",1,false,true];
 			const expected = [
 				'2-2',
@@ -149,7 +149,7 @@ describe("Arrayish", () => {
 
 	});
 
-	describe("mapFirst", () => {
+	describe(".mapFirst", () => {
 		const values = [2,1,null,true];
 
 		const tests = [
@@ -217,6 +217,25 @@ describe("Arrayish", () => {
 			expect(spies.notFound).toHaveBeenCalledTimes(1);
 
 			expect(mappedValue).toBeUndefined();
+		});
+
+	});
+
+	describe(".partition", () => {
+
+		test(`partition()`, () => {
+			const inputValues = [2,1,null,"2",true,null,undefined,2,null,"1",1,false,true];
+			const inputFunction = (val: unknown) => ["boolean","number","string","object","undefined","null"].indexOf(typeof(val));
+			const expected = [
+				[ true, false, true ],
+				[ 2, 1, 2, 1 ],
+				[ '2', '1' ],
+				[ null, null, null ],
+				[ undefined ]
+			];
+			const iterator = SpiedOn.from(inputValues);
+			const partitioned = iterator.partition(inputFunction);
+			expect(partitioned).toStrictEqual(expected);
 		});
 
 	});

@@ -26,7 +26,7 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 
 	private attachEvents(other: ArrayishBase<any, any>): this {
 		["start", "increment", "filtered", "finish", "found", "notFound"]
-			.forEach(key => other[key as "start"] = this[key as "start"]);
+			.forEach(key => this[key as "start"] = other[key as "start"]);
 		return this;
 	}
 
@@ -109,6 +109,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	public filter(
 			predicate: (value: T, index: number, iterableLike: U) => unknown,
 			thisArg?: any): T[] {
+
 		const { iterableLike } = this;
 		const outValues: T[] = [];
 		this.start();
@@ -132,6 +133,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 			predicate: (value: T, index: number, iterableLike: U) => unknown,
 			callbackfn: (value: T, index: number, iterableLike: U) => V,
 			thisArg?: any): V[] {
+
 		const { iterableLike } = this;
 		const outValues: V[] = [];
 		this.start();
@@ -153,6 +155,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	public find(
 			predicate: (value: T, index: number, iterableLike: U) => unknown,
 			thisArg?: any): OrUndefined<T> {
+
 		const { iterableLike } = this;
 		this.start();
 
@@ -175,6 +178,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 			batchSize: number,
 			callbackfn: (values: T[], startIndex: number, iterableLike: U) => void,
 			thisArg?: any): void {
+
 		const { iterableLike } = this;
 		this.start();
 
@@ -197,6 +201,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	public forEach(
 			callbackfn: (value: T, index: number, iterableLike: U) => void,
 			thisArg?: any): void {
+
 		const { iterableLike } = this;
 		this.start();
 
@@ -213,6 +218,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	public map<V>(
 			callbackfn: (value: T, index: number, iterableLike: U) => V,
 			thisArg?: any): V[] {
+
 		const { iterableLike } = this;
 		const outValues: V[] = [];
 		this.start();
@@ -236,6 +242,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	public mapFirst<V>(
 			callbackfn: (value: T, index: number, iterableLike: U) => V,
 			thisArg?: any): OrUndefined<V> {
+
 		const { iterableLike } = this;
 		this.start();
 
@@ -252,6 +259,29 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 
 		this.notFound();
 		return undefined;
+	}
+
+	/** Partitions the values into nested Arrays based on the partitionfn */
+	public partition(
+			partitionfn: (value: T, index: number, arrayLike: U) => number,
+			thisArg?: any): T[][] {
+
+		const { iterableLike } = this;
+		const partitioned: T[][] = [];
+		this.start();
+
+		// start at -1 and use ++index
+		let index = -1;
+		for (const value of this) {
+			const partIndex = partitionfn.call(thisArg, value, ++index, iterableLike);
+			if (!partitioned[partIndex]) {
+				partitioned[partIndex] = [];
+			}
+			partitioned[partIndex].push(value);
+		}
+
+		this.finish();
+		return partitioned;
 	}
 
 	public slice(start?: number, end?: number): T[] {

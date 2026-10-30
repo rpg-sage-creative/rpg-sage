@@ -1,4 +1,4 @@
-import { partition, sortPrimitive, StringSet } from "@rsc-utils/core-utils";
+import { Arrayish, sortPrimitive, StringSet } from "@rsc-utils/core-utils";
 import { Currency, unpipe } from "@rsc-utils/game-utils";
 import type { Message } from "discord.js";
 import { Condition } from "../../../../../gameSystems/Condition.js";
@@ -21,9 +21,8 @@ export async function sendGameCharacterMods(sageMessage: SageMessage, character:
 	let showCurrency = false;
 
 	const sortedKeys = [...updatedKeys].sort(sortPrimitive);
-	const [statKeys, templateKeys] = partition(sortedKeys, key =>
-		key.toLowerCase().endsWith(".template") ? 1 : 0
-	);
+	const [statKeys, templateKeys] = Arrayish.from(sortedKeys)
+		.partition(key => key.toLowerCase().endsWith(".template") ? 1 : 0);
 
 	if (statKeys?.length) {
 		renderableContent.appendTitledSection(`<b>Stats Updated</b>`);

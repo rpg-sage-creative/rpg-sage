@@ -1,4 +1,4 @@
-import { error, errorReturnEmptyArray, errorReturnFalse, errorReturnUndefined, formatDataFilePath, getCodeName, getDataRoot, partition, tagLiterals, warnReturnUndefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Arrayish, error, errorReturnEmptyArray, errorReturnFalse, errorReturnUndefined, formatDataFilePath, getCodeName, getDataRoot, tagLiterals, warnReturnUndefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, readJsonFileSync, readText, writeFile } from "@rsc-utils/io-utils";
 import { join } from "node:path";
 import { ensureNonNilId } from "./internal/ensureNonNilId.js";
@@ -546,7 +546,7 @@ export class DataTable<
 			return loaded;
 		}
 
-		const [sources, others] = partition(files, file => file.includes("/Source/") ? 0 : 1);
+		const [sources, others] = Arrayish.from(files).partition(file => file.includes("/Source/") ? 0 : 1);
 
 		for (const source of sources) {
 			const core = await readJsonFile<Core>(source).catch(warnReturnUndefined);

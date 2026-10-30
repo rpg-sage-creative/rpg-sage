@@ -1,5 +1,5 @@
 import { EmbedColorType, type EmbedColor } from "@rsc-sage/data";
-import { Color, error, errorReturnUndefined, getEnumValues, isDefined, partition, stringifyJson } from "@rsc-utils/core-utils";
+import { Arrayish, Color, error, errorReturnUndefined, getEnumValues, isDefined, stringifyJson } from "@rsc-utils/core-utils";
 import { EmbedBuilder } from "@rsc-utils/discord-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
@@ -144,7 +144,7 @@ async function _colorList(sageMessage: SageMessage, which: BotServerGameType, ca
 	const filteredColors = types.length ? botColors.filter(({ type }) => types.includes(type)) : botColors;
 	const contents = [`### RPG Sage ${BotServerGameType[which]} Colors *(${filteredColors.length})*`];
 	const allEmbeds = renderColors(sageMessage, ...filteredColors.map(({ type }) => ({ which, type })));
-	const embedGroups = partition(allEmbeds, (_, index) => Math.floor(index / 10));
+	const embedGroups = Arrayish.from(allEmbeds).partition((_, index) => Math.floor(index / 10));
 	for (const embeds of embedGroups) {
 		const content = contents.shift();
 		await sageMessage.replyStack.send({ content, embeds });

@@ -1,4 +1,4 @@
-import { HasIdCore, partition, type IdCore } from "@rsc-utils/core-utils";
+import { Arrayish, HasIdCore, type IdCore } from "@rsc-utils/core-utils";
 import type { IMapLocation } from "../map/map.js";
 import type { IWeatherDayResult } from "./WeatherGenerator.js";
 
@@ -14,7 +14,7 @@ export class WeatherCalendar extends HasIdCore<WeatherCalendarCore> {
 	public get data() { return this.core?.data ?? []; }
 
 	public get all() { return this.data.slice(); }
-	public get months() { return partition(this.data, t => t.date.monthType); }
-	public get tempeateSeasons() { return partition(this.data, t => t.date.temperateSeasonType); }
-	public get tropicalSeasons() { return partition(this.data, t => t.date.tropicalSeasonType); }
+	public get months() { return Arrayish.from(this.data).partition(t => t.date.monthType); }
+	public get tempeateSeasons() { return Arrayish.from(this.data).partition(t => t.date.temperateSeasonType); }
+	public get tropicalSeasons() { return Arrayish.from(this.data).partition(t => t.date.tropicalSeasonType); }
 }
