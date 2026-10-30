@@ -4,8 +4,8 @@ import type { SortResult } from "./types.js";
 
 /**
  * Sorts values in ascending order.
- * undefined is considered the "greatest" value.
- * null is considered the "second greatest" value.
+ * undefined is considered the "greatest" value. (last/end of the array)
+ * null is considered the "second greatest" value. (second to last/end of array before undefined)
  * string vs string comparison is first done ignoring case.
  */
 export function sortPrimitive<T extends boolean | Date | number | string>(a: Optional<T>, b: Optional<T>): SortResult {
