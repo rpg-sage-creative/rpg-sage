@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, test, vitest } from "vitest";
 import { Arrayish, toUnique } from "../build/index.js";
 import { tagLiterals } from "@rsc-tools/dev-scripts";
+import { randomInt } from "node:crypto";
 
 const spies = {
 	start: (...args: any[]) => {},
@@ -16,6 +17,10 @@ class SpiedOn<T> extends Arrayish<T> {
 	finish(...args: any[]) { spies.finish(...args); }
 	found(...args: any[]) { spies.found(...args); }
 	notFound(...args: any[]) { spies.notFound(...args); }
+}
+
+async function sleep(ms: number): Promise<void> {
+	return await new Promise(res => setTimeout(res, ms ?? 0));
 }
 
 beforeAll(() => {
@@ -39,9 +44,11 @@ function evenIndex(_: unknown, i: number) { return i % 2 === 0; }
 
 describe("Arrayish", () => {
 
+	test.todo(".filter");
+
 	describe(".filterAndMap", () => {
 
-		test(`.filterAndMap --> "\${val}-\${val}"`, () => {
+		test(`(array).filterAndMap --> "\${val}-\${val}"`, () => {
 			const input = [2,1,null,"2",true,null,undefined,2,null,"1",1,false,true];
 			const expected = [
 				'2-2',
@@ -57,7 +64,7 @@ describe("Arrayish", () => {
 			expect(output).toStrictEqual(expected);
 		});
 
-		test(".filterAndMap --> square the evens", () => {
+		test("(array).filterAndMap --> square the evens", () => {
 			// numbers 0 - 9
 			const dataArray = Array.from({ length:10 }, (_, i) => i);
 			const iterator = SpiedOn.from(dataArray);
@@ -69,9 +76,13 @@ describe("Arrayish", () => {
 
 	});
 
+	test.todo(".find");
+
+	test.todo(".forBatch");
+
 	describe(".forEach", () => {
 
-		test("Arrayish(array).forEach", () => {
+		test("(array).forEach", () => {
 			const dataArray = new Array(100).fill(1);
 			const iterator = SpiedOn.from(dataArray);
 
@@ -87,7 +98,7 @@ describe("Arrayish", () => {
 			});
 		});
 
-		test("Arrayish(set).forEach", () => {
+		test("(set).forEach", () => {
 			const dataArray = [1, 1, "a", "a", "b", "b", 2, 2, "c", "c", "1", "2", "3", "4", "5"];
 			const setArray = new Set(dataArray);
 			const iterator = SpiedOn.from(setArray);
@@ -112,7 +123,7 @@ describe("Arrayish", () => {
 
 	describe(".map", () => {
 
-		test("Arrayish(array).map", () => {
+		test("(array).map", () => {
 			const dataArray = new Array(100).fill(1);
 			const iterator = SpiedOn.from(dataArray);
 
@@ -127,7 +138,7 @@ describe("Arrayish", () => {
 			});
 		});
 
-		test("Arrayish(set).map", () => {
+		test("(set).map", () => {
 			const dataArray = [1, 1, "a", "a", "b", "b", 2, 2, "c", "c", "1", "2", "3", "4", "5"];
 			const setArray = new Set(dataArray);
 			const iterator = SpiedOn.from(setArray);
@@ -150,6 +161,37 @@ describe("Arrayish", () => {
 	});
 
 	describe(".mapFirst", () => {
+
+		test("(array).mapFirst() --> found", () => {
+			const dataArray = new Array(100).fill(1);
+			const iterator = SpiedOn.from(dataArray);
+
+			const mappedValue = iterator.mapFirst((v, i) => v * i === 10 ? v * i : undefined);
+
+			expect(spies.start).toHaveBeenCalledTimes(1);
+			expect(spies.increment).toHaveBeenCalledTimes(10);
+			expect(spies.finish).toHaveBeenCalledTimes(0);
+			expect(spies.found).toHaveBeenCalledTimes(1);
+			expect(spies.notFound).toHaveBeenCalledTimes(0);
+
+			expect(mappedValue).toBe(10);
+		});
+
+		test("(array).mapFirst() --> notFound", () => {
+			const dataArray = new Array(100).fill(1);
+			const iterator = SpiedOn.from(dataArray);
+
+			const mappedValue = iterator.mapFirst((v, i) => v * i === -1 ? v * i : undefined);
+
+			expect(spies.start).toHaveBeenCalledTimes(1);
+			expect(spies.increment).toHaveBeenCalledTimes(100);
+			expect(spies.finish).toHaveBeenCalledTimes(0);
+			expect(spies.found).toHaveBeenCalledTimes(0);
+			expect(spies.notFound).toHaveBeenCalledTimes(1);
+
+			expect(mappedValue).toBeUndefined();
+		});
+
 		const values = [2,1,null,true];
 
 		const tests = [
@@ -166,7 +208,7 @@ describe("Arrayish", () => {
 		];
 
 		tests.forEach(({ callbackfn, expected }) => {
-			test(tagLiterals`mapFirst(${values}, ${callbackfn})`, () => {
+			test(tagLiterals`(${values}).mapFirst(${callbackfn})`, () => {
 				const output = SpiedOn.from(values).mapFirst(callbackfn as any);
 				expect(output).toBe(expected);
 
@@ -189,41 +231,11 @@ describe("Arrayish", () => {
 			});
 		});
 
-		test("Arrayish(array).mapFirst() --> found", () => {
-			const dataArray = new Array(100).fill(1);
-			const iterator = SpiedOn.from(dataArray);
-
-			const mappedValue = iterator.mapFirst((v, i) => v * i === 10 ? v * i : undefined);
-
-			expect(spies.start).toHaveBeenCalledTimes(1);
-			expect(spies.increment).toHaveBeenCalledTimes(10);
-			expect(spies.finish).toHaveBeenCalledTimes(0);
-			expect(spies.found).toHaveBeenCalledTimes(1);
-			expect(spies.notFound).toHaveBeenCalledTimes(0);
-
-			expect(mappedValue).toBe(10);
-		});
-
-		test("Arrayish(array).mapFirst() --> notFound", () => {
-			const dataArray = new Array(100).fill(1);
-			const iterator = SpiedOn.from(dataArray);
-
-			const mappedValue = iterator.mapFirst((v, i) => v * i === -1 ? v * i : undefined);
-
-			expect(spies.start).toHaveBeenCalledTimes(1);
-			expect(spies.increment).toHaveBeenCalledTimes(100);
-			expect(spies.finish).toHaveBeenCalledTimes(0);
-			expect(spies.found).toHaveBeenCalledTimes(0);
-			expect(spies.notFound).toHaveBeenCalledTimes(1);
-
-			expect(mappedValue).toBeUndefined();
-		});
-
 	});
 
 	describe(".partition", () => {
 
-		test(`partition()`, () => {
+		test(`(array).partition()`, () => {
 			const inputValues = [2,1,null,"2",true,null,undefined,2,null,"1",1,false,true];
 			const inputFunction = (val: unknown) => ["boolean","number","string","object","undefined","null"].indexOf(typeof(val));
 			const expected = [
@@ -240,26 +252,21 @@ describe("Arrayish", () => {
 
 	});
 
-	// find
+	test.todo(".slice");
 
-	// findAsync
-
-	// slice
-
-	// forBatch
-
-	// forBatchAsync
-
-	// filter
-
-	// filterAsync
 });
 
 describe("Async", () => {
 
+	test.todo(".filter");
+
+	test.todo(".find");
+
+	test.todo(".forBatch");
+
 	describe(".forEach", () => {
 
-		test("Async(array).forEach", async () => {
+		test("(array).forEach", async () => {
 			const dataArray = new Array(100).fill(1);
 			const iterator = SpiedOn.from(dataArray);
 
@@ -274,7 +281,7 @@ describe("Async", () => {
 			});
 		});
 
-		test("Async(set).forEach", async () => {
+		test("(set).forEach", async () => {
 			const dataArray = [1, 1, "a", "a", "b", "b", 2, 2, "c", "c", "1", "2", "3", "4", "5"];
 			const setArray = new Set(dataArray);
 			const iterator = SpiedOn.from(setArray);
@@ -299,7 +306,7 @@ describe("Async", () => {
 
 	describe(".map", () => {
 
-		test("Async(array).map", async () => {
+		test("(array).map", async () => {
 			const dataArray: number[] = new Array(100).fill(1);
 			const iterator = SpiedOn.from(dataArray);
 
@@ -314,7 +321,7 @@ describe("Async", () => {
 			});
 		});
 
-		test("Async(set).map", async () => {
+		test("(set).map", async () => {
 			const dataArray = [1, 1, "a", "a", "b", "b", 2, 2, "c", "c", "1", "2", "3", "4", "5"];
 			const setArray = new Set(dataArray);
 			const iterator = SpiedOn.from(setArray);
@@ -335,4 +342,111 @@ describe("Async", () => {
 		});
 
 	});
+
+});
+
+describe("Parallel", () => {
+
+	describe(".forEach", () => {
+
+		test("(array).forEach", async () => {
+			const dataArray = new Array(100).fill(1);
+			const iterator = SpiedOn.from(dataArray);
+
+			const mappedValues: number[] = [];
+			await iterator.parallel().forEach((v, i) => { mappedValues.push(v * i); });
+
+			expect(spies.start).toHaveBeenCalledTimes(1);
+			expect(spies.increment).toHaveBeenCalledTimes(dataArray.length);
+			expect(spies.finish).toHaveBeenCalledTimes(1);
+			dataArray.forEach((v, i) => {
+				expect(v * i).toBe(mappedValues[i]);
+			});
+		});
+
+		test("(set).forEach --> fail", async () => {
+			const dataArray = [1, 1, "a", "a", "b", "b", 2, 2, "c", "c", "1", "2", "3", "4", "5"];
+			const dataSet = new Set(dataArray);
+			const iterator = SpiedOn.from(dataSet);
+
+			const mapped: number[] = [];
+			await iterator.parallel().forEach(async (v, i) => {
+				// random sleep intervals
+				await sleep(randomInt(1, 5) * 100);
+				// ensures the map is out of order
+				mapped.push(+v * i);
+			});
+
+			expect(spies.start).toHaveBeenCalledTimes(1);
+			expect(spies.increment).toHaveBeenCalledTimes(dataSet.size);
+			expect(spies.finish).toHaveBeenCalledTimes(1);
+
+			const expected = Array.from(dataSet).map((v, i) => +v * i);
+			// we expect the mapped array to be out of order and thus NOT equal
+			expect(mapped).not.toEqual(expected);
+		});
+
+		test("(set).forEach --> pass", async () => {
+			const dataArray = [1, 1, "a", "a", "b", "b", 2, 2, "c", "c", "1", "2", "3", "4", "5"];
+			const dataSet = new Set(dataArray);
+			const iterator = SpiedOn.from(dataSet);
+
+			const mapped: number[] = [];
+			await iterator.parallel().forEach(async (v, i) => {
+				// random sleep interval
+				await sleep(randomInt(1, 5) * 100);
+				// indexed set ensures the map is in order
+				mapped[i] = +v * i;
+			});
+
+			expect(spies.start).toHaveBeenCalledTimes(1);
+			expect(spies.increment).toHaveBeenCalledTimes(dataSet.size);
+			expect(spies.finish).toHaveBeenCalledTimes(1);
+
+			const expected = Array.from(dataSet).map((v, i) => +v * i);
+			// we expect the mapped array to be in order and thus equal
+			expect(mapped).toEqual(expected);
+		});
+
+	});
+
+	describe(".map", () => {
+
+		test("(array).map", async () => {
+			const dataArray: number[] = new Array(100).fill(1);
+			const iterator = SpiedOn.from(dataArray);
+
+			const mappedValues = await iterator.async().map(async (v, i) => v * i);
+
+			expect(spies.start).toHaveBeenCalledTimes(1);
+			expect(spies.increment).toHaveBeenCalledTimes(dataArray.length);
+			expect(spies.finish).toHaveBeenCalledTimes(1);
+
+			dataArray.forEach((v, i) => {
+				expect(v * i).toBe(mappedValues[i]);
+			});
+		});
+
+		test("(set).map", async () => {
+			const dataArray = [1, 1, "a", "a", "b", "b", 2, 2, "c", "c", "1", "2", "3", "4", "5"];
+			const dataSet = new Set(dataArray);
+			const iterator = SpiedOn.from(dataSet);
+
+			const mapped = await iterator.async().map(async (v, i) => +v * i);
+
+			expect(spies.start).toHaveBeenCalledTimes(1);
+			expect(spies.increment).toHaveBeenCalledTimes(dataSet.size);
+			expect(spies.finish).toHaveBeenCalledTimes(1);
+
+			let i = 0;
+			dataSet.forEach(v => {
+				isNaN(+v * i)
+					? expect(+v * i).toBeNaN()
+					: expect(+v * i).toBe(mapped[i]);
+				i++;
+			});
+		});
+
+	});
+
 });
