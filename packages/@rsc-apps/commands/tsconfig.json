@@ -9,5 +9,6 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/game-utils" },
+		{ "path": "../../@rsc-utils/logger-utils" },
 	],
 }

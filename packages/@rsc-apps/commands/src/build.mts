@@ -1,7 +1,7 @@
 import { getCodeName, getDataRoot } from "@rsc-sage/env";
-import { captureProcessExit, error, info } from "@rsc-utils/core-utils";
 import { buildAndCount } from "@rsc-utils/discord-utils";
 import { findJsonFile, writeFileSync } from "@rsc-utils/io-utils";
+import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { commandPathValidator } from "./utils/commandPathValidator.js";
 
 captureProcessExit();
@@ -22,16 +22,16 @@ async function main() {
 	const botCore = await findJsonFile(botsPath, { contentFilter:(core: BotCore) => core.codeName === codeName });
 
 	if (!botCore) {
-		error(`Unable to find Bot: ${codeName}`);
+		Logger.package("@rsc-apps/command").error("Unable to find Bot: %s", codeName);
 
 	}else {
 		// build all slash commands for the bot and save the json
 		try {
 			const { builders, characterCount } = await buildAndCount(commandPathValidator);
 			writeFileSync(`./data/slash/${codeName}.json`, builders, { makeDir:true, formatted:true });
-			info(`Slash Commands built for ${codeName}: ${builders.length} commands; ${characterCount} characters`);
+			Logger.package("@rsc-apps/command").info("Slash Commands built for %s: %d commands; %d characters", codeName, builders.length, characterCount);
 		}catch(ex) {
-			error(ex);
+			Logger.package("@rsc-apps/command").error(ex);
 		}
 
 	}

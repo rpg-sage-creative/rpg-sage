@@ -16,7 +16,8 @@
 		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/discord-utils": "workspace:",
 		"@rsc-utils/game-utils": "workspace:",
-		"@rsc-utils/io-utils": "workspace:"
+		"@rsc-utils/io-utils": "workspace:",
+		"@rsc-utils/logger-utils": "workspace:"
 	},
 	"scripts": {
 	}

@@ -1,7 +1,7 @@
 import { getCodeName, getDataRoot, getToken } from "@rsc-sage/env";
-import { captureProcessExit, error } from "@rsc-utils/core-utils";
 import { updateSlashCommands } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
+import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { commandPathValidator } from "./utils/commandPathValidator.js";
 
 captureProcessExit();
@@ -22,7 +22,7 @@ async function main() {
 	const botCore = await findJsonFile(botsPath, { contentFilter:(core: BotCore) => core.codeName === codeName });
 
 	if (!botCore) {
-		error(`Unable to find Bot: ${codeName}`);
+		Logger.package("@rsc-apps/command").error("Unable to find Bot: %s", codeName);
 
 	}else {
 		// build and update all slash commands for the bot
