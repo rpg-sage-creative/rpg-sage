@@ -1,5 +1,5 @@
 import { isSnsClientConfig, type SnsClientConfig } from "@rsc-utils/aws-utils";
-import { getFromProcessSafely } from "@rsc-utils/core-utils";
+import { getFromProcessSafely } from "./getFromProcess.js";
 
 type InvalidSnsClientConfig = Partial<SnsClientConfig> & { valid:false; };
 type ValidSnsClientConfig = SnsClientConfig & { valid:true; };

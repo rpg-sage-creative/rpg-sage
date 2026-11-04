@@ -1,4 +1,6 @@
-import { getId, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
+import type { Optional } from "@rsc-utils/type-utils";
+import { getId } from "./getId.js";
 
 /** Retrieves the id from env for "superUserId". */
 export function getSuperUserId(): Snowflake {

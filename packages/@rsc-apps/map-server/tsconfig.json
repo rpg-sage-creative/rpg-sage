@@ -10,5 +10,6 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/map-utils" },
+		{ "path": "../../@rsc-sage/env" },
 	],
 }

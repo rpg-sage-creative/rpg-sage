@@ -26,6 +26,7 @@ function _getDataRoot(): string {
 	let dataRoot = pathMap.get("");
 
 	if (!dataRoot) {
+trace("_getDataRoot() -> !pathMap.get('')")
 		// initialize it if we don't have it
 
 		const dirValidator = (value: Optional<ValidatorArg>): value is string => typeof(value) === "string" ? existsSync(value) : false;
@@ -111,4 +112,14 @@ export function getDataRoot(...args: unknown[]): string {
 	}
 
 	return _getChildPath(dataPath, childPath);
+}
+
+export function setDataRoot(dataPath: string): string {
+	const dirValidator = (value: Optional<ValidatorArg>): value is string => typeof(value) === "string" ? existsSync(value) : false;
+	if (dirValidator(dataPath)) {
+trace("dirValidator(dataPath) == "+dirValidator(dataPath))
+		pathMap.set("", dataPath);
+	}
+
+	return getDataRoot();
 }

@@ -1,7 +1,6 @@
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import type { Optional } from "@rsc-utils/type-utils";
-import { getFromProcess } from "./getFromProcess.js";
-import { getFromProcessSafely } from "./getFromProcessSafely.js";
+import { getFromProcess, getFromProcessSafely } from "./getFromProcess.js";
 
 const _ids: Record<string, Snowflake[]> = { };
 

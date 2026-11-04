@@ -1,4 +1,5 @@
-import { formatDataFilePath, generateSnowflake, noop, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { generateSnowflake, noop, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { format } from "node:path";
 import PDFParser from "pdf2json";
 import { deleteFile } from "../fs/deleteFile.js";
 import { writeFile } from "../fs/writeFile.js";
@@ -17,9 +18,13 @@ export class PdfCacher {
 	private readonly cachedPdfPath: string;
 
 	/** Creates a new PdfCacher for the given url. */
-	public constructor(private readonly url: string) {
+	public constructor(private readonly url: string, cachePath?: string) {
 		this.id = generateSnowflake();
-		this.cachedPdfPath = formatDataFilePath({ dir:["cache", "pdf"], name:this.id, ext:"pdf" });
+		this.cachedPdfPath = format({
+			dir: cachePath ?? PdfCacher.globalCachePath ?? PdfCacher.DefaultGlobalCachePath,
+			name: this.id,
+			ext: "pdf",
+		});
 	}
 
 	/** Reads from the url and writes the local file. */
@@ -96,6 +101,7 @@ export class PdfCacher {
 			return Promise.reject(new Error(`No Cache to read: ${this.id}`));
 		}
 
+		/** @todo rewrite using .withResolvers to ensure we clear timers and remove cache */
 		return new Promise((resolve, reject) => {
 			const pdfParser = new PDFParser();
 
@@ -164,22 +170,18 @@ export class PdfCacher {
 
 	/** Convenience for: PdfJsonManager.from(await this.read()) */
 	public async createManager<T extends PdfJson>(): Promise<PdfJsonManager<T>> {
-		return new Promise((resolve, reject) =>
-			this.read<T>()
-				.then(json => resolve(PdfJsonManager.from(json)), reject)
-		);
+		return PdfJsonManager.from(await this.read());
 	}
 
 	/** Deletes the local file. */
 	private async removeCache(): Promise<boolean> {
-		return deleteFile(this.cachedPdfPath).catch(() => false);
+		return await deleteFile(this.cachedPdfPath).catch(() => false);
 	}
 
 	/** Convenience for new PdfCacher(url).read(); */
 	public static async read<U>(url: Optional<string>): Promise<U | undefined> {
 		if (url) {
-			const cacher = new PdfCacher(url);
-			return cacher.read();
+			return await new PdfCacher(url).read();
 		}
 		return undefined;
 	}
@@ -202,4 +204,6 @@ export class PdfCacher {
 		return promise;
 	}
 
+	public static readonly DefaultGlobalCachePath = "./cache/pdf";
+	public static globalCachePath?: string;
 }

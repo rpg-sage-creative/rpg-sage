@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { getCodeName } from "@rsc-utils/core-utils";
+import { getCodeName } from "@rsc-sage/env";
 import type { SlashCommand } from "../index.js";
 import { addOptions } from "./addOptions.js";
 import { addSubcommands } from "./addSubCommands.js";

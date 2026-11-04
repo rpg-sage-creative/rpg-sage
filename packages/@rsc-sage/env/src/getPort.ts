@@ -1,6 +1,5 @@
 import { isSimpleNumberString, type Optional } from "@rsc-utils/type-utils";
-import { getFromProcess } from "./getFromProcess.js";
-import { getFromProcessSafely } from "./getFromProcessSafely.js";
+import { getFromProcess, getFromProcessSafely } from "./getFromProcess.js";
 import type { ValidatorArg } from "./types.js";
 
 const _ports: Record<string, number | null> = { };

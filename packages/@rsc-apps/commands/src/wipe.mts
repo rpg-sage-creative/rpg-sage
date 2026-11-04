@@ -1,5 +1,5 @@
-import { getToken } from "@rsc-sage/env";
-import { captureProcessExit, error, getCodeName, getDataRoot } from "@rsc-utils/core-utils";
+import { getCodeName, getDataRoot, getToken } from "@rsc-sage/env";
+import { captureProcessExit, error } from "@rsc-utils/core-utils";
 import { wipeSlashCommands } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
 

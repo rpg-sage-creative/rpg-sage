@@ -1,4 +1,5 @@
-import { Arrayish, getDataRoot, noop, tagLiterals, trace } from "@rsc-utils/core-utils";
+import { getDataRoot } from "@rsc-sage/env";
+import { Arrayish, noop, tagLiterals, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import type { DataTable } from "../DataTable.js";
 import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";

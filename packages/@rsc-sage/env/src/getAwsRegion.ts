@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/type-utils";
-import { getFromProcessSafely } from "./getFromProcessSafely.js";
+import { getFromProcessSafely } from "./getFromProcess.js";
 import type { Region, ValidatorArg } from "./types.js";
 
 export function getAwsRegion(key: string): Region | undefined {

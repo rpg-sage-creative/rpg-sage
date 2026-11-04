@@ -1,6 +1,5 @@
 export * from "./cache/index.js";
 export * from "./class/index.js";
-export * from "./env/index.js";
 export * from "./ephemeral/index.js";
 export * from "./pause/index.js";
 export * from "./regex/index.js";

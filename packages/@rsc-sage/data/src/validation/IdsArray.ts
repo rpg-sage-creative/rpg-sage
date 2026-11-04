@@ -1,4 +1,5 @@
-import { debug, getDataRoot, isDefined, noop, parseSnowflake, parseUuid, toUnique, trace, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { getDataRoot } from "@rsc-sage/env";
+import { debug, isDefined, noop, parseSnowflake, parseUuid, toUnique, trace, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { join } from "node:path";
 import type { SageCharacterCore } from "../types/SageCharacterCore.js";

@@ -1,4 +1,5 @@
-import { captureProcessExit, error, getCodeName, getDataRoot, info } from "@rsc-utils/core-utils";
+import { getCodeName, getDataRoot } from "@rsc-sage/env";
+import { captureProcessExit, error, info } from "@rsc-utils/core-utils";
 import { buildAndCount } from "@rsc-utils/discord-utils";
 import { findJsonFile, writeFileSync } from "@rsc-utils/io-utils";
 import { commandPathValidator } from "./utils/commandPathValidator.js";

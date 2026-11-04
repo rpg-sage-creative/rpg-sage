@@ -1,4 +1,5 @@
-import { formatDataFilePath, generateSnowflake, noop, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { generateSnowflake, noop, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { format } from "node:path";
 import { deleteFile } from "../fs/deleteFile.js";
 import { readFile } from "../fs/readFile.js";
 import { writeFile } from "../fs/writeFile.js";
@@ -15,9 +16,13 @@ export class ImageCacher {
 	private readonly cachedImagePath: string;
 
 	/** Creates a new ImageCacher for the given url. */
-	public constructor(private readonly url: string) {
+	public constructor(private readonly url: string, cachePath?: string) {
 		this.id = generateSnowflake();
-		this.cachedImagePath = formatDataFilePath({ dir:["cache", "image"], name:this.id, ext:"img" });
+		this.cachedImagePath = format({
+			dir: cachePath ?? ImageCacher.globalCachePath ?? ImageCacher.DefaultGlobalCachePath,
+			name: this.id,
+			ext: "img",
+		});
 	}
 
 	/** Reads from the url and writes the local file. */
@@ -67,4 +72,6 @@ export class ImageCacher {
 		return bufferToMetadata(buffer);
 	}
 
+	public static readonly DefaultGlobalCachePath = "./cache/image";
+	public static globalCachePath?: string;
 }

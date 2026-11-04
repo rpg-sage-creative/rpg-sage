@@ -12,7 +12,8 @@
 	},
 	"dependencies": {
 		"@rsc-utils/core-utils": "workspace:",
-		"@rsc-sage/core": "workspace:"
+		"@rsc-sage/core": "workspace:",
+		"@rsc-sage/env": "workspace:"
 	},
 	"scripts": {
 	}

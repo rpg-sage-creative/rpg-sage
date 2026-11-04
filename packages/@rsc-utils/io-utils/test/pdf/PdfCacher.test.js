@@ -1,11 +1,14 @@
 import { join, resolve } from "node:path";
-import { error, tagLiterals } from "@rsc-utils/core-utils";
+import { error, tagLiterals, setDataRoot, getDataRoot, Logger } from "@rsc-utils/core-utils";
 import { PdfCacher, PdfJsonFieldManager, PdfJsonManager, writeFileSync } from "../../build/index.js";
+import { beforeAll, describe, test, expect } from "vitest";
 
-console.log({args:process.argv})
-// beforeAll(() => {
-// 	process.env.dataRoot = "./test";
-// });
+const DATA_ROOT = "/Users/randaltmeyer/git/rsc/rpg-sage/packages/@rsc-utils/io-utils/test";
+
+beforeAll(() => {
+	Logger.init({ dev:true });
+	setDataRoot(DATA_ROOT);
+});
 
 function toTestFilePath(...parts) {
 	return "file://" + resolve(join("packages", "@rsc-utils", "io-utils", "test", ...parts));

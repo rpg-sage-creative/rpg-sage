@@ -1,10 +1,10 @@
 import { ActiveBot, registerAndLoadPf2eData, registerCommandHandlers, registerPromptHandler } from "@rsc-sage/core";
 import { DataTable } from "@rsc-sage/data";
-import { getSageId, getSnsClientConfig } from "@rsc-sage/env";
-import { getCodeName, getEndpoint, getPort } from "@rsc-utils/core-utils";
+import { getCodeName, getDataRoot, getEndpoint, getPort, getSageId, getSnsClientConfig } from "@rsc-sage/env";
 import { DiscordCache } from "@rsc-utils/discord-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { RenderableMap } from "@rsc-utils/map-utils";
+import { ImageCacher, PdfCacher } from "../../../@rsc-utils/io-utils/src/index.js";
 
 captureProcessExit();
 
@@ -15,6 +15,8 @@ if (clientConfig) {
 }
 
 DiscordCache.setSageId(getSageId());
+PdfCacher.globalCachePath = getDataRoot("cache", "pdf");
+ImageCacher.globalCachePath = getDataRoot("cache", "image");
 
 const services = {
 	"Map": RenderableMap,

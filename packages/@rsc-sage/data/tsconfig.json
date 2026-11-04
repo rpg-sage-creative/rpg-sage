@@ -9,7 +9,9 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/aws-utils" },
+		{ "path": "../../@rsc-utils/core-utils" },
 		{ "path": "../../@rsc-utils/date-utils" },
 		{ "path": "../../@rsc-utils/io-utils" },
+		{ "path": "../../@rsc-sage/env" },
 	],
 }

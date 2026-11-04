@@ -1,4 +1,5 @@
-import { captureProcessExit, getPort } from "@rsc-utils/core-utils";
+import { getPort } from "@rsc-sage/env";
+import { captureProcessExit } from "@rsc-utils/core-utils";
 import { RenderableMap } from "@rsc-utils/map-utils";
 
 captureProcessExit();

@@ -1,5 +1,6 @@
+import { getDataRoot } from "@rsc-sage/env";
 import type { RepoItem } from "@rsc-utils/aws-utils";
-import { Arrayish, captureProcessExit, getDataRoot, trace } from "@rsc-utils/core-utils";
+import { Arrayish, captureProcessExit, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
 import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType, objectTypeToDirName } from "./cache/types.js";

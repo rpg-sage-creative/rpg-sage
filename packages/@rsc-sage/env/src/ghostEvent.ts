@@ -1,4 +1,7 @@
-import { getFromProcessSafely, getIds, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
+import type { Optional } from "@rsc-utils/type-utils";
+import { getFromProcessSafely } from "./getFromProcess.js";
+import { getIds } from "./getIds.js";
 
 const ghostMode = getFromProcessSafely((val: unknown) => val === true, "ghostMode") === true;
 function isGhostMode(): boolean {

@@ -1,4 +1,4 @@
-import { getCodeName } from "@rsc-utils/core-utils";
+import { getCodeName } from "@rsc-sage/env";
 
 export function commandPathValidator(commandPath: string): boolean {
 	const codeName = getCodeName();

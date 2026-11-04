@@ -1,5 +1,5 @@
 import { stringifyJson } from "@rsc-utils/json-utils";
-import { trace } from "@rsc-utils/logger-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { ValidatorArg } from "../types.js";
 
 /**
@@ -12,6 +12,6 @@ import type { ValidatorArg } from "../types.js";
 export function logAndReturn<T>(from: "argv" | "env" | "json", key: string, value: ValidatorArg): T {
 	const shouldMask = key.endsWith("Token") || key.includes("AccessKey");
 	const outValue = shouldMask ? (value as string).split("").map(() => "*").join("") : value;
-	trace(`Environment Variable (${from}): ${key}=${stringifyJson(outValue)}`);
+	Logger.package("@rsc-sage/env").trace(`Environment Variable (${from}): ${key}=${stringifyJson(outValue)}`);
 	return value as T;
 }

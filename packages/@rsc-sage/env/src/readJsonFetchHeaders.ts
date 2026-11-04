@@ -1,5 +1,5 @@
-import { errorReturnUndefined } from "@rsc-utils/core-utils";
 import { readJsonFile } from "@rsc-utils/io-utils";
+import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { join } from "node:path";
 
 let jsonFetchHeaders: Record<string, string> | undefined;

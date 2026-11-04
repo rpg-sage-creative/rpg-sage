@@ -1,4 +1,5 @@
-import { Arrayish, errorReturnUndefined, getDataRoot, trace } from "@rsc-utils/core-utils";
+import { getDataRoot } from "@rsc-sage/env";
+import { Arrayish, errorReturnUndefined, trace } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { assertSageCharacterCore } from "../../types/SageCharacterCore.js";
 import { assertSageGameCore } from "../../types/SageGameCore.js";

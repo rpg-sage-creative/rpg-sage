@@ -1,6 +1,6 @@
 import { parseBoolean, type Optional } from "@rsc-utils/type-utils";
 import { getAwsRegion } from "./getAwsRegion.js";
-import { getFromProcessSafely } from "./getFromProcessSafely.js";
+import { getFromProcessSafely } from "./getFromProcess.js";
 import { getPort } from "./getPort.js";
 import type { Region, ValidatorArg } from "./types.js";
 

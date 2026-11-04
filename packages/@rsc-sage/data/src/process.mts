@@ -1,9 +1,10 @@
-import { Arrayish, captureProcessExit, getDataRoot, stringifyJson, trace, type Snowflake } from "@rsc-utils/core-utils";
+import { Arrayish, captureProcessExit, stringifyJson, trace, type Snowflake } from "@rsc-utils/core-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { stat, Stats } from "node:fs";
 import { basename, join } from "node:path";
 // import { getDdbTable } from "./cache/internal/DdbRepo.js";
+import { getDataRoot } from "@rsc-sage/env";
 import { objectTypeToDirName } from "./cache/types.js";
 import { ensureSageGameCore, ensureSageMessageReferenceCore, ensureSageServerCore, ensureSageUserCore, type SageCore, type SageMessageReferenceCore } from "./types/index.js";
 import { getFilePaths, populateIdsArray, type EnsureContext } from "./validation/index.js";

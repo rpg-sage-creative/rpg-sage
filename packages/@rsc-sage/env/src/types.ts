@@ -6,6 +6,7 @@ export type EnvironmentName = "development" | "test" | "production";
 
 /** @internal */
 export type ValidatorArg = string | number | boolean | string[];
+
 /** @internal */
 export type Validator = (value: Optional<ValidatorArg>) => value is ValidatorArg;
 

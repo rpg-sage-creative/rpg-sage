@@ -8,7 +8,13 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/arg-utils" },
 		{ "path": "../../@rsc-utils/aws-utils" },
-		{ "path": "../../@rsc-utils/core-utils" },
+		{ "path": "../../@rsc-utils/git-utils" },
+		{ "path": "../../@rsc-utils/id-utils" },
+		{ "path": "../../@rsc-utils/io-utils" },
+		{ "path": "../../@rsc-utils/json-utils" },
+		{ "path": "../../@rsc-utils/logger-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
 	],
 }
