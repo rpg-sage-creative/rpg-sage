@@ -9,6 +9,7 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/map-utils" },
 		{ "path": "../../@rsc-sage/env" },
 	],
