@@ -1,7 +1,6 @@
 import { PixelsRelayServer } from "@rsc-sage/core";
 import { getPort } from "@rsc-sage/env";
-import { captureProcessExit } from "@rsc-utils/core-utils";
-
+import { captureProcessExit } from "@rsc-utils/logger-utils";
 captureProcessExit();
 PixelsRelayServer.startServer(getPort("Pixels"));
 
