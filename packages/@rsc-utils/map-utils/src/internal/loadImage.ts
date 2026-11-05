@@ -1,5 +1,5 @@
 import { Image, loadImage as _loadImage } from "@napi-rs/canvas";
-import { error, warn } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { ImageMeta } from "../types.js";
 import type { MapCache } from "./types.js";
 
@@ -14,14 +14,14 @@ export async function loadImage(mapCache: MapCache, imgMeta: ImageMeta): Promise
 	if (!images.has(imageUrl)) {
 		// first fetch
 		let image = await _loadImage(imageUrl).catch(err => {
-			warn({ imageUrl }, err);
+			Logger.package("@rsc-utils/map-utils").warn({ imageUrl }, err);
 			return null;
 		});
 
 		// if we failed, try again just in case
 		if (!image) {
 			image = await _loadImage(imageUrl).catch(err => {
-				error({ imageUrl }, err);
+				Logger.package("@rsc-utils/map-utils").error({ imageUrl }, err);
 				return null;
 			});
 		}

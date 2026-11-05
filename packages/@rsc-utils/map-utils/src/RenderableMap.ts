@@ -1,5 +1,6 @@
-import { error, errorReturnUndefined, toLiteral, trace, warn, type Awaitable } from "@rsc-utils/core-utils";
+import { toLiteral, type Awaitable } from "@rsc-utils/core-utils";
 import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/io-utils";
+import { errorReturnUndefined, Logger } from "@rsc-utils/logger-utils";
 import { renderMap, serverHandler } from "./internal/index.js";
 import type { GameMap, GameMapBackgroundImage, GameMapData, GameMapLayer, MapRenderPayload, MapRenderResponse, MimeType } from "./types.js";
 
@@ -10,10 +11,10 @@ import type { GameMap, GameMapBackgroundImage, GameMapData, GameMapLayer, MapRen
  */
 function catchBufferFetch(err: any): false | null {
 	if (String(err).includes("ECONNREFUSED")) {
-		warn(`MapServer down.`);
+		Logger.package("@rsc-utils/map-utils").warn(`MapServer down.`);
 		return false;
 	}else {
-		error(`MapServer error:`, err);
+		Logger.package("@rsc-utils/map-utils").error(`MapServer error:`, err);
 		return null;
 	}
 }
@@ -24,28 +25,28 @@ async function renderMapData(mapData: GameMapData, mimeType: MimeType = "image/w
 
 	const awsEndpoint = RenderableMap.awsEndpointUrl;
 	if (awsEndpoint) {
-		trace(`Rendering Map via AWS Lambda.`);
+		Logger.package("@rsc-utils/map-utils").trace(`Rendering Map via AWS Lambda.`);
 		response = await getJson<MapRenderResponse>(awsEndpoint, payload).catch(catchBufferFetch);
 	}
 
 	if (!response) {
 		const serverEndpoint = RenderableMap.endpointUrl;
 		if (serverEndpoint) {
-			trace(`Rendering Map via AppServer.`);
+			Logger.package("@rsc-utils/map-utils").trace(`Rendering Map via AppServer.`);
 			response = await getJson<MapRenderResponse>(serverEndpoint, payload).catch(catchBufferFetch);
 		}
 	}
 
 	if (response === false) {
-		trace(`Rendering Map in main thread.`);
+		Logger.package("@rsc-utils/map-utils").trace(`Rendering Map in main thread.`);
 		response = await renderMap(mapData, mimeType);
 	}
 
 	// we have a response, let's use it
 	if (response !== null) {
 		/** @todo do something about these bad images */
-		trace({ invalidImageUrls:response.invalidImageUrls }, `${response.invalidImageUrls.length ?? 0} invalidImageUrls`);
-		trace({ invalidImages:response.invalidImages }, `${response.invalidImages.length ?? 0} invalidImages`);
+		Logger.package("@rsc-utils/map-utils").trace({ invalidImageUrls:response.invalidImageUrls }, `${response.invalidImageUrls.length ?? 0} invalidImageUrls`);
+		Logger.package("@rsc-utils/map-utils").trace({ invalidImages:response.invalidImages }, `${response.invalidImages.length ?? 0} invalidImages`);
 		return response;
 	}
 
@@ -85,7 +86,7 @@ export abstract class RenderableMap implements GameMap {
 	public static awsEndpointUrl: string = "";
 	public static setAwsEndpointUrl(awsEndpointUrl: string): void {
 		RenderableMap.awsEndpointUrl = awsEndpointUrl;
-		trace(`RenderableMap.setEndpoint("${awsEndpointUrl}") = ${RenderableMap.awsEndpointUrl}`);
+		Logger.package("@rsc-utils/map-utils").trace(`RenderableMap.setEndpoint("${awsEndpointUrl}") = ${RenderableMap.awsEndpointUrl}`);
 	}
 
 	public static endpointUrl: string = "";
@@ -100,7 +101,7 @@ export abstract class RenderableMap implements GameMap {
 			const port = endpointOrUrl.port ?? 0;
 			RenderableMap.endpointUrl = `${protocol}://${hostname}:${port}`;
 		}
-		trace(`RenderableMap.setEndpoint(${toLiteral(endpointOrUrl)}) = ${RenderableMap.endpointUrl}`);
+		Logger.package("@rsc-utils/map-utils").trace(`RenderableMap.setEndpoint(${toLiteral(endpointOrUrl)}) = ${RenderableMap.endpointUrl}`);
 	}
 
 	public static setEndpoints(data: { aws:string; port:number; }): void {
