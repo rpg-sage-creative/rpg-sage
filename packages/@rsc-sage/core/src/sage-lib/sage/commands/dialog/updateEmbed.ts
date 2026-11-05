@@ -1,5 +1,5 @@
 import type { Optional } from "@rsc-utils/core-utils";
-import { EmbedBuilder } from "@rsc-utils/discord-utils";
+import { EmbedBuilder } from "@rsc-chat/discord-utils";
 import type { Embed } from "discord.js";
 
 export function updateEmbed(originalEmbed: Embed | undefined, imageUrl: Optional<string>, content: string): EmbedBuilder {

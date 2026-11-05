@@ -1,6 +1,6 @@
 import { EmbedColorType, type EmbedColor } from "@rsc-sage/data";
 import { Arrayish, Color, getEnumValues, isDefined, stringifyJson } from "@rsc-utils/core-utils";
-import { EmbedBuilder } from "@rsc-utils/discord-utils";
+import { EmbedBuilder } from "@rsc-chat/discord-utils";
 import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";

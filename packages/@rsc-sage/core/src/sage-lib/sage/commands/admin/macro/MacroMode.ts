@@ -1,4 +1,4 @@
-import { getActionRows } from "@rsc-utils/discord-utils";
+import { getActionRows } from "@rsc-chat/discord-utils";
 import { type MessageActionRowComponent } from "discord.js";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { parseCustomId, type MacroActionKey } from "./customId.js";

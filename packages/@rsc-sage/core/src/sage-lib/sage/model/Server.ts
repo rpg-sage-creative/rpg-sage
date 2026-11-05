@@ -2,7 +2,7 @@ import type { AdminRole, AdminRoleType, AdminUser, DialogPostType, DiceCriticalM
 import { DiceSortType, ensureSageServerCore, parseGameSystem } from "@rsc-sage/data";
 import { getHomeServerId } from "@rsc-sage/env";
 import { applyChanges, generateSnowflake, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordKey } from "@rsc-utils/discord-utils";
+import { DiscordKey } from "@rsc-chat/discord-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";

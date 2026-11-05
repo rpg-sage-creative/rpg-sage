@@ -1,6 +1,6 @@
 import { DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, type GameSystemType, type MacroBase } from "@rsc-sage/data";
 import { isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
-import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
+import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-chat/discord-utils";
 import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath, isMath, isRandomItem, processDiceMacroCall, type DiceMacroBase } from "@rsc-utils/game-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { MaxDiceCount, MaxDieSides } from "@rsc-utils/random-utils";

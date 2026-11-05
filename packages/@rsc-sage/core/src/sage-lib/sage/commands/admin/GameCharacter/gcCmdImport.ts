@@ -1,4 +1,4 @@
-import { DiscordMaxValues, isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues, isInvalidWebhookUsername } from "@rsc-chat/discord-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { CharacterArray } from "../../../model/CharacterArray.js";

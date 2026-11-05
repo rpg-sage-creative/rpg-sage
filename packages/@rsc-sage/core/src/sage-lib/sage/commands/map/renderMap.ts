@@ -1,5 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import type { SupportedTarget } from "@rsc-utils/discord-utils";
+import type { SupportedTarget } from "@rsc-chat/discord-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from "discord.js";
 import type { GameMap } from "./GameMap.js";

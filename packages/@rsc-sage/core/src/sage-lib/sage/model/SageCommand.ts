@@ -1,7 +1,7 @@
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, EmbedColorType, EmojiType, GameCreatorType, GameSystemType, parseGameSystem, SageChannelType, type DiceCriticalMethodType, type SageChannel } from "@rsc-sage/data";
 import type { LocalizedTextKey } from "@rsc-sage/localization";
 import { Cache, HasCache, isDefined, RenderableContent, stringOrUndefined, type HexColorString, type If, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import type { DiscordCache, EmbedBuilder, SupportedInteraction, SupportedRepliableInteraction } from "@rsc-utils/discord-utils";
+import type { DiscordCache, EmbedBuilder, SupportedInteraction, SupportedRepliableInteraction } from "@rsc-chat/discord-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { ComponentType, InteractionType, Message, PartialGroupDMChannel, type ActionRowBuilder, type AttachmentBuilder, type ButtonBuilder, type StringSelectMenuBuilder, type TextBasedChannel } from "discord.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";

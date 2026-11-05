@@ -1,5 +1,5 @@
 import { escapeRegex } from "@rsc-utils/core-utils";
-import { toUserMention } from "@rsc-utils/discord-utils";
+import { toUserMention } from "@rsc-chat/discord-utils";
 import type { GuildMember } from "discord.js";
 
 const AtGameMastersRegex = /@(?:gms?|gamemasters?)/i;

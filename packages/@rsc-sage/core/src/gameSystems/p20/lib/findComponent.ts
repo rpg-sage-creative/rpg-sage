@@ -1,4 +1,4 @@
-import { findComponent as _findComponent } from "@rsc-utils/discord-utils";
+import { findComponent as _findComponent } from "@rsc-chat/discord-utils";
 import type { Message, MessageActionRowComponent } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 

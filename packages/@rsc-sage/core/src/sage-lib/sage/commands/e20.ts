@@ -1,5 +1,5 @@
 import type { Optional, Snowflake } from "@rsc-utils/core-utils";
-import { EmbedBuilder, type SupportedTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
+import { EmbedBuilder, type SupportedTarget, parseReference, toUserMention } from "@rsc-chat/discord-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/e20/index.js";

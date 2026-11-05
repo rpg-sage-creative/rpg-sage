@@ -1,5 +1,5 @@
+import { DiscordMaxValues, EmbedBuilder } from "@rsc-chat/discord-utils";
 import { isWrapped, unwrap, type HexColorString } from "@rsc-utils/core-utils";
-import { DiscordMaxValues, EmbedBuilder } from "@rsc-utils/discord-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 

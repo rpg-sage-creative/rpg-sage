@@ -1,5 +1,5 @@
 import { Arrayish, sortByKey, sortPrimitive, StringMatcher, toUniqueDefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordMaxValues } from "@rsc-utils/discord-utils";
+import { DiscordMaxValues } from "@rsc-chat/discord-utils";
 import type { MacroBase } from "@rsc-utils/game-utils";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";

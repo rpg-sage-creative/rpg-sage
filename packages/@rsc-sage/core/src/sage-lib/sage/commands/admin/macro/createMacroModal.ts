@@ -1,5 +1,5 @@
 import { type Snowflake } from "@rsc-utils/core-utils";
-import { ModalBuilder } from "@rsc-utils/discord-utils";
+import { ModalBuilder } from "@rsc-chat/discord-utils";
 import type { DiceMacroArgPlaceholder } from "@rsc-utils/game-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 import { createCustomId, type MacroActionKey } from "./customId.js";

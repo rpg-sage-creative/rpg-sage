@@ -1,6 +1,6 @@
 import { EmbedColorType } from "@rsc-sage/data";
 import type { Optional } from "@rsc-utils/core-utils";
-import { toMessageUrl, type SupportedMessagesChannel, type SupportedTarget } from "@rsc-utils/discord-utils";
+import { toMessageUrl, type SupportedMessagesChannel, type SupportedTarget } from "@rsc-chat/discord-utils";
 import { sendTo } from "../../../discord/sendTo.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { FormattedDiceOutput } from "./FormattedDiceOutput.js";

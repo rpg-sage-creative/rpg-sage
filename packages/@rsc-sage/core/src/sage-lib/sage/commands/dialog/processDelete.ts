@@ -1,6 +1,6 @@
 import { EmojiType } from "@rsc-sage/data";
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
+import { DiscordApiError, toHumanReadable, toMessageUrl } from "@rsc-chat/discord-utils";
 import { AttachmentBuilder, User } from "discord.js";
 import { deleteMessage, isDeleted } from "../../../discord/deletedMessages.js";
 import { registerReactionListener } from "../../../discord/handlers.js";

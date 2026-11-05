@@ -1,6 +1,6 @@
 import type { CardBase } from "@rsc-sage/data";
 import { BULLET, capitalize, type Snowflake } from "@rsc-utils/core-utils";
-import { toUserMention } from "@rsc-utils/discord-utils";
+import { toUserMention } from "@rsc-chat/discord-utils";
 import { Deck, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "@rsc-utils/game-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";

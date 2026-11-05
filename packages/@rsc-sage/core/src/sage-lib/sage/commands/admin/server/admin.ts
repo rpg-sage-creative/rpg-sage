@@ -1,6 +1,6 @@
 import { AdminRoleType, type AdminUser } from "@rsc-sage/data";
 import { Arrayish, isDefined, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { toHumanReadable } from "@rsc-chat/discord-utils";
 import type { User } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { SageCommand } from "../../../model/SageCommand.js";

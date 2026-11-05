@@ -1,4 +1,4 @@
-import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername } from "@rsc-chat/discord-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { cannotManageCharacter } from "./cannotManageCharacter.js";

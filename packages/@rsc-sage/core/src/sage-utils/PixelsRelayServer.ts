@@ -1,6 +1,6 @@
 import { getHomeServerId, getToken } from "@rsc-sage/env";
 import { isNonNilSnowflake, parseJson, stringifyJson, toMarkdown, type Snowflake } from "@rsc-utils/core-utils";
-import { getRegisteredIntents, toUserMention } from "@rsc-utils/discord-utils";
+import { getRegisteredIntents, toUserMention } from "@rsc-chat/discord-utils";
 import { AppServer, type BufferHandlerJsonError, type BufferHandlerResponse } from "@rsc-utils/io-utils";
 import { captureProcessExit, errorReturnUndefined, Logger } from "@rsc-utils/logger-utils";
 import { AttachmentBuilder, Client } from "discord.js";

@@ -1,5 +1,5 @@
 import { generateSnowflake, isDefined, type Optional } from "@rsc-utils/core-utils";
-import { isDiscordAttachmentCdnUrl, simplifyDiscordAttachmentUrl } from "@rsc-utils/discord-utils";
+import { isDiscordAttachmentCdnUrl, simplifyDiscordAttachmentUrl } from "@rsc-chat/discord-utils";
 import type { SageInteraction } from "../../model/SageInteraction.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import type { GameMap } from "./GameMap.js";

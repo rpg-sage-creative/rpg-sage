@@ -1,5 +1,5 @@
 import { GameUserType } from "@rsc-sage/data";
-import { toRoleMention, toUserMention } from "@rsc-utils/discord-utils";
+import { toRoleMention, toUserMention } from "@rsc-chat/discord-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
 
 /**

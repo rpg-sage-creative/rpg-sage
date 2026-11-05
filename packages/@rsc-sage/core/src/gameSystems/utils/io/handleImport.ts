@@ -1,6 +1,6 @@
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
+import type { SupportedTarget } from "@rsc-chat/discord-utils";
 import type { Optional } from "@rsc-utils/core-utils";
-import type { SupportedTarget } from "@rsc-utils/discord-utils";
+import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import { attachCharacter as _attachCharacter } from "./attachCharacter.js";
 import { type FetchResult } from "./fetchCores.js";

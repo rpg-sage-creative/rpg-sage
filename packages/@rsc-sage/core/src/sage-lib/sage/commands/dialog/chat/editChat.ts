@@ -1,6 +1,6 @@
 import { DialogPostType } from "@rsc-sage/data";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
-import { splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
+import { splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-chat/discord-utils";
 import type { DialogContent } from "@rsc-utils/game-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { AttachmentBuilder } from "discord.js";

@@ -1,4 +1,4 @@
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { toHumanReadable } from "@rsc-chat/discord-utils";
 import type { SageMessage } from "../../../model/SageMessage.js";
 
 export async function eCmdList(sageMessage: SageMessage): Promise<void> {

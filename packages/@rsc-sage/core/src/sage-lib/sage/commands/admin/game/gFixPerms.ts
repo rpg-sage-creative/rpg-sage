@@ -1,4 +1,4 @@
-import { fixMissingChannelPerms, getPermsFor, getRequiredPermissions, toHumanReadable, type SupportedGameChannel } from "@rsc-utils/discord-utils";
+import { fixMissingChannelPerms, getPermsFor, getRequiredPermissions, toHumanReadable, type SupportedGameChannel } from "@rsc-chat/discord-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { Game } from "../../../model/Game.js";
 import type { SageCommand } from "../../../model/SageCommand.js";

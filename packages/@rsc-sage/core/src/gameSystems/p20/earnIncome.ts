@@ -1,6 +1,6 @@
+import { findComponent, toUserMention } from "@rsc-chat/discord-utils";
 import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data";
 import { addCommas, nth, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
-import { findComponent, toUserMention } from "@rsc-utils/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { Dice } from "../../sage-dice/dice/pf2e/index.js";
 import { DieRollGrade } from "../../sage-dice/index.js";

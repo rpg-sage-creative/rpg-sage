@@ -1,4 +1,4 @@
-import { getActionRows } from "@rsc-utils/discord-utils";
+import { getActionRows } from "@rsc-chat/discord-utils";
 import type { Message } from "discord.js";
 import { handleImport as handleImportE20 } from "../../../gameSystems/e20/import/handleImport.js";
 import { handleReimport as handleReimportE20 } from "../../../gameSystems/e20/import/handleReimport.js";

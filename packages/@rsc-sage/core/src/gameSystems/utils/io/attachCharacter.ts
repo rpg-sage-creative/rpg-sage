@@ -1,7 +1,7 @@
-import type { CharacterBase } from "@rsc-utils/game-utils";
+import type { SupportedTarget } from "@rsc-chat/discord-utils";
 import type { Optional } from "@rsc-utils/core-utils";
+import type { CharacterBase } from "@rsc-utils/game-utils";
 import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
-import type { SupportedTarget } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 

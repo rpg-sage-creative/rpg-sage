@@ -1,4 +1,4 @@
-import { toHumanReadable, toUserMention } from "@rsc-utils/discord-utils";
+import { toHumanReadable, toUserMention } from "@rsc-chat/discord-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
 
 /**

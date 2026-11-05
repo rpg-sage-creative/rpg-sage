@@ -1,4 +1,4 @@
-import { toMessageUrl } from "@rsc-utils/discord-utils";
+import { toMessageUrl } from "@rsc-chat/discord-utils";
 import type { MessageContextMenuCommandInteraction } from "discord.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";

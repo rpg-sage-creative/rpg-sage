@@ -1,4 +1,4 @@
-import { isSupportedTarget } from "@rsc-utils/discord-utils";
+import { isSupportedTarget } from "@rsc-chat/discord-utils";
 import type { CharacterShell } from "../../../model/CharacterShell.js";
 import type { HasCharacters } from "./HasCharacters.js";
 

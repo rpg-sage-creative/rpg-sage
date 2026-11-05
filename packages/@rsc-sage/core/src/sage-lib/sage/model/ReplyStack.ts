@@ -1,5 +1,5 @@
 import { omit, type Optional, type RenderableContentResolvable } from "@rsc-utils/core-utils";
-import { splitMessageOptions } from "@rsc-utils/discord-utils";
+import { splitMessageOptions } from "@rsc-chat/discord-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { BaseMessageOptions, InteractionReplyOptions, Message, MessageEditOptions } from "discord.js";
 import { deleteMessage, isDeletable } from "../../discord/deletedMessages.js";

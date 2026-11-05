@@ -1,4 +1,4 @@
-import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
+import { isInvalidWebhookUsername } from "@rsc-chat/discord-utils";
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { Message } from "discord.js";

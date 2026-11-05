@@ -1,6 +1,6 @@
 import { EmojiType } from "@rsc-sage/data";
 import { ArgsManager, Cache, RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
+import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-chat/discord-utils";
 import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import type { User } from "discord.js";
 import { regex } from "regex";

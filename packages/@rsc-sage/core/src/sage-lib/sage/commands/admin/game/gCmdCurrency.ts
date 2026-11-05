@@ -1,5 +1,5 @@
 import { addCommas, isDefined, type Snowflake } from "@rsc-utils/core-utils";
-import { splitMessageOptions, toChannelUrl, toDiscordDate, toHumanReadable } from "@rsc-utils/discord-utils";
+import { splitMessageOptions, toChannelUrl, toDiscordDate, toHumanReadable } from "@rsc-chat/discord-utils";
 import { capitalize } from "@rsc-utils/core-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";

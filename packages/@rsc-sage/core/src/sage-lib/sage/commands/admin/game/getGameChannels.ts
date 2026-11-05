@@ -1,6 +1,6 @@
 import { SageChannelType, type SageChannel } from "@rsc-sage/data";
 import type { Snowflake } from "@rsc-utils/core-utils";
-import { toChannelMention } from "@rsc-utils/discord-utils";
+import { toChannelMention } from "@rsc-chat/discord-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
 type Results = { free:SageChannel[]; used:SageChannel[]; };

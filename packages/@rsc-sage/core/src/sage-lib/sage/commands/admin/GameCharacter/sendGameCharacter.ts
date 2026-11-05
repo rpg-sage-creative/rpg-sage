@@ -1,6 +1,6 @@
 import { DialogPostType, SageChannelType } from "@rsc-sage/data";
 import { Arrayish, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
-import { toChannelMention, toHumanReadable, toMessageUrl } from "@rsc-utils/discord-utils";
+import { toChannelMention, toHumanReadable, toMessageUrl } from "@rsc-chat/discord-utils";
 import type { Message } from "discord.js";
 import { sendWebhook } from "../../../../discord/messages.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";

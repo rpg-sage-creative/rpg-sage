@@ -1,5 +1,5 @@
 import { isNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
-import { ModalBuilder } from "@rsc-utils/discord-utils";
+import { ModalBuilder } from "@rsc-chat/discord-utils";
 import { createCustomId } from "./customId.js";
 import type { CharId, CharModalAction } from "./types.js";
 

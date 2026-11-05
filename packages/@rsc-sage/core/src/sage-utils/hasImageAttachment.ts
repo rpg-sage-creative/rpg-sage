@@ -1,4 +1,4 @@
-import type { SMessageOrPartial } from "@rsc-utils/discord-utils";
+import type { SMessageOrPartial } from "@rsc-chat/discord-utils";
 
 const ImageRegExp = /image/i;
 

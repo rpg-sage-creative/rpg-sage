@@ -1,4 +1,4 @@
-import { toHumanReadable } from "@rsc-utils/discord-utils";
+import { toHumanReadable } from "@rsc-chat/discord-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { ActiveBot } from "../../model/ActiveBot.js";
