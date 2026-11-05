@@ -1,4 +1,4 @@
-import { parseJson } from "@rsc-utils/core-utils";
+import { parseJson } from "@rsc-utils/json-utils";
 import type { BufferHandlerJsonError, BufferHandlerResponse } from "@rsc-utils/io-utils";
 import type { MapRenderPayload, MapRenderResponse } from "../types.js";
 import { renderMap } from "./renderMap.js";

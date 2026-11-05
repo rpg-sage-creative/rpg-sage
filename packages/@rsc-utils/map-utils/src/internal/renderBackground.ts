@@ -1,5 +1,5 @@
 import { createCanvas, type SKRSContext2D } from "@napi-rs/canvas";
-import { stringifyJson } from "@rsc-utils/core-utils";
+import { stringifyJson } from "@rsc-utils/json-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { calculateValidClip } from "./calculateValidClip.js";
 import { loadImage } from "./loadImage.js";

@@ -1,6 +1,6 @@
-import { toLiteral, type Awaitable } from "@rsc-utils/core-utils";
 import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/io-utils";
 import { errorReturnUndefined, Logger } from "@rsc-utils/logger-utils";
+import type { Awaitable } from "@rsc-utils/type-utils";
 import { renderMap, serverHandler } from "./internal/index.js";
 import type { GameMap, GameMapBackgroundImage, GameMapData, GameMapLayer, MapRenderPayload, MapRenderResponse, MimeType } from "./types.js";
 
@@ -101,7 +101,7 @@ export abstract class RenderableMap implements GameMap {
 			const port = endpointOrUrl.port ?? 0;
 			RenderableMap.endpointUrl = `${protocol}://${hostname}:${port}`;
 		}
-		Logger.package("@rsc-utils/map-utils").trace(`RenderableMap.setEndpoint(${toLiteral(endpointOrUrl)}) = ${RenderableMap.endpointUrl}`);
+		Logger.package("@rsc-utils/map-utils").trace("RenderableMap.setEndpoint('%s') = %s", endpointOrUrl, RenderableMap.endpointUrl);
 	}
 
 	public static setEndpoints(data: { aws:string; port:number; }): void {

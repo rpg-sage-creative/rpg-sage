@@ -12,10 +12,11 @@
 	},
 	"dependencies": {
 		"@napi-rs/canvas": "^0.1.88",
-		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
+		"@rsc-utils/json-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
-		"@rsc-utils/random-utils": "workspace:"
+		"@rsc-utils/random-utils": "workspace:",
+		"@rsc-utils/type-utils": "workspace:"
 	},
 	"scripts": {
 		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"

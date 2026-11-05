@@ -9,7 +9,9 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/io-utils" },
+		{ "path": "../../@rsc-utils/json-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/random-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
 	],
 }
