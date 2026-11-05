@@ -1,4 +1,5 @@
-import { warn, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { findByValue } from "../data/Repository.js";
 import type { FocusSpell } from "./FocusSpell.js";
@@ -29,7 +30,7 @@ export class Domain extends HasSource<DomainCore> {
 
 		content.addAonLink(...this.spells.filter((spell, index) => {
 			if (!spell) {
-				warn(`Missing Domain (${this.name}) Spell: ${this.core.spells[index]}`);
+				Logger.package("@rsc-sage/core").warn(`Missing Domain (${this.name}) Spell: ${this.core.spells[index]}`);
 			}
 			return !!spell;
 		}).map(spell => spell.toAonLink()));

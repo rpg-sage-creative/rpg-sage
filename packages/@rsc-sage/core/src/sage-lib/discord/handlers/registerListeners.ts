@@ -1,5 +1,6 @@
 import type { Awaitable } from "@rsc-utils/core-utils";
-import { ArgsManager, debug, escapeRegex } from "@rsc-utils/core-utils";
+import { ArgsManager, escapeRegex } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { SageCommand } from "../../sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage/model/SageInteraction.js";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
@@ -115,7 +116,7 @@ export function registerListeners({ commands, interaction, message, reaction, ha
 
 		if (handler || reaction) {
 			// registerReactionListener(handler ?? tester!, interaction);
-			debug(`Unregistered Reaction Handler`);
+			Logger.package("@rsc-sage/core").debug(`Unregistered Reaction Handler`);
 		}
 
 	}

@@ -1,5 +1,6 @@
-import { error, stringifyJson, warn, type TypedRegExp } from "@rsc-utils/core-utils";
+import { stringifyJson, type TypedRegExp } from "@rsc-utils/core-utils";
 import { isErrorLike } from "@rsc-utils/error-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { DiscordAPIError as TDiscordApiError } from "discord.js";
 
 /** https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes */
@@ -82,26 +83,26 @@ export class DiscordApiError {
 	public process(): boolean {
 
 		if (this.isUsername) {
-			error({ invalidUsername:this.getInvalidUsername() });
+			Logger.package("@rsc-chat/discord-utils").error({ invalidUsername:this.getInvalidUsername() });
 			return true;
 		}
 
 		if (isErrorCode(this.error.code)) {
 			if (this.isAvatarUrl || this.isEmbedThumbnailUrl) {
-				warn(`An image url (avatar or thumbnail) has been flagged as invalid.`);
+				Logger.package("@rsc-chat/discord-utils").warn(`An image url (avatar or thumbnail) has been flagged as invalid.`);
 			}else {
-				error(this.error);
+				Logger.package("@rsc-chat/discord-utils").error(this.error);
 			}
 			return true;
 		}
 
 		if (this.isFetchWebhooks && this.isMissingPermissions) {
-			warn(`DiscordAPIError[${this.error.code}]: Missing Permissions (TextChannel.fetchWebhooks)`);
+			Logger.package("@rsc-chat/discord-utils").warn(`DiscordAPIError[${this.error.code}]: Missing Permissions (TextChannel.fetchWebhooks)`);
 			return true;
 		}
 
 		if (isWarnCode(this.error.code)) {
-			warn(`[${this.error.code}]${this.error.message}: ${this.error.url}`);
+			Logger.package("@rsc-chat/discord-utils").warn(`[${this.error.code}]${this.error.message}: ${this.error.url}`);
 			return true;
 		}
 

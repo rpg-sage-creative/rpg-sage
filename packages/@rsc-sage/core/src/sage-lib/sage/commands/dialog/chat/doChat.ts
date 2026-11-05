@@ -1,6 +1,6 @@
 import type { EmbedColorType } from "@rsc-sage/data";
-import { error } from "@rsc-utils/core-utils";
 import type { DialogContent } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { sendDialogPost } from "../sendDialogPost.js";
@@ -25,7 +25,7 @@ export async function doChat(sageMessage: SageMessage, { character, colorType, d
 			embedColor,
 			embedImageUrl,
 			postType,
-		}, options).catch(error);
+		}, options).catch(Logger.package("@rsc-sage/core").error);
 	}else {
 		await sageMessage.reactWarn(`Unable to find character for dialog: "${dialogContent.alias ?? dialogContent.type}::"`);
 	}

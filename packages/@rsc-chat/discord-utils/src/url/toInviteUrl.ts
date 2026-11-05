@@ -1,4 +1,5 @@
-import { error, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import type { Optional, OrUndefined } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { Guild } from "discord.js";
 
 export function toInviteUrl(guild: Optional<Guild>): OrUndefined<string> {
@@ -19,8 +20,9 @@ export function toInviteUrl(guild: Optional<Guild>): OrUndefined<string> {
 			return true;
 		});
 		return bestInvite?.url ?? undefined;
+
 	}catch(ex) {
-		error(ex);
+		Logger.package("@rsc-chat/discord-utils").error(ex);
 	}
 	return undefined;
 }

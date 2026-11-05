@@ -1,6 +1,7 @@
 import { EmbedColorType, type EmbedColor } from "@rsc-sage/data";
-import { Arrayish, Color, error, errorReturnUndefined, getEnumValues, isDefined, stringifyJson } from "@rsc-utils/core-utils";
+import { Arrayish, Color, getEnumValues, isDefined, stringifyJson } from "@rsc-utils/core-utils";
 import { EmbedBuilder } from "@rsc-utils/discord-utils";
+import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";
 import type { ColorAndType, Colors } from "../../model/Colors.js";
@@ -85,7 +86,7 @@ function renderColors(sageCommand: SageCommand, ...pairs: RenderPair[]): EmbedBu
 	const embeds: EmbedBuilder[] = [];
 
 	const errorPushInvalid = (pair: RenderPair, botColor?: EmbedColor, color?: string, hex?: string) => {
-		error(`renderColors:: Invalid embed color value: ${stringifyJson({pair,botColor,color,hex})}`);
+		Logger.package("@rsc-sage/core").error(`renderColors:: Invalid embed color value: ${stringifyJson({pair,botColor,color,hex})}`);
 		embeds.push(new EmbedBuilder({ description:`Invalid ColorType: ${pair.type}` }));
 	}
 

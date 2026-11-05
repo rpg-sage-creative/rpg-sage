@@ -1,6 +1,7 @@
 import { DiceOutputType, type GameSystemType } from "@rsc-sage/data";
-import { HasIdCore, sortPrimitive, sum, warn, type IdCore } from "@rsc-utils/core-utils";
+import { HasIdCore, sortPrimitive, sum, type IdCore } from "@rsc-utils/core-utils";
 import { DiceDropKeepType, evalMath, unpipe, type DiceDropKeepData } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { TokenData } from "@rsc-utils/token-string-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
@@ -30,7 +31,7 @@ export function sumDropKeep(values: number[], dropKeep?: DiceDropKeepData): numb
 		case DiceDropKeepType.KeepLowest:
 			return sum(sorted.slice(0, dropKeep.value));
 		default:
-			warn(`Invalid dropKeep.type = ${dropKeep.type} (${DiceDropKeepType[dropKeep.type]})`);
+			Logger.package("@rsc-sage/core").warn(`Invalid dropKeep.type = ${dropKeep.type} (${DiceDropKeepType[dropKeep.type]})`);
 			return sum(values);
 	}
 }
@@ -118,7 +119,7 @@ export function testRoll(roll: TDiceRoll): boolean | undefined {
 			case TestType.LessThanOrEqual:
 				return roll.total <= test.value;
 			default:
-				warn(`testRoll(): invalid roll.dice.test.type = ${test.type} (${test.alias})`);
+				Logger.package("@rsc-sage/core").warn(`testRoll(): invalid roll.dice.test.type = ${test.type} (${test.alias})`);
 		}
 	}
 	return undefined;

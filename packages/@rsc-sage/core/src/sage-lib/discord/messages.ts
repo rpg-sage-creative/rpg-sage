@@ -1,6 +1,7 @@
 import { DialogPostType } from "@rsc-sage/data";
-import { error, RenderableContent, warn, warnReturnUndefined, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { addInvalidWebhookUsername, DiscordKey, isMessage, isUser, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedTarget } from "@rsc-utils/discord-utils";
+import { Logger, warnReturnUndefined } from "@rsc-utils/logger-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";
 import { SageMessageReference } from "../sage/repo/SageMessageReference.js";
@@ -20,7 +21,7 @@ function messageToDetails(message: MessageOrPartial): string {
 
 function logIfNotTimeout(typeOfReason: string, reason: string): void {
 	if (reason !== TIMEOUT) {
-		error(`${typeOfReason}: ${reason}`);
+		Logger.package("@rsc-sage/core").error(`${typeOfReason}: ${reason}`);
 	}
 }
 
@@ -75,7 +76,7 @@ export async function sendWebhook(targetChannel: Channel, webhookOptions: Webhoo
 	return sendTo(
 		{ sageCache, target:webhook, embeds, files, threadId, ...authorOptions },
 		{ contentToEmbeds, embedsToContent },
-		(err: unknown) => error({
+		(err: unknown) => Logger.package("@rsc-sage/core").error({
 			err,
 			targetChannel: toHumanReadable(targetChannel) ?? "#UnknownTargetChannel",
 			threadId,
@@ -126,7 +127,7 @@ export async function replaceWebhook(originalMessage: SMessageOrPartial, webhook
 
 	const results = await sendTo({ sageCache, target:webhook, content, embeds, files, replyingTo, threadId, ...authorOptions }, { contentToEmbeds, embedsToContent });
 	if (!results) {
-		warn(`${toHumanReadable(originalMessage.channel)}${threadId?" "+threadId:""}: replaceWebhook ==> canTest && !canSend (no perms)`);
+		Logger.package("@rsc-sage/core").warn(`${toHumanReadable(originalMessage.channel)}${threadId?" "+threadId:""}: replaceWebhook ==> canTest && !canSend (no perms)`);
 		return [];
 	}
 	const messages: Message[] = [];
@@ -139,10 +140,10 @@ export async function replaceWebhook(originalMessage: SMessageOrPartial, webhook
 			const dUser = await sageCache.discord.fetchUser(sageCache.user.did);
 			await dUser?.send(`We are unable to send your message for the following reason:\n${sageCache.getLocalizer()("USERNAME_S_BANNED", invalidUsername)}`);
 			const updated = addInvalidWebhookUsername(authorOptions.username, invalidUsername);
-			error({ fn:"replaceWebhook", invalidUsername, updated });
+			Logger.package("@rsc-sage/core").error({ fn:"replaceWebhook", invalidUsername, updated });
 
 		}else if (result && !result.process()) {
-			error({
+			Logger.package("@rsc-sage/core").error({
 				err: result.error,
 				originalChannel: toHumanReadable(originalMessage.channel) ?? "#UnknownOriginalMessageChannel",
 				threadId,
@@ -182,7 +183,7 @@ export async function send(sageCache: SageCache, targetChannel: SupportedTarget,
 			return [];
 		}
 	}catch(ex) {
-		error(ex);
+		Logger.package("@rsc-sage/core").error(ex);
 	}
 	return [];
 }
@@ -196,7 +197,7 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: Re
 			const sent = await sendTo(
 				{ sageCache, target:targetChannel, embeds:[embed] },
 				{ },
-				(err: unknown) => error({
+				(err: unknown) => Logger.package("@rsc-sage/core").error({
 					err,
 					targetChannel: toHumanReadable(targetChannel) ?? "#UnknownTargetChannel",
 				}, `sendRenderableContent(): Unable to notify long content will be sent as DM`)
@@ -207,7 +208,7 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: Re
 			const sent = await sendTo(
 				{ sageCache, target:originalAuthor, embeds },
 				{ },
-				(err: unknown) => error({
+				(err: unknown) => Logger.package("@rsc-sage/core").error({
 					err,
 					originalAuthor: toHumanReadable(originalAuthor) ?? "@UnknownOriginalAuthor",
 				}, `sendRenderableContent(): Unable to send long content as DM`)
@@ -218,7 +219,7 @@ async function sendRenderableContent(sageCache: SageCache, renderableContent: Re
 		const sent = await sendTo(
 			{ sageCache, target:targetChannel, embeds },
 			 { },
-			  (err: unknown) => error({
+			  (err: unknown) => Logger.package("@rsc-sage/core").error({
 				err,
 				originalAuthor: toHumanReadable(originalAuthor) ?? "@UnknownOriginalAuthor",
 				targetChannel: toHumanReadable(targetChannel) ?? "#UnknownTargetChannel",
@@ -240,7 +241,7 @@ function sendMenuRenderableContent(sageCache: SageCache, menuRenderable: IMenuRe
 		if (renderable) {
 			send(sageCache, targetChannel, renderable, originalAuthor);
 		}else {
-			warn(`sendMenuRenderableContent: Nothing to send!`);
+			Logger.package("@rsc-sage/core").warn(`sendMenuRenderableContent: Nothing to send!`);
 		}
 	}
 }
@@ -297,8 +298,8 @@ function sendAndAwaitReactions(sageCache: SageCache, menuRenderable: IMenuRender
 		}, (/*reason*/) => {
 			if (!sageCache.discordKey.isDm) {
 				lastMessage.reactions.removeAll().catch(ex => {
-					warn(`Clearing Reactions`, ex);
-					reactions.forEach(reaction => reaction.remove().catch(x => error(`Clearing Reaction`, x)));
+					Logger.package("@rsc-sage/core").warn(`Clearing Reactions`, ex);
+					reactions.forEach(reaction => reaction.remove().catch(x => Logger.package("@rsc-sage/core").error(`Clearing Reaction`, x)));
 				});
 			}
 			reject(TIMEOUT);

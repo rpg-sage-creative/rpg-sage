@@ -1,5 +1,6 @@
 import { DataTable, type SageMessageReferenceCore } from "@rsc-sage/data";
-import { error, errorReturnUndefined, noop, snowflakeToDate, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { noop, snowflakeToDate, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import type { Message, MessageReference, PartialMessage } from "discord.js";
 
 type ReadOptions = {
@@ -61,7 +62,7 @@ export class SageMessageReference {
 			? resolvable.id as Snowflake
 			: resolvable.messageId as Snowflake;
 		if (!messageId) {
-			error(`DialogMessageRepository.read(): resolvable doesn't have message id`);
+			Logger.package("@rsc-sage/core").error(`DialogMessageRepository.read(): resolvable doesn't have message id`);
 			return undefined;
 		}
 

@@ -1,8 +1,8 @@
 import { EmbedColorType, type EmbedColor } from "@rsc-sage/data";
-import { Color, warn, type HexColorString, type Optional } from "@rsc-utils/core-utils";
+import { Color, type HexColorString, type Optional } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 
 export type ColorAndType = { type: EmbedColorType; color: Color; };
-
 
 export type HasColorsCore = {
 	colors: Colors;
@@ -96,7 +96,7 @@ export class Colors {
 				return color?.hex ?? this.toHexColorString(EmbedColorType.NonPlayerCharacter);
 
 			default:
-				warn(`Missing EmbedColorType: ${colorType}`);
+				Logger.package("@rsc-sage/core").warn(`Missing EmbedColorType: ${colorType}`);
 				return undefined;
 		}
 	}

@@ -1,14 +1,14 @@
-import { warn } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
+import type { AbilityName } from "../gameSystems/d20/lib/Ability.js";
 import { Skill } from "../gameSystems/p20/lib/Skill.js";
-import { type AbilityName } from "../gameSystems/d20/lib/Ability.js";
 
 export type GetStatPrefix = "" | "dc" | "ext" | "label" | "labeled" | "mod" | "p" | "prof" | "proficiency";
 
 //#region Abilities
 export const STRENGTH = "Strength", DEXTERITY = "Dexterity", CONSTITUTION = "Constitution", INTELLIGENCE = "Intelligence", WISDOM = "Wisdom", CHARISMA = "Charisma";
 export const ABILITIES: AbilityName[] = [STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA];
-export { type AbilityName as TAbility } from "../gameSystems/d20/lib/Ability.js";
-export { type AbilityAbbr as TAbil } from "../gameSystems/d20/lib/Ability.js";
+export { type AbilityAbbr as TAbil, type AbilityName as TAbility } from "../gameSystems/d20/lib/Ability.js";
+export { toModifier } from "../gameSystems/utils/toModifier.js";
 //#endregion Abilities
 
 //#region Magic Traditions
@@ -250,7 +250,7 @@ export function profToMod(prof: TProficiency): number {
 		case MASTER: return 6;
 		case LEGENDARY: return 8;
 		default:
-			warn(`Invalid Proficiency: ${prof}`);
+			Logger.package("@rsc-sage/core").warn(`Invalid Proficiency: ${prof}`);
 			return 0;
 	}
 }
@@ -262,7 +262,6 @@ export function minProf(a: TProficiency, b: TProficiency): TProficiency {
 	}
 	return aMod < bMod ? a : b;
 }
-export { toModifier } from "../gameSystems/utils/toModifier.js";
 
 export function rarityToSuper(rarity: TRarity): string {
 	if (rarity === "Rare") {

@@ -1,7 +1,8 @@
 import type { DialogPostType } from "@rsc-sage/data";
 import { getLocalizedText } from "@rsc-sage/localization";
-import { errorReturnEmptyArray, type RenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
+import { errorReturnEmptyArray } from "@rsc-utils/logger-utils";
 import type { Message } from "discord.js";
 import { replaceWebhook, sendWebhook, type AuthorOptions } from "../../../discord/messages.js";
 import type { AttachmentResolvable } from "../../../discord/sendTo.js";

@@ -1,5 +1,6 @@
-import { debug, isNilSnowflake, NIL_SNOWFLAKE, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
+import { isNilSnowflake, NIL_SNOWFLAKE, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { EmbedBuilder, getActionRows } from "@rsc-utils/discord-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, type MessagePayloadOption } from "discord.js";
 import { createMessageEmbed } from "../../../../../discord/createMessageEmbed.js";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
@@ -159,7 +160,7 @@ async function showStats(sageInteraction: SageButtonInteraction, idParts: Custom
 }
 
 async function handleCharFormAction(sageInteraction: SageInteraction, idParts: CustomIdParts): Promise<void> {
-	debug({idParts});
+	Logger.package("@rsc-sage/core").debug({idParts});
 	const { interaction, replyStack } = sageInteraction;
 	switch(idParts.action) {
 		case SelectChar: return selectCharacter(sageInteraction);

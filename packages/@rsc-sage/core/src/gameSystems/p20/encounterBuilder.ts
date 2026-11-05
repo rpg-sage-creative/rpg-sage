@@ -1,5 +1,6 @@
 import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data";
-import { warn, ZERO_WIDTH_SPACE, type RenderableContent, type Snowflake, type SortResult } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE, type RenderableContent, type Snowflake, type SortResult } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, Message, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from "discord.js";
 import { deleteMessage } from "../../sage-lib/discord/deletedMessages.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
@@ -538,12 +539,12 @@ async function showEncounter(sageCommand: SageCommand): Promise<void> {
 		sageCommand.replyStack.whisper({ content:sageCommand.getLocalizer()("SORRY_WE_DONT_KNOW") });
 	};
 
-	const messageOne = await sageCommand.replyStack.reply({ content:"Loading ..." }, true).catch(warn);
+	const messageOne = await sageCommand.replyStack.reply({ content:"Loading ..." }, true).catch(Logger.package("@rsc-sage/core").warn);
 	if (!messageOne) {
 		return sorry();
 	}
 
-	const messageTwo = await sageCommand.replyStack.send({ content:"Loading ..." }, true).catch(warn);
+	const messageTwo = await sageCommand.replyStack.send({ content:"Loading ..." }, true).catch(Logger.package("@rsc-sage/core").warn);
 	if (!messageTwo) {
 		return sorry(messageOne);
 	}
@@ -621,8 +622,8 @@ async function updateEncounter(sageCommand: SageCommand, args: Args): Promise<vo
 	const options = sageCommand.resolveToOptions({ content, components });
 
 	const [messageOne, messageTwo] = args.messages;
-	await messageOne.edit(options).catch(warn);
-	await messageTwo.edit({ content:ZERO_WIDTH_SPACE, components:buildFormTwo(args) }).catch(warn);
+	await messageOne.edit(options).catch(Logger.package("@rsc-sage/core").warn);
+	await messageTwo.edit({ content:ZERO_WIDTH_SPACE, components:buildFormTwo(args) }).catch(Logger.package("@rsc-sage/core").warn);
 
 	// debug({getArgs:(Date.now()-start)});
 }

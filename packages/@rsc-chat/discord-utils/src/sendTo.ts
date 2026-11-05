@@ -1,4 +1,5 @@
-import { error, type Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { ActionRow, Attachment, AttachmentBuilder, Message, Webhook, type MessageActionRowComponent } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";
 import type { EmbedResolvable } from "./embed/EmbedResolvable.js";
@@ -57,7 +58,7 @@ export async function sendTo(sendArgs: SendToArgs, splitOptions: SplitOptions, c
 
 	const catcher = catchHandler
 		? (reason: unknown) => { DiscordApiError.process(reason) ? void 0 : catchHandler(reason); return undefined; } // NOSONAR
-		: (reason: unknown) => { const apiErr = DiscordApiError.from(reason); if (!apiErr) error(reason); return apiErr; }; // NOSONAR
+		: (reason: unknown) => { const apiErr = DiscordApiError.from(reason); if (!apiErr) Logger.package("@rsc-chat/discord-utils").error(reason); return apiErr; }; // NOSONAR
 
 	const results: Result[] = [];
 	for (const payload of payloads) {

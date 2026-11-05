@@ -1,4 +1,4 @@
-import { warn } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { MDASH, type HasContents, type HasParent, type HasQuantity, type IHasContents, type IHasParent, type IHasQuantity, type TContentItem, type TContentItemArray, type TObjectQuantity } from "../common.js";
 import { filter, findByValue } from "../data/Repository.js";
 import type { TDetail } from "../model/base/interfaces.js";
@@ -19,7 +19,7 @@ export function toObjectQuantity<T extends HasBulk>(contentItem: TContentItem, d
 		objectQuantity.quantity = contentItem.quantity || 1;
 	}
 	if (!objectQuantity.object) {
-		warn({ defaultObjectType, contentItem }, "Invalid objectQuantity.object");
+		Logger.package("@rsc-sage/core").warn({ defaultObjectType, contentItem }, "Invalid objectQuantity.object");
 	}
 	return objectQuantity;
 }

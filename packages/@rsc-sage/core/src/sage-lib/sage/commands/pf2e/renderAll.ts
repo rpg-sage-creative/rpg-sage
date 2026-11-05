@@ -1,4 +1,5 @@
-import { Arrayish, error, isDefined, sortComparable, toUnique, toUniqueDefined, trace, type RenderableContent } from "@rsc-utils/core-utils";
+import { Arrayish, isDefined, sortComparable, toUnique, toUniqueDefined, type RenderableContent } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../../sage-pf2e/index.js";
 import { createCommandRenderableContent } from "../cmd.js";
 
@@ -73,7 +74,7 @@ function renderAllBySource(objectType: string, objectTypePlural: string): Render
 }
 
 export function renderAll(objectType: string, objectTypePlural: string, _bySource = false): RenderableContent[] {
-	trace("renderAll(%s, %s)", objectType, objectTypePlural);
+	Logger.package("@rsc-sage/core").trace("renderAll(%s, %s)", objectType, objectTypePlural);
 	try {
 		if (objectType === "Source") {
 			return [renderAllSource(objectType, objectTypePlural)];
@@ -89,7 +90,7 @@ export function renderAll(objectType: string, objectTypePlural: string, _bySourc
 		SourceNotationMap.appendNotatedItems(content, all);
 		return [content];
 	} catch (ex) {
-		error(ex);
+		Logger.package("@rsc-sage/core").error(ex);
 	}
 	return [];
 }

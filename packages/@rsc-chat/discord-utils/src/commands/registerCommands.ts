@@ -1,6 +1,6 @@
 
-import { error } from "@rsc-utils/core-utils";
 import { filterFiles } from "@rsc-utils/io-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { join, parse } from "node:path";
 import type { MessageCommand, SlashCommand, UserCommand } from "../index.js";
 
@@ -41,7 +41,7 @@ export async function registerCommands(commandPathValidator: CommandPathValidato
 			commandArray.push(registerCommand() as any);
 		}
 	}catch(ex) {
-		error(ex);
+		Logger.package("@rsc-chat/discord-utils").error(ex);
 	}
 	return commands;
 }

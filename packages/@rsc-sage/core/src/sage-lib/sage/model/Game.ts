@@ -1,7 +1,8 @@
 import type { AutoChannelData, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameRoleData, GameSystem, GameSystemType, GameUserData, PostCurrency, SageChannel, SageGameCore, SageGameCoreOld } from "@rsc-sage/data";
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameRoleType, GameUserType, SageChannelType, ensureSageGameCore, parseGameSystem, parseSageChannelType } from "@rsc-sage/data";
-import { applyChanges, error, generateSnowflake, isDefined, sortPrimitive, warn, type Args, type Comparable, type HexColorString, type Optional, type OrNull, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, generateSnowflake, isDefined, sortPrimitive, type Args, type Comparable, type HexColorString, type Optional, type OrNull, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGameMessagesChannel } from "@rsc-utils/discord-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, Role } from "discord.js";
 import type { HasPostCurrency } from "../commands/admin/PostCurrency.js";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
@@ -676,7 +677,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 
 	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
 		if (!this.core.colors?.length) {
-			warn(`Colors Missing: Game (${this.name || this.id})`);
+			Logger.package("@rsc-sage/core").warn(`Colors Missing: Game (${this.name || this.id})`);
 			return this.server.toHexColorString(colorType);
 		}
 		return this.colors.toHexColorString(colorType)
@@ -698,7 +699,7 @@ export class Game extends HasSageCacheCore<GameCore> implements Comparable<Game>
 			text = this.emoji.emojify(text);
 			text = this.server.emojify(text);
 		}catch(err) {
-			error({ err, gameId:this.id, serverDid:this.serverDid }, "Game.emojify()");
+			Logger.package("@rsc-sage/core").error({ err, gameId:this.id, serverDid:this.serverDid }, "Game.emojify()");
 		}
 		return text;
 	}

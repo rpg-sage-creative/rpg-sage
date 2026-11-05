@@ -1,4 +1,5 @@
-import { debug, type Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { GameCharacter } from "../GameCharacter.js";
 import type { SageCommand } from "../SageCommand.js";
 
@@ -21,7 +22,7 @@ import type { SageCommand } from "../SageCommand.js";
  * @returns
  */
 export async function findActiveCharacter(sageCommand: SageCommand, characterId?: Snowflake): Promise<GameCharacter | undefined> {
-	debug({fn:"findActiveCharacter",characterId});
+	Logger.package("@rsc-sage/core").debug({fn:"findActiveCharacter",characterId});
 	const { actor, channel } = sageCommand;
 	if (!actor.id || !channel?.type) return undefined;
 

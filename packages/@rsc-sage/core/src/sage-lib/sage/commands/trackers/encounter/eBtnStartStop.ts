@@ -1,7 +1,6 @@
-import { debug } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { registerInteractionListener } from "../../../../discord/handlers.js";
 import type { SageButtonInteraction } from "../../../model/SageInteraction.js";
-
 
 const CustomIdRegExp = /encounter-\d+-status-action-(start|stop)/;
 
@@ -14,7 +13,7 @@ async function handleEncounterStartStopButton(sageInteraction: SageButtonInterac
 	sageInteraction.replyStack.defer();
 	const [_encounter, encounterId, _status, _action, action] = sageInteraction.interaction.customId.split("-")[1];
 	const encounter = sageInteraction.game?.encounters.get(encounterId);
-	debug({encounterId,encounter:!!encounter});
+	Logger.package("@rsc-sage/core").debug({encounterId,encounter:!!encounter});
 	if (action === "start") {
 		encounter?.start();
 	}else {

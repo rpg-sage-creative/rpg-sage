@@ -1,4 +1,5 @@
-import { capitalize, nth, toUniqueDefined, warn, type Optional } from "@rsc-utils/core-utils";
+import { capitalize, nth, toUniqueDefined, type Optional } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e/index.js";
 import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
@@ -189,7 +190,7 @@ async function specialistLists(sageMessage: SageMessage): Promise<void> {
 		} else if (traditionAndModifier.modifier === "&") {
 			spells = spells.slice().filter(spell => spells.includes(spell) && byTradition.includes(spell));
 		} else {
-			warn(traditionAndModifier);
+			Logger.package("@rsc-sage/core").warn(traditionAndModifier);
 		}
 	});
 

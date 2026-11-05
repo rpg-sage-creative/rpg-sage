@@ -1,6 +1,7 @@
 import { getSageId, getSuperUserId, getToken } from "@rsc-sage/env";
-import { captureProcessExit, info, trace, type Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, getRegisteredIntents, getRegisteredPartials } from "@rsc-utils/discord-utils";
+import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { ActivityType, Client, type ClientOptions } from "discord.js";
 import { setDeleted } from "../../discord/deletedMessages.js";
 import { handleInteraction, handleMessage, handleReaction } from "../../discord/handlers.js";
@@ -58,7 +59,7 @@ export class ActiveBot extends Bot {
 
 			ActiveBot.active = this;
 
-			info(`Discord.Client.on("clientReady") [success]`);
+			Logger.package("@rsc-sage/core").info(`Discord.Client.on("clientReady") [success]`);
 
 			ActiveBot.client.users.fetch(getSuperUserId(), { cache:true, force:false })
 				.then(async user => await user.send(`Discord.Client.on("clientReady") [success]`), DiscordApiError.process);
@@ -75,7 +76,7 @@ export class ActiveBot extends Bot {
 		client.on("guildCreate", guild => {
 			initializeServer(guild).then(initialized => {
 				const guildArg = { id:guild.id, name:guild.name };
-				trace("Discord.Client.on('guildCreate', %o) => %s", guildArg, initialized);
+				Logger.package("@rsc-sage/core").trace("Discord.Client.on('guildCreate', %o) => %s", guildArg, initialized);
 			});
 		});
 
@@ -100,7 +101,7 @@ export class ActiveBot extends Bot {
 						const interactionArg = "message" in interaction
 							? { id:interaction.id, message:{ id:interaction.message?.id }, user:{ id:interaction.user.id } }
 							: { id:interaction.id, user:{ id:interaction.user.id } };
-						trace(`Discord.Client.on(%s, interaction: %o) => %d.%d`, clientEvent, interactionArg, data.tested, data.handled);
+						Logger.package("@rsc-sage/core").trace(`Discord.Client.on(%s, interaction: %o) => %d.%d`, clientEvent, interactionArg, data.tested, data.handled);
 					}
 				});
 			});
@@ -113,7 +114,7 @@ export class ActiveBot extends Bot {
 					if (data.handled > 0) {
 						const originalMessageArg = { id:originalMessage.id, author:{ id:originalMessage.author?.id } };
 						const updatedMessageArg = { id:updatedMessage?.id, author:{ id:updatedMessage?.author?.id } };
-						trace(`Discord.Client.on(%s, originalMessage: %o, updatedMessage: %o) => %d.%d`, ev, originalMessageArg, updatedMessageArg, data.tested, data.handled);
+						Logger.package("@rsc-sage/core").trace(`Discord.Client.on(%s, originalMessage: %o, updatedMessage: %o) => %d.%d`, ev, originalMessageArg, updatedMessageArg, data.tested, data.handled);
 					}
 				});
 			});
@@ -134,7 +135,7 @@ export class ActiveBot extends Bot {
 					if (data.handled > 0) {
 						const messageReactionArg = { message:{ id:messageReaction.message.id }, emoji:{ name:messageReaction.emoji.name } };
 						const userArg = { id:user.id };
-						trace(`Discord.Client.on(%s, messageReaction: %o, user: %o) => %d.%d`, ev, messageReactionArg, userArg, data.tested, data.handled);
+						Logger.package("@rsc-sage/core").trace(`Discord.Client.on(%s, messageReaction: %o, user: %o) => %d.%d`, ev, messageReactionArg, userArg, data.tested, data.handled);
 					}
 				});
 			});
@@ -163,7 +164,7 @@ export class ActiveBot extends Bot {
 
 	public destroy() {
 		super.destroy();
-		info("Destroying Discord.Client");
+		Logger.package("@rsc-sage/core").info("Destroying Discord.Client");
 		return ActiveBot.client.destroy();
 	}
 

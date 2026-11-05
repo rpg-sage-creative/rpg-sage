@@ -1,4 +1,5 @@
-import { HasIdCore, sortPrimitive, StringMatcher, warn, type Comparable, type IdCore, type Renderable, type SortResult, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { HasIdCore, sortPrimitive, StringMatcher, type Comparable, type IdCore, type Renderable, type SortResult, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { SearchInfo, SearchScore, type Searchable } from "@rsc-utils/search-utils";
 import { NEWLINE, TAB } from "../../common.js";
 import { RenderableContent } from "../../data/RenderableContent.js";
@@ -48,7 +49,7 @@ export class Base<T extends BaseCore<U> = BaseCore<any>, U extends string = stri
 	public constructor(protected core: T) {
 		super(core);
 		if (!core.id && !((core as any).hash)) {
-			warn("NO ID! %o", core.name ?? core);
+			Logger.package("@rsc-sage/core").warn("NO ID! %o", core.name ?? core);
 		}
 	}
 

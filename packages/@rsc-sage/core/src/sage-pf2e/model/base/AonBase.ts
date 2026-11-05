@@ -1,5 +1,6 @@
 import type { GameSystemCode } from "@rsc-sage/data";
-import { capitalize, error, sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/core-utils";
+import { capitalize, sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import type { GameSearchInfo } from "../../../sage-search/GameSearchInfo.js";
 import type { Aon2eGameSystemCode } from "../../../sage-search/aon/2e/types.js";
@@ -109,7 +110,7 @@ function hackCore(core: AonBaseCore): AonBaseCore {
 			core.aonId = +core.id.split("-")[0];
 			break;
 		default:
-			error({ core }, "unexpected core.id");
+			Logger.package("@rsc-sage/core").error({ core }, "unexpected core.id");
 	}
 	return core;
 }

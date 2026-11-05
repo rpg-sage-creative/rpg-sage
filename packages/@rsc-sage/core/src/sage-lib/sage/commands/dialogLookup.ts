@@ -1,7 +1,8 @@
 import { EmbedColorType, EmojiType, GameUserType } from "@rsc-sage/data";
 import { isSageId, isTupperBoxId } from "@rsc-sage/env";
-import { errorReturnUndefined, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import type { Optional, RenderableContent, Snowflake } from "@rsc-utils/core-utils";
 import { toMessageUrl, toUserMention } from "@rsc-utils/discord-utils";
+import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import type { Guild, Message, TextChannel } from "discord.js";
 import { ReactionType } from "../../discord/enums.js";
 import { registerReactionListener } from "../../discord/handlers.js";

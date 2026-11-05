@@ -1,5 +1,5 @@
-import { debug } from "@rsc-utils/core-utils";
 import type { DialogContent } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { registerMessageListener } from "../../discord/handlers.js";
 import { MessageType, type TCommandAndArgsAndData } from "../../discord/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
@@ -55,7 +55,7 @@ async function doDialog(sageMessage: SageMessage, dialogContents: DialogContent[
 				await editChat(sageMessage, dialogContent);
 				break;
 			default:
-				debug({ dialogContent }, `Invalid dialogContent.type`);
+				Logger.package("@rsc-sage/core").debug({ dialogContent }, `Invalid dialogContent.type`);
 				break;
 		}
 	}

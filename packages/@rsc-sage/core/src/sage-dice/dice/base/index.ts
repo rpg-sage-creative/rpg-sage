@@ -1,7 +1,8 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
-import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, generateSnowflake, sortPrimitive, sum, warn, type Optional, type OrNull, type OrUndefined, type SortResult } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE, cleanWhitespace, dequote, generateSnowflake, sortPrimitive, sum, type Optional, type OrNull, type OrUndefined, type SortResult } from "@rsc-utils/core-utils";
 import { correctEscapedMentions } from "@rsc-utils/discord-utils";
 import { DiceDropKeep, DiceDropKeepType, cleanDicePartDescription, createTestRegExp, removeDesc, type DiceDropKeepData } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/token-string-utils";
 import {
@@ -664,7 +665,7 @@ export class DiceRoll<T extends DiceRollCore, U extends TDice, V extends TDicePa
 			case DiceOutputType.XS: return this.toStringXS(hideRolls);
 			case DiceOutputType.XXS: return this.toStringXXS(hideRolls);
 			default: {
-				warn(`DiceRoll.toString(${args})`);
+				Logger.package("@rsc-sage/core").warn(`DiceRoll.toString(${args})`);
 				return this.toString(DiceOutputType.M, hideRolls);
 			}
 		}

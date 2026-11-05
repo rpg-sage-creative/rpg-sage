@@ -1,6 +1,7 @@
-import { errorReturnUndefined, isDefined, isNotBlank, StringMatcher, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isNotBlank, StringMatcher, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type SupportedTarget } from "@rsc-utils/discord-utils";
 import { replaceMacroArgsWithDefaultValues, type DiceMacroBase, type MacroBase } from "@rsc-utils/game-utils";
+import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { SavingThrow } from "../../../gameSystems/d20/lib/SavingThrow.js";
 import { HephaistosCharacterSF1e, type CharacterSectionType, type CharacterViewType } from "../../../gameSystems/sf1e/characters/HephaistosCharacter.js";

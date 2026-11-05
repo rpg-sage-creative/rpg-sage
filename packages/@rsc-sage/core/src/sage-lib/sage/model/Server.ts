@@ -1,8 +1,9 @@
 import type { AdminRole, AdminRoleType, AdminUser, DialogPostType, DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, EmbedColorType, EmojiType, GameCreatorType, GameSystem, GameSystemType, SageChannel, SageCharacterCore, SageServerCore, SageServerCoreOld, ServerOptions } from "@rsc-sage/data";
 import { DiceSortType, ensureSageServerCore, parseGameSystem } from "@rsc-sage/data";
 import { getHomeServerId } from "@rsc-sage/env";
-import { applyChanges, error, generateSnowflake, warn, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, generateSnowflake, type Args, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey } from "@rsc-utils/discord-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../model/ActiveBot.js";
 import { HasSageCacheCore } from "../repo/base/HasSageCacheCore.js";
@@ -378,7 +379,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 
 	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
 		if (!this.core.colors?.length) {
-			warn(`Colors Missing: Server (${this.discord?.guild?.name ?? this.id})`);
+			Logger.package("@rsc-sage/core").warn(`Colors Missing: Server (${this.discord?.guild?.name ?? this.id})`);
 			return this.sageCache.bot.toHexColorString(colorType);
 		}
 		return this.colors.toHexColorString(colorType)
@@ -400,7 +401,7 @@ export class Server extends HasSageCacheCore<ServerCore> implements HasColorsCor
 			text = this.emoji.emojify(text);
 			text = this.sageCache.bot.emojify(text);
 		}catch(err) {
-			error({ err, serverId:this.id }, "Server.emojify()");
+			Logger.package("@rsc-sage/core").error({ err, serverId:this.id }, "Server.emojify()");
 		}
 		return text;
 	}

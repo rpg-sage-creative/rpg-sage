@@ -1,4 +1,4 @@
-import { error } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageInteraction } from "../model/SageInteraction.js";
 
@@ -6,7 +6,7 @@ import type { SageInteraction } from "../model/SageInteraction.js";
 
 async function slashDmHandler(sageInteraction: SageInteraction): Promise<void> {
 	const failure = (reason: any) => {
-		error(reason);
+		Logger.package("@rsc-sage/core").error(reason);
 		return sageInteraction.whisper(`Sorry, there was a problem!`);
 	};
 	const deferred = () => {

@@ -1,11 +1,12 @@
 import { EmojiType } from "@rsc-sage/data";
-import { ArgsManager, Cache, debug, error, errorReturnUndefined, RenderableContent, warn, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { ArgsManager, Cache, RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-utils/discord-utils";
+import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import type { User } from "discord.js";
 import { regex } from "regex";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { sendTo } from "../../discord/sendTo.js";
-import { type TCommandAndArgs } from "../../discord/types.js";
+import type { TCommandAndArgs } from "../../discord/types.js";
 import { createAdminRenderableContent } from "../commands/cmd.js";
 import { SageCommand, type SageCommandCore, type TSendArgs } from "./SageCommand.js";
 import { SageEventCache } from "./SageEventCache.js";
@@ -54,7 +55,7 @@ export class SageMessage
 	}
 
 	public clear(): void {
-		debug("Clearing SageMessage");
+		Logger.package("@rsc-sage/core").debug("Clearing SageMessage");
 		this.cache.clear();
 		this.eventCache.clear();
 	}
@@ -126,7 +127,7 @@ export class SageMessage
 			content: this.eventCache.resolveToContent(renderableContentResolvable).join("\n")
 		};
 		const catchHandler = (err: unknown) => {
-			error({
+			Logger.package("@rsc-sage/core").error({
 				err,
 				targetChannel: toHumanReadable(target) ?? "#UnknownTargetChannel",
 			}, `SageMessage.sendPost(): Error with sendTo()`);
@@ -177,7 +178,7 @@ export class SageMessage
 		/** @todo: start saving the reason for reactions so users can click them to get a DM about what the fuck is going on */
 		const emoji = this.getEmoji(emojiType);
 		if (!emoji) {
-			warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`);
+			Logger.package("@rsc-sage/core").warn(`Invalid emojiType: ${emojiType} >> ${reason ?? "no reason given"}`);
 		}
 		if (emoji && !reason) {
 			const reacted = await this._react(this.message, emoji)

@@ -1,7 +1,8 @@
 import { DialogPostType } from "@rsc-sage/data";
-import { error, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import { splitMessageOptions, toMessageUrl, validateMessageOptions } from "@rsc-utils/discord-utils";
 import type { DialogContent } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { AttachmentBuilder } from "discord.js";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -69,7 +70,7 @@ export async function editChat(sageMessage: SageMessage, dialogContent: DialogCo
 	const payloads = splitMessageOptions(msgOptions, splitOptions);
 	const isValid = validateMessageOptions(payloads[0]);
 	if (isValid) {
-		await webhook.editMessage(message.id, payloads[0]).then(() => deleteMessage(sageMessage.message), error);
+		await webhook.editMessage(message.id, payloads[0]).then(() => deleteMessage(sageMessage.message), Logger.package("@rsc-sage/core").error);
 
 		if (sageMessage.sageUser.dmOnEdit) {
 			// because this is a SageMessage we already validated the actor

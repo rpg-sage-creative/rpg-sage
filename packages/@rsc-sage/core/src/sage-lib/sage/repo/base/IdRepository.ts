@@ -1,6 +1,7 @@
 import { DataTable, type BaseCacheItem, type CacheItemObjectType } from "@rsc-sage/data";
 import { getDataRoot } from "@rsc-sage/env";
-import { debug, EphemeralMap, error, isNonNilSnowflake, isNonNilUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { EphemeralMap, isNonNilSnowflake, isNonNilUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { Game, type GameCore } from "../../model/Game.js";
 import { GameCharacter, type GameCharacterCore } from "../../model/GameCharacter.js";
 import type { SageCache } from "../../model/SageCache.js";
@@ -20,7 +21,9 @@ async function entityFromCore(sageCache: SageCache, core: GameCharacterCore | Ga
 			return undefined as GameCharacter | unknown;
 		case "Game":
 			const server = await sageCache.getOrFetchServer(core.serverId, core.serverDid);
-			if (!server) debug({serverId:core.serverId,serverDid:core.serverDid});
+			if (!server) {
+				Logger.package("@rsc-sage/core").debug({serverId:core.serverId,serverDid:core.serverDid});
+			}
 			return new Game(core, server!, sageCache);
 		case "Server":
 			return new Server(core, sageCache);
@@ -112,7 +115,7 @@ export class IdRepository<
 			}
 		}
 
-		debug(`IdRepository.getById("${objectType}", ${ids.join(", ")}): nothing mapped, calling this.readById("${objectType}", ${[...validIds].join(", ")})`);
+		Logger.package("@rsc-sage/core").debug(`IdRepository.getById("${objectType}", ${ids.join(", ")}): nothing mapped, calling this.readById("${objectType}", ${[...validIds].join(", ")})`);
 
 		// we have to get it from cache or file
 		return this.readById(objectType, ...validIds);
@@ -183,7 +186,7 @@ export class IdRepository<
 			usedToFetch.add(id);
 		}
 
-		debug({ ev:`IdRepository.readById(objectType, ...ids): Item Not Found!`, objectType, ids });
+		Logger.package("@rsc-sage/core").debug({ ev:`IdRepository.readById(objectType, ...ids): Item Not Found!`, objectType, ids });
 
 		return undefined;
 	}
@@ -192,7 +195,7 @@ export class IdRepository<
 	public async write(entity: Entity): Promise<boolean> {
 		const dataTable = DataTable.for(entity.objectType as Type);
 		if (!dataTable) {
-			error(`IdRepository.write() failed; DataTable missing: ${entity.objectType}`);
+			Logger.package("@rsc-sage/core").error(`IdRepository.write() failed; DataTable missing: ${entity.objectType}`);
 			return false;
 		}
 		const saved = await dataTable?.write(entity.toJSON());

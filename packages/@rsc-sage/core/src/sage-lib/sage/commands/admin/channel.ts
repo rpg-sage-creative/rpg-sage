@@ -1,6 +1,7 @@
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, getCriticalMethodText, parseGameSystem, SageChannelType, type SageChannel } from "@rsc-sage/data";
-import { Arrayish, isDefined, stringifyJson, warn, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import { Arrayish, isDefined, stringifyJson, type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, isSupportedTarget, toChannelMention } from "@rsc-utils/discord-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { GuildChannel } from "discord.js";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { Game } from "../../model/Game.js";
@@ -170,7 +171,7 @@ async function channelSet(sageMessage: SageMessage): Promise<void> {
 
 	const channelOptions = sageMessage.args.getChannelOptions();
 	if (!channelOptions) {
-		warn(`No or Invalid Channel Options: ${stringifyJson(channelOptions)}`);
+		Logger.package("@rsc-sage/core").warn(`No or Invalid Channel Options: ${stringifyJson(channelOptions)}`);
 		return sageMessage.reactFailure();
 	}
 

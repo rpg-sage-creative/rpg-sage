@@ -1,4 +1,4 @@
-import { debug } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder, type ComponentEmojiResolvable } from "discord.js";
 import type { Encounter } from "./Encounter.js";
 
@@ -32,7 +32,7 @@ function createCharacterSelector(encounter: Encounter): ActionRowBuilder<StringS
 		.setCustomId(getCustomId({ encounter, action:"charSelect" } as ButtonOptions));
 	const characters = encounter.getSortedCharacters();
 	characters.forEach(char => {
-		debug({ label:char.name, value:char.id });
+		Logger.package("@rsc-sage/core").debug({ label:char.name, value:char.id });
 		select.addOptions({ label:char.name, value:char.id });
 	});
 	return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([select]);

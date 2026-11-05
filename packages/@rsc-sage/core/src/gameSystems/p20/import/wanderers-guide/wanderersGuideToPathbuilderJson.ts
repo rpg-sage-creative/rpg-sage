@@ -1,4 +1,5 @@
-import { capitalize, debug, generateSnowflake, type Optional, type UUID } from "@rsc-utils/core-utils";
+import { capitalize, generateSnowflake, type Optional, type UUID } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { Ability } from "../../../d20/lib/Ability.js";
 import { Skill } from "../../lib/Skill.js";
 import { parseSize } from "../pathbuilder-2e/parseSize.js";
@@ -356,7 +357,7 @@ function parseSpellcasters({ spell_raw_data, spells, spell_sources, focus_spells
 				const spellRankList = getSpellRank(spell.rank).list;
 				const found = all.find(sp => sp.id === spell.spell_id);
 				if (!found?.name) {
-					debug({ spell, found });
+					Logger.package("@rsc-sage/core").debug({ spell, found });
 				}else {
 					spellRankList.push(found.name);
 				}
@@ -387,7 +388,7 @@ function parseSpellcasters({ spell_raw_data, spells, spell_sources, focus_spells
 				const found = focus_spells.find(sp => sp.id === spell.spell_id)
 					?? all.find(sp => sp.id === spell.spell_id);
 				if (!found?.name) {
-					debug({ spell, found });
+					Logger.package("@rsc-sage/core").debug({ spell, found });
 				}else {
 					spellRankList.push(found.name);
 				}

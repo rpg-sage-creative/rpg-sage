@@ -1,5 +1,6 @@
 import { GameUserType } from "@rsc-sage/data";
-import { Arg, Color, debug, error, isBlank, warn, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Arg, Color, isBlank, type Args, type HexColorString, type IncrementArg, type KeyValueArg, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -108,9 +109,9 @@ function hexOrUndefined(value: Optional<string>): HexColorString | undefined {
 		try {
 			const color = Color.from(value);
 			if (color) return color.hex;
-			warn("Unable to parse color: %s", value);
+			Logger.package("@rsc-sage/core").warn("Unable to parse color: %s", value);
 		}catch(err) {
-			error({ err }, "Error parsing color: %s", value);
+			Logger.package("@rsc-sage/core").error({ err }, "Error parsing color: %s", value);
 		}
 	}
 	return undefined;
@@ -195,7 +196,7 @@ export async function getCharactersArgs(sageMessage: SageMessage, isGm: boolean,
 						case "newname": getNames().newName = value; break;
 						case "oldname": getNames().oldName = value; break;
 
-						default: debug("getCharactersArgs(): Unknown core key/value pair: %o", {key,value}); break;
+						default: Logger.package("@rsc-sage/core").debug("getCharactersArgs(): Unknown core key/value pair: %o", {key,value}); break;
 					}
 				}else {
 					(stats ??= []).push(Arg.from({ raw:`${key}="${value}"`, index, isKeyValue:true, key, value:valueOrNull }));

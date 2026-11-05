@@ -1,9 +1,10 @@
 import { AdminRoleType, DataTable, GameUserType, type GameCacheItem } from "@rsc-sage/data";
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
-import { Arrayish, BULLET, debug, error, errorReturnFalse, isDefined, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, stringifyJson, toMarkdown, trace, uncache, warn, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { Arrayish, BULLET, isDefined, NIL_SNOWFLAKE, orNilSnowflake, parseUuid, stringifyJson, toMarkdown, uncache, type Optional, type RenderableContentResolvable, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type SupportedMessagesChannel, type SupportedTarget, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { isErrorLike } from "@rsc-utils/error-utils";
+import { errorReturnFalse, Logger } from "@rsc-utils/logger-utils";
 import type { Channel, User as DUser, Guild, GuildMember, Interaction, Message } from "discord.js";
 import { isDeleted } from "../../discord/deletedMessages.js";
 import { send } from "../../discord/messages.js";
@@ -157,7 +158,7 @@ function appendFetchError({ clientEvent, discord, err, fetchNotes, guild, valida
 }
 function sendErrors(validationErrors: string[]): void {
 	if (validationErrors.length > 0) {
-		error(validationErrors.join("\n"));
+		Logger.package("@rsc-sage/core").error(validationErrors.join("\n"));
 	}
 }
 
@@ -502,7 +503,7 @@ export class SageEventCache {
 
 	/** Clears the cache/maps in an attempt to avoid memory leaks. */
 	public clear(): void {
-		debug("Clearing SageEventCache");
+		Logger.package("@rsc-sage/core").debug("Clearing SageEventCache");
 		this.canSendMessageToMap.clear();
 		this.hasTupperMap.clear();
 		this.canReactToMap.clear();
@@ -602,9 +603,9 @@ export class SageEventCache {
 		const hasTupper = await this.hasTupper(discordKey);
 		if (hasTupper) {
 			// let's pause for a second in case Tupper is involved ...
-			trace(`Pausing for Tupper ...`);
+			Logger.package("@rsc-sage/core").trace(`Pausing for Tupper ...`);
 			await (new Promise(res => setTimeout(res, 1000)));
-			trace(`                   ... done pausing for Tupper.`);
+			Logger.package("@rsc-sage/core").trace(`                   ... done pausing for Tupper.`);
 		}
 	}
 
@@ -668,7 +669,7 @@ export class SageEventCache {
 		if (channel) {
 			core.discordKey = DiscordKey.from(channel);
 		}else {
-			warn(`Invalid Channel in cloneForChannel`);
+			Logger.package("@rsc-sage/core").warn(`Invalid Channel in cloneForChannel`);
 		}
 		return this.clone(core);
 	}

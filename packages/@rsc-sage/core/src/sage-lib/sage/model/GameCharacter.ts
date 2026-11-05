@@ -1,8 +1,9 @@
 import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type AutoChannelData, type DeckCore, type DeckType, type GameSystem, type SageCharacterCore, type SageMessageReferenceCore } from "@rsc-sage/data";
-import { applyChanges, Arrayish, debug, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Arrayish, isDefined, isNotBlank, isString, numberOrUndefined, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type HexColorString, type IncrementArg, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-utils/discord-utils";
 import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { isUrl } from "@rsc-utils/io-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { Condition } from "../../../gameSystems/Condition.js";
 import { checkStatBounds } from "../../../gameSystems/checkStatBounds.js";
 import { Ability } from "../../../gameSystems/d20/lib/Ability.js";
@@ -336,15 +337,15 @@ export class GameCharacter {
 		// this is part of the temporary transition of how we manage characters
 
 		if (this.core.essence20 || this.core.essence20Id) {
-			debug({ ev:"importedChar fetch failed", essence20:!!this.core.essence20, essence20Id:this.core.essence20Id });
+			Logger.package("@rsc-sage/core").debug({ ev:"importedChar fetch failed", essence20:!!this.core.essence20, essence20Id:this.core.essence20Id });
 		}
 
 		if (this.core.hephaistos || this.core.hephaistosId) {
-			debug({ ev:"importedChar fetch failed", hephaistos:!!this.core.hephaistos, hephaistosId:this.core.hephaistosId });
+			Logger.package("@rsc-sage/core").debug({ ev:"importedChar fetch failed", hephaistos:!!this.core.hephaistos, hephaistosId:this.core.hephaistosId });
 		}
 
 		if (this.core.pathbuilder || this.core.pathbuilderId) {
-			debug({ ev:"importedChar fetch failed", pathbuilder:!!this.core.pathbuilder, pathbuilderId:this.core.pathbuilderId });
+			Logger.package("@rsc-sage/core").debug({ ev:"importedChar fetch failed", pathbuilder:!!this.core.pathbuilder, pathbuilderId:this.core.pathbuilderId });
 		}
 
 		return undefined;
@@ -422,15 +423,15 @@ export class GameCharacter {
 		// this is part of the temporary transition of how we manage characters
 
 		if (this.core.essence20 || this.core.essence20Id) {
-			debug({ ev:"importedChar fetch failed", essence20:!!this.core.essence20, essence20Id:this.core.essence20Id });
+			Logger.package("@rsc-sage/core").debug({ ev:"importedChar fetch failed", essence20:!!this.core.essence20, essence20Id:this.core.essence20Id });
 		}
 
 		if (this.core.hephaistos || this.core.hephaistosId) {
-			debug({ ev:"importedChar fetch failed", hephaistos:!!this.core.hephaistos, hephaistosId:this.core.hephaistosId });
+			Logger.package("@rsc-sage/core").debug({ ev:"importedChar fetch failed", hephaistos:!!this.core.hephaistos, hephaistosId:this.core.hephaistosId });
 		}
 
 		if (this.core.pathbuilder || this.core.pathbuilderId) {
-			debug({ ev:"importedChar fetch failed", pathbuilder:!!this.core.pathbuilder, pathbuilderId:this.core.pathbuilderId });
+			Logger.package("@rsc-sage/core").debug({ ev:"importedChar fetch failed", pathbuilder:!!this.core.pathbuilder, pathbuilderId:this.core.pathbuilderId });
 		}
 
 		return undefined;

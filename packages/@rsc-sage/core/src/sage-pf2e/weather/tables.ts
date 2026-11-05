@@ -1,5 +1,6 @@
-import { cloneJson, warn } from "@rsc-utils/core-utils";
+import { cloneJson } from "@rsc-utils/core-utils";
 import type { SimpleDice } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { randomInt } from "node:crypto";
 import { ClimateType, WindType } from "./weather.js";
 
@@ -43,17 +44,17 @@ export function rollOnTable(tableName: string): TableItem;
 export function rollOnTable(tableName: string): TableItem | null {
 	const table: TableItem[] | undefined = tables[tableName as WeatherTableKey];
 	if (!table) {
-		warn(`Invalid Table: ${tableName}`);
+		Logger.package("@rsc-sage/core").warn(`Invalid Table: ${tableName}`);
 		return null;
 	}
 	if (!table.length) {
-		warn(`Empty Table: ${tableName}`);
+		Logger.package("@rsc-sage/core").warn(`Empty Table: ${tableName}`);
 		return null;
 	}
 
 	const [min, max] = getMinMax(table);
 	if (min === Infinity || max === -Infinity) {
-		warn(`Invalid Table min/max values: ${tableName} min(${min}) / max(${max})`);
+		Logger.package("@rsc-sage/core").warn(`Invalid Table min/max values: ${tableName} min(${min}) / max(${max})`);
 		return null;
 	}
 

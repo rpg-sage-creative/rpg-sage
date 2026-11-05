@@ -1,5 +1,6 @@
 import { EmbedColorType } from "@rsc-sage/data";
-import { error, isDefined, warn, type RenderableContent } from "@rsc-utils/core-utils";
+import { isDefined, type RenderableContent } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { registerCommandRegex } from "../cmd.js";
 import { createRenderableContent } from "../helpers/createRenderableContent.js";
@@ -16,7 +17,7 @@ function levelToPoints(level: number, tierMin: number, tierMax: number): number 
 	if (level === tierMin + 1) return 3;
 	if (level === tierMax - 1) return 4;
 	if (level === tierMax) return 6;
-	warn(`levelToPoints(level: ${level}, tierMin: ${tierMin}, tierMax: ${tierMax})`);
+	Logger.package("@rsc-sage/core").warn(`levelToPoints(level: ${level}, tierMin: ${tierMin}, tierMax: ${tierMax})`);
 	if (level < tierMin) return 2;
 	if (tierMax < level) return 6;
 	return 0;
@@ -34,7 +35,7 @@ function pointsToSubTier(points: number): string {
 	if (testRange(points, 23, 27)) return "High Subtier (6-player adjustment) OR High Subtier (level bump)";
 	if (testRange(points, 28, 32)) return "High Subtier (5-player adjustment with level bump)";
 	if (testRange(points, 33, 42)) return "High Subtier (6-player adjustment with level bump)";
-	warn(`pointsToSubTier(points: ${points})`);
+	Logger.package("@rsc-sage/core").warn(`pointsToSubTier(points: ${points})`);
 	if (points < 8) return "Low Subtier";
 	if (42 < points) return "High Subtier (6-player adjustment with level bump)";
 	return "Unknown Subtier";
@@ -137,8 +138,9 @@ function pfsScenario(sageMessage: SageMessage): void {
 			return;
 		}
 		sageMessage.send(scenario.callback(sageMessage, tierInfo));
-	} catch (err) {
-		error({ err }, "pfsScenario()");
+
+	}catch (err) {
+		Logger.package("@rsc-sage/core").error({ err }, "pfsScenario()");
 	}
 }
 function registerScenarios(): void {

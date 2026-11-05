@@ -1,6 +1,7 @@
 import { DataTable } from "@rsc-sage/data";
-import { addCommas, capitalize, cleanWhitespace, debug, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, cleanWhitespace, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { CharacterBase, type DiceMacroBase, type StatResults } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import type { IHasAbilities } from "../../../gameSystems/p20/lib/Abilities.js";
@@ -271,7 +272,7 @@ function doPets(char: PathbuilderCharacter): string[] {
 			const equipment = pet.equipment.length ? `; ${equipmentToHtml(pet.equipment)}` : ``;
 			return `<b>${pet.type}</b> ${name}${specializations}${armor}${equipment}`;
 		}else {
-			debug(stringifyJson(pet));
+			Logger.package("@rsc-sage/core").debug(stringifyJson(pet));
 			return pet.name;
 		}
 	});
@@ -920,7 +921,7 @@ export class PathbuilderCharacter extends CharacterBase<PathbuilderCharacterCore
 		const profMod = this.getProficiencyMod(key, specificKey);
 		return profMod === this.untrainedProficiencyMod
 			? Proficiency.findByName("U")
-			: Proficiency.findByModifier(profMod) ?? debug({key,specificKey,profMod}) ?? Proficiency.findByName("U");
+			: Proficiency.findByModifier(profMod) ?? Logger.package("@rsc-sage/core").debug({key,specificKey,profMod}) ?? Proficiency.findByName("U");
 	}
 
 	public getProficiencyMod(key: TPathbuilderCharacterProficienciesKey, specificKey?: string): ProficiencyType {

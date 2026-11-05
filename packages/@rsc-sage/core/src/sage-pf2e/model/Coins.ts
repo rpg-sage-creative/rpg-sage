@@ -1,4 +1,5 @@
-import { addCommas, HasCore, round, sortPrimitive, warn, type Comparable, type Core, type SortResult } from "@rsc-utils/core-utils";
+import { addCommas, HasCore, round, sortPrimitive, type Comparable, type Core, type SortResult } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { Bulk } from "./Bulk.js";
 
 type TMoney = number | string | Coins;
@@ -343,7 +344,7 @@ export class Coins extends HasCore<CoinsCore> implements Comparable<Coins> {
 			?? [],
 			core = createCore();
 		if (!values.length) {
-			warn("Invalid coinString: " + coinString);
+			Logger.package("@rsc-sage/core").warn("Invalid coinString: " + coinString);
 		}
 		values.forEach(value => {
 			if (value === "0") {

@@ -1,13 +1,14 @@
 import { DataTable } from "@rsc-sage/data";
-import { stringifyJson, warn } from "@rsc-utils/core-utils";
+import { stringifyJson } from "@rsc-utils/core-utils";
 import { getText } from "@rsc-utils/io-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { Aon1eSearchResultsCat, Aon1eSearchResultsLink } from "./types.js";
 
 const NonWordCharRegExpG = /\W/g;
 
 async function getSearchResults(url: string): Promise<string> {
 	return await getText(url)
-		.catch(ex => warn(ex) as any || "");
+		.catch(ex => Logger.package("@rsc-sage/core").warn(ex) as any || "");
 }
 
 async function getOrCreateHtmlCache(url: string): Promise<string> {

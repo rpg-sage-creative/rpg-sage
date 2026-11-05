@@ -1,5 +1,6 @@
-import { type Optional, type Snowflake, errorReturnUndefined } from "@rsc-utils/core-utils";
+import type { Optional, Snowflake } from "@rsc-utils/core-utils";
 import { EmbedBuilder, type SupportedTarget, parseReference, toUserMention } from "@rsc-utils/discord-utils";
+import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { shiftDie } from "../../../sage-dice/dice/e20/index.js";
 import { PlayerCharacterE20, type TSkillE20, type TSkillSpecialization, type TStatE20 } from "../../../sage-e20/common/PlayerCharacterE20.js";

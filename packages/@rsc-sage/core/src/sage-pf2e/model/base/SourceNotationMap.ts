@@ -1,4 +1,5 @@
-import { RenderableContent, toSuperscript, warn, type UUID } from "@rsc-utils/core-utils";
+import { RenderableContent, toSuperscript, type UUID } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { HasSource } from "./HasSource.js";
 import { Source } from "./Source.js";
 
@@ -62,7 +63,7 @@ export class SourceNotationMap<T extends HasSource> {
 	}
 	public static filterByHasSource<T extends HasSource>(item: T): boolean {
 		if (!item.source) {
-			warn(`Missing Source: ${item.objectType} (${item.id})`);
+			Logger.package("@rsc-sage/core").warn(`Missing Source: ${item.objectType} (${item.id})`);
 		}
 		return !!item.source;
 	}

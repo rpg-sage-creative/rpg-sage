@@ -1,5 +1,6 @@
-import { error, omit, type Optional, type RenderableContentResolvable, warn } from "@rsc-utils/core-utils";
+import { omit, type Optional, type RenderableContentResolvable } from "@rsc-utils/core-utils";
 import { splitMessageOptions } from "@rsc-utils/discord-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { BaseMessageOptions, InteractionReplyOptions, Message, MessageEditOptions } from "discord.js";
 import { deleteMessage, isDeletable } from "../../discord/deletedMessages.js";
 import type { SageCommand, TSendArgs } from "./SageCommand.js";
@@ -29,7 +30,7 @@ stopThinking
 */
 
 function errorReturnPromiseResolve<T = any>(err: unknown): Promise<T> {
-	error(err);
+	Logger.package("@rsc-sage/core").error(err);
 	return Promise.resolve() as Promise<T>;
 }
 
@@ -152,7 +153,7 @@ export class ReplyStack {
 				await addMessageDeleteButton(this.thinkingMessage, this.deletableBy);
 			}
 		}else {
-			warn(`startThinking(): not isSageMessage() && !isSageInteraction("REPLIABLE")`);
+			Logger.package("@rsc-sage/core").warn(`startThinking(): not isSageMessage() && !isSageInteraction("REPLIABLE")`);
 		}
 	}
 	public startThinking(): Promise<void> {
@@ -256,7 +257,7 @@ export class ReplyStack {
 			this.replyMessage = await user?.send(replyArgs);
 
 		}else {
-			warn(`ReplyStack._reply ELSE!?`);
+			Logger.package("@rsc-sage/core").warn(`ReplyStack._reply ELSE!?`);
 		}
 
 		// we shouldn't get here, but return undefined just in case
@@ -308,7 +309,7 @@ export class ReplyStack {
 				this.lastMessage = await this.sageCommand.dChannel.send(payload);
 			}
 		}else {
-			warn(`ReplyStack._send w/o a sageCommand.dChannel!`);
+			Logger.package("@rsc-sage/core").warn(`ReplyStack._send w/o a sageCommand.dChannel!`);
 		}
 
 		return this.lastMessage ?? undefined;

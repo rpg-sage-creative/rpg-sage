@@ -1,6 +1,7 @@
 import { DataTable, type EmbedColorType, type EmojiType, type GameSystemType, type HasEmbedColors, type HasEmoji, type MacroBase } from "@rsc-sage/data";
 import type { CodeName } from "@rsc-sage/env";
-import { HasIdCore, warn, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
+import { HasIdCore, type HexColorString, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { Colors, type HasColorsCore } from "./Colors.js";
 import { Emojis, type HasEmojiCore } from "./Emojis.js";
 
@@ -92,7 +93,7 @@ export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCo
 
 	public toHexColorString(colorType: EmbedColorType): HexColorString | undefined {
 		if (!this.core.colors?.length) {
-			warn(`Colors Missing: Bot (${this.codeName || this.id})`);
+			Logger.package("@rsc-sage/core").warn(`Colors Missing: Bot (${this.codeName || this.id})`);
 			return undefined;
 		}
 		return this.colors.toHexColorString(colorType);

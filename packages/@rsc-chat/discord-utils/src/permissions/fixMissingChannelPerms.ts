@@ -1,4 +1,4 @@
-import { error } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { GuildMember, PermissionFlagsBits } from "discord.js";
 import type { SupportedCategoryChannel, SupportedGameChannel } from "../types/index.js";
 import { getPermsFor } from "./getPermsFor.js";
@@ -61,7 +61,7 @@ export async function fixMissingChannelPerms(botGuildMember: GuildMember, channe
 			const fnSection = "permissionOverwrites";
 			const channelType = channel.type;
 			const parentChannelType = channel.parent?.type;
-			error({ fnName, fnSection, channelType, parentChannelType });
+			Logger.package("@rsc-chat/discord-utils").error({ fnName, fnSection, channelType, parentChannelType });
 		}
 		fixError = true;
 		return null;

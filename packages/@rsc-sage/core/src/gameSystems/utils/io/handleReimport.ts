@@ -1,9 +1,9 @@
-import { error } from "@rsc-utils/core-utils";
 import { isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { Message } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
-import { type FetchResult } from "./fetchCores.js";
+import type { FetchResult } from "./fetchCores.js";
 import { handleImportErrors } from "./handleImportErrors.js";
 
 /** Declares the handlers needed from each specific import character type for use with handleReimport. */
@@ -88,7 +88,7 @@ export async function handleReimport<
 	if (saved) {
 		await handlers.updateSheet(sageCommand, newClass, message);
 	}else {
-		error({ fetchResult }, `Error saving reimported character`);
+		Logger.package("@rsc-sage/core").error({ fetchResult }, `Error saving reimported character`);
 		const localizer = sageCommand.getLocalizer();
 		await sageCommand.replyStack.whisper(localizer("SORRY_WE_DONT_KNOW"));
 	}

@@ -1,7 +1,8 @@
 import { DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, type GameSystemType, type MacroBase } from "@rsc-sage/data";
-import { error, isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
+import { isWrapped, redactContent, unwrap, wrap, type Optional } from "@rsc-utils/core-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-utils/discord-utils";
 import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath, isMath, isRandomItem, processDiceMacroCall, type DiceMacroBase } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { MaxDiceCount, MaxDieSides } from "@rsc-utils/random-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";
 import { DiscordDice } from "../../../sage-dice/dice/discord/index.js";
@@ -104,7 +105,7 @@ async function parseDiscordMacro(macroString: string, options: ParseDiscordMacro
 	if (macroAndOutput) {
 		const { macro, output } = macroAndOutput;
 		if (macroStack.includes(macro.name) && !isRandomItem(macroString)) {
-			error({ macroString, macroStack },`parseDiscordMacro(): Macro Recursion`);
+			Logger.package("@rsc-sage/core").error({ macroString, macroStack },`parseDiscordMacro(): Macro Recursion`);
 			const parsedDice = await parseDiscordDice(`[0d0 Recursion!]`, { processor, sageCommand });
 			return parsedDice?.roll().toStrings() ?? [];
 		}

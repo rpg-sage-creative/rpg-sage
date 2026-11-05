@@ -1,5 +1,6 @@
 import { DataTable } from "@rsc-sage/data";
-import { info, type Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { Guild } from "discord.js";
 import { ActiveBot } from "../../model/ActiveBot.js";
 import { Server } from "../../model/Server.js";
@@ -13,13 +14,13 @@ export async function initializeServer(guild: Optional<Guild>): Promise<boolean>
 
 	const exists = dataTable.has(guild.id);
 	if (exists) {
-		info(`${ActiveBot.active.codeName} rejoined ${guild?.name} (${guild?.id})`);
+		Logger.package("@rsc-sage/core").info(`${ActiveBot.active.codeName} rejoined ${guild?.name} (${guild?.id})`);
 		return false;
 	}
 
 	const saved = await dataTable.write(Server.createCore(guild));
 	if (saved) {
-		info(`${ActiveBot.active.codeName} joined ${guild.name} (${guild.id})`);
+		Logger.package("@rsc-sage/core").info(`${ActiveBot.active.codeName} joined ${guild.name} (${guild.id})`);
 	}
 
 	return saved;

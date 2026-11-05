@@ -1,7 +1,8 @@
 import { getHomeServerId, getToken } from "@rsc-sage/env";
-import { captureProcessExit, debug, errorReturnUndefined, isNonNilSnowflake, parseJson, stringifyJson, toMarkdown, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, parseJson, stringifyJson, toMarkdown, type Snowflake } from "@rsc-utils/core-utils";
 import { getRegisteredIntents, toUserMention } from "@rsc-utils/discord-utils";
 import { AppServer, type BufferHandlerJsonError, type BufferHandlerResponse } from "@rsc-utils/io-utils";
+import { captureProcessExit, errorReturnUndefined, Logger } from "@rsc-utils/logger-utils";
 import { AttachmentBuilder, Client } from "discord.js";
 import { parseDiceMatches } from "../sage-lib/sage/commands/dice.js";
 import { StatMacroProcessor } from "../sage-lib/sage/commands/dice/stats/StatMacroProcessor.js";
@@ -87,7 +88,7 @@ async function serverHandler(bufferOrPayload: Buffer | PixelsDicePayload): Promi
 
 	const payload = Buffer.isBuffer(bufferOrPayload) ? parseJson(bufferOrPayload.toString()) as PixelsDicePayload : bufferOrPayload;
 
-	debug({payload});
+	Logger.package("@rsc-sage/core").debug({payload});
 
 	const action = payload?.actionValue?.split(ActionValueSplitterRegExp).reduce((out, pair) => {
 		const [key, value] = pair.split("=").map(s => s.trim());
@@ -97,7 +98,7 @@ async function serverHandler(bufferOrPayload: Buffer | PixelsDicePayload): Promi
 		return out;
 	}, {} as Record<ActionKey, Snowflake>);
 
-	debug({action});
+	Logger.package("@rsc-sage/core").debug({action});
 
 	if (action.channelId && action.userId) {
 

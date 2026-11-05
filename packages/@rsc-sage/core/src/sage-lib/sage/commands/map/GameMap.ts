@@ -1,4 +1,5 @@
-import { error, type Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
 import { COL, GameMapBase, LayerType, ROW, UserLayerType, type TGameMapAura, type TGameMapCore, type TGameMapImage } from "./GameMapBase.js";
 import { MoveDirection, type Direction } from "./MoveDirection.js";
@@ -58,7 +59,7 @@ function moveImage(image: TGameMapImage, ...directions: Direction[]): boolean {
 			case "downleft": return moveImage(direction.distance, [ROW, DOWN], [COL, LEFT]);
 			case "down": return moveImage(direction.distance, [ROW, DOWN]);
 			case "downright": return moveImage(direction.distance, [ROW, DOWN], [COL, RIGHT]);
-			default: error({dir,direction}); return;
+			default: Logger.package("@rsc-sage/core").error({dir,direction}); return;
 		}
 	});
 

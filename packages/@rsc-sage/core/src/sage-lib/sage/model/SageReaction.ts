@@ -1,6 +1,7 @@
 import { isSageId } from "@rsc-sage/env";
-import { Cache, debug, type Snowflake } from "@rsc-utils/core-utils";
+import { Cache, type Snowflake } from "@rsc-utils/core-utils";
 import { DiscordApiError, type ReactionOrPartial, type SMessageOrPartial, type UserOrPartial } from "@rsc-utils/discord-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { Message, MessageReaction } from "discord.js";
 import { ReactionType } from "../../discord/index.js";
 import { SageCommand, type SageCommandCore } from "./SageCommand.js";
@@ -94,7 +95,7 @@ export class SageReaction
 	}
 
 	public clear(): void {
-		debug("Clearing SageReaction");
+		Logger.package("@rsc-sage/core").debug("Clearing SageReaction");
 		this.cache.clear();
 		this.eventCache.clear();
 	}

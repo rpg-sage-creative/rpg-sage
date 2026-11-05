@@ -1,7 +1,8 @@
 import type { CardBase } from "@rsc-sage/data";
-import { BULLET, capitalize, error, type Snowflake } from "@rsc-utils/core-utils";
+import { BULLET, capitalize, type Snowflake } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-utils/discord-utils";
 import { Deck, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { deleteMessage } from "../../discord/deletedMessages.js";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
@@ -649,7 +650,7 @@ async function handleCardsButton(sageInteration: SageButtonInteraction): Promise
 		}
 
 	}else {
-		error({customId:sageInteration.interaction.customId});
+		Logger.package("@rsc-sage/core").error({customId:sageInteration.interaction.customId});
 		await replyStack.whisper(`Sorry, we goofed up!`);
 	}
 }

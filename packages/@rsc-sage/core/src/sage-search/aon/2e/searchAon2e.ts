@@ -1,5 +1,6 @@
-import { cleanWhitespace, error, oneToUS, sortPrimitive, StringMatcher, type SortResult } from "@rsc-utils/core-utils";
+import { cleanWhitespace, oneToUS, sortPrimitive, StringMatcher, type SortResult } from "@rsc-utils/core-utils";
 import { getJson } from "@rsc-utils/io-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
 import type { ParsedSearchInfo } from "../../common.js";
 import { Aon2eSearchResults } from "./Aon2eSearchResults.js";
@@ -10,7 +11,7 @@ export async function searchAon2e(gameSystem: Aon2eGameSystemCode, parsedSearchI
 	const searchInfo = new GameSearchInfo(gameSystem, parsedSearchInfo.searchText, nameOnly ? "" : "g");
 
 	const postDataShould = buildPostData(searchInfo.terms.map(term => oneToUS(term.term)), "should");
-	const responseShould = await getJson<Aon2eSearchResponseData>(getAon2eSearchUrl(gameSystem), postDataShould).catch(e => error(e)! || null);
+	const responseShould = await getJson<Aon2eSearchResponseData>(getAon2eSearchUrl(gameSystem), postDataShould).catch(e => Logger.package("@rsc-sage/core").error(e)! || null);
 	// writeFileSync(`${getDataRoot(`cache/json`, true)}/pf2e.aon.search.json`, responseShould, true, true);
 	const searchResults = new Aon2eSearchResults(searchInfo, responseShould);
 	/** @todo run a "must" search before running a "should" search and splice the results with "must" results at the top */

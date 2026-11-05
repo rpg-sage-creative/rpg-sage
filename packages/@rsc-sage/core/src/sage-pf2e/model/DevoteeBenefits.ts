@@ -1,5 +1,6 @@
 
-import { nth, warn } from "@rsc-utils/core-utils";
+import { nth } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { findByValue } from "../data/Repository.js";
 import type { Domain } from "./Domain.js";
 import type { Skill } from "./Skill.js";
@@ -41,7 +42,7 @@ export class DevoteeBenefits {
 			return spell.nameLower.italics();
 		}
 		const spellName = this.core.divineFont[index];
-		warn(`Missing Deity Divine Font: ${spellName}`);
+		Logger.package("@rsc-sage/core").warn(`Missing Deity Divine Font: ${spellName}`);
 		return spellName.toLowerCase().italics();
 	}
 	public domainToContent(index: number): string {
@@ -50,7 +51,7 @@ export class DevoteeBenefits {
 			return domain.nameLower;
 		}
 		const domainName = this.core.domains[index];
-		warn(`Missing Deity Domain: ${domainName}`);
+		Logger.package("@rsc-sage/core").warn(`Missing Deity Domain: ${domainName}`);
 		return domainName.toLowerCase();
 	}
 	public spellToContent(index: number): string {
@@ -60,7 +61,7 @@ export class DevoteeBenefits {
 		}
 		const spellName = this.core.clericSpells[index];
 		const found = findByValue("Spell", spellName.split(/\s*\(/)[0]);
-		warn(found ? `TyPo Deity Spell: ${spellName}` : `Missing Deity Spell: ${spellName}`);
+		Logger.package("@rsc-sage/core").warn(found ? `TyPo Deity Spell: ${spellName}` : `Missing Deity Spell: ${spellName}`);
 		return `?: <i>${spellName.toLowerCase()}</i>`;
 	}
 	public alternateDomainToContent(index: number): string {
@@ -69,7 +70,7 @@ export class DevoteeBenefits {
 			return domain.nameLower;
 		}
 		const domainName = (this.core.alternateDomains || [])[index];
-		warn(`Missing Deity Alternate Domain: ${domainName}`);
+		Logger.package("@rsc-sage/core").warn(`Missing Deity Alternate Domain: ${domainName}`);
 		return domainName.toLowerCase();
 	}
 }

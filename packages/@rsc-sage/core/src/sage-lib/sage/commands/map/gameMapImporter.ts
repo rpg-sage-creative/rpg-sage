@@ -1,4 +1,5 @@
-import { StringMatcher, debug, dequote, generateSnowflake, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { StringMatcher, dequote, generateSnowflake, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { Guild } from "discord.js";
 import { regex } from "regex";
 import { COL, LayerType, ROW, type TGameMapAura, type TGameMapCore, type TGameMapImage } from "./GameMapBase.js";
@@ -88,7 +89,7 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 	const tagRegex = regex("i")`${tag}`;
 	const tagMatch = guild.members.cache.find(member => tagRegex.test(member.user.tag));
 	if (tagMatch) {
-		debug(`parseUser match: tag = "${tag}"`);
+		Logger.package("@rsc-sage/core").debug(`parseUser match: tag = "${tag}"`);
 		return tagMatch.id as Snowflake;
 	}
 
@@ -96,15 +97,15 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 	const usernameRegex = regex("i")`${username}`;
 	const usernameMatches = Array.from(guild.members.cache.filter(member => {
 		if (usernameRegex.test(member.user.username)) {
-			debug(`parseUser match: username = "${member.user.username}"`);
+			Logger.package("@rsc-sage/core").debug(`parseUser match: username = "${member.user.username}"`);
 			return true;
 		}
 		if (usernameRegex.test(member.displayName)) {
-			debug(`parseUser match: displayName = "${member.displayName}"`);
+			Logger.package("@rsc-sage/core").debug(`parseUser match: displayName = "${member.displayName}"`);
 			return true;
 		}
 		if (usernameRegex.test(member.nickname ?? "")) {
-			debug(`parseUser match: nickname = "${member.nickname}"`);
+			Logger.package("@rsc-sage/core").debug(`parseUser match: nickname = "${member.nickname}"`);
 			return true;
 		}
 		return false;
@@ -113,7 +114,7 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 		return usernameMatches[0].id as Snowflake;
 	}
 
-	debug(`parseUser no match: ${userValue}`);
+	Logger.package("@rsc-sage/core").debug(`parseUser no match: ${userValue}`);
 
 	// we got nothing
 	return undefined;
@@ -123,14 +124,14 @@ async function parseUser(guild: Guild, userValue?: string): Promise<Snowflake | 
 function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 	const [url, name] = matchUrlAndName(lines);
 	if (!url || !name) {
-		debug(`mapSectionToMapCore: !url (${!url}) || !name (${!name})`);
+		Logger.package("@rsc-sage/core").debug(`mapSectionToMapCore: !url (${!url}) || !name (${!name})`);
 		return null;
 	}
 
 	const [cols, rows] = matchLine(lines, /^grid=/i, true, true)
 		?? [+matchLine(lines, /^cols=/i, true)!, +matchLine(lines, /^rows=/i, true)!];
 	if (isNaN(cols) || isNaN(rows)) {
-		debug(`mapSectionToMapCore: isNaN(cols) (${isNaN(cols)}) || isNaN(rows) (${isNaN(rows)})`);
+		Logger.package("@rsc-sage/core").debug(`mapSectionToMapCore: isNaN(cols) (${isNaN(cols)}) || isNaN(rows) (${isNaN(rows)})`);
 		return null;
 	}
 
@@ -158,14 +159,14 @@ function mapSectionToMapCore(lines: string[]): TParsedGameMapCore | null {
 function mapSectionTo<T extends TGameMapImage>(lines: string[], layerType: LayerType): T | null {
 	const [url, name] = matchUrlAndName(lines);
 	if (!url || !name) {
-		debug(`mapSectionTo(${LayerType[layerType]}): !url (${!url}) || !name (${!name})`);
+		Logger.package("@rsc-sage/core").debug(`mapSectionTo(${LayerType[layerType]}): !url (${!url}) || !name (${!name})`);
 		return null;
 	}
 
 	const pos = matchLine(lines, /^pos(ition)?=/i, true, true)
 		?? [+matchLine(lines, /^col=/i, true)!, +matchLine(lines, /^row=/i, true)!];
 	if (isNaN(pos[COL]) || isNaN(pos[ROW])) {
-		debug(`mapSectionTo(${LayerType[layerType]}): isNaN(pos[COL]) (${isNaN(pos[COL])}) || isNaN(pos[ROW]) (${isNaN(pos[ROW])})`);
+		Logger.package("@rsc-sage/core").debug(`mapSectionTo(${LayerType[layerType]}): isNaN(pos[COL]) (${isNaN(pos[COL])}) || isNaN(pos[ROW]) (${isNaN(pos[ROW])})`);
 		return null;
 	}
 
@@ -242,7 +243,7 @@ export function gameMapImporter(raw: string): TParsedGameMapCore | null {
 	const mapSection = spliceSection(lines, "map");
 	const parsedCore = mapSectionToMapCore(mapSection);
 	if (!parsedCore) {
-		debug(`gameMapImporter: !parsedCore`);
+		Logger.package("@rsc-sage/core").debug(`gameMapImporter: !parsedCore`);
 		return null;
 	}
 	//#endregion

@@ -1,12 +1,13 @@
 import type { CharacterBase } from "@rsc-utils/game-utils";
-import { error, errorReturnUndefined, type Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import type { SupportedTarget } from "@rsc-utils/discord-utils";
 import { AttachmentBuilder } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 
 export async function attachCharacter({ eventCache }: SageCommand, target: Optional<SupportedTarget>, character: CharacterBase, pin: boolean): Promise<void> {
 	if (!target) {
-		return error(`Attaching a character without a target.`);
+		return Logger.package("@rsc-sage/core").error(`Attaching a character without a target.`);
 	}
 
 	const content = `Attaching Character: ${character.name}`;

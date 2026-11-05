@@ -1,5 +1,6 @@
-import { EphemeralMap, error, errorReturnFalse, errorReturnUndefined, generateSnowflake, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { EphemeralMap, generateSnowflake, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
 import { createActionRow, getActionRows } from "@rsc-utils/discord-utils";
+import { Logger, errorReturnFalse, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Message } from "discord.js";
 import type { SageCommand } from "../sage/model/SageCommand.js";
 import type { SageInteraction } from "../sage/model/SageInteraction.js";
@@ -205,7 +206,7 @@ export async function prompt(args: PromptArgs): Promise<PromptResults | null> {
 		});
 	})
 	.catch(reason => {
-		error(reason);
+		Logger.package("@rsc-sage/core").error(reason);
 		return null;
 	});
 }

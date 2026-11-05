@@ -1,5 +1,6 @@
-import { unwrap, warnReturnUndefined } from "@rsc-utils/core-utils";
+import { unwrap } from "@rsc-utils/core-utils";
 import { getText, isUrl } from "@rsc-utils/io-utils";
+import { warnReturnUndefined } from "@rsc-utils/logger-utils";
 import { parseTable } from "./parseTable.js";
 
 /**

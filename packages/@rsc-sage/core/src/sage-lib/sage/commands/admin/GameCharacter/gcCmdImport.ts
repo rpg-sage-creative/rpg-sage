@@ -1,5 +1,5 @@
-import { error } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, isInvalidWebhookUsername } from "@rsc-utils/discord-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { CharacterArray } from "../../../model/CharacterArray.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";
@@ -82,8 +82,14 @@ export async function gcCmdImport(sageMessage: SageMessage): Promise<void> {
 
 	for (const oneResult of allResults) {
 		const { core, mods, names, stats, userId = pcUserId, type = characterTypeMeta.type } = oneResult;
-		if (!core?.name) { error(`Importing a character without a name.`); continue; }
-		if (isInvalidWebhookUsername(core.name)) { error(`Importing a character with an invalid name.`); continue; }
+		if (!core?.name) {
+			Logger.package("@rsc-sage/core").error(`Importing a character without a name.`);
+			continue;
+		}
+		if (isInvalidWebhookUsername(core.name)) {
+			Logger.package("@rsc-sage/core").error(`Importing a character with an invalid name.`);
+			continue;
+		}
 
 		let characterManager: CharacterArray | undefined = ["gm","npc","minion"].includes(type!) ? hasCharacters.nonPlayerCharacters : hasCharacters.playerCharacters;
 		if (type === "companion") {

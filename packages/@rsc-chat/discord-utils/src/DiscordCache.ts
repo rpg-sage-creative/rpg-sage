@@ -1,5 +1,6 @@
 import type { Awaitable, Optional, Snowflake } from "@rsc-utils/core-utils";
-import { NIL_SNOWFLAKE, error, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { ChannelType, Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type Channel } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";
 import { DiscordKey } from "./DiscordKey.js";
@@ -76,7 +77,7 @@ export class DiscordCache {
 		}
 
 		if (channel) {
-			error(`Fetched unsupported channel: ${ChannelType[channel.type]} ${channel.url}`);
+			Logger.package("@rsc-chat/discord-utils").error(`Fetched unsupported channel: ${ChannelType[channel.type]} ${channel.url}`);
 		}
 
 		return undefined;

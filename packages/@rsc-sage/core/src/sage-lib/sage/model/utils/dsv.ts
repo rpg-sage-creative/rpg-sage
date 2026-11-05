@@ -1,5 +1,6 @@
-import { errorReturnUndefined, WhitespaceRegExp, type Optional } from "@rsc-utils/core-utils";
+import { WhitespaceRegExp, type Optional } from "@rsc-utils/core-utils";
 import { getText, parseDsv, type DsvDelimiter, type DsvResults, type VALID_URL } from "@rsc-utils/io-utils";
+import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import type { SageCommand } from "../SageCommand.js";
 
 type StringRecord = Record<string, string>;

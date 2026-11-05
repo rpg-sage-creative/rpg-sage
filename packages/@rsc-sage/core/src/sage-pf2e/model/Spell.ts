@@ -1,4 +1,5 @@
-import { capitalize, debug, nth, toUnique, type Core, type RenderableContent as UtilsRenderableContent, type UUID } from "@rsc-utils/core-utils";
+import { capitalize, nth, toUnique, type Core, type RenderableContent as UtilsRenderableContent, type UUID } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { ABILITIES, NEWLINE, toModifier, type TMagicComponent, type TMagicTradition } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";
@@ -137,7 +138,7 @@ function heightenSpell(spellId: UUID, core: SpellCore): HeightenedSpell[] {
 		spells.push(last);
 	}
 	if (spells.length !== 11 - core.level) {
-		debug({ core, spells, spellId }, "heightenSpell()");
+		Logger.package("@rsc-sage/core").debug({ core, spells, spellId }, "heightenSpell()");
 	}
 	return spells;
 }

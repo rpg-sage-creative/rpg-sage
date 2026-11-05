@@ -1,6 +1,7 @@
-import { isWrapped, unwrap, warn, type HexColorString } from "@rsc-utils/core-utils";
+import { isWrapped, unwrap, type HexColorString } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder } from "@rsc-utils/discord-utils";
 import { isUrl } from "@rsc-utils/io-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 
 type Options = {
 	title?: string | null;
@@ -17,7 +18,7 @@ export function createMessageEmbed({ title, description, color, thumbnailUrl }: 
 
 	if (title) {
 		if (title.length > titleLength) {
-			warn(`MessageEmbed.title too long (${title.length}/${titleLength}): ${title}`);
+			Logger.package("@rsc-sage/core").warn(`MessageEmbed.title too long (${title.length}/${titleLength}): ${title}`);
 			title = title.slice(0, titleLength);
 		}
 		embed.setTitle(title);
@@ -25,7 +26,7 @@ export function createMessageEmbed({ title, description, color, thumbnailUrl }: 
 
 	if (description) {
 		if (description.length > descriptionLength) {
-			warn(`MessageEmbed.description too long (${description.length}/${descriptionLength}): ${description}`);
+			Logger.package("@rsc-sage/core").warn(`MessageEmbed.description too long (${description.length}/${descriptionLength}): ${description}`);
 			description = description.slice(0, descriptionLength);
 		}
 		embed.setDescription(description);
@@ -33,7 +34,7 @@ export function createMessageEmbed({ title, description, color, thumbnailUrl }: 
 
 	if (color) {
 		if (color.startsWith("0x")) {
-			warn(`Unexpected MessageEmbed.color: ${color}`);
+			Logger.package("@rsc-sage/core").warn(`Unexpected MessageEmbed.color: ${color}`);
 			color = `#${color.slice(2)}`;
 		}
 		embed.setColor(color);
@@ -42,12 +43,12 @@ export function createMessageEmbed({ title, description, color, thumbnailUrl }: 
 	if (thumbnailUrl) {
 		if (isUrl(thumbnailUrl)) {
 			if (isWrapped(thumbnailUrl, "<>")) {
-				warn(`MessageEmbed.thumbnail wrapped: ${thumbnailUrl}`);
+				Logger.package("@rsc-sage/core").warn(`MessageEmbed.thumbnail wrapped: ${thumbnailUrl}`);
 				thumbnailUrl = unwrap(thumbnailUrl, "<>");
 			}
 			embed.setThumbnail(thumbnailUrl);
 		}else {
-			warn(`MessageEmbed.thumbnail invalid: ${thumbnailUrl}`);
+			Logger.package("@rsc-sage/core").warn(`MessageEmbed.thumbnail invalid: ${thumbnailUrl}`);
 		}
 	}
 

@@ -1,5 +1,5 @@
 import { hasLocalizedText } from "@rsc-sage/localization";
-import { debug } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 
 export type FetchResultError = "INVALID_ID" | "INVALID_EXISTING_ID"
@@ -34,7 +34,7 @@ export async function handleImportErrors(sageCommand: SageCommand, action: "IMPO
 				}
 				return localizer(fetchResult.error);
 			}
-			debug({fetchResult});
+			Logger.package("@rsc-sage/core").debug({fetchResult});
 			return localizer("SORRY_WE_DONT_KNOW");
 		});
 

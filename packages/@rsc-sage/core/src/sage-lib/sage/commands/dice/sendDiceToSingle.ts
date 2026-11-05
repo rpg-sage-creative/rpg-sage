@@ -1,6 +1,7 @@
 import { EmbedColorType } from "@rsc-sage/data";
-import { debug, isNotBlank, type Optional } from "@rsc-utils/core-utils";
+import { isNotBlank, type Optional } from "@rsc-utils/core-utils";
 import { toMessageUrl, type SupportedMessagesChannel, type SupportedTarget } from "@rsc-utils/discord-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { sendTo } from "../../../discord/sendTo.js";
 import type { SageCommand } from "../../model/SageCommand.js";
 import type { FormattedDiceOutput } from "./FormattedDiceOutput.js";
@@ -53,7 +54,7 @@ export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutput
 				embedContent: gmEmbedContent
 			}, splitOptions);
 		}else {
-			debug("no gmTargetChannel!");
+			Logger.package("@rsc-sage/core").debug("no gmTargetChannel!");
 		}
 	}
 
@@ -68,7 +69,7 @@ export async function sendDiceToSingle(sageCommand: SageCommand, formattedOutput
 				embedContent: mainEmbedContent
 			}, splitOptions);
 		}else {
-			debug("no targetChannel!");
+			Logger.package("@rsc-sage/core").debug("no targetChannel!");
 		}
 	}
 

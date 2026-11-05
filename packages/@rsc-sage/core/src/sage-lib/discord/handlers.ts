@@ -1,7 +1,8 @@
 import { ghostEvent } from "@rsc-sage/env";
-import { debug, error, isNullOrUndefined, stringOrUndefined, trace, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isNullOrUndefined, stringOrUndefined, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { isDiscordApiError, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SMessage, type SupportedInteraction, type UserOrPartial } from "@rsc-utils/discord-utils";
 import { DialogTypeOrAliasRegExp } from "@rsc-utils/game-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { ChannelType, MessageType as DMessageType, GatewayIntentBits, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";
 import { SageMessage } from "../sage/model/SageMessage.js";
@@ -87,16 +88,16 @@ function registerListener<T extends TListenerType>(listener: T): void {
 	const listeners: T[] = getListeners(listener.which);
 
 	if (isNullOrUndefined(listener.priorityIndex)) {
-		trace(`Registering ${listener.which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
+		Logger.package("@rsc-sage/core").trace(`Registering ${listener.which} #${listeners.length + 1}: ${listener.command ?? listener.tester.name}`);
 	} else {
-		trace(`Registering ${listener.which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
+		Logger.package("@rsc-sage/core").trace(`Registering ${listener.which} #${listeners.length + 1} at priorityIndex ${listener.priorityIndex}: ${listener.command ?? listener.tester.name}`);
 		if (listeners.find(l => l.priorityIndex === listener.priorityIndex)) {
-			warn(`${listener.which} at priorityIndex ${listener.priorityIndex} already exists!`);
+			Logger.package("@rsc-sage/core").warn(`${listener.which} at priorityIndex ${listener.priorityIndex} already exists!`);
 		}
 	}
 
 	if (listener.which === "MessageListener" && listeners.some(l => l.command === listener.command)) {
-		warn(`${listener.which} command ${listener.command} already exists!`);
+		Logger.package("@rsc-sage/core").warn(`${listener.which} command ${listener.command} already exists!`);
 	}
 
 	listeners.push(listener);
@@ -198,7 +199,7 @@ function getInteractionFlags(interaction: Optional<Interaction>): InteractionFla
 			}
 		}
 	}catch(err) {
-		error({
+		Logger.package("@rsc-sage/core").error({
 			err,
 			interaction,
 			user: toHumanReadable(interaction.user) ?? "@UnknownInteractionUser"
@@ -218,17 +219,19 @@ export async function handleInteraction(clientEvent: ClientEventsKey, interactio
 			await handleInteractions(sageInteraction, output);
 			sageInteraction.clear();
 		}catch(err) {
-			error({
+			Logger.package("@rsc-sage/core").error({
 				err,
 				interaction,
 				user: toHumanReadable(interaction.user) ?? "@UnknownInteractionUser"
 			});
 		}
 
-		if (output.ghosted) debug(output);
+		if (output.ghosted) {
+			Logger.package("@rsc-sage/core").debug(output);
+		}
 
 		if (!output.handled && !output.ghosted) {
-			error({
+			Logger.package("@rsc-sage/core").error({
 				ev: "Unhandled Interaction",
 				guild: interaction.guild?.name,
 				customId: "customId" in interaction ? interaction.customId : undefined,
@@ -399,14 +402,16 @@ export async function handleMessage(clientEvent: HandleMessageClientEventsKey, o
 				await handleMessages(sageMessage, messageType, output);
 				sageMessage.clear();
 
-				if (output.ghosted) debug(output);
+				if (output.ghosted) {
+					Logger.package("@rsc-sage/core").debug(output);
+				}
 			}
 		}
 	} catch (err) {
 		// DiscordAPIError[10008]: Unknown Message <-- probably a deleted message from tupperbox
 		// DiscordAPIError[50001]: Missing Access  <-- probably in a server and getting events but can't see this channel
 		if (!isDiscordApiError(err, 10008, 50001)) {
-			error({
+			Logger.package("@rsc-sage/core").error({
 				err,
 				content: oldMessage.content,
 				user: toHumanReadable(oldMessage.author) ?? "@UnknownMessageUser"
@@ -437,7 +442,7 @@ async function handleMessages(sageMessage: SageMessage, messageType: MessageType
 	}
 	// track incorrect command attempts that aren't edits
 	if (!output.handled && messageType !== MessageType.Edit && sageMessage.hasPrefix && sageMessage.prefix && sageMessage.slicedContent.startsWith("!")) {
-		error(`I got ${messageListeners.length} message handlers, but "${sageMessage.slicedContent}" ain't one!`);
+		Logger.package("@rsc-sage/core").error(`I got ${messageListeners.length} message handlers, but "${sageMessage.slicedContent}" ain't one!`);
 	}
 }
 
@@ -485,10 +490,12 @@ export async function handleReaction(clientEvent: HandleReactionClientEventsKey,
 
 		sageReaction?.clear();
 
-		if (output.ghosted) debug(output);
+		if (output.ghosted) {
+			Logger.package("@rsc-sage/core").debug(output);
+		}
 
-	} catch (err) {
-		error({
+	}catch (err) {
+		Logger.package("@rsc-sage/core").error({
 			err,
 			emoji: messageReaction.emoji.name,
 			user: toHumanReadable(user) ?? "@UnknownReactionUser"
