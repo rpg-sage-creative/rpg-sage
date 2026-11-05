@@ -1,5 +1,5 @@
+import { updateSlashCommands } from "@rsc-chat/discord-utils";
 import { getCodeName, getDataRoot, getToken } from "@rsc-sage/env";
-import { updateSlashCommands } from "@rsc-utils/discord-utils";
 import { findJsonFile } from "@rsc-utils/io-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { commandPathValidator } from "./utils/commandPathValidator.js";

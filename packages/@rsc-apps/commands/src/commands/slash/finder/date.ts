@@ -1,4 +1,4 @@
-import type { GameSlashCommand } from "@rsc-utils/discord-utils";
+import type { GameSlashCommand } from "@rsc-chat/discord-utils";
 
 export function registerCommand(): GameSlashCommand<"Finder"> {
 	return {

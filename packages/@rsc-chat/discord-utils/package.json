@@ -1,5 +1,5 @@
 {
-	"name": "@rsc-utils/discord-utils",
+	"name": "@rsc-chat/discord-utils",
 	"version": "1.5.0",
 	"license": "LGPL-3.0-or-later",
 	"private": true,
