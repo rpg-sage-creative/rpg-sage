@@ -1,4 +1,4 @@
-import { error } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { mkdirSync, rmSync, symlinkSync } from "node:fs";
 import { dirname } from "node:path";
 
@@ -13,7 +13,7 @@ export function symLinkSync(target: string, path: string, options?: Options): bo
 			mkdirSync(pathParent, { recursive:true });
 		}
 	}catch(ex) {
-		error(ex);
+		Logger.package("@rsc-utils/io-utils").error(ex);
 	}
 	try {
 		// let's just try to make it and catch the EEXIST error
@@ -22,7 +22,7 @@ export function symLinkSync(target: string, path: string, options?: Options): bo
 	}catch(outer: any) {
 		const overwrite = outer.code === "EEXIST" && options?.overwrite;
 		if (!overwrite) {
-			error(outer);
+			Logger.package("@rsc-utils/io-utils").error(outer);
 			return false;
 		}
 
@@ -34,7 +34,7 @@ export function symLinkSync(target: string, path: string, options?: Options): bo
 			symlinkSync(target, path, "file");
 
 		}catch(inner) {
-			error(inner);
+			Logger.package("@rsc-utils/io-utils").error(inner);
 			return false;
 		}
 	}

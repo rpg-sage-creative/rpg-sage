@@ -1,4 +1,4 @@
-import { warn } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { regex } from "regex";
 import { applyDiceMacroArgs } from "./applyDiceMacroArgs.js";
 import { parseDiceMacroCall, type DiceMacroArgs } from "./parseDiceMacroCall.js";
@@ -81,7 +81,7 @@ function processBlock(input: string, macroTiers: DiceMacroBase[][], argsStack: D
 export function flattenDiceMacro(input: string, macroTiers: DiceMacroBase[][], argsStack: DiceMacroArgs[], stack: string[] = []): string[] {
 	// avoid a stack overflow
 	if (stack.some(isStackOverflow)) {
-		warn({ input, stack }, `flattenDiceMacro(): Macro Recursion`);
+		Logger.package("@rsc-utils/game-utils").warn({ input, stack }, `flattenDiceMacro(): Macro Recursion`);
 		return ["[0d0 Recursion!]"];
 	}
 

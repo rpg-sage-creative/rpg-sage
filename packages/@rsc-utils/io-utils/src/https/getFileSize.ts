@@ -1,4 +1,5 @@
-import { trace, type Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { typeError } from "@rsc-utils/error-utils";
 import type { FollowResponse, RedirectableRequest } from "follow-redirects";
 import type { IncomingMessage } from "node:http";
@@ -53,7 +54,7 @@ export function getFileSize(url: string): Promise<number> {
 		const protocol = getProtocol(url);
 		const options = { method:"HEAD" };
 
-		trace(`${options.method} ${url}`);
+		Logger.package("@rsc-utils/io-utils").trace(`${options.method} ${url}`);
 
 		request = protocol.request(url, options, _response => {
 			response = _response;

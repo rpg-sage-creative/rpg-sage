@@ -1,4 +1,4 @@
-import { error } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { symlink } from "node:fs";
 import { dirname } from "node:path";
 import { deleteFile } from "./deleteFile.js";
@@ -22,7 +22,7 @@ export async function symLink(target: string, path: string, options?: Options): 
 		}catch(outer: any) {
 			const overwrite = outer?.code === "EEXIST" && options?.overwrite;
 			if (!overwrite) {
-				error(outer);
+				Logger.package("@rsc-utils/io-utils").error(outer);
 				res(false);
 				return;
 			}
@@ -37,7 +37,7 @@ export async function symLink(target: string, path: string, options?: Options): 
 				}
 
 			}catch(inner) {
-				error(inner);
+				Logger.package("@rsc-utils/io-utils").error(inner);
 				res(false);
 			}
 		}

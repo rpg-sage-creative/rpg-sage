@@ -1,5 +1,6 @@
 import type { GameSystemCode, GameSystem as GameSystemObj } from "@rsc-sage/data";
-import { applyChanges, debug, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type Optional, type SortResult } from "@rsc-utils/core-utils";
+import { applyChanges, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type Optional, type SortResult } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { addValues } from "./internal/addValues.js";
 import { convertCurrency } from "./internal/convertCurrency.js";
 import { coreFrom } from "./internal/coreFrom.js";
@@ -267,7 +268,7 @@ implements Comparable<AnyCurrency> {
 			case "+": return this.add(value, denom!);
 			case "-": return this.subtract(value, denom!);
 			case "*": return this.multiply(value);
-			default: debug(`Not Yet Implemented: Currency.math("${operator}", ${value}, ${denom})`);
+			default: Logger.package("@rsc-utils/game-utils").debug(`Not Yet Implemented: Currency.math("${operator}", ${value}, ${denom})`);
 		}
 		return this;
 	}

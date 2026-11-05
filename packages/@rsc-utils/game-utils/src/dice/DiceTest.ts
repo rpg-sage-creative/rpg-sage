@@ -1,4 +1,5 @@
-import { error, warn, type EnumLike, type Optional } from "@rsc-utils/core-utils";
+import type { EnumLike, Optional } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import type { TokenData, TokenParsers } from "@rsc-utils/token-string-utils";
 import { createTestRegExp } from "../utils/createTestRegExp.js";
 const DiceTestRegExp = createTestRegExp(["gteq","gte","gt","lteq","lte","lt","eq","=","==",">=",">","<=","<"]);
@@ -118,7 +119,7 @@ export class DiceTest {
 				case DiceTestType.LessThanOrEqual:
 					return total <= this.value;
 				default:
-					warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
+					Logger.package("@rsc-utils/game-utils").warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
 			}
 		}
 		return undefined;
@@ -183,7 +184,7 @@ export class DiceTest {
 				const key = targetEnum[data.type as unknown as keyof typeof targetEnum] as unknown as Key;
 				return DiceTest.createData(defTestType, data.value, data.hidden, key.toLowerCase());
 			}else {
-				error({ data, targetEnum, defTestType }, `Invalid targetToTest arguments`);
+				Logger.package("@rsc-utils/game-utils").error({ data, targetEnum, defTestType }, `Invalid targetToTest arguments`);
 			}
 		}
 		return data as DiceTestData;

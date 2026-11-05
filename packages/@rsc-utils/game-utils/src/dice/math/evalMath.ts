@@ -1,4 +1,4 @@
-import { error } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { reapplySign } from "./internal/reapplySign.js";
 
 /** avoids running eval on anything except math */
@@ -71,7 +71,7 @@ export function evalMath(input: string): string {
 		return outWithSign;
 
 	}catch(err) {
-		error({ err, input }, `evalMath(input) exception!`);
+		Logger.package("@rsc-utils/game-utils").error({ err, input }, `evalMath(input) exception!`);
 		return `(ERR)`;
 	}
 }

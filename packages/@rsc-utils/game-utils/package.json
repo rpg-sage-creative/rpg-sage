@@ -16,6 +16,7 @@
 		"@rsc-utils/date-utils": "workspace:",
 		"@rsc-utils/error-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
+		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/random-utils": "workspace:",
 		"@rsc-utils/token-string-utils": "workspace:",
 		"regex": "^6.1.0"

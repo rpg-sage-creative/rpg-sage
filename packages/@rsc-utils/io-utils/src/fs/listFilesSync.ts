@@ -1,4 +1,4 @@
-import { error } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { readdirSync } from "node:fs";
 import { createExtFilter } from "./internal/createExtFilter.js";
 
@@ -13,7 +13,7 @@ export function listFilesSync(path: string, ext?: string): string[] {
 		}
 		return files;
 	}catch(ex) {
-		error(ex);
+		Logger.package("@rsc-utils/io-utils").error(ex);
 	}
 	return [];
 }

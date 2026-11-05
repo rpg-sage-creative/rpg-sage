@@ -1,5 +1,6 @@
 import type { CardBase, DeckCore, DeckType } from "@rsc-sage/data";
-import { capitalize, generateSnowflake, warn, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { capitalize, generateSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { randomItems, shuffle } from "@rsc-utils/random-utils";
 import { getCards } from "./decks/getCards.js";
 
@@ -274,13 +275,13 @@ export class Deck {
 
 	public static from(core: DeckCore | Deck): Deck {
 		if ("toJSON" in core) {
-			warn(`Deck.from(Deck): should have been a DeckCore!`);
+			Logger.package("@rsc-utils/game-utils").warn(`Deck.from(Deck): should have been a DeckCore!`);
 			core = core.toJSON();
 		}
 
 		const deck = new Deck(core);
 		if (!deck.audit()) {
-			warn(`Resetting Invalid Deck!`);
+			Logger.package("@rsc-utils/game-utils").warn(`Resetting Invalid Deck!`);
 			deck.reset();
 		}
 

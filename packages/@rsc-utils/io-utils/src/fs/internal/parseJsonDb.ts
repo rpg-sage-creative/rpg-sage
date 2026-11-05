@@ -1,5 +1,5 @@
-import { error, parseJson, type Optional } from "@rsc-utils/core-utils";
-
+import { parseJson, type Optional } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 /**
  * @internal
  * Designed for reading a .json.db file that is a list of json items on each line, but not an array.
@@ -13,7 +13,7 @@ export function parseJsonDb<T>(raw: Optional<string>): T[] {
 			try {
 				objects.push(parseJson(trimmed));
 			}catch(ex) {
-				error({ index, ex });
+				Logger.package("@rsc-utils/io-utils").error({ index, ex });
 			}
 		}
 	});
