@@ -1,4 +1,5 @@
-import { debug, isNonNilSnowflake, isNotBlank, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, isNotBlank, type Snowflake } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { assertArray, assertBoolean, assertNumber, assertSimpleObject, assertString, optional } from "../validation/index.js";
 
 export type PostCurrencyUserCountPostType = "dialog" | "dice";
@@ -94,7 +95,7 @@ function assertPostCurrencyDataTotal({ core, objectType }: { core:PostCurrencyDa
 export function assertPostCurrency({ core, objectType }: { core:PostCurrency; objectType:string; }): boolean {
 	if (!assertSimpleObject<PostCurrency>(core)) return false;
 	for (const [key, data] of Object.entries(core)) {
-		if (key !== data.key) debug({ key, dataKey:data.key });
+		if (key !== data.key) Logger.package("@rsc-sage/data").debug({ key, dataKey:data.key });
 		if (!assertString({ core:data, objectType, key:"key", validator:isNotBlank })) return false;
 		if (!assertString({ core:data, objectType, key:"name", validator:isNotBlank })) return false;
 		if (!assertString({ core:data, objectType, key:"description", optional, validator:isNotBlank })) return false;

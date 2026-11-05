@@ -1,6 +1,7 @@
-import { Arrayish, captureProcessExit, stringifyJson, trace, type Snowflake } from "@rsc-utils/core-utils";
+import { Arrayish, stringifyJson, type Snowflake } from "@rsc-utils/core-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { stat, Stats } from "node:fs";
 import { basename, join } from "node:path";
 // import { getDdbTable } from "./cache/internal/DdbRepo.js";
@@ -190,12 +191,12 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 	/** this object had more than 1 file */
 	let duplicatesDeleted = 0;
 
-	trace(`ObjectType: ${objectType}`);
-	trace(`  ${objectType} Path: ${objectRoot}`);
+	Logger.package("@rsc-sage/data").trace(`ObjectType: ${objectType}`);
+	Logger.package("@rsc-sage/data").trace(`  ${objectType} Path: ${objectRoot}`);
 
 	const children = objectType === "Message" ? yearArgs : [""];
 	if (children[0]) {
-		trace(`  ${objectType} Children: ${children}`);
+		Logger.package("@rsc-sage/data").trace(`  ${objectType} Children: ${children}`);
 	}
 
 	// const ddbTable = getDdbTable(objectType);
@@ -205,12 +206,12 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 	for (const child of children) {
 		const dataPath = child ? join(objectRoot, child) : objectRoot;
 		if (child) {
-			trace(`  ${objectType} ${child} Path: ${dataPath}`);
+			Logger.package("@rsc-sage/data").trace(`  ${objectType} ${child} Path: ${dataPath}`);
 		}
 
-		trace(`  Counting ${objectType} ...`);
+		Logger.package("@rsc-sage/data").trace(`  Counting ${objectType} ...`);
 		const files = await filterFiles(dataPath, { fileExt:"json", recursive:true });
-		trace(`                 ... ${files.length} found.`)
+		Logger.package("@rsc-sage/data").trace(`                 ... ${files.length} found.`)
 
 		const deletedSet = new Set<string>();
 		// const ddbQueue: any[] = [];
@@ -236,8 +237,8 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 				}
 				if (reason === "duplicate") {
 					duplicatesDeleted++;
-					trace(`        Deleting "${reason}" of ${basename(filePath)}${tsToDate(meta.updatedTs)}: ${basename(deletePath)}${tsToDate(updatedTs)}; `);
-					trace(`            %o` + {id:oldCore?.id,did:oldCore?.did,uuid:oldCore?.uuid});
+					Logger.package("@rsc-sage/data").trace(`        Deleting "${reason}" of ${basename(filePath)}${tsToDate(meta.updatedTs)}: ${basename(deletePath)}${tsToDate(updatedTs)}; `);
+					Logger.package("@rsc-sage/data").trace(`            %o` + {id:oldCore?.id,did:oldCore?.did,uuid:oldCore?.uuid});
 					await deleteFile(deletePath);
 					deletedSet.add(deletePath);
 				}
@@ -325,7 +326,7 @@ async function processObjects<Type extends ObjectType>(objectType: Type, process
 
 	await Promise.all(ddbPromises);
 
-	trace({ unableToRead, missingCharacterId, missingUserId, moved, targetExists, updated, updatedTwice, duplicatesDeleted });
+	Logger.package("@rsc-sage/data").trace({ unableToRead, missingCharacterId, missingUserId, moved, targetExists, updated, updatedTwice, duplicatesDeleted });
 }
 
 async function main() {

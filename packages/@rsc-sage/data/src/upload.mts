@@ -1,7 +1,8 @@
 import { getDataRoot } from "@rsc-sage/env";
 import type { RepoItem } from "@rsc-utils/aws-utils";
-import { Arrayish, captureProcessExit, trace } from "@rsc-utils/core-utils";
+import { Arrayish } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
+import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";
 import { type BaseCacheItem, type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType, objectTypeToDirName } from "./cache/types.js";
 
@@ -25,9 +26,9 @@ async function main() {
 		const ddbTable = getDdbTable(objectType);
 		const { tableName } = ddbTable;
 
-		trace(`Uploading to DDB: %s ...`, objectType);
+		Logger.package("@rsc-sage/data").trace(`Uploading to DDB: %s ...`, objectType);
 
-		trace(`  Ensuring table exists and is empty ...`);
+		Logger.package("@rsc-sage/data").trace(`  Ensuring table exists and is empty ...`);
 		// await ddbTable.drop(true).catch(() => {});
 		await ddbTable.ensure(true);
 
@@ -39,11 +40,11 @@ async function main() {
 			dirPaths.push(getDataRoot(["sage", objectTypeToDirName(objectType)]));
 		}
 		for (const dirPath of dirPaths) {
-			trace(`  Reading from %s ...`, dirPath);
+			Logger.package("@rsc-sage/data").trace(`  Reading from %s ...`, dirPath);
 
 			const files = await filterFiles(dirPath, { fileExt:"json" });
 
-			trace(`  Found %d files ...`, files.length);
+			Logger.package("@rsc-sage/data").trace(`  Found %d files ...`, files.length);
 
 			// const cores: BaseCacheItem[] = [];
 			const errors: string[] = [];
@@ -70,7 +71,7 @@ async function main() {
 			});
 
 			// send to the logs so we can see if something is amiss
-			trace({ tableName, dirPath, files:files.length, errors:errors.length });
+			Logger.package("@rsc-sage/data").trace({ tableName, dirPath, files:files.length, errors:errors.length });
 		}
 	}
 }

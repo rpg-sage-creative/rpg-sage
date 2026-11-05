@@ -1,24 +1,24 @@
-import { captureProcessExit, debug, trace } from "@rsc-utils/core-utils";
 import { deleteFile } from "@rsc-utils/io-utils";
+import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { getDuplicates, getIdsArrayFilePath, getIdsStats, writeIdsArray } from "./validation/IdsArray.js";
 
 captureProcessExit();
 
 async function main() {
-	trace("Deleting ...");
+	Logger.package("@rsc-sage/data").trace("Deleting ...");
 	await deleteFile(getIdsArrayFilePath());
 
-	trace("Writing ...");
+	Logger.package("@rsc-sage/data").trace("Writing ...");
 	await writeIdsArray();
 
-	trace("Looking for duplicates ...");
+	Logger.package("@rsc-sage/data").trace("Looking for duplicates ...");
 	const duplicates = getDuplicates();
 
 	if (duplicates.length) {
-		debug({duplicates});
+		Logger.package("@rsc-sage/data").debug({duplicates});
 	}
 
-	debug(getIdsStats());
+	Logger.package("@rsc-sage/data").debug(getIdsStats());
 }
 
 // make sure we don't trigger this with an index.ts include

@@ -6,7 +6,6 @@ export * from "@rsc-utils/git-utils";
 export * from "@rsc-utils/id-utils";
 export * from "@rsc-utils/json-utils";
 export * from "@rsc-utils/language-utils";
-export * from "@rsc-utils/logger-utils";
 export * from "@rsc-utils/number-utils";
 export * from "@rsc-utils/quoted-string-utils";
 export * from "@rsc-utils/string-utils";

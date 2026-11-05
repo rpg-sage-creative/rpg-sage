@@ -1,4 +1,4 @@
-import { captureProcessExit } from "@rsc-utils/core-utils";
+import { captureProcessExit } from "@rsc-utils/logger-utils";
 import { validate } from "./cache/internal/validate.js";
 import { type CacheItemObjectType, dirNameToObjectType, isCacheItemDirName, isCacheItemObjectType } from "./cache/types.js";
 

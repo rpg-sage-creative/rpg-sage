@@ -1,6 +1,7 @@
 import type { RepoId } from "@rsc-utils/aws-utils";
-import { areEqual, debug, error, isDefined, noop, warn } from "@rsc-utils/core-utils";
+import { areEqual, isDefined, noop } from "@rsc-utils/core-utils";
 import { readJsonFile } from "@rsc-utils/io-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
 import { getDdbTable } from "./DdbRepo.js";
 import { getJsonPath } from "./getJsonPath.js";
@@ -25,18 +26,18 @@ async function readFromBoth<
 	const fileStart = Date.now();
 	const fromFile = await readFromFile<Core>(objectType, item);
 	const fileDone = Date.now();
-	debug({ ddbStart, ddbDone, ddbMs:ddbDone-ddbStart, fileStart, fileDone, fileMs:fileDone-fileStart });
+	Logger.package("@rsc-sage/data").debug({ ddbStart, ddbDone, ddbMs:ddbDone-ddbStart, fileStart, fileDone, fileMs:fileDone-fileStart });
 
 	if (!fromDdb && !fromFile) {
-		error(`fetchFromBoth - both missing: ${objectType} -> ${item}`);
+		Logger.package("@rsc-sage/data").error(`fetchFromBoth - both missing: ${objectType} -> ${item}`);
 		return undefined;
 	}
 
 	if (!fromDdb || !fromFile) {
-		warn(`fetchFromBoth - ${fromDdb ? "file" : "ddb"} missing: ${objectType} -> ${item}`);
+		Logger.package("@rsc-sage/data").warn(`fetchFromBoth - ${fromDdb ? "file" : "ddb"} missing: ${objectType} -> ${item}`);
 
 	}else if (!areEqual(fromDdb, fromFile)) {
-		warn(`fetchFromBoth - different json: ${objectType} -> ${item}`);
+		Logger.package("@rsc-sage/data").warn(`fetchFromBoth - different json: ${objectType} -> ${item}`);
 	}
 
 	return fromDdb ?? fromFile;

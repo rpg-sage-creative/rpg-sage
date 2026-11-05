@@ -1,4 +1,4 @@
-import { debug } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { tagFailure } from "../index.js";
 import type { AssertArgs } from "./types.js";
 
@@ -22,7 +22,7 @@ export function assertRecord<Core, Type>(args: AssertRecordArgs<Core, Type>): bo
 		}else if (validator) {
 			const failed = Object.values(record).find(val => !validator(val));
 			if (failed) {
-				if (validator.name === "assertSageCharacterCore") debug(failed);
+				if (validator.name === "assertSageCharacterCore") Logger.package("@rsc-sage/data").debug(failed);
 				return tagFailure`${objectType}: invalid array item(s) validator:${validator.name} (${key} === ${record})`;
 			}
 		}else {

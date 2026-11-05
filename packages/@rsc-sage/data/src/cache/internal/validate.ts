@@ -1,6 +1,7 @@
 import { getDataRoot } from "@rsc-sage/env";
-import { Arrayish, errorReturnUndefined, trace } from "@rsc-utils/core-utils";
+import { Arrayish } from "@rsc-utils/core-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
+import { errorReturnUndefined, Logger } from "@rsc-utils/logger-utils";
 import { assertSageCharacterCore } from "../../types/SageCharacterCore.js";
 import { assertSageGameCore } from "../../types/SageGameCore.js";
 import { assertSageMessageReferenceCore } from "../../types/SageMessageReferenceCore.js";
@@ -13,27 +14,27 @@ export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(
 	const invalid: string[] = [];
 	let fileCount = 0;
 
-	trace(`ObjectType: ${objectType}`);
+	Logger.package("@rsc-sage/data").trace(`ObjectType: ${objectType}`);
 
 	const dirName = objectTypeToDirName(objectType);
 
 	const dataPath = getDataRoot(["sage", dirName]);
-	trace(`  ${objectType} Path: ${dataPath}`);
+	Logger.package("@rsc-sage/data").trace(`  ${objectType} Path: ${dataPath}`);
 
 	const children = objectType === "Message" ? yearArgs ?? ["2021", "2022", "2023", "2024", "2025", "2026"] : [""];
 	if (children[0]) {
-		trace(`  ${objectType} Children: ${children}`);
+		Logger.package("@rsc-sage/data").trace(`  ${objectType} Children: ${children}`);
 	}
 
 	for (const child of children) {
 		const childPath = child ? getDataRoot(["sage", dirName, child]) : dataPath;
 		if (child) {
-			trace(`  ${objectType} ${child} Path: ${childPath}`);
+			Logger.package("@rsc-sage/data").trace(`  ${objectType} ${child} Path: ${childPath}`);
 		}
 
-		trace(`  Counting ${objectType} ...`);
+		Logger.package("@rsc-sage/data").trace(`  Counting ${objectType} ...`);
 		const files = await filterFiles(childPath, { fileExt:"json", recursive:true });
-		trace(`                 ... ${files.length} found.`);
+		Logger.package("@rsc-sage/data").trace(`                 ... ${files.length} found.`);
 
 		fileCount += files.length;
 
@@ -54,7 +55,7 @@ export async function validate<CacheItem extends BaseCacheItem = BaseCacheItem>(
 	}
 
 	// send to the logs so we can see if something is amiss
-	trace({ objectType, dataPath, files:fileCount, errors:errors.length, invalid:invalid.length });
+	Logger.package("@rsc-sage/data").trace({ objectType, dataPath, files:fileCount, errors:errors.length, invalid:invalid.length });
 
 	return !errors.length && !invalid.length;
 }

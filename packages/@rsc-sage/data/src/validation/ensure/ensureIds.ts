@@ -1,4 +1,5 @@
-import { debug, generateSnowflake, generateUuid, parseSnowflake, parseUuid } from "@rsc-utils/core-utils";
+import { generateSnowflake, generateUuid, parseSnowflake, parseUuid } from "@rsc-utils/core-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 
 type Core = { id:string; did?:string; uuid?:string; createdTs?:number; objectType?:string; };
 type Options = { didTs?:number; uuidTs?:number; validKeys?:string[]; }
@@ -24,7 +25,7 @@ export function ensureIds(core: Core, options?: Options): void {
 
 	let id = did ?? uuid ?? core.id;
 	if (!id && core.objectType !== "Character") {
-		debug({core},`Missing %s Id`, core.objectType);
+		Logger.package("@rsc-sage/data").debug({core},`Missing %s Id`, core.objectType);
 	}
 	if (!id) id = generateSnowflake(snowflakeOpts);
 	if (id) core.id = id;

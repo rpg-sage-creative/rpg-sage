@@ -1,6 +1,7 @@
 import { getDataRoot } from "@rsc-sage/env";
-import { debug, isDefined, noop, parseSnowflake, parseUuid, toUnique, trace, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { isDefined, noop, parseSnowflake, parseUuid, toUnique, type Snowflake, type UUID } from "@rsc-utils/core-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { Logger } from "@rsc-utils/logger-utils";
 import { join } from "node:path";
 import type { SageCharacterCore } from "../types/SageCharacterCore.js";
 
@@ -27,7 +28,7 @@ export function getIdsStats() { return idsStats; }
 
 function pushIds(core: Core, filePath?: string) {
 	if (!core.objectType) {
-		debug({core}, `Invalid Core!`);
+		Logger.package("@rsc-sage/data").debug({core}, `Invalid Core!`);
 		return;
 	}
 
@@ -43,7 +44,7 @@ function pushIds(core: Core, filePath?: string) {
 	const id = uuidId ?? didId;
 	if (!id) {
 		if (core.objectType !== "Character") {
-			debug({core}, `Invalid Core!`);
+			Logger.package("@rsc-sage/data").debug({core}, `Invalid Core!`);
 		}
 		return;
 	}
@@ -65,21 +66,21 @@ function pushCharIds({ id, did, uuid }: Core, _parent?: Core) {
 export async function populateIdsArray(objectTypeArgs?: ObjectType[]) {
 	if (idsArray.length) return false;
 
-	trace(`Populating ids-array.json`);
+	Logger.package("@rsc-sage/data").trace(`Populating ids-array.json`);
 
 	const root = getDataRoot("sage");
 
 	for (const objectType of ObjectTypes) {
 		if (objectTypeArgs && !objectTypeArgs.includes(objectType)) continue;
 		const dir = objectTypeToDirName(objectType);
-		trace(`Mapping Ids from ${dir} ...`);
+		Logger.package("@rsc-sage/data").trace(`Mapping Ids from ${dir} ...`);
 		const path = join(root, dir);
 		const files = await listFiles(path, "json");
 		for (const fileName of files) {
 			const filePath = join(path, fileName);
 			const json = await readJsonFile<Core>(filePath);
 			if (!json) {
-				debug("invalid file: " + filePath);
+				Logger.package("@rsc-sage/data").debug("invalid file: " + filePath);
 				continue;
 			}
 			pushIds({ id:json.id, did:json.did, uuid:json.uuid, objectType }, filePath);
@@ -112,7 +113,7 @@ export async function writeIdsArray() {
 
 	if (!populated) return false;
 
-	trace(`Writing ids-array.json ...`);
+	Logger.package("@rsc-sage/data").trace(`Writing ids-array.json ...`);
 
 	await writeFile(getIdsArrayFilePath(), idsArray);
 
@@ -123,17 +124,17 @@ export async function writeIdsArray() {
 export async function readIdsArray() {
 	if (idsArray.length) return false;
 
-	trace("Opening ids-array.json ...");
+	Logger.package("@rsc-sage/data").trace("Opening ids-array.json ...");
 
 	const cores = await readJsonFile<Core[]>(getIdsArrayFilePath()).catch(noop);
 
 	if (!cores?.length) return false;
 
-	trace("Reading ids-array.json ...");
+	Logger.package("@rsc-sage/data").trace("Reading ids-array.json ...");
 
 	cores.forEach(core => pushIds(core));
 
-	trace("                    ... done.");
+	Logger.package("@rsc-sage/data").trace("                    ... done.");
 
 	return true;
 }
