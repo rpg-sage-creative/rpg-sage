@@ -1,5 +1,6 @@
-import { cleanWhitespace, oneToUS, sortPrimitive, StringMatcher, type SortResult } from "@rsc-utils/core-utils";
+import { cleanWhitespace, sortPrimitive, StringMatcher, type SortResult } from "@rsc-utils/core-utils";
 import { getJson } from "@rsc-utils/io-utils";
+import { oneToUS } from "@rsc-utils/language-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
 import type { ParsedSearchInfo } from "../../common.js";

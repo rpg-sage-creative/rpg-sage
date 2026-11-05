@@ -17,7 +17,6 @@
 		{ "path": "../../@rsc-utils/error-utils" },
 		{ "path": "../../@rsc-utils/id-utils" },
 		{ "path": "../../@rsc-utils/json-utils" },
-		{ "path": "../../@rsc-utils/language-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/number-utils" },
 		{ "path": "../../@rsc-utils/progress-utils" },

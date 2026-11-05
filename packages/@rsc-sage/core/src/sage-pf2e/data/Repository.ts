@@ -1,6 +1,7 @@
 import { DataTable } from "@rsc-sage/data";
 import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { initializeNoiseUS, initializeUKtoUS, isDefined, SnowflakeMatcher, StringMatcher, UuidMatcher } from "@rsc-utils/core-utils";
+import { isDefined, SnowflakeMatcher, StringMatcher, UuidMatcher } from "@rsc-utils/core-utils";
+import { initializeNoiseUS, initializeUKtoUS } from "@rsc-utils/language-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { randomItem } from "@rsc-utils/random-utils";
 import type { AonBase } from "../model/base/AonBase.js";

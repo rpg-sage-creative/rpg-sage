@@ -26,6 +26,7 @@
 		"@rsc-utils/game-utils": "workspace:",
 		"@rsc-utils/git-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
+		"@rsc-utils/language-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/map-utils": "workspace:",
 		"@rsc-utils/random-utils": "workspace:",

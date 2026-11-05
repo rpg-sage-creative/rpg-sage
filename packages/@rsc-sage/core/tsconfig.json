@@ -15,6 +15,7 @@
 		{ "path": "../../@rsc-utils/error-utils" },
 		{ "path": "../../@rsc-utils/game-utils" },
 		{ "path": "../../@rsc-utils/git-utils" },
+		{ "path": "../../@rsc-utils/language-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/map-utils" },
 		{ "path": "../../@rsc-utils/token-string-utils" },
