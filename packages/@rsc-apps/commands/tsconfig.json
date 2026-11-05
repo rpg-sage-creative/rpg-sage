@@ -8,6 +8,7 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-chat/discord-utils" },
 		{ "path": "../../@rsc-utils/game-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 	],

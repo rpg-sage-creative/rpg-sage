@@ -1,7 +1,7 @@
+import { DiscordCache } from "@rsc-chat/discord-utils";
 import { ActiveBot, registerAndLoadPf2eData, registerCommandHandlers, registerPromptHandler } from "@rsc-sage/core";
 import { DataTable } from "@rsc-sage/data";
 import { getCodeName, getDataRoot, getEndpoint, getPort, getSageId, getSnsClientConfig } from "@rsc-sage/env";
-import { DiscordCache } from "@rsc-utils/discord-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { RenderableMap } from "@rsc-utils/map-utils";
 import { ImageCacher, PdfCacher } from "../../../@rsc-utils/io-utils/src/index.js";
