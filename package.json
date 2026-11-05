@@ -56,16 +56,15 @@
 		"pnpm": ">=10"
 	},
 	"devDependencies": {
-		"@rsc/dev-scripts": "./tools/@rsc-tools/dev-scripts",
-		"@rsc-tools/dynamic-test": "./tools/@rsc-tools/dynamic-test",
-		"@rsc-tools/release": "./tools/@rsc-tools/release",
+		"@rsc-tools/dev-scripts": "link:tools/@rsc-tools/dev-scripts",
+		"@rsc-tools/dynamic-test": "link:tools/@rsc-tools/dynamic-test",
+		"@rsc-tools/release": "link:tools/@rsc-tools/release",
 		"@types/node": "^24.12.0",
-		"discord.js": "^14.26.2",
+		"discord.js": "^14.28.1",
 		"typescript": "^7.0.2",
 		"vitest": "^4.1.10"
 	},
-	"dependencies": {
-	},
+	"dependencies": {},
 	"exifreader": {
 		"include": {
 			"file": true,
@@ -84,38 +83,30 @@
 		"scrub::logs": "rm -rf ./logs/*.log packages/*/*/logs/*.log || true",
 		"postscrub": "pnpm install --prefer-offline",
 		"scrubIfMissing": "[ -d './node_modules' ] && [ -f './pnpm-lock.yaml' ] || pnpm scrub",
-
 		"prebuild-tools": "rm -rf tools/*/*/build tools/*/*/mjs tools/*/*/*.tsbuildinfo",
 		"build-tools": "tsc -b --force tools/@rsc-tools/dev-scripts/tsconfig.json",
-
 		"prebuild": "pnpm scrubIfMissing && pnpm build-tools && pnpm run '/^build::.*/'",
 		"build::clean-build-folder": "rm -rf build packages/*/*/build || true",
 		"build::clean-build-info": "rm -f *.tsbuildinfo packages/*/*/*.tsbuildinfo || true",
 		"build::create-indexes": "pnpm run -r '/^build::.*/'",
 		"build": "[ -f './tsconfig.json' ] && tsc -b --force tsconfig.json",
 		"build:fresh": "pnpm scrub && pnpm build",
-
 		"pretest": "pnpm scrub::logs",
 		"test": "pnpm build && pnpm vitest --run --globals -- codeName=dev",
 		"test:nobuild": "pnpm pretest && pnpm vitest --run --globals -- codeName=dev",
-
 		"refresh-tags": "git tag -l | xargs git tag -d; git fetch --tags",
-
 		"deploy:dev": "pnpm dev-scripts deploy dev",
 		"deploy:docker": "pnpm dev-scripts deploy docker",
 		"deploy:beta": "git checkout beta && git merge develop && git push && git checkout develop && pnpm dev-scripts deploy beta",
 		"deploy:stable": "pnpm dev-scripts deploy stable",
-
 		"prestart": "pnpm run '/^start::.*/'",
 		"start::env": "pnpm dev-scripts write-env-json local",
 		"start::build": "pnpm build",
 		"start": "node ./packages/@rsc-apps/bot/build/app.js codeName=dev --getFromEnvJson",
-
 		"predocker:setup": "docker compose down; docker compose up -d",
 		"docker:setup": "pm2 deploy bot.config.cjs docker setup",
 		"docker:start": "pnpm deploy docker dev bot pnpm --noPrompt",
 		"docker:stop": "pm2 deploy bot.config.cjs docker run 'pm2 stop sage-bot-dev'",
-
 		"data:stack": "bash ./scripts/data-update.sh",
 		"commands:build": "node ./packages/@rsc-apps/app-commands/build/build.mjs codeName=dev --getFromEnvJson",
 		"-start:dev:all": "node ./packages/@rsc-apps/bot/build/app.js codeName=dev --getFromEnvJson --spawnServices"
