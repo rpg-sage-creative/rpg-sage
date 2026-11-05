@@ -19,6 +19,7 @@
 		"@rsc-sage/env": "workspace:",
 		"@rsc-sage/localization": "workspace:",
 		"@rsc-utils/aws-utils": "workspace:",
+		"@rsc-utils/charset-utils": "workspace:",
 		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/date-utils": "workspace:",
 		"@rsc-utils/error-utils": "workspace:",

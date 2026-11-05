@@ -9,15 +9,16 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/charset-utils" },
 		{ "path": "../../@rsc-utils/date-utils" },
 		{ "path": "../../@rsc-utils/error-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/token-string-utils" },
-		{ "path": "../../@rsc-chat/discord-utils" },
-		{ "path": "../../@rsc-sage/data" },
 		{ "path": "../../@rsc-utils/aws-utils" },
 		{ "path": "../../@rsc-utils/game-utils" },
 		{ "path": "../../@rsc-utils/map-utils" },
+		{ "path": "../../@rsc-chat/discord-utils" },
+		{ "path": "../../@rsc-sage/data" },
 		{ "path": "../../@rsc-sage/env" },
 		{ "path": "../../@rsc-sage/localization" },
 	],

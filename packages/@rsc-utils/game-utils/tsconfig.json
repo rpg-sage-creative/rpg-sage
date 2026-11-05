@@ -12,6 +12,7 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/charset-utils" },
 		{ "path": "../../@rsc-utils/date-utils" },
 		{ "path": "../../@rsc-utils/error-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },

@@ -1,4 +1,5 @@
-import { isFiniteNumber, toCircledLetter, toCircledNumber } from "@rsc-utils/core-utils";
+import { toCircledLetter, toCircledNumber } from "@rsc-utils/charset-utils";
+import { isFiniteNumber } from "@rsc-utils/core-utils";
 
 type TrackerDotValues = {
 	/** the value that represents "off" */

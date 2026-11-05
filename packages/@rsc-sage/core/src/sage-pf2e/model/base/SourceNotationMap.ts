@@ -1,4 +1,5 @@
-import { RenderableContent, toSuperscript, type UUID } from "@rsc-utils/core-utils";
+import { toSuperscript } from "@rsc-utils/charset-utils";
+import { RenderableContent, type UUID } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { HasSource } from "./HasSource.js";
 import { Source } from "./Source.js";

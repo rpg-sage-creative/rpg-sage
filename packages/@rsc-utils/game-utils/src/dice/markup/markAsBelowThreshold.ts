@@ -1,4 +1,4 @@
-import { toSuperscript } from "@rsc-utils/core-utils";
+import { toSuperscript } from "@rsc-utils/charset-utils";
 
 export function markAsBelowThreshold(value: number, threshold: number | string, isFixed?: boolean): string {
 	const superF = isFixed ? "ᶠ" : "";

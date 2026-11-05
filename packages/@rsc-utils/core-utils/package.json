@@ -13,7 +13,6 @@
 	"dependencies": {
 		"@rsc-utils/array-utils": "workspace:",
 		"@rsc-utils/arg-utils": "workspace:",
-		"@rsc-utils/charset-utils": "workspace:",
 		"@rsc-utils/color-utils": "workspace:",
 		"@rsc-utils/error-utils": "workspace:",
 		"@rsc-utils/git-utils": "workspace:",

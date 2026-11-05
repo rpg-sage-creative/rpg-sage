@@ -1,6 +1,5 @@
 export * from "@rsc-utils/array-utils";
 export * from "@rsc-utils/arg-utils";
-export * from "@rsc-utils/charset-utils";
 export * from "@rsc-utils/color-utils";
 export * from "@rsc-utils/git-utils";
 export * from "@rsc-utils/id-utils";
