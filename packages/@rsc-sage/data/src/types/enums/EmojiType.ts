@@ -1,4 +1,4 @@
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import { isSimpleObject } from "../../validation/index.js";
 
 export enum EmojiType {

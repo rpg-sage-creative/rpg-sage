@@ -1,5 +1,6 @@
 
-import { ZERO_WIDTH_SPACE, type Optional } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { Channel } from "discord.js";
 import { toGuildName } from "../toGuildName.js";
 import { toUserName } from "../toUserName.js";

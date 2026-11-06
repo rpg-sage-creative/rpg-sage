@@ -3,7 +3,8 @@ import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, typ
 import type { IncrementArg, KeyValuePair } from "@rsc-utils/arg-utils";
 import type { HexColorString } from "@rsc-utils/color-utils";
 import { Arrayish, sortByKey } from "@rsc-utils/collection-utils";
-import { isDefined, isNotBlank, isString, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type Optional } from "@rsc-utils/core-utils";
+import { isNotBlank, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap } from "@rsc-utils/string-utils";
+import { isDefined, isString, type Args, type Optional } from "@rsc-utils/core-utils";
 import { applyChanges } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";

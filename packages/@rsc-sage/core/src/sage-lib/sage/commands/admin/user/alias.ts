@@ -1,5 +1,5 @@
 import { DialogPostType, type Alias } from "@rsc-sage/data";
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import { parseDialogContent, type DialogContent } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";

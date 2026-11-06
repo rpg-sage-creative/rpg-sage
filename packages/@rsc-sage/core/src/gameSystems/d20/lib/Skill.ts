@@ -1,4 +1,4 @@
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import { Ability, type AbilityAbbr } from "./Ability.js";
 
 export class Skill<SkillName extends string = string> {

@@ -1,5 +1,6 @@
 import { DataTable } from "@rsc-sage/data";
-import { isDefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import { stringOrUndefined } from "@rsc-utils/string-utils";
+import { isDefined, type Optional } from "@rsc-utils/core-utils";
 import type { StatResults } from "@rsc-utils/game-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/game-utils";
 import { numberOrUndefined } from "@rsc-utils/number-utils";

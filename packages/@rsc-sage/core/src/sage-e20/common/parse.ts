@@ -1,4 +1,4 @@
-import { isBlank, stringOrUndefined } from "@rsc-utils/core-utils";
+import { isBlank, stringOrUndefined } from "@rsc-utils/string-utils";
 import { generateSnowflake } from "@rsc-utils/id-utils";
 import { PdfJsonManager } from "@rsc-utils/io-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";

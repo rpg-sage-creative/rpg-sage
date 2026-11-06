@@ -15,6 +15,7 @@
 		{ "path": "../../@rsc-utils/id-utils" },
 		{ "path": "../../@rsc-utils/io-utils" },
 		{ "path": "../../@rsc-utils/json-utils" },
+		{ "path": "../../@rsc-utils/string-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/token-string-utils" },
 		{ "path": "../../@rsc-sage/env" },

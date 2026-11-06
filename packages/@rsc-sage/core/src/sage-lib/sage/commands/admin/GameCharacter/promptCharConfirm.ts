@@ -1,4 +1,4 @@
-import type { StringSet } from "@rsc-utils/core-utils";
+import type { StringSet } from "@rsc-utils/string-utils";
 import { deleteMessages } from "../../../../discord/deletedMessages.js";
 import { discordPromptYesNo } from "../../../../discord/prompts.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";

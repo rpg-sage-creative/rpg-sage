@@ -1,7 +1,8 @@
 import { GameUserType } from "@rsc-sage/data";
 import { Arg, type IncrementArg, type KeyValueArg } from "@rsc-utils/arg-utils";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
-import { isBlank, type Args, type Optional } from "@rsc-utils/core-utils";
+import { isBlank } from "@rsc-utils/string-utils";
+import { type Args, type Optional } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { GameCharacterCore } from "../../../model/GameCharacter.js";

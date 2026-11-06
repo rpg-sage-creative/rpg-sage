@@ -1,4 +1,4 @@
-import { StringMatcher } from "@rsc-utils/core-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
 import { generateSnowflake, isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { dequote } from "@rsc-utils/quoted-string-utils";

@@ -1,4 +1,4 @@
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import type { HephaistosCharacterCoreSF1e } from "../types.js";
 import { isSimpleObject } from "@rsc-sage/data";
 

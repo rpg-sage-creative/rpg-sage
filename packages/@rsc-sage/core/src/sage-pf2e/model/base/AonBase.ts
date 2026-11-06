@@ -1,6 +1,6 @@
 import type { GameSystemCode } from "@rsc-sage/data";
 import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/collection-utils";
-import { capitalize } from "@rsc-utils/core-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { SearchInfo, SearchScore, Searchable } from "@rsc-utils/search-utils";
 import type { GameSearchInfo } from "../../../sage-search/GameSearchInfo.js";

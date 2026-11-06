@@ -1,5 +1,6 @@
 import type { KeyValuePair } from "@rsc-utils/arg-utils";
-import { isDefined, isString, stringArrayOrEmpty, StringSet, type Optional } from "@rsc-utils/core-utils";
+import { stringArrayOrEmpty, StringSet } from "@rsc-utils/string-utils";
+import { isDefined, isString, type Optional } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import type { StatKey, StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-utils/game-utils";
 import { numberOrUndefined } from "@rsc-utils/number-utils";

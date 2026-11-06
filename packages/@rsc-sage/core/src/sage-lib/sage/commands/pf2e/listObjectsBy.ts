@@ -1,4 +1,4 @@
-import { capitalize } from "@rsc-utils/core-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import { Repository, SourceNotationMap } from "../../../../sage-pf2e/index.js";
 import { createAon2eSearchLink } from "../../../../sage-search/aon/2e/createAon2eSearchLink.js";

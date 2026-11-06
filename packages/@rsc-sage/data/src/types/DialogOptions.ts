@@ -1,4 +1,4 @@
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { assertNumber, assertString, optional, renameProperty } from "../validation/index.js";
 import { DialogPostType, MoveDirectionOutputType } from "./enums/index.js";

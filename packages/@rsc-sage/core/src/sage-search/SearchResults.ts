@@ -1,4 +1,5 @@
-import { RenderableContent, StringMatcher, type OrUndefined, type Renderable } from "@rsc-utils/core-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
+import { RenderableContent, type OrUndefined, type Renderable } from "@rsc-utils/core-utils";
 import { addCommas } from "@rsc-utils/number-utils";
 import { HasScoredSearchables, SearchInfo, SearchScore, type Searchable } from "@rsc-utils/search-utils";
 import type { IMenuRenderable } from "../sage-lib/discord/index.js";

@@ -1,5 +1,5 @@
 import { getHomeServerId, getToken } from "@rsc-sage/env";
-import { toMarkdown } from "@rsc-utils/core-utils";
+import { toMarkdown } from "@rsc-utils/string-utils";
 import { parseJson, stringifyJson } from "@rsc-utils/json-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { getRegisteredIntents, toUserMention } from "@rsc-chat/discord-utils";

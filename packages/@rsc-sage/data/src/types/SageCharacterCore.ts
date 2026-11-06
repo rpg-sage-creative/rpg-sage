@@ -1,6 +1,7 @@
 import { formatDataFilePath } from "@rsc-sage/env";
 import { isHexColorString, type HexColorString } from "@rsc-utils/color-utils";
-import { isBlank, isNotBlank, type Optional } from "@rsc-utils/core-utils";
+import { isBlank, isNotBlank } from "@rsc-utils/string-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { isNonNilSnowflake, isValidId, type Snowflake } from "@rsc-utils/id-utils";
 import { fileExistsSync, isUrl } from "@rsc-utils/io-utils";
 import { Logger, warnReturnUndefined } from "@rsc-utils/logger-utils";

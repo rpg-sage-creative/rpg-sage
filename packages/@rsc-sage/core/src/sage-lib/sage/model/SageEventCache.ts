@@ -2,7 +2,8 @@ import { AdminRoleType, DataTable, GameUserType, type GameCacheItem } from "@rsc
 import { getHomeServerId, getTupperBoxId, isSageId } from "@rsc-sage/env";
 import { getLocalizedText, type Localizer } from "@rsc-sage/localization";
 import { Arrayish } from "@rsc-utils/collection-utils";
-import { BULLET, isDefined, toMarkdown, uncache, type Optional, type RenderableContentResolvable } from "@rsc-utils/core-utils";
+import { BULLET, toMarkdown } from "@rsc-utils/string-utils";
+import { isDefined, uncache, type Optional, type RenderableContentResolvable } from "@rsc-utils/core-utils";
 import { stringifyJson } from "@rsc-utils/json-utils";
 import { NIL_SNOWFLAKE, orNilSnowflake, parseUuid, type Snowflake, type UUID } from "@rsc-utils/id-utils";
 import { canSendMessageTo, DiscordCache, DiscordKey, getPermsFor, isDiscordApiError, toHumanReadable, type ChannelReference, type MessageOrPartial, type MessageReferenceOrPartial, type ReactionOrPartial, type SMessage, type SupportedChannel, type SupportedInteraction, type SupportedMessagesChannel, type SupportedTarget, type UserOrPartial } from "@rsc-chat/discord-utils";

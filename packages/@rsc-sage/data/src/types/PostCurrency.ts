@@ -1,4 +1,4 @@
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { assertArray, assertBoolean, assertNumber, assertSimpleObject, assertString, optional } from "../validation/index.js";

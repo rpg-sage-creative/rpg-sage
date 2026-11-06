@@ -1,6 +1,6 @@
 import type { Localizer } from "@rsc-sage/localization";
 import { Arrayish } from "@rsc-utils/collection-utils";
-import { ELLIPSIS } from "@rsc-utils/core-utils";
+import { ELLIPSIS } from "@rsc-utils/string-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordMaxValues } from "@rsc-chat/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";

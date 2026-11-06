@@ -1,4 +1,4 @@
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import type { Snowflake, UUID } from "@rsc-utils/id-utils";
 import { assertArray, assertNumber, assertSageCore, assertString, deleteInvalidString, ensureArray, ensureIds, isMacroBase, optional, type EnsureContext } from "../validation/index.js";
 import { GameCreatorType, isAdminRole, isAdminUser, isEmbedColor, isEmoji, type AdminRole, type AdminUser, type HasEmbedColors, type HasEmoji } from "./enums/index.js";

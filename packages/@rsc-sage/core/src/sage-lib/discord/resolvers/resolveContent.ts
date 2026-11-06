@@ -1,4 +1,5 @@
-import { chunk, RenderableContent, type RenderableContentResolvable, type RenderableContentSection } from "@rsc-utils/core-utils";
+import { chunk } from "@rsc-utils/string-utils";
+import { RenderableContent, type RenderableContentResolvable, type RenderableContentSection } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, getEmbedFieldCount, getEmbedLength, resolveEmbed, type EmbedResolvable } from "@rsc-chat/discord-utils";
 import { createMessageEmbed } from "../createMessageEmbed.js";
 import { getValueToAppend } from "./getValueToAppend.js";

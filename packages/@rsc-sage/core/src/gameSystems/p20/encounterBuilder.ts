@@ -1,5 +1,6 @@
 import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data";
-import { ZERO_WIDTH_SPACE, type RenderableContent } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
+import type { RenderableContent } from "@rsc-utils/core-utils";
 import type { SortResult } from "@rsc-utils/collection-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";

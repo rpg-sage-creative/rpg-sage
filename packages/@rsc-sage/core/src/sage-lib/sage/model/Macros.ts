@@ -1,5 +1,6 @@
 import { Arrayish, sortByKey, sortPrimitive, toUniqueDefined } from "@rsc-utils/collection-utils";
-import { StringMatcher, type Optional } from "@rsc-utils/core-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordMaxValues } from "@rsc-chat/discord-utils";
 import type { MacroBase } from "@rsc-utils/game-utils";

@@ -1,4 +1,4 @@
-import { getCodeBlockSafeSplitter } from "@rsc-utils/core-utils";
+import { getCodeBlockSafeSplitter } from "@rsc-utils/string-utils";
 import type { DialogContent } from "@rsc-utils/game-utils";
 import { SageMessage } from "../../model/SageMessage.js";
 import { isStartOfDialog } from "./isStartOfDialog.js";

@@ -1,4 +1,5 @@
-import { stringFormat, type Optional } from "@rsc-utils/core-utils";
+import { stringFormat } from "@rsc-utils/string-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { getWikiUrl, hasWikiUrl } from "./getWikiUrl.js";
 
 const DISCORD_POLICY = `[(Discord Policy)](<https://discord.com/developers/docs/resources/user>)`;

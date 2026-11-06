@@ -10,5 +10,6 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/core-utils" },
+		{ "path": "../../@rsc-utils/string-utils" },
 	],
 }

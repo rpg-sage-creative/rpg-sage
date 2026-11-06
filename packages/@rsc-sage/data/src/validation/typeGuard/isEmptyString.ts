@@ -1,4 +1,4 @@
-import { isBlank } from "@rsc-utils/core-utils";
+import { isBlank } from "@rsc-utils/string-utils";
 
 export function isEmptyString(string?: unknown) {
 	return string === undefined

@@ -1,4 +1,5 @@
-import { escapeRegex, StringMatcher } from "@rsc-utils/core-utils";
+import { StringMatcher } from "@rsc-utils/string-utils";
+import { escapeRegex } from "@rsc-utils/core-utils";
 import type { SearchResults } from "./SearchResults.js";
 
 export function sortSearchResults(searchResults: SearchResults): void {

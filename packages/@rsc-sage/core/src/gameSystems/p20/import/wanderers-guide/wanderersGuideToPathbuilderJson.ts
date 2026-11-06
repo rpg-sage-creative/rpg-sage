@@ -1,4 +1,5 @@
-import { capitalize, type Optional } from "@rsc-utils/core-utils";
+import { capitalize } from "@rsc-utils/string-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import { generateSnowflake, type UUID } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { Ability } from "../../../d20/lib/Ability.js";

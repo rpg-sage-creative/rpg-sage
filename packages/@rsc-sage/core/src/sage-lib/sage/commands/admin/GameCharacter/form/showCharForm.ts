@@ -1,4 +1,4 @@
-import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { isNilSnowflake, NIL_SNOWFLAKE } from "@rsc-utils/id-utils";
 import { EmbedBuilder, getActionRows } from "@rsc-chat/discord-utils";
 import { Logger } from "@rsc-utils/logger-utils";

@@ -1,4 +1,5 @@
-import { isWrapped, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import { isWrapped, stringOrUndefined } from "@rsc-utils/string-utils";
+import type { Optional } from "@rsc-utils/core-utils";
 import type { MacroBase } from "@rsc-utils/game-utils";
 import { getText, type VALID_URL } from "@rsc-utils/io-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";

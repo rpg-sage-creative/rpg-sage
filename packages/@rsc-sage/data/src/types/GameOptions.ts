@@ -1,4 +1,4 @@
-import { isNotBlank } from "@rsc-utils/core-utils";
+import { isNotBlank } from "@rsc-utils/string-utils";
 import { assertString } from "../validation/index.js";
 import { assertDialogOptions, DialogOptionsKeys, ensureDialogOptions, type DialogOptions, type DialogOptionsOld } from "./DialogOptions.js";
 import { assertDiceOptions, DiceOptionsKeys, ensureDiceOptions, type DiceOptions, type DiceOptionsOld } from "./DiceOptions.js";
