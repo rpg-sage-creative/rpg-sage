@@ -1,5 +1,6 @@
 import { formatDataFilePath } from "@rsc-sage/env";
-import { isBlank, isHexColorString, isNonNilSnowflake, isNotBlank, isValidId, type HexColorString, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isHexColorString, type HexColorString } from "@rsc-utils/color-utils";
+import { isBlank, isNonNilSnowflake, isNotBlank, isValidId, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import { fileExistsSync, isUrl } from "@rsc-utils/io-utils";
 import { Logger, warnReturnUndefined } from "@rsc-utils/logger-utils";
 import { assertArray, assertSageCore, assertSimpleObject, assertString, deleteInvalidHexColorString, deleteInvalidString, deleteInvalidUrl, ensureArray, ensureIds, isAutoChannelData, isMacroBase, optional, renameProperty, tagFailure, type EnsureContext, } from "../validation/index.js";

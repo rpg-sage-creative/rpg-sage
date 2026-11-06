@@ -1,5 +1,4 @@
 export * from "@rsc-utils/collection-utils";
-export * from "@rsc-utils/color-utils";
 export * from "@rsc-utils/id-utils";
 export * from "@rsc-utils/json-utils";
 export * from "@rsc-utils/number-utils";

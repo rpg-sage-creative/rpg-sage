@@ -1,6 +1,7 @@
 import { EmbedColorType, type EmbedColor } from "@rsc-sage/data";
-import { Color, type HexColorString, type Optional } from "@rsc-utils/core-utils";
+import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 
 export type ColorAndType = { type: EmbedColorType; color: Color; };
 
