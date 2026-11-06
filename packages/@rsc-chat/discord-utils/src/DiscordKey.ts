@@ -1,4 +1,5 @@
-import { isNilSnowflake, isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { isNilSnowflake, isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import type { Channel, Interaction, MessageReference, User } from "discord.js";
 import { getDiscordUrlRegex } from "./parse/getDiscordUrlRegex.js";
 import type { ChannelReference } from "./resolve/resolveChannelReference.js";

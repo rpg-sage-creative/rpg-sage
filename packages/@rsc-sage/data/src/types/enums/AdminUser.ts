@@ -1,4 +1,4 @@
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import type { AdminRoleType } from "./AdminRoleType.js";
 import { isSimpleObject } from "../../validation/index.js";
 

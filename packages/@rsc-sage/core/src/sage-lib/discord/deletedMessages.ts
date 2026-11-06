@@ -1,5 +1,6 @@
 import { DiscordApiError, isDiscordApiError } from "@rsc-chat/discord-utils";
-import { EphemeralSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { EphemeralSet, type Optional } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { Channel, Collection, Message, PartialMessage } from "discord.js";
 import { GameMapBase } from "../sage/commands/map/GameMapBase.js";

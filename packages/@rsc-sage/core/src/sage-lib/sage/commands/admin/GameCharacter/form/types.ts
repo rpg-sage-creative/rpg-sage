@@ -1,4 +1,4 @@
-import type { Snowflake, UUID } from "@rsc-utils/core-utils";
+import type { Snowflake, UUID } from "@rsc-utils/id-utils";
 
 export type CharId = Snowflake | UUID;
 

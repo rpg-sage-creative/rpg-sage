@@ -1,4 +1,5 @@
-import { globalizeRegex, type Snowflake, type TypedRegExp } from "@rsc-utils/core-utils";
+import { globalizeRegex, type TypedRegExp } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 
 type MentionType = "channel" | "role" | "user";
 

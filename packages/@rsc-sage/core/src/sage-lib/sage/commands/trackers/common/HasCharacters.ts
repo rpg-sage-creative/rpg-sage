@@ -1,4 +1,5 @@
-import { escapeRegex, generateSnowflake } from "@rsc-utils/core-utils";
+import { escapeRegex } from "@rsc-utils/core-utils";
+import { generateSnowflake } from "@rsc-utils/id-utils";
 import { CharacterShell, type CharacterShellCore } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";

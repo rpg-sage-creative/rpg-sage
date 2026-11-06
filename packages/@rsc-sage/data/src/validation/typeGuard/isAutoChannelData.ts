@@ -1,4 +1,4 @@
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import type { AutoChannelData } from "../../types/index.js";
 import { isSimpleObject } from "./index.js";
 

@@ -1,4 +1,5 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import type { SupportedTarget } from "@rsc-chat/discord-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from "discord.js";

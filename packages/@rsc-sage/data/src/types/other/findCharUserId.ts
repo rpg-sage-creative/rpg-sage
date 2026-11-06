@@ -1,4 +1,4 @@
-import { parseSnowflake, parseUuid, type Snowflake } from "@rsc-utils/core-utils";
+import { parseSnowflake, parseUuid, type Snowflake } from "@rsc-utils/id-utils";
 import { GameUserType } from "../enums/GameUserType.js";
 import type { SageGameCoreOld } from "../SageGameCore.js";
 

@@ -1,5 +1,6 @@
 import { toUserMention } from "@rsc-chat/discord-utils";
-import { escapeRegex, globalizeRegex, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { escapeRegex, globalizeRegex, type Optional } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { dequote, QuotedContentRegExp } from "@rsc-utils/quoted-string-utils";
 import type { GuildMember } from "discord.js";
 import type { Game } from "../../../model/Game.js";

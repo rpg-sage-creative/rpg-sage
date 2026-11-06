@@ -1,5 +1,6 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
-import { Arrayish, generateSnowflake, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { Arrayish, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { generateSnowflake } from "@rsc-utils/id-utils";
 import { cleanDicePartDescription, createTestRegExp } from "@rsc-utils/game-utils";
 import { numberOrUndefined } from "@rsc-utils/number-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/token-string-utils";

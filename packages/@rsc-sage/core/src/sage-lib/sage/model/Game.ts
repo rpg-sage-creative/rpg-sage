@@ -2,7 +2,8 @@ import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGa
 import type { AutoChannelData, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameRoleData, GameSystem, GameSystemType, GameUserData, PostCurrency, SageChannel, SageGameCore, SageGameCoreOld } from "@rsc-sage/data";
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameRoleType, GameUserType, SageChannelType, ensureSageGameCore, parseGameSystem, parseSageChannelType } from "@rsc-sage/data";
 import type { HexColorString } from "@rsc-utils/color-utils";
-import { applyChanges, generateSnowflake, isDefined, sortPrimitive, type Args, type Comparable, type Optional, type OrNull, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, isDefined, sortPrimitive, type Args, type Comparable, type Optional, type OrNull } from "@rsc-utils/core-utils";
+import { generateSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { GuildChannel, GuildMember, GuildTextBasedChannel, Role } from "discord.js";
 import type { HasPostCurrency } from "../commands/admin/PostCurrency.js";

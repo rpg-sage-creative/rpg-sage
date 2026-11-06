@@ -1,5 +1,5 @@
 import { formatDataFilePath } from "@rsc-sage/env";
-import { snowflakeToDate, type Snowflake } from "@rsc-utils/core-utils";
+import { snowflakeToDate, type Snowflake } from "@rsc-utils/id-utils";
 import type { CacheItemDirName } from "../types.js";
 
 /**

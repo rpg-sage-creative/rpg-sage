@@ -1,5 +1,5 @@
 import { getSageId, getSuperUserId, getToken } from "@rsc-sage/env";
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordApiError, getRegisteredIntents, getRegisteredPartials } from "@rsc-chat/discord-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { ActivityType, Client, type ClientOptions } from "discord.js";

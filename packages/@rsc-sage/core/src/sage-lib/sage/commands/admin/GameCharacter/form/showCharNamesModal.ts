@@ -1,4 +1,4 @@
-import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE } from "@rsc-utils/id-utils";
 import { DiscordMaxValues } from "@rsc-chat/discord-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";

@@ -1,4 +1,4 @@
-import type { Snowflake, UUID } from "@rsc-utils/core-utils";
+import type { Snowflake, UUID } from "@rsc-utils/id-utils";
 import { errorReturnFalse } from "@rsc-utils/logger-utils";
 import type { SageCore } from "../../types/index.js";
 import { assertIds, assertNumber, assertObjectType, assertSimpleObject, assertValidKeys, optional } from "./index.js";

@@ -1,5 +1,6 @@
 import type { Localizer } from "@rsc-sage/localization";
-import { Arrayish, ELLIPSIS, type Snowflake } from "@rsc-utils/core-utils";
+import { Arrayish, ELLIPSIS } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordMaxValues } from "@rsc-chat/discord-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { MacroOwner } from "../../../model/MacroOwner.js";

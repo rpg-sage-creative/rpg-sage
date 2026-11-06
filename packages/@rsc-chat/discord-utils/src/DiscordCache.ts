@@ -1,5 +1,5 @@
-import type { Awaitable, Optional, Snowflake } from "@rsc-utils/core-utils";
-import { NIL_SNOWFLAKE, isNonNilSnowflake } from "@rsc-utils/core-utils";
+import type { Awaitable, Optional } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { ChannelType, Client, DMChannel, Guild, GuildMember, Message, Role, User, Webhook, type Channel } from "discord.js";
 import { DiscordApiError } from "./DiscordApiError.js";

@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { GameCharacter } from "../GameCharacter.js";
 import type { SageCommand } from "../SageCommand.js";

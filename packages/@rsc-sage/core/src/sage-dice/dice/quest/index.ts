@@ -1,5 +1,6 @@
 import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
-import { generateSnowflake, type OrNull } from "@rsc-utils/core-utils";
+import type { OrNull } from "@rsc-utils/core-utils";
+import { generateSnowflake } from "@rsc-utils/id-utils";
 import { cleanDicePartDescription, createTestRegExp } from "@rsc-utils/game-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/token-string-utils";

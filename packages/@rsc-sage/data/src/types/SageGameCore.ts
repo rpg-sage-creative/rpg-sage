@@ -1,4 +1,4 @@
-import { isNonNilSnowflake, isNonNilUuid, isValidId, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, isNonNilUuid, isValidId, type Snowflake, type UUID } from "@rsc-utils/id-utils";
 import { assertArray, assertNumber, assertObject, assertSageCore, assertString, deleteEmptyArray, ensureArray, ensureIds, isMacroBase, optional, renameProperty, type EnsureContext } from "../validation/index.js";
 import { isEmbedColor, type HasEmbedColors } from "./enums/EmbedColorType.js";
 import { isEmoji, type HasEmoji } from "./enums/EmojiType.js";

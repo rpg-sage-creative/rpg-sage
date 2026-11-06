@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import type { Game } from "../../../model/Game.js";
 import type { User } from "../../../model/User.js";
 

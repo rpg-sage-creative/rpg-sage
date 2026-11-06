@@ -2,7 +2,8 @@ import { DiscordKey, toMessageUrl, urlOrUndefined } from "@rsc-chat/discord-util
 import { autoChannelDataMatches, DEFAULT_GM_CHARACTER_NAME, parseGameSystem, type AutoChannelData, type DeckCore, type DeckType, type GameSystem, type SageCharacterCore, type SageMessageReferenceCore } from "@rsc-sage/data";
 import type { IncrementArg, KeyValuePair } from "@rsc-utils/arg-utils";
 import type { HexColorString } from "@rsc-utils/color-utils";
-import { applyChanges, Arrayish, isDefined, isNotBlank, isString, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { applyChanges, Arrayish, isDefined, isNotBlank, isString, sortByKey, stringArrayOrEmpty, StringMatcher, stringOrUndefined, StringSet, wrap, type Args, type Optional } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { Logger } from "@rsc-utils/logger-utils";

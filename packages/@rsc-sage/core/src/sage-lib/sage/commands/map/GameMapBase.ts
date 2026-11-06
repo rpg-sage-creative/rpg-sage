@@ -1,5 +1,5 @@
 import { DataTable } from "@rsc-sage/data";
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { RenderableGameMap } from "./RenderableGameMap.js";
 
 //#region types

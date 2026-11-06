@@ -1,4 +1,4 @@
-import { isNonNilSnowflake, isValidId, parseSnowflake, snowflakeToDate, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, isValidId, parseSnowflake, snowflakeToDate, type Snowflake } from "@rsc-utils/id-utils";
 import { assertArray, assertNumber, assertSageCore, assertString, optional, type EnsureContext } from "../validation/index.js";
 import type { SageCore } from "./index.js";
 

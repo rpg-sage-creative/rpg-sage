@@ -1,4 +1,4 @@
-import { generateSnowflake } from "@rsc-utils/core-utils";
+import { generateSnowflake } from "@rsc-utils/id-utils";
 import { CharacterShell } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";
 import { Manager } from "../common/Manager.js";

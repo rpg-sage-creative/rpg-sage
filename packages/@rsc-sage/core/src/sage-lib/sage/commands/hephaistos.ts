@@ -1,4 +1,5 @@
-import { isDefined, isNotBlank, StringMatcher, toUnique, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isNotBlank, StringMatcher, toUnique, type Optional } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type SupportedTarget } from "@rsc-chat/discord-utils";
 import { replaceMacroArgsWithDefaultValues, type DiceMacroBase, type MacroBase } from "@rsc-utils/game-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";

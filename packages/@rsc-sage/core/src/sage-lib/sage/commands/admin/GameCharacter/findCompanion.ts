@@ -1,4 +1,5 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import type { CharacterArray } from "../../../model/CharacterArray.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { Names } from "../../../model/SageCommandArgs.js";

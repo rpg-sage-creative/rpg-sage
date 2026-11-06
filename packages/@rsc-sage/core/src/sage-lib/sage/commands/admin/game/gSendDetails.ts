@@ -1,6 +1,7 @@
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameRoleType, getCriticalMethodText } from "@rsc-sage/data";
 import { getRollemId, getTupperBoxId } from "@rsc-sage/env";
-import { type Optional, type RenderableContent, type Snowflake } from "@rsc-utils/core-utils";
+import type { Optional, RenderableContent } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";
 import { addZeroWidthSpaces, getPermsFor, getRequiredPermissions, toHumanReadable, type SupportedTextChannel } from "@rsc-chat/discord-utils";
 import type { GuildMember, TextChannel } from "discord.js";

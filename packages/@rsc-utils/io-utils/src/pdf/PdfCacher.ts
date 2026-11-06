@@ -1,4 +1,5 @@
-import { generateSnowflake, noop, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { noop, type Optional } from "@rsc-utils/core-utils";
+import { generateSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { format } from "node:path";
 import PDFParser from "pdf2json";
 import { deleteFile } from "../fs/deleteFile.js";

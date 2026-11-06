@@ -1,4 +1,5 @@
-import { generateSnowflake, isBlank, stringOrUndefined } from "@rsc-utils/core-utils";
+import { isBlank, stringOrUndefined } from "@rsc-utils/core-utils";
+import { generateSnowflake } from "@rsc-utils/id-utils";
 import { PdfJsonManager } from "@rsc-utils/io-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
 import type { PlayerCharacterCoreE20, TArmorE20, TAttackE20, TSkillE20, TStatE20, TWeaponE20 } from "./PlayerCharacterE20.js";

@@ -1,4 +1,5 @@
-import { isNonNilSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { ActionRowBuilder, Message, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerInteractionListener } from "../../../discord/handlers.js";
 import { discordPromptYesNo } from "../../../discord/prompts.js";

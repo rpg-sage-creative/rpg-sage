@@ -1,4 +1,5 @@
-import { isNotBlank, isSnowflake, sortPrimitive, type Snowflake } from "@rsc-utils/core-utils";
+import { isNotBlank, sortPrimitive } from "@rsc-utils/core-utils";
+import { isSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { assertArray, assertNumber, assertSageCore, assertString, optional, renameProperty } from "../validation/index.js";
 import type { DeckType, SageCore } from "./index.js";
 

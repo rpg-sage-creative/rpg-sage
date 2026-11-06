@@ -1,5 +1,6 @@
 import { getDataRoot } from "@rsc-sage/env";
-import { isDefined, noop, parseSnowflake, parseUuid, toUnique, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { isDefined, noop, toUnique } from "@rsc-utils/core-utils";
+import { parseSnowflake, parseUuid, type Snowflake, type UUID } from "@rsc-utils/id-utils";
 import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { join } from "node:path";

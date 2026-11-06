@@ -1,4 +1,5 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { getPermsFor } from "./getPermsFor.js";
 import { isLockedOrArchivedThread } from "./internal/isLockedOrArchivedThread.js";
 import type { SupportedChannel } from "../types/typeGuards/isSupported.js";

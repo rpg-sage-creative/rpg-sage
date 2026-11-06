@@ -1,4 +1,5 @@
-import type { Optional, OrUndefined, Snowflake } from "@rsc-utils/core-utils";
+import type { Optional, OrUndefined } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import type { Channel } from "discord.js";
 import type { DiscordKey } from "../DiscordKey.js";
 import type { MessageOrPartial } from "../types/types.js";

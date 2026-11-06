@@ -1,5 +1,4 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
-import { isNonNilSnowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { assertNumber, assertString, optional, renameProperty } from "../validation/index.js";
 import { DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType } from "./enums/index.js";
 

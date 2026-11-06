@@ -1,4 +1,4 @@
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { isSimpleObject } from "../../validation/index.js";
 
 export enum GameUserType { Unknown = 0, Player = 1, GameMaster = 2 }

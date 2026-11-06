@@ -1,4 +1,5 @@
-import type { Optional, Snowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import type { SageCommand } from "../../../model/SageCommand.js";
 
 /** Checks for Game Player and uses their Id before checking the args. */

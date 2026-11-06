@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { deleteEmptyArray } from "../utils/deleteEmptyArray.js";
 
 export type EnsureContext = {

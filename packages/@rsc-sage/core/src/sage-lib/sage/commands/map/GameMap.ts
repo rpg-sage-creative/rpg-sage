@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { SageCommand } from "../../model/SageCommand.js";
 import { COL, GameMapBase, LayerType, ROW, UserLayerType, type TGameMapAura, type TGameMapCore, type TGameMapImage } from "./GameMapBase.js";

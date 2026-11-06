@@ -1,4 +1,5 @@
-import { isNonNilSnowflake, isNonNilUuid, isSnowflake, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, isNonNilUuid, isSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import type { CharId, CharModalAction, CharModalIndicator, CustomIdParts } from "./types.js";
 
 export function createCustomId(args: Omit<CustomIdParts, "indicator">): string;

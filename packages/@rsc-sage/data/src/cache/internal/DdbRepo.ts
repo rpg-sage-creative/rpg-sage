@@ -1,5 +1,6 @@
 import { DdbRepo, type DdbTable, type TableNameParser } from "@rsc-utils/aws-utils";
-import type { Optional, Snowflake, UUID } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import type { Snowflake, UUID } from "@rsc-utils/id-utils";
 import { objectTypeToTableName, type CacheItemObjectType } from "../types.js";
 
 let ddbRepo: Optional<DdbRepo>;

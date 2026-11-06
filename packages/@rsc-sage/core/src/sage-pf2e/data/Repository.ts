@@ -1,6 +1,7 @@
 import { DataTable } from "@rsc-sage/data";
 import type { Matcher, Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
-import { isDefined, SnowflakeMatcher, StringMatcher, UuidMatcher } from "@rsc-utils/core-utils";
+import { isDefined, StringMatcher } from "@rsc-utils/core-utils";
+import { SnowflakeMatcher, UuidMatcher } from "@rsc-utils/id-utils";
 import { initializeNoiseUS, initializeUKtoUS } from "@rsc-utils/language-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { randomItem } from "@rsc-utils/random-utils";

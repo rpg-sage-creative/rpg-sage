@@ -1,4 +1,5 @@
-import { NIL_SNOWFLAKE, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE, type Snowflake, type UUID } from "@rsc-utils/id-utils";
 import { MacroOwnerType, type MacroOwnerTypeKey } from "../../../model/MacroOwner.js";
 import type { MacroState } from "./getArgs.js";
 

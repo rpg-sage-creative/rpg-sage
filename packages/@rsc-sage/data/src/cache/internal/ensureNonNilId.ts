@@ -1,4 +1,4 @@
-import { isNonNilSnowflake, isNonNilUuid, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, isNonNilUuid, type Snowflake, type UUID } from "@rsc-utils/id-utils";
 
 type HasIds = {
 	did?: string;

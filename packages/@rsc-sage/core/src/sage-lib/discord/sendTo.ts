@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordApiError, sendTo as sendToDiscord, type EmbedResolvable, type SplitOptions, type SupportedTarget } from "@rsc-chat/discord-utils";
 import { ActionRow, Attachment, AttachmentBuilder, Message, Webhook, type MessageActionRowComponent } from "discord.js";
 import type { SageEventCache } from "../sage/model/SageEventCache.js";

@@ -1,4 +1,4 @@
-import { generateSnowflake, generateUuid, parseSnowflake, parseUuid } from "@rsc-utils/core-utils";
+import { generateSnowflake, generateUuid, parseSnowflake, parseUuid } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 
 type Core = { id:string; did?:string; uuid?:string; createdTs?:number; objectType?:string; };

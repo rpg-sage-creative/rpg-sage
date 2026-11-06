@@ -1,6 +1,7 @@
 import { addInvalidWebhookUsername, DiscordKey, isMessage, isUser, toHumanReadable, toInviteUrl, toMessageUrl, toUserMention, toUserUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedTarget } from "@rsc-chat/discord-utils";
 import { DialogPostType } from "@rsc-sage/data";
-import { RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { RenderableContent, type Optional, type RenderableContentResolvable } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { Logger, warnReturnUndefined } from "@rsc-utils/logger-utils";
 import type { Channel, Message, MessageReaction, User } from "discord.js";
 import type { SageCache } from "../sage/model/SageCache.js";

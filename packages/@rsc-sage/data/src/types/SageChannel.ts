@@ -1,4 +1,4 @@
-import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { warnReturnUndefined } from "@rsc-utils/logger-utils";
 import { assertSimpleObject, assertString, renameProperty } from "../validation/index.js";
 import { assertChannelOptions, ChannelOptionsKeys, ensureChannelOptions, type ChannelOptions } from "./ChannelOptions.js";

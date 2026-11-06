@@ -1,6 +1,7 @@
 import { getSageId } from "@rsc-sage/env";
 import { getLocalizedText, type LocalizedTextKey } from "@rsc-sage/localization";
-import { isNotBlank, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isNotBlank, type Optional } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordApiError, toChannelMention, toMessageUrl, toUserMention } from "@rsc-chat/discord-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, type ActionRowComponent, type ActionRowComponentData, type ActionRowData, type BaseMessageOptions, type InteractionReplyOptions, type MessageActionRowComponentBuilder, type MessageCreateOptions, type MessageEditOptions } from "discord.js";

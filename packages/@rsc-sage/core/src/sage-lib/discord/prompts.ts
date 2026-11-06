@@ -1,4 +1,5 @@
-import { EphemeralMap, generateSnowflake, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
+import { EphemeralMap, type RenderableContentResolvable } from "@rsc-utils/core-utils";
+import { generateSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { createActionRow, getActionRows } from "@rsc-chat/discord-utils";
 import { Logger, errorReturnFalse, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { ButtonBuilder, ButtonStyle, ComponentType, type APIButtonComponentWithCustomId, type Message } from "discord.js";

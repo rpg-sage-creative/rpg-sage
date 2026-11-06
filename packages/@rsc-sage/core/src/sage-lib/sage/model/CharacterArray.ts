@@ -1,5 +1,6 @@
 import type { AutoChannelData } from "@rsc-sage/data";
-import { generateSnowflake, type Optional, type OrUndefined, type Snowflake } from "@rsc-utils/core-utils";
+import { type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { generateSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { resolveSnowflake, type CanBeSnowflakeResolvable } from "@rsc-chat/discord-utils";
 import type { Game } from "./Game.js";
 import { GameCharacter, type AutoChannelResult, type GameCharacterCore, type TGameCharacterType } from "./GameCharacter.js";
