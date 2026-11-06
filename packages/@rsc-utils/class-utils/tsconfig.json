@@ -11,6 +11,8 @@
 		"./src"
 	],
 	"references": [
-		// { "path": "" },
+		{ "path": "../../@rsc-utils/collection-utils" },
+		{ "path": "../../@rsc-utils/id-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
 	],
 }

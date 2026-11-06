@@ -1,4 +1,5 @@
-import { capitalize, parseHexColor } from "@rsc-utils/core-utils";
+import { parseHexColor } from "@rsc-utils/color-utils";
+import { capitalize } from "@rsc-utils/string-utils";
 import { unwrapUrl } from "../utils/unwrapUrl.js";
 import type { DialogContent } from "./DialogContent.js";
 import { DialogPostType } from "./DialogPostType.js";

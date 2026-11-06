@@ -1,4 +1,5 @@
-import { isBlank, StringSet, type KeyValuePair, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import type { KeyValuePair } from "@rsc-utils/arg-utils";
+import { isBlank, StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 
 export type TNoteCategory = {
 	category: string;

@@ -1,5 +1,5 @@
-import { escapeRegex } from "@rsc-utils/core-utils";
 import { typeError } from "@rsc-utils/error-utils";
+import { escapeRegExp } from "@rsc-utils/regexp-utils";
 
 type Options = {
 	/** make the wrap chars optional: `(regexp)|regex` */
@@ -34,7 +34,7 @@ export function wrapRegex(regexp: RegExp, pairs: string[], options?: Options): R
 
 		let source =
 			// escape the left wrap chars
-			escapeRegex(left)
+			escapeRegExp(left)
 			// add optional space and start non-capture group
 			+ "\\s*(?:"
 			// add original source
@@ -42,7 +42,7 @@ export function wrapRegex(regexp: RegExp, pairs: string[], options?: Options): R
 			// close non-capture group and add optional space
 			+ ")\\s*"
 			// escape the right wrap chars
-			+ escapeRegex(right);
+			+ escapeRegExp(right);
 
 		// with an "or" we want to allow matching the original regexp
 		if (or) {

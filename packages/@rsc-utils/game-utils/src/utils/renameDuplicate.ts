@@ -1,4 +1,4 @@
-import { escapeRegex } from "@rsc-utils/core-utils";
+import { escapeRegExp } from "@rsc-utils/regexp-utils";
 
 type SuffixType = "alpha" | "number" | string[];
 
@@ -11,7 +11,7 @@ function getRegexAndMethod(which: SuffixType = "number"): RegexAndMethod {
 
 	if (which === "alpha") return { regex:alphaRegex, method:nextNamed, suffixes:getAlphaList() };
 
-	const escaped = which.map(value => escapeRegex(value));
+	const escaped = which.map(escapeRegExp);
 	const regex = new RegExp(`(\\s+(?<suffix>${escaped.join("|")}))?$`);
 	return { regex, method:nextNamed, suffixes:which.slice() };
 }

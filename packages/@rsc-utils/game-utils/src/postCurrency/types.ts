@@ -1,4 +1,4 @@
-import type { Snowflake } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 
 export type PostCurrencyUserCountPostType = "dialog" | "dice";
 export type PostCurrencyIncrementPostType = PostCurrencyUserCountPostType | "all";

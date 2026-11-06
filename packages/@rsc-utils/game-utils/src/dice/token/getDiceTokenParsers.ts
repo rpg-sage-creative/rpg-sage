@@ -1,4 +1,4 @@
-import { MisquotedContentRegExp, QuotedContentRegExp } from "@rsc-utils/core-utils";
+import { MisquotedContentRegExp, QuotedContentRegExp } from "@rsc-utils/quoted-string-utils";
 import type { TokenParsers } from "@rsc-utils/token-string-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";

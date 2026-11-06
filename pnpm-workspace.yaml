@@ -36,6 +36,8 @@ overrides:
   "@rsc-utils/arg-utils": "./packages/@rsc-utils/arg-utils"
   "@rsc-utils/aws-utils": "./packages/@rsc-utils/aws-utils"
   "@rsc-utils/charset-utils": "./packages/@rsc-utils/charset-utils"
+  "@rsc-utils/class-utils": "./packages/@rsc-utils/class-utils"
+  "@rsc-utils/collection-utils": "./packages/@rsc-utils/collection-utils"
   "@rsc-utils/color-utils": "./packages/@rsc-utils/color-utils"
   "@rsc-utils/core-utils": "./packages/@rsc-utils/core-utils"
   "@rsc-utils/date-utils": "./packages/@rsc-utils/date-utils"

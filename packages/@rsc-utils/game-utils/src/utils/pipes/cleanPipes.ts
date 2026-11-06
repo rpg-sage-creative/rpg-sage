@@ -1,4 +1,5 @@
-import { globalizeRegex, PipedContentRegExp } from "@rsc-utils/core-utils";
+import { PipedContentRegExp } from "@rsc-utils/quoted-string-utils";
+import { globalizeRegExp } from "@rsc-utils/regexp-utils";
 import { regex } from "regex";
 import { trimWithPadding } from "../trimWithPadding.js";
 import { unpipe } from "./unpipe.js";
@@ -10,7 +11,7 @@ const NestedPipeRegExp = regex`
 		.*?
 	\|{2}
 `;
-const NestedPipeRegExpG = globalizeRegex(NestedPipeRegExp);
+const NestedPipeRegExpG = globalizeRegExp(NestedPipeRegExp);
 
 /** Cleans instances of nested pipes by removing inner pipes. */
 export function cleanPipes(value: string): string {

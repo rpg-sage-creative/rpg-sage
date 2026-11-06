@@ -1,4 +1,6 @@
-import { globalizeRegex, OptionalHorizontalWhitespaceRegExp as HWS, AlphaNumericDashDotArgKeyRegExp as KEY, type TypedRegExp } from "@rsc-utils/core-utils";
+import { AlphaNumericDashDotArgKeyRegExp as KEY } from "@rsc-utils/arg-utils";
+import { globalizeRegExp, type TypedRegExp } from "@rsc-utils/regexp-utils";
+import { OptionalHorizontalWhitespaceRegExp as HWS } from "@rsc-utils/whitespace-string-utils";
 import { regex } from "regex";
 
 type DiceMacroArgPlaceholderRegExpGroups = { vs?:string; key:string; defaultValue?:string; };
@@ -56,7 +58,7 @@ export const DiceMacroArgPlaceholderRegExp = regex("i")`
 	)
 ` as TypedRegExp<DiceMacroArgPlaceholderRegExpGroups>;
 
-export const DiceMacroArgPlaceholderRegExpG = globalizeRegex<TypedRegExp<DiceMacroArgPlaceholderRegExpGroups>>(DiceMacroArgPlaceholderRegExp);
+export const DiceMacroArgPlaceholderRegExpG = globalizeRegExp<TypedRegExp<DiceMacroArgPlaceholderRegExpGroups>>(DiceMacroArgPlaceholderRegExp);
 
 export function hasDiceMacroArgPlaceholder(value?: string): boolean {
 	return value ? DiceMacroArgPlaceholderRegExp.test(value) : false;

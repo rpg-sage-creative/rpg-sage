@@ -1,9 +1,8 @@
-export * from "@rsc-utils/array-utils";
-export * from "@rsc-utils/arg-utils";
+export * from "@rsc-utils/collection-utils";
+export * from "@rsc-utils/class-utils";
 export * from "@rsc-utils/color-utils";
 export * from "@rsc-utils/id-utils";
 export * from "@rsc-utils/json-utils";
-// export * from "@rsc-utils/language-utils";
 export * from "@rsc-utils/number-utils";
 export * from "@rsc-utils/quoted-string-utils";
 export * from "@rsc-utils/string-utils";

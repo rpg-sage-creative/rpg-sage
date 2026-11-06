@@ -1,5 +1,6 @@
-import type { Awaitable } from "@rsc-utils/core-utils";
-import { ArgsManager, escapeRegex } from "@rsc-utils/core-utils";
+import { ArgsManager } from "@rsc-utils/arg-utils";
+import type { Awaitable } from "@rsc-utils/type-utils";
+import { escapeRegex } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { SageCommand } from "../../sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage/model/SageInteraction.js";

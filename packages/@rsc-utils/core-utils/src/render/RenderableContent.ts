@@ -1,4 +1,4 @@
-import { toUnique } from "@rsc-utils/array-utils";
+import { toUnique } from "@rsc-utils/collection-utils";
 import type { HexColorString } from "@rsc-utils/color-utils";
 import { error } from "@rsc-utils/logger-utils";
 import type { Optional } from "@rsc-utils/type-utils";

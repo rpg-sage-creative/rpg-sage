@@ -1,7 +1,9 @@
-import { globalizeRegex, PipedContentRegExp, type Optional, type OrNull, type OrUndefined } from "@rsc-utils/core-utils";
+import { PipedContentRegExp } from "@rsc-utils/quoted-string-utils";
+import { globalizeRegExp } from "@rsc-utils/regexp-utils";
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { trimWithPadding } from "../trimWithPadding.js";
 
-const PipedContentRegExpG = globalizeRegex(PipedContentRegExp);
+const PipedContentRegExpG = globalizeRegExp(PipedContentRegExp);
 
 export type UnpipeResults<Type extends string | undefined | null> = {
 	endPad: string;

@@ -1,4 +1,4 @@
-import { HasCache } from "../cache/HasCache.js";
+import { HasCache } from "./HasCache.js";
 
 /** The most basic Core used. */
 export type Core<ObjectType extends string = string> = {

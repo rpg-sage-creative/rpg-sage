@@ -1,4 +1,5 @@
-import { ArgsManager, unwrap, type KeyValueArg } from "@rsc-utils/core-utils";
+import { ArgsManager, type KeyValueArg } from "@rsc-utils/arg-utils";
+import { unwrap } from "@rsc-utils/string-utils";
 import { parseDiceMacroPrefix, type DiceMacroPrefix } from "./parseDiceMacroPrefix.js";
 import type { DiceMacroBase } from "./types.js";
 

@@ -1,6 +1,9 @@
 import type { GameSystemCode, GameSystem as GameSystemObj } from "@rsc-sage/data";
-import { applyChanges, deepFreeze, HasCore, sortPrimitive, toLiteral, type Comparable, type Constructable, type Core, type Optional, type SortResult } from "@rsc-utils/core-utils";
+import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/collection-utils";
+import { HasCore, type Core } from "@rsc-utils/class-utils";
+import { applyChanges } from "@rsc-utils/json-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { deepFreeze, toLiteral, type Constructable, type Optional } from "@rsc-utils/type-utils";
 import { addValues } from "./internal/addValues.js";
 import { convertCurrency } from "./internal/convertCurrency.js";
 import { coreFrom } from "./internal/coreFrom.js";

@@ -1,4 +1,4 @@
-import { cleanWhitespace } from "@rsc-utils/core-utils";
+import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";
 import { getAon1eUrlRoot } from "./getAon1eUrlRoot.js";
 import type { Aon1eGameSystemCode, Aon1eSearchResultsLink } from "./types.js";
 

@@ -1,4 +1,4 @@
-import { cleanWhitespace } from "@rsc-utils/core-utils";
+import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";
 
 /** This strips a trailing comma (,) or semicolon (;) and compresses whitespace. */
 export function cleanDicePartDescription(description?: string): string {

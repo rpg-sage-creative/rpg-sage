@@ -1,4 +1,4 @@
-import { globalizeRegex } from "@rsc-utils/core-utils";
+import { globalizeRegExp } from "@rsc-utils/regexp-utils";
 import { regex } from "regex";
 import { doPipedMath } from "./doPipedMath.js";
 import { wrapRegex } from "./wrapRegex.js";
@@ -14,7 +14,7 @@ export const PosNegNumberRegExp = regex()`
 
 export const OrSpoileredPosNegNumberRegExp = wrapRegex(PosNegNumberRegExp, ["||||"], { or:true });
 
-const OrSpoileredPosNegNumberRegExpG = globalizeRegex(OrSpoileredPosNegNumberRegExp);
+const OrSpoileredPosNegNumberRegExpG = globalizeRegExp(OrSpoileredPosNegNumberRegExp);
 
 
 /**

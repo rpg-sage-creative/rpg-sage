@@ -1,5 +1,5 @@
 {
-	"name": "@rsc-utils/array-utils",
+	"name": "@rsc-utils/collection-utils",
 	"version": "1.8.0",
 	"license": "LGPL-3.0-or-later",
 	"main": "build/index.js",
@@ -11,6 +11,7 @@
 		"vitest": "^4.1.11"
 	},
 	"dependencies": {
+		"@rsc-utils/type-utils": "workspace:"
 	},
 	"scripts": {
 		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"

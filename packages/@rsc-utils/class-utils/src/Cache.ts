@@ -1,5 +1,5 @@
+import { EphemeralMap } from "@rsc-utils/collection-utils";
 import type { Awaitable } from "@rsc-utils/type-utils";
-import { EphemeralMap } from "../ephemeral/EphemeralMap.js";
 
 /** Set of all ClassCache objects. */
 const _cacheSet = new WeakSet<Cache>;

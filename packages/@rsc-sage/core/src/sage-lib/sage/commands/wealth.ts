@@ -1,4 +1,5 @@
-import { addCommas, cleanWhitespace } from "@rsc-utils/core-utils";
+import { addCommas } from "@rsc-utils/number-utils";
+import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";
 import { Coins } from "../../../sage-pf2e/index.js";
 import type { SageMessage } from "../model/SageMessage.js";
 import { createCommandRenderableContent, registerCommandRegex } from "./cmd.js";

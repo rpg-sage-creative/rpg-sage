@@ -1,5 +1,5 @@
 import { DiceOutputType } from "@rsc-sage/data";
-import { generateSnowflake } from "@rsc-utils/core-utils";
+import { generateSnowflake } from "@rsc-utils/id-utils";
 import type { TokenData } from "@rsc-utils/token-string-utils";
 import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
 import { cleanDicePartDescription } from "../cleanDicePartDescription.js";

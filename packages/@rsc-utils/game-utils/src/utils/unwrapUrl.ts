@@ -1,4 +1,4 @@
-import type { Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 
 export function unwrapUrl(url: string): string;
 export function unwrapUrl(url: OrNull<string>): OrNull<string>

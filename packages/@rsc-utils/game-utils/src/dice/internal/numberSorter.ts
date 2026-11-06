@@ -1,4 +1,4 @@
-/** @internal Based on array-utils sortPrimitive */
+/** @internal Based on collection-utils sortPrimitive */
 export function numberSorter(a: number, b: number): -1 | 0 | 1 {
 	if (a === undefined) {
 		return 1;

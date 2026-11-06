@@ -1,4 +1,5 @@
-import { globalizeRegex, NumberRegExp } from "@rsc-utils/core-utils";
+import { globalizeRegExp } from "@rsc-utils/regexp-utils";
+import { NumberRegExp } from "@rsc-utils/type-utils";
 import { regex } from "regex";
 import { doPipedMath } from "./doPipedMath.js";
 import { OrSpoileredPosNegNumberRegExp } from "./doPosNeg.js";
@@ -34,7 +35,7 @@ export const SimpleMathRegExp = regex()`
 
 export const OrSpoileredSimpleMathRegExp = wrapRegex(SimpleMathRegExp, ["||||"], { or:true });
 
-const SimpleMathRegExpG = globalizeRegex(SimpleMathRegExp);
+const SimpleMathRegExpG = globalizeRegExp(SimpleMathRegExp);
 
 /**
  * @internal

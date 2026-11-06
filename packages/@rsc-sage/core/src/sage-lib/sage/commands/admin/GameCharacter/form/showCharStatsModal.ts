@@ -1,5 +1,6 @@
-import { NIL_SNOWFLAKE, type KeyValuePair } from "@rsc-utils/core-utils";
-import { parseKeyValueArgs } from "@rsc-utils/core-utils";
+import { NIL_SNOWFLAKE } from "@rsc-utils/core-utils";
+import type { KeyValuePair } from "@rsc-utils/arg-utils";
+import { parseKeyValueArgs } from "@rsc-utils/arg-utils";
 import { registerInteractionListener } from "../../../../../discord/handlers.js";
 import type { GameCharacter } from "../../../../model/GameCharacter.js";
 import type { SageInteraction } from "../../../../model/SageInteraction.js";

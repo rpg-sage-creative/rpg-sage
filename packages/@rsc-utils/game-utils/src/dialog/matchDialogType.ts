@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { DialogType } from "./DialogType.js";
 
 const DialogTypes: DialogType[] = ["edit","gm","npc","ally","enemy","boss","minion","pc","alt","companion","familiar","hireling"] as const;

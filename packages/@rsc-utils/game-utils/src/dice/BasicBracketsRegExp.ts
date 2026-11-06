@@ -1,4 +1,4 @@
-import { globalizeRegex } from "@rsc-utils/core-utils";
+import { globalizeRegExp } from "@rsc-utils/regexp-utils";
 import { regex } from "regex";
 
 /*
@@ -23,9 +23,9 @@ export const BasicBracketsRegExp = regex("i")`
 `;
 
 /** Matches [[...]] or [...]. Used for string.match(), string.matchAll(), and string.replace(). */
-export const BasicBracketsRegExpG = globalizeRegex(BasicBracketsRegExp);
+export const BasicBracketsRegExpG = globalizeRegExp(BasicBracketsRegExp);
 
 /** Creates a unique BasicBracketsRegExpG regular expression. Used when you need to respect .lastIndex. */
 export function createBasicBracketsRegExpG(): RegExp {
-	return globalizeRegex(BasicBracketsRegExp);
+	return globalizeRegExp(BasicBracketsRegExp);
 }

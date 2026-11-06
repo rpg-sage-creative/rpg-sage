@@ -1,4 +1,5 @@
-import type { KeyValueArg, Optional } from "@rsc-utils/core-utils";
+import type { KeyValueArg } from "@rsc-utils/arg-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { parseDiceMacroArgPlaceholder } from "./parseDiceMacroArgPlaceholder.js";
 import type { DiceMacroArgs } from "./parseDiceMacroCall.js";
 import { DiceMacroArgPlaceholderRegExpG, DiceMacroRemainingArgPlaceholderRegExpG } from "./regexp.js";

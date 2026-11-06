@@ -1,5 +1,5 @@
 import { DataTable } from "@rsc-sage/data";
-import { addCommas, capitalize, cleanWhitespace, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { addCommas, capitalize, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { CharacterBase, type DiceMacroBase, type StatResults } from "@rsc-utils/game-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
@@ -17,6 +17,7 @@ import { ABILITIES } from "../../index.js";
 import type { Weapon } from "../Weapon.js";
 import { PbcAbilities } from "./PbcAbilities.js";
 import { SavingThrows, type IHasSavingThrows } from "./SavingThrows.js";
+import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";
 
 //#region helpers
 

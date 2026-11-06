@@ -1,4 +1,4 @@
-import { round } from "@rsc-utils/core-utils";
+import { round } from "@rsc-utils/number-utils";
 import { Currency, type CurrencyCore, type CurrencyData } from "../../../currency/Currency.js";
 
 type GameSystemKey = "DnD5e";

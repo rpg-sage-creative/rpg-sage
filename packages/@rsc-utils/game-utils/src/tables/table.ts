@@ -1,5 +1,6 @@
-import { toUniqueDefined, type Optional, type OrNull } from "@rsc-utils/core-utils";
+import { toUniqueDefined } from "@rsc-utils/collection-utils";
 import { rollDie } from "@rsc-utils/random-utils";
+import type { Optional, OrNull } from "@rsc-utils/type-utils";
 import type { TDice } from "../dice/dice/Dice.js";
 import { DiceGroup } from "../dice/dice/DiceGroup.js";
 

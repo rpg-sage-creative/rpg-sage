@@ -1,4 +1,5 @@
-import { globalizeRegex, type Optional } from "@rsc-utils/core-utils";
+import { globalizeRegExp } from "@rsc-utils/regexp-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { regex } from "regex";
 
 const BasicDiceRegExp = regex("i")`
@@ -11,7 +12,7 @@ const BasicDiceRegExp = regex("i")`
 	\]
 `;
 
-const BasicDiceRegExpG = globalizeRegex(BasicDiceRegExp);
+const BasicDiceRegExpG = globalizeRegExp(BasicDiceRegExp);
 
 export function matchBasicDice(content: Optional<string>): `[${string}]`[] {
 	return content?.match(BasicDiceRegExpG) as `[${string}]`[] ?? [];

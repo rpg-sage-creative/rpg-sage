@@ -1,9 +1,19 @@
 
 type Awaitable<T> = T | Promise<T>;
+
 type OrUndefined<T> = T | undefined;
 
-type IterableLike<T> = ArrayLike<T> | Set<T>;
+type SetLike<T> = {
+	size: number;
+	has(value: T): boolean;
+	keys(): SetIterator<T>;
+	[Symbol.iterator](): SetIterator<T>;
+};
+
+type IterableLike<T> = ArrayLike<T> | SetLike<T>;
+
 type IsIterable<T> = Array<T> | Set<T>;
+
 type ElementOf<I> = I extends IterableLike<infer E> ? E : never;
 
 // The iterators below are not mutation safe;

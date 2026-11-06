@@ -1,4 +1,4 @@
-import { sum } from "@rsc-utils/core-utils";
+import { sum } from "@rsc-utils/number-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import type { TDicePart } from "../dice/DicePart.js";
 import { rollDataMapper } from "../internal/rollDataMapper.js";

@@ -1,4 +1,4 @@
-import { escapeRegex } from "@rsc-utils/core-utils";
+import { escapeRegExp } from "@rsc-utils/regexp-utils";
 // import { wrapRegex } from "../dice/math/internal/wrapRegex.js";
 // import { pattern, regex } from "regex";
 
@@ -26,7 +26,7 @@ export function createTestRegExp(aliases: string[]): RegExp {
 			// split each alias on space, ex: "vs ac"
 			.split(" ")
 			// escape the non-space characters
-			.map(escapeRegex)
+			.map(escapeRegExp)
 			// join with optional space regexp
 			.join("\\s*")
 	// rejoin the aliases with an OR

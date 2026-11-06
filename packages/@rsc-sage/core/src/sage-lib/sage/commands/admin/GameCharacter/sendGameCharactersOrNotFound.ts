@@ -1,4 +1,5 @@
-import { Arg, escapeRegex, type Optional } from "@rsc-utils/core-utils";
+import { Arg } from "@rsc-utils/arg-utils";
+import { escapeRegex, type Optional } from "@rsc-utils/core-utils";
 import type { CharacterArray } from "../../../model/CharacterArray.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";

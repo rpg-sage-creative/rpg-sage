@@ -1,10 +1,11 @@
-import { globalizeRegex, hypot, nth, NumberRegExp, round, signed } from "@rsc-utils/core-utils";
+import { hypot, nth, round, signed } from "@rsc-utils/number-utils";
+import { globalizeRegExp, wrapRegExp } from "@rsc-utils/regexp-utils";
+import { NumberRegExp } from "@rsc-utils/type-utils";
 import { regex } from "regex";
 import { cleanPipes } from "../../../utils/pipes/cleanPipes.js";
 import { unpipe } from "../../../utils/pipes/unpipe.js";
 import { doSimple, OrSpoileredSimpleMathRegExp } from "./doSimple.js";
 import { reapplySign } from "./reapplySign.js";
-import { wrapRegex } from "./wrapRegex.js";
 
 type SageMathFunction = keyof typeof SageMath;
 
@@ -66,11 +67,11 @@ export const ComplexMathRegExp = regex("i")`
 	(?(DEFINE)
 		(?<numberOrSimple> \g<orSpoileredNumber> | \g<orSpoileredSimpleMath> )
 		(?<orSpoileredSimpleMath> ${OrSpoileredSimpleMathRegExp} )
-		(?<orSpoileredNumber> ${wrapRegex(NumberRegExp, ["||||"], { or:true })} )
+		(?<orSpoileredNumber> ${wrapRegExp(NumberRegExp, ["||||"], { or:true })} )
 	)
 `;
 
-const ComplexMathRegExpG = globalizeRegex(ComplexMathRegExp);
+const ComplexMathRegExpG = globalizeRegExp(ComplexMathRegExp);
 
 
 /** @internal Tests the value against a complex regex using the given options. */

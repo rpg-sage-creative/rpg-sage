@@ -1,5 +1,5 @@
-import { OptionalHorizontalWhitespaceRegExp as HWS, OptionalWhitespaceRegExp as WS } from "@rsc-utils/core-utils";
 import { getUrlRegex } from "@rsc-utils/io-utils";
+import { OptionalHorizontalWhitespaceRegExp as HWS, OptionalWhitespaceRegExp as WS } from "@rsc-utils/whitespace-string-utils";
 import { regex } from "regex";
 
 /** captures :: character name (display name) :: */

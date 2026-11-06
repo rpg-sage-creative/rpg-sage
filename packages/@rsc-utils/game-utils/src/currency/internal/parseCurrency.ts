@@ -1,6 +1,6 @@
 import type { GameSystemCode } from "@rsc-sage/data";
-import type { TypedRegExp } from "@rsc-utils/core-utils";
-import { OptionalHorizontalWhitespaceRegExp as HWS } from "@rsc-utils/core-utils";
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
+import { OptionalHorizontalWhitespaceRegExp as HWS } from "@rsc-utils/whitespace-string-utils";
 import { pattern, regex } from "regex";
 import type { Currency, CurrencyConstructor, CurrencyCore, Denomination, DenominationsCore } from "../Currency.js";
 import { createDenomCore } from "./createDenomCore.js";

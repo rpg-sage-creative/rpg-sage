@@ -1,5 +1,8 @@
 import { DiceOutputType } from "@rsc-sage/data";
-import { cleanWhitespace, generateSnowflake, isBoolean, sum } from "@rsc-utils/core-utils";
+import { generateSnowflake } from "@rsc-utils/id-utils";
+import { sum } from "@rsc-utils/number-utils";
+import { isBoolean } from "@rsc-utils/type-utils";
+import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";

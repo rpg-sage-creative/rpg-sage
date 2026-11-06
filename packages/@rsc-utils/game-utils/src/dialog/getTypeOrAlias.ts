@@ -1,4 +1,5 @@
-import { OptionalHorizontalWhitespaceRegExp as HWS, type Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
+import { OptionalHorizontalWhitespaceRegExp as HWS } from "@rsc-utils/whitespace-string-utils";
 import { regex } from "regex";
 import type { DialogType } from "./DialogType.js";
 import { matchDialogType } from "./matchDialogType.js";

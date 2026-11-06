@@ -1,4 +1,4 @@
-import type { HexColorString } from "@rsc-utils/core-utils";
+import type { HexColorString } from "@rsc-utils/color-utils";
 import type { DialogPostType } from "./DialogPostType.js";
 import type { DialogType } from "./DialogType.js";
 

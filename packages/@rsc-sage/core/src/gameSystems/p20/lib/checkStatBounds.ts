@@ -1,4 +1,4 @@
-import type { KeyValuePair } from "@rsc-utils/core-utils";
+import type { KeyValuePair } from "@rsc-utils/arg-utils";
 import { unpipe, type UnpipeResults } from "@rsc-utils/game-utils";
 import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
 import { numberOrUndefined } from "../../utils/numberOrUndefined.js";

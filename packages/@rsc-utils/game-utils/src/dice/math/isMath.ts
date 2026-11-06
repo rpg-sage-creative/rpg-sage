@@ -1,4 +1,5 @@
-import { isNumberString, unwrap } from "@rsc-utils/core-utils";
+import { unwrap } from "@rsc-utils/string-utils";
+import { isNumberString } from "@rsc-utils/type-utils";
 import { hasMath } from "./hasMath.js";
 import { processMath } from "./processMath.js";
 

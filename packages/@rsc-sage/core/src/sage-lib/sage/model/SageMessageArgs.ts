@@ -1,4 +1,5 @@
-import { isDefined, isNonNilSnowflake, isNotBlank, type ArgsManager, type Optional } from "@rsc-utils/core-utils";
+import { ArgsManager } from "@rsc-utils/arg-utils";
+import { isDefined, isNonNilSnowflake, isNotBlank, type Optional } from "@rsc-utils/core-utils";
 import { parseId, type SupportedMessagesChannel } from "@rsc-chat/discord-utils";
 import type { Attachment, Role, User } from "discord.js";
 import { SageCommandArgs } from "./SageCommandArgs.js";

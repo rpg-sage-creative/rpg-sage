@@ -1,4 +1,4 @@
-import { ArgsManager } from "@rsc-utils/core-utils";
+import { ArgsManager } from "@rsc-utils/arg-utils";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
 import { registerMessageListener } from "../handlers.js";
 import type { TCommandAndArgs, TMessageHandler } from "../types.js";

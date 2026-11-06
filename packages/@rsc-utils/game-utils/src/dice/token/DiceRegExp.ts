@@ -1,4 +1,4 @@
-import type { TypedRegExp } from "@rsc-utils/core-utils";
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
 import { regex } from "regex";
 
 type DiceRegExpGroups = {

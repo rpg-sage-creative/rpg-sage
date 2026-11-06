@@ -1,4 +1,4 @@
-import { sum } from "@rsc-utils/core-utils";
+import { sum } from "@rsc-utils/number-utils";
 import type { TDicePart } from "./dice/DicePart.js";
 import type { DiceOperator } from "./types/DiceOperator.js";
 

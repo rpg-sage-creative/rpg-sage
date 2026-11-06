@@ -1,4 +1,4 @@
-import { ArgsManager } from "@rsc-utils/core-utils";
+import { ArgsManager } from "@rsc-utils/arg-utils";
 import { registerMessageListener } from "../../../discord/handlers.js";
 import type { TCommandAndArgs } from "../../../discord/types.js";
 import type { SageMessage } from "../../model/SageMessage.js";

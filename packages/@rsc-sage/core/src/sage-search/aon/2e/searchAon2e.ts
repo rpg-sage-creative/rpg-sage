@@ -1,7 +1,8 @@
-import { cleanWhitespace, sortPrimitive, StringMatcher, type SortResult } from "@rsc-utils/core-utils";
+import { sortPrimitive, StringMatcher, type SortResult } from "@rsc-utils/core-utils";
 import { getJson } from "@rsc-utils/io-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";
 import { GameSearchInfo } from "../../GameSearchInfo.js";
 import type { ParsedSearchInfo } from "../../common.js";
 import { Aon2eSearchResults } from "./Aon2eSearchResults.js";

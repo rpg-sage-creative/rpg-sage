@@ -1,5 +1,4 @@
 import { DiceOutputType, DiceSecretMethodType, type DiceCriticalMethodType } from "@rsc-sage/data";
-import { generateSnowflake, isBoolean } from "@rsc-utils/core-utils";
 import { tokenize, type TokenData } from "@rsc-utils/token-string-utils";
 import { isGradeFailure } from "../grade.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
@@ -9,6 +8,8 @@ import { partitionDiceParts } from "../token/partitionDiceParts.js";
 import { Dice, type DiceCore, type TDice } from "./Dice.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
 import type { TDicePart } from "./DicePart.js";
+import { isBoolean } from "@rsc-utils/type-utils";
+import { generateSnowflake } from "@rsc-utils/id-utils";
 
 type DiceGroupCoreBase = {
 	criticalMethodType?: DiceCriticalMethodType;

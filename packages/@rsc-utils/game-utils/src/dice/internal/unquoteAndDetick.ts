@@ -1,4 +1,4 @@
-import { dequote } from "@rsc-utils/core-utils";
+import { dequote } from "@rsc-utils/quoted-string-utils";
 
 /**
  * @internal

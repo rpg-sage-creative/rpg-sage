@@ -1,5 +1,5 @@
 import type { GameSystemCode } from "@rsc-sage/data";
-import { addCommas } from "@rsc-utils/core-utils";
+import { addCommas } from "@rsc-utils/number-utils";
 import type { Currency, CurrencyCore, DenominationsCore } from "../Currency.js";
 import { getDenominations } from "./getDenominations.js";
 

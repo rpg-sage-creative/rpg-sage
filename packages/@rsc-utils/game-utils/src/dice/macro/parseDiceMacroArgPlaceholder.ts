@@ -1,4 +1,4 @@
-import { isSimpleNumberString } from "@rsc-utils/core-utils";
+import { isSimpleNumberString } from "@rsc-utils/type-utils";
 import { DiceMacroArgPlaceholderRegExp } from "./regexp.js";
 
 /** A named arg pair that has a key and optional defaultValue. */

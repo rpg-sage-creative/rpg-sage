@@ -1,4 +1,4 @@
-import { numberOrUndefined } from "@rsc-utils/core-utils";
+import { numberOrUndefined } from "@rsc-utils/number-utils";
 
 const ValidBulkRegExp = /^\s*\d+\s*L?\s*$/;
 const ValidLightBulkRegExp = /^\s*(\d+)\s*L\s*$/;
