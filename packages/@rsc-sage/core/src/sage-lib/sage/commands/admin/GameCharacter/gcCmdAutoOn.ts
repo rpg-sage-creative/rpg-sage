@@ -1,6 +1,6 @@
-import { DialogPostType } from "@rsc-sage/data";
-import { quote } from "@rsc-utils/core-utils";
 import { parseIds, toChannelMention, toUserMention } from "@rsc-chat/discord-utils";
+import { DialogPostType } from "@rsc-sage/data";
+import { quote } from "@rsc-utils/quoted-string-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { cannotManageCharacter } from "./cannotManageCharacter.js";

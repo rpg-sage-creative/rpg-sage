@@ -21,7 +21,6 @@
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/number-utils" },
 		{ "path": "../../@rsc-utils/progress-utils" },
-		{ "path": "../../@rsc-utils/quoted-string-utils" },
 		{ "path": "../../@rsc-utils/regexp-utils" },
 		{ "path": "../../@rsc-utils/string-utils" },
 		{ "path": "../../@rsc-utils/token-string-utils" },

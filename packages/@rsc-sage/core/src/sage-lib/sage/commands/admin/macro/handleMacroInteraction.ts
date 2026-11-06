@@ -1,6 +1,7 @@
 import type { LocalizedTextKey, Localizer } from "@rsc-sage/localization";
-import { EphemeralMap, quote, ZERO_WIDTH_SPACE, type Snowflake } from "@rsc-utils/core-utils";
+import { EphemeralMap, ZERO_WIDTH_SPACE, type Snowflake } from "@rsc-utils/core-utils";
 import type { MacroBase } from "@rsc-utils/game-utils";
+import { quote } from "@rsc-utils/quoted-string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { Macro } from "../../../model/Macro.js";
 import { findCharacterOrCompanion, Macros } from "../../../model/Macros.js";

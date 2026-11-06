@@ -1,5 +1,6 @@
-import { StringMatcher, dequote, generateSnowflake, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
+import { StringMatcher, generateSnowflake, isNonNilSnowflake, type Snowflake } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { dequote } from "@rsc-utils/quoted-string-utils";
 import type { Guild } from "discord.js";
 import { regex } from "regex";
 import { COL, LayerType, ROW, type TGameMapAura, type TGameMapCore, type TGameMapImage } from "./GameMapBase.js";

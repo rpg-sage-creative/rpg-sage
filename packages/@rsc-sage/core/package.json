@@ -36,6 +36,7 @@
 		"@rsc-utils/map-utils": "workspace:",
 		"@rsc-utils/number-utils": "workspace:",
 		"@rsc-utils/random-utils": "workspace:",
+		"@rsc-utils/quoted-string-utils": "workspace:",
 		"@rsc-utils/search-utils": "workspace:",
 		"@rsc-utils/string-utils": "workspace:",
 		"@rsc-utils/token-string-utils": "workspace:",

@@ -1,9 +1,10 @@
 import { correctEscapedMentions } from "@rsc-chat/discord-utils";
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
-import { ZERO_WIDTH_SPACE, dequote, sortPrimitive, sum, type SortResult } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE, sortPrimitive, sum, type SortResult } from "@rsc-utils/core-utils";
 import { DiceDropKeep, DiceDropKeepType, cleanDicePartDescription, createTestRegExp, removeDesc, type DiceDropKeepData } from "@rsc-utils/game-utils";
 import { generateSnowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { dequote } from "@rsc-utils/quoted-string-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/token-string-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";

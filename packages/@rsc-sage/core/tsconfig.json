@@ -25,6 +25,7 @@
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/map-utils" },
 		{ "path": "../../@rsc-utils/number-utils" },
+		{ "path": "../../@rsc-utils/quoted-string-utils" },
 		{ "path": "../../@rsc-utils/string-utils" },
 		{ "path": "../../@rsc-utils/token-string-utils" },
 		{ "path": "../../@rsc-utils/whitespace-string-utils" },
