@@ -1,6 +1,6 @@
 import { parseEnum } from "@rsc-utils/core-utils";
+import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { StringSelectMenuComponent } from "discord.js";
-import { numberOrUndefined } from "../../utils/numberOrUndefined.js";
 import { findComponent, type MessagesOrSageCommand } from "./findComponent.js";
 
 /** Gets the selected value (updated or default) for the given customId. */

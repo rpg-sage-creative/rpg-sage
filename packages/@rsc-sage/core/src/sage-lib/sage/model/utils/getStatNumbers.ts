@@ -1,5 +1,5 @@
-import { numberOrUndefined } from "@rsc-utils/core-utils";
 import type { StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-utils/game-utils";
+import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { CharacterShell } from "../CharacterShell.js";
 import type { GameCharacter } from "../GameCharacter.js";
 import { getMetaStat, isMetaStatKey } from "./getMetaStat.js";

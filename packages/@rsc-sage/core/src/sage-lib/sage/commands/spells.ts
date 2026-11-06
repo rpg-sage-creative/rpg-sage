@@ -1,5 +1,6 @@
-import { capitalize, nth, toUniqueDefined, type Optional } from "@rsc-utils/core-utils";
+import { capitalize, toUniqueDefined, type Optional } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { nth } from "@rsc-utils/number-utils";
 import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e/index.js";
 import { FocusSpell, Repository, SourceNotationMap } from "../../../sage-pf2e/index.js";
 import type { SageMessage } from "../model/SageMessage.js";

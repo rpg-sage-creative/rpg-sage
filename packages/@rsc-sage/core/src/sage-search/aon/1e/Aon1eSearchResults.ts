@@ -1,8 +1,9 @@
-import { addCommas, RenderableContent } from "@rsc-utils/core-utils";
+import { RenderableContent } from "@rsc-utils/core-utils";
+import { addCommas } from "@rsc-utils/number-utils";
+import type { GameSearchInfo } from "../../GameSearchInfo.js";
 import { SearchResults } from "../../SearchResults.js";
 import type { Aon1eSearchBase } from "./Aon1eSearchBase.js";
 import { createAon1eSearchUrl } from "./createAon1eSearchUrl.js";
-import type { GameSearchInfo } from "../../GameSearchInfo.js";
 import type { Aon1eGameSystemCode } from "./types.js";
 
 function createClickableSearchLink(searchResults: Aon1eSearchResults, label: string): string {

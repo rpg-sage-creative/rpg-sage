@@ -1,6 +1,7 @@
 import type { Core } from "@rsc-utils/class-utils";
-import { capitalize, nth, toUnique, type RenderableContent as UtilsRenderableContent, type UUID } from "@rsc-utils/core-utils";
+import { capitalize, toUnique, type RenderableContent as UtilsRenderableContent, type UUID } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { nth } from "@rsc-utils/number-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { ABILITIES, NEWLINE, toModifier, type TMagicComponent, type TMagicTradition } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";

@@ -1,6 +1,6 @@
-import { numberOrUndefined } from "@rsc-utils/core-utils";
 import type { KeyValuePair } from "@rsc-utils/arg-utils";
 import { unpipe } from "@rsc-utils/game-utils";
+import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { GameCharacter } from "../sage-lib/sage/model/GameCharacter.js";
 import { checkStatBounds as checkStatBoundsP20 } from "./p20/lib/checkStatBounds.js";
 import { checkStatBounds as checkStatBoundsSF1e } from "./sf1e/lib/checkStatBounds.js";

@@ -1,4 +1,4 @@
-import { addCommas } from "@rsc-utils/core-utils";
+import { addCommas } from "@rsc-utils/number-utils";
 import { rollDie } from "@rsc-utils/random-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../../model/SageCommand.js";

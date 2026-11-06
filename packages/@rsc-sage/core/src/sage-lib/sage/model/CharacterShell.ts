@@ -1,6 +1,7 @@
 import type { KeyValuePair } from "@rsc-utils/arg-utils";
-import { isDefined, isString, numberOrUndefined, stringArrayOrEmpty, StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
+import { isDefined, isString, stringArrayOrEmpty, StringSet, type Optional, type Snowflake } from "@rsc-utils/core-utils";
 import type { StatKey, StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-utils/game-utils";
+import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { Wealth } from "../commands/trackers/wealth/Wealth.js";
 import { getCharWealth } from "../commands/trackers/wealth/getCharWealth.js";
 import type { CharacterArray } from "./CharacterArray.js";

@@ -1,6 +1,6 @@
 
-import { nth } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { nth } from "@rsc-utils/number-utils";
 import { findByValue } from "../data/Repository.js";
 import type { Domain } from "./Domain.js";
 import type { Skill } from "./Skill.js";

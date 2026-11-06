@@ -1,7 +1,9 @@
 import { DataTable } from "@rsc-sage/data";
-import { addCommas, capitalize, isDefined, nth, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { capitalize, isDefined, sortPrimitive, stringifyJson, StringMatcher, stringOrUndefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
 import { CharacterBase, type DiceMacroBase, type StatResults } from "@rsc-utils/game-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { addCommas, nth } from "@rsc-utils/number-utils";
+import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";
 import { Ability, type AbilityAbbr } from "../../../gameSystems/d20/lib/Ability.js";
 import type { PathbuilderCharacterCore, StrikingRune, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterAnimalCompanion, TPathbuilderCharacterArmor, TPathbuilderCharacterCustomFlags, TPathbuilderCharacterEquipment, TPathbuilderCharacterFamiliar, TPathbuilderCharacterFeat, TPathbuilderCharacterFocusStat, TPathbuilderCharacterFocusTradition, TPathbuilderCharacterLore, TPathbuilderCharacterMoney, TPathbuilderCharacterProficienciesKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterSpellCasterSpells, TPathbuilderCharacterWeapon, WeaponGrade } from "../../../gameSystems/p20/import/pathbuilder-2e/types.js";
 import type { IHasAbilities } from "../../../gameSystems/p20/lib/Abilities.js";
@@ -17,7 +19,6 @@ import { ABILITIES } from "../../index.js";
 import type { Weapon } from "../Weapon.js";
 import { PbcAbilities } from "./PbcAbilities.js";
 import { SavingThrows, type IHasSavingThrows } from "./SavingThrows.js";
-import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";
 
 //#region helpers
 

@@ -1,4 +1,5 @@
-import { nth, sortByKey, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { sortByKey, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { nth } from "@rsc-utils/number-utils";
 import { rarityToSuper } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { all, find, findByValue } from "../data/Repository.js";

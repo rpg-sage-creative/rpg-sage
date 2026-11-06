@@ -1,7 +1,8 @@
 import { DataTable } from "@rsc-sage/data";
-import { isDefined, numberOrUndefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import { isDefined, stringOrUndefined, type Optional } from "@rsc-utils/core-utils";
 import type { StatResults } from "@rsc-utils/game-utils";
 import { CharacterBase, type CharacterBaseCore } from "@rsc-utils/game-utils";
+import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
 import type { PlayerCharacterCoreJoe, PlayerCharacterJoe } from "../joe/PlayerCharacterJoe.js";
 import type { PlayerCharacterPR } from "../pr/PlayerCharacterPR.js";
