@@ -1,5 +1,6 @@
 import type { LocalizedTextKey, Localizer } from "@rsc-sage/localization";
-import { EphemeralMap, ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
+import { EphemeralMap } from "@rsc-utils/collection-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import type { MacroBase } from "@rsc-utils/game-utils";
 import { quote } from "@rsc-utils/quoted-string-utils";

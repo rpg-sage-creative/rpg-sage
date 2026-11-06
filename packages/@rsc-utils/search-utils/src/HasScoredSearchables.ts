@@ -1,4 +1,4 @@
-import { sortPrimitive } from "@rsc-utils/core-utils";
+import { sortPrimitive } from "@rsc-utils/collection-utils";
 import type { SearchScore } from "./SearchScore.js";
 import type { Searchable } from "./Searchable.js";
 

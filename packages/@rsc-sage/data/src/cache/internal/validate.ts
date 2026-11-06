@@ -1,5 +1,5 @@
 import { getDataRoot } from "@rsc-sage/env";
-import { Arrayish } from "@rsc-utils/core-utils";
+import { Arrayish } from "@rsc-utils/collection-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { errorReturnUndefined, Logger } from "@rsc-utils/logger-utils";
 import { assertSageCharacterCore } from "../../types/SageCharacterCore.js";

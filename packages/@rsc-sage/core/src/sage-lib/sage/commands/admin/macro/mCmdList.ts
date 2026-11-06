@@ -1,4 +1,5 @@
-import { Arrayish, type RenderableContent } from "@rsc-utils/core-utils";
+import { Arrayish } from "@rsc-utils/collection-utils";
+import type { RenderableContent } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, toUserMention } from "@rsc-chat/discord-utils";
 import { deleteMessage } from "../../../../discord/deletedMessages.js";
 import type { Macro } from "../../../model/Macro.js";

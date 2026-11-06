@@ -1,6 +1,6 @@
 import { getDataRoot } from "@rsc-sage/env";
 import type { RepoItem } from "@rsc-utils/aws-utils";
-import { Arrayish } from "@rsc-utils/core-utils";
+import { Arrayish } from "@rsc-utils/collection-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { getDdbTable } from "./cache/internal/DdbRepo.js";

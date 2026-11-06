@@ -1,4 +1,4 @@
-import { sortPrimitive } from "@rsc-utils/core-utils";
+import { sortPrimitive } from "@rsc-utils/collection-utils";
 import type { Searchable } from "./Searchable.js";
 
 type TCategorizedSearchables<T extends Searchable> = {

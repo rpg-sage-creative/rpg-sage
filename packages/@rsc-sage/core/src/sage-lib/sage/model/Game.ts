@@ -2,7 +2,8 @@ import { DiscordKey, resolveUserId, type CanBeUserIdResolvable, type SupportedGa
 import type { AutoChannelData, DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, EmbedColorType, EmojiType, GameOptions, GameRoleData, GameSystem, GameSystemType, GameUserData, PostCurrency, SageChannel, SageGameCore, SageGameCoreOld } from "@rsc-sage/data";
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameRoleType, GameUserType, SageChannelType, ensureSageGameCore, parseGameSystem, parseSageChannelType } from "@rsc-sage/data";
 import type { HexColorString } from "@rsc-utils/color-utils";
-import { isDefined, sortPrimitive, type Args, type Comparable, type Optional, type OrNull } from "@rsc-utils/core-utils";
+import { sortPrimitive, type Comparable } from "@rsc-utils/collection-utils";
+import { isDefined, type Args, type Optional, type OrNull } from "@rsc-utils/core-utils";
 import { applyChanges } from "@rsc-utils/json-utils";
 import { generateSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";

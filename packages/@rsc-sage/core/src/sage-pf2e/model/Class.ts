@@ -1,4 +1,4 @@
-import { remove } from "@rsc-utils/core-utils";
+import { remove } from "@rsc-utils/collection-utils";
 import type { TProficiency } from "../common.js";
 import { Feature, type FeatureCore } from "./Feature.js";
 import { Features, type FeatureLevelCore } from "./Features.js";

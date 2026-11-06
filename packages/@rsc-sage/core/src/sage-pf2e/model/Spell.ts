@@ -1,5 +1,6 @@
 import type { Core } from "@rsc-utils/class-utils";
-import { capitalize, toUnique, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import { toUnique } from "@rsc-utils/collection-utils";
+import { capitalize, type RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import type { UUID } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { nth } from "@rsc-utils/number-utils";

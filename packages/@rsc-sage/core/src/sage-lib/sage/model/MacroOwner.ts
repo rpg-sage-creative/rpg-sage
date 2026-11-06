@@ -1,5 +1,5 @@
 import type { LocalizedTextKey } from "@rsc-sage/localization";
-import { sortPrimitive } from "@rsc-utils/core-utils";
+import { sortPrimitive } from "@rsc-utils/collection-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import type { GameCharacter } from "./GameCharacter.js";
 import type { Macro } from "./Macro.js";

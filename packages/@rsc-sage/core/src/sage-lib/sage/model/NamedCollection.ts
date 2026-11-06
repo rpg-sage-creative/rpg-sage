@@ -1,4 +1,5 @@
-import { isDefined, toUniqueDefined } from "@rsc-utils/core-utils";
+import { toUniqueDefined } from "@rsc-utils/collection-utils";
+import { isDefined } from "@rsc-utils/core-utils";
 import { regex } from "regex";
 
 export interface IHasSave {

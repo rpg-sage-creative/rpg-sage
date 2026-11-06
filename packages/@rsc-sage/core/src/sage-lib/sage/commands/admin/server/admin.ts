@@ -1,5 +1,6 @@
 import { AdminRoleType, type AdminUser } from "@rsc-sage/data";
-import { Arrayish, isDefined, type RenderableContent } from "@rsc-utils/core-utils";
+import { Arrayish } from "@rsc-utils/collection-utils";
+import { isDefined, type RenderableContent } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { toHumanReadable } from "@rsc-chat/discord-utils";
 import type { User } from "discord.js";

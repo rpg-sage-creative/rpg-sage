@@ -1,4 +1,4 @@
-import { remove } from "@rsc-utils/core-utils";
+import { remove } from "@rsc-utils/collection-utils";
 import { findByValue } from "../data/Repository.js";
 import type { Ancestry } from "./Ancestry.js";
 import type { FeatureCore } from "./Feature.js";

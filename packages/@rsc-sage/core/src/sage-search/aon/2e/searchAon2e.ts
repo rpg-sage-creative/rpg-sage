@@ -1,4 +1,5 @@
-import { sortPrimitive, StringMatcher, type SortResult } from "@rsc-utils/core-utils";
+import { sortPrimitive, type SortResult } from "@rsc-utils/collection-utils";
+import { StringMatcher } from "@rsc-utils/core-utils";
 import { getJson } from "@rsc-utils/io-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import { Logger } from "@rsc-utils/logger-utils";

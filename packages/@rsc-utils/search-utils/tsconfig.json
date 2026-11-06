@@ -11,6 +11,7 @@
 		"./src"
 	],
 	"references": [
+		{ "path": "../../@rsc-utils/collection-utils" },
 		{ "path": "../../@rsc-utils/language-utils" },
 		{ "path": "../../@rsc-utils/quoted-string-utils" },
 		{ "path": "../../@rsc-utils/token-string-utils" },

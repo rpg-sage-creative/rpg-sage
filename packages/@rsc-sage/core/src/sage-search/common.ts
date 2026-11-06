@@ -1,5 +1,5 @@
 import { GameSystemType } from "@rsc-sage/data";
-import { remove } from "@rsc-utils/core-utils";
+import { remove } from "@rsc-utils/collection-utils";
 import type { SearchResults } from "./SearchResults.js";
 import { searchAon1e } from "./aon/1e/searchAon1e.js";
 import { searchAon2e } from "./aon/2e/searchAon2e.js";

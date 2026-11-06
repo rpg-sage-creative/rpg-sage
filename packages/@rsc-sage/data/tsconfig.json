@@ -10,6 +10,7 @@
 	"references": [
 		{ "path": "../../@rsc-utils/aws-utils" },
 		{ "path": "../../@rsc-utils/class-utils" },
+		{ "path": "../../@rsc-utils/collection-utils" },
 		{ "path": "../../@rsc-utils/color-utils" },
 		{ "path": "../../@rsc-utils/core-utils" },
 		{ "path": "../../@rsc-utils/json-utils" },

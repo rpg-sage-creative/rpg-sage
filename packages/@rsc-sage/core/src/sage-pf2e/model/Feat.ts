@@ -1,4 +1,5 @@
-import type { SortResult, RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { SortResult } from "@rsc-utils/collection-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import type { TAction } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";

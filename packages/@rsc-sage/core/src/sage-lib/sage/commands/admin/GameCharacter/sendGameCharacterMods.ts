@@ -1,4 +1,5 @@
-import { Arrayish, sortPrimitive, StringSet } from "@rsc-utils/core-utils";
+import { Arrayish, sortPrimitive } from "@rsc-utils/collection-utils";
+import { StringSet } from "@rsc-utils/core-utils";
 import { Currency, unpipe } from "@rsc-utils/game-utils";
 import type { Message } from "discord.js";
 import { Condition } from "../../../../../gameSystems/Condition.js";

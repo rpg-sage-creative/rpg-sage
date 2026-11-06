@@ -1,6 +1,7 @@
 import { correctEscapedMentions } from "@rsc-chat/discord-utils";
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
-import { ZERO_WIDTH_SPACE, sortPrimitive, type SortResult } from "@rsc-utils/core-utils";
+import { ZERO_WIDTH_SPACE } from "@rsc-utils/core-utils";
+import { sortPrimitive, type SortResult } from "@rsc-utils/collection-utils";
 import { DiceDropKeep, DiceDropKeepType, cleanDicePartDescription, createTestRegExp, removeDesc, type DiceDropKeepData } from "@rsc-utils/game-utils";
 import { generateSnowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";

@@ -1,5 +1,6 @@
 import { DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameSystemType, getCriticalMethodText, parseGameSystem, SageChannelType, type SageChannel } from "@rsc-sage/data";
-import { Arrayish, isDefined, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
+import { Arrayish } from "@rsc-utils/collection-utils";
+import { isDefined, type Optional, type RenderableContent } from "@rsc-utils/core-utils";
 import { stringifyJson } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordKey, isSupportedTarget, toChannelMention } from "@rsc-chat/discord-utils";

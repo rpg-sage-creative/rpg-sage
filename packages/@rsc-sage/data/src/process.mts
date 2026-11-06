@@ -1,4 +1,4 @@
-import { Arrayish } from "@rsc-utils/core-utils";
+import { Arrayish } from "@rsc-utils/collection-utils";
 import { stringifyJson } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";

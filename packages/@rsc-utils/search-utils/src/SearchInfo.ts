@@ -1,4 +1,4 @@
-import { toUniqueDefined } from "@rsc-utils/core-utils";
+import { toUniqueDefined } from "@rsc-utils/collection-utils";
 import { oneToUS, reduceNoiseUS } from "@rsc-utils/language-utils";
 import { dequote, QuotedContentRegExp } from "@rsc-utils/quoted-string-utils";
 import { tokenize } from "@rsc-utils/token-string-utils";
