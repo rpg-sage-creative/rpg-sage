@@ -1,4 +1,5 @@
-import { parseJson, type Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/core-utils";
+import { parseJson } from "@rsc-utils/json-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 /**
  * @internal

@@ -16,7 +16,6 @@
 		{ "path": "../../@rsc-utils/color-utils" },
 		{ "path": "../../@rsc-utils/class-utils" },
 		{ "path": "../../@rsc-utils/error-utils" },
-		{ "path": "../../@rsc-utils/json-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/number-utils" },
 		{ "path": "../../@rsc-utils/progress-utils" },

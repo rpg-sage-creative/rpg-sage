@@ -18,6 +18,7 @@
 		"@rsc-utils/date-utils": "workspace:",
 		"@rsc-utils/id-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
+		"@rsc-utils/json-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-sage/env": "workspace:"
 	},

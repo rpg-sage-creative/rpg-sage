@@ -1,4 +1,4 @@
-import { cloneJson } from "@rsc-utils/core-utils";
+import { cloneJson } from "@rsc-utils/json-utils";
 import { HasSource, type SourcedCore } from "../model/base/HasSource.js";
 import { Metadata, type IHasMetadata, type IMetadata } from "./Metadata.js";
 

@@ -16,6 +16,7 @@
 		{ "path": "../../@rsc-utils/collection-utils" },
 		{ "path": "../../@rsc-utils/color-utils" },
 		{ "path": "../../@rsc-utils/date-utils" },
+		{ "path": "../../@rsc-utils/json-utils" },
 		{ "path": "../../@rsc-utils/error-utils" },
 		{ "path": "../../@rsc-utils/game-utils" },
 		{ "path": "../../@rsc-utils/git-utils" },

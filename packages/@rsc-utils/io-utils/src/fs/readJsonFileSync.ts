@@ -1,4 +1,4 @@
-import { parseJson } from "@rsc-utils/core-utils";
+import { parseJson } from "@rsc-utils/json-utils";
 import { readTextSync } from "./readTextSync.js";
 
 /**

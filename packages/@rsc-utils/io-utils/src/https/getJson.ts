@@ -1,4 +1,4 @@
-import { parseJson } from "@rsc-utils/core-utils";
+import { parseJson } from "@rsc-utils/json-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { getText, type GetTextOpts } from "./getText.js";
 

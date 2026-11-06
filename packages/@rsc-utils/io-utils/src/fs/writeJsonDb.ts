@@ -1,4 +1,4 @@
-import { stringifyJson } from "@rsc-utils/core-utils";
+import { stringifyJson } from "@rsc-utils/json-utils";
 import { writeFile } from "./writeFile.js";
 
 /**

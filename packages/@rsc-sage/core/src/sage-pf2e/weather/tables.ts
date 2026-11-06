@@ -1,4 +1,4 @@
-import { cloneJson } from "@rsc-utils/core-utils";
+import { cloneJson } from "@rsc-utils/json-utils";
 import type { SimpleDice } from "@rsc-utils/game-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { randomInt } from "node:crypto";
