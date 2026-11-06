@@ -1,7 +1,9 @@
 import { DataTable, type BaseCacheItem, type CacheItemObjectType } from "@rsc-sage/data";
 import { getDataRoot } from "@rsc-sage/env";
-import { EphemeralMap, isNonNilSnowflake, isNonNilUuid, type Optional, type Snowflake, type UUID } from "@rsc-utils/core-utils";
+import { EphemeralMap } from "@rsc-utils/collection-utils";
+import { isNonNilSnowflake, isNonNilUuid, type Snowflake, type UUID } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { Game, type GameCore } from "../../model/Game.js";
 import { GameCharacter, type GameCharacterCore } from "../../model/GameCharacter.js";
 import type { SageCache } from "../../model/SageCache.js";

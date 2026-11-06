@@ -1,4 +1,4 @@
-import type { IdCore } from "@rsc-utils/core-utils";
+import type { IdCore } from "@rsc-utils/class-utils";
 
 export type SageCore<
 			ObjectType extends string,

@@ -12,8 +12,10 @@
 	},
 	"dependencies": {
 		"@rsc-utils/aws-utils": "workspace:",
+		"@rsc-utils/class-utils": "workspace:",
 		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/date-utils": "workspace:",
+		"@rsc-utils/id-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-sage/env": "workspace:"

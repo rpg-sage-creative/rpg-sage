@@ -1,8 +1,11 @@
+import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-chat/discord-utils";
 import { EmojiType } from "@rsc-sage/data";
 import { ArgsManager } from "@rsc-utils/arg-utils";
-import { Cache, RenderableContent, type Optional, type RenderableContentResolvable, type Snowflake } from "@rsc-utils/core-utils";
-import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUrl, type MessageOrPartial, type SMessage, type SMessageOrPartial, type SupportedMessagesChannel } from "@rsc-chat/discord-utils";
+import type { Cache } from "@rsc-utils/class-utils";
+import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/core-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { User } from "discord.js";
 import { regex } from "regex";
 import { isDeleted } from "../../discord/deletedMessages.js";

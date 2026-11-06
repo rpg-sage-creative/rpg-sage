@@ -1,4 +1,4 @@
-import { HasCore, type Core } from "@rsc-utils/core-utils";
+import { HasCore, type Core } from "@rsc-utils/class-utils";
 import { Coins, type CoinsCore } from "./Coins.js";
 
 export interface IValuable {

@@ -1,4 +1,5 @@
-import { HasIdCore, type IdCore, type Snowflake } from "@rsc-utils/core-utils";
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
+import type { Snowflake } from "@rsc-utils/id-utils";
 import type { SageCache } from "../../model/SageCache.js";
 
 export class HasSageCacheCore<T extends IdCore<U>, U extends string = string> extends HasIdCore<T, U> {

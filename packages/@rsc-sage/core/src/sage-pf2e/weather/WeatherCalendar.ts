@@ -1,4 +1,5 @@
-import { Arrayish, HasIdCore, type IdCore } from "@rsc-utils/core-utils";
+import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
+import { Arrayish } from "@rsc-utils/collection-utils";
 import type { IMapLocation } from "../map/map.js";
 import type { IWeatherDayResult } from "./WeatherGenerator.js";
 

@@ -1,4 +1,5 @@
-import { HasCore, type Core, type UUID } from "@rsc-utils/core-utils";
+import { HasCore, type Core } from "@rsc-utils/class-utils";
+import type { UUID } from "@rsc-utils/id-utils";
 import { DASH } from "../common.js";
 import { Spell } from "./Spell.js";
 

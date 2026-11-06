@@ -1,4 +1,5 @@
-import { isNonNilSnowflake, isNonNilUuid, type IdCore } from "@rsc-utils/core-utils";
+import type { IdCore } from "@rsc-utils/class-utils";
+import { isNonNilSnowflake, isNonNilUuid } from "@rsc-utils/id-utils";
 import { tagFailure } from "../index.js";
 
 type AssertIdsArgs<Core extends IdCore> = {
