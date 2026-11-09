@@ -1,4 +1,4 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
 import type { SearchInfo, SearchScore } from "@rsc-utils/search-utils";
 import { RenderableContent } from "../../data/RenderableContent.js";

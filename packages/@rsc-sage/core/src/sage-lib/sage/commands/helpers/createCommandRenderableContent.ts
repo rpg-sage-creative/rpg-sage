@@ -1,5 +1,5 @@
 import { EmbedColorType } from "@rsc-sage/data";
-import type { RenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ActiveBot } from "../../model/ActiveBot.js";
 import { createRenderableContent } from "./createRenderableContent.js";
 

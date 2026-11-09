@@ -1,4 +1,4 @@
-import { RenderableContent as UtilsRenderableContent, type RenderableContentSection } from "@rsc-utils/core-utils";
+import { RenderableContent as UtilsRenderableContent, type RenderableContentSection } from "@rsc-utils/render-utils";
 import { NEWLINE, TAB } from "../common.js";
 import type { Base } from "../model/base/Base.js";
 import type { HasSource } from "../model/base/HasSource.js";

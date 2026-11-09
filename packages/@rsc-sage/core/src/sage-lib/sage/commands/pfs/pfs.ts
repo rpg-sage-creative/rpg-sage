@@ -1,6 +1,7 @@
 import { EmbedColorType } from "@rsc-sage/data";
-import { isDefined, type RenderableContent } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { registerCommandRegex } from "../cmd.js";
 import { createRenderableContent } from "../helpers/createRenderableContent.js";

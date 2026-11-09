@@ -1,4 +1,4 @@
-import { RenderableContent } from "@rsc-utils/core-utils";
+import { RenderableContent } from "@rsc-utils/render-utils";
 import { addCommas } from "@rsc-utils/number-utils";
 import type { GameSearchInfo } from "../../GameSearchInfo.js";
 import { SearchResults } from "../../SearchResults.js";

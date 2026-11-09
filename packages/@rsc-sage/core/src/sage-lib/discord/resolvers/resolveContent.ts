@@ -1,9 +1,9 @@
-import { chunk } from "@rsc-utils/string-utils";
-import { RenderableContent, type RenderableContentResolvable, type RenderableContentSection } from "@rsc-utils/core-utils";
 import { DiscordMaxValues, EmbedBuilder, getEmbedFieldCount, getEmbedLength, resolveEmbed, type EmbedResolvable } from "@rsc-chat/discord-utils";
+import { RenderableContent, type RenderableContentResolvable, type RenderableContentSection } from "@rsc-utils/render-utils";
+import { chunk } from "@rsc-utils/string-utils";
+import type { ContentFormatter } from "../../sage/model/SageEventCache.js";
 import { createMessageEmbed } from "../createMessageEmbed.js";
 import { getValueToAppend } from "./getValueToAppend.js";
-import type { ContentFormatter } from "../../sage/model/SageEventCache.js";
 
 type ResolveSectionOptions = { embeds:EmbedBuilder[]; formatter:ContentFormatter; renderableContent:RenderableContent; section:RenderableContentSection; };
 

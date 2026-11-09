@@ -1,4 +1,4 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { find } from "../data/Repository.js";
 import { HasSource, type SourcedCore } from "./base/HasSource.js";

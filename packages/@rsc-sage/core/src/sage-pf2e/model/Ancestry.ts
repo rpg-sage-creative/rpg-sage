@@ -1,5 +1,5 @@
 import { remove } from "@rsc-utils/collection-utils";
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { filter } from "../data/Repository.js";
 import { Feature, type FeatureCore } from "./Feature.js";

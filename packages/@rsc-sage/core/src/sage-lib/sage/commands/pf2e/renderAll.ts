@@ -1,6 +1,7 @@
 import { Arrayish, sortComparable, toUnique, toUniqueDefined } from "@rsc-utils/collection-utils";
-import { isDefined, type RenderableContent } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import { HasSource, Repository, Skill, Source, SourceNotationMap } from "../../../../sage-pf2e/index.js";
 import { createCommandRenderableContent } from "../cmd.js";
 

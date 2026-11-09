@@ -1,4 +1,4 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { RenderableContent } from "../data/RenderableContent.js";
 import type { TDevoteeBenefitsCore } from "./DevoteeBenefits.js";
 import { DevoteeBenefits } from "./DevoteeBenefits.js";

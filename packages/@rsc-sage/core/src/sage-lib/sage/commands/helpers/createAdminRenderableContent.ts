@@ -1,5 +1,5 @@
 import { EmbedColorType } from "@rsc-sage/data";
-import type { RenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import type { HasColorsCore } from "../../model/Colors.js";
 import { createRenderableContent } from "./createRenderableContent.js";
 

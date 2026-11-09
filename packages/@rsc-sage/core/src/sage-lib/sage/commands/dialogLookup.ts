@@ -1,9 +1,10 @@
+import { toMessageUrl, toUserMention } from "@rsc-chat/discord-utils";
 import { EmbedColorType, EmojiType, GameUserType } from "@rsc-sage/data";
 import { isSageId, isTupperBoxId } from "@rsc-sage/env";
-import type { Optional, RenderableContent } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
-import { toMessageUrl, toUserMention } from "@rsc-chat/discord-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { Guild, Message, TextChannel } from "discord.js";
 import { ReactionType } from "../../discord/enums.js";
 import { registerReactionListener } from "../../discord/handlers.js";

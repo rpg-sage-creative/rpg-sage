@@ -1,6 +1,7 @@
 import { AdminRoleType, DialogPostType, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameCreatorType, getCriticalMethodText, type AdminRole } from "@rsc-sage/data";
 import { Arrayish } from "@rsc-utils/collection-utils";
-import type { Optional, RenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { Role } from "discord.js";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";
 import type { SageMessage } from "../../../model/SageMessage.js";

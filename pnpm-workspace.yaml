@@ -53,6 +53,7 @@ overrides:
   "@rsc-utils/quoted-string-utils": "./packages/@rsc-utils/quoted-string-utils"
   "@rsc-utils/random-utils": "./packages/@rsc-utils/random-utils"
   "@rsc-utils/regexp-utils": "./packages/@rsc-utils/regexp-utils"
+  "@rsc-utils/render-utils": "./packages/@rsc-utils/render-utils"
   "@rsc-utils/search-utils": "./packages/@rsc-utils/search-utils"
   "@rsc-utils/string-utils": "./packages/@rsc-utils/string-utils"
   "@rsc-utils/token-string-utils": "./packages/@rsc-utils/token-string-utils"

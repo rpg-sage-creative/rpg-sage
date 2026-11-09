@@ -39,6 +39,7 @@
 		"@rsc-utils/random-utils": "workspace:",
 		"@rsc-utils/regexp-utils": "workspace:",
 		"@rsc-utils/quoted-string-utils": "workspace:",
+		"@rsc-utils/render-utils": "workspace:",
 		"@rsc-utils/search-utils": "workspace:",
 		"@rsc-utils/string-utils": "workspace:",
 		"@rsc-utils/token-string-utils": "workspace:",

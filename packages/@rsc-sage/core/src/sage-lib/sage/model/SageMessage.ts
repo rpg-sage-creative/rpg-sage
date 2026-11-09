@@ -2,9 +2,9 @@ import { DiscordApiError, DiscordKey, safeMentions, toHumanReadable, toMessageUr
 import { EmojiType } from "@rsc-sage/data";
 import { ArgsManager } from "@rsc-utils/arg-utils";
 import type { Cache } from "@rsc-utils/class-utils";
-import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
+import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { User } from "discord.js";
 import { regex } from "regex";

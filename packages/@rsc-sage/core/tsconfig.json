@@ -28,6 +28,7 @@
 		{ "path": "../../@rsc-utils/number-utils" },
 		{ "path": "../../@rsc-utils/quoted-string-utils" },
 		{ "path": "../../@rsc-utils/regexp-utils" },
+		{ "path": "../../@rsc-utils/render-utils" },
 		{ "path": "../../@rsc-utils/string-utils" },
 		{ "path": "../../@rsc-utils/token-string-utils" },
 		{ "path": "../../@rsc-utils/whitespace-string-utils" },

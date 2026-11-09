@@ -1,5 +1,6 @@
 import type { ArgsManager } from "@rsc-utils/arg-utils";
-import type { Awaitable, Optional, Renderable, RenderableContent } from "@rsc-utils/core-utils";
+import type { Renderable, RenderableContent } from "@rsc-utils/render-utils";
+import type { Awaitable, Optional } from "@rsc-utils/type-utils";
 import type { SageInteraction } from "../sage/model/SageInteraction.js";
 import type { SageMessage } from "../sage/model/SageMessage.js";
 import type { SageReaction } from "../sage/model/SageReaction.js";

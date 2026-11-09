@@ -1,6 +1,7 @@
 import { toSuperscript } from "@rsc-utils/charset-utils";
-import { RenderableContent, type OrUndefined } from "@rsc-utils/core-utils";
 import { addCommas } from "@rsc-utils/number-utils";
+import { RenderableContent } from "@rsc-utils/render-utils";
+import type { OrUndefined } from "@rsc-utils/type-utils";
 import { AonBase } from "../../../sage-pf2e/model/base/AonBase.js";
 import type { Base } from "../../../sage-pf2e/model/base/Base.js";
 import type { HasSource } from "../../../sage-pf2e/model/base/HasSource.js";

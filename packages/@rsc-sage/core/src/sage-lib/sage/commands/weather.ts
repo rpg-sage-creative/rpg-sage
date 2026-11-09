@@ -1,7 +1,7 @@
-import type { RenderableContent } from "@rsc-utils/core-utils";
 import { Season, TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason, } from "@rsc-utils/date-utils";
 import { GDate } from "@rsc-utils/game-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/number-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";
 import { isDefined, parseEnum, type Args, type EnumLike } from "@rsc-utils/type-utils";
 import { AttachmentBuilder } from "discord.js";

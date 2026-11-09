@@ -1,7 +1,7 @@
 import { GameSystemType, getPaizoGameSystems, isStarfinder, parseEnum } from "@rsc-sage/data";
-import type { RenderableContent } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { addCommas, nth } from "@rsc-utils/number-utils";
+import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ActionRowBuilder, ButtonBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
 import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd.js";

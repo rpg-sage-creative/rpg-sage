@@ -1,4 +1,4 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import type { TObjectQuantity } from "../common.js";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { findByValue } from "../data/Repository.js";

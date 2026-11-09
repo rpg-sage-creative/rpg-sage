@@ -1,8 +1,8 @@
 import { DiscordKey, type SupportedAutocompleteInteraction, type SupportedButtonInteraction, type SupportedInteraction, type SupportedMessageContextInteraction, type SupportedMessagesChannel, type SupportedModalSubmitInteraction, type SupportedSlashCommandInteraction, type SupportedStringSelectInteraction, type SupportedTarget, type SupportedUserContextInteraction } from "@rsc-chat/discord-utils";
 import type { Cache } from "@rsc-utils/class-utils";
-import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { RenderableContent, type RenderableContentResolvable } from "@rsc-utils/render-utils";
 import { isDefined, isString } from "@rsc-utils/type-utils";
 import type { InteractionReplyOptions, InteractionUpdateOptions, Message, User } from "discord.js";
 import { deleteMessages } from "../../discord/deletedMessages.js";

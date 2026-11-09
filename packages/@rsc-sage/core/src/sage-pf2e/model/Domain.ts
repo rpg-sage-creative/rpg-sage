@@ -1,5 +1,5 @@
-import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import type { RenderableContent as UtilsRenderableContent } from "@rsc-utils/render-utils";
 import { RenderableContent } from "../data/RenderableContent.js";
 import { findByValue } from "../data/Repository.js";
 import type { FocusSpell } from "./FocusSpell.js";
