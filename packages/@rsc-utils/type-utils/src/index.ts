@@ -1,7 +1,6 @@
 export * from "./boolean/index.js";
 export * from "./enums/index.js";
 export * from "./iterator/index.js";
-export * from "./literals/index.js";
 export * from "./typeGuards/index.js";
 export * from "./applyMixins.js";
 export * from "./deepFreeze.js";

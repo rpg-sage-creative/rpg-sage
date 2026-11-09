@@ -1,4 +1,4 @@
-import { toLiteral } from "@rsc-utils/type-utils";
+import { stringifyJson } from "@rsc-utils/json-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 
 type Options = "error" | "warn";
@@ -8,7 +8,8 @@ export function tagFailure(arg: Options): (arg: TemplateStringsArray, ...args: u
 export function tagFailure(arg: Options | TemplateStringsArray, ...args: unknown[]) {
 	// process template
 	if (Array.isArray(arg)) {
-		Logger.package("@rsc-sage/data").error(arg.reduce((out, s) => out + s + (args.length ? toLiteral(args.shift()) : ""), ""));
+		Logger.package("@rsc-sage/data")
+			.error(arg.reduce((out, s) => out + s + (args.length ? stringifyJson(args.shift()) : ""), ""));
 		return false;
 	}
 
@@ -17,7 +18,7 @@ export function tagFailure(arg: Options | TemplateStringsArray, ...args: unknown
 		const logger = arg === "warn"
 			? Logger.package("@rsc-sage/data").warn
 			: Logger.package("@rsc-sage/data").error;
-		logger(strings.reduce((out, s) => out + s + (_args.length ? toLiteral(_args.shift()) : ""), ""));
+		logger(strings.reduce((out, s) => out + s + (_args.length ? stringifyJson(_args.shift()) : ""), ""));
 		return false;
 	};
 }

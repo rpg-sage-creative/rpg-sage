@@ -1,5 +1,4 @@
 import type { LocalizedTextKey } from "@rsc-sage/localization";
-import { tagLiterals } from "@rsc-utils/type-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { CharacterShell } from "../../../model/CharacterShell.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
@@ -179,7 +178,13 @@ export async function cannotManageCharacter(
 	}else if (errorKey) {
 		await sageCommand.replyStack.whisper(sageCommand.getLocalizer()(errorKey));
 	}else {
-		Logger.package("@rsc-sage/core").error(tagLiterals`Invalid Results: testCanManageCharacter(sageCommand, ${characterTypeMeta}, ${action}, ${character?.name});`);
+		Logger.package("@rsc-sage/core")
+			.error(
+				"Invalid Results: testCanManageCharacter(sageCommand, %o, '%s', '%s');",
+				characterTypeMeta,
+				action,
+				character?.name,
+			);
 	}
 	return true;
 }

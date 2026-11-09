@@ -1,9 +1,9 @@
 import { formatDataFilePath, getCodeName, getDataRoot, } from "@rsc-sage/env";
 import { Arrayish } from "@rsc-utils/collection-utils";
-import { tagLiterals, type Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, readJsonFileSync, readText, writeFile } from "@rsc-utils/io-utils";
 import { Logger, errorReturnEmptyArray, errorReturnFalse, errorReturnUndefined, warnReturnUndefined } from "@rsc-utils/logger-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { join } from "node:path";
 import { ensureNonNilId } from "./internal/ensureNonNilId.js";
 import { getJsonPath } from "./internal/getJsonPath.js";
@@ -111,7 +111,12 @@ export class DataTable<
 	 */
 	public async fetch<Core extends CacheItem>(item: CacheItem): Promise<Core | undefined> {
 		if (!item.id && !item.did && !item.uuid) {
-			Logger.package("@rsc-sage/data").error(tagLiterals`GlobalCache.ObjectCache.fetch(${this.tableName}, ${simplifyForLogging(item)})`);
+			Logger.package("@rsc-sage/data")
+				.error(
+					"GlobalCache.ObjectCache.fetch('%s', %o)",
+					this.tableName,
+					simplifyForLogging(item),
+				);
 			return undefined;
 		}
 
@@ -260,7 +265,12 @@ export class DataTable<
 	public async write(item: CacheItem): Promise<boolean> {
 		// ensure this item has an id
 		if (!ensureNonNilId(item)) {
-			Logger.package("@rsc-sage/data").error(tagLiterals`GlobalCache.ObjectCache.put(${this.tableName}): Missing id; ${simplifyForLogging(item)})`);
+			Logger.package("@rsc-sage/data")
+				.error(
+					"GlobalCache.ObjectCache.put('%s'): Missing id; %o)",
+					this.tableName,
+					simplifyForLogging(item),
+				);
 			return false;
 		}
 

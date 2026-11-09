@@ -1,8 +1,8 @@
 import { getDataRoot } from "@rsc-sage/env";
 import { Arrayish } from "@rsc-utils/collection-utils";
-import { noop, tagLiterals } from "@rsc-utils/type-utils";
 import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { noop } from "@rsc-utils/type-utils";
 import type { DataTable } from "../DataTable.js";
 import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
 import { getDdbTable } from "./DdbRepo.js";
@@ -39,11 +39,11 @@ async function populateFromDdb<
 
 	const { objectType, tableName } = dataTable;
 
-	Logger.package("@rsc-sage/data").trace(tagLiterals`Populating ${objectType} ...`);
+	Logger.package("@rsc-sage/data").trace("Populating %s ...", objectType);
 
 	const ddbTable = getDdbTable(objectType);
 
-	Logger.package("@rsc-sage/data").trace(tagLiterals`  Reading from ${tableName} ...`);
+	Logger.package("@rsc-sage/data").trace("  Reading from %s ...", tableName);
 
 	let files = 0;
 	let errors = 0;
@@ -76,17 +76,17 @@ async function populateFromFile<
 
 	const { objectType } = dataTable;
 
-	Logger.package("@rsc-sage/data").trace(tagLiterals`Populating ${objectType} ...`);
+	Logger.package("@rsc-sage/data").trace("Populating %s ...", objectType);
 
 	// iterate the json files and load cache data into memory
 	const dirName = objectTypeToDirName(objectType);
 	const dirPath = getDataRoot(["sage", dirName]);
 
-	Logger.package("@rsc-sage/data").trace(tagLiterals`  Reading from ${dirPath} ...`);
+	Logger.package("@rsc-sage/data").trace("  Reading from %s ...", dirPath);
 
 	const files = await filterFiles(dirPath, { fileExt:"json" });
 
-	Logger.package("@rsc-sage/data").trace(tagLiterals`  Found ${files.length} files ...`);
+	Logger.package("@rsc-sage/data").trace("  Found %d files ...", files.length);
 
 	const errors: string[] = [];
 

@@ -1,9 +1,9 @@
 import type { GameSystemCode, GameSystem as GameSystemObj } from "@rsc-sage/data";
-import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/collection-utils";
 import { HasCore, type Core } from "@rsc-utils/class-utils";
-import { applyChanges } from "@rsc-utils/json-utils";
+import { sortPrimitive, type Comparable, type SortResult } from "@rsc-utils/collection-utils";
+import { applyChanges, stringifyJson } from "@rsc-utils/json-utils";
 import { Logger } from "@rsc-utils/logger-utils";
-import { deepFreeze, toLiteral, type Constructable, type Optional } from "@rsc-utils/type-utils";
+import { deepFreeze, type Constructable, type Optional } from "@rsc-utils/type-utils";
 import { addValues } from "./internal/addValues.js";
 import { convertCurrency } from "./internal/convertCurrency.js";
 import { coreFrom } from "./internal/coreFrom.js";
@@ -424,20 +424,20 @@ implements Comparable<AnyCurrency> {
 	}
 
 	public static compare(a: ParsableCurrency, b: ParsableCurrency): SortResult {
-		throw Error(`Not Implemented: Currency.compare(${toLiteral(a)}, ${toLiteral(b)})`);
+		throw Error(`Not Implemented: Currency.compare(${stringifyJson(a)}, ${stringifyJson(b)})`);
 	}
 
 	/** Expects a clone or converted instance of the Currency. */
 	public static from(currency?: AnyCurrency): AnyCurrency {
-		throw Error(`Not Implemented: Currency.from(${toLiteral(currency)})`);
+		throw Error(`Not Implemented: Currency.from(${stringifyJson(currency)})`);
 	}
 
 	public static parse(currency: ParsableCurrency, decimal?: "," | "."): AnyCurrency {
-		throw Error(`Not Implemented: Currency.parse(${toLiteral(currency)}, ${toLiteral(decimal)})`);
+		throw Error(`Not Implemented: Currency.parse(${stringifyJson(currency)}, ${stringifyJson(decimal)})`);
 	}
 
 	public static sum(...currencies: ParsableCurrency[]): AnyCurrency {
-		throw Error(`Not Implemented: Currency.sum(${toLiteral(currencies)})`);
+		throw Error(`Not Implemented: Currency.sum(${stringifyJson(currencies)})`);
 	}
 
 	/** Child classes should set this with deepFreeze(). */
