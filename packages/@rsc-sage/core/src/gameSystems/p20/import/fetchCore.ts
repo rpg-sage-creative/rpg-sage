@@ -1,4 +1,3 @@
-import { pause } from "@rsc-utils/core-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import { PathbuilderCharacter } from "../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import { fetchCores as fetchAll, fetchJsonCore, fetchCore as fetchOne, type FetchResult } from "../../utils/io/fetchCores.js";
@@ -53,7 +52,7 @@ async function processPathbuilderQueue() {
 	// Pathbuilder limits requests to 10 / minute per IP (6 seconds each)
 	if (tsSinceLastFetch < 6000) {
 		// make sure we don't spam the pathbuilder server
-		await pause(6000 - tsSinceLastFetch, "Pathbuilder Throttle");
+		await (new Promise(res => setTimeout(res, 6000 - tsSinceLastFetch)));
 	}
 
 	// get queue info

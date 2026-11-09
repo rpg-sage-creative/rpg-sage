@@ -7,3 +7,4 @@ export * from "./parseNumeric.js";
 export * from "./round.js";
 export * from "./signed.js";
 export * from "./sum.js";
+export * from "./temperature.js";

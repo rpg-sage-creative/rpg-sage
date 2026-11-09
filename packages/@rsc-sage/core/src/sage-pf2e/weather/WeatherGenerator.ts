@@ -1,8 +1,9 @@
-import { fahrenheitToCelsius, isDefined } from "@rsc-utils/core-utils";
-import { cloneJson } from "@rsc-utils/json-utils";
 import { Season } from "@rsc-utils/date-utils";
 import { GDate, type SimpleDice } from "@rsc-utils/game-utils";
+import { cloneJson } from "@rsc-utils/json-utils";
+import { fahrenheitToCelsius } from "@rsc-utils/number-utils";
 import { rollDiceString, rollDie } from "@rsc-utils/random-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import { randomInt } from "node:crypto";
 import { WindStrength, rollOnTable, rollTemperatureVariation, type CloudCoverTableItem, type PrecipitationTableItem, type WindTableItem } from "../index.js";
 import {
