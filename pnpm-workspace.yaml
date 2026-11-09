@@ -2,6 +2,7 @@ packages:
   - 'packages/@rsc-apps/*'
   - 'packages/@rsc-chat/*'
   - 'packages/@rsc-sage/*'
+  - 'packages/@rsc-types/*'
   - 'packages/@rsc-utils/*'
   - 'tools/@rsc-tools/*'
 
@@ -37,6 +38,8 @@ overrides:
   "@rsc-sage/data": "./packages/@rsc-sage/data"
   "@rsc-sage/env": "./packages/@rsc-sage/env"
   "@rsc-sage/localization": "./packages/@rsc-sage/localization"
+
+  "@rsc-types/global": "./packages/@rsc-types/global"
 
   "@rsc-utils/arg-utils": "./packages/@rsc-utils/arg-utils"
   "@rsc-utils/aws-utils": "./packages/@rsc-utils/aws-utils"
