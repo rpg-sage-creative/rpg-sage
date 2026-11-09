@@ -1,4 +1,4 @@
-import type { TypedRegExp } from "@rsc-utils/type-utils";
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
 // import { regex } from "regex";
 import type { UUID } from "./types.js";
 

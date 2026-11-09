@@ -1,5 +1,5 @@
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
 import { AllCodeBlocksRegExp } from "@rsc-utils/string-utils";
-import type { TypedRegExp } from "@rsc-utils/type-utils";
 import { tokenize } from "@rsc-utils/token-string-utils";
 
 const SortTagRegExp = /<sort(\s[^\>]+)?\s*>((?:(?<!<sort)(?:.|\n))*?)<\/sort>/i;

@@ -13,6 +13,7 @@
 		"regex": "^6.1.0"
 	},
 	"dependencies": {
+		"@rsc-utils/regexp-utils": "workspace:",
 		"@rsc-utils/type-utils": "workspace:"
 	},
 	"scripts": {

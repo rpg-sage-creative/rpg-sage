@@ -1,9 +1,10 @@
 import { AlphaNumericDashDotArgKeyRegExp } from "@rsc-utils/arg-utils";
 import { isUrl } from "@rsc-utils/io-utils";
 import { dequote } from "@rsc-utils/quoted-string-utils";
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
 import { AllCodeBlocksRegExp, stringArrayOrEmpty } from "@rsc-utils/string-utils";
 import { tokenize } from "@rsc-utils/token-string-utils";
-import type { Optional, TypedRegExp } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { regex } from "regex";
 import { BasicBracketsRegExp } from "../BasicBracketsRegExp.js";
 import { doStatMath } from "./doStatMath.js";

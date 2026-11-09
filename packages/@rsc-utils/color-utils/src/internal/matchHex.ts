@@ -1,4 +1,5 @@
-import type { Optional, TypedRegExp } from "@rsc-utils/type-utils";
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 // import { regex } from "regex";
 
 type Results = {

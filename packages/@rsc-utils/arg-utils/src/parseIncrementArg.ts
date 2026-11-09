@@ -1,5 +1,6 @@
 import { dequote, MisquotedNumberRegExp, QuotedNumberRegExp } from "@rsc-utils/quoted-string-utils";
-import { NumberRegExp, type Optional, type TypedRegExp } from "@rsc-utils/type-utils";
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
+import { NumberRegExp, type Optional } from "@rsc-utils/type-utils";
 import { regex } from "regex";
 import { Arg } from "./Arg.js";
 import { AlphaNumericDashDotArgKeyRegExp } from "./regexp.js";

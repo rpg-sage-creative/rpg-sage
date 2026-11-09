@@ -12,6 +12,7 @@
 		"vitest": "^4.1.11"
 	},
 	"dependencies": {
+		"@rsc-utils/regexp-utils": "workspace:",
 		"@rsc-utils/type-utils": "workspace:",
 		"@sapphire/snowflake": "^3.5.5",
 		"uuid": "^13.0.0"

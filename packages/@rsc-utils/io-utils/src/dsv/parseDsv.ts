@@ -1,4 +1,4 @@
-import type { TypedRegExp } from "@rsc-utils/type-utils";
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
 import csvParser from "csv-parser";
 import { Readable as ReadableStream, Transform } from "node:stream";
 

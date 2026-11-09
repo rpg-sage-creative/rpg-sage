@@ -1,4 +1,5 @@
-import type { Optional, TypedRegExp } from "@rsc-utils/type-utils";
+import type { Optional } from "@rsc-utils/type-utils";
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
 import type { Snowflake } from "./types.js";
 
 const SnowflakeRegExp = (/\b(?<id>\d{16,})\b/) as TypedRegExp<{ id:Snowflake; }>;

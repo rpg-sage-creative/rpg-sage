@@ -10,5 +10,4 @@ export * from "./Matcher.js";
 export * from "./noop.js";
 export * from "./omit.js";
 export * from "./Saveable.js";
-export * from "./TypedRegExp.js";
 export * from "./uncache.js";

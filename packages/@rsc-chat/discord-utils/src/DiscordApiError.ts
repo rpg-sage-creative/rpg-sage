@@ -1,7 +1,7 @@
-import { stringifyJson } from "@rsc-utils/json-utils";
-import type { TypedRegExp } from "@rsc-utils/type-utils";
 import { isErrorLike } from "@rsc-utils/error-utils";
+import { stringifyJson } from "@rsc-utils/json-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import type { TypedRegExp } from "@rsc-utils/regexp-utils";
 import type { DiscordAPIError as TDiscordApiError } from "discord.js";
 
 /** https://discord.com/developers/docs/topics/opcodes-and-status-codes#json-json-error-codes */
