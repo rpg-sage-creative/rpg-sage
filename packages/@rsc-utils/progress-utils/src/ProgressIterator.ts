@@ -50,7 +50,7 @@ export class ProgressIterator<T> {
 		tracker?.finish();
 	}
 
-	public async forEachAsync(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): Promise<void> {
+	public async forEachAsync(callbackfn: (value: T, index: number, array: T[]) => void | Promise<void>, thisArg?: any): Promise<void> {
 		const { array, tracker } = this;
 		tracker?.start();
 		for (let index = 0, len = array.length; index < len; index++) {
@@ -72,7 +72,7 @@ export class ProgressIterator<T> {
 		return outValues;
 	}
 
-	public async mapAsync<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): Promise<U[]> {
+	public async mapAsync<U>(callbackfn: (value: T, index: number, array: T[]) => U | Promise<U>, thisArg?: any): Promise<U[]> {
 		const { array, tracker } = this;
 		tracker?.start();
 		const outValues: U[] = [];

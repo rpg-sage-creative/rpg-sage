@@ -35,7 +35,7 @@ describe("ProgressIterator", () => {
 		iterator.forEach(() => { });
 
 		// each increment 0 - 100%
-		expect(logger.debug).toHaveBeenCalledTimes(11);
+		expect(logger.info).toHaveBeenCalledTimes(13); // start, increments, finish
 	});
 
 	test("Array.forEach - verbose", () => {
@@ -43,7 +43,9 @@ describe("ProgressIterator", () => {
 		iterator.forEach(() => { });
 
 		// each increment 0 - 100%
-		expect(logger.debug).toHaveBeenCalledTimes(100 + 11);
+		expect(logger.trace).toHaveBeenCalledTimes(100);
+		// standard invtervals plus start/finish
+		expect(logger.info).toHaveBeenCalledTimes(13);
 	});
 
 	test("Set.forEach", () => {
@@ -52,7 +54,7 @@ describe("ProgressIterator", () => {
 		iterator.forEach(() => { });
 
 		// each increment 0 - 100%
-		expect(logger.debug).toHaveBeenCalledTimes(11);
+		expect(logger.info).toHaveBeenCalledTimes(13); // start, increments, finish
 	});
 
 	//#endregion
@@ -72,7 +74,7 @@ describe("ProgressIterator", () => {
 		// check values
 		expect(output).toStrictEqual(["ONE", "TWO", "THREE"]);
 		// 0%, 100%; (with 3 items we will never see another increment divisible by 10)
-		expect(logger.debug).toHaveBeenCalledTimes(2);
+		expect(logger.info).toHaveBeenCalledTimes(4); // start, 0%, 100%, finish
 	});
 
 
@@ -87,7 +89,7 @@ describe("ProgressIterator", () => {
 		// check values
 		expect(mapped).toEqual(new Array(100).fill(1).map((value, index) => value * index));
 		// each increment 0 - 100%
-		expect(logger.debug).toHaveBeenCalledTimes(11);
+		expect(logger.info).toHaveBeenCalledTimes(13); // start, increments, finish
 	});
 
 	test("Set.map", () => {
@@ -98,7 +100,7 @@ describe("ProgressIterator", () => {
 		// check values
 		expect(mapped).toEqual(Array.from(new Set(array)).map((value, index) => +value * index));
 		// each increment 0 - 100%
-		expect(logger.debug).toHaveBeenCalledTimes(11);
+		expect(logger.info).toHaveBeenCalledTimes(13); // start, increments, finish
 	});
 
 	//#endregion
@@ -117,7 +119,7 @@ describe("ProgressIterator", () => {
 		// check values
 		expect(output).toStrictEqual(["ONE-ONE", "TWO-TWO", "THREE-THREE"]);
 		// 0%, 100%; (with 3 items we will never see another increment divisible by 10)
-		expect(logger.debug).toHaveBeenCalledTimes(2);
+		expect(logger.info).toHaveBeenCalledTimes(4); // start, 0%, 100%, finish
 	});
 
 	test("Set.mapAsync", async () => {
@@ -132,7 +134,7 @@ describe("ProgressIterator", () => {
 		// check values
 		expect(output).toStrictEqual(["ONE-ONE", "TWO-TWO", "THREE-THREE"]);
 		// 0%, 100%; (with 3 items we will never see another increment divisible by 10)
-		expect(logger.debug).toHaveBeenCalledTimes(2);
+		expect(logger.info).toHaveBeenCalledTimes(4); // start, 0%, 100%, finish
 	});
 
 	//#endregion

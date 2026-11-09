@@ -83,7 +83,13 @@ export class ProgressTracker {
 		handlers?.forEach(handler => handler(eventData));
 
 		// call logger function if we have one
-		const loggerFnName = eventName === "error" ? "error" : eventName !== "increment" ? "info" : undefined;
+		const loggerFnName = eventName === "error" // is event error?
+			? "error"                              // error uses error
+			: eventName !== "increment"            // or is event NOT increment
+				? "info"                           // non-error non-increment uses info
+				: this.verbose                     // or is event increment AND we are verbose
+					? "trace"                      // verbose increment uses trace
+					: undefined;                   // do nothing
 		const loggerFn = this.logger?.[loggerFnName as keyof LoggerLike];
 		if (loggerFn) {
 			this.compact ? loggerFn(message) : loggerFn(this.toLoggerObject(), message);
