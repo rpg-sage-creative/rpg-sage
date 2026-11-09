@@ -1,5 +1,5 @@
 import { DataTable, type SageMessageReferenceCore } from "@rsc-sage/data";
-import { noop, type Optional } from "@rsc-utils/core-utils";
+import { noop, type Optional } from "@rsc-utils/type-utils";
 import { snowflakeToDate, type Snowflake } from "@rsc-utils/id-utils";
 import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import type { Message, MessageReference, PartialMessage } from "discord.js";

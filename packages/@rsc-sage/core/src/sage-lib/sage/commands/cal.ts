@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { GDate, SDate } from "@rsc-utils/game-utils";
 import { registerListeners } from "../../discord/handlers/registerListeners.js";
 import type { SageCommand } from "../model/SageCommand.js";

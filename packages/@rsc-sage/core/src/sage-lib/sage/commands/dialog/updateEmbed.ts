@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { EmbedBuilder } from "@rsc-chat/discord-utils";
 import type { Embed } from "discord.js";
 

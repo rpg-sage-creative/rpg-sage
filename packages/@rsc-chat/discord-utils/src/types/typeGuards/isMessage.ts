@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { Channel, DiscordAPIError, Interaction, Message, PartialMessage, User } from "discord.js";
 import type { DiscordApiError } from "../../DiscordApiError.js";
 

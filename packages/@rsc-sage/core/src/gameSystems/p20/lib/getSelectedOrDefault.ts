@@ -1,4 +1,4 @@
-import { parseEnum } from "@rsc-utils/core-utils";
+import { parseEnum } from "@rsc-utils/type-utils";
 import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { StringSelectMenuComponent } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";

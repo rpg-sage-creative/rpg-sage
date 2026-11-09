@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { EmbedResolvable } from "./EmbedResolvable.js";
 import { resolveEmbed } from "./resolveEmbed.js";
 

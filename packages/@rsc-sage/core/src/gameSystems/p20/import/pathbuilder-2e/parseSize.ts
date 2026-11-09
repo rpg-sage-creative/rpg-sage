@@ -1,4 +1,4 @@
-import { parseEnum } from "@rsc-utils/core-utils";
+import { parseEnum } from "@rsc-utils/type-utils";
 import { SizeType } from "../../lib/types.js";
 
 type PathbuilderSizeInfo = {

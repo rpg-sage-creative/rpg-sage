@@ -1,5 +1,5 @@
 import { EmojiType } from "@rsc-sage/data";
-import { getEnumValues, isDefined } from "@rsc-utils/core-utils";
+import { getEnumValues, isDefined } from "@rsc-utils/type-utils";
 import { splitMessageOptions } from "@rsc-chat/discord-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { registerListeners } from "../../../discord/handlers/registerListeners.js";

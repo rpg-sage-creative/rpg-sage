@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { embedLength, type APIEmbed } from "discord.js";
 import type { EmbedResolvable } from "./EmbedResolvable.js";
 import { resolveEmbed } from "./resolveEmbed.js";

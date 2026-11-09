@@ -17,6 +17,6 @@
 		{ "path": "../../@rsc-utils/token-string-utils" },
 		{ "path": "../../@rsc-utils/whitespace-string-utils" },
 
-		{ "path": "../../@rsc-utils/core-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
 	],
 }

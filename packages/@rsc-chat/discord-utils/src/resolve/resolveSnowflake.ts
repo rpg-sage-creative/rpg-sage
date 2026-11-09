@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { isSnowflake, NIL_SNOWFLAKE, orNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 
 type HasSnowflakeId = { id:Snowflake; };

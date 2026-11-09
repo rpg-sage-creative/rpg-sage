@@ -1,4 +1,4 @@
-import { applyMixins } from "@rsc-utils/core-utils";
+import { applyMixins } from "@rsc-utils/type-utils";
 import { CharacterShell } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";
 import { GameCharacter } from "../../../model/GameCharacter.js";

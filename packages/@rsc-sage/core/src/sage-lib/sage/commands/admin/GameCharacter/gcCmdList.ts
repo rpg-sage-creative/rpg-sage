@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { CharacterArray } from "../../../model/CharacterArray.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { cannotManageCharacter } from "./cannotManageCharacter.js";

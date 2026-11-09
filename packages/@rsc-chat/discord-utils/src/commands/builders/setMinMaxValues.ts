@@ -1,5 +1,5 @@
 import type { SlashCommandIntegerOption, SlashCommandNumberOption } from "@discordjs/builders";
-import { isFiniteNumber } from "@rsc-utils/core-utils";
+import { isFiniteNumber } from "@rsc-utils/type-utils";
 import type { SlashCommandOption } from "../index.js";
 
 export function setMinMaxValues<T extends SlashCommandIntegerOption | SlashCommandNumberOption>(opt: T, option: SlashCommandOption): T {

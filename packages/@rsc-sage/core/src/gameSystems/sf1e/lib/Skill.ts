@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { AbilityAbbr } from "../../d20/lib/Ability.js";
 import { Skill as SkillD20 } from "../../d20/lib/Skill.js";
 

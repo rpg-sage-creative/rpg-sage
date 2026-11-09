@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, test } from "vitest";
 import { renameDuplicate } from "../../build/utils/renameDuplicate.js";
-import { tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-utils/type-utils";
 
 beforeAll(() => {
 });

@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 
 /** How should we handle secret dice rolls. */
 export enum DiceSecretMethodType

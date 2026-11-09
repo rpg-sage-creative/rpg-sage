@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 
 /** @internal Ensures we have a string, prepending a NewLine if needed. */
 export function getValueToAppend(value: Optional<string>, newLine: boolean): string {

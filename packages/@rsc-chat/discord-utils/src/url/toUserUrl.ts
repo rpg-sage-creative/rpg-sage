@@ -1,4 +1,4 @@
-import type { Optional, OrUndefined } from "@rsc-utils/core-utils";
+import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { resolveUserId, type UserIdResolvable } from "../resolve/resolveUserId.js";
 
 export function toUserUrl(user: UserIdResolvable): string;

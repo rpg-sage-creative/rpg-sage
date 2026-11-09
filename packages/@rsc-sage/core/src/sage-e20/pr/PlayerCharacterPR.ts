@@ -1,5 +1,5 @@
 import { stringOrUndefined } from "@rsc-utils/string-utils";
-import { type Optional, isDefined } from "@rsc-utils/core-utils";
+import { type Optional, isDefined } from "@rsc-utils/type-utils";
 import type { StatResults } from "@rsc-utils/game-utils";
 import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";

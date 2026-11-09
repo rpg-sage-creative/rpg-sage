@@ -1,4 +1,4 @@
-import { isSimpleObject } from "@rsc-utils/core-utils";
+import { isSimpleObject } from "@rsc-utils/type-utils";
 import { tagFailure } from "../index.js";
 import type { AssertArgs } from "./types.js";
 

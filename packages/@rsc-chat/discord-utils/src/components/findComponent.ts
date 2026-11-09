@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { ActionRowComponent, ComponentInContainer, TopLevelComponent } from "discord.js";
 
 type Component = ActionRowComponent | ComponentInContainer | TopLevelComponent;

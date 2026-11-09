@@ -1,4 +1,4 @@
-import type { Optional, OrUndefined } from "@rsc-utils/core-utils";
+import type { Optional, OrUndefined } from "@rsc-utils/type-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { Guild } from "discord.js";
 

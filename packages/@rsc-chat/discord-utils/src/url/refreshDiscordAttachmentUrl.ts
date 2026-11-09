@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { getJson } from "@rsc-utils/io-utils";
 
 const POST_URL = "https://discord.com/api/v9/attachments/refresh-urls";

@@ -102,8 +102,7 @@
 		// ensure the rsc-utils stack
 		{ "path": "./packages/@rsc-chat/discord-utils" },
 		// @rsc-utils/discord-utils triggers @rsc-utils/io-utils
-		// @rsc-utils/io-utils triggers @rsc-utils/core-utils
-		// @rsc-utils/core-utils triggers @rsc-utils/type-utils
+		// @rsc-utils/io-utils triggers @rsc-utils/type-utils
 
 		{ "path": "./packages/@rsc-sage/core" },
 		{ "path": "./packages/@rsc-sage/data" },

@@ -1,5 +1,5 @@
 import { normalizeDashes, unwrap } from "@rsc-utils/string-utils";
-import type { TypedRegExp } from "@rsc-utils/core-utils";
+import type { TypedRegExp } from "@rsc-utils/type-utils";
 import type { SimpleRollableTable, SimpleRollableTableItem } from "./SimpleRollableTable.js";
 
 const NotNumberNotDashRegExpG = /[^\d-]/g;

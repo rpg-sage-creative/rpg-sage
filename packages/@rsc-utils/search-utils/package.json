@@ -13,10 +13,10 @@
 	},
 	"dependencies": {
 		"@rsc-utils/collection-utils": "workspace:",
-		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/language-utils": "workspace:",
 		"@rsc-utils/quoted-string-utils": "workspace:",
 		"@rsc-utils/token-string-utils": "workspace:",
+		"@rsc-utils/type-utils": "workspace:",
 		"@rsc-utils/whitespace-string-utils": "workspace:",
 		"regex": "^6"
 	},

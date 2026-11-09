@@ -1,4 +1,4 @@
-import type { EnumLike } from "@rsc-utils/core-utils";
+import type { EnumLike } from "@rsc-utils/type-utils";
 
 export function ensureEnum<Key extends string, Value extends number>(enumObject: EnumLike<Key, Value>, value?: number): number | undefined;
 export function ensureEnum(enumObject: Record<string | number, string | number>, value?: number): number | undefined {

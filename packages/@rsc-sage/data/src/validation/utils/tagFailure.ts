@@ -1,4 +1,4 @@
-import { toLiteral } from "@rsc-utils/core-utils";
+import { toLiteral } from "@rsc-utils/type-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 
 type Options = "error" | "warn";

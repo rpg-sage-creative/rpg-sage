@@ -16,7 +16,6 @@
 		"@discordjs/builders": "^1.13.1",
 		"@discordjs/rest": "^2.6.0",
 		"@rsc-sage/env": "workspace:",
-		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/error-utils": "workspace:",
 		"@rsc-utils/id-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",

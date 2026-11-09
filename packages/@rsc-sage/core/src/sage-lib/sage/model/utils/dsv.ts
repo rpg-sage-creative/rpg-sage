@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { getText, parseDsv, type DsvDelimiter, type DsvResults, type VALID_URL } from "@rsc-utils/io-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { WhitespaceRegExp } from "@rsc-utils/whitespace-string-utils";

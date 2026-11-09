@@ -1,6 +1,6 @@
 import { splitMessageOptions, toChannelUrl, toDiscordDate, toHumanReadable } from "@rsc-chat/discord-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import { isDefined } from "@rsc-utils/core-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { addCommas } from "@rsc-utils/number-utils";
 import { registerListeners } from "../../../../discord/handlers/registerListeners.js";

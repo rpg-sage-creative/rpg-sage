@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { typeError } from "@rsc-utils/error-utils";
 import type { FollowResponse, RedirectableRequest } from "follow-redirects";

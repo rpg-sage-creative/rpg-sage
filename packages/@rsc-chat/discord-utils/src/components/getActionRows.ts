@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { ComponentType, type ActionRow, type Message, type MessageActionRowComponent } from "discord.js";
 import type { SPartialMessage } from "../types/types.js";
 

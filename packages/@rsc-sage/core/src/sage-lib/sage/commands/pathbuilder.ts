@@ -1,6 +1,6 @@
 import { toUnique } from "@rsc-utils/collection-utils";
 import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
-import { isDefined, type Optional } from "@rsc-utils/core-utils";
+import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type SupportedTarget } from "@rsc-chat/discord-utils";
 import { replaceMacroArgsWithDefaultValues, type DiceMacroBase, type MacroBase } from "@rsc-utils/game-utils";

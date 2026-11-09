@@ -1,4 +1,4 @@
-import type { Optional, OrNull, OrUndefined } from "@rsc-utils/core-utils";
+import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
 
 /**
  * If the given value is a url wrapped in <> then the <> are removed and the url is returned.

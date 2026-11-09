@@ -1,4 +1,4 @@
-import { isDefined } from "@rsc-utils/core-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import { assertNumber, optional } from "../validation/index.js";
 import { SageChannelType } from "./enums/SageChannelType.js";
 

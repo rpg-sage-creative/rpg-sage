@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 
 export function calcStatModifierD20(value: Optional<number>): number {
 	if (!value) return 0;

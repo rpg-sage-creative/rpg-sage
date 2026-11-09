@@ -13,7 +13,7 @@
 		{ "path": "../../@rsc-utils/collection-utils" },
 		{ "path": "../../@rsc-utils/color-utils" },
 		{ "path": "../../@rsc-utils/string-utils" },
-		{ "path": "../../@rsc-utils/core-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
 		{ "path": "../../@rsc-utils/json-utils" },
 		{ "path": "../../@rsc-utils/date-utils" },
 		{ "path": "../../@rsc-utils/id-utils" },

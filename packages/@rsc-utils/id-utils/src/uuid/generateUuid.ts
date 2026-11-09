@@ -11,7 +11,7 @@ type UuidArgs = {
 /**
  * A convenience method for uuid.v7().
  * Why? ... Sometimes I am lazy and only want one import in my file.
- * This way I can import { isUuid, generateUuid } from "@rsc-utils/core-utils" instead of needing to also import from uuid.
+ * This way I can import { isUuid, generateUuid } from "@rsc-utils/id-utils" instead of needing to also import from uuid.
 */
 export function generateUuid(args?: UuidArgs): STRICT_UUID {
 	const msecs = typeof(args?.ts) === "bigint" ? +args.ts.toString() || undefined : +(args?.ts as Date) || undefined;

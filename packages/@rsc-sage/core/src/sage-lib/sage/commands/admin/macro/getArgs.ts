@@ -1,4 +1,4 @@
-import { parseEnum } from "@rsc-utils/core-utils";
+import { parseEnum } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { getSelectedOrDefault, getSelectedOrDefaultNumber } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";
 import { Macro } from "../../../model/Macro.js";

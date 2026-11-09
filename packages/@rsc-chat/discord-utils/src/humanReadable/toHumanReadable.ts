@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { Channel, Guild, GuildMember, GuildPreview, Role, Webhook } from "discord.js";
 import type { MessageOrPartial, UserResolvable } from "../types/types.js";
 import { toChannelName } from "./toChannelName.js";

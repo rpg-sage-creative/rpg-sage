@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { MessageOrPartial, MessageReferenceOrPartial } from "../types/types.js";
 
 function createUrl(guildId: Optional<string>, channelId: string, messageId: string): string {

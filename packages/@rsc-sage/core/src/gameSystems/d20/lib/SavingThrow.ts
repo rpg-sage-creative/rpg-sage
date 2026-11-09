@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { Ability } from "./Ability.js";
 
 export const SavingThrowNames = ["Fortitude", "Reflex", "Will"] as const;

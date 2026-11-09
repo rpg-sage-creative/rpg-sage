@@ -2,7 +2,7 @@ import { parseIds, type SupportedMessagesChannel } from "@rsc-chat/discord-utils
 import { type DialogOptions, DialogPostType, DiceCriticalMethodType, type DiceOptions, DiceOutputType, DicePostType, DiceSecretMethodType, DiceSortType, GameCreatorType, type GameOptions, type GameSystemOptions, GameSystemType, parseEnum, type SageChannelOptions, SageChannelType, type ServerOptions } from "@rsc-sage/data";
 import { Color, type HexColorString } from "@rsc-utils/color-utils";
 import { unwrap } from "@rsc-utils/string-utils";
-import { type Args, type EnumLike, isDefined, type Optional } from "@rsc-utils/core-utils";
+import { type Args, type EnumLike, isDefined, type Optional } from "@rsc-utils/type-utils";
 import { isEmpty } from "@rsc-utils/json-utils";
 import { isSnowflake, isUuid, type Snowflake, type UUID } from "@rsc-utils/id-utils";
 import { isUrl, type VALID_URL } from "@rsc-utils/io-utils";

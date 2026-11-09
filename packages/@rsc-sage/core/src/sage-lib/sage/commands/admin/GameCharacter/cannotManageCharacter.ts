@@ -1,5 +1,5 @@
 import type { LocalizedTextKey } from "@rsc-sage/localization";
-import { tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-utils/type-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { CharacterShell } from "../../../model/CharacterShell.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";

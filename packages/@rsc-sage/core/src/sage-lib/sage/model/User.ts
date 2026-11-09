@@ -1,7 +1,7 @@
 import { DialogPostType, ensureSageUserCore, type Alias, type AutoChannelData, type DialogDiceBehaviorType, type SageCharacterCore, type SageUserCore, type SageUserCoreOld } from "@rsc-sage/data";
 import { isSuperAdminId, isSuperUserId } from "@rsc-sage/env";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
-import type { Args } from "@rsc-utils/core-utils";
+import type { Args } from "@rsc-utils/type-utils";
 import { applyChanges } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import type { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";

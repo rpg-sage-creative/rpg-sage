@@ -24,7 +24,6 @@
 		"@rsc-utils/class-utils": "workspace:",
 		"@rsc-utils/collection-utils": "workspace:",
 		"@rsc-utils/color-utils": "workspace:",
-		"@rsc-utils/core-utils": "workspace:",
 		"@rsc-utils/date-utils": "workspace:",
 		"@rsc-utils/error-utils": "workspace:",
 		"@rsc-utils/game-utils": "workspace:",

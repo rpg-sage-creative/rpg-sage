@@ -11,8 +11,8 @@
 		"vitest": "^4.1.10"
 	},
 	"dependencies": {
-		"@rsc-utils/core-utils": "workspace:",
-		"@rsc-utils/string-utils": "workspace:"
+		"@rsc-utils/string-utils": "workspace:",
+		"@rsc-utils/type-utils": "workspace:"
 	},
 	"scripts": {
 		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"

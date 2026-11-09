@@ -1,4 +1,4 @@
-import { isDefined, type Optional } from "@rsc-utils/core-utils";
+import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import { PdfJsonFieldManager } from "./PdfJsonFieldManager.js";
 import type { PdfJson } from "./types.js";
 

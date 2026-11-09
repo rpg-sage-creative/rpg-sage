@@ -1,5 +1,5 @@
 import type { SupportedTarget } from "@rsc-chat/discord-utils";
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { CharacterBase } from "@rsc-utils/game-utils";
 import { Logger, errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { AttachmentBuilder } from "discord.js";

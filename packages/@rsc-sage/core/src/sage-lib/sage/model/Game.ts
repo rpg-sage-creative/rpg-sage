@@ -3,7 +3,7 @@ import type { AutoChannelData, DiceCriticalMethodType, DiceOutputType, DiceSecre
 import { DEFAULT_GM_CHARACTER_NAME, DialogPostType, DicePostType, DiceSortType, GameRoleType, GameUserType, SageChannelType, ensureSageGameCore, parseGameSystem, parseSageChannelType } from "@rsc-sage/data";
 import type { HexColorString } from "@rsc-utils/color-utils";
 import { sortPrimitive, type Comparable } from "@rsc-utils/collection-utils";
-import { isDefined, type Args, type Optional, type OrNull } from "@rsc-utils/core-utils";
+import { isDefined, type Args, type Optional, type OrNull } from "@rsc-utils/type-utils";
 import { applyChanges } from "@rsc-utils/json-utils";
 import { generateSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";

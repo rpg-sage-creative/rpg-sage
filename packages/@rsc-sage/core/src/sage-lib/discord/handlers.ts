@@ -1,7 +1,7 @@
 import { isDiscordApiError, toHumanReadable, type MessageOrPartial, type ReactionOrPartial, type SMessage, type SupportedInteraction, type UserOrPartial } from "@rsc-chat/discord-utils";
 import { ghostEvent } from "@rsc-sage/env";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
-import { isNullOrUndefined, type Optional } from "@rsc-utils/core-utils";
+import { isNullOrUndefined, type Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { DialogTypeOrAliasRegExp } from "@rsc-utils/game-utils";
 import { Logger } from "@rsc-utils/logger-utils";

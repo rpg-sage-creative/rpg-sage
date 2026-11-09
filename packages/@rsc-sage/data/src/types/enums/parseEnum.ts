@@ -1,4 +1,4 @@
-import { parseEnum as parse, type EnumLike, type Optional } from "@rsc-utils/core-utils";
+import { parseEnum as parse, type EnumLike, type Optional } from "@rsc-utils/type-utils";
 import { DialogPostType, parseDialogPostType } from "./DialogPostType.js";
 import { DiceCriticalMethodType, parseDiceCriticalMethodType } from "./DiceCriticalMethodType.js";
 import { DicePostType, parseDicePostType } from "./DicePostType.js";

@@ -1,6 +1,6 @@
 import { formatDataFilePath, getCodeName, getDataRoot, } from "@rsc-sage/env";
 import { Arrayish } from "@rsc-utils/collection-utils";
-import { tagLiterals, type Optional } from "@rsc-utils/core-utils";
+import { tagLiterals, type Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { deleteFile, fileExists, filterFiles, readJsonFile, readJsonFileSync, readText, writeFile } from "@rsc-utils/io-utils";
 import { Logger, errorReturnEmptyArray, errorReturnFalse, errorReturnUndefined, warnReturnUndefined } from "@rsc-utils/logger-utils";

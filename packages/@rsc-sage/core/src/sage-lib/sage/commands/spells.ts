@@ -1,6 +1,6 @@
 import { toUniqueDefined } from "@rsc-utils/collection-utils";
 import { capitalize } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { nth } from "@rsc-utils/number-utils";
 import type { Domain, Spell, TMagicTradition } from "../../../sage-pf2e/index.js";

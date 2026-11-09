@@ -1,4 +1,4 @@
-import { isFiniteNumber } from "@rsc-utils/core-utils";
+import { isFiniteNumber } from "@rsc-utils/type-utils";
 
 const GlobalTrackerBars = {
 	/** 8 different bars, 0% -> 100% */

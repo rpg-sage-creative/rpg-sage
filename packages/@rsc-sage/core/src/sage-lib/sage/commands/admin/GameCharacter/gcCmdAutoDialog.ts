@@ -1,5 +1,5 @@
 // import { autoChannelDataMatches, DialogPostType, type AutoChannelData, type SageChannel } from "@rsc-sage/data";
-// import { debug, type Snowflake } from "@rsc-utils/core-utils";
+// import { debug, type Snowflake } from "@rsc-utils/type-utils";
 // import { toHumanReadable, type SupportedTextChannel } from "@rsc-chat/discord-utils";
 // import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, type SelectMenuComponentOptionData } from "discord.js";
 // import { getSelectedOrDefault } from "../../../../../gameSystems/p20/lib/getSelectedOrDefault.js";

@@ -39,7 +39,6 @@ overrides:
   "@rsc-utils/class-utils": "./packages/@rsc-utils/class-utils"
   "@rsc-utils/collection-utils": "./packages/@rsc-utils/collection-utils"
   "@rsc-utils/color-utils": "./packages/@rsc-utils/color-utils"
-  "@rsc-utils/core-utils": "./packages/@rsc-utils/core-utils"
   "@rsc-utils/date-utils": "./packages/@rsc-utils/date-utils"
   "@rsc-utils/error-utils": "./packages/@rsc-utils/error-utils"
   "@rsc-utils/git-utils": "./packages/@rsc-utils/git-utils"

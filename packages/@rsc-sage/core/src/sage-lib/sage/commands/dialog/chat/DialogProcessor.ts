@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { DiceMacroBase } from "@rsc-utils/game-utils";
 import type { GuildMember } from "discord.js";
 import type { Game } from "../../../model/Game.js";

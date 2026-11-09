@@ -1,4 +1,4 @@
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { Ability, type AbilityAbbr } from "../../d20/lib/Ability.js";
 
 export type SkillName = "Perception"

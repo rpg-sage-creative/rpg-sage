@@ -1,5 +1,5 @@
 import { unwrap } from "@rsc-utils/string-utils";
-import type { Optional } from "@rsc-utils/core-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import { isUrl, type VALID_URL } from "@rsc-utils/io-utils";
 
 /** Checks that the valud is a valid url and returns the unwrapped url (removes <>). */

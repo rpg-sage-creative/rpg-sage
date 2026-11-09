@@ -9,7 +9,7 @@
 		"./src"
 	],
 	"references": [
-		{ "path": "../../@rsc-utils/core-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
 		{ "path": "../../@rsc-utils/string-utils" },
 	],
 }

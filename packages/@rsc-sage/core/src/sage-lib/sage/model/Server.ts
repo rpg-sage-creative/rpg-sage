@@ -3,7 +3,7 @@ import type { AdminRole, AdminRoleType, AdminUser, DialogPostType, DiceCriticalM
 import { DiceSortType, ensureSageServerCore, parseGameSystem } from "@rsc-sage/data";
 import { getHomeServerId } from "@rsc-sage/env";
 import type { HexColorString } from "@rsc-utils/color-utils";
-import type { Args, Optional } from "@rsc-utils/core-utils";
+import type { Args, Optional } from "@rsc-utils/type-utils";
 import { generateSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { applyChanges } from "@rsc-utils/json-utils";
 import { Logger } from "@rsc-utils/logger-utils";

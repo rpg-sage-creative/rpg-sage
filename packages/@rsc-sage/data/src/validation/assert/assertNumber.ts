@@ -1,4 +1,4 @@
-import type { EnumLike } from "@rsc-utils/core-utils";
+import type { EnumLike } from "@rsc-utils/type-utils";
 import { tagFailure } from "../index.js";
 import type { AssertArgs } from "./types.js";
 

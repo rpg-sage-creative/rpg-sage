@@ -1,7 +1,7 @@
 import { DataTable } from "@rsc-sage/data";
 import { sortPrimitive } from "@rsc-utils/collection-utils";
 import { capitalize, StringMatcher, stringOrUndefined } from "@rsc-utils/string-utils";
-import { isDefined, type Optional, type OrUndefined } from "@rsc-utils/core-utils";
+import { isDefined, type Optional, type OrUndefined } from "@rsc-utils/type-utils";
 import { stringifyJson } from "@rsc-utils/json-utils";
 import { CharacterBase, type DiceMacroBase, type StatResults } from "@rsc-utils/game-utils";
 import { Logger } from "@rsc-utils/logger-utils";

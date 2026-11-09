@@ -1,5 +1,5 @@
 import type { RepoId } from "@rsc-utils/aws-utils";
-import { isDefined, noop } from "@rsc-utils/core-utils";
+import { isDefined, noop } from "@rsc-utils/type-utils";
 import { areEqual } from "@rsc-utils/json-utils";
 import { readJsonFile } from "@rsc-utils/io-utils";
 import { Logger } from "@rsc-utils/logger-utils";

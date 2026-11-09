@@ -1,4 +1,4 @@
-import { isDefined, type Awaitable } from "@rsc-utils/core-utils";
+import { isDefined, type Awaitable } from "@rsc-utils/type-utils";
 import { filterFiles } from "./filterFiles.js";
 import { readJsonFile } from "./readJsonFile.js";
 

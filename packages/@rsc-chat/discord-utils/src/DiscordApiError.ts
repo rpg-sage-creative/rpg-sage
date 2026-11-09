@@ -1,5 +1,5 @@
 import { stringifyJson } from "@rsc-utils/json-utils";
-import type { TypedRegExp } from "@rsc-utils/core-utils";
+import type { TypedRegExp } from "@rsc-utils/type-utils";
 import { isErrorLike } from "@rsc-utils/error-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { DiscordAPIError as TDiscordApiError } from "discord.js";

@@ -1,4 +1,4 @@
-import type { Awaitable } from "@rsc-utils/core-utils";
+import type { Awaitable } from "@rsc-utils/type-utils";
 import { createExtFilter } from "./internal/createExtFilter.js";
 import { isDir } from "./isDir.js";
 import { listFiles } from "./listFiles.js";

@@ -1,5 +1,5 @@
 import { sortPrimitive } from "@rsc-utils/collection-utils";
-import { isDefined } from "@rsc-utils/core-utils";
+import { isDefined } from "@rsc-utils/type-utils";
 import { ARMOR_UNARMORED, profToMod, TRAINED, UNTRAINED, type TProficiency } from "../common.js";
 import { findById, findByValue } from "../data/Repository.js";
 import type { Feat } from "./Feat.js";

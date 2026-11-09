@@ -1,4 +1,4 @@
-import type { TypedRegExp } from "@rsc-utils/core-utils";
+import type { TypedRegExp } from "@rsc-utils/type-utils";
 import { randomItems } from "@rsc-utils/random-utils";
 import { regex } from "regex";
 import type { TDiceOutput } from "../../../../sage-dice/index.js";
