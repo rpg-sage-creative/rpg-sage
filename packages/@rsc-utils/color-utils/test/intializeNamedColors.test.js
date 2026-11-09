@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { join, resolve } from "node:path";
 import { Color, getNamedColors, intializeNamedColors } from "../build/index.js";
 

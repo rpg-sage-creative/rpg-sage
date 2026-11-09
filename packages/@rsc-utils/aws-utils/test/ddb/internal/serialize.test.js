@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { serialize } from "../../../build/ddb/internal/serialize.js";
 import { getTests } from "../data.js";
 

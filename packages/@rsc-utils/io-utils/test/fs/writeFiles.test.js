@@ -1,4 +1,4 @@
-import { tagLiterals, toLiteral } from "@rsc-utils/core-utils";
+import { tagLiterals, toLiteral } from "@rsc-tools/dev-scripts";
 import { appendJsonDb, deleteFileSync, readTextSync, writeFile, writeFileSync, writeJsonDb, writeJsonDbSync } from "../../build/index.js";
 import { getTestRoot } from "./getTestRoot.js";
 

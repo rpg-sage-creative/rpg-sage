@@ -1,6 +1,8 @@
-import { enableLogLevels, pause, tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { DdbRepo } from "../../build/index.js";
 import { getJsonObjects } from "./data.js";
+
+async function pause(ms) { return new Promise(res => setTimeout(res, ms)); }
 
 /*
 
@@ -8,7 +10,6 @@ import { getJsonObjects } from "./data.js";
 
 */
 
-enableLogLevels("development");
 
 /** @type {DdbRepo | undefined} */
 let _ddbRepo;

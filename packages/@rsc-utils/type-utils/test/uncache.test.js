@@ -1,4 +1,5 @@
-import { tagLiterals as _, uncache } from "../build/index.js";
+import { uncache } from "../build/index.js";
+import { tagLiterals as _ } from "@rsc-tools/dev-scripts";
 
 describe("uncache", () => {
 

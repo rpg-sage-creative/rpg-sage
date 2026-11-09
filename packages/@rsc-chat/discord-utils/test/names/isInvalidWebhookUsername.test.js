@@ -1,4 +1,4 @@
-import { toLiteral } from "@rsc-utils/core-utils";
+import { toLiteral } from "@rsc-tools/dev-scripts";
 import { isInvalidWebhookUsername } from "../../build/index.js";
 
 /** returns all the letters that might be used to create a variant of a username */

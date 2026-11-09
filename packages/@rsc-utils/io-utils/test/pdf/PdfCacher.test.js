@@ -1,13 +1,14 @@
 import { join, resolve } from "node:path";
-import { error, tagLiterals, setDataRoot, getDataRoot, Logger } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
+import { Logger, error } from "@rsc-utils/logger-utils";
 import { PdfCacher, PdfJsonFieldManager, PdfJsonManager, writeFileSync } from "../../build/index.js";
 import { beforeAll, describe, test, expect } from "vitest";
 
-const DATA_ROOT = "/Users/randaltmeyer/git/rsc/rpg-sage/packages/@rsc-utils/io-utils/test";
+const CACHE_PATH = "/Users/randaltmeyer/git/rsc/rpg-sage/packages/@rsc-utils/io-utils/test";
 
 beforeAll(() => {
 	Logger.init({ dev:true });
-	setDataRoot(DATA_ROOT);
+	PdfCacher.globalCachePath = CACHE_PATH;
 });
 
 function toTestFilePath(...parts) {
@@ -23,6 +24,7 @@ describe("pdf", () => {
 		];
 
 		tests.forEach(({ url, values }, index) => {
+
 			const testFields = fieldManager => {
 				values.forEach(({ key, value }) => {
 					expect(fieldManager.getValue(key)).toBe(value);

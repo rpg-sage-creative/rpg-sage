@@ -1,4 +1,5 @@
-import { getEnumKeys, getEnumValues, parseEnum, tagLiterals } from "../build/index.js";
+import { getEnumKeys, getEnumValues, parseEnum } from "../build/index.js";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 
 describe("enums", () => {
 

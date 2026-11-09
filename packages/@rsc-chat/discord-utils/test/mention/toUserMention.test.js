@@ -1,4 +1,4 @@
-import { toLiteral } from "@rsc-utils/core-utils";
+import { toLiteral } from "@rsc-tools/dev-scripts";
 import { toUserMention } from "../../build/index.js";
 
 describe("mention", () => {

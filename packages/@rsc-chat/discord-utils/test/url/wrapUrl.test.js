@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { wrapUrl } from "../../build/index.js";
 
 describe("url", () => {

@@ -1,7 +1,6 @@
-import { enableLogLevels, tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { getJson } from "../../build/index.js";
 
-enableLogLevels("development");
 
 describe("https", () => {
 	describe("getJson", () => {

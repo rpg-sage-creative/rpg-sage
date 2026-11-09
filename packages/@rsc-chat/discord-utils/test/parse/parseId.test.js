@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { parseId } from "../../build/index.js";
 
 describe("parse", () => {

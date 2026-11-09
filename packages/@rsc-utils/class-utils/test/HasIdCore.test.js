@@ -1,4 +1,5 @@
-import { HasIdCore, tagLiterals } from "../../build/index.js";
+import { HasIdCore } from "../build/index.js";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 
 class HasIdCoreTester extends HasIdCore {
 	get [Symbol.toStringTag]() { return "HasIdCoreTester"; }

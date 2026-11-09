@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { filterFiles, filterFilesSync } from "../../build/index.js";
 import { getTestRoot } from "./getTestRoot.js";
 

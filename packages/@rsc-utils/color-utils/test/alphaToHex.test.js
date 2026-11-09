@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { alphaToHex } from "../build/internal/toHex.js";
 
 describe("color", () => {

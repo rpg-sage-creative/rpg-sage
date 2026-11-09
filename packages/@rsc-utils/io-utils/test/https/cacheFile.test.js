@@ -1,8 +1,7 @@
-import { enableLogLevels, tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { existsSync, rmSync, statSync } from "fs";
 import { cacheFile } from "../../build/index.js";
 
-enableLogLevels("development");
 
 const filePath = "./invite-permission-list.jpg";
 

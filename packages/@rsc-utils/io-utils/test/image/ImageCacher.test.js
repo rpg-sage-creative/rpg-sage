@@ -1,8 +1,13 @@
-import { toLiteral } from "@rsc-utils/core-utils";
+import { toLiteral } from "@rsc-tools/dev-scripts";
+import { Logger } from "@rsc-utils/logger-utils";
+import { beforeAll, describe, expect, test } from "vitest";
 import { ImageCacher } from "../../build/index.js";
 
+const CACHE_PATH = "/Users/randaltmeyer/git/rsc/rpg-sage/packages/@rsc-utils/io-utils/test";
+
 beforeAll(() => {
-	process.env.dataRoot = "./test";
+	Logger.init({ dev:true });
+	ImageCacher.globalCachePath = CACHE_PATH;
 });
 
 describe("image", () => {

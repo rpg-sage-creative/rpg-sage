@@ -1,4 +1,4 @@
-import { HasCore } from "../../build/index.js";
+import { HasCore } from "../build/index.js";
 
 class HasCoreTester extends HasCore { }
 

@@ -1,4 +1,4 @@
-import { toLiteral } from "@rsc-utils/core-utils";
+import { toLiteral } from "@rsc-tools/dev-scripts";
 import { embedLength } from "discord.js";
 import { getEmbedLength } from "../../build/index.js";
 

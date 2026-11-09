@@ -1,4 +1,5 @@
-import { generateSnowflake } from "@rsc-utils/core-utils";
+import { DiscordSnowflake } from "@sapphire/snowflake";
+// importing id-utils/generateSnowflake creates a circular reference
 
 const testDate = new Date();
 const testBigInt = BigInt("12345678901234567890");
@@ -55,7 +56,8 @@ export function getJsonObjects(...objectTypes) {
 	const itemCount = 50;
 	for (let i = 0; i < itemCount; i++) {
 		for (const objectType of objectTypes) {
-			const id = generateSnowflake();
+			// instead of importing id-utils/generateSnowflake
+			const id = DiscordSnowflake.generate().toString();
 			const item = {
 				name: `Random ${objectType}: ${id}`,
 				id,

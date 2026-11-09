@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { parseHexColor } from "../build/index.js";
 
 describe("color", () => {

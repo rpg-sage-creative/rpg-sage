@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { NIL_SNOWFLAKE, orNilSnowflake, generateSnowflake } from "../../build/index.js";
 import { getTests } from "./data.js";
 

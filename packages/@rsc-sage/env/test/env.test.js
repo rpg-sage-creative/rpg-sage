@@ -1,4 +1,5 @@
-import { getBuildInfo, getCodeName, getDataRoot, getEnvironmentName, getId, getIds, tagLiterals } from "../../build/index.js";
+import { getBuildInfo, getCodeName, getDataRoot, getEnvironmentName, getId, getIds } from "../build/index.js";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 
 const hasArgs = process.argv.slice(3).length > 0;
 

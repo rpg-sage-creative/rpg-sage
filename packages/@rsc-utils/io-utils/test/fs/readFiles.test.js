@@ -1,4 +1,6 @@
-import { error, parseJson, tagLiterals, toLiteral } from "@rsc-utils/core-utils";
+import { tagLiterals, toLiteral } from "@rsc-tools/dev-scripts";
+import { parseJson } from "@rsc-utils/json-utils";
+import { error } from "@rsc-utils/logger-utils";
 import { readFile, readFileSync, readJsonDb, readJsonDbSync, readJsonFile, readJsonFileSync, readText, readTextSync } from "../../build/index.js";
 import { getTestRoot } from "./getTestRoot.js";
 

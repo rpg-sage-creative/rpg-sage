@@ -6,6 +6,7 @@
 	"type": "module",
 	"devDependencies": {
 		"@rsc-tools/dev-scripts": "workspace:",
+		"@sapphire/snowflake": "^3.5.5",
 		"@types/node": "^24.12.2",
 		"typescript": "^7.0.2",
 		"vitest": "^4.1.11"

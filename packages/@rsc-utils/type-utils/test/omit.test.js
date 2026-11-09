@@ -1,4 +1,5 @@
-import { omit, tagLiterals } from "../build/index.js";
+import { omit } from "../build/index.js";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 
 describe("omit", () => {
 

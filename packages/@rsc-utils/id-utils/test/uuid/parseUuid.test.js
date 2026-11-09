@@ -1,4 +1,4 @@
-import { tagLiterals } from "@rsc-utils/type-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { parseUuid, generateUuid } from "../../build/index.js";
 
 describe("uuid", () => {

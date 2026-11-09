@@ -1,4 +1,4 @@
-import { toLiteral } from "@rsc-utils/core-utils";
+import { toLiteral } from "@rsc-tools/dev-scripts";
 import { findJsonFile } from "../../build/index.js";
 import { getTestRoot } from "./getTestRoot.js";
 

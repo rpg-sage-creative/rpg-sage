@@ -1,4 +1,5 @@
-import { captureProcessExit, toLiteral } from "@rsc-utils/core-utils";
+import { toLiteral } from "@rsc-tools/dev-scripts";
+import { captureProcessExit } from "@rsc-utils/logger-utils";
 import { Client } from "discord.js";
 import { DiscordCache, toChannelUrl, toHumanReadable, toMessageUrl, toUserUrl } from "../../build/index.js";
 import { inject } from "vitest";

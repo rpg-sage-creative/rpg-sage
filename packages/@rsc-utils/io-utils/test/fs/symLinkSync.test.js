@@ -1,8 +1,7 @@
-import { enableLogLevels, tagLiterals } from "@rsc-utils/core-utils";
+import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { deleteFileSync, fileExistsSync, readJsonFileSync, symLinkSync } from "../../build/index.js";
 import { getTestRoot } from "./getTestRoot.js";
 
-enableLogLevels("development");
 
 describe("fs", () => {
 	describe("symLinkSync", () => {

@@ -1,4 +1,5 @@
-import { captureProcessExit, toLiteral } from "@rsc-utils/core-utils";
+import { toLiteral } from "@rsc-tools/dev-scripts";
+import { captureProcessExit } from "@rsc-utils/logger-utils";
 import { Client, IntentsBitField } from "discord.js";
 import { readFileSync } from "fs";
 import { DiscordCache } from "../../build/index.js";
