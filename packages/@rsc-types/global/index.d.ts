@@ -1,4 +1,4 @@
-export * from "./generics.d.ts";
-export * from "./id.d.ts";
-export * from "./String.d.ts";
-export * from "./TypedRegExp.d.ts";
+export type * from "./generics.d.ts";
+export type * from "./id.d.ts";
+export type * from "./String.d.ts";
+export type * from "./TypedRegExp.d.ts";
