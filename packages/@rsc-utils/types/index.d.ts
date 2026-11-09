@@ -7,7 +7,7 @@ export type { KeyValuePair, KeyValueTrio, KeyValueRegex, KeyValueQuad, ArgBase, 
 
 // aws-utils
 export type { AwsRegion } from "../aws-utils/build/AwsRegion.js";
-export type { VALID_URL, DdbClientConfig } from "../aws-utils/build/ddb/DdbClientConfig.js";
+export type { DdbClientConfig } from "../aws-utils/build/ddb/DdbClientConfig.js";
 export type { RepoId, RepoItem, BatchRequestKey, BatchGetRequestItems, BatchGetResults, BatchWriteRequestItems, BatchWriteResults, TableNameParser, UnprocessedItem } from "../aws-utils/build/ddb/types.js";
 export type { SnsClientConfig } from "../aws-utils/build/sns/SnsClientConfig.js";
 
@@ -27,8 +27,6 @@ export type { SortResult, Sorter, Comparable } from "../collection-utils/build/s
 export type { HexColorString, RgbColorString, RgbaColorString, ColorString, ColorData } from "../color-utils/build/ColorData.js";
 
 // core-utils
-export type { RegExpQuantifier, RegExpAnchorOptions, RegExpCaptureOptions, RegExpFlagOptions, RegExpQuantifyOptions, RegExpSpoilerOptions, RegExpWrapOptions } from "../core-utils/build/regex/RegExpOptions.js";
-export type { RegExpGetOptions } from "../core-utils/build/regex/getOrCreateRegex.js";
 export type { Renderable, RenderableContentResolvable, RenderableContentSection, RenderableContentSectionColumn } from "../core-utils/build/render/types.js";
 
 // date-utils
@@ -71,9 +69,7 @@ export type { SimpleDice } from "../game-utils/build/dice/types/SimpleDice.js";
 export type { SortedRollData } from "../game-utils/build/dice/types/SortedDataRoll.js";
 export type { PostCurrencyUserCountPostType, PostCurrencyIncrementPostType, PostCurrencyIncrement, PostCurrencyUserCount, PostCurrencyDataEvent, PostCurrencyDataTotal, PostCurrencyData, PostCurrency } from "../game-utils/build/postCurrency/types.js";
 export type { Weight, CurrencyCoreDnD5e, CurrencyDnD5eArg, CurrencyDnD5e } from "../game-utils/build/systems/dnd5e/currency/CurrencyDnD5e.js";
-export type { MonthName, DayName } from "../game-utils/build/systems/p20/pf2e/calendar/internal/types.js";
 export type { CurrencyCorePf2e, CurrencyPf2eArg, CurrencyPf2e } from "../game-utils/build/systems/p20/pf2e/currency/CurrencyPf2e.js";
-export type { MonthName, DayName } from "../game-utils/build/systems/p20/sf2e/calendar/internal/types.js";
 export type { CurrencyCoreSf2e, CurrencySf2eArg, CurrencySf2e } from "../game-utils/build/systems/p20/sf2e/currency/CurrencySf2e.js";
 export type { CurrencyCorePf1e, CurrencyPf1eArg, CurrencyPf1e } from "../game-utils/build/systems/pf1e/currency/CurrencyPf1e.js";
 export type { CurrencyCoreSF1e, CurrencySF1eArg, CurrencySF1e } from "../game-utils/build/systems/sf1e/currency/CurrencySf1e.js";
@@ -143,7 +139,6 @@ export type { TokenParsers, TokenData } from "../token-string-utils/build/tokeni
 // type-utils
 export type { MatcherResolvable, Matcher } from "../type-utils/build/Matcher.js";
 export type { Saveable } from "../type-utils/build/Saveable.js";
-export type { TypedRegExpMatchArray, TypedRegExpExecArray, TypedRegExpStringIterator, TypedRegExp } from "../type-utils/build/TypedRegExp.js";
 export type { Enum } from "../type-utils/build/enums/Enum.js";
 export type { Args, Awaitable, Constructable, EnumLike, If, Optional, OrNull, OrUndefined } from "../type-utils/build/generics.js";
 export type { Options } from "../type-utils/build/literals/toLiteral.js";
