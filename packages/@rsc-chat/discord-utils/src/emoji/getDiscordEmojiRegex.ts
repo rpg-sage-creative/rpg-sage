@@ -1,11 +1,11 @@
-import { getOrCreateRegex, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions, type RegExpQuantifyOptions } from "@rsc-utils/core-utils";
+import { getOrCreateRegExp, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions, type RegExpQuantifyOptions } from "@rsc-utils/regexp-utils";
 
 type Options = RegExpFlagOptions & RegExpAnchorOptions & RegExpCaptureOptions & RegExpQuantifyOptions & {
 	animated?: boolean | "optional";
 };
 
 /** Reusable function for ensuring consistent regex creation. */
-function createDiscordEmojiRegex(options?: Options): RegExp {
+function createDiscordEmojiRegExp(options?: Options): RegExp {
 	const { animated = "optional", gFlag = "", iFlag = "i" } = options ?? {};
 	const flags = `${gFlag}${iFlag}`;
 
@@ -27,5 +27,5 @@ function createDiscordEmojiRegex(options?: Options): RegExp {
  * Default options: { animated:"optional", gFlag:"", iFlag:"i" }
  */
 export function getDiscordEmojiRegex(options?: Options): RegExp {
-	return getOrCreateRegex(createDiscordEmojiRegex, options);
+	return getOrCreateRegExp(createDiscordEmojiRegExp, options);
 }

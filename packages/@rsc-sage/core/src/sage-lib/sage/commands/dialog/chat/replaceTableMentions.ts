@@ -1,5 +1,5 @@
-import { escapeRegex } from "@rsc-utils/core-utils";
 import { toUserMention } from "@rsc-chat/discord-utils";
+import { escapeRegExp } from "@rsc-utils/regexp-utils";
 import type { GuildMember } from "discord.js";
 
 const AtGameMastersRegex = /@(?:gms?|gamemasters?)/i;
@@ -8,7 +8,7 @@ const AtTableRegex = /@table/i;
 
 function updatePrefix(regexp: RegExp, prefix: string): RegExp {
 	if (prefix !== "@") {
-		return new RegExp(escapeRegex(prefix) + regexp.source.slice(1), "i");
+		return new RegExp(escapeRegExp(prefix) + regexp.source.slice(1), "i");
 	}
 	return regexp;
 }

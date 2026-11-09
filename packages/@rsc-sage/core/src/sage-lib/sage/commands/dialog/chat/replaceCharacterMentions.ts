@@ -1,19 +1,20 @@
 import { toUserMention } from "@rsc-chat/discord-utils";
-import { escapeRegex, globalizeRegex, type Optional } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { dequote, QuotedContentRegExp } from "@rsc-utils/quoted-string-utils";
+import { escapeRegExp, globalizeRegExp } from "@rsc-utils/regexp-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { GuildMember } from "discord.js";
 import type { Game } from "../../../model/Game.js";
 import type { User as SageUser } from "../../../model/User.js";
 
 /** creates the char mention regexp source for the given mention prefix */
 function createCharMentionRegExpSource(mentionPrefix: string) {
-	return `${escapeRegex(mentionPrefix)}\\w+|${escapeRegex(mentionPrefix)}(${QuotedContentRegExp.source})`;
+	return `${escapeRegExp(mentionPrefix)}\\w+|${escapeRegExp(mentionPrefix)}(${QuotedContentRegExp.source})`;
 }
 
 /** holds the baseline char mention regexp */
 const CharMentionRegExp = new RegExp(createCharMentionRegExpSource("@"));
-const CharMentionRegExpG = globalizeRegex(CharMentionRegExp);
+const CharMentionRegExpG = globalizeRegExp(CharMentionRegExp);
 
 /** gets the char mention regex as determined by the args */
 function getCharMentionRegExpG(mentionPrefix: Optional<string>) {

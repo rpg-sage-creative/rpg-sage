@@ -1,16 +1,17 @@
-import { globalizeRegex, type TypedRegExp } from "@rsc-utils/core-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
+import { globalizeRegExp } from "@rsc-utils/regexp-utils";
+import type { TypedRegExp } from "@rsc-utils/type-utils";
 
 type MentionType = "channel" | "role" | "user";
 
 const ChannelMentionRegExp = (/<#(?<channelId>\d{16,})>/) as TypedRegExp<{ channelId:Snowflake; }>;
-const ChannelMentionRegExpG = globalizeRegex(ChannelMentionRegExp);
+const ChannelMentionRegExpG = globalizeRegExp(ChannelMentionRegExp);
 
 const RoleMentionRegExp = (/<@&(?<roleId>\d{16,})>/) as TypedRegExp<{ roleId:Snowflake; }>;
-const RoleMentionRegExpG = globalizeRegex(RoleMentionRegExp);
+const RoleMentionRegExpG = globalizeRegExp(RoleMentionRegExp);
 
 const UserMentionRegExp = (/<@\!?(?<userId>\d{16,})>/) as TypedRegExp<{ userId:Snowflake; }>;
-const UserMentionRegExpG = globalizeRegex(UserMentionRegExp);
+const UserMentionRegExpG = globalizeRegExp(UserMentionRegExp);
 
 /** Returns a TypedRegExp with one of the following capture groups: channelId, roleId, or userId */
 export function getMentionRegex(type: MentionType, global?: boolean): RegExp {

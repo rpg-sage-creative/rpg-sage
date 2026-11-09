@@ -1,10 +1,10 @@
-import { getOrCreateRegex, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions, type RegExpQuantifyOptions } from "@rsc-utils/core-utils";
+import { getOrCreateRegExp, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions, type RegExpQuantifyOptions } from "@rsc-utils/regexp-utils";
 import emojiRegex from "emoji-regex-xs";
 
 type Options = RegExpFlagOptions & RegExpAnchorOptions & RegExpCaptureOptions & RegExpQuantifyOptions;
 
 /** Reusable function for ensuring consistent regex creation. */
-function createUnicodeEmojiRegex(options?: Options): RegExp {
+function createUnicodeEmojiRegExp(options?: Options): RegExp {
 	const { gFlag = "", iFlag = "i" } = options ?? {};
 	const flags = `${gFlag}${iFlag}u`;
 
@@ -18,5 +18,5 @@ function createUnicodeEmojiRegex(options?: Options): RegExp {
  * Default options: { anchored:false, capture:undefined, gFlag:"", iFlag:"", quantifier:"" }
  */
 export function getUnicodeEmojiRegex(options?: Options): RegExp {
-	return getOrCreateRegex(createUnicodeEmojiRegex, options);
+	return getOrCreateRegExp(createUnicodeEmojiRegExp, options);
 }

@@ -22,8 +22,10 @@
 		"@rsc-utils/io-utils": "workspace:",
 		"@rsc-utils/json-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
+		"@rsc-utils/regexp-utils": "workspace:",
 		"@rsc-utils/string-utils": "workspace:",
 		"@rsc-utils/token-string-utils": "workspace:",
+		"@rsc-utils/type-utils": "workspace:",
 		"discord.js": "^14.25.1",
 		"emoji-regex-xs": "^2.0.1",
 		"regex": "^6.1.0"

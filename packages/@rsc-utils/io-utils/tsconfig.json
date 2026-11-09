@@ -17,6 +17,7 @@
 		{ "path": "../../@rsc-utils/json-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/progress-utils" },
+		{ "path": "../../@rsc-utils/regexp-utils" },
 		{ "path": "../../@rsc-utils/type-utils" },
 	],
 }

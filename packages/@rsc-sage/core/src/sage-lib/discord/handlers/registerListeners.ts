@@ -1,13 +1,13 @@
 import { ArgsManager } from "@rsc-utils/arg-utils";
-import type { Awaitable } from "@rsc-utils/type-utils";
-import { escapeRegex } from "@rsc-utils/core-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { escapeRegExp } from "@rsc-utils/regexp-utils";
+import type { Awaitable } from "@rsc-utils/type-utils";
 import type { SageCommand } from "../../sage/model/SageCommand.js";
 import type { SageInteraction } from "../../sage/model/SageInteraction.js";
 import type { SageMessage } from "../../sage/model/SageMessage.js";
 import type { SageReaction } from "../../sage/model/SageReaction.js";
 import { registerInteractionListener, registerMessageListener } from "../handlers.js";
-import { type TCommandAndArgs } from "../types.js";
+import type { TCommandAndArgs } from "../types.js";
 import { DefaultPrefixRegExp } from "./DefaultPrefixRegExp.js";
 
 type SageCommandHandler = (sageCommand: SageCommand) => Awaitable<void>;
@@ -64,7 +64,7 @@ function commandToMatcher(command: Command): RegExp {
 	// we have to build the regexp for testing the command and getting args
 	if (typeof(command) === "string") {
 		const commandParts = command.split("|");
-		const keyRegex = commandParts.map(part => escapeRegex(part)).join("\\s+");
+		const keyRegex = commandParts.map(part => escapeRegExp(part)).join("\\s+");
 		return createCommandRegexWithArgsCaptureGroup(keyRegex);
 
 	// the regex doesn't include command arg capture group

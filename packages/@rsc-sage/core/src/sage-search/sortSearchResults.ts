@@ -1,10 +1,10 @@
+import { escapeRegExp } from "@rsc-utils/regexp-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import { escapeRegex } from "@rsc-utils/core-utils";
 import type { SearchResults } from "./SearchResults.js";
 
 export function sortSearchResults(searchResults: SearchResults): void {
 	const searchText = searchResults.searchInfo.searchText;
-	const escapedSearchText = escapeRegex(searchText);
+	const escapedSearchText = escapeRegExp(searchText);
 
 	const stringMatcher = StringMatcher.from(searchText);
 	const nameMatches = searchResults.scores.filter(score => score.searchable.matches(stringMatcher));

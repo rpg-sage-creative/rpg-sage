@@ -1,5 +1,6 @@
 import { Arg } from "@rsc-utils/arg-utils";
-import { escapeRegex, type Optional } from "@rsc-utils/core-utils";
+import { escapeRegExp } from "@rsc-utils/regexp-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { CharacterArray } from "../../../model/CharacterArray.js";
 import type { GameCharacter } from "../../../model/GameCharacter.js";
 import type { SageMessage } from "../../../model/SageMessage.js";
@@ -9,7 +10,7 @@ import { toReadableOwner } from "./toReadableOwner.js";
 function filterCharacters(characters: Optional<CharacterArray>, value: Optional<string>): GameCharacter[] {
 	if (characters) {
 		if (value) {
-			const regex = new RegExp(escapeRegex(value), "i");
+			const regex = new RegExp(escapeRegExp(value), "i");
 			return characters.filter(({ alias, name }) => regex.test(name) || alias && regex.test(alias));
 		}
 		return characters.slice();

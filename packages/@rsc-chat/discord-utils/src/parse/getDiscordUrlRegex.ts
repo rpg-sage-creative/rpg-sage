@@ -1,4 +1,4 @@
-import { getOrCreateRegex, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions } from "@rsc-utils/core-utils";
+import { getOrCreateRegExp, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions } from "@rsc-utils/regexp-utils";
 import { regex } from "regex";
 
 // dm message
@@ -119,7 +119,7 @@ function flagRegex(regexp: RegExp, flags: FlagsGI): RegExp {
 	return new RegExp(regexp, newFlags);
 }
 
-function createDiscordUrlRegex(options?: Options): RegExp {
+function createDiscordUrlRegExp(options?: Options): RegExp {
 	const { capture, gFlag = "", iFlag = "", type = "message" } = options ?? {};
 	const flags: FlagsGI = `${gFlag}${iFlag}`;
 
@@ -137,5 +137,5 @@ function createDiscordUrlRegex(options?: Options): RegExp {
 
 /** @deprecated @todo rewrite this to not use getOrCreateRegex (see other regex using globalizeRegex) */
 export function getDiscordUrlRegex(options?: Options): RegExp {
-	return getOrCreateRegex(createDiscordUrlRegex, options);
+	return getOrCreateRegExp(createDiscordUrlRegExp, options);
 }

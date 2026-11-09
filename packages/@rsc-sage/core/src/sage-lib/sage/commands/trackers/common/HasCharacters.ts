@@ -1,4 +1,4 @@
-import { escapeRegex } from "@rsc-utils/core-utils";
+import { escapeRegExp } from "@rsc-utils/regexp-utils";
 import { generateSnowflake } from "@rsc-utils/id-utils";
 import { CharacterShell, type CharacterShellCore } from "../../../model/CharacterShell.js";
 import type { Game } from "../../../model/Game.js";
@@ -27,7 +27,7 @@ export abstract class HasCharacters<Core extends HasCharactersCore> {
 	}
 
 	private findChar(idOrLabel: string): CharacterShellCore | undefined {
-		const regex = new RegExp(`^${escapeRegex(idOrLabel)}$`, "i");
+		const regex = new RegExp(`^${escapeRegExp(idOrLabel)}$`, "i");
 		return this.characterCores.find(c => regex.test(c.id) || regex.test(c.label));
 	}
 
@@ -40,7 +40,7 @@ export abstract class HasCharacters<Core extends HasCharactersCore> {
 
 		let suffixIndex = -1;
 		const suffixes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		const regex = new RegExp(`^${escapeRegex(nickname)}$`, "i");
+		const regex = new RegExp(`^${escapeRegExp(nickname)}$`, "i");
 		const existing = this.characterCores.filter(char => regex.test(char.nickname));
 		existing.forEach(ch => {
 			if (!ch.suffix) {
