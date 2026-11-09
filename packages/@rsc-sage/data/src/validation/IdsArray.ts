@@ -2,7 +2,7 @@ import { getDataRoot } from "@rsc-sage/env";
 import { toUnique } from "@rsc-utils/collection-utils";
 import { isDefined, noop } from "@rsc-utils/type-utils";
 import { parseSnowflake, parseUuid, type Snowflake, type UUID } from "@rsc-utils/id-utils";
-import { listFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { listFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { join } from "node:path";
 import type { SageCharacterCore } from "../types/SageCharacterCore.js";

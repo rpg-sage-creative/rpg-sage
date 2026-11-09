@@ -12,6 +12,7 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/error-utils" },
+		{ "path": "../../@rsc-utils/fs-utils" },
 		{ "path": "../../@rsc-utils/id-utils" },
 		{ "path": "../../@rsc-utils/json-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },

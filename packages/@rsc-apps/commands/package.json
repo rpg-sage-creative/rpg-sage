@@ -15,7 +15,7 @@
   		"@rsc-sage/data": "workspace:",
 		"@rsc-sage/env": "workspace:",
 		"@rsc-utils/game-utils": "workspace:",
-		"@rsc-utils/io-utils": "workspace:",
+		"@rsc-utils/fs-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/type-utils": "workspace:"
 	},

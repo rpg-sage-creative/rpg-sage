@@ -1,6 +1,6 @@
 import { getDataRoot } from "@rsc-sage/env";
 import { Arrayish } from "@rsc-utils/collection-utils";
-import { filterFiles, readJsonFile } from "@rsc-utils/io-utils";
+import { filterFiles, readJsonFile } from "@rsc-utils/fs-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { noop } from "@rsc-utils/type-utils";
 import type { DataTable } from "../DataTable.js";

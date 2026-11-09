@@ -1,5 +1,5 @@
 
-import { filterFiles } from "@rsc-utils/io-utils";
+import { filterFiles } from "@rsc-utils/fs-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { join, parse } from "node:path";
 import type { MessageCommand, SlashCommand, UserCommand } from "../index.js";

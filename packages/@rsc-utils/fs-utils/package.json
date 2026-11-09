@@ -1,0 +1,22 @@
+{
+	"name": "@rsc-utils/fs-utils",
+	"version": "0.0.0",
+	"description": "Filesystem utilities for reading, writing, filtering, and managing files.",
+	"license": "LGPL-3.0-or-later",
+	"main": "build/index.js",
+	"type": "module",
+	"devDependencies": {
+		"@rsc-tools/dev-scripts": "workspace:",
+		"@types/node": "^24.12.2",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
+	},
+	"dependencies": {
+		"@rsc-utils/json-utils": "workspace:",
+		"@rsc-utils/logger-utils": "workspace:",
+		"@rsc-utils/type-utils": "workspace:"
+	},
+	"scripts": {
+		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
+	}
+}

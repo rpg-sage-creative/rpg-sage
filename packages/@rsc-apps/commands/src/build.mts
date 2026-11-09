@@ -1,6 +1,6 @@
 import { buildAndCount } from "@rsc-chat/discord-utils";
 import { getCodeName, getDataRoot } from "@rsc-sage/env";
-import { findJsonFile, writeFileSync } from "@rsc-utils/io-utils";
+import { findJsonFile, writeFileSync } from "@rsc-utils/fs-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { commandPathValidator } from "./utils/commandPathValidator.js";
 

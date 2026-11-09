@@ -1,0 +1,2 @@
+{"index":0,"name":"zero"}
+{"index":1,"name":"one","bigInt":{"$bigint":"9223372036854775807"}}

@@ -1,4 +1,4 @@
-import { readJsonFile } from "@rsc-utils/io-utils";
+import { readJsonFile } from "@rsc-utils/fs-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { join } from "node:path";
 

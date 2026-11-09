@@ -89,6 +89,9 @@
 		// uses/triggers logger
 		{ "path": "./packages/@rsc-utils/progress-utils" },
 
+		// uses/triggers json/logger/type
+		{ "path": "./packages/@rsc-utils/fs-utils" },
+
 		// uses/triggers type
 		{ "path": "./packages/@rsc-utils/collection-utils" },
 		{ "path": "./packages/@rsc-utils/git-utils" }, // also json

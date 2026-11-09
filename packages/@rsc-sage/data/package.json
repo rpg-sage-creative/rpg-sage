@@ -16,6 +16,7 @@
 		"@rsc-utils/collection-utils": "workspace:",
 		"@rsc-utils/color-utils": "workspace:",
 		"@rsc-utils/date-utils": "workspace:",
+		"@rsc-utils/fs-utils": "workspace:",
 		"@rsc-utils/id-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
 		"@rsc-utils/json-utils": "workspace:",

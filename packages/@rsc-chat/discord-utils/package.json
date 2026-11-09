@@ -17,6 +17,7 @@
 		"@discordjs/rest": "^2.6.0",
 		"@rsc-sage/env": "workspace:",
 		"@rsc-utils/error-utils": "workspace:",
+		"@rsc-utils/fs-utils": "workspace:",
 		"@rsc-utils/id-utils": "workspace:",
 		"@rsc-utils/io-utils": "workspace:",
 		"@rsc-utils/json-utils": "workspace:",

@@ -17,6 +17,7 @@
 		{ "path": "../../@rsc-utils/json-utils" },
 		{ "path": "../../@rsc-utils/date-utils" },
 		{ "path": "../../@rsc-utils/id-utils" },
+		{ "path": "../../@rsc-utils/fs-utils" },
 		{ "path": "../../@rsc-utils/io-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-sage/env" },

@@ -1,4 +1,4 @@
-import { deleteFile } from "@rsc-utils/io-utils";
+import { deleteFile } from "@rsc-utils/fs-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { getDuplicates, getIdsArrayFilePath, getIdsStats, writeIdsArray } from "./validation/IdsArray.js";
 

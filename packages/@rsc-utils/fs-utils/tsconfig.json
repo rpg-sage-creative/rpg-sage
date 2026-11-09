@@ -1,0 +1,18 @@
+{
+	"extends": "../../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./build",
+		"rootDir": "./src",
+	},
+	"exclude": [
+		"./test"
+	],
+	"include": [
+		"./src"
+	],
+	"references": [
+		{ "path": "../../@rsc-utils/json-utils" },
+		{ "path": "../../@rsc-utils/logger-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
+	],
+}

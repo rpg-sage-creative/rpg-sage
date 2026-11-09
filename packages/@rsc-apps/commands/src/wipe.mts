@@ -1,6 +1,6 @@
 import { wipeSlashCommands } from "@rsc-chat/discord-utils";
 import { getCodeName, getDataRoot, getToken } from "@rsc-sage/env";
-import { findJsonFile } from "@rsc-utils/io-utils";
+import { findJsonFile } from "@rsc-utils/fs-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 
 captureProcessExit();

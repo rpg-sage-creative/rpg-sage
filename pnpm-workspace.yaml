@@ -49,6 +49,7 @@ overrides:
   "@rsc-utils/color-utils": "./packages/@rsc-utils/color-utils"
   "@rsc-utils/date-utils": "./packages/@rsc-utils/date-utils"
   "@rsc-utils/error-utils": "./packages/@rsc-utils/error-utils"
+  "@rsc-utils/fs-utils": "./packages/@rsc-utils/fs-utils"
   "@rsc-utils/game-utils": "./packages/@rsc-utils/game-utils"
   "@rsc-utils/git-utils": "./packages/@rsc-utils/git-utils"
   "@rsc-utils/id-utils": "./packages/@rsc-utils/id-utils"

@@ -1,4 +1,5 @@
 import { typeError } from "@rsc-utils/error-utils";
+import { fileExists, readFile } from "@rsc-utils/fs-utils";
 import { stringifyJson } from "@rsc-utils/json-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { ProgressTracker } from "@rsc-utils/progress-utils";
@@ -7,8 +8,6 @@ import type { FollowResponse, RedirectableRequest } from "follow-redirects";
 import type { IncomingMessage } from "node:http";
 import { pipeline } from "node:stream";
 import { createBrotliDecompress, createGunzip, type Gunzip } from "node:zlib";
-import { fileExists } from "../fs/fileExists.js";
-import { readFile } from "../fs/readFile.js";
 import { createHttpLogger } from "./createHttpLogger.js";
 import { getProtocol } from "./getProtocol.js";
 

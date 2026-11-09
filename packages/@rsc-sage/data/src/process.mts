@@ -2,7 +2,7 @@ import { Arrayish } from "@rsc-utils/collection-utils";
 import { stringifyJson } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { getDateStrings } from "@rsc-utils/date-utils";
-import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/io-utils";
+import { deleteFile, fileExists, filterFiles, readJsonFile, writeFile } from "@rsc-utils/fs-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
 import { stat, Stats } from "node:fs";
 import { basename, join } from "node:path";

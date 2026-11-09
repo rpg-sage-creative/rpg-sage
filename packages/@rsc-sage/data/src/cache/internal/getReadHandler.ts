@@ -1,7 +1,7 @@
 import type { RepoId } from "@rsc-utils/aws-utils";
 import { isDefined, noop } from "@rsc-utils/type-utils";
 import { areEqual } from "@rsc-utils/json-utils";
-import { readJsonFile } from "@rsc-utils/io-utils";
+import { readJsonFile } from "@rsc-utils/fs-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { objectTypeToDirName, type BaseCacheItem, type CacheItemObjectType, type DataMode } from "../types.js";
 import { getDdbTable } from "./DdbRepo.js";
