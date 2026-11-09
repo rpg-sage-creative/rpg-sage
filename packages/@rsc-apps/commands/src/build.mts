@@ -22,7 +22,7 @@ async function main() {
 	const botCore = await findJsonFile(botsPath, { contentFilter:(core: BotCore) => core.codeName === codeName });
 
 	if (!botCore) {
-		Logger.package("@rsc-apps/command").error("Unable to find Bot: %s", codeName);
+		Logger.package("@rsc-apps/commands").error("Unable to find Bot: %s", codeName);
 
 	}else {
 		// build all slash commands for the bot and save the json

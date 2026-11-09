@@ -33,6 +33,11 @@ overrides:
 
   "@rsc-chat/discord-utils": "./packages/@rsc-chat/discord-utils"
 
+  "@rsc-sage/core": "./packages/@rsc-sage/core"
+  "@rsc-sage/data": "./packages/@rsc-sage/data"
+  "@rsc-sage/env": "./packages/@rsc-sage/env"
+  "@rsc-sage/localization": "./packages/@rsc-sage/localization"
+
   "@rsc-utils/arg-utils": "./packages/@rsc-utils/arg-utils"
   "@rsc-utils/aws-utils": "./packages/@rsc-utils/aws-utils"
   "@rsc-utils/charset-utils": "./packages/@rsc-utils/charset-utils"
@@ -41,12 +46,14 @@ overrides:
   "@rsc-utils/color-utils": "./packages/@rsc-utils/color-utils"
   "@rsc-utils/date-utils": "./packages/@rsc-utils/date-utils"
   "@rsc-utils/error-utils": "./packages/@rsc-utils/error-utils"
+  "@rsc-utils/game-utils": "./packages/@rsc-utils/game-utils"
   "@rsc-utils/git-utils": "./packages/@rsc-utils/git-utils"
   "@rsc-utils/id-utils": "./packages/@rsc-utils/id-utils"
   "@rsc-utils/io-utils": "./packages/@rsc-utils/io-utils"
   "@rsc-utils/json-utils": "./packages/@rsc-utils/json-utils"
   "@rsc-utils/language-utils": "./packages/@rsc-utils/language-utils"
   "@rsc-utils/logger-utils": "./packages/@rsc-utils/logger-utils"
+  "@rsc-utils/map-utils": "./packages/@rsc-utils/map-utils"
   "@rsc-utils/number-utils": "./packages/@rsc-utils/number-utils"
   "@rsc-utils/progress-utils": "./packages/@rsc-utils/progress-utils"
   "@rsc-utils/quoted-string-utils": "./packages/@rsc-utils/quoted-string-utils"

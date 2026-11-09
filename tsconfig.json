@@ -69,15 +69,17 @@
 	],
 	"references": [
 
-		// packages with no dependencies should build first
+		// no dependencies (build first)
 		{ "path": "./packages/@rsc-utils/aws-utils" },
 		{ "path": "./packages/@rsc-utils/date-utils" },
 		{ "path": "./packages/@rsc-utils/error-utils" },
 		{ "path": "./packages/@rsc-utils/json-utils" },
+		{ "path": "./packages/@rsc-utils/language-utils" },
 		{ "path": "./packages/@rsc-utils/token-string-utils" },
+		{ "path": "./packages/@rsc-utils/type-utils" },
 		{ "path": "./packages/@rsc-utils/whitespace-string-utils" },
 
-		// uses/triggers error-utils
+		// uses/triggers error
 		{ "path": "./packages/@rsc-utils/charset-utils" },
 		{ "path": "./packages/@rsc-utils/regexp-utils" },
 
@@ -88,31 +90,66 @@
 		{ "path": "./packages/@rsc-utils/progress-utils" },
 
 		// uses/triggers type
+		{ "path": "./packages/@rsc-utils/collection-utils" },
+		{ "path": "./packages/@rsc-utils/git-utils" }, // also json
+		{ "path": "./packages/@rsc-utils/id-utils" }, // also regexp
 		{ "path": "./packages/@rsc-utils/quoted-string-utils" },
-		{ "path": "./packages/@rsc-utils/id-utils" },
+		{ "path": "./packages/@rsc-utils/random-utils" },
 
-		// uses/triggers error/type
+		// uses/triggers regexp/type
+		{ "path": "./packages/@rsc-utils/color-utils" },
+
+		// uses/triggers collection/id/type
+		{ "path": "./packages/@rsc-utils/class-utils" },
+
+		// uses/triggers charset/type
 		{ "path": "./packages/@rsc-utils/number-utils" },
+
+		// uses/triggers quoted-string/regexp/token-string/type/whitespace-string
+		{ "path": "./packages/@rsc-utils/arg-utils" },
+
+		// uses/triggers error/id/json/logger/progress/regexp/type
+		{ "path": "./packages/@rsc-utils/io-utils" },
+
+		// uses/triggers arg/charset/error/json/number/quoted-string/regexp/token-string/type/whitespace-string
 		{ "path": "./packages/@rsc-utils/string-utils" },
 
-		// ?
-		{ "path": "./packages/@rsc-utils/arg-utils" },
+		// uses/triggers collection/color/logger/type
+		{ "path": "./packages/@rsc-utils/render-utils" },
+
+		// uses/triggers collection/language/quoted-string/token-string/type/whitespace-string
 		{ "path": "./packages/@rsc-utils/search-utils" },
 
-		// ensure the rsc-utils stack
-		{ "path": "./packages/@rsc-chat/discord-utils" },
-		// @rsc-utils/discord-utils triggers @rsc-utils/io-utils
-		// @rsc-utils/io-utils triggers @rsc-utils/type-utils
-
-		{ "path": "./packages/@rsc-sage/core" },
-		{ "path": "./packages/@rsc-sage/data" },
-		{ "path": "./packages/@rsc-sage/env" },
-		{ "path": "./packages/@rsc-sage/localization" },
-		{ "path": "./packages/@rsc-utils/game-utils" },
+		// uses/triggers io/json/logger/random/type
 		{ "path": "./packages/@rsc-utils/map-utils" },
-		{ "path": "./packages/@rsc-apps/bot" },
+
+		// uses/triggers arg/aws/git/id/io/json/logger/type
+		{ "path": "./packages/@rsc-sage/env" },
+
+		// uses/triggers aws/class/collection/color/date/id/io/json/logger/string/type + env
+		{ "path": "./packages/@rsc-sage/data" },
+
+		// uses/triggers env/error/id/io/json/logger/regexp/string/token-string/type
+		{ "path": "./packages/@rsc-chat/discord-utils" },
+
+		// uses/triggers data + arg/charset/class/collection/color/date/error/id/io/json/logger/number/quoted-string/random/regexp/string/token-string/type/whitespace-string
+		{ "path": "./packages/@rsc-utils/game-utils" },
+
+		// uses/triggers string/type
+		{ "path": "./packages/@rsc-sage/localization" },
+
+		// uses/triggers discord-utils/data/env/localization + the rsc-utils stack
+		{ "path": "./packages/@rsc-sage/core" },
+
+		// apps (build last)
 		{ "path": "./packages/@rsc-apps/commands" },
+		{ "path": "./packages/@rsc-apps/bot" },
 		{ "path": "./packages/@rsc-apps/map-server" },
 		{ "path": "./packages/@rsc-apps/pixels-relay-server" },
+
+		// not referenced here:
+		// @rsc-tools/dev-scripts is built separately via the build-tools script (bootstraps this build)
+		// tools/@rsc-tools/dynamic-test and tools/@rsc-tools/release have no tsconfig.json
+		// packages/@rsc-chat/chat-utils is an empty directory (no package.json or src)
 	]
 }

@@ -9,7 +9,10 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-chat/discord-utils" },
+		{ "path": "../../@rsc-sage/data" },
+		{ "path": "../../@rsc-sage/env" },
 		{ "path": "../../@rsc-utils/game-utils" },
+		{ "path": "../../@rsc-utils/io-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/type-utils" },
 	],

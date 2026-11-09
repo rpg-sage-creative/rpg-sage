@@ -12,5 +12,6 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/json-utils" },
+		{ "path": "../../@rsc-utils/type-utils" },
 	],
 }
