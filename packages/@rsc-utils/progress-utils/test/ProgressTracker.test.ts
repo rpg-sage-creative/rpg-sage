@@ -88,13 +88,13 @@ describe("ProgressTracker", () => {
 		array.forEach((value, index, array) => {
 			if (!index) tracker.start();         // error++ = 2
 			if (index === 14) tracker.finish();  // info++  = 2
-			tracker.increment();                 // (prev line finishes early); error++ = 3 (increment after finish())
+			tracker.increment();                 // trace++ = 14 (prev line finishes early); error++ = 3 (increment after finish())
 			                                     // withLogger only registers increment() via interval: info += 6
 		});
 		tracker.finish();                        // error++ = 4
 		tracker.start();                         // error++ = 5
 
-		expect(logger.trace).toHaveBeenCalledTimes(0);
+		expect(logger.trace).toHaveBeenCalledTimes(14);
 		expect(logger.debug).toHaveBeenCalledTimes(0);
 		expect(logger.info).toHaveBeenCalledTimes(8); // start, 0%, 20%, 40%, 60%, 80%, 93%, finish
 		expect(logger.warn).toHaveBeenCalledTimes(0);
