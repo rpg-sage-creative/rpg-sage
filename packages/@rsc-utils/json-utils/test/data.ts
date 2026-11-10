@@ -1,4 +1,11 @@
-/** @returns {{ object:object; string:string; label:string; stringifyReplacer?:Function|(string|number)[]|null; stringifySpace?:string|number; stringifyMaxLineLength?:number; }[]} */
+type CloneParseStringifyData = {
+	object: object;
+	string: string;
+	label: string;
+	stringifyReplacer?: Function|(string|number)[]|null;
+	stringifySpace?: string|number;
+	stringifyMaxLineLength?: number;
+};
 const cloneParseStringify = () => {
 	const date = new Date();
 	const dateString = date.toISOString();
@@ -41,15 +48,19 @@ const cloneParseStringify = () => {
 		{ object:{ "one": "One", "two": [ 2, 3, 4 ] }, string:`{\n\t"one": "One",\n\t"two": [ 2, 3, 4 ]\n}`, stringifyMaxLineLength:250, label:`simple multiline output`},
 
 		{ object:{ "one": "One", "two": [ "2", { "three": [ 3 ] } ], "four": "4" }, string:`{\n\t"one": "One",\n\t"two": [\n\t\t"2",\n\t\t{\n\t\t\t"three": [ 3 ]\n\t\t}\n\t],\n\t"four": "4"\n}`, stringifyMaxLineLength:250, label:`multiline output`, },
-	];
+	] as CloneParseStringifyData[];
 }
 
-/** @returns {{object:object;empty:boolean;keyless:boolean;}[]} */
+type EmptyKeylessData = {
+	object: object;
+	empty: boolean;
+	keyless: boolean;
+};
 const emptyKeyless = () => {
-	const deleted = { a:"A" };
+	const deleted: { a?:"A"; } = { a:"A" };
 	delete deleted.a;
 
-	const added = {};
+	const added: { a?:"A"; } = {};
 	added.a = undefined;
 
 	return [
@@ -62,16 +73,13 @@ const emptyKeyless = () => {
 		{ object:{"":""},       empty:false, keyless:false },
 		{ object:{"":null},     empty:false, keyless:false },
 		{ object:{0:null},      empty:false, keyless:false },
-	];
+	] as EmptyKeylessData[];
 };
 
-/**
- *
- * @param {"cloneJson" | "isEmpty" | "isKeyless" | "parseJson" | "stringifyJson"} name
- * @returns
- */
-export function getTests(name) {
-	switch(name) {
+export function getTests(fnName: "cloneJson" | "parseJson" | "stringifyJson"): CloneParseStringifyData[];
+export function getTests(fnName: "isEmpty" | "isKeyless"): EmptyKeylessData[];
+export function getTests(fnName: "cloneJson" | "isEmpty" | "isKeyless" | "parseJson" | "stringifyJson") {
+	switch(fnName) {
 		case "cloneJson": return cloneParseStringify();
 		case "isEmpty": return emptyKeyless();
 		case "isKeyless": return emptyKeyless();

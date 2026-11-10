@@ -1,15 +1,15 @@
 import { stringifyJson } from "../build/index.js";
-import { getTests } from "./data.js";
+import { getTests } from "./data.ts";
+import { describe, test, expect } from "vitest";
 
 describe("json", () => {
 	describe("stringifyJson", () => {
 
-		/** @type {{ object:object; string:string; label:string; stringifyReplacer?:Function|(string|number)[]|null; stringifySpace?:string|number; stringifyMaxLineLength?:number; }[]} */
 		const tests = getTests("stringifyJson");
 
 		tests.forEach(({ object, string, label, stringifyReplacer, stringifySpace, stringifyMaxLineLength }) => {
 			test(`stringifyJson("${label}") === ${string}`, () => {
-				expect(stringifyJson(object, stringifyReplacer, stringifySpace, stringifyMaxLineLength)).toBe(string);
+				expect(stringifyJson(object, stringifyReplacer as null, stringifySpace, stringifyMaxLineLength)).toBe(string);
 			});
 		});
 

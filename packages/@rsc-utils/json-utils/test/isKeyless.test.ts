@@ -1,10 +1,10 @@
+import { describe, expect, test } from "vitest";
 import { isKeyless, stringifyJson } from "../build/index.js";
-import { getTests } from "./data.js";
+import { getTests } from "./data.ts";
 
 describe("json", () => {
 	describe("isKeyless", () => {
 
-		/** @type {{ object:object; empty:boolean; keyless:boolean; }[]} */
 		const tests = getTests("isKeyless");
 
 		tests.forEach(({ object, keyless }) => {

@@ -1,8 +1,9 @@
 import { isDate } from "node:util/types";
+import { describe, expect, test } from "vitest";
 import { cleanJson, cloneJson } from "../build/index.js";
-import { getTests } from "./data.js";
+import { getTests } from "./data.ts";
 
-function isPrimitive(object) {
+function isPrimitive(object: unknown): object is null | undefined | Date | bigint | boolean | number | string {
 	return object === null
 		|| object === undefined
 		|| isDate(object)
@@ -12,7 +13,6 @@ function isPrimitive(object) {
 describe("json", () => {
 	describe("cloneJson", () => {
 
-		/** @type {{ object:object; string:string; label:string; }[]} */
 		const tests = getTests("cloneJson");
 
 		tests.forEach(({ object, label }) => {

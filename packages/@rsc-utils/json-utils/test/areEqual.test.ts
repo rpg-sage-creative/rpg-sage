@@ -1,8 +1,22 @@
+import { describe, expect, test } from "vitest";
 import { areEqual, stringifyJson } from "../build/index.js";
+
+type ChildData = {
+	empty?: null|undefined;
+	one?: 1|"one";
+	two?: 2|"2";
+	three?: 3 | "3" | { "3":3|"3"; "3_4":3.4|"3.4" };
+};
+type TestData = {
+	a: ChildData;
+	b: ChildData;
+	equal: boolean;
+	options?: { strict?:boolean; ignore?:string[]; }
+};
 
 describe("areEqual", () => {
 
-	const tests = [
+	const tests: TestData[] = [
 		{ a: {}, b: {}, equal:true },
 
 		// stringify removes "empty" as a key due to undefined
@@ -33,7 +47,7 @@ describe("areEqual", () => {
 
 	for (const { a, b, options, equal } of tests) {
 		test(`areEqual(${stringifyJson(a)}, ${stringifyJson(b)}, ${stringifyJson(options)}) === ${equal}`, () => {
-			expect(areEqual(a, b, options)).toBe(equal);
+			expect(areEqual(a, b, options as undefined)).toBe(equal);
 		});
 	}
 

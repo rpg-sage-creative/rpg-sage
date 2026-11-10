@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest";
 import { applyChanges, stringifyJson } from "../build/index.js";
 
 describe("json", () => {

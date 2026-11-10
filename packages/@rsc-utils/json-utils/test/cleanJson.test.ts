@@ -1,10 +1,17 @@
-import { cleanJson,stringifyJson } from "../build/index.js";
+import { describe, expect, test } from "vitest";
+import { cleanJson, type JsonCleanRules, stringifyJson } from "../build/index.js";
+
+type TestData = [
+	object,
+	JsonCleanRules | undefined,
+	object
+];
 
 describe("json", () => {
 	describe("cleanJson", () => {
 
 		// [input, options, output, "toStrictEqual"?]
-		const tests = [
+		const tests: TestData[] = [
 			// deleteBlankString
 			[{ a:"Apple", b:"" }, { }, { a:"Apple", b:"" }],
 			[{ a:"Apple", b:"" }, { deleteBlankString:true }, { a:"Apple" }],
@@ -58,9 +65,9 @@ describe("json", () => {
 			[{ a:"Apple", b:{ c:undefined } }, { deleteEmptyObject:true, deleteUndefined:true, recursive:true }, { a:"Apple" }],
 		];
 
-		tests.forEach(([input, options, output, comparer]) => {
+		tests.forEach(([input, options, output]) => {
 			test(`cleanJson(${stringifyJson(input)}, ${stringifyJson(options)}) strictly equals ${stringifyJson(output)}`, () => {
-				expect(cleanJson(input, options)).toStrictEqual(output);
+				expect(cleanJson(input, options as JsonCleanRules)).toStrictEqual(output);
 			});
 		});
 	});
