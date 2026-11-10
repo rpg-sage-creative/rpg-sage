@@ -9,8 +9,8 @@ describe("fs", () => {
 
 		const dir = getTestRoot("files");
 		const file = `${dir}/jsonFile.json`;
-		// the link lives in files/out so concurrent scans of files/ (readJsonFiles, findJsonFile) never see it created/deleted mid-run
-		const link = `${dir}/out/jsonFile.link-sync.json`;
+		// the link lives in files/out (excluded from listings) and has no .json extension, so concurrent scans never match it mid-create/delete
+		const link = `${dir}/out/jsonFile.link-sync`;
 
 		test(tagLiterals`link ${file} as ${link}`, () => {
 			expect(fileExistsSync(file)).toBe(true);
