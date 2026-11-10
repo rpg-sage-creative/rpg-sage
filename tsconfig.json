@@ -119,7 +119,7 @@
 		{ "path": "./packages/@rsc-utils/https-utils" },
 
 		// uses/triggers error/fs/https/id/json/logger/progress/type
-		{ "path": "./packages/@rsc-utils/io-utils" },
+		{ "path": "./packages/@rsc-utils/cache-utils" },
 
 		// uses/triggers arg/charset/error/json/number/quoted-string/regexp/token-string/type/whitespace-string
 		{ "path": "./packages/@rsc-utils/string-utils" },
@@ -133,7 +133,7 @@
 		// uses/triggers https/json/logger/random/type
 		{ "path": "./packages/@rsc-utils/map-utils" },
 
-		// uses/triggers arg/aws/git/id/io/json/logger/type
+		// uses/triggers arg/aws/git/id/json/logger/type
 		{ "path": "./packages/@rsc-sage/env" },
 
 		// uses/triggers aws/class/collection/color/date/fs/id/json/logger/string/type/url + env

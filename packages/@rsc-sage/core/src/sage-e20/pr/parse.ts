@@ -1,4 +1,4 @@
-import type { PdfJsonManager } from "@rsc-utils/io-utils";
+import type { PdfJsonManager } from "@rsc-utils/cache-utils";
 import type { TSkillDie } from "../../sage-dice/dice/e20/index.js";
 import { filterValuesWithKeys, PdfJsonParserE20, type SkillPairKey } from "../common/parse.js";
 import type { PlayerCharacterCorePR, TAttackZord, TSkillZord, TStatPR, TStatZord, TZord } from "./PlayerCharacterPR.js";

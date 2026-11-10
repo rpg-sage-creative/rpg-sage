@@ -43,6 +43,7 @@ overrides:
 
   "@rsc-utils/arg-utils": "./packages/@rsc-utils/arg-utils"
   "@rsc-utils/aws-utils": "./packages/@rsc-utils/aws-utils"
+  "@rsc-utils/cache-utils": "./packages/@rsc-utils/cache-utils"
   "@rsc-utils/charset-utils": "./packages/@rsc-utils/charset-utils"
   "@rsc-utils/class-utils": "./packages/@rsc-utils/class-utils"
   "@rsc-utils/collection-utils": "./packages/@rsc-utils/collection-utils"
@@ -55,7 +56,6 @@ overrides:
   "@rsc-utils/git-utils": "./packages/@rsc-utils/git-utils"
   "@rsc-utils/https-utils": "./packages/@rsc-utils/https-utils"
   "@rsc-utils/id-utils": "./packages/@rsc-utils/id-utils"
-  "@rsc-utils/io-utils": "./packages/@rsc-utils/io-utils"
   "@rsc-utils/json-utils": "./packages/@rsc-utils/json-utils"
   "@rsc-utils/language-utils": "./packages/@rsc-utils/language-utils"
   "@rsc-utils/logger-utils": "./packages/@rsc-utils/logger-utils"

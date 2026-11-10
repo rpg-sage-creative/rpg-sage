@@ -2,7 +2,7 @@ import { isInvalidWebhookUsername, parseReference, type MessageOrPartial } from 
 import { readJsonFetchHeaders } from "@rsc-sage/env";
 import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
 import { getJson } from "@rsc-utils/https-utils";
-import { PdfCacher, type PdfJson } from "@rsc-utils/io-utils";
+import { PdfCacher, type PdfJson } from "@rsc-utils/cache-utils";
 import { noop } from "@rsc-utils/type-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import type { FetchResultError } from "./handleImportErrors.js";

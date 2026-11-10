@@ -1,4 +1,4 @@
-import type { PdfJsonManager } from "@rsc-utils/io-utils";
+import type { PdfJsonManager } from "@rsc-utils/cache-utils";
 import { PdfJsonParserE20 } from "../common/parse.js";
 import type { TWeaponE20 } from "../common/PlayerCharacterE20.js";
 import type { PlayerCharacterCoreTransformer, TAltMode, TWeaponTransformer } from "./PlayerCharacterTransformer.js";

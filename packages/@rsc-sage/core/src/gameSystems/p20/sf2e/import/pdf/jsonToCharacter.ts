@@ -1,4 +1,4 @@
-import { PdfJsonFieldManager, type Field, type PdfJson } from "@rsc-utils/io-utils";
+import { PdfJsonFieldManager, type Field, type PdfJson } from "@rsc-utils/cache-utils";
 import { PathbuilderCharacter } from "../../../../../sage-pf2e/model/pc/PathbuilderCharacter.js";
 import type { PathbuilderCharacterCore } from "../../../import/pathbuilder-2e/types.js";
 import { getWanderersGuidePdfKeyMap } from "../../../import/wanderers-guide/getWanderersGuidePdfKeyMap.js";

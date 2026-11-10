@@ -3,7 +3,7 @@ import { Logger } from "@rsc-utils/logger-utils";
 import { beforeAll, describe, expect, test } from "vitest";
 import { ImageCacher } from "../../build/index.js";
 
-const CACHE_PATH = "/Users/randaltmeyer/git/rsc/rpg-sage/packages/@rsc-utils/io-utils/test";
+const CACHE_PATH = "/Users/randaltmeyer/git/rsc/rpg-sage/packages/@rsc-utils/cache-utils/test";
 
 beforeAll(() => {
 	Logger.init({ dev:true });

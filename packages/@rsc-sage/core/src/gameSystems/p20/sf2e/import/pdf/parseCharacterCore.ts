@@ -1,7 +1,7 @@
 import { capitalize } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import { generateSnowflake } from "@rsc-utils/id-utils";
-import { PdfJsonFieldManager } from "@rsc-utils/io-utils";
+import { PdfJsonFieldManager } from "@rsc-utils/cache-utils";
 import { parseSize } from "../../../import/pathbuilder-2e/parseSize.js";
 import type { PathbuilderCharacterCore, TPathbuilderCharacterAbilityKey, TPathbuilderCharacterSpellCaster, TPathbuilderCharacterWeapon } from "../../../import/pathbuilder-2e/types.js";
 import { ProficiencyType } from "../../../lib/types.js";

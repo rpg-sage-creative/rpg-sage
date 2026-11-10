@@ -1,4 +1,4 @@
-import type { PdfJsonFieldManager } from "@rsc-utils/io-utils";
+import type { PdfJsonFieldManager } from "@rsc-utils/cache-utils";
 
 export type PdfKeyMapValueParser = (mgr: PdfJsonFieldManager, value?: string) => string | undefined;
 

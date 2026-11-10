@@ -1,4 +1,4 @@
-import type { PdfJsonFieldManager } from "@rsc-utils/io-utils";
+import type { PdfJsonFieldManager } from "@rsc-utils/cache-utils";
 import type { PdfKeyMap } from "../../sf2e/import/pdf/types.js";
 
 export function getWanderersGuidePdfKeyMap(): PdfKeyMap { // NOSONAR

@@ -4,7 +4,7 @@ import { Logger, error } from "@rsc-utils/logger-utils";
 import { PdfCacher, PdfJsonFieldManager, PdfJsonManager, writeFileSync } from "../../build/index.js";
 import { beforeAll, describe, test, expect } from "vitest";
 
-const CACHE_PATH = "/Users/randaltmeyer/git/rsc/rpg-sage/packages/@rsc-utils/io-utils/test";
+const CACHE_PATH = "/Users/randaltmeyer/git/rsc/rpg-sage/packages/@rsc-utils/cache-utils/test";
 
 beforeAll(() => {
 	Logger.init({ dev:true });
@@ -12,7 +12,7 @@ beforeAll(() => {
 });
 
 function toTestFilePath(...parts) {
-	return "file://" + resolve(join("packages", "@rsc-utils", "io-utils", "test", ...parts));
+	return "file://" + resolve(join("packages", "@rsc-utils", "cache-utils", "test", ...parts));
 }
 
 describe("pdf", () => {

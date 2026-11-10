@@ -12,6 +12,7 @@
 		{ "path": "../../@rsc-sage/core" },
 		{ "path": "../../@rsc-sage/data" },
 		{ "path": "../../@rsc-sage/env" },
+		{ "path": "../../@rsc-utils/cache-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
 		{ "path": "../../@rsc-utils/map-utils" },
 	],

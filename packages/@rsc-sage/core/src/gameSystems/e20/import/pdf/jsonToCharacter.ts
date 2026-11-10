@@ -1,4 +1,4 @@
-import { PdfJsonManager, type PdfJson } from "@rsc-utils/io-utils";
+import { PdfJsonManager, type PdfJson } from "@rsc-utils/cache-utils";
 import { PdfJsonParserJoe } from "../../../../sage-e20/joe/parse.js";
 import { PdfJsonParserPR } from "../../../../sage-e20/pr/parse.js";
 import { PdfJsonParserTransformer } from "../../../../sage-e20/transformer/parse.js";
