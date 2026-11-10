@@ -1,0 +1,23 @@
+import { tagLiterals } from "@rsc-tools/dev-scripts";
+import { describe, expect, test } from "vitest";
+import { randomItem } from "../../build/index.js";
+
+describe("random", () => {
+	describe("randomItem", () => {
+
+		const array = [1,2,"a","b",{},new Date(),new Map()];
+
+		test(tagLiterals`randomItem(${array})`, () => {
+			for (let i = 0; i < 1000; i++) {
+				expect(array.includes(randomItem(array))).toBe(true);
+			}
+		});
+
+		test(tagLiterals`randomItem(${[]})`, () => {
+			for (let i = 0; i < 1000; i++) {
+				expect(randomItem([])).toBeUndefined();
+			}
+		});
+
+	});
+});
