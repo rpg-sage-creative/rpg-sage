@@ -735,7 +735,7 @@ export class SageEventCache {
 		if (!channelId) return undefined;
 		const guildId = this.server?.id;
 		if (guildId) {
-			return this.discord.fetchChannel({ guildId, channelId });
+			return this.discord.fetchGuildChannel({ guildId, channelId });
 		}
 		if (this.user) {
 			return this.discord.fetchDmChannel({ channelId, userId:this.user?.did }) as Promise<T>;

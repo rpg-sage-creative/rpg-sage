@@ -56,10 +56,6 @@ export class DiscordCache {
 
 	//#region channel
 
-	/** @deprecated use fetchGuildChannel() */
-	public async fetchChannel<T extends SupportedChannelOrParent = SupportedChannelOrParent>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
-		return this.fetchGuildChannel(resolvable);
-	}
 	public async fetchGuildChannel<T extends SupportedChannelOrParent = SupportedChannelOrParent>(resolvable: Optional<CanBeChannelReferenceResolvable>): Promise<T | undefined> {
 		const { guildId, channelId } = resolveChannelReference(resolvable) ?? { };
 		if (!channelId || !guildId) return undefined; //NOSONAR
