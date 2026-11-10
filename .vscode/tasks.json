@@ -88,6 +88,23 @@
 			}
 		},
 		{
+			"label": "dynamic-test-package",
+			"command": "[ ! -f \"${fileDirname}/tsconfig.json\" ] || pnpm exec tsc -b \"${fileDirname}/tsconfig.json\" && pnpm scrub::logs && pnpm vitest --run --globals \"${fileDirname}\" codeName=dev",
+			"type": "shell",
+			"group": {
+				"kind": "test",
+				"isDefault": "packages/**/package.json"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false
+			}
+		},
+		{
 			"label": "full-test",
 			"command": "pnpm",
 			"args": [ "test" ],
