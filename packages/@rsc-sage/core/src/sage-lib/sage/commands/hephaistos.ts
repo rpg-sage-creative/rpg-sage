@@ -3,7 +3,7 @@ import { isNotBlank, StringMatcher } from "@rsc-utils/string-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordMaxValues, EmbedBuilder, parseReference, toUserMention, type SupportedTarget } from "@rsc-chat/discord-utils";
-import { replaceMacroArgsWithDefaultValues, type DiceMacroBase, type MacroBase } from "@rsc-utils/game-utils";
+import { replaceMacroArgsWithDefaultValues, type DiceMacroBase, type MacroBase } from "@rsc-sage/game";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message, StringSelectMenuBuilder } from "discord.js";
 import { SavingThrow } from "../../../gameSystems/d20/lib/SavingThrow.js";

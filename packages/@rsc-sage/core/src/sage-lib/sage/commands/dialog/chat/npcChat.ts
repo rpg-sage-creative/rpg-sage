@@ -1,4 +1,4 @@
-import type { DialogContent } from "@rsc-utils/game-utils";
+import type { DialogContent } from "@rsc-sage/game";
 import type { SageMessage } from "../../../model/SageMessage.js";
 import { findNpc } from "../find/findNpc.js";
 import { getColorType } from "../getColorType.js";

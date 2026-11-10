@@ -143,7 +143,7 @@
 		{ "path": "./packages/@rsc-chat/discord-utils" },
 
 		// uses/triggers data + arg/charset/class/collection/color/date/error/id/json/logger/number/quoted-string/random/regexp/string/token-string/type/url/whitespace-string
-		{ "path": "./packages/@rsc-utils/game-utils" },
+		{ "path": "./packages/@rsc-sage/game" },
 
 		// uses/triggers string/type
 		{ "path": "./packages/@rsc-sage/localization" },

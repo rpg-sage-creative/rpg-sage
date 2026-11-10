@@ -1,5 +1,5 @@
 import { cloneJson } from "@rsc-utils/json-utils";
-import type { SimpleDice } from "@rsc-utils/game-utils";
+import type { SimpleDice } from "@rsc-sage/game";
 import { Logger } from "@rsc-utils/logger-utils";
 import { randomInt } from "node:crypto";
 import { ClimateType, WindType } from "./weather.js";

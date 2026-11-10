@@ -1,6 +1,6 @@
 import { isInvalidWebhookUsername, parseReference, type MessageOrPartial } from "@rsc-chat/discord-utils";
 import { readJsonFetchHeaders } from "@rsc-sage/env";
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
+import type { CharacterBase, CharacterBaseCore } from "@rsc-sage/game";
 import { getJson } from "@rsc-utils/https-utils";
 import { PdfCacher, type PdfJson } from "@rsc-utils/cache-utils";
 import { noop } from "@rsc-utils/type-utils";

@@ -1,5 +1,5 @@
 import { Season } from "@rsc-utils/date-utils";
-import { GDate, type SimpleDice } from "@rsc-utils/game-utils";
+import { GDate, type SimpleDice } from "@rsc-sage/game";
 import { cloneJson } from "@rsc-utils/json-utils";
 import { fahrenheitToCelsius } from "@rsc-utils/number-utils";
 import { rollDiceString, rollDie } from "@rsc-utils/random-utils";

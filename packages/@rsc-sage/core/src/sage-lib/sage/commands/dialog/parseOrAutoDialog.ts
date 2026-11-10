@@ -1,6 +1,6 @@
 import { EmojiType } from "@rsc-sage/data";
 import { isDefined } from "@rsc-utils/type-utils";
-import type { DialogContent } from "@rsc-utils/game-utils";
+import type { DialogContent } from "@rsc-sage/game";
 import { hasImageAttachment } from "../../../../sage-utils/hasImageAttachment.js";
 import type { SageMessage } from "../../model/SageMessage.js";
 import { parseDialogContents } from "./parseDialogContents.js";

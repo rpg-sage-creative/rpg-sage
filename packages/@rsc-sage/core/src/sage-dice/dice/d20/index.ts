@@ -2,7 +2,7 @@ import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSyste
 import { Arrayish } from "@rsc-utils/collection-utils";
 import type { OrNull, OrUndefined } from "@rsc-utils/type-utils";
 import { generateSnowflake } from "@rsc-utils/id-utils";
-import { cleanDicePartDescription, createTestRegExp } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, createTestRegExp } from "@rsc-sage/game";
 import { numberOrUndefined } from "@rsc-utils/number-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/token-string-utils";
 import {

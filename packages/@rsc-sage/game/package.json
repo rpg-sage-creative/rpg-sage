@@ -1,5 +1,5 @@
 {
-	"name": "@rsc-utils/game-utils",
+	"name": "@rsc-sage/game",
 	"version": "0.0.0",
 	"private": true,
 	"main": "build/index.js",

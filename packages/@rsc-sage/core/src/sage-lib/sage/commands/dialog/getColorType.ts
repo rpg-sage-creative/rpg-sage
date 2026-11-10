@@ -1,5 +1,5 @@
 import { EmbedColorType } from "@rsc-sage/data";
-import type { DialogType } from "@rsc-utils/game-utils";
+import type { DialogType } from "@rsc-sage/game";
 
 export function getColorType(dialogType?: DialogType): EmbedColorType | null {
 	switch (dialogType) {

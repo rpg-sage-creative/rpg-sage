@@ -71,7 +71,7 @@ export function evalMath(input: string): string {
 		return outWithSign;
 
 	}catch(err) {
-		Logger.package("@rsc-utils/game-utils").error({ err, input }, `evalMath(input) exception!`);
+		Logger.package("@rsc-sage/game").error({ err, input }, `evalMath(input) exception!`);
 		return `(ERR)`;
 	}
 }

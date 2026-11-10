@@ -277,13 +277,13 @@ export class Deck {
 
 	public static from(core: DeckCore | Deck): Deck {
 		if ("toJSON" in core) {
-			Logger.package("@rsc-utils/game-utils").warn(`Deck.from(Deck): should have been a DeckCore!`);
+			Logger.package("@rsc-sage/game").warn(`Deck.from(Deck): should have been a DeckCore!`);
 			core = core.toJSON();
 		}
 
 		const deck = new Deck(core);
 		if (!deck.audit()) {
-			Logger.package("@rsc-utils/game-utils").warn(`Resetting Invalid Deck!`);
+			Logger.package("@rsc-sage/game").warn(`Resetting Invalid Deck!`);
 			deck.reset();
 		}
 

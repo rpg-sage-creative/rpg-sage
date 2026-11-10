@@ -20,7 +20,6 @@
 		{ "path": "../../@rsc-utils/dsv-utils" },
 		{ "path": "../../@rsc-utils/json-utils" },
 		{ "path": "../../@rsc-utils/error-utils" },
-		{ "path": "../../@rsc-utils/game-utils" },
 		{ "path": "../../@rsc-utils/git-utils" },
 		{ "path": "../../@rsc-utils/https-utils" },
 		{ "path": "../../@rsc-utils/id-utils" },
@@ -41,6 +40,7 @@
 		{ "path": "../../@rsc-chat/discord-utils" },
 		{ "path": "../../@rsc-sage/data" },
 		{ "path": "../../@rsc-sage/env" },
+		{ "path": "../../@rsc-sage/game" },
 		{ "path": "../../@rsc-sage/localization" },
 	],
 }

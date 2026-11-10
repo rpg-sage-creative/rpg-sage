@@ -2,7 +2,7 @@ import type { LocalizedTextKey, Localizer } from "@rsc-sage/localization";
 import { EphemeralMap } from "@rsc-utils/collection-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
-import type { MacroBase } from "@rsc-utils/game-utils";
+import type { MacroBase } from "@rsc-sage/game";
 import { quote } from "@rsc-utils/quoted-string-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { Macro } from "../../../model/Macro.js";

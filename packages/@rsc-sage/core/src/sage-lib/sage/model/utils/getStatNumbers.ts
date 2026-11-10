@@ -1,4 +1,4 @@
-import type { StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-utils/game-utils";
+import type { StatNumbersOptions, StatNumbersResults, StatResults } from "@rsc-sage/game";
 import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { CharacterShell } from "../CharacterShell.js";
 import type { GameCharacter } from "../GameCharacter.js";

@@ -81,7 +81,7 @@ function processBlock(input: string, macroTiers: DiceMacroBase[][], argsStack: D
 export function flattenDiceMacro(input: string, macroTiers: DiceMacroBase[][], argsStack: DiceMacroArgs[], stack: string[] = []): string[] {
 	// avoid a stack overflow
 	if (stack.some(isStackOverflow)) {
-		Logger.package("@rsc-utils/game-utils").warn({ input, stack }, `flattenDiceMacro(): Macro Recursion`);
+		Logger.package("@rsc-sage/game").warn({ input, stack }, `flattenDiceMacro(): Macro Recursion`);
 		return ["[0d0 Recursion!]"];
 	}
 

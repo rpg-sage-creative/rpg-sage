@@ -14,7 +14,7 @@
 		"@rsc-chat/discord-utils": "workspace:",
   		"@rsc-sage/data": "workspace:",
 		"@rsc-sage/env": "workspace:",
-		"@rsc-utils/game-utils": "workspace:",
+		"@rsc-sage/game": "workspace:",
 		"@rsc-utils/fs-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/type-utils": "workspace:"

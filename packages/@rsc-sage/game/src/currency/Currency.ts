@@ -271,7 +271,7 @@ implements Comparable<AnyCurrency> {
 			case "+": return this.add(value, denom!);
 			case "-": return this.subtract(value, denom!);
 			case "*": return this.multiply(value);
-			default: Logger.package("@rsc-utils/game-utils").debug(`Not Yet Implemented: Currency.math("${operator}", ${value}, ${denom})`);
+			default: Logger.package("@rsc-sage/game").debug(`Not Yet Implemented: Currency.math("${operator}", ${value}, ${denom})`);
 		}
 		return this;
 	}

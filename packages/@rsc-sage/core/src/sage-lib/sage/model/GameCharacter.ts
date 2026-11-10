@@ -7,7 +7,7 @@ import { isNotBlank, stringArrayOrEmpty, StringMatcher, stringOrUndefined, Strin
 import { isDefined, isString, type Args, type Optional } from "@rsc-utils/type-utils";
 import { applyChanges } from "@rsc-utils/json-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
-import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-utils/game-utils";
+import { Currency, CurrencyPf2e, Deck, doStatMath, processMath, StatBlockProcessor, unpipe, type DenominationsCore, type StatKey, type StatNumbersOptions, type StatNumbersResults, type StatResults } from "@rsc-sage/game";
 import { isUrl } from "@rsc-utils/url-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { numberOrUndefined } from "@rsc-utils/number-utils";

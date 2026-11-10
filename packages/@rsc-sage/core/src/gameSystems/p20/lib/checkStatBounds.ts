@@ -1,5 +1,5 @@
 import type { KeyValuePair } from "@rsc-utils/arg-utils";
-import { unpipe, type UnpipeResults } from "@rsc-utils/game-utils";
+import { unpipe, type UnpipeResults } from "@rsc-sage/game";
 import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { GameCharacter } from "../../../sage-lib/sage/model/GameCharacter.js";
 import { Condition } from "./Condition.js";

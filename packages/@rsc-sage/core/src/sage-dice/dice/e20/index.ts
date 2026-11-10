@@ -1,6 +1,6 @@
 import { correctEscapedMentions } from "@rsc-chat/discord-utils";
 import { DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
-import { cleanDicePartDescription, createTestRegExp, DiceDropKeepType } from "@rsc-utils/game-utils";
+import { cleanDicePartDescription, createTestRegExp, DiceDropKeepType } from "@rsc-sage/game";
 import { generateSnowflake } from "@rsc-utils/id-utils";
 import { rollDice } from "@rsc-utils/random-utils";
 import { tokenize, type TokenData, type TokenParsers } from "@rsc-utils/token-string-utils";

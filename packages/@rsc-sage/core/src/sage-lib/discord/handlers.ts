@@ -3,7 +3,7 @@ import { ghostEvent } from "@rsc-sage/env";
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { isNullOrUndefined, type Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
-import { DialogTypeOrAliasRegExp } from "@rsc-utils/game-utils";
+import { DialogTypeOrAliasRegExp } from "@rsc-sage/game";
 import { Logger } from "@rsc-utils/logger-utils";
 import { ChannelType, MessageType as DMessageType, GatewayIntentBits, PermissionFlagsBits, type Channel, type Interaction } from "discord.js";
 import { SageInteraction } from "../sage/model/SageInteraction.js";

@@ -1,4 +1,4 @@
-import { calculatePostCurrencyTotals, type PostCurrency, type PostCurrencyData, type PostCurrencyIncrement, type PostCurrencyUserCount, type PostCurrencyUserCountPostType } from "@rsc-utils/game-utils";
+import { calculatePostCurrencyTotals, type PostCurrency, type PostCurrencyData, type PostCurrencyIncrement, type PostCurrencyUserCount, type PostCurrencyUserCountPostType } from "@rsc-sage/game";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";

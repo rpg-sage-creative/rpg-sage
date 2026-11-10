@@ -1,4 +1,4 @@
-import type { DialogContent } from "@rsc-utils/game-utils";
+import type { DialogContent } from "@rsc-sage/game";
 import { Logger } from "@rsc-utils/logger-utils";
 import { registerMessageListener } from "../../discord/handlers.js";
 import { MessageType, type TCommandAndArgsAndData } from "../../discord/index.js";

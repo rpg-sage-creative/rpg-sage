@@ -2,7 +2,7 @@ import type { CardBase } from "@rsc-sage/data";
 import { BULLET, capitalize } from "@rsc-utils/string-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { toUserMention } from "@rsc-chat/discord-utils";
-import { Deck, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "@rsc-utils/game-utils";
+import { Deck, type DeckPlayArgs, type StackCard, type StackKey, type StackWhereKey } from "@rsc-sage/game";
 import { Logger } from "@rsc-utils/logger-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { deleteMessage } from "../../discord/deletedMessages.js";

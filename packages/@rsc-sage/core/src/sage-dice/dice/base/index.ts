@@ -2,7 +2,7 @@ import { correctEscapedMentions } from "@rsc-chat/discord-utils";
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType } from "@rsc-sage/data";
 import { ZERO_WIDTH_SPACE } from "@rsc-utils/string-utils";
 import { sortPrimitive, type SortResult } from "@rsc-utils/collection-utils";
-import { DiceDropKeep, DiceDropKeepType, cleanDicePartDescription, createTestRegExp, removeDesc, type DiceDropKeepData } from "@rsc-utils/game-utils";
+import { DiceDropKeep, DiceDropKeepType, cleanDicePartDescription, createTestRegExp, removeDesc, type DiceDropKeepData } from "@rsc-sage/game";
 import { generateSnowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { sum } from "@rsc-utils/number-utils";

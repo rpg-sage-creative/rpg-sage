@@ -1,5 +1,5 @@
 import { isInvalidWebhookUsername } from "@rsc-chat/discord-utils";
-import type { CharacterBase, CharacterBaseCore } from "@rsc-utils/game-utils";
+import type { CharacterBase, CharacterBaseCore } from "@rsc-sage/game";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { Message } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";

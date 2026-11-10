@@ -1,5 +1,5 @@
 import { EmbedColorType } from "@rsc-sage/data";
-import type { DialogContent } from "@rsc-utils/game-utils";
+import type { DialogContent } from "@rsc-sage/game";
 import { SageMessage } from "../../../model/SageMessage.js";
 import { findGm } from "../find/findGm.js";
 import type { ChatOptions } from "./ChatOptions.js";

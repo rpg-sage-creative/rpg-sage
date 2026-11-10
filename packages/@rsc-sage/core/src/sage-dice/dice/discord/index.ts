@@ -1,6 +1,6 @@
 import { DiceCriticalMethodType, DiceOutputType, DiceSecretMethodType, GameSystemType, getGameSystems, parseGameSystem, type GameSystem } from "@rsc-sage/data";
 import { HasCore, type IdCore } from "@rsc-utils/class-utils";
-import { matchBasicDice } from "@rsc-utils/game-utils";
+import { matchBasicDice } from "@rsc-sage/game";
 import { generateSnowflake } from "@rsc-utils/id-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { parseEnum, type OrNull, type OrUndefined } from "@rsc-utils/type-utils";

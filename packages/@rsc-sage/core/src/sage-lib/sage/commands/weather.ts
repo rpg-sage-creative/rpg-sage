@@ -1,5 +1,5 @@
 import { Season, TemperateSeason, TropicalSeason, getTemperateSeason, getTropicalSeason, } from "@rsc-utils/date-utils";
-import { GDate } from "@rsc-utils/game-utils";
+import { GDate } from "@rsc-sage/game";
 import { fahrenheitToCelsius } from "@rsc-utils/number-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { capitalize } from "@rsc-utils/string-utils";

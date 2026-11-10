@@ -1,4 +1,4 @@
-import { parseDialogContent, type DialogContent } from "@rsc-utils/game-utils";
+import { parseDialogContent, type DialogContent } from "@rsc-sage/game";
 import type { SageCommand } from "../../model/SageCommand.js";
 import { findAlias } from "./find/findAlias.js";
 

@@ -1,6 +1,6 @@
 import type { IncrementArg, KeyValuePair } from "@rsc-utils/arg-utils";
 import { StringSet } from "@rsc-utils/string-utils";
-import { doStatMath } from "@rsc-utils/game-utils";
+import { doStatMath } from "@rsc-sage/game";
 import { Condition } from "../../../../gameSystems/Condition.js";
 import type { GameCharacter } from "../GameCharacter.js";
 

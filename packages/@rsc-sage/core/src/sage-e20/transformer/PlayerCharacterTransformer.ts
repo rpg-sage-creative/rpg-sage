@@ -1,6 +1,6 @@
 import { stringOrUndefined } from "@rsc-utils/string-utils";
 import { isDefined, type Optional } from "@rsc-utils/type-utils";
-import type { StatResults } from "@rsc-utils/game-utils";
+import type { StatResults } from "@rsc-sage/game";
 import { numberOrUndefined } from "@rsc-utils/number-utils";
 import { PlayerCharacterE20, type PlayerCharacterCoreE20, type TWeaponE20 } from "../common/PlayerCharacterE20.js";
 

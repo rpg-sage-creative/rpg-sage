@@ -2,7 +2,7 @@ import { DiceCriticalMethodType, DiceOutputType, DicePostType, DiceSecretMethodT
 import { isWrapped, redactContent, unwrap, wrap } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { SupportedMessagesChannel, SupportedTarget } from "@rsc-chat/discord-utils";
-import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath, isMath, isRandomItem, processDiceMacroCall, type DiceMacroBase } from "@rsc-utils/game-utils";
+import { BasicBracketsRegExpG, createBasicBracketsRegExpG, doStatMath, isMath, isRandomItem, processDiceMacroCall, type DiceMacroBase } from "@rsc-sage/game";
 import { Logger } from "@rsc-utils/logger-utils";
 import { MaxDiceCount, MaxDieSides } from "@rsc-utils/random-utils";
 import type { TDiceOutput } from "../../../sage-dice/common.js";

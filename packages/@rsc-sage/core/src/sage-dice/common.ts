@@ -1,7 +1,7 @@
 import { DiceOutputType, type GameSystemType } from "@rsc-sage/data";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { sortPrimitive } from "@rsc-utils/collection-utils";
-import { DiceDropKeepType, evalMath, unpipe, type DiceDropKeepData } from "@rsc-utils/game-utils";
+import { DiceDropKeepType, evalMath, unpipe, type DiceDropKeepData } from "@rsc-sage/game";
 import { Logger } from "@rsc-utils/logger-utils";
 import { sum } from "@rsc-utils/number-utils";
 import type { TokenData } from "@rsc-utils/token-string-utils";

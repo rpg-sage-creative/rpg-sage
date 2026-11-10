@@ -37,6 +37,7 @@ overrides:
   "@rsc-sage/core": "./packages/@rsc-sage/core"
   "@rsc-sage/data": "./packages/@rsc-sage/data"
   "@rsc-sage/env": "./packages/@rsc-sage/env"
+  "@rsc-sage/game": "./packages/@rsc-sage/game"
   "@rsc-sage/localization": "./packages/@rsc-sage/localization"
 
   "@rsc-types/global": "./packages/@rsc-types/global"
@@ -52,7 +53,6 @@ overrides:
   "@rsc-utils/dsv-utils": "./packages/@rsc-utils/dsv-utils"
   "@rsc-utils/error-utils": "./packages/@rsc-utils/error-utils"
   "@rsc-utils/fs-utils": "./packages/@rsc-utils/fs-utils"
-  "@rsc-utils/game-utils": "./packages/@rsc-utils/game-utils"
   "@rsc-utils/git-utils": "./packages/@rsc-utils/git-utils"
   "@rsc-utils/https-utils": "./packages/@rsc-utils/https-utils"
   "@rsc-utils/id-utils": "./packages/@rsc-utils/id-utils"

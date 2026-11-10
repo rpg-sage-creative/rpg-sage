@@ -3,7 +3,7 @@ import { StringMatcher } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
 import { DiscordMaxValues } from "@rsc-chat/discord-utils";
-import type { MacroBase } from "@rsc-utils/game-utils";
+import type { MacroBase } from "@rsc-sage/game";
 import type { Bot } from "./Bot.js";
 import type { Game } from "./Game.js";
 import type { GameCharacter } from "./GameCharacter.js";

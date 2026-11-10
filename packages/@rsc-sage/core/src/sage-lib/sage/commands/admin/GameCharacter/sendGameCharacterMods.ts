@@ -1,6 +1,6 @@
 import { Arrayish, sortPrimitive } from "@rsc-utils/collection-utils";
 import { StringSet } from "@rsc-utils/string-utils";
-import { Currency, unpipe } from "@rsc-utils/game-utils";
+import { Currency, unpipe } from "@rsc-sage/game";
 import type { Message } from "discord.js";
 import { Condition } from "../../../../../gameSystems/Condition.js";
 import { sendWebhook } from "../../../../discord/messages.js";
