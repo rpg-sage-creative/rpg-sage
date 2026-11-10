@@ -5,18 +5,21 @@ function createUrl(guildId: Optional<string>, channelId: string, messageId: stri
 	return `https://discord.com/channels/${guildId ?? "@me"}/${channelId}/${messageId}`;
 }
 
-export function toMessageUrl(ref: MessageOrPartial | MessageReferenceOrPartial): string | undefined {
-	if ("messageId" in ref) {
-		if (ref.messageId) {
-			return createUrl(ref.guildId, ref.channelId, ref.messageId);
-		}
-	}else {
-		if (ref.url) {
-			return ref.url;
-		}
-		if (ref.id) {
-			return createUrl(ref.guildId, ref.channelId, ref.id);
+export function toMessageUrl(ref: Optional<MessageOrPartial | MessageReferenceOrPartial>): string | undefined {
+	if (ref) {
+		if ("messageId" in ref) {
+			if (ref.messageId) {
+				return createUrl(ref.guildId, ref.channelId, ref.messageId);
+			}
+		}else {
+			if (ref.url) {
+				return ref.url;
+			}
+			if (ref.id) {
+				return createUrl(ref.guildId, ref.channelId, ref.id);
+			}
 		}
 	}
+	console.log("%j", ref);
 	return undefined;
 }
