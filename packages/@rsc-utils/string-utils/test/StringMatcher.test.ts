@@ -1,7 +1,7 @@
 import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { describe, expect, test } from "vitest";
 import { ELLIPSIS, StringMatcher } from "../build/index.js";
-import { MatcherResolvable } from "@rsc-utils/type-utils";
+import type { MatcherResolvable } from "@rsc-utils/type-utils";
 
 describe("StringMatcher", () => {
 
