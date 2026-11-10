@@ -18,11 +18,11 @@
 		"@rsc-utils/date-utils": "workspace:",
 		"@rsc-utils/fs-utils": "workspace:",
 		"@rsc-utils/id-utils": "workspace:",
-		"@rsc-utils/io-utils": "workspace:",
 		"@rsc-utils/json-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/string-utils": "workspace:",
 		"@rsc-utils/type-utils": "workspace:",
+		"@rsc-utils/url-utils": "workspace:",
 		"@rsc-sage/env": "workspace:"
 	},
 	"scripts": {

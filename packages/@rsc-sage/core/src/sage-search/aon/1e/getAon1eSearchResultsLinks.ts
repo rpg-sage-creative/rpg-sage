@@ -1,6 +1,6 @@
 import { DataTable } from "@rsc-sage/data";
 import { stringifyJson } from "@rsc-utils/json-utils";
-import { getText } from "@rsc-utils/io-utils";
+import { getText } from "@rsc-utils/https-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import type { Aon1eSearchResultsCat, Aon1eSearchResultsLink } from "./types.js";
 

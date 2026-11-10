@@ -48,10 +48,12 @@ overrides:
   "@rsc-utils/collection-utils": "./packages/@rsc-utils/collection-utils"
   "@rsc-utils/color-utils": "./packages/@rsc-utils/color-utils"
   "@rsc-utils/date-utils": "./packages/@rsc-utils/date-utils"
+  "@rsc-utils/dsv-utils": "./packages/@rsc-utils/dsv-utils"
   "@rsc-utils/error-utils": "./packages/@rsc-utils/error-utils"
   "@rsc-utils/fs-utils": "./packages/@rsc-utils/fs-utils"
   "@rsc-utils/game-utils": "./packages/@rsc-utils/game-utils"
   "@rsc-utils/git-utils": "./packages/@rsc-utils/git-utils"
+  "@rsc-utils/https-utils": "./packages/@rsc-utils/https-utils"
   "@rsc-utils/id-utils": "./packages/@rsc-utils/id-utils"
   "@rsc-utils/io-utils": "./packages/@rsc-utils/io-utils"
   "@rsc-utils/json-utils": "./packages/@rsc-utils/json-utils"
@@ -68,6 +70,7 @@ overrides:
   "@rsc-utils/string-utils": "./packages/@rsc-utils/string-utils"
   "@rsc-utils/token-string-utils": "./packages/@rsc-utils/token-string-utils"
   "@rsc-utils/type-utils": "./packages/@rsc-utils/type-utils"
+  "@rsc-utils/url-utils": "./packages/@rsc-utils/url-utils"
   "@rsc-utils/whitespace-string-utils": "./packages/@rsc-utils/whitespace-string-utils"
 
 # catalog:

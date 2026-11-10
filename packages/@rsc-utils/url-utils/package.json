@@ -1,0 +1,21 @@
+{
+	"name": "@rsc-utils/url-utils",
+	"version": "0.0.0",
+	"description": "URL validation and URL-matching regex utilities.",
+	"license": "LGPL-3.0-or-later",
+	"main": "build/index.js",
+	"type": "module",
+	"devDependencies": {
+		"@rsc-tools/dev-scripts": "workspace:",
+		"@types/node": "^24.12.2",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
+	},
+	"dependencies": {
+		"@rsc-utils/regexp-utils": "workspace:",
+		"regex": "^6.1.0"
+	},
+	"scripts": {
+		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
+	}
+}

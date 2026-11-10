@@ -1,4 +1,4 @@
-import { getUrlRegex } from "@rsc-utils/io-utils";
+import { getUrlRegex } from "@rsc-utils/url-utils";
 import { OptionalHorizontalWhitespaceRegExp as HWS, OptionalWhitespaceRegExp as WS } from "@rsc-utils/whitespace-string-utils";
 import { regex } from "regex";
 

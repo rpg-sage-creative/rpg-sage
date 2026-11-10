@@ -1,6 +1,6 @@
 import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { existsSync, rmSync, statSync } from "fs";
-import { cacheFile } from "../../build/index.js";
+import { cacheFile } from "../build/index.js";
 
 
 const filePath = "./invite-permission-list.jpg";

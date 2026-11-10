@@ -1,5 +1,5 @@
 import { parseJson } from "@rsc-utils/json-utils";
-import { getJson } from "@rsc-utils/io-utils";
+import { getJson } from "@rsc-utils/https-utils";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
 import { coreToResult, fetchCores as fetchAll, fetchCore as fetchOne, type FetchCoreResult, type FetchResult, type ImportHandlers } from "../../utils/io/fetchCores.js";
 import type { FetchResultError } from "../../utils/io/handleImportErrors.js";

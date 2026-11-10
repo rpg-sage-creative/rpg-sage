@@ -1,5 +1,5 @@
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { getUrlRegex, type WRAPPED_URL, type URL } from "@rsc-utils/io-utils";
+import { getUrlRegex, type WRAPPED_URL, type URL } from "@rsc-utils/url-utils";
 
 /**
  * Wraps the given content in <> if it is a url.

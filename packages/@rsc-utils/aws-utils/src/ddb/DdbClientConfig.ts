@@ -1,15 +1,5 @@
-// import { isUrl } from "../../url/isUrl.js";
-// import type { VALID_URL } from "../../url/types.js";
+import { isUrl, type VALID_URL } from "@rsc-utils/url-utils";
 import { isAwsRegion, type AwsRegion } from "../AwsRegion.js";
-
-/** A valid URL starts with http:// or https:// */
-export type VALID_URL = string & { valid_url:never; };
-
-/** @todo replace this function and the VALID_URL type with proper references when they are extracted from io-utils */
-function isUrl(value: unknown): value is VALID_URL {
-	return typeof(value) === "string"
-		&& (value.startsWith("http://") || value.startsWith("https://"));
-}
 
 export type DdbClientConfig = {
 	/** "ddbAccessKeyId":"" */

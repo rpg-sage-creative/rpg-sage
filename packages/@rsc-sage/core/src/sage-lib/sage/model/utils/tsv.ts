@@ -1,7 +1,8 @@
 import { isWrapped, stringOrUndefined } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { MacroBase } from "@rsc-utils/game-utils";
-import { getText, type VALID_URL } from "@rsc-utils/io-utils";
+import { getText } from "@rsc-utils/https-utils";
+import type { VALID_URL } from "@rsc-utils/url-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 
 type StringRecord = Record<string, string>;

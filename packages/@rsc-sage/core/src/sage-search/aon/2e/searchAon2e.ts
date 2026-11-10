@@ -1,6 +1,6 @@
 import { sortPrimitive, type SortResult } from "@rsc-utils/collection-utils";
 import { StringMatcher } from "@rsc-utils/string-utils";
-import { getJson } from "@rsc-utils/io-utils";
+import { getJson } from "@rsc-utils/https-utils";
 import { oneToUS } from "@rsc-utils/language-utils";
 import { Logger } from "@rsc-utils/logger-utils";
 import { cleanWhitespace } from "@rsc-utils/whitespace-string-utils";

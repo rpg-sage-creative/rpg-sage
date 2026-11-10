@@ -12,7 +12,7 @@
 	},
 	"dependencies": {
 		"@napi-rs/canvas": "^0.1.88",
-		"@rsc-utils/io-utils": "workspace:",
+		"@rsc-utils/https-utils": "workspace:",
 		"@rsc-utils/json-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/random-utils": "workspace:",

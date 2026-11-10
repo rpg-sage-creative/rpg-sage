@@ -1,5 +1,5 @@
 import { tagLiterals } from "@rsc-tools/dev-scripts";
-import { getJson } from "../../build/index.js";
+import { getJson } from "../build/index.js";
 
 
 describe("https", () => {

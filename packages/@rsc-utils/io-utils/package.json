@@ -6,7 +6,6 @@
 	"type": "module",
 	"devDependencies": {
 		"@rsc-tools/dev-scripts": "workspace:",
-		"@types/follow-redirects": "^1.14.4",
 		"@types/node": "^24.12.2",
 		"typescript": "^7.0.2",
 		"vitest": "^4.1.11"
@@ -14,17 +13,14 @@
 	"dependencies": {
 		"@rsc-utils/error-utils": "workspace:",
 		"@rsc-utils/fs-utils": "workspace:",
+		"@rsc-utils/https-utils": "workspace:",
 		"@rsc-utils/id-utils": "workspace:",
 		"@rsc-utils/json-utils": "workspace:",
 		"@rsc-utils/logger-utils": "workspace:",
 		"@rsc-utils/progress-utils": "workspace:",
-		"@rsc-utils/regexp-utils": "workspace:",
 		"@rsc-utils/type-utils": "workspace:",
-		"csv-parser": "^3.2.0",
 		"exifreader": "^4.36.2",
-		"follow-redirects": "^1.15.11",
-		"pdf2json": "^4.0.2",
-		"regex": "^6.1.0"
+		"pdf2json": "^4.0.2"
 	},
 	"exifreader": {
 		"include": {

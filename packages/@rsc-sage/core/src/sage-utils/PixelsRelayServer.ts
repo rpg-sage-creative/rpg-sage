@@ -3,7 +3,7 @@ import { toMarkdown } from "@rsc-utils/string-utils";
 import { parseJson, stringifyJson } from "@rsc-utils/json-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { getRegisteredIntents, toUserMention } from "@rsc-chat/discord-utils";
-import { AppServer, type BufferHandlerJsonError, type BufferHandlerResponse } from "@rsc-utils/io-utils";
+import { AppServer, type BufferHandlerJsonError, type BufferHandlerResponse } from "@rsc-utils/https-utils";
 import { captureProcessExit, errorReturnUndefined, Logger } from "@rsc-utils/logger-utils";
 import { AttachmentBuilder, Client } from "discord.js";
 import { parseDiceMatches } from "../sage-lib/sage/commands/dice.js";

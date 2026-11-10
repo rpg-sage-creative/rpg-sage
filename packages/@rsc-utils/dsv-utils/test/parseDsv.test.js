@@ -1,5 +1,5 @@
 import { tagLiterals } from "@rsc-tools/dev-scripts";
-import { parseDsv } from "../../build/index.js";
+import { parseDsv } from "../build/index.js";
 
 describe("string", () => {
 	describe("dsv", () => {

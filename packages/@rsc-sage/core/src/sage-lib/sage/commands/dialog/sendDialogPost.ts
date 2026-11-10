@@ -1,7 +1,7 @@
 import { DialogDiceBehaviorType, DialogPostType, EmojiType, type EmbedColorType } from "@rsc-sage/data";
 import type { HexColorString } from "@rsc-utils/color-utils";
 import type { Snowflake } from "@rsc-utils/id-utils";
-import { getBuffer } from "@rsc-utils/io-utils";
+import { getBuffer } from "@rsc-utils/https-utils";
 import { errorReturnEmptyArray, errorReturnUndefined, warnReturnUndefined } from "@rsc-utils/logger-utils";
 import { RenderableContent } from "@rsc-utils/render-utils";
 import { AttachmentBuilder, type Message } from "discord.js";

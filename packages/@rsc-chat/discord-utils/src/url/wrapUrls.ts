@@ -1,5 +1,5 @@
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { getUrlRegex } from "@rsc-utils/io-utils";
+import { getUrlRegex } from "@rsc-utils/url-utils";
 
 /**
  * Wraps all urls in the content with <>.

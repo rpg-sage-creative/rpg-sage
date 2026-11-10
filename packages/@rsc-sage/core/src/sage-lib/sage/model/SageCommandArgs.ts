@@ -5,7 +5,7 @@ import { unwrap } from "@rsc-utils/string-utils";
 import { type Args, type EnumLike, isDefined, type Optional } from "@rsc-utils/type-utils";
 import { isEmpty } from "@rsc-utils/json-utils";
 import { isSnowflake, isUuid, type Snowflake, type UUID } from "@rsc-utils/id-utils";
-import { isUrl, type VALID_URL } from "@rsc-utils/io-utils";
+import { isUrl, type VALID_URL } from "@rsc-utils/url-utils";
 import type { Attachment, Role, User } from "discord.js";
 import { MoveDirectionOutputType } from "../commands/map/MoveDirection.js";
 import type { SageCommand } from "./SageCommand.js";

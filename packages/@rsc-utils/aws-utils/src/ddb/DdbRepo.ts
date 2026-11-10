@@ -1,6 +1,7 @@
 import { CreateTableCommand, DeleteTableCommand, DynamoDB, ListTablesCommand, UpdateTimeToLiveCommand, type CreateTableCommandInput, type CreateTableCommandOutput, type DeleteTableCommandOutput, type ScanCommandInput, type ScanCommandOutput, type UpdateTimeToLiveCommandInput, type UpdateTimeToLiveCommandOutput } from "@aws-sdk/client-dynamodb";
+import type { VALID_URL } from "@rsc-utils/url-utils";
 import type { AwsRegion } from "../AwsRegion.js";
-import type { DdbClientConfig, VALID_URL } from "./DdbClientConfig.js";
+import type { DdbClientConfig } from "./DdbClientConfig.js";
 import { DdbTable } from "./DdbTable.js";
 import { deserializeObject } from "./internal/deserialize.js";
 import { processInBatches } from "./internal/processInBatches.js";

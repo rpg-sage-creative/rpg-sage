@@ -1,8 +1,8 @@
 import { DiscordMaxValues, EmbedBuilder } from "@rsc-chat/discord-utils";
 import type { HexColorString } from "@rsc-utils/color-utils";
-import { isWrapped, unwrap } from "@rsc-utils/string-utils";
-import { isUrl } from "@rsc-utils/io-utils";
 import { Logger } from "@rsc-utils/logger-utils";
+import { isWrapped, unwrap } from "@rsc-utils/string-utils";
+import { isUrl } from "@rsc-utils/url-utils";
 
 type Options = {
 	title?: string | null;

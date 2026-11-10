@@ -1,4 +1,4 @@
-import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/io-utils";
+import { AppServer, getJson, type AppServerEndpoint } from "@rsc-utils/https-utils";
 import { errorReturnUndefined, Logger } from "@rsc-utils/logger-utils";
 import type { Awaitable } from "@rsc-utils/type-utils";
 import { renderMap, serverHandler } from "./internal/index.js";

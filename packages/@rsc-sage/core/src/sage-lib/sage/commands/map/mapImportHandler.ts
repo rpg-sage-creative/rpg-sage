@@ -1,4 +1,4 @@
-import { getText } from "@rsc-utils/io-utils";
+import { getText } from "@rsc-utils/https-utils";
 import type { Attachment } from "discord.js";
 import { deleteMessage } from "../../../discord/deletedMessages.js";
 import { registerMessageListener } from "../../../discord/handlers.js";

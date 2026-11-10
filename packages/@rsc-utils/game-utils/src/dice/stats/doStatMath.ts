@@ -1,4 +1,4 @@
-import { UrlRegExp } from "@rsc-utils/io-utils";
+import { UrlRegExp } from "@rsc-utils/url-utils";
 import { tokenize } from "@rsc-utils/token-string-utils";
 import { ComplexMathRegExp } from "../math/internal/doComplex.js";
 import { doPosNeg, PosNegNumberRegExp } from "../math/internal/doPosNeg.js";

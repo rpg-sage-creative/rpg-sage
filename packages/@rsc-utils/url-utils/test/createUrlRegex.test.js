@@ -1,5 +1,5 @@
 import { tagLiterals } from "@rsc-tools/dev-scripts";
-import { getUrlRegex } from "../../build/index.js";
+import { getUrlRegex } from "../build/index.js";
 
 describe("url", () => {
 

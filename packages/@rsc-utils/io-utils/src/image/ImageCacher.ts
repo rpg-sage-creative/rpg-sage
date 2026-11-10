@@ -1,8 +1,8 @@
 import { deleteFile, readFile, writeFile } from "@rsc-utils/fs-utils";
+import { getBuffer } from "@rsc-utils/https-utils";
 import { generateSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { noop, type Optional } from "@rsc-utils/type-utils";
 import { format } from "node:path";
-import { getBuffer } from "../https/getBuffer.js";
 import { bufferToMetadata, type ImageMetadata } from "./bufferToMetadata.js";
 
 /** Copies an image from the given url to a local file before trying to read it. */

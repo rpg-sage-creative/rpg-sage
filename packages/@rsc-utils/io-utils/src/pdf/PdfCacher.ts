@@ -1,9 +1,9 @@
 import { deleteFile, writeFile } from "@rsc-utils/fs-utils";
+import { getBuffer } from "@rsc-utils/https-utils";
 import { generateSnowflake, type Snowflake } from "@rsc-utils/id-utils";
 import { noop, type Optional } from "@rsc-utils/type-utils";
 import { format } from "node:path";
 import PDFParser from "pdf2json";
-import { getBuffer } from "../https/getBuffer.js";
 import { PdfJsonFieldManager, type PdfJsonFieldTransmuter } from "./PdfJsonFieldManager.js";
 import { PdfJsonManager } from "./PdfJsonManager.js";
 import type { CheckField, Field, PdfJson, TextField } from "./types.js";

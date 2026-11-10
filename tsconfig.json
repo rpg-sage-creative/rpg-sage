@@ -102,6 +102,10 @@
 		// uses/triggers regexp/type
 		{ "path": "./packages/@rsc-utils/color-utils" },
 
+		// uses/triggers regexp
+		{ "path": "./packages/@rsc-utils/dsv-utils" },
+		{ "path": "./packages/@rsc-utils/url-utils" },
+
 		// uses/triggers collection/id/type
 		{ "path": "./packages/@rsc-utils/class-utils" },
 
@@ -111,7 +115,10 @@
 		// uses/triggers quoted-string/regexp/token-string/type/whitespace-string
 		{ "path": "./packages/@rsc-utils/arg-utils" },
 
-		// uses/triggers error/id/json/logger/progress/regexp/type
+		// uses/triggers error/fs/json/logger/progress/type
+		{ "path": "./packages/@rsc-utils/https-utils" },
+
+		// uses/triggers error/fs/https/id/json/logger/progress/type
 		{ "path": "./packages/@rsc-utils/io-utils" },
 
 		// uses/triggers arg/charset/error/json/number/quoted-string/regexp/token-string/type/whitespace-string
@@ -123,19 +130,19 @@
 		// uses/triggers collection/language/quoted-string/token-string/type/whitespace-string
 		{ "path": "./packages/@rsc-utils/search-utils" },
 
-		// uses/triggers io/json/logger/random/type
+		// uses/triggers https/json/logger/random/type
 		{ "path": "./packages/@rsc-utils/map-utils" },
 
 		// uses/triggers arg/aws/git/id/io/json/logger/type
 		{ "path": "./packages/@rsc-sage/env" },
 
-		// uses/triggers aws/class/collection/color/date/id/io/json/logger/string/type + env
+		// uses/triggers aws/class/collection/color/date/fs/id/json/logger/string/type/url + env
 		{ "path": "./packages/@rsc-sage/data" },
 
-		// uses/triggers env/error/id/io/json/logger/regexp/string/token-string/type
+		// uses/triggers env/error/fs/https/id/json/logger/regexp/string/token-string/type/url
 		{ "path": "./packages/@rsc-chat/discord-utils" },
 
-		// uses/triggers data + arg/charset/class/collection/color/date/error/id/io/json/logger/number/quoted-string/random/regexp/string/token-string/type/whitespace-string
+		// uses/triggers data + arg/charset/class/collection/color/date/error/id/json/logger/number/quoted-string/random/regexp/string/token-string/type/url/whitespace-string
 		{ "path": "./packages/@rsc-utils/game-utils" },
 
 		// uses/triggers string/type

@@ -1,0 +1,27 @@
+{
+	"name": "@rsc-utils/https-utils",
+	"version": "0.0.0",
+	"description": "HTTP/HTTPS request, caching, and app server utilities.",
+	"license": "LGPL-3.0-or-later",
+	"main": "build/index.js",
+	"type": "module",
+	"devDependencies": {
+		"@rsc-tools/dev-scripts": "workspace:",
+		"@types/follow-redirects": "^1.14.4",
+		"@types/node": "^24.12.2",
+		"typescript": "^7.0.2",
+		"vitest": "^4.1.11"
+	},
+	"dependencies": {
+		"@rsc-utils/error-utils": "workspace:",
+		"@rsc-utils/fs-utils": "workspace:",
+		"@rsc-utils/json-utils": "workspace:",
+		"@rsc-utils/logger-utils": "workspace:",
+		"@rsc-utils/progress-utils": "workspace:",
+		"@rsc-utils/type-utils": "workspace:",
+		"follow-redirects": "^1.15.11"
+	},
+	"scripts": {
+		"build::create-indexes": "[ -d './src' ] && pnpm dev-scripts create-indexes"
+	}
+}

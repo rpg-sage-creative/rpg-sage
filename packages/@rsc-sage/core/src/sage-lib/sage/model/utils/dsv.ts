@@ -1,5 +1,7 @@
 import type { Optional } from "@rsc-utils/type-utils";
-import { getText, parseDsv, type DsvDelimiter, type DsvResults, type VALID_URL } from "@rsc-utils/io-utils";
+import { parseDsv, type DsvDelimiter, type DsvResults } from "@rsc-utils/dsv-utils";
+import { getText } from "@rsc-utils/https-utils";
+import type { VALID_URL } from "@rsc-utils/url-utils";
 import { errorReturnUndefined } from "@rsc-utils/logger-utils";
 import { WhitespaceRegExp } from "@rsc-utils/whitespace-string-utils";
 import type { SageCommand } from "../SageCommand.js";
