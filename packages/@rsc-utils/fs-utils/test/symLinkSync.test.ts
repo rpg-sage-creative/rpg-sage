@@ -7,17 +7,15 @@ import { getTestRoot } from "./getTestRoot.js";
 describe("fs", () => {
 	describe("symLinkSync", () => {
 
-		const TEST_ROOT = "./test/fs";
-
 		const dir = getTestRoot("files");
 		const file = `${dir}/jsonFile.json`;
-		const original = `./jsonFile.json`
-		const link = `${dir}/jsonFile.link-sync.json`;
+		// the link lives in files/out so concurrent scans of files/ (readJsonFiles, findJsonFile) never see it created/deleted mid-run
+		const link = `${dir}/out/jsonFile.link-sync.json`;
 
 		test(tagLiterals`link ${file} as ${link}`, () => {
 			expect(fileExistsSync(file)).toBe(true);
 			expect(fileExistsSync(link)).toBe(false);
-			expect(symLinkSync(original, link, { overwrite:true })).toBe(true);
+			expect(symLinkSync(file, link, { makeDir:true, overwrite:true })).toBe(true);
 			expect(fileExistsSync(link)).toBe(true);
 			expect(readJsonFileSync(file)).toStrictEqual(readJsonFileSync(link));
 			expect(deleteFileSync(link)).toBeTruthy();

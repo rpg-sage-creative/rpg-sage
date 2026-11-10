@@ -9,13 +9,13 @@ describe("fs", () => {
 
 		const dir = getTestRoot("files");
 		const file = `${dir}/jsonFile.json`;
-		const original = `./jsonFile.json`
-		const link = `${dir}/jsonFile.link.json`;
+		// the link lives in files/out so concurrent scans of files/ (readJsonFiles, findJsonFile) never see it created/deleted mid-run
+		const link = `${dir}/out/jsonFile.link.json`;
 
 		test(tagLiterals`link ${file} as ${link}`, async() => {
 			expect(await fileExists(file)).toBe(true);
 			expect(await fileExists(link)).toBe(false);
-			expect(await symLink(original, link, { overwrite:true })).toBe(true);
+			expect(await symLink(file, link, { makeDir:true, overwrite:true })).toBe(true);
 			expect(await fileExists(link)).toBe(true);
 			expect(await readJsonFile(file)).toStrictEqual(await readJsonFile(link));
 			expect(await deleteFile(link)).toBeTruthy();
