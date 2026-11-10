@@ -33,5 +33,10 @@ describe("json", () => {
 			});
 		});
 
+		test("cloneJson(undefined) throws a SyntaxError", () => {
+			expect(() => cloneJson(undefined)).toThrow(SyntaxError);
+			expect(() => cloneJson(undefined)).toThrow(/Unexpected identifier/);
+		});
+
 	});
 });

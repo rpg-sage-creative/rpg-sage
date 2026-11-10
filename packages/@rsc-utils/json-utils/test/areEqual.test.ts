@@ -1,15 +1,9 @@
 import { describe, expect, test } from "vitest";
 import { areEqual, stringifyJson } from "../build/index.js";
 
-type ChildData = {
-	empty?: null|undefined;
-	one?: 1|"one";
-	two?: 2|"2";
-	three?: 3 | "3" | { "3":3|"3"; "3_4":3.4|"3.4" };
-};
 type TestData = {
-	a: ChildData;
-	b: ChildData;
+	a: unknown;
+	b: unknown;
 	equal: boolean;
 	options?: { strict?:boolean; ignore?:string[]; }
 };
@@ -43,6 +37,33 @@ describe("areEqual", () => {
 		{ a: { three:{"3":3,"3_4":3.4}, one:1, two:2 }, b: { two:2, one:1, three:{"3":3,"3_4":"3.4"} }, options:{ ignore:["three"] }, equal:true },
 		{ a: { three:{"3":3,"3_4":3.4}, one:1, two:2 }, b: { two:2, one:1, three:{"3":3,"3_4":"3.4"} }, options:{ ignore:["three.3_4"] }, equal:true },
 		{ a: { three:{"3":3,"3_4":3.4}, one:1, two:2 }, b: { two:2, one:1, three:{"3":"3","3_4":"3.4"} }, options:{ ignore:["three.3_4"] }, equal:false },
+
+		// primitives
+		{ a:1, b:1, equal:true },
+		{ a:"Apple", b:"apple", equal:false },
+		{ a:null, b:undefined, equal:false },
+		{ a:undefined, b:undefined, equal:true },
+
+		// stringifyJson turns NaN into null and -0 into 0
+		{ a:NaN, b:NaN, equal:true },
+		{ a:0, b:-0, equal:true },
+
+		// dates compare by their stringified value
+		{ a:new Date(100), b:new Date(100), equal:true },
+		{ a:new Date(100), b:new Date(200), equal:false },
+
+		// bigints compare by their stringified value
+		{ a:1n, b:1n, equal:true },
+		{ a:1n, b:"1", equal:false },
+
+		// arrays are order sensitive
+		{ a:[1, 2], b:[1, 2], equal:true },
+		{ a:[1, 2], b:[2, 1], equal:false },
+
+		// ignore keyPaths can go any number of levels deep
+		{ a:{ x:{ y:{ z:1, w:2 } } }, b:{ x:{ y:{ z:9, w:2 } } }, options:{ ignore:["x.y.z"] }, equal:true },
+		{ a:{ x:{ y:{ z:1, w:2 } } }, b:{ x:{ y:{ z:9, w:2 } } }, options:{ ignore:["x.y.q"] }, equal:false },
+
 	];
 
 	for (const { a, b, options, equal } of tests) {

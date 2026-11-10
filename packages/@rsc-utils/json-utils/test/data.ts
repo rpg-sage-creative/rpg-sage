@@ -48,6 +48,9 @@ const cloneParseStringify = () => {
 		{ object:{ "one": "One", "two": [ 2, 3, 4 ] }, string:`{\n\t"one": "One",\n\t"two": [ 2, 3, 4 ]\n}`, stringifyMaxLineLength:250, label:`simple multiline output`},
 
 		{ object:{ "one": "One", "two": [ "2", { "three": [ 3 ] } ], "four": "4" }, string:`{\n\t"one": "One",\n\t"two": [\n\t\t"2",\n\t\t{\n\t\t\t"three": [ 3 ]\n\t\t}\n\t],\n\t"four": "4"\n}`, stringifyMaxLineLength:250, label:`multiline output`, },
+
+		// space without maxLineLength
+		{ object:{ a:"Apple" }, string:'{\n  "a": "Apple"\n}', stringifySpace:2, label:`space=2 pretty output` },
 	] as CloneParseStringifyData[];
 }
 
