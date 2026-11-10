@@ -47,7 +47,8 @@ export function stringifyJson(value: any, replacer?: Function | (string | number
 				return replacer.call(this, key, value);
 
 			// check an array to ensure the key was given
-			}else if (Array.isArray(replacer) && !replacer.some(_key => String(_key) === key)) {
+			// key "" is JSON.stringify's sentinel for the root value, which must never be filtered out
+			}else if (Array.isArray(replacer) && key !== "" && !replacer.some(_key => String(_key) === key)) {
 				return undefined;
 			}
 		}
