@@ -39,6 +39,7 @@ overrides:
   "@rsc-sage/env": "./packages/@rsc-sage/env"
   "@rsc-sage/game": "./packages/@rsc-sage/game"
   "@rsc-sage/localization": "./packages/@rsc-sage/localization"
+  "@rsc-sage/map": "./packages/@rsc-sage/map"
 
   "@rsc-types/global": "./packages/@rsc-types/global"
 
@@ -59,7 +60,6 @@ overrides:
   "@rsc-utils/json-utils": "./packages/@rsc-utils/json-utils"
   "@rsc-utils/language-utils": "./packages/@rsc-utils/language-utils"
   "@rsc-utils/logger-utils": "./packages/@rsc-utils/logger-utils"
-  "@rsc-utils/map-utils": "./packages/@rsc-utils/map-utils"
   "@rsc-utils/number-utils": "./packages/@rsc-utils/number-utils"
   "@rsc-utils/progress-utils": "./packages/@rsc-utils/progress-utils"
   "@rsc-utils/quoted-string-utils": "./packages/@rsc-utils/quoted-string-utils"

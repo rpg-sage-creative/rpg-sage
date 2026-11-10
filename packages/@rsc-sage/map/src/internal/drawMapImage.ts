@@ -28,7 +28,7 @@ export async function drawMapImage(mapArgs: MapCache, mapLayerMeta: MapLayerMeta
 			mapArgs.context.globalAlpha = opacity;
 			mapArgs.context.drawImage(imgImage, imgClipX, imgClipY, imgClipWidth, imgClipHeight, mapLayerMeta.layerOffsetX + scaledImgOffsetX, mapLayerMeta.layerOffsetY + scaledImgOffsetY, scaledImgWidth, scaledImgHeight);
 		}catch(err) {
-			Logger.package("@rsc-utils/map-utils")
+			Logger.package("@rsc-sage/map")
 				.error(
 					{ err },
 					"mapArgs.context.drawImage(imgImage = %o, %d, %d, %d, %d, %d, %d, %d, %d",

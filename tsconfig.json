@@ -130,23 +130,23 @@
 		// uses/triggers collection/language/quoted-string/token-string/type/whitespace-string
 		{ "path": "./packages/@rsc-utils/search-utils" },
 
-		// uses/triggers https/json/logger/random/type
-		{ "path": "./packages/@rsc-utils/map-utils" },
-
 		// uses/triggers arg/aws/git/id/json/logger/type
 		{ "path": "./packages/@rsc-sage/env" },
 
-		// uses/triggers aws/class/collection/color/date/fs/id/json/logger/string/type/url + env
-		{ "path": "./packages/@rsc-sage/data" },
-
 		// uses/triggers env/error/fs/https/id/json/logger/regexp/string/token-string/type/url
 		{ "path": "./packages/@rsc-chat/discord-utils" },
+
+		// uses/triggers aws/class/collection/color/date/fs/id/json/logger/string/type/url + env
+		{ "path": "./packages/@rsc-sage/data" },
 
 		// uses/triggers data + arg/charset/class/collection/color/date/error/id/json/logger/number/quoted-string/random/regexp/string/token-string/type/url/whitespace-string
 		{ "path": "./packages/@rsc-sage/game" },
 
 		// uses/triggers string/type
 		{ "path": "./packages/@rsc-sage/localization" },
+
+		// uses/triggers https/json/logger/random/type
+		{ "path": "./packages/@rsc-sage/map" },
 
 		// uses/triggers discord-utils/data/env/localization + the rsc-utils stack
 		{ "path": "./packages/@rsc-sage/core" },

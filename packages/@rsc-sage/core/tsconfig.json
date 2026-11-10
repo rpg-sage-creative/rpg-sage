@@ -25,7 +25,6 @@
 		{ "path": "../../@rsc-utils/id-utils" },
 		{ "path": "../../@rsc-utils/language-utils" },
 		{ "path": "../../@rsc-utils/logger-utils" },
-		{ "path": "../../@rsc-utils/map-utils" },
 		{ "path": "../../@rsc-utils/number-utils" },
 		{ "path": "../../@rsc-utils/quoted-string-utils" },
 		{ "path": "../../@rsc-utils/random-utils" },
@@ -42,5 +41,6 @@
 		{ "path": "../../@rsc-sage/env" },
 		{ "path": "../../@rsc-sage/game" },
 		{ "path": "../../@rsc-sage/localization" },
+		{ "path": "../../@rsc-sage/map" },
 	],
 }

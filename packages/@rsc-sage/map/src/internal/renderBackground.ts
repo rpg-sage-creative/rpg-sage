@@ -23,14 +23,14 @@ export async function renderBackground(mapCache: MapCache): Promise<boolean> {
 
 	// ensure the map data has a background
 	if (!background) {
-		Logger.package("@rsc-utils/map-utils").trace({ mapData:mapCache.mapData }, `!GameMapData.background`);
+		Logger.package("@rsc-sage/map").trace({ mapData:mapCache.mapData }, `!GameMapData.background`);
 		return false;
 	}
 
 	// load the background image
 	const bgImage = await loadImage(mapCache, background);
 	if (!bgImage) {
-		Logger.package("@rsc-utils/map-utils").trace({ background }, `!bgImage`);
+		Logger.package("@rsc-sage/map").trace({ background }, `!bgImage`);
 		return false;
 	}
 	// mapCache.bgImage = bgImage;
@@ -72,7 +72,7 @@ export async function renderBackground(mapCache: MapCache): Promise<boolean> {
 		return true;
 
 	}catch(err) {
-		Logger.package("@rsc-utils/map-utils").error({ err }, `mapArgs.context.drawImage(bgImage = ${stringifyJson(background)}, ${bgClipX}, ${bgClipY}, ${bgWidth}, ${bgHeight}, 0, 0, ${bgWidth}, ${bgHeight});`);
+		Logger.package("@rsc-sage/map").error({ err }, `mapArgs.context.drawImage(bgImage = ${stringifyJson(background)}, ${bgClipX}, ${bgClipY}, ${bgWidth}, ${bgHeight}, 0, 0, ${bgWidth}, ${bgHeight});`);
 		// remember the bad url
 		mapCache.invalidImages.add(background.url);
 		return false;

@@ -14,14 +14,14 @@ export async function loadImage(mapCache: MapCache, imgMeta: ImageMeta): Promise
 	if (!images.has(imageUrl)) {
 		// first fetch
 		let image = await _loadImage(imageUrl).catch(err => {
-			Logger.package("@rsc-utils/map-utils").warn({ imageUrl }, err);
+			Logger.package("@rsc-sage/map").warn({ imageUrl }, err);
 			return null;
 		});
 
 		// if we failed, try again just in case
 		if (!image) {
 			image = await _loadImage(imageUrl).catch(err => {
-				Logger.package("@rsc-utils/map-utils").error({ imageUrl }, err);
+				Logger.package("@rsc-sage/map").error({ imageUrl }, err);
 				return null;
 			});
 		}

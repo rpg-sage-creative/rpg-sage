@@ -1,6 +1,6 @@
 import { getPort } from "@rsc-sage/env";
+import { RenderableMap } from "@rsc-sage/map";
 import { captureProcessExit } from "@rsc-utils/logger-utils";
-import { RenderableMap } from "@rsc-utils/map-utils";
 
 captureProcessExit();
 RenderableMap.startServer(getPort("Map"));

@@ -1,4 +1,4 @@
-import { RenderableMap, type GameMapLayer, type MapRenderResponse, type HasOffset, type GameMapData, type GameMapBackgroundImage, type GameMapLayerData, type GameMapLayerImage } from "@rsc-utils/map-utils"
+import { RenderableMap, type GameMapLayer, type MapRenderResponse, type HasOffset, type GameMapData, type GameMapBackgroundImage, type GameMapLayerData, type GameMapLayerImage } from "@rsc-sage/map";
 import type { TGameMapAura, TGameMapCore, TGameMapImage } from "./GameMapBase.js";
 import type { TParsedGameMapCore } from "./gameMapImporter.js";
 

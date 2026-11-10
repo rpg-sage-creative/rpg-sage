@@ -4,7 +4,7 @@ import { DataTable } from "@rsc-sage/data";
 import { getCodeName, getDataRoot, getEndpoint, getPort, getSageId, getSnsClientConfig } from "@rsc-sage/env";
 import { ImageCacher, PdfCacher } from "@rsc-utils/cache-utils";
 import { captureProcessExit, Logger } from "@rsc-utils/logger-utils";
-import { RenderableMap } from "@rsc-utils/map-utils";
+import { RenderableMap } from "@rsc-sage/map";
 
 captureProcessExit();
 

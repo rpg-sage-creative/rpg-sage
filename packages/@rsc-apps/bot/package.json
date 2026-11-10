@@ -15,9 +15,9 @@
 		"@rsc-sage/core": "workspace:",
 		"@rsc-sage/data": "workspace:",
 		"@rsc-sage/env": "workspace:",
+		"@rsc-sage/map": "workspace:",
 		"@rsc-utils/cache-utils": "workspace:",
-		"@rsc-utils/logger-utils": "workspace:",
-		"@rsc-utils/map-utils": "workspace:"
+		"@rsc-utils/logger-utils": "workspace:"
 	},
 	"scripts": {
 	}
