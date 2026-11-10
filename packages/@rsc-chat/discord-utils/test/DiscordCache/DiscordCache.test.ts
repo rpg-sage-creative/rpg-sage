@@ -1,19 +1,30 @@
 import { toLiteral } from "@rsc-tools/dev-scripts";
+import { Snowflake } from "@rsc-utils/id-utils";
 import { captureProcessExit } from "@rsc-utils/logger-utils";
-import { Client } from "discord.js";
-import { DiscordCache, toChannelUrl, toHumanReadable, toMessageUrl, toUserUrl } from "../../build/index.js";
-import { inject } from "vitest";
+import { Client, IntentsBitField, Message, User } from "discord.js";
+import { afterAll, beforeAll, describe, expect, inject, test } from "vitest";
+import { CanBeUserIdResolvable, DiscordCache, SupportedGameMessagesChannel, toChannelUrl, toHumanReadable, toMessageUrl, toUserUrl } from "../../build/index.js";
 
-/** @type {Client} */
-let client;
+let client!: Client;
 
-/** @type {DiscordCache} */
-let discordCache;
+let discordCache!: DiscordCache;
 
-const injected = {
-	ids: inject("packages.@rsc-chat.discord-utils.ids"),
-	intents: inject("packages.@rsc-chat.discord-utils.intents"),
-	token: inject("packages.@rsc-chat.discord-utils.token"),
+const injected: {
+	ids: {
+		CHANNEL_ID: Snowflake;
+		GUILD_ID: Snowflake;
+		MESSAGE_ID: Snowflake;
+		ROLE_ID: Snowflake;
+		SAGE_ID: Snowflake;
+		SUPER_USER_ID: Snowflake;
+		WEBHOOK_ID: Snowflake;
+	},
+	intents: IntentsBitField,
+	token: string,
+} = {
+	ids: inject("packages.@rsc-chat.discord-utils.ids" as never),
+	intents: inject("packages.@rsc-chat.discord-utils.intents" as never),
+	token: inject("packages.@rsc-chat.discord-utils.token" as never),
 };
 
 beforeAll(async () => {
@@ -40,7 +51,7 @@ describe("DiscordCache", () => {
 
 	test(`discordCache = await DiscordCache.from(client, ${toLiteral(GUILD_ID)})`, () => {
 		expect(discordCache).toBeDefined();
-		expect(discordCache.guild.id).toBe(GUILD_ID);
+		expect(discordCache.guild?.id).toBe(GUILD_ID);
 	});
 
 });
@@ -51,7 +62,7 @@ describe("humanReadable", () => {
 		const { CHANNEL_ID, GUILD_ID, ROLE_ID, SUPER_USER_ID, WEBHOOK_ID } = injected.ids;
 
 		test(`toHumanReadable(channel)`, async () => {
-			const channel = await discordCache.fetchChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
+			const channel = await discordCache.fetchGuildChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
 			expect(toHumanReadable(channel)).toBe("RPG Sage (Dev)#​pf2e-ic");
 		});
 
@@ -66,7 +77,7 @@ describe("humanReadable", () => {
 		});
 
 		test(`toHumanReadable(guildMember)`, async () => {
-			const guildMember = await discordCache.fetchGuildMember({ user:{id:SUPER_USER_ID}, guildId:GUILD_ID });
+			const guildMember = await discordCache.fetchGuildMember({ user:{id:SUPER_USER_ID}, guildId:GUILD_ID } as CanBeUserIdResolvable);
 			expect(toHumanReadable(guildMember)).toBe("@​Randal");
 		});
 
@@ -78,7 +89,7 @@ describe("humanReadable", () => {
 		test(`toHumanReadable(webhook)`, async () => {
 			const webhook = await discordCache.fetchWebhook({ channelId:CHANNEL_ID, guildId:GUILD_ID });
 			expect(toHumanReadable(webhook)).toBe("@​RPG Sage (Dev)$SageDialogWebhookName");
-			expect(webhook.id).toBe(WEBHOOK_ID);
+			expect(webhook?.id).toBe(WEBHOOK_ID);
 		});
 
 	});
@@ -92,11 +103,10 @@ describe("url", () => {
 
 		const CHANNEL_LINK = `https://discord.com/channels/${GUILD_ID}/${CHANNEL_ID}`;
 
-		/** @type {import("discord.js").GuildTextBasedChannel} */
-		let channel;
+		let channel: SupportedGameMessagesChannel | undefined;
 
 		test(`fetching channel to test: ${toLiteral({ channelId:CHANNEL_ID, guildId:GUILD_ID })}`, async () => {
-			channel = await discordCache.fetchChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
+			channel = await discordCache.fetchGuildChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
 			expect(channel).toBeDefined();
 		});
 
@@ -105,8 +115,7 @@ describe("url", () => {
 			expect(toChannelUrl(channel)).toBe(CHANNEL_LINK);
 		});
 
-		/** @type {import("discord.js").Message} */
-		let message;
+		let message: Message | undefined;
 
 		test(`fetching message to test: ${toLiteral({ channelId:CHANNEL_ID, guildId:GUILD_ID, message:MESSAGE_ID })}`, async () => {
 			message = await channel?.messages.fetch({ message:MESSAGE_ID, cache:true, force:true });
@@ -126,16 +135,14 @@ describe("url", () => {
 
 		const MESSAGE_LINK = `https://discord.com/channels/${GUILD_ID}/${CHANNEL_ID}/${MESSAGE_ID}`;
 
-		/** @type {import("discord.js").GuildTextBasedChannel} */
-		let channel;
+		let channel: SupportedGameMessagesChannel | undefined;
 
 		test(`fetching channel to test: ${toLiteral({ channelId:CHANNEL_ID, guildId:GUILD_ID })}`, async () => {
-			channel = await discordCache.fetchChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
+			channel = await discordCache.fetchGuildChannel({ channelId:CHANNEL_ID, guildId:GUILD_ID });
 			expect(channel).toBeDefined();
 		});
 
-		/** @type {import("discord.js").Message} */
-		let message;
+		let message: Message | undefined;
 
 		test(`fetching message to test: ${toLiteral({ channelId:CHANNEL_ID, guildId:GUILD_ID, message:MESSAGE_ID })}`, async () => {
 			message = await channel?.messages.fetch({ message:MESSAGE_ID, cache:true, force:true });
@@ -155,8 +162,7 @@ describe("url", () => {
 
 		const SUPER_USER_LINK = `https://discordapp.com/users/${SUPER_USER_ID}`;
 
-		/** @type {import("discord.js").User} */
-		let user;
+		let user: User | undefined;
 
 		test(`fetching user to test: ${toLiteral(SUPER_USER_ID)}`, async () => {
 			user = await discordCache.fetchUser(SUPER_USER_ID);
