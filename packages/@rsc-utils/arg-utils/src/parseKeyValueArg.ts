@@ -46,10 +46,25 @@ export const KeyValueArgRegExp = regex()`
 
 /**
  * Returns KeyValueArg if the input is a valid key/value pairing, undefined otherwise.
- * If key is given then the key must match the valid key/value pair.
+ * The optional index is for use in classes like ArgsManager.
  */
-export function parseKeyValueArg<ValueType extends string = string>(input: Optional<string>, index?: number): KeyValueArg<string, ValueType> | undefined;
-export function parseKeyValueArg<KeyType extends string = string, ValueType extends string = string>(input: Optional<string>, index?: number): KeyValueArg<KeyType, ValueType> | undefined;
+export function parseKeyValueArg<
+	ValueType extends string = string,
+>(
+	input: Optional<string>,
+	/** optional index (for use in classes like ArgsManager) */
+	index?: number,
+): KeyValueArg<string, ValueType> | undefined;
+
+export function parseKeyValueArg<
+	KeyType extends string = string,
+	ValueType extends string = string,
+>(
+	input: Optional<string>,
+	/** optional index (for use in classes like ArgsManager) */
+	index?: number,
+): KeyValueArg<KeyType, ValueType> | undefined;
+
 export function parseKeyValueArg(raw: Optional<string>, index?: number): KeyValueArg | undefined {
 	if (raw) {
 		const match = KeyValueArgRegExp.exec(raw);
