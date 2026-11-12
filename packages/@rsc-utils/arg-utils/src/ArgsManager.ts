@@ -27,30 +27,33 @@ function parseArg<T extends string, U extends string>(arg: T, index: number): Or
 }
 
 export class ArgsManager<T extends string = string> {
-	private _args: Arg<T, string>[];
-	private _flagArgs?: FlagArg<T>[];
-	private _incrementArgs?: IncrementArg<T, any>[];
-	private _keyValueArgs?: KeyValueArg<T, any>[];
-	private _strings: string[];
-	private _valueArgs?: ValueArg<T>[];
+	// created as/if needed
+	#flagArgs?: FlagArg<T>[];
+	#incrementArgs?: IncrementArg<T, any>[];
+	#keyValueArgs?: KeyValueArg<T, any>[];
+	#valueArgs?: ValueArg<T>[];
+
+	// created in constructor
+	#args: Arg<T, string>[];
+	#strings: string[];
 
 	public constructor(raw?: string[]) {
 		// store original input
-		this._strings = raw?.slice() ?? [];
+		this.#strings = raw?.slice() ?? [];
 		// we do not want to include blank strings as args; they are separators
-		this._args = raw?.filter(s => s?.trim()).map(parseArg) as Arg<T, any>[] ?? [];
+		this.#args = raw?.filter(s => s?.trim()).map(parseArg) as Arg<T, any>[] ?? [];
 	}
 
 	// public [Symbol.]
 
 	/** Returns the count of defined Args. This may differ from the count of the original (raw) string array. */
 	public get length(): number {
-		return this._args.length;
+		return this.#args.length;
 	}
 
 	/** Returns an array of all the Args. */
 	public args(): Arg<T, string>[] {
-		return this._args.slice();
+		return this.#args.slice();
 	}
 
 	/** Sends all ValueArgs to parseEnum and returns only valid (defined) results. */
@@ -73,40 +76,40 @@ export class ArgsManager<T extends string = string> {
 
 	/** Returns all FlagArg (.isFlag === true). */
 	public flagArgs(): FlagArg<T>[] {
-		this._flagArgs ??= this._args.filter(arg => arg.isFlag) as FlagArg<T>[];
-		return this._flagArgs.slice();
+		this.#flagArgs ??= this.#args.filter(arg => arg.isFlag) as FlagArg<T>[];
+		return this.#flagArgs.slice();
 	}
 
 	/** Returns true if a flag is found that has any of the given keys. Flag keys are the flag with the first 1 or 2 dashes removed. */
 	public hasFlag(key: Lowercase<string>, ...additionalKeys: Lowercase<string>[]): boolean;
 	public hasFlag(...keys: Lowercase<string>[]): boolean {
-		return this._args.some(arg => arg.isFlag && keys.includes(arg.keyLower));
+		return this.#args.some(arg => arg.isFlag && keys.includes(arg.keyLower));
 	}
 
 	/** Returns all IncrementArg (.isIncrement === true), optionally filtering by the given keys. */
 	public incrementArgs<U extends string = string>(...keys: Lowercase<string>[]): IncrementArg<T, U>[] {
-		this._incrementArgs ??= this._args.filter(arg => arg.isIncrement) as IncrementArg<T, U>[];
-		if (keys.length && this._incrementArgs.length) {
+		this.#incrementArgs ??= this.#args.filter(arg => arg.isIncrement) as IncrementArg<T, U>[];
+		if (keys.length && this.#incrementArgs.length) {
 			const lowers = keys.map(key => key.toLowerCase());
-			return this._incrementArgs.filter(arg => lowers.includes(arg.keyLower));
+			return this.#incrementArgs.filter(arg => lowers.includes(arg.keyLower));
 		}
-		return this._incrementArgs.slice();
+		return this.#incrementArgs.slice();
 	}
 
 	/** Returns all KeyValueArg (.isKeyValue === true), optionally filtering by the given keys. */
 	public keyValueArgs<U extends string = string>(...keys: Lowercase<string>[]): KeyValueArg<T, U>[] {
-		this._keyValueArgs ??= this._args.filter(arg => arg.isKeyValue) as KeyValueArg<T, U>[];
-		if (keys.length && this._keyValueArgs.length) {
+		this.#keyValueArgs ??= this.#args.filter(arg => arg.isKeyValue) as KeyValueArg<T, U>[];
+		if (keys.length && this.#keyValueArgs.length) {
 			const lowers = keys.map(key => key.toLowerCase());
-			return this._keyValueArgs.filter(arg => lowers.includes(arg.keyLower));
+			return this.#keyValueArgs.filter(arg => lowers.includes(arg.keyLower));
 		}
-		return this._keyValueArgs.slice();
+		return this.#keyValueArgs.slice();
 	}
 
 	/** Returns all args that are _NOT_ KeyValueArg objects. Used for convenient splitting of args into key/value or simply value. */
 	public nonKeyValueArgs() {
 		const keyValueArgs = this.keyValueArgs();
-		return this._args.filter(arg => !keyValueArgs.includes(arg as KeyValueArg<T>));
+		return this.#args.filter(arg => !keyValueArgs.includes(arg as KeyValueArg<T>));
 	}
 
 	/** Returns all args that are _NOT_ KeyValueArg objects. Used for convenient splitting of args into key/value or simply value. */
@@ -116,13 +119,13 @@ export class ArgsManager<T extends string = string> {
 
 	/** Returns the original (raw) string array. */
 	public raw(): string[] {
-		return this._strings.slice();
+		return this.#strings.slice();
 	}
 
 	/** Returns all ValueArg (.isValue === true). */
 	public valueArgs(): ValueArg<T>[] {
-		this._valueArgs ??= this._args.filter(arg => arg.isValue) as ValueArg<T>[];
-		return this._valueArgs.slice();
+		this.#valueArgs ??= this.#args.filter(arg => arg.isValue) as ValueArg<T>[];
+		return this.#valueArgs.slice();
 	}
 
 	/** Splits the given value into arguments by tokenizing it and then creating an ArgsManager from the resulting array. */
@@ -140,7 +143,7 @@ export class ArgsManager<T extends string = string> {
 		}
 
 		if (typeof(content) !== "string") {
-			const values = Array.from("args" in content ? content._strings : content);
+			const values = Array.from("raw" in content ? content.raw() : content);
 			return new ArgsManager<T>(values);
 		}
 
