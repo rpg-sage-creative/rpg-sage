@@ -103,4 +103,110 @@ describe("ProgressTracker", () => {
 
 	});
 
+	describe("constructor and defaults", () => {
+
+		test(`totalWithCommas formats with thousands separators`, () => {
+			expect(new ProgressTracker("t", 1500).totalWithCommas).toBe("1,500");
+		});
+
+		test(`interval defaults to 10`, () => {
+			expect(new ProgressTracker("t", 10).interval).toBe(10);
+		});
+
+		test(`zero/negative total and interval are ignored`, () => {
+			const tracker = new ProgressTracker("t", 0, -5);
+			expect(tracker.total).toBe(0);
+			expect(tracker.interval).toBe(10);
+		});
+
+	});
+
+	describe("messages and lifecycle events", () => {
+
+		test(`status before start reports "Not Started!"`, () => {
+			const messages: string[] = [];
+			new ProgressTracker({ label:"L", total:10 }).on("status", ({ message }) => messages.push(message)).status();
+			expect(messages).toEqual([`L status ... Not Started!`]);
+		});
+
+		test(`error() without a message reports "Error!"`, () => {
+			const messages: string[] = [];
+			new ProgressTracker({ label:"L", total:10 }).on("error", ({ message }) => messages.push(message)).error();
+			expect(messages).toEqual([`L (10) ... Error: Error!`]);
+		});
+
+		test(`error(message) includes the given message`, () => {
+			const messages: string[] = [];
+			new ProgressTracker({ label:"L", total:10 }).on("error", ({ message }) => messages.push(message)).error(`boom`);
+			expect(messages).toEqual([`L (10) ... Error: Error: boom`]);
+		});
+
+		test(`finish reports the actual percent unless force100 is given`, () => {
+			const statuses: string[] = [];
+			const tracker = new ProgressTracker({ label:"L", total:15 });
+			tracker.on("status", ({ message }) => statuses.push(message));
+			for (let i = 0; i < 14; i++) tracker.increment();
+			tracker.finish();
+			expect(statuses.at(-1)).toBe(`L (15) ... 93%`);
+
+			const forced: string[] = [];
+			const tracker2 = new ProgressTracker({ label:"L", total:15 });
+			tracker2.on("status", ({ message }) => forced.push(message));
+			for (let i = 0; i < 14; i++) tracker2.increment();
+			tracker2.finish(true);
+			expect(forced.at(-1)).toBe(`L (15) ... 100%`);
+		});
+
+		test(`duplicate identical handlers are only registered once`, () => {
+			let hits = 0;
+			const handler = () => hits++;
+			const tracker = new ProgressTracker({ label:"L", total:1 });
+			tracker.on("started", handler).on("started", handler);
+			tracker.start();
+			expect(hits).toBe(1);
+		});
+
+		test(`withEvents wires up all five event handlers`, () => {
+			const error = vitest.fn(), finished = vitest.fn(), increment = vitest.fn(), started = vitest.fn(), status = vitest.fn();
+			const events = ProgressTracker.withEvents({ label:"we", total:1, error, finished, increment, started, status });
+			events.start();      // started + 0% status
+			events.increment();  // increment event; percent hits 100 so a 100% status is reported
+			events.finish();     // last interval was already 100, so only the finished event fires
+			expect(started).toHaveBeenCalledTimes(1);
+			expect(increment).toHaveBeenCalledTimes(1);
+			expect(status).toHaveBeenCalledTimes(2);
+			expect(finished).toHaveBeenCalledTimes(1);
+			expect(error).toHaveBeenCalledTimes(0);
+		});
+
+	});
+
+	describe("logger integration", () => {
+
+		test(`compact logger calls receive only the message`, () => {
+			const info = vitest.fn();
+			ProgressTracker.withLogger({ label:"L", total:1, logger:{ info }, compact:true }).start();
+			expect(info).toHaveBeenCalledWith(`L Started.`);
+		});
+
+		test(`non-compact logger calls receive the tracker state and message`, () => {
+			const info = vitest.fn();
+			ProgressTracker.withLogger({ label:"L", total:1, logger:{ info } }).start();
+			expect(info).toHaveBeenCalledWith(expect.objectContaining({ countComplete:0, finished:false, interval:10, label:"L", percentComplete:0, started:true, total:1 }), `L Started.`);
+		});
+
+		test(`increment events go to logger.trace only when verbose`, () => {
+			const trace = vitest.fn();
+			const tracker = ProgressTracker.withLogger({ label:"L", total:2, logger:{ trace }, compact:true });
+			tracker.increment();
+			expect(trace).toHaveBeenCalledTimes(0);
+
+			const verboseTrace = vitest.fn();
+			const verbose = ProgressTracker.withLogger({ label:"L", total:2, logger:{ trace:verboseTrace }, compact:true, verbose:true });
+			verbose.increment();
+			expect(verboseTrace).toHaveBeenCalledTimes(1);
+		});
+
+	});
+
 });

@@ -1,6 +1,6 @@
 import { Logger, LoggerLike } from "@rsc-utils/logger-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, test, vitest } from "vitest";
-import { ProgressIterator } from "../build/index.js";
+import { ProgressIterator, ProgressTracker } from "../build/index.js";
 
 let logger: LoggerLike;
 
@@ -135,6 +135,49 @@ describe("ProgressIterator", () => {
 		expect(output).toStrictEqual(["ONE-ONE", "TWO-TWO", "THREE-THREE"]);
 		// 0%, 100%; (with 3 items we will never see another increment divisible by 10)
 		expect(logger.info).toHaveBeenCalledTimes(4); // start, 0%, 100%, finish
+	});
+
+	//#endregion
+
+	//#region constructor and tracker variants
+
+	test(`new ProgressIterator() has no tracker but still iterates`, () => {
+		const iterator = new ProgressIterator([1, 2, 3]);
+		expect(iterator.tracker).toBe(undefined);
+		const output: number[] = [];
+		iterator.forEach(value => output.push(value));
+		expect(output).toEqual([1, 2, 3]);
+	});
+
+	test(`forEach passes thisArg to the callback`, () => {
+		const seen: unknown[] = [];
+		new ProgressIterator([1, 2]).forEach(function(this:{ tag:string }, value){ seen.push([value, this.tag]); }, { tag:`T` });
+		expect(seen).toEqual([[1, `T`], [2, `T`]]);
+	});
+
+	test(`map passes thisArg to the callback`, () => {
+		const mapped = new ProgressIterator([1, 2]).map(function(this:{ factor:number }, value){ return value * this.factor; }, { factor:10 });
+		expect(mapped).toEqual([10, 20]);
+	});
+
+	test(`withTracker drives the given tracker through forEach`, () => {
+		const tracker = new ProgressTracker({ label:"wt", total:3 });
+		const iterator = ProgressIterator.withTracker([`a`, `b`, `c`], tracker);
+		expect(iterator.tracker).toBe(tracker);
+		iterator.forEach(() => { });
+		expect(tracker.countComplete).toBe(3);
+		expect(tracker.finished).toBe(true);
+	});
+
+	test(`an empty iterable logs start/finish failures and no progress`, () => {
+		const error = vitest.fn();
+		const info = vitest.fn();
+		const iterator = ProgressIterator.withLogger([], { compact:true, label:"empty", logger:{ error, info } });
+		iterator.forEach(() => { });
+		expect(info).toHaveBeenCalledTimes(0);
+		expect(error).toHaveBeenCalledTimes(2);
+		expect(String(error.mock.calls[0][0])).toContain(`Start Failed: Invalid Total (0)`);
+		expect(String(error.mock.calls[1][0])).toContain(`Finish Failed: Not Started!`);
 	});
 
 	//#endregion
