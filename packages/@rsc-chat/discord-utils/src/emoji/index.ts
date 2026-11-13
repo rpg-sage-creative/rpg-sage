@@ -1,3 +1,3 @@
-export * from "./getDiscordEmojiRegex.js";
-export * from "./getEmojiRegex.js";
-export * from "./getUnicodeEmojiRegex.js";
+export * from "./DiscordEmojiRegExp.js";
+export * from "./EmojiRegExp.js";
+export * from "./UnicodeEmojiRegExp.js";

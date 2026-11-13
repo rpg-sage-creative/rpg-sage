@@ -1,6 +1,10 @@
-import { getUrlRegex } from "@rsc-utils/url-utils";
+import { captureRegExp, wrapExactRegExp } from "@rsc-utils/regexp-utils";
+import { UrlRegExp as HttpUrlRegExp } from "@rsc-utils/url-utils";
 import { OptionalHorizontalWhitespaceRegExp as HWS, OptionalWhitespaceRegExp as WS } from "@rsc-utils/whitespace-string-utils";
 import { regex } from "regex";
+
+/** A url with optional <> wrap chars. */
+const WrappedUrlRegExp = wrapExactRegExp(HttpUrlRegExp, "<>", { optional:true });
 
 /** captures :: character name (display name) :: */
 const DialogNameAndDisplayNameRegExp = regex`
@@ -69,7 +73,7 @@ const DialogUrlRegExp = regex("i")`
 	${HWS}
 	=
 	${HWS}
-	${getUrlRegex({ capture:"dialogUrl", wrapChars:"<>", wrapOptional:true })}
+	${captureRegExp(WrappedUrlRegExp, "dialogUrl")}
 	${WS}
 	::
 `;
@@ -82,7 +86,7 @@ const EmbedUrlRegExp = regex("i")`
 	${HWS}
 	=
 	${HWS}
-	${getUrlRegex({ capture:"embedUrl", wrapChars:"<>", wrapOptional:true })}
+	${captureRegExp(WrappedUrlRegExp, "embedUrl")}
 	${WS}
 	::
 `;
@@ -91,7 +95,7 @@ const UrlRegExp = regex("i")`
 	^
 	::
 	${WS}
-	${getUrlRegex({ capture:"url", wrapChars:"<>", wrapOptional:true })}
+	${captureRegExp(WrappedUrlRegExp, "url")}
 	${WS}
 	::
 `;

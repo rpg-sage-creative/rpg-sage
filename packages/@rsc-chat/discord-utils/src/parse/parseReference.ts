@@ -1,13 +1,17 @@
+import { anchorRegExp } from "@rsc-utils/regexp-utils";
 import { unwrap } from "@rsc-utils/string-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 import type { Channel, MessageReference } from "discord.js";
 import type { MessageOrPartial } from "../types/types.js";
-import { getDiscordUrlRegex } from "./getDiscordUrlRegex.js";
+import { ChannelUrlCaptureRegExp, MessageUrlCaptureRegExp } from "./DiscordUrlRegExp.js";
 
 type ReferenceType = "channel" | "message";
 
+const AnchoredChannelUrlCaptureRegExp = anchorRegExp(ChannelUrlCaptureRegExp);
+const AnchoredMessageUrlCaptureRegExp = anchorRegExp(MessageUrlCaptureRegExp);
+
 function parseString(url: string, type: ReferenceType): MessageReference | undefined {
-	const regex = getDiscordUrlRegex({ anchored:true, capture:"discordUrl", type });
+	const regex = type === "channel" ? AnchoredChannelUrlCaptureRegExp : AnchoredMessageUrlCaptureRegExp;
 	const match = regex.exec(unwrap(url, "<>"));
 	if (match?.groups) {
 		// cast to MessageReference to allow guildId to be undefined

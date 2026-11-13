@@ -1,4 +1,5 @@
-import { getUrlRegex } from "./getUrlRegex.js";
+import { anchorRegExp, wrapExactRegExp } from "@rsc-utils/regexp-utils";
+import { AnchoredUrlRegExp, UrlRegExp } from "./UrlRegExp.js";
 import type { VALID_URL, WRAPPED_URL } from "./types.js";
 
 type WrapRequired = { wrapChars:string; wrapOptional?:false; };
@@ -20,5 +21,9 @@ export function isUrl(value: unknown, options: WrapOptional): value is VALID_URL
 export function isUrl(value: unknown, options: WrapOptions): value is VALID_URL | WRAPPED_URL;
 
 export function isUrl(value: unknown, options?: WrapOptions): boolean {
-	return typeof(value) === "string" ? getUrlRegex({ anchored:true, ...options }).test(value) : false;
+	if (typeof(value) !== "string") return false;
+	const regex = options?.wrapChars
+		? anchorRegExp(wrapExactRegExp(UrlRegExp, options.wrapChars, { optional:options.wrapOptional === true }))
+		: AnchoredUrlRegExp;
+	return regex.test(value);
 }

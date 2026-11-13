@@ -1,4 +1,4 @@
-import { getOrCreateRegExp, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions } from "@rsc-utils/regexp-utils";
+import { globalizeRegExp } from "@rsc-utils/regexp-utils";
 import { regex } from "regex";
 
 // dm message
@@ -17,13 +17,8 @@ import { regex } from "regex";
 // attachment
 //          https://cdn.discordapp.com/attachments/1182487240534937610/1192629621783535626/image.png?ex=65bc3ae3&is=65a9c5e3&hm=89f732c8e70c8b2f4fa6c0367bb992b7b4b40521269c53531dedf5f623019df9&
 
-type UrlType = "channel" | "message";
-
-type Options = RegExpFlagOptions & RegExpAnchorOptions & RegExpCaptureOptions & {
-	type: UrlType;
-};
-
-const ChannelUrlRegExp = regex`
+/** Matches a discord channel url, not followed by a message id. */
+export const ChannelUrlRegExp = regex`
 	# base
 	https://discord\.com/channels/
 
@@ -44,7 +39,8 @@ const ChannelUrlRegExp = regex`
 	)
 `;
 
-const ChannelUrlCaptureRegExp = regex`
+/** Matches a discord channel url and captures guildId/channelId. */
+export const ChannelUrlCaptureRegExp = regex`
 	# base
 	https://discord\.com/channels/
 
@@ -65,7 +61,8 @@ const ChannelUrlCaptureRegExp = regex`
 	)
 `;
 
-const MessageUrlRegExp = regex`
+/** Matches a discord message url. */
+export const MessageUrlRegExp = regex`
 	# base
 	https://discord\.com/channels/
 
@@ -88,7 +85,8 @@ const MessageUrlRegExp = regex`
 	)
 `;
 
-const MessageUrlCaptureRegExp = regex`
+/** Matches a discord message url and captures guildId/channelId/messageId. */
+export const MessageUrlCaptureRegExp = regex`
 	# base
 	https://discord\.com/channels/
 
@@ -111,31 +109,8 @@ const MessageUrlCaptureRegExp = regex`
 	)
 `;
 
-type FlagsGI = `${"g"|""}${"i"|""}`;
+/** Global clone for finding channel urls within content. Safe with String.match(); beware lastIndex with exec loops on the shared instance. */
+export const ChannelUrlRegExpG = globalizeRegExp(ChannelUrlRegExp);
 
-function flagRegex(regexp: RegExp, flags: FlagsGI): RegExp {
-	let newFlags = regexp.flags;
-	flags.split("").forEach(flag => newFlags = newFlags.replace(flag, "") + flag);
-	return new RegExp(regexp, newFlags);
-}
-
-function createDiscordUrlRegExp(options?: Options): RegExp {
-	const { capture, gFlag = "", iFlag = "", type = "message" } = options ?? {};
-	const flags: FlagsGI = `${gFlag}${iFlag}`;
-
-	switch(type) {
-		case "channel":
-			return capture
-				? flagRegex(ChannelUrlCaptureRegExp, flags)
-				: flagRegex(ChannelUrlRegExp, flags);
-		case "message":
-			return capture
-				? flagRegex(MessageUrlCaptureRegExp, flags)
-				: flagRegex(MessageUrlRegExp, flags);
-	}
-}
-
-/** @deprecated @todo rewrite this to not use getOrCreateRegex (see other regex using globalizeRegex) */
-export function getDiscordUrlRegex(options?: Options): RegExp {
-	return getOrCreateRegExp(createDiscordUrlRegExp, options);
-}
+/** Global clone for finding message urls within content. Safe with String.match(); beware lastIndex with exec loops on the shared instance. */
+export const MessageUrlRegExpG = globalizeRegExp(MessageUrlRegExp);

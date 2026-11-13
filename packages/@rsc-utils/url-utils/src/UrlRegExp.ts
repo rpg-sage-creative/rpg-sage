@@ -1,6 +1,5 @@
-import { getOrCreateRegExp, globalizeRegExp, type RegExpAnchorOptions, type RegExpCaptureOptions, type RegExpFlagOptions } from "@rsc-utils/regexp-utils";
+import { anchorRegExp, globalizeRegExp } from "@rsc-utils/regexp-utils";
 import { regex } from "regex";
-import type { WrapOptions } from "./types.js";
 
 /*
 Future Considerations, Possible Bugs
@@ -8,9 +7,6 @@ Future Considerations, Possible Bugs
  - Ports require 2–5 digits (:8 fails)
  - Bracketed IPv6 hosts (http://[::1]:8080/x) fail while raw forms pass
 */
-
-type CreateOptions = Omit<RegExpFlagOptions, "iFlag">;
-type GetOptions = Omit<RegExpFlagOptions, "iFlag"> & RegExpAnchorOptions & RegExpCaptureOptions & WrapOptions;
 
 const IPv4RegExp = regex`
 (
@@ -121,18 +117,8 @@ export const UrlRegExp = regex("i")`
 	(\#[\-\w]*)?
 `;
 
+/** A globalized clone of UrlRegExp. Beware lastIndex when using exec loops against a shared instance. */
 export const UrlRegExpG = globalizeRegExp(UrlRegExp);
 
-/** @todo have a serious think about wether or not iFlag is optional on a url ... */
-function createUrlRegex(options?: CreateOptions): RegExp {
-	return options?.gFlag ? UrlRegExpG : UrlRegExp;
-}
-
-/**
- * Returns an instance of the url regexp.
- * If gFlag is passed, a new regexp is created.
- * If gFlag is not passed, a cached version of the regexp is used.
- */
-export function getUrlRegex(options?: GetOptions): RegExp {
-	return getOrCreateRegExp(createUrlRegex, options);
-}
+/** Requires the entire value to be a url. */
+export const AnchoredUrlRegExp = anchorRegExp(UrlRegExp);

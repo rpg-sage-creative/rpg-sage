@@ -1,8 +1,8 @@
-import type { Optional } from "@rsc-utils/type-utils";
 import { isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { Collection } from "discord.js";
 import type { MessageOrPartial } from "../types/types.js";
-import { getDiscordUrlRegex } from "./getDiscordUrlRegex.js";
+import { ChannelUrlCaptureRegExp, ChannelUrlRegExpG, MessageUrlCaptureRegExp, MessageUrlRegExpG } from "./DiscordUrlRegExp.js";
 import { getMentionRegex } from "./getMentionRegex.js";
 
 type MentionIdType = "channel" | "role" | "user";
@@ -76,11 +76,11 @@ function getMessageMentionIds(type: IdType, message: MessageOrPartial): Possible
 function getContentUrlIds(type: IdType, content: Optional<string>): PossibleSnowflake[] {
 	if (isUrlIdType(type) && content) {
 		// use global regex to get an array of urls
-		const globalRegex = getDiscordUrlRegex({ gFlag:"g", type });
+		const globalRegex = type === "channel" ? ChannelUrlRegExpG : MessageUrlRegExpG;
 		const urls = content.match(globalRegex);
 		if (urls?.length) {
 			// use capture regex to parse each individual url
-			const regex = getDiscordUrlRegex({ capture:type, type });
+			const regex = type === "channel" ? ChannelUrlCaptureRegExp : MessageUrlCaptureRegExp;
 			const groupKey = getGroupKey(type);
 			return urls.map(url => regex.exec(url)?.groups?.[groupKey]);
 		}

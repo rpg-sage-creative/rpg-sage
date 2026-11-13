@@ -1,5 +1,8 @@
+import { globalizeRegExp, wrapExactRegExp } from "@rsc-utils/regexp-utils";
 import type { Optional, OrNull, OrUndefined } from "@rsc-utils/type-utils";
-import { getUrlRegex } from "@rsc-utils/url-utils";
+import { UrlRegExp } from "@rsc-utils/url-utils";
+
+const WrappedUrlRegExpG = globalizeRegExp(wrapExactRegExp(UrlRegExp, "<>", { optional:true }));
 
 /**
  * Wraps all urls in the content with <>.
@@ -10,6 +13,5 @@ export function wrapUrls(content: OrUndefined<string>): OrUndefined<string>;
 export function wrapUrls(content: Optional<string>): Optional<string>;
 export function wrapUrls(content: Optional<string>): Optional<string> {
 	if (!content) return content;
-	const regex = getUrlRegex({ gFlag:"g", wrapChars:"<>", wrapOptional:true });
-	return content.replace(regex, url => url.startsWith("<") ? url : `<${url}>`);
+	return content.replace(WrappedUrlRegExpG, url => url.startsWith("<") ? url : `<${url}>`);
 }

@@ -1,7 +1,7 @@
-import type { Optional } from "@rsc-utils/type-utils";
 import { isNilSnowflake, isNonNilSnowflake, type Snowflake } from "@rsc-utils/id-utils";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { Channel, Interaction, MessageReference, User } from "discord.js";
-import { getDiscordUrlRegex } from "./parse/getDiscordUrlRegex.js";
+import { ChannelUrlCaptureRegExp, MessageUrlCaptureRegExp } from "./parse/DiscordUrlRegExp.js";
 import type { ChannelReference } from "./resolve/resolveChannelReference.js";
 import { resolveSnowflake, type CanBeSnowflakeResolvable, type SnowflakeResolvable } from "./resolve/resolveSnowflake.js";
 import type { MessageOrPartial, MessageReferenceOrPartial, ReactionOrPartial } from "./types/index.js";
@@ -131,13 +131,13 @@ export class DiscordKey implements MessageReference, ChannelReference {
 	}
 
 	public static fromUrl(url: string): DiscordKey | undefined {
-		const messageMatch = getDiscordUrlRegex({ type:"message" }).exec(url);
+		const messageMatch = MessageUrlCaptureRegExp.exec(url);
 		if (messageMatch?.groups) {
 			const { guildId, channelId, messageId } = messageMatch.groups;
 			return new DiscordKey(guildId, channelId, channelId, messageId);
 		}
 
-		const channelMatch = getDiscordUrlRegex({ type:"channel" }).exec(url);
+		const channelMatch = ChannelUrlCaptureRegExp.exec(url);
 		if (channelMatch?.groups) {
 			const { guildId, channelId } = channelMatch.groups;
 			return new DiscordKey(guildId, channelId, channelId);

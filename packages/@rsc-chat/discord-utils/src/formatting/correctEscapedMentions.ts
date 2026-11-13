@@ -1,5 +1,5 @@
 import { tokenize } from "@rsc-utils/token-string-utils";
-import { getEmojiRegex } from "../emoji/getEmojiRegex.js";
+import { EmojiRegExp } from "../emoji/EmojiRegExp.js";
 
 // <@&number>  role
 const RoleRegExp = /<@&\d{16,}>/;
@@ -65,7 +65,7 @@ export function correctEscapedMentions(value: string, options: Options): string 
 	const getParsers = () => {
 		if (!parsers) {
 			parsers = {};
-			if (options.emoji) parsers.emoji = getEmojiRegex();
+			if (options.emoji) parsers.emoji = EmojiRegExp;
 			if (options.roles) parsers.role = RoleRegExp;
 			if (options.users) parsers.user = UserRegExp;
 		}
