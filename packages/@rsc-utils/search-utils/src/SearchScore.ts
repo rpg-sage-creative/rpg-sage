@@ -34,7 +34,8 @@ export class SearchScore<T extends Searchable> {
 			return false;
 		}
 
-		// if no required (plus) terms exist, other terms must have hits
+		// if no required (plus) terms exist, other terms must have hits;
+		// an exclusion-only score has no positive signal and never matches by design
 		if (this.plusMatches === 0) {
 			return this.otherMatches > 0;
 		}
@@ -129,11 +130,12 @@ export class SearchScore<T extends Searchable> {
 
 	public get totalScore(): number {
 		let score = 0;
-		const searchableName = this.searchable.name;
+		// matching is case-insensitive (terms use /gi regexes), so the name bonus must compare lowercased values
+		const searchableName = this.searchable.name.toLowerCase();
 		this.terms.forEach((term, index) => {
 			const termMultiplier = getTermMultiplier(term);
 			const hitsMultiplier = this.hits[index]!;
-			const nameMultiplier = getNameMultiplier(searchableName.includes(term.term));
+			const nameMultiplier = getNameMultiplier(searchableName.includes(term.term.toLowerCase()));
 			score += termMultiplier * hitsMultiplier * nameMultiplier;
 		});
 		return score;
@@ -143,8 +145,10 @@ export class SearchScore<T extends Searchable> {
 		return this.hits.reduce((total, current) => total + current, 0);
 	}
 
+	/** Adds the term data and hits, accumulating hits when the same term (with the same plus/minus flags) already exists. */
 	public add(termData: SearchTermData, hits: number): void {
-		const index = this.terms.findIndex(t => t.term === termData.term);
+		// terms must match on their flags as well; "+fire" and "fire" are different criteria
+		const index = this.terms.findIndex(t => t.term === termData.term && t.plus === termData.plus && t.minus === termData.minus);
 		if (index < 0) {
 			this.terms.push(termData);
 			this.hits.push(hits);
@@ -157,13 +161,17 @@ export class SearchScore<T extends Searchable> {
 		scores.forEach(score => score.terms.forEach((term, i) => this.add(term, score.hits[i]!)));
 	}
 
+	/** Returns a new score for this searchable that merges the terms of this score with the given scores. */
 	public concat(...scores: SearchScore<T>[]): SearchScore<T> {
-		const newScore = new SearchScore(this.searchable);
-		scores.forEach(score => score.terms.forEach((term, i) => newScore.add(term, score.hits[i]!)));
+		// carry over compScore so merged scores keep their rank signal in HasScoredSearchables sorting
+		const newScore = new SearchScore(this.searchable, this.compScore);
+		[this, ...scores].forEach(score => score.terms.forEach((term, i) => newScore.add(term, score.hits[i]!)));
 		return newScore;
 	}
 
 	public fail(): void {
-		this.add({ term:"!FAIL!", regex:undefined, plus:false, minus:true }, 1);
+		// the sentinel term contains whitespace so it can never be produced by tokenizing user input,
+		// which keeps a real search for "!FAIL!" from colliding with this entry
+		this.add({ term:"! FAIL !", regex:undefined, plus:false, minus:true }, 1);
 	}
 }

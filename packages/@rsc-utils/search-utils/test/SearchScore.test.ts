@@ -35,6 +35,22 @@ describe("SearchScore", () => {
 			expect(score.hits).toEqual([5]);
 		});
 
+		test(`adding the same term text with different flags keeps separate entries`, () => {
+			const score = new SearchScore(mk(`X`));
+			score.add(term(`fire`), 1);
+			score.add(term(`fire`, { plus:true }), 0);
+			expect(score.terms.length).toBe(2);
+			expect(score.hits).toEqual([1, 0]);
+		});
+
+		test(`a plain hit does not satisfy the same term required as a plus term`, () => {
+			const score = new SearchScore(mk(`X`));
+			score.add(term(`fire`), 3);
+			score.add(term(`fire`, { plus:true }), 0);
+			expect(score.plusMatches).toBe(-1);
+			expect(score.bool).toBe(false);
+		});
+
 	});
 
 	describe("match getters", () => {
@@ -101,10 +117,14 @@ describe("SearchScore", () => {
 			expect(score.bool).toBe(false);
 		});
 
-		test(`bool is false for an exclusion-only score even when no excluded term hits (other matches are required)`, () => {
+		test(`bool is false for an exclusion-only score even when no excluded term hits (exclusion-only queries never match by design)`, () => {
 			const score = new SearchScore(mk(`X`));
 			score.add(term(`bad`, { minus:true }), 0);
 			expect(score.bool).toBe(false);
+		});
+
+		test(`bool is false for a score with no terms at all`, () => {
+			expect(new SearchScore(mk(`X`)).bool).toBe(false);
 		});
 
 		test(`bool is false when a plain term exists but none of the plain terms hit`, () => {
@@ -142,6 +162,12 @@ describe("SearchScore", () => {
 			expect(score.totalScore).toBe(2);
 		});
 
+		test(`the name bonus applies case-insensitively, matching the /gi term regexes`, () => {
+			const score = new SearchScore(mk(`Fireball`));
+			score.add(term(`fire`), 1);
+			expect(score.totalScore).toBe(2);
+		});
+
 		test(`multiplies minus terms by -5`, () => {
 			const score = new SearchScore(mk(`X`));
 			score.add(term(`bad`, { minus:true }), 1);
@@ -158,12 +184,16 @@ describe("SearchScore", () => {
 
 	describe("fail(), append(), and concat()", () => {
 
-		test(`fail() adds a minus !FAIL! term that forces bool false`, () => {
+		test(`fail() forces bool false and its sentinel cannot collide with a real search term`, () => {
 			const score = new SearchScore(mk(`X`));
 			score.add(term(`a`), 1);
 			expect(score.bool).toBe(true);
 			score.fail();
 			expect(score.bool).toBe(false);
+			// a user searching the literal text must not merge into the fail sentinel entry
+			score.add({ term:`!FAIL!`, plus:false, minus:true }, 4);
+			expect(score.terms.length).toBe(3);
+			expect(score.hits).toEqual([1, 1, 4]);
 		});
 
 		test(`append() merges another score's terms into this one`, () => {
@@ -176,7 +206,7 @@ describe("SearchScore", () => {
 			expect(a.hits).toEqual([1, 2]);
 		});
 
-		test(`known quirk: concat() merges only the given scores, not this score's own terms`, () => {
+		test(`concat() merges this score's terms with the given scores without mutating either`, () => {
 			const a = new SearchScore(mk(`X`));
 			a.add(term(`a`), 1);
 			const b = new SearchScore(mk(`X`));
@@ -184,9 +214,24 @@ describe("SearchScore", () => {
 			const merged = a.concat(b);
 			expect(merged).not.toBe(a);
 			expect(merged.searchable).toBe(a.searchable);
-			expect(merged.terms.map(t => t.term)).toEqual([`b`]);
-			expect(merged.hits).toEqual([2]);
+			expect(merged.terms.map(t => t.term)).toEqual([`a`, `b`]);
+			expect(merged.hits).toEqual([1, 2]);
 			expect(a.hits).toEqual([1]);
+			expect(b.hits).toEqual([2]);
+		});
+
+		test(`concat() accumulates hits for terms shared between the scores`, () => {
+			const a = new SearchScore(mk(`X`));
+			a.add(term(`a`), 1);
+			const b = new SearchScore(mk(`X`));
+			b.add(term(`a`), 2);
+			expect(a.concat(b).hits).toEqual([3]);
+		});
+
+		test(`concat() carries over this score's compScore`, () => {
+			const a = new SearchScore(mk(`X`), 7);
+			a.add(term(`a`), 1);
+			expect(a.concat().compScore).toBe(7);
 		});
 
 	});

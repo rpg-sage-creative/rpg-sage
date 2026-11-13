@@ -61,9 +61,27 @@ describe("SearchInfo", () => {
 			expect(cold?.minus).toBe(true);
 		});
 
-		test(`known quirk: global tokenization keeps whitespace gap tokens as terms`, () => {
+		test(`whitespace gap tokens are not kept as terms`, () => {
 			const si = new SearchInfo(`fire ball`, `g`);
-			expect(si.terms.map(t => t.term)).toContain(` `);
+			expect(si.terms.map(t => t.term)).toEqual([`fire`, `ball`]);
+		});
+
+		test(`a whitespace-only search has no terms and matches nothing`, () => {
+			const si = new SearchInfo(`   `, ``);
+			expect(si.terms).toEqual([]);
+			expect(si.test(`anything at all`)).toBe(false);
+		});
+
+		test(`an empty search has no terms and matches nothing`, () => {
+			const si = new SearchInfo(``, ``);
+			expect(si.terms).toEqual([]);
+			expect(si.test(`anything`)).toBe(false);
+		});
+
+		test(`content matching no search term fails even when it contains spaces`, () => {
+			const si = new SearchInfo(`fire ball`, `g`);
+			expect(si.test(`foo bar`)).toBe(false);
+			expect(si.test(`a fire here`)).toBe(true);
 		});
 
 	});

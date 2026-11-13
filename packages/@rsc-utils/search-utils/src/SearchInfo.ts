@@ -12,7 +12,9 @@ export type TSearchFlag = "" | "g" | "r" | "gr" | "rg";
 
 function createTerms(searchInfo: SearchInfo, term: string, regexFlag: boolean) {
 	const tokens = tokenize(term, { quoted:QuotedContentRegExp, other:/\S+/ });
-	const terms = tokens.map(token => token.token).map(dequote).filter(toUniqueDefined);
+	// gap tokens (whitespace between words) and empty dequoted values are not searchable terms;
+	// as terms they would match almost any content and produce false positives
+	const terms = tokens.map(token => token.token).map(dequote).filter(toUniqueDefined).filter(term => !!term.trim());
 	return reduceNoiseUS(terms).map(_term => {
 		const minus = _term.startsWith("-");
 		const plus = _term.startsWith("+");
@@ -46,7 +48,10 @@ export class SearchInfo {
 		this.globalFlag = ((searchText.match(MatchFlagRegExp) ?? [])[0] ?? "").includes("g") || flags.includes("g");
 		const regexFlag = ((searchText.match(MatchFlagRegExp) ?? [])[0] ?? "").includes("r") || flags.includes("r");
 		const term = cleanWhitespace(searchText.replace(MatchFlagRegExp, "")).replace(CollapseModifierRegExp, `$1$2`).trim();
-		if (this.globalFlag) {
+		if (!term) {
+			// an empty search has no terms; it should not match everything with a blank regex
+			this.terms = [];
+		}else if (this.globalFlag) {
 			this.terms = createTerms(this, term, regexFlag);
 		}else {
 			this.terms = [{
