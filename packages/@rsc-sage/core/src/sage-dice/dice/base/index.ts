@@ -498,8 +498,8 @@ export class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> 
 
 	//#region calculated
 	public get baseDicePart(): OrUndefined<U> { return this.diceParts.find(dicePart => dicePart.hasDie); }
-	public get max(): number { return sum(this.diceParts.map(dicePart => dicePart.max)); }
-	public get min(): number { return sum(this.diceParts.map(dicePart => dicePart.min)); }
+	public get max(): number { return sum(this.diceParts, dicePart => dicePart.max); }
+	public get min(): number { return sum(this.diceParts, dicePart => dicePart.min); }
 	public get test(): OrUndefined<TTestData> { return this.diceParts.find(dicePart => dicePart.hasTest)?.test; }
 	//#endregion
 

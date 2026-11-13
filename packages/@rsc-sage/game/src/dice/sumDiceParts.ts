@@ -1,4 +1,4 @@
-import { sum } from "@rsc-utils/number-utils";
+import { sumInts } from "@rsc-utils/number-utils";
 import type { TDicePart } from "./dice/DicePart.js";
 import type { DiceOperator } from "./types/DiceOperator.js";
 
@@ -32,7 +32,7 @@ export function sumDiceParts(diceParts: TDicePart[]): number {
 	// add last value
 	valuesToAdd.push(valueToAdd);
 
-	return sum(valuesToAdd);
+	return sumInts(valuesToAdd);
 	// return diceParts.reduce((value, dicePart) => {
 	// 	switch(dicePart.sign) {
 	// 		/** @todo WHY THE EFF IS THIS A + AND NOT A - ???? */

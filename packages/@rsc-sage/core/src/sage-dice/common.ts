@@ -1,9 +1,9 @@
 import { DiceOutputType, type GameSystemType } from "@rsc-sage/data";
+import { DiceDropKeepType, evalMath, unpipe, type DiceDropKeepData } from "@rsc-sage/game";
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { sortPrimitive } from "@rsc-utils/collection-utils";
-import { DiceDropKeepType, evalMath, unpipe, type DiceDropKeepData } from "@rsc-sage/game";
 import { Logger } from "@rsc-utils/logger-utils";
-import { sum } from "@rsc-utils/number-utils";
+import { sumInts } from "@rsc-utils/number-utils";
 import type { TokenData } from "@rsc-utils/token-string-utils";
 import type { TDiceRoll } from "./dice/base/types.js";
 
@@ -20,21 +20,21 @@ export const UNICODE_LEFT_ARROW = "\u27f5";
 /** @deprecated will be rolled into new DiceManipulation logic */
 export function sumDropKeep(values: number[], dropKeep?: DiceDropKeepData): number {
 	if (!dropKeep) {
-		return sum(values);
+		return sumInts(values);
 	}
 	const sorted = values.slice().sort(sortPrimitive);
 	switch (dropKeep.type) {
 		case DiceDropKeepType.DropHighest:
-			return sum(sorted.slice(0, -dropKeep.value));
+			return sumInts(sorted.slice(0, -dropKeep.value));
 		case DiceDropKeepType.DropLowest:
-			return sum(sorted.slice(dropKeep.value));
+			return sumInts(sorted.slice(dropKeep.value));
 		case DiceDropKeepType.KeepHighest:
-			return sum(sorted.slice(-dropKeep.value));
+			return sumInts(sorted.slice(-dropKeep.value));
 		case DiceDropKeepType.KeepLowest:
-			return sum(sorted.slice(0, dropKeep.value));
+			return sumInts(sorted.slice(0, dropKeep.value));
 		default:
 			Logger.package("@rsc-sage/core").warn(`Invalid dropKeep.type = ${dropKeep.type} (${DiceDropKeepType[dropKeep.type]})`);
-			return sum(values);
+			return sumInts(values);
 	}
 }
 

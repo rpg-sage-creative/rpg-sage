@@ -39,10 +39,10 @@ export class Dice<
 	public get primary(): ChildType | undefined { return this.children.find(dicePart => dicePart.hasDie); }
 
 	/** Sums the max of all the dice parts. */
-	public get max(): number { return sum(this.children.map(dicePart => dicePart.max)); }
+	public get max(): number { return sum(this.children, dicePart => dicePart.max); }
 
 	/** Sums the min of all the dice parts. */
-	public get min(): number { return sum(this.children.map(dicePart => dicePart.min)); }
+	public get min(): number { return sum(this.children, dicePart => dicePart.min); }
 
 	/** Gets the first test. */
 	public get test(): DiceTest { return this.children.find(dicePart => dicePart.hasTest)?.test ?? DiceTest.EmptyTest; }

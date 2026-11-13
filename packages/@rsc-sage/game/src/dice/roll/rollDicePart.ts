@@ -60,6 +60,6 @@ export function rollDicePart(dicePart: TDicePart): SortedRollData {
 		initialCount,
 		initialSum,
 		noSort,
-		sum: sum(notDropped.map(roll => roll.threshold ?? roll.value))
+		sum: sum(notDropped, roll => roll.threshold ?? roll.value)
 	};
 }
