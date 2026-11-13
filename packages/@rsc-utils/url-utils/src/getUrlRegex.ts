@@ -2,8 +2,15 @@ import { getOrCreateRegExp, globalizeRegExp, type RegExpAnchorOptions, type RegE
 import { regex } from "regex";
 import type { WrapOptions } from "./types.js";
 
-type CreateOptions = RegExpFlagOptions;
-type GetOptions = RegExpFlagOptions & RegExpAnchorOptions & RegExpCaptureOptions & WrapOptions;
+/*
+Future Considerations, Possible Bugs
+ - Querystring/path charsets reject legal RFC 3986 sub-delims — ?fields=a,b, ?q=(bold), /a,b all fail
+ - Ports require 2–5 digits (:8 fails)
+ - Bracketed IPv6 hosts (http://[::1]:8080/x) fail while raw forms pass
+*/
+
+type CreateOptions = Omit<RegExpFlagOptions, "iFlag">;
+type GetOptions = Omit<RegExpFlagOptions, "iFlag"> & RegExpAnchorOptions & RegExpCaptureOptions & WrapOptions;
 
 const IPv4RegExp = regex`
 (

@@ -69,7 +69,7 @@ const DialogUrlRegExp = regex("i")`
 	${HWS}
 	=
 	${HWS}
-	${getUrlRegex({ capture:"dialogUrl", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
+	${getUrlRegex({ capture:"dialogUrl", wrapChars:"<>", wrapOptional:true })}
 	${WS}
 	::
 `;
@@ -82,7 +82,7 @@ const EmbedUrlRegExp = regex("i")`
 	${HWS}
 	=
 	${HWS}
-	${getUrlRegex({ capture:"embedUrl", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
+	${getUrlRegex({ capture:"embedUrl", wrapChars:"<>", wrapOptional:true })}
 	${WS}
 	::
 `;
@@ -91,7 +91,7 @@ const UrlRegExp = regex("i")`
 	^
 	::
 	${WS}
-	${getUrlRegex({ capture:"url", iFlag:"i", wrapChars:"<>", wrapOptional:true })}
+	${getUrlRegex({ capture:"url", wrapChars:"<>", wrapOptional:true })}
 	${WS}
 	::
 `;
