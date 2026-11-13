@@ -1,9 +1,6 @@
 import { EphemeralMap } from "@rsc-utils/collection-utils";
 import type { Awaitable } from "@rsc-utils/type-utils";
 
-/** Set of all ClassCache objects. */
-const _cacheSet = new WeakSet<Cache>;
-
 /**
  * A simple Cache mechanism.
  * Includes synchronous get an asynchronous fetch.
@@ -30,7 +27,6 @@ export class Cache {
 
 	public constructor(msToLive?: number) {
 		this._msToLive = msToLive;
-		_cacheSet.add(this);
 	}
 
 	/**
@@ -56,10 +52,9 @@ export class Cache {
 	}
 
 	/**
-	 * Clears this cache's values, deletes the cache map, and removes the instance from the set of all caches.
+	 * Clears this cache's values and deletes the cache map.
 	*/
 	public destroy(): void {
-		_cacheSet.delete(this);
 		this._cache?.clear();
 		delete this._cache;
 	}
@@ -111,15 +106,6 @@ export class Cache {
 			}
 		}
 		return this._cache;
-	}
-
-	//#endregion
-
-	//#region static
-
-	/** Clears all the caches for all the ClassCache objects. */
-	public static clear(): void {
-		Set.prototype.forEach.call(_cacheSet, (cache: Cache) => cache?.clear());
 	}
 
 	//#endregion
