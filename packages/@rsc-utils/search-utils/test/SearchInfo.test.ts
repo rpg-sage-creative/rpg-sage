@@ -84,9 +84,9 @@ describe("SearchInfo", () => {
 			expect(si.test(`just fire`)).toBe(true);
 		});
 
-		test(`known quirk: a missing plus term does not fail the boolean if other terms match`, () => {
+		test(`a required plus term that is missing fails the boolean`, () => {
 			const si = new SearchInfo(`+fire ball`, `g`);
-			expect(si.test(`ball only`)).toBe(true);
+			expect(si.test(`ball only`)).toBe(false);
 			expect(si.test(`fire and ball`)).toBe(true);
 		});
 

@@ -28,47 +28,100 @@ export class SearchScore<T extends Searchable> {
 
 	/** All criteria has been met, no minus matches, all plus matches, any other matches */
 	public get bool(): boolean {
-		if (this.minusMatches < 0) {
+		// any excluded (minus) terms have hits = failure
+		// any required (plus) terms don't have hits = failure
+		if (this.minusMatches < 0 || this.plusMatches < 0) {
 			return false;
 		}
-		return this.plusMatches === 0 ? this.otherMatches > 0 : this.otherMatches > -1;
+
+		// if no required (plus) terms exist, other terms must have hits
+		if (this.plusMatches === 0) {
+			return this.otherMatches > 0;
+		}
+
+		// we have required (plus) term hits, make sure other matches aren't negative
+		return this.otherMatches > -1;
 	}
 
 	public hits: number[] = [];
 
-	/** -1 means exists and is bad, 0 means non-existent, 1 means exists and good */
-	public get minusMatches(): number {
-		const indexes = this.terms.map((termData, index) => termData.minus ? index : -1).filter(i => i !== -1);
+	/**
+	 * Do excluded (minus) terms have hits?
+	 * -1 means excluded terms exist and do have hits (bad)
+	 *  0 means excluded terms don't exist
+	 *  1 means excluded terms exist and don't have hits (good)
+	 */
+	public get minusMatches(): -1 | 0 | 1 {
+		const indexes = this.terms
+			// set non-minus terms to -1
+			.map((termData, index) => termData.minus ? index : -1)
+			// exclude non-minus indexes
+			.filter(i => i !== -1);
+
+		// excluded terms don't exist
 		if (!indexes.length) {
 			return 0;
 		}
-		if (indexes.find(index => this.hits[index]! > 0) !== undefined) {
+
+		// excluded terms exist and do have hit (bad)
+		if (indexes.some(index => this.hits[index]! > 0)) {
 			return -1;
 		}
+
+		// excluded terms exist and don't have hit (good)
 		return 1;
 	}
 
 	/** -1 means exists and is bad, 0 means non-existent, 1 means exists and good */
-	public get otherMatches(): number {
-		const indexes = this.terms.map((termData, index) => !termData.minus && !termData.plus ? index : -1).filter(i => i !== -1);
+	/**
+	 * Do other (non-minus, non-plus) terms have hits?
+	 * -1 means other terms exist and don't have hits (bad)
+	 *  0 means other terms don't exist
+	 *  1 means other terms exist and do have hits (good)
+	 */
+	public get otherMatches(): -1 | 0 | 1 {
+		const indexes = this.terms
+			// set minusMatches and plusMatches to -1
+			.map((termData, index) => termData.minus || termData.plus ? -1 : index)
+			// exclude minusMatches and plusMatches
+			.filter(i => i !== -1);
+
+		// other terms don't exist
 		if (!indexes.length) {
 			return 0;
 		}
-		if (indexes.find(index => this.hits[index]! > 0) !== undefined) {
+
+		// other terms exist and do have hits (good)
+		if (indexes.some(index => this.hits[index]! > 0)) {
 			return 1;
 		}
+
+		// other terms exist and don't have hits (bad)
 		return -1;
 	}
 
-	/** -1 means exists and is bad, 0 means non-existent, 1 means exists and good */
-	public get plusMatches(): number {
-		const indexes = this.terms.map((termData, index) => termData.plus ? index : -1).filter(i => i !== -1);
+	/**
+	 * Do required (plus) terms have hits?
+	 * -1 means required terms exist and don't have hits (bad)
+	 *  0 means required terms don't exist
+	 *  1 means required terms exist and do have hits (good)
+	 */
+	public get plusMatches(): -1 | 0 | 1 {
+		const indexes = this.terms
+			.map((termData, index) => termData.plus ? index : -1)
+			.filter(i => i !== -1);
+
+		// required terms don't exist
 		if (!indexes.length) {
 			return 0;
 		}
-		if (indexes.find(index => this.hits[index] === 0) !== undefined) {
+
+		// required terms exist and don't have hit (bad)
+		if (indexes.some(index => this.hits[index] === 0)) {
 			return -1;
 		}
+
+		// required terms exist and do have hit (good)
 		return 1;
 	}
 

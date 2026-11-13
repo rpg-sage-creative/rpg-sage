@@ -87,11 +87,24 @@ describe("SearchScore", () => {
 			expect(score.bool).toBe(false);
 		});
 
-		test(`known quirk: bool stays true when a required plus term is missing but another term matches`, () => {
+		test(`bool is false when a required plus term is missing even if another term matches`, () => {
 			const score = new SearchScore(mk(`X`));
 			score.add(term(`need`, { plus:true }), 0);
 			score.add(term(`a`), 1);
-			expect(score.bool).toBe(true);
+			expect(score.bool).toBe(false);
+		});
+
+		test(`bool is false when one of several required plus terms is missing`, () => {
+			const score = new SearchScore(mk(`X`));
+			score.add(term(`need1`, { plus:true }), 2);
+			score.add(term(`need2`, { plus:true }), 0);
+			expect(score.bool).toBe(false);
+		});
+
+		test(`bool is false for an exclusion-only score even when no excluded term hits (other matches are required)`, () => {
+			const score = new SearchScore(mk(`X`));
+			score.add(term(`bad`, { minus:true }), 0);
+			expect(score.bool).toBe(false);
 		});
 
 		test(`bool is false when a plain term exists but none of the plain terms hit`, () => {
