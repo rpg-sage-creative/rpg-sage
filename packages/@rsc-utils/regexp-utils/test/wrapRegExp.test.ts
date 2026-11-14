@@ -1,39 +1,55 @@
-import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { describe, expect, test } from "vitest";
 import { wrapRegExp } from "../build/index.js";
 
 describe("regex", () => {
 	describe("wrapRegExp", () => {
 
-		const tests: { input:RegExp; pairs?:string[]; options?:{or?:boolean;}; expected?:RegExp; toThrow?:boolean; }[] = [
-			{ input:/\d+/, pairs:undefined, options:undefined, toThrow:true },
-			{ input:/\d+/, pairs:[], options:undefined, expected:/\d+/ },
-			{ input:/\d+/, pairs:["()"], options:undefined, expected:/\(\s*(?:\d+)\s*\)/ },
-			{ input:/\d+/, pairs:["()"], options:{or:true}, expected:/\(\s*(?:\d+)\s*\)|(?:\d+)/ },
-			{ input:/\d+|\w+/, pairs:["()"], options:undefined, expected:/\(\s*(?:\d+|\w+)\s*\)/ },
-			{ input:/\d+|\w+/, pairs:["()"], options:{or:true}, expected:/\(\s*(?:\d+|\w+)\s*\)|(?:\d+|\w+)/ },
-			{ input:/\d+/, pairs:["||||"], options:undefined, expected:/\|\|\s*(?:\d+)\s*\|\|/ },
-			{ input:/\d+/, pairs:["||||"], options:{or:true}, expected:/\|\|\s*(?:\d+)\s*\|\||(?:\d+)/ },
-			{ input:/\d+/, pairs:["||||", "()"], options:undefined, expected:/\(\s*(?:\|\|\s*(?:\d+)\s*\|\|)\s*\)/ },
-			{ input:/\d+/, pairs:["||||", "()"], options:{or:true}, expected:/\(\s*(?:\|\|\s*(?:\d+)\s*\|\||(?:\d+))\s*\)|(?:\|\|\s*(?:\d+)\s*\|\||(?:\d+))/ },
-		];
+		test(`throws when pairs is undefined`, () => {
+			expect(() => wrapRegExp(/\d+/, undefined!)).toThrow();
+		});
 
-		tests.forEach(({ input, pairs, options, expected, toThrow }) => {
-			if (toThrow) {
-				test(tagLiterals`wrapRegExp(${input}, ${pairs}, ${options}) === ${expected}`, () => {
-					expect(() => wrapRegExp(input, pairs!, options)).toThrow();
-				});
-			}else {
-				test(tagLiterals`wrapRegExp(${input}, ${pairs}, ${options}) === ${expected}`, () => {
-					const regexp = wrapRegExp(input, pairs!, options);
-					expect(regexp.source).toBe(expected?.source);
-					expect(regexp.flags).toBe(expected?.flags);
-				});
-			}
+		test(`returns the same regexp for empty pairs`, () => {
+			const regexp = /\d+/;
+			expect(wrapRegExp(regexp, [])).toBe(regexp);
+		});
+
+		test(`wraps in optional space and parens`, () => {
+			const regexp = wrapRegExp(/\d+/, ["()"]);
+			expect(regexp.source).toBe(/\(\s*(?:\d+)\s*\)/.source);
+			expect(regexp.flags).toBe(``);
+		});
+
+		test(`with or also matches the bare source`, () => {
+			const regexp = wrapRegExp(/\d+/, ["()"], { or:true });
+			expect(regexp.source).toBe(/\(\s*(?:\d+)\s*\)|(?:\d+)/.source);
+		});
+
+		test(`wraps alternation sources in a non-capture group`, () => {
+			const regexp = wrapRegExp(/\d+|\w+/, ["()"]);
+			expect(regexp.source).toBe(/\(\s*(?:\d+|\w+)\s*\)/.source);
+			const orRegexp = wrapRegExp(/\d+|\w+/, ["()"], { or:true });
+			expect(orRegexp.source).toBe(/\(\s*(?:\d+|\w+)\s*\)|(?:\d+|\w+)/.source);
+		});
+
+		test(`wraps in pipe spoilers`, () => {
+			const regexp = wrapRegExp(/\d+/, ["||||"]);
+			expect(regexp.source).toBe(/\|\|\s*(?:\d+)\s*\|\|/.source);
+			const orRegexp = wrapRegExp(/\d+/, ["||||"], { or:true });
+			expect(orRegexp.source).toBe(/\|\|\s*(?:\d+)\s*\|\||(?:\d+)/.source);
+		});
+
+		test(`applies multiple pairs in order`, () => {
+			const regexp = wrapRegExp(/\d+/, ["||||", "()"]);
+			expect(regexp.source).toBe(/\(\s*(?:\|\|\s*(?:\d+)\s*\|\|)\s*\)/.source);
+		});
+
+		test(`with multiple pairs and or makes each layer optional`, () => {
+			const regexp = wrapRegExp(/\d+/, ["||||", "()"], { or:true });
+			expect(regexp.source).toBe(/\(\s*(?:\|\|\s*(?:\d+)\s*\|\||(?:\d+))\s*\)|(?:\|\|\s*(?:\d+)\s*\|\||(?:\d+))/.source);
 		});
 
 		// baseline
-		test(tagLiterals`wrapRegExp(${/\d+/}, []).test()`, () => {
+		test(`wrapRegExp(${/\d+/}, []).test()`, () => {
 			const regexp = wrapRegExp(/\d+/, []);
 			expect(regexp.test("")).toBe(false);
 			expect(regexp.test("a")).toBe(false);
@@ -54,7 +70,7 @@ describe("regex", () => {
 			expect(Array.from(regexp.exec("nothing ( || 12 || ) here")!)).toEqual(["12"]);
 		});
 
-		test(tagLiterals`wrapRegExp(${/\d+/}, ["||||"]).test()`, () => {
+		test(`wrapRegExp(${/\d+/}, ["||||"]).test()`, () => {
 			const regexp = wrapRegExp(/\d+/, ["||||"]);
 			expect(regexp.test("")).toBe(false);
 			expect(regexp.test("a")).toBe(false);
@@ -75,7 +91,7 @@ describe("regex", () => {
 			expect(Array.from(regexp.exec("nothing ( || 12 || ) here")!)).toEqual(["|| 12 ||"]);
 		});
 
-		test(tagLiterals`wrapRegExp(${/\d+/}, ["||||"], { or:true }).test()`, () => {
+		test(`wrapRegExp(${/\d+/}, ["||||"], { or:true }).test()`, () => {
 			const regexp = wrapRegExp(/\d+/, ["||||"], { or:true });
 			expect(regexp.test("")).toBe(false);
 			expect(regexp.test("a")).toBe(false);
@@ -96,7 +112,7 @@ describe("regex", () => {
 			expect(Array.from(regexp.exec("nothing ( || 12 || ) here")!)).toEqual(["|| 12 ||"]);
 		});
 
-		test(tagLiterals`wrapRegExp(${/\d+/}, ["()"]).test()`, () => {
+		test(`wrapRegExp(${/\d+/}, ["()"]).test()`, () => {
 			const regexp = wrapRegExp(/\d+/, ["()"]);
 			expect(regexp.test("")).toBe(false);
 			expect(regexp.test("a")).toBe(false);
@@ -117,7 +133,7 @@ describe("regex", () => {
 			expect(regexp.exec("nothing ( || 12 || ) here")).toBeNull();
 		});
 
-		test(tagLiterals`wrapRegExp(${/\d+/}, ["()"], { or:true }).test()`, () => {
+		test(`wrapRegExp(${/\d+/}, ["()"], { or:true }).test()`, () => {
 			const regexp = wrapRegExp(/\d+/, ["()"], { or:true });
 			expect(regexp.test("")).toBe(false);
 			expect(regexp.test("a")).toBe(false);
@@ -138,7 +154,7 @@ describe("regex", () => {
 			expect(Array.from(regexp.exec("nothing ( || 12 || ) here")!)).toEqual(["12"]);
 		});
 
-		test(tagLiterals`wrapRegExp(${/\d+/}, ["||||", "()"]).test()`, () => {
+		test(`wrapRegExp(${/\d+/}, ["||||", "()"]).test()`, () => {
 			const regexp = wrapRegExp(/\d+/, ["||||", "()"]);
 			expect(regexp.test("")).toBe(false);
 			expect(regexp.test("a")).toBe(false);
@@ -159,7 +175,7 @@ describe("regex", () => {
 			expect(Array.from(regexp.exec("nothing ( || 12 || ) here")!)).toEqual(["( || 12 || )"]);
 		});
 
-		test(tagLiterals`wrapRegExp(${/\d+/}, ["||||", "()"], { or:true }).test()`, () => {
+		test(`wrapRegExp(${/\d+/}, ["||||", "()"], { or:true }).test()`, () => {
 			const regexp = wrapRegExp(/\d+/, ["||||", "()"], { or:true });
 			expect(regexp.test("")).toBe(false);
 			expect(regexp.test("a")).toBe(false);
