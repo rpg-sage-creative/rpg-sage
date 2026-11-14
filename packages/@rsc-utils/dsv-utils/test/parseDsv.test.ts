@@ -14,7 +14,7 @@ const commaData = table(`,`);
 const pipeData = table(`|`);
 const tabData = table(`\t`);
 
-const strippedValues = values.map(line => { const o = { }; line.forEach((value, index) => o[keys[index]] = value.replace(/"/g, "")); return o; });
+const strippedValues = values.map(line => { const o: Record<string, string> = { }; line.forEach((value, index) => o[keys[index]] = value.replace(/"/g, "")); return o; });
 
 describe("parseDsv", () => {
 
@@ -102,6 +102,26 @@ describe("parseDsv", () => {
 
 		test(`rejects with RangeError for undefined input`, async () => {
 			await expect(parseDsv(undefined as unknown as string)).rejects.toThrow(RangeError);
+		});
+
+	});
+
+	describe("empty input", () => {
+
+		test(`empty string is undefined (regression: used to hang forever, promise never settled)`, async () => {
+			expect(await parseDsv(``)).toBeUndefined();
+		});
+
+		test(`whitespace-only string is undefined`, async () => {
+			expect(await parseDsv(`  \n\t `)).toBeUndefined();
+		});
+
+		test(`empty Buffer is undefined (regression: used to hang forever)`, async () => {
+			expect(await parseDsv(Buffer.from(""))).toBeUndefined();
+		});
+
+		test(`empty string with explicit delimiter is undefined`, async () => {
+			expect(await parseDsv(``, `,`)).toBeUndefined();
 		});
 
 	});

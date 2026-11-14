@@ -141,8 +141,8 @@ export async function parseDsv<
 		throw new RangeError(`Invalid Data: parseDsv(${input})`);
 	}
 
-	// don't process empty input
-	if (isString ? !input.trim().length : input.length) {
+	// don't process empty/blank input (csv-parser never settles the pipeline for zero-length input)
+	if (isString ? !input.trim().length : !input.length) {
 		return undefined;
 	}
 
