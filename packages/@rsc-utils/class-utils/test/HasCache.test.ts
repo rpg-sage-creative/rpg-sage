@@ -6,6 +6,10 @@ class Cacher extends HasCache {
 	public read(key:string) {
 		return this.cache.getOrSet(key, () => `value-for-${key}`);
 	}
+	/** Seeds the protected cache so tests can prove a value came from the cache instead of being recomputed. */
+	public seed(key:string, value:string): string {
+		return this.cache.getOrSet(key, () => value);
+	}
 }
 
 describe("HasCache", () => {
@@ -17,14 +21,15 @@ describe("HasCache", () => {
 
 	test(`values are cached across calls on the same instance`, () => {
 		const cacher = new Cacher();
-		cacher.cache.getOrSet(`a`, () => `first`);
+		cacher.seed(`a`, `first`);
 		expect(cacher.read(`a`)).toBe(`first`);
 	});
 
 	test(`instances do not share their default caches`, () => {
 		const one = new Cacher();
 		const two = new Cacher();
-		one.cache.getOrSet(`a`, () => `mine`);
+		one.seed(`a`, `mine`);
+		expect(one.read(`a`)).toBe(`mine`);
 		expect(two.read(`a`)).toBe(`value-for-a`);
 	});
 
@@ -32,13 +37,13 @@ describe("HasCache", () => {
 		const shared = new Cache();
 		const one = new Cacher(shared);
 		const two = new Cacher(shared);
-		one.cache.getOrSet(`a`, () => `shared-value`);
+		one.seed(`a`, `shared-value`);
 		expect(two.read(`a`)).toBe(`shared-value`);
 	});
 
 	test(`an injected msToLive produces an expiring cache`, async () => {
 		const cacher = new Cacher(20);
-		cacher.cache.getOrSet(`k`, () => `v`);
+		cacher.seed(`k`, `v`);
 		expect(cacher.read(`k`)).toBe(`v`);
 		await new Promise(res => setTimeout(res, 60));
 		expect(cacher.read(`k`)).toBe(`value-for-k`);
@@ -46,7 +51,7 @@ describe("HasCache", () => {
 
 	test(`destroy() drops the cached values`, () => {
 		const cacher = new Cacher();
-		cacher.cache.getOrSet(`a`, () => `first`);
+		cacher.seed(`a`, `first`);
 		cacher.destroy();
 		expect(cacher.read(`a`)).toBe(`value-for-a`);
 	});
