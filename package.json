@@ -94,6 +94,7 @@
 		"pretest": "pnpm scrub::logs",
 		"test": "pnpm build && pnpm vitest --run --globals -- codeName=dev",
 		"test:nobuild": "pnpm pretest && pnpm vitest --run --globals -- codeName=dev",
+		"typecheck::tests": "tsc --ignoreConfig --noEmit --strict --target esnext --module nodenext --moduleResolution nodenext $(find packages -path '*/test/*' -name '*.test.ts' -not -path '*/node_modules/*')",
 		"refresh-tags": "git tag -l | xargs git tag -d; git fetch --tags",
 		"deploy:dev": "pnpm dev-scripts deploy dev",
 		"deploy:docker": "pnpm dev-scripts deploy docker",
