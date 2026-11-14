@@ -133,9 +133,17 @@ export async function parseDsv<
 	opts?: csvParser.Options | DsvDelimiter,
 ): Promise<DsvResults<T> | undefined> {
 
+	const isString = typeof(input) === "string";
+	const isBuffer = !isString && Buffer.isBuffer(input);
+
 	// require a valid input value
-	if (typeof(input) !== "string" && !Buffer.isBuffer(input)) {
+	if (!isString && !isBuffer) {
 		throw new RangeError(`Invalid Data: parseDsv(${input})`);
+	}
+
+	// don't process empty input
+	if (isString ? !input.trim().length : input.length) {
+		return undefined;
 	}
 
 	// create parser options from given opts
