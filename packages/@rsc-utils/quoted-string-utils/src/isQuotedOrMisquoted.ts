@@ -2,7 +2,10 @@ import type { Optional } from "@rsc-utils/type-utils";
 import { MisquotedContentRegExp } from "./MisquotedContentRegExp.js";
 import { QuotedContentRegExp } from "./QuotedContentRegExp.js";
 
-/** Returns true if the value is properly quoted, false otherwise. */
+/**
+ * Returns "quoted" for properly quoted values, "misquoted" for mismatched open/close quotes, and false otherwise.
+ * Proper pairs are checked first, so they never report as misquoted.
+ */
 export function isQuotedOrMisquoted(value: Optional<string>): "quoted" | "misquoted" | false {
 	if (!value) return false;
 

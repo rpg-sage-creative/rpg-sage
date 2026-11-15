@@ -18,7 +18,10 @@ type MisquotedString
 	| `’${string}'` | `’${string}‘` | `’${string}’`
 	;
 
-/** Returns true if the value is properly quoted, false otherwise. */
+/**
+ * Returns true if the value has mismatched open/close quotes, false otherwise.
+ * Properly quoted values are not misquoted.
+ */
 export function isMisquoted(value: Optional<string>): value is MisquotedString {
 	return isQuotedOrMisquoted(value) === "misquoted";
 }
