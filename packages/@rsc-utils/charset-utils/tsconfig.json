@@ -12,5 +12,6 @@
 	],
 	"references": [
 		{ "path": "../../@rsc-utils/error-utils" },
+		{ "path": "../../@rsc-utils/number-utils" },
 	],
 }

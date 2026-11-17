@@ -1,4 +1,3 @@
-import { getSubscriptCharSet, getSuperscriptCharSet, type ScriptedCharSet } from "@rsc-utils/charset-utils";
 import { isIntegerString, isNumberString } from "@rsc-utils/type-utils";
 
 type NumberResults = {
@@ -66,10 +65,9 @@ function parseNumber(stringValue: string): NumberResults {
 	};
 }
 
-type NumericType = "number" | "super-number" | "sub-number"
-	| "bigint" | "super-bigint" | "sub-bigint";
+export type NumericType = "number" | "bigint";
 
-type NumericResults = {
+export type NumericResults = {
 	isBigInt: boolean;
 	isNaN: boolean;
 	isNumber: boolean;
@@ -79,71 +77,17 @@ type NumericResults = {
 	value: string;
 };
 
-function findCharSet(value: string): ScriptedCharSet | undefined {
-	const getters = [getSuperscriptCharSet, getSubscriptCharSet];
-	for (const getter of getters) {
-		const charSet = getter();
-		if (charSet.numberRegex.test(value)) {
-			return charSet;
-		}
-	}
-	return undefined;
-}
-
-function scriptedToUnscripted(value: string): { charSet:ScriptedCharSet; stringValue:string; } | undefined {
-	// split number into characters
-	const chars = value.split("");
-
-	// get valid scripted character set
-	const charSet = findCharSet(value);
-	if (!charSet) return undefined;
-
-	// convert to normal chars
-	let stringValue = "";
-	for (const char of chars) {
-		if (char === charSet.period) {
-			// can't have two decimals
-			if (stringValue.includes(".")) return undefined;
-			stringValue += ".";
-
-		}else if (char === charSet.plus) {
-			// the plus can only be at the beginning
-			if (stringValue.length) return undefined;
-			// we don't actually use the plus
-
-		}else if (char === charSet.minus) {
-			// the minus can only be at the beginning
-			if (stringValue.length) return undefined;
-			stringValue = "-";
-
-		}else {
-			const index = charSet.numbers.indexOf(char);
-			// must be a valid number
-			if (index < 0) return undefined;
-			stringValue += "0123456789"[index];
-		}
-	}
-
-	return { stringValue, charSet };
-}
-
-/** @internal exported only for testing */
+/**
+ * Parses a stringValue into different bits of information about the number.
+ * Only plain numeric strings are understood here — for super/subscript scripted numbers, use parseNumericString from @rsc-utils/charset-utils.
+ */
 export function parseNumericString(value: string): NumericResults {
-	let charSetType: "sub" | "super" | "other" | undefined;
-	let stringValue = value;
-
-	// see if we need to convert from super/sub
-	if (!isNumberString(value)) {
-		const unscriptedResults = scriptedToUnscripted(value);
-		if (unscriptedResults) {
-			charSetType = unscriptedResults.charSet.type;
-			stringValue = unscriptedResults.stringValue;
-		}
-	}
-
-	const parsedNumber = parseNumber(stringValue);
-	const type = [charSetType, parsedNumber.isBigInt ? "bigint" : "number"].filter(s => s).join("-") as NumericType;
-	return { ...parsedNumber, type, value };
+	const parsedNumber = parseNumber(value);
+	return {
+		...parsedNumber,
+		type: parsedNumber.isBigInt ? "bigint" : "number",
+		value
+	};
 }
 
 /** Parses the given numeric string into a number, bigint, or NaN. */

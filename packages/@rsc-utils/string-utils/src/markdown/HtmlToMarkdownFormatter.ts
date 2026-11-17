@@ -1,5 +1,4 @@
-import { toSubscript, toSuperscript } from "@rsc-utils/charset-utils";
-import { parseNumeric } from "@rsc-utils/number-utils";
+import { parseNumeric, toSubscript, toSuperscript } from "@rsc-utils/charset-utils";
 import { HORIZONTAL_TAB } from "../consts.js";
 import { htmlToMarkdown } from "./htmlToMarkdown.js";
 

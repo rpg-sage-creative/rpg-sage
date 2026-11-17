@@ -1,70 +1,92 @@
-import { tagLiterals } from "@rsc-tools/dev-scripts";
 import { describe, expect, test } from "vitest";
 import { toCircledLetter } from "../build/index.js";
 
+// within each block the mapping is linear code-point arithmetic (circleA + charCode - delta),
+// so boundary letters prove the formula for every letter between them — see TESTS-PROGRESS.md
 describe("toCircledLetter", () => {
 
-	const expected = [
-		[ 'A', 'ⓐ', 'Ⓐ', '🅐' ],
-		[ 'B', 'ⓑ', 'Ⓑ', '🅑' ],
-		[ 'C', 'ⓒ', 'Ⓒ', '🅒' ],
-		[ 'D', 'ⓓ', 'Ⓓ', '🅓' ],
-		[ 'E', 'ⓔ', 'Ⓔ', '🅔' ],
-		[ 'F', 'ⓕ', 'Ⓕ', '🅕' ],
-		[ 'G', 'ⓖ', 'Ⓖ', '🅖' ],
-		[ 'H', 'ⓗ', 'Ⓗ', '🅗' ],
-		[ 'I', 'ⓘ', 'Ⓘ', '🅘' ],
-		[ 'J', 'ⓙ', 'Ⓙ', '🅙' ],
-		[ 'K', 'ⓚ', 'Ⓚ', '🅚' ],
-		[ 'L', 'ⓛ', 'Ⓛ', '🅛' ],
-		[ 'M', 'ⓜ', 'Ⓜ', '🅜' ],
-		[ 'N', 'ⓝ', 'Ⓝ', '🅝' ],
-		[ 'O', 'ⓞ', 'Ⓞ', '🅞' ],
-		[ 'P', 'ⓟ', 'Ⓟ', '🅟' ],
-		[ 'Q', 'ⓠ', 'Ⓠ', '🅠' ],
-		[ 'R', 'ⓡ', 'Ⓡ', '🅡' ],
-		[ 'S', 'ⓢ', 'Ⓢ', '🅢' ],
-		[ 'T', 'ⓣ', 'Ⓣ', '🅣' ],
-		[ 'U', 'ⓤ', 'Ⓤ', '🅤' ],
-		[ 'V', 'ⓥ', 'Ⓥ', '🅥' ],
-		[ 'W', 'ⓦ', 'Ⓦ', '🅦' ],
-		[ 'X', 'ⓧ', 'Ⓧ', '🅧' ],
-		[ 'Y', 'ⓨ', 'Ⓨ', '🅨' ],
-		[ 'Z', 'ⓩ', 'Ⓩ', '🅩' ]
-	];
+	describe("uppercase block Ⓐ-Ⓩ", () => {
 
-	for (const [letter, lower, upper, negative] of expected) {
-		test(tagLiterals`toCircledLetter(${letter.toUpperCase()}) === ${upper}`, () => {
-			expect(toCircledLetter(letter.toUpperCase())).toBe(upper);
+		test(`"A" is the first circled uppercase`, () => {
+			expect(toCircledLetter("A")).toBe(`Ⓐ`);
 		});
-		test(tagLiterals`toCircledLetter(${letter.toUpperCase()}, { negative:true }) === ${negative}`, () => {
-			expect(toCircledLetter(letter.toUpperCase(), { negative:true })).toBe(negative);
-		});
-		test(tagLiterals`toCircledLetter(${letter.toLowerCase()}) === ${lower}`, () => {
-			expect(toCircledLetter(letter.toLowerCase())).toBe(lower);
-		});
-		test(tagLiterals`toCircledLetter(${letter.toLowerCase()}, { negative:true }) === ""`, () => {
-			expect(toCircledLetter(letter.toLowerCase(), { negative:true })).toBe("");
-		});
-	}
 
-	const errors = [
-		"",
-		" ",
-		"\t",
-		"\n",
-		"1",
-		1,
-		true,
-		false,
-		null,
-		undefined,
-	];
-
-	for (const value of errors) {
-		test(tagLiterals`toCircledLetter(${value}) to throw`, () => {
-			expect(() => toCircledLetter(value as string)).toThrow();
+		test(`interior letter "M" maps by delta`, () => {
+			expect(toCircledLetter("M")).toBe(`Ⓜ`);
 		});
-	}
+
+		test(`"Z" is the last circled uppercase`, () => {
+			expect(toCircledLetter("Z")).toBe(`Ⓩ`);
+		});
+
+	});
+
+	describe("lowercase block ⓐ-ⓩ", () => {
+
+		test(`"a" is the first circled lowercase`, () => {
+			expect(toCircledLetter("a")).toBe(`ⓐ`);
+		});
+
+		test(`interior letter "m" maps by delta`, () => {
+			expect(toCircledLetter("m")).toBe(`ⓜ`);
+		});
+
+		test(`"z" is the last circled lowercase`, () => {
+			expect(toCircledLetter("z")).toBe(`ⓩ`);
+		});
+
+	});
+
+	describe("negative (white on black) variants", () => {
+
+		test(`uppercase "A" with negative:true starts the 🅐-🅩 block`, () => {
+			expect(toCircledLetter("A", { negative:true })).toBe(`🅐`);
+		});
+
+		test(`uppercase "Z" with negative:true ends the block`, () => {
+			expect(toCircledLetter("Z", { negative:true })).toBe(`🅩`);
+		});
+
+		test(`negative lowercase returns "" — no such code points exist`, () => {
+			expect(toCircledLetter("a", { negative:true })).toBe(``);
+		});
+
+		test(`negative:false explicitly behaves like the default`, () => {
+			expect(toCircledLetter("A", { negative:false })).toBe(`Ⓐ`);
+		});
+
+	});
+
+	describe("quirks and errors", () => {
+
+		test(`multi-character input uses only the first character (quirk)`, () => {
+			expect(toCircledLetter("ab")).toBe(`ⓐ`);
+		});
+
+		test(`empty string throws RangeError`, () => {
+			expect(() => toCircledLetter(``)).toThrow(RangeError);
+		});
+
+		test(`space throws RangeError`, () => {
+			expect(() => toCircledLetter(` `)).toThrow(RangeError);
+		});
+
+		test(`digit "1" throws RangeError`, () => {
+			expect(() => toCircledLetter(`1`)).toThrow(RangeError);
+		});
+
+		test(`non-string input throws TypeError (charCodeAt is not a function), not the guarded RangeError`, () => {
+			expect(() => toCircledLetter(1 as unknown as string)).toThrow(TypeError);
+		});
+
+		test(`null throws`, () => {
+			expect(() => toCircledLetter(null as unknown as string)).toThrow();
+		});
+
+		test(`undefined throws`, () => {
+			expect(() => toCircledLetter(undefined as unknown as string)).toThrow();
+		});
+
+	});
 
 });

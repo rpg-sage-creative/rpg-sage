@@ -1,5 +1,6 @@
 export * from "./getSubscriptCharSet.js";
 export * from "./getSuperscriptCharSet.js";
+export * from "./parseNumeric.js";
 export * from "./ScriptedCharSet.js";
 export * from "./toCircledLetter.js";
 export * from "./toCircledNumber.js";

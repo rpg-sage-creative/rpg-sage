@@ -1,3 +1,4 @@
+import { numberOrUndefined } from "@rsc-utils/number-utils";
 import { typeError } from "@rsc-utils/error-utils";
 
 type Options = {
@@ -8,20 +9,6 @@ type Options = {
 	/** negative circled numbers (white number on black circle); only valid for 0-20 */
 	negative?: boolean;
 };
-
-/** Returns the value cast as a number or undefined if the value does not represent a number. */
-function numberOrUndefined(value: unknown): number | undefined {
-	switch(typeof(value)) {
-		case "number":
-			return isFinite(value) ? value : undefined;
-		case "string":
-			const number = +value;
-			const string = (value.startsWith("+") ? "+" : "") + String(+value);
-			return value === string ? number : undefined;
-		default:
-			return undefined;
-	}
-}
 
 /** Processes double circled numbers (1-10) */
 function processDouble(value: number, { dingbat, negative }: Omit<Options, "double">): string {
@@ -60,7 +47,7 @@ function processDingbat(value: number, negative: boolean): string {
 	}else {
 		codePoint = negative
 			? 10122   // dingbat negative circled one "➊" is 10122  "\u278a"
-			: 10112;  // dingbat circled one "➀" is 10122  "\u2780"
+			: 10112;  // dingbat circled one "➀" is 10112  "\u2780"
 
 		// the starting codePoint is for 1, so we have to treat it as index 0
 		delta = value - 1;
@@ -70,7 +57,7 @@ function processDingbat(value: number, negative: boolean): string {
 	return String.fromCodePoint(codePoint + delta);
 }
 
-/** Proesses negative circled numbers (0-20) */
+/** Processes negative circled numbers (0-20) */
 function processNegative(value: number): string {
 	// only numbers 0-20
 	if (value < 0 || value > 20) {
@@ -106,7 +93,7 @@ function processNegative(value: number): string {
 	return String.fromCodePoint(codePoint + delta);
 }
 
-/** Proesses circled numbers (0-50) */
+/** Processes circled numbers (0-50) */
 function process(value: number): string {
 	// a zero based index for adjusting the codePoint within a block
 	let delta: number;
@@ -142,7 +129,7 @@ function process(value: number): string {
 		// circled 36 "㊱" is 12977  "\u32B1"
 		codePoint = 12977;
 
-		// rthe starting codePoint is for 36
+		// the starting codePoint is for 36
 		delta = value - 36;
 	}
 
