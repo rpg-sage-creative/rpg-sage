@@ -7,7 +7,7 @@ export const NumberRegExp = /[\-\+]?\d+(?:\.\d+)?/;
 
 /**
  * Regular Expression to match an anchored number (whole or decimal; +/- optional):
- * /[\-\+]?\d+(?:\.\d+)?/
+ * /^[\-\+]?\d+(?:\.\d+)?$/
  */
 const NumberStringRegExp = /^[\-\+]?\d+(?:\.\d+)?$/;
 
