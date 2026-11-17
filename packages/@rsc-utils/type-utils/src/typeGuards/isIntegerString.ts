@@ -1,12 +1,10 @@
 /**
- * Regular Expression to match a whole number (+/- optional):
- * /[\-+]?\d+/
+ * Regular Expression to match an anchored whole number (+/- optional):
+ * /^[\-+]?\d+$/
  */
-export const IntegerRegExp = /[\-+]?\d+/;
+export const IntegerStringRegExp = /^[\-+]?\d+$/;
 
 /** Returns true if the value is a string representation of a whole number (+/- optional). */
 export function isIntegerString(value: unknown): value is `${"-"|"+"|""}${number}` {
-	if (typeof(value) !== "string") return false;
-	const match = IntegerRegExp.exec(value);
-	return match?.index === 0 && match[0].length === value.length;
+	return typeof(value) === "string" && IntegerStringRegExp.test(value);
 }
