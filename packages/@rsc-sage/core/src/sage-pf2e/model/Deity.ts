@@ -37,7 +37,7 @@ export class Deity extends Faith<"Deity", DeityCore> {
 	public toRenderableContent(): UtilsRenderableContent {
 		const content = new RenderableContent(this);
 		if (this.source.isCore) {
-			content.setThumbnailUrl(`http://rpgsage.io/images/religious/${this.name.replace(/\s/g, "")}.png`);
+			content.setThumbnailUrl(`http://rpgsage.app/pf2/images/religious/${this.name.replace(/\s/g, "")}.png`);
 		}
 		content.setTitle(`<b>${this.name}</b>`);
 		this.appendDetailsTo(content);

@@ -44,7 +44,7 @@ export class Bot extends HasIdCore<BotCore> implements HasColorsCore, HasEmojiCo
 
 		public get macros() { return this.core.macros ??= []; }
 
-	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.io/SageBotToken.png"; }
+	public get tokenUrl(): string { return this.core.tokenUrl ?? "https://rpgsage.app/SageBotToken.png"; }
 
 	//#region Pathbuilder Import Status
 

@@ -4,8 +4,8 @@ import { getWikiUrl, hasWikiUrl } from "./getWikiUrl.js";
 
 const DISCORD_POLICY = `[(Discord Policy)](<https://discord.com/developers/docs/resources/user>)`;
 
-const RPG_SAGE_HOME = `https://rpgsage.io`;
-const RPG_SAGE_INVITE = `https://discord.gg/rpgsage`;
+const RPG_SAGE_HOME = `https://rpgsage.app`;
+const RPG_SAGE_INVITE = `https://discord.rpgsage.app`;
 
 const enUS = {
 	"FOR_MORE_INFO_JOIN": `For more information, join us at <${RPG_SAGE_INVITE}>`,

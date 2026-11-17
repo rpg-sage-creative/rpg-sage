@@ -19,7 +19,7 @@ describe("pdf", () => {
 	describe("PdfCacher", () => {
 
 		const tests = [
-			{ url:"https://pf2.rpgsage.io/pathbuilder-2e-mal-level-4.pdf", values:[{ key:"CharacterName",value:"Malken'throp (Mal)"}] },
+			{ url:"https://code.rpgsage.app/test/pdf/pathbuilder-2e-mal-level-4.pdf", values:[{ key:"CharacterName",value:"Malken'throp (Mal)"}] },
 			{ url:toTestFilePath("pdf", "in", "BudMastercraft.pdf"), values:[{ key:"text_1wgcm", value:"Character Name" }] },
 		];
 
@@ -57,7 +57,7 @@ describe("pdf", () => {
 	});
 });
 // runTests(async function test_PdfUtils() {
-// 	const urlOne = "https://pf2.rpgsage.io/pathbuilder-2e-mal-level-4.pdf";
+// 	const urlOne = "https://code.rpgsage.app/test/pdf/pathbuilder-2e-mal-level-4.pdf";
 // 	const contentOne = await PdfCacher.read(urlOne).catch(error);
 // 	assert(!!contentOne, "File (Mal) was NOT cached and read.");
 // 	const managerOne = PdfJsonFieldManager.from(contentOne);

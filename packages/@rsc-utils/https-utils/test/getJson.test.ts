@@ -6,7 +6,7 @@ import { getJson } from "../build/index.js";
 describe("https", () => {
 	describe("getJson", () => {
 
-		const urlOne = "https://pf2.rpgsage.io/abc/some.json";
+		const urlOne = "https://code.rpgsage.app/test/json/some.json";
 		test(tagLiterals`getJson(${urlOne})`, async () => {
 			const json = await getJson(urlOne, undefined, { logPercent:true });
 			expect(Array.isArray(json)).toBe(true);

@@ -7,7 +7,7 @@ import { createCommandRenderableContent } from "./cmd.js";
 
 async function createHelpRenderable(_caches: SageCache, _categories: string[]): Promise<RenderableContent> {
 	const renderableContent = createCommandRenderableContent(`<b>Sage Help</b>`);
-	renderableContent.appendSection(`<a href="https://rpgsage.io">RPG Sage Home</a>`, `<a href="https://github.com/rpg-sage-creative/rpg-sage/wiki">RPG Sage Wiki</a>`);
+	renderableContent.appendSection(`<a href="https://rpgsage.app">RPG Sage Home</a>`, `<a href="https://github.com/rpg-sage-creative/rpg-sage/wiki">RPG Sage Wiki</a>`);
 	return renderableContent;
 }
 //#endregion
@@ -16,7 +16,7 @@ async function createHelpRenderable(_caches: SageCache, _categories: string[]): 
 async function renderHelpHandler(sageMessage: SageMessage): Promise<void> {
 	const renderableContent = createCommandRenderableContent(`<b>RPG Sage Help</b>`);
 	renderableContent.appendTitledSection("Slash Command", `/sage-help`);
-	renderableContent.appendTitledSection("Guides", `<a href="https://rpgsage.io">RPG Sage Home</a>`, `<a href="https://github.com/rpg-sage-creative/rpg-sage/wiki">RPG Sage Wiki</a>`);
+	renderableContent.appendTitledSection("Guides", `<a href="https://rpgsage.app">RPG Sage Home</a>`, `<a href="https://github.com/rpg-sage-creative/rpg-sage/wiki">RPG Sage Wiki</a>`);
 	await sageMessage.sageCache.send(sageMessage.message.channel, renderableContent, sageMessage.message.author);
 }
 // #endregion

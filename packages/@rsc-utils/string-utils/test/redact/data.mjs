@@ -155,25 +155,25 @@ const redactKeyValuePairsTests = [
 /** @type {Test[]} */
 const redactMdLinksTests = [
 	{
-		input: `[link](http://rpgsage.io)`,
-		expected: `[****](*****************)`,
+		input: `[link](http://rpgsage.app)`,
+		expected: `[****](******************)`,
 	},
 	{
-		input: `[link](http://rpgsage.io)`,
-		expected: `[****](*****************)`,
-		options: { labelChar:"l", urlChar:"u", expected:`[llll](uuuuuuuuuuuuuuuuu)` },
+		input: `[link](http://rpgsage.app)`,
+		expected: `[****](******************)`,
+		options: { labelChar:"l", urlChar:"u", expected:`[llll](uuuuuuuuuuuuuuuuuu)` },
 	},
 	{
-		input: `[link](http://rpgsage.io)`,
-		expected: `[****](*****************)`,
-		options: { char:"&", complete:true, labelChar:"l", urlChar:"u", expected:`&llll&&uuuuuuuuuuuuuuuuu&` },
+		input: `[link](http://rpgsage.app)`,
+		expected: `[****](******************)`,
+		options: { char:"&", complete:true, labelChar:"l", urlChar:"u", expected:`&llll&&uuuuuuuuuuuuuuuuuu&` },
 	},
 	{
-		input: `[link](<http://rpgsage.io>)`,
-		expected: `[****](<*****************>)`,
-		char: { char:"&", expected:`[&&&&](<&&&&&&&&&&&&&&&&&>)` },
-		complete: { complete:true,          expected:`***************************` },
-		options: { char:"&", complete:true, expected:`&&&&&&&&&&&&&&&&&&&&&&&&&&&` },
+		input: `[link](<http://rpgsage.app>)`,
+		expected: `[****](<******************>)`,
+		char: { char:"&", expected:`[&&&&](<&&&&&&&&&&&&&&&&&&>)` },
+		complete: { complete:true,          expected:`****************************` },
+		options: { char:"&", complete:true, expected:`&&&&&&&&&&&&&&&&&&&&&&&&&&&&` },
 	},
 	{
 		input: `[Here is d20's list of additional deities](https://www.d20pfsrd.com/classes/core-classes/cleric/domains)\n[Here is the list of first-party domains, mapped to the first-party gods which have them](https://www.aonprd.com/ClericDomains.aspx)`,

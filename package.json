@@ -31,12 +31,12 @@
 		"vtm5e"
 	],
 	"private": true,
-	"author": "Randal T Meyer <randal.t.meyer@gmail.com> (https://rpgsage.io)",
+	"author": "Randal T Meyer <randal.t.meyer@gmail.com> (https://rpgsage.app)",
 	"contributors": [],
 	"license": "GPL-3.0-only",
 	"bugs": {
 		"url": "https://github.com/rpg-sage-creative/rpg-sage/issues",
-		"email": "bugs@rpgsage.io"
+		"email": "bugs@rpgsage.app"
 	},
 	"homepage": "https://github.com/rpg-sage-creative/rpg-sage#readme",
 	"funding": {

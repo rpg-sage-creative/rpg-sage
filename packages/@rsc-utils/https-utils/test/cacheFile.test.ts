@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { cacheFile } from "../build/index.js";
 
 
-const filePath = "./invite-permission-list.jpg";
+const filePath = "./259x591-21413.jpg";
 
 function deleteCacheFile() {
 	try { if (existsSync(filePath)) rmSync(filePath); }catch(ex) { }
@@ -17,7 +17,7 @@ afterAll(() => deleteCacheFile());
 describe("https", () => {
 	describe("cacheFile", () => {
 
-		const url = "https://rpgsage.io/images/docs/invite-permission-list.jpg";
+		const url = "https://code.rpgsage.app/test/img/259x591-21413.jpg";
 		const expectedFileSize = 21413;
 
 		const options = { url, filePath, logPercent:true };

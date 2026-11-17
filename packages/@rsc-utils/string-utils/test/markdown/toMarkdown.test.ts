@@ -22,8 +22,8 @@ more</i>
 line<br>break
 <sup>12.34567809</sup>
 <sub>12.34567809</sub>
-<a href="https://rpgsage.io">RPG Sage Site</a>
-<a href="https://rpgsage.io" title="cool site bro">RPG Sage Site</a>
+<a href="https://rpgsage.app">RPG Sage Site</a>
+<a href="https://rpgsage.app" title="cool site bro">RPG Sage Site</a>
 line<br/>break
 line<br />break 2
 line<br readonly/>break 3
@@ -60,8 +60,8 @@ line
 break
 ¹²\u22C5³⁴⁵⁶⁷⁸⁰⁹
 ₁₂\u2024₃₄₅₆₇₈₀₉
-[RPG Sage Site](https://rpgsage.io)
-[RPG Sage Site](https://rpgsage.io "cool site bro")
+[RPG Sage Site](https://rpgsage.app)
+[RPG Sage Site](https://rpgsage.app "cool site bro")
 line
 break
 line

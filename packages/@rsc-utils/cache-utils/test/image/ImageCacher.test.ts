@@ -14,10 +14,10 @@ describe("image", () => {
 	describe("ImageCacher", () => {
 
 		const tests = [
-			{ url:"https://rpgsage.io/test-images/259x591-21413.jpg", size:21413, width:259, height:591, type:"jpeg" },
-			{ url:"https://rpgsage.io/test-images/32x32-4871.png", size:4871, width:32, height:32, type:"png" },
-			{ url:"https://rpgsage.io/test-images/2494x2046-75630.webp", size:75630, width:2494, height:2046, type:"webp" },
-			{ url:"https://rpgsage.io/test-images/411x412-499203.gif", size:499203, width:411, height:412, type:"gif" },
+			{ url:"https://code.rpgsage.app/test/img/259x591-21413.jpg", size:21413, width:259, height:591, type:"jpeg" },
+			{ url:"https://code.rpgsage.app/test/img/32x32-4871.png", size:4871, width:32, height:32, type:"png" },
+			{ url:"https://code.rpgsage.app/test/img/2494x2046-75630.webp", size:75630, width:2494, height:2046, type:"webp" },
+			{ url:"https://code.rpgsage.app/test/img/411x412-499203.gif", size:499203, width:411, height:412, type:"gif" },
 			// { url:"file://~/Downloads/AnimatedPath_0.66.v2.gif", size:499203, width:411, height:412, type:"gif" },
 			// { url:undefined, size:000, width:000, height:000, type:"png" },
 		];

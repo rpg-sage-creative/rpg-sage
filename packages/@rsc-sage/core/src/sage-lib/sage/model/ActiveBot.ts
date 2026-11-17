@@ -53,7 +53,7 @@ export class ActiveBot extends Bot {
 			client.user?.setPresence({
 				status: "online"
 			});
-			client.user?.setActivity("rpgsage.io; /sage-help", {
+			client.user?.setActivity("rpgsage.app; /sage-help", {
 				type: ActivityType.Playing
 			});
 
