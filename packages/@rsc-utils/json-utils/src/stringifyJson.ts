@@ -24,7 +24,8 @@ function inlineSquareBrackets(value: string, maxLineLength: number): string {
 }
 
 /**
- * BigInt and Date friendly replacement for JSON.stringify().
+ * BigInt, Date, and non-finite-number friendly replacement for JSON.stringify().
+ * Values JSON cannot represent are wrapped so parseJson can restore them: bigint to { $bigint }, Date to { $date }, and NaN/-0/±Infinity to { $number }.
  */
 export function stringifyJson(value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number, maxLineLength?: number): string;
 
@@ -39,6 +40,12 @@ export function stringifyJson(value: any, replacer?: Function | (string | number
 		const cleanValue = this[key];
 		if (isDate(cleanValue)) return { $date:cleanValue.toISOString() };
 		if (typeof(cleanValue) === "bigint") return { $bigint:cleanValue.toString() };
+
+		// JSON cannot represent NaN, ±Infinity, or -0; wrap them so parseJson can restore them losslessly
+		if (typeof(cleanValue) === "number") {
+			if (!Number.isFinite(cleanValue)) return { $number:String(cleanValue) };
+			if (Object.is(cleanValue, -0)) return { $number:"-0" };
+		}
 
 		// if they passed in a replacer, then let's use it
 		if (replacer) {
