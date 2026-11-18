@@ -35,17 +35,25 @@ describe("boundNumber", () => {
 
 	});
 
-	describe("out-of-bounds returns the default — it does NOT clamp", () => {
+	describe("out-of-bounds clamps to the boundary when no default is given", () => {
 
-		test(`below min with no default → undefined (not clamped to min)`, () => {
-			expect(boundNumber(-1, { min: 0, max: 10 })).toBe(undefined);
+		test(`below min with no defaults → clamped up to min`, () => {
+			expect(boundNumber(-1, { min: 0, max: 10 })).toBe(0);
 		});
 
-		test(`above max with no default → undefined (not clamped to max)`, () => {
-			expect(boundNumber(11, { min: 0, max: 10 })).toBe(undefined);
+		test(`above max with no defaults → clamped down to max`, () => {
+			expect(boundNumber(11, { min: 0, max: 10 })).toBe(10);
 		});
 
-		test(`below min with a default → the default`, () => {
+		test(`a lone max does not invent a lower clamp — -5 with only {max:10} passes through`, () => {
+			expect(boundNumber(-5, { max: 10 })).toBe(-5);
+		});
+
+	});
+
+	describe("out-of-bounds returns the default when one is given", () => {
+
+		test(`below min with a default → the default (default wins over clamping)`, () => {
 			expect(boundNumber(-1, { min: 0, max: 10, default: 0 })).toBe(0);
 		});
 
@@ -53,8 +61,51 @@ describe("boundNumber", () => {
 			expect(boundNumber(11, { min: 0, max: 10, default: 99 })).toBe(99);
 		});
 
-		test(`a default of 0 is distinguishable from "no default" (falsy defaults are honored)`, () => {
+		test(`a falsy default is honored (distinguishable from "no default")`, () => {
 			expect(boundNumber(-1, { min: 0, default: 0 })).toBe(0);
+		});
+
+	});
+
+	describe("minDefault/maxDefault override the boundary and win over default", () => {
+
+		test(`below min with minDefault → minDefault`, () => {
+			expect(boundNumber(-1, { min: 0, minDefault: -99 })).toBe(-99);
+		});
+
+		test(`above max with maxDefault → maxDefault`, () => {
+			expect(boundNumber(11, { max: 10, maxDefault: 99 })).toBe(99);
+		});
+
+		test(`minDefault wins over default; a falsy minDefault still wins via ??`, () => {
+			expect(boundNumber(-1, { min: 0, minDefault: -99, default: 7 })).toBe(-99);
+			expect(boundNumber(-1, { min: 5, minDefault: 0, default: 7 })).toBe(0);
+		});
+
+		test(`maxDefault wins over default`, () => {
+			expect(boundNumber(11, { max: 10, maxDefault: 99, default: 7 })).toBe(99);
+		});
+
+	});
+
+	describe("infinite values clamp against finite bounds", () => {
+
+		test(`-Infinity with a finite min clamps to it`, () => {
+			expect(boundNumber(-Infinity, { min: 5 })).toBe(5);
+		});
+
+		test(`+Infinity with a finite max clamps to it`, () => {
+			expect(boundNumber(Infinity, { max: 10 })).toBe(10);
+		});
+
+		test(`a default still wins over the infinite clamp`, () => {
+			expect(boundNumber(-Infinity, { min: 0, default: 7 })).toBe(7);
+			expect(boundNumber(Infinity, { max: 10, default: 7 })).toBe(7);
+		});
+
+		test(`minDefault/maxDefault win over the infinite clamp too`, () => {
+			expect(boundNumber(-Infinity, { min: 5, minDefault: -99 })).toBe(-99);
+			expect(boundNumber(Infinity, { max: 10, maxDefault: 99 })).toBe(99);
 		});
 
 	});
@@ -73,31 +124,23 @@ describe("boundNumber", () => {
 			expect(boundNumber(undefined, {})).toBe(undefined);
 		});
 
-		test(`-Infinity is explicitly boundless — never confined, yields the default`, () => {
-			expect(boundNumber(-Infinity, { min: 0, default: 7 })).toBe(7);
-		});
-
-		test(`+Infinity is explicitly boundless too`, () => {
-			expect(boundNumber(Infinity, { max: 10, default: 7 })).toBe(7);
+		test(`±Infinity with no finite opposing bound yields the default — nothing to clamp against`, () => {
+			expect(boundNumber(Infinity, { min: 0 })).toBe(undefined);
+			expect(boundNumber(-Infinity, { max: 10 })).toBe(undefined);
+			expect(boundNumber(Infinity, { default: -1 })).toBe(-1);
 		});
 
 	});
 
 	describe("quirks", () => {
 
-		test(`contradictory bounds (min > max) put every value out of range`, () => {
-			expect(boundNumber(5, { min: 10, max: 0 })).toBe(undefined);
+		test(`contradictory bounds (min > max) put every value out of range — the below-min branch wins`, () => {
+			expect(boundNumber(5, { min: 10, max: 0 })).toBe(10);
 			expect(boundNumber(5, { min: 10, max: 0, default: -1 })).toBe(-1);
 		});
 
 		test(`non-number bounds from untyped callers are ignored, not coerced — a null min does NOT act as 0`, () => {
 			expect(boundNumber(-1, { min: null as unknown as number })).toBe(-1);
-		});
-
-		test(`±Infinity VALUES are explicitly boundless — they yield the default even when no opposing bound exists`, () => {
-			expect(boundNumber(Infinity, { min: 0 })).toBe(undefined);
-			expect(boundNumber(-Infinity, { max: 10 })).toBe(undefined);
-			expect(boundNumber(Infinity, { default: -1 })).toBe(-1);
 		});
 
 		test(`non-finite bounds are ignored — omit min/max to leave a side unbounded`, () => {
@@ -111,8 +154,8 @@ describe("boundNumber", () => {
 			expect(boundNumber(5, { max: -Infinity })).toBe(5);
 		});
 
-		test(`ignoring a non-finite bound does not disable the other bound`, () => {
-			expect(boundNumber(50, { min: -Infinity, max: 10 })).toBe(undefined);
+		test(`ignoring a non-finite bound does not disable the other bound — that one clamps`, () => {
+			expect(boundNumber(50, { min: -Infinity, max: 10 })).toBe(10);
 		});
 
 	});
