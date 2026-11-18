@@ -1,7 +1,7 @@
 import { findComponent } from "@rsc-chat/discord-utils";
 import { GameSystemType, parseEnum } from "@rsc-sage/data";
 import type { Snowflake } from "@rsc-utils/id-utils";
-import { nth } from "@rsc-utils/number-utils";
+import { boundNumber, nth, type BoundedOptions } from "@rsc-utils/number-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from "discord.js";
 import { registerListeners } from "../../sage-lib/discord/handlers/registerListeners.js";
@@ -9,7 +9,6 @@ import { createCommandRenderableContent } from "../../sage-lib/sage/commands/cmd
 import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton, createMessageDeleteButtonRow } from "../../sage-lib/sage/model/utils/deleteButton.js";
-import { boundNumber, type BoundedOptions } from "../utils/boundNumber.js";
 import { toModifier } from "../utils/toModifier.js";
 
 type Table = "Simple" | "Level" | "Rank";
@@ -262,8 +261,8 @@ async function showDCs(sageCommand: SageCommand): Promise<void> {
 
 /** Gets the selected value (updated or default) for the given customId. */
 function getSelected<T extends string = string>(sageInteraction: SageStringSelectInteraction, customId: string): T | undefined;
-function getSelected(sageInteraction: SageStringSelectInteraction, customId: string, boundOpts: BoundedOptions): number;
-function getSelected(sageInteraction: SageStringSelectInteraction, customId: string, boundOpts?: BoundedOptions): string | number | undefined {
+function getSelected(sageInteraction: SageStringSelectInteraction, customId: string, boundOpts: BoundedOptions & { default:number; }): number;
+function getSelected(sageInteraction: SageStringSelectInteraction, customId: string, boundOpts?: BoundedOptions & { default:number; }): string | number | undefined {
 	const ret = boundOpts
 		? (value: string) => boundNumber(+value, boundOpts)
 		: (value: string) => value;

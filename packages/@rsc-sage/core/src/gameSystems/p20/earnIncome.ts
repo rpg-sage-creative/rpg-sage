@@ -1,7 +1,7 @@
 import { findComponent, toUserMention } from "@rsc-chat/discord-utils";
 import { GameSystemType, getPaizoGameSystems, parseGameSystem } from "@rsc-sage/data";
 import type { Snowflake } from "@rsc-utils/id-utils";
-import { addCommas, nth } from "@rsc-utils/number-utils";
+import { addCommas, boundNumber, nth } from "@rsc-utils/number-utils";
 import type { RenderableContent } from "@rsc-utils/render-utils";
 import { ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { Dice } from "../../sage-dice/dice/pf2e/index.js";
@@ -14,7 +14,6 @@ import type { SageCommand } from "../../sage-lib/sage/model/SageCommand.js";
 import type { SageButtonInteraction, SageStringSelectInteraction } from "../../sage-lib/sage/model/SageInteraction.js";
 import { createMessageDeleteButton } from "../../sage-lib/sage/model/utils/deleteButton.js";
 import { Coins } from "../../sage-pf2e/index.js";
-import { boundNumber } from "../utils/boundNumber.js";
 import { toModifier } from "../utils/toModifier.js";
 import { getByLevelTable } from "./dcs.js";
 import { getSelectedOrDefault, getSelectedOrDefaultEnum, getSelectedOrDefaultNumber } from "./lib/getSelectedOrDefault.js";
