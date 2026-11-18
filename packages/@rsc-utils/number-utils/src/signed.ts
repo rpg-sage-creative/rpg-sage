@@ -4,7 +4,7 @@
  */
 export function signed(value: number): string {
 	if (value < 0) {
-		return `−${value}`;
+		return `−${Math.abs(value)}`;
 	}
 	return `+${value}`;
 }

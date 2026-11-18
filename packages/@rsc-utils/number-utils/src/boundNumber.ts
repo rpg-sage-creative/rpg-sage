@@ -1,3 +1,4 @@
+import { isFiniteNumber } from "@rsc-utils/type-utils";
 import type { Optional } from "@rsc-utils/type-utils";
 
 export type BoundedOptions = {
@@ -6,15 +7,21 @@ export type BoundedOptions = {
 	default?: number;
 };
 
-/** If the value is outside the bounds, the default value is returned. */
+/**
+ * If the value is not finite (NaN/±Infinity) or is outside the bounds, the default value is returned.
+ * Non-finite bounds are ignored; omit min/max to leave a side unbounded.
+ */
 export function boundNumber(value: Optional<number>, options: BoundedOptions & { default:number; }): number;
 
-/** If the value is outside the bounds, the default value (or undefined if no default is given) is returned. */
+/**
+ * If the value is not finite (NaN/±Infinity) or is outside the bounds, the default value is returned.
+ * Non-finite bounds are ignored; omit min/max to leave a side unbounded.
+ */
 export function boundNumber(value: Optional<number>, options: BoundedOptions): number | undefined;
 
 export function boundNumber(value: Optional<number>, options: BoundedOptions): number | undefined {
-	if (typeof(value) !== "number" || isNaN(value)) return options.default;
-	if (options.min !== undefined && value < options.min) return options.default;
-	if (options.max !== undefined && value > options.max) return options.default;
+	if (!isFiniteNumber(value)) return options.default;
+	if (isFiniteNumber(options.min) && value < options.min) return options.default;
+	if (isFiniteNumber(options.max) && value > options.max) return options.default;
 	return value;
 }

@@ -5,12 +5,12 @@ import { round } from "./round.js";
 export function celsiusToFahrenheit(degreesC: number): number;
 
 /** Returns the temperature in fahrenheit, rounded to the number of decimal places given. */
-export function celsiusToFahrenheit(degreesC: number, precision: number): number;
+export function celsiusToFahrenheit(degreesC: number, decimals: number): number;
 
-export function celsiusToFahrenheit(degreesC: number, precision = 0): number {
+export function celsiusToFahrenheit(degreesC: number, decimals = 0): number {
 	const degreesF = degreesC * 9 / 5 + 32;
-	if (precision !== undefined) {
-		return round(degreesF, precision);
+	if (decimals !== undefined) {
+		return round(degreesF, decimals);
 	}
 	return degreesF;
 }
@@ -20,12 +20,12 @@ export function celsiusToFahrenheit(degreesC: number, precision = 0): number {
 export function fahrenheitToCelsius(degreesF: number): number;
 
 /** Returns the temperature in celsius, rounded to the number of decimal places given. */
-export function fahrenheitToCelsius(degreesF: number, precision: number): number;
+export function fahrenheitToCelsius(degreesF: number, decimals: number): number;
 
-export function fahrenheitToCelsius(degreesF: number, precision = 0): number {
+export function fahrenheitToCelsius(degreesF: number, decimals = 0): number {
 	const degreesC = (degreesF - 32) * 5 / 9;
-	if (precision !== undefined) {
-		return round(degreesC, precision);
+	if (decimals !== undefined) {
+		return round(degreesC, decimals);
 	}
 	return degreesC;
 }

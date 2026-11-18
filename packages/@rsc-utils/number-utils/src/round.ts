@@ -1,19 +1,13 @@
-/** Rounds the given number to the given number of decimal places. */
+import { isFiniteNumber } from "@rsc-utils/type-utils";
+
+/**
+ * Rounds the given number to the given number of decimal places.
+ * Returns NaN if either argument is not a finite number.
+ */
 export function round(value: number, decimals: number = 0): number {
-	if (isNaN(value) || isNaN(decimals)) {
+	if (!isFiniteNumber(value) || !isFiniteNumber(decimals)) {
 		return NaN;
 	}
 	const rounded = Math.round(Number(`${value}e${decimals}`));
 	return Number(`${rounded}e-${decimals}`);
 }
-
-/*
-
-@todo what was this for???
-
-export function roundToPrecision(x: number, precision = 1) {
-	const y = x + precision / 2;
-	return y - (y % precision);
-}
-
-*/
