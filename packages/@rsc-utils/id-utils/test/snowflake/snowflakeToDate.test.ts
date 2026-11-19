@@ -15,8 +15,8 @@ async function generateSnowflakes() {
 describe("snowflakeToDate", () => {
 
 	test(`snowflakeToDate(generateSnowflake()).toEqual(Date.now())`, async () => {
-		const now = new Date();
 		const snowflake = generateSnowflake();
+		const now = new Date();
 		const date = snowflakeToDate(snowflake);
 		expect(date).toEqual(now);
 	});
