@@ -235,7 +235,7 @@ function matchDiceOutputType(match: string, defaultDiceOutputType: OrUndefined<D
 	const diceOutputMatch = match.match(DICE_OUTPUT_CHECK);
 	if (diceOutputMatch) {
 		const diceOutputTypeString = diceOutputMatch[0];
-		const diceOutputType = parseEnum(DiceOutputType, diceOutputTypeString, defaultDiceOutputType);
+		const diceOutputType = parseEnum(DiceOutputType, diceOutputTypeString) ?? defaultDiceOutputType;
 		return [
 			match.slice(diceOutputTypeString.length).trim(),
 			diceOutputType
@@ -252,7 +252,7 @@ function matchCritMethodType(match: string, gameType: OrUndefined<GameSystemType
 		const critMethodMatch = match.match(CRIT_METHOD_CHECK);
 		if (critMethodMatch) {
 			const critMethodTypeString = critMethodMatch[0];
-			const critMethodType = parseEnum(GameSystemType, critMethodTypeString, defaultCritMethodType);
+			const critMethodType = parseEnum(DiceCriticalMethodType, critMethodTypeString) ?? defaultCritMethodType;
 			return [
 				match.slice(critMethodTypeString.length).trim(),
 				critMethodType
