@@ -51,6 +51,18 @@ export function stringifyPinoLogEntry(entry: unknown, maxLineLength = 80): strin
 		return lines.join("\n");
 	}
 
+
+	// we want to see the word undefined, not get an undefined value
+	if (entry === undefined) {
+		return "undefined";
+	}
+
+	// functions and symbols stringify to undefined, but we want more visibility
+	const type = typeof(entry);
+	if (type === "function" || type === "symbol") {
+		return String(entry);
+	}
+
 	// stringify the object
 	return stringifyJson(entry, undefined, undefined, maxLineLength);
 

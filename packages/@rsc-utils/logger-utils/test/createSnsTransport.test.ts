@@ -1,84 +1,111 @@
-import { readFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
 import { describe, expect, test } from "vitest";
-import { Logger } from "../build/index.js";
+import type { SnsClientConfig } from "@rsc-utils/aws-utils";
+// createSnsTransport is a default export — `export *` in index.ts does not re-export defaults, so it must be imported directly
+import createSnsTransport from "../build/createSnsTransport.js";
 
-// this flag avoids spamming SNS running tests
-const SNS_ENABLED = false;
+const validClientConfig = {
+	accessKeyId:"AKIDEXAMPLE",
+	region:"us-east-1",
+	secretAccessKey:"secret",
+	topicArn:"arn:aws:sns:us-east-1:000000000000:rpg-sage"
+} as SnsClientConfig;
 
-/**
- * the actual app has a function in the @rsc-sage/env lib to parse this
- * this test don't have those dependencies, so we manually read and parse the config
- */
-async function getSnsClientConfig() {
-	// extra safety check
-	if (!SNS_ENABLED) return undefined;
+// NOTE: constructing the transport flips a module-private SEND_SNS flag, but no log is ever written into the returned stream here —
+// actual SNS publishing (sendSns + its circuit-breaker that disables SEND_SNS on first failure) requires real AWS credentials and is integration-only.
 
-	let counter = 3;
+describe("createSnsTransport", () => {
 
-	// if we run from rpg-sage root, this path is fine
-	let path = "./config/config.json";
+	describe("options validation", () => {
 
-	// if we happen to run it from within logger-utils, this loop will fix the path to the config.json
-	while (!existsSync(path) && counter--) {
-		path = join("..", path);
-	}
-
-	try {
-		const config = JSON.parse(readFileSync(path).toString());
-		const { snsTopicArn, snsRegion, snsAccessKeyId, snsSecretAccessKey } = config.beta.env;
-		return {
-			topicArn: snsTopicArn,
-			region: snsRegion,
-			accessKeyId: snsAccessKeyId,
-			secretAccessKey: snsSecretAccessKey,
-		};
-
-	}catch(err) {
-		console.error(err);
-		return undefined;
-	}
-}
-
-async function doTest() {
-
-	const clientConfig = await getSnsClientConfig();
-	const subject = `RPG Sage (createSnsTransport.test.js) Logger - {level}`;
-
-	const logger = Logger.init({
-		// enable trace/debug
-		dev: true,
-		// enable SNS for error/fatal
-		sns:{ clientConfig, subject }
-	});
-	logger.info("info(Message Only)");
-	logger.info({ a:"A", two:2, big:1n }, "info(Object w/ Message)");
-	logger.error(new Error("Test Error"));
-	logger.error(new Error("Test Error w/ Message"), "error(Test Error w/ Message)");
-	logger.fatal({ a:"A", two:2, big:1n, err:new Error("Test Error in Object") }, "fatal(Test Error in Object)");
-	["trace", "debug", "info", "warn", "error", "fatal"].forEach(level => {
-		logger[level](level + "()");
-		logger.package("logger-utils")[level](level + "()");
-	});
-	if (SNS_ENABLED) {
-		logger.trace("pausing for 1 second");
-		await new Promise(res => setTimeout(res, 1000));
-	}
-}
-
-if (process.argv.some(arg => arg.endsWith("createSnsTransport.test.js"))) {
-
-	doTest();
-
-}else {
-
-	describe("Logger", () => {
-		test("createSnsTransport()", async () => {
-
-			await doTest();
-
-			expect(void 0).toBeUndefined();
+		test(`missing options throws`, () => {
+			expect(() => createSnsTransport(undefined as never)).toThrow(TypeError);
+			expect(() => createSnsTransport(undefined as never)).toThrow(
+				`The "options" argument must be an object: { clientConfig, subject }. Received undefined`
+			);
 		});
+
+		test(`null options throws with "Received null"`, () => {
+			expect(() => createSnsTransport(null as never)).toThrow(
+				`The "options" argument must be an object: { clientConfig, subject }. Received null`
+			);
+		});
+
+		test(`an empty object reports the options error (missing keys are checked with in)`, () => {
+			expect(() => createSnsTransport({} as never)).toThrow(
+				`The "options" argument must be an object: { clientConfig, subject }. Received type object ([object Object])`
+			);
+		});
+
+		test(`missing clientConfig reports the options error`, () => {
+			expect(() => createSnsTransport({ subject:"s" } as never)).toThrow(/The "options" argument/);
+		});
+
+		test(`missing subject reports the options error`, () => {
+			expect(() => createSnsTransport({ clientConfig:validClientConfig } as never)).toThrow(/The "options" argument/);
+		});
+
 	});
 
-}
+	describe("clientConfig validation", () => {
+
+		test(`an invalid region fails isSnsClientConfig and throws the clientConfig error`, () => {
+			const bad = { ...validClientConfig, region:"mars-1" } as unknown as SnsClientConfig;
+			expect(() => createSnsTransport({ subject:"s", clientConfig:bad })).toThrow(
+				`The "options.clientConfig" argument must be an object: { accessKeyId, region, secretAccessKey, topicArn }. Received type object ([object Object])`
+			);
+		});
+
+		test(`a non-string accessKeyId fails the guard`, () => {
+			const bad = { ...validClientConfig, accessKeyId:5 } as unknown as SnsClientConfig;
+			expect(() => createSnsTransport({ subject:"s", clientConfig:bad })).toThrow(/options\.clientConfig/);
+		});
+
+		test(`a nullish clientConfig fails the guard`, () => {
+			expect(() => createSnsTransport({ subject:"s", clientConfig:null as never })).toThrow(/options\.clientConfig/);
+		});
+
+	});
+
+	describe("subject validation", () => {
+
+		test(`an empty string throws`, () => {
+			expect(() => createSnsTransport({ subject:"", clientConfig:validClientConfig })).toThrow(
+				`The "options.subject" argument must be a string. Received type string ('')`
+			);
+		});
+
+		test(`QUIRK: a whitespace-only subject is a string but fails the trim check — the message misleadingly says it "must be a string"`, () => {
+			expect(() => createSnsTransport({ subject:"   ", clientConfig:validClientConfig })).toThrow(
+				`The "options.subject" argument must be a string. Received type string ('   ')`
+			);
+		});
+
+		test(`a non-string subject throws`, () => {
+			expect(() => createSnsTransport({ subject:42 as never, clientConfig:validClientConfig })).toThrow(
+				`The "options.subject" argument must be a string. Received type number (42)`
+			);
+		});
+
+		test(`a non-empty trimmed subject passes`, () => {
+			expect(() => createSnsTransport({ subject:"RPG Sage", clientConfig:validClientConfig })).not.toThrow();
+		});
+
+	});
+
+	describe("transport construction", () => {
+
+		test(`valid options return a Duplex stream (pino-abstract-transport)`, async () => {
+			const { Duplex } = await import("node:stream");
+			const transport = createSnsTransport({ subject:"RPG Sage - {level}", clientConfig:validClientConfig });
+			expect(transport).toBeInstanceOf(Duplex);
+		});
+
+		test(`the transport exposes stream event plumbing`, () => {
+			const transport = createSnsTransport({ subject:"s", clientConfig:validClientConfig });
+			expect(typeof transport.on).toBe("function");
+			expect(typeof transport.write).toBe("function");
+		});
+
+	});
+
+});

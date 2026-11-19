@@ -77,6 +77,31 @@ describe("stringifyJson", () => {
 		expect(stringifyJson(undefined)).toBeUndefined();
 	});
 
+	// regression (fixed 2026-11-19): maxLineLength > 0 used to crash calling .replace on JSON.stringify's undefined result
+	test("stringifyJson(undefined) with maxLineLength returns undefined instead of throwing", () => {
+		expect(stringifyJson(undefined, null, undefined, 80)).toBeUndefined();
+	});
+
+	// functions and symbols at the root also stringify to undefined
+	test("stringifyJson(function) at the root with maxLineLength returns undefined instead of throwing", () => {
+		expect(() => stringifyJson(() => {}, null, undefined, 80)).not.toThrow();
+		expect(stringifyJson(() => {}, null, undefined, 80)).toBeUndefined();
+	});
+
+	test("stringifyJson(symbol) at the root with maxLineLength returns undefined instead of throwing", () => {
+		expect(stringifyJson(Symbol("s"), null, undefined, 80)).toBeUndefined();
+	});
+
+	// a replacer that drops the root value makes JSON.stringify return undefined for it too
+	test("stringifyJson with a replacer that drops the root returns undefined instead of throwing", () => {
+		expect(stringifyJson({ a:1 }, () => undefined, undefined, 80)).toBeUndefined();
+	});
+
+	// defined output must still be inline-processed when maxLineLength is given (the fix must not skip real values)
+	test("stringifyJson still inlines defined output when maxLineLength is given", () => {
+		expect(stringifyJson({ one:"One" }, null, undefined, 250)).toBe('{ "one": "One" }');
+	});
+
 	// replacers
 
 	test("stringifyJson uses a function replacer", () => {
@@ -142,6 +167,59 @@ describe("stringifyJson", () => {
 
 	test("stringifyJson maxLineLength collapses whitespace inside brackets in string values (quirk)", () => {
 		expect(stringifyJson({ a:"p[ q   r ]s" }, null, 2, 80)).toBe('{\n  "a": "p[ q r ]s"\n}');
+	});
+
+	// drop-in contract: for any input WITHOUT a special case in stringifyJson (bigint/Date/non-finite-number/-0 wrapping),
+	// and without maxLineLength processing, the output must be identical to JSON.stringify's.
+	// uniform sweep over a fixed list — one assertion per value, not distinct-case tests (escapeRegExp precedent).
+	const dropInValues:[label:string, value:unknown][] = [
+		["null", null],
+		["undefined", undefined],
+		["true", true],
+		["false", false],
+		["0", 0],
+		["-5", -5],
+		["3.14", 3.14],
+		["1e21", 1e21],
+		["empty string", ""],
+		["string w/ quotes, newline, tab, emoji, lone surrogate", "hello \"world\"\n\ttabbed \u{1F600} lone-surrogate:\uD800"],
+		["empty object", {}],
+		["empty array", []],
+		["simple object", { a:1, b:"x" }],
+		["nested object/array", { a:{ b:[1,"two",null] }, c:true }],
+		["array w/ undefined hole", [undefined]],
+		["sparse array", (() => { const arr = [1,,3]; return arr; })()],
+		["object w/ undefined value (key dropped)", { a:1, b:undefined }],
+		["Error object", new Error("boom")],
+		["Error w/ enumerable prop", Object.assign(new Error("e"), { code:"X" })],
+		["function at root", () => {}],
+		["symbol at root", Symbol("s")],
+		["symbol-keyed object", { [Symbol("k")]:1 }],
+		["boxed String", new String("x")],
+		["boxed Number", new Number(5)],
+		["toJSON object", { toJSON() { return { a:1 }; } }]
+	];
+
+	test("stringifyJson is a drop-in for JSON.stringify on every non-special value (default args)", () => {
+		for (const [label, value] of dropInValues) {
+			expect(stringifyJson(value), label).toBe(JSON.stringify(value));
+		}
+	});
+
+	test("stringifyJson is a drop-in for JSON.stringify on every non-special value (space=2 formatting)", () => {
+		for (const [label, value] of dropInValues) {
+			expect(stringifyJson(value, null, 2), label).toBe(JSON.stringify(value, null, 2));
+		}
+	});
+
+	test("circular structures throw the same TypeError from both", () => {
+		const circular:{ self?:unknown } = {};
+		circular.self = circular;
+		let jsonError:unknown, stringifiedError:unknown;
+		try { JSON.stringify(circular); } catch(err) { jsonError = err; }
+		try { stringifyJson(circular); } catch(err) { stringifiedError = err; }
+		expect(stringifiedError).toBeInstanceOf(TypeError);
+		expect((stringifiedError as Error).message).toBe((jsonError as Error).message);
 	});
 
 });

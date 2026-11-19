@@ -63,8 +63,8 @@ export function stringifyJson(value: any, replacer?: Function | (string | number
 		return value;
 	}, space);
 
-	// if we have a maxLineLength, process the json
-	if (maxLineLength > 0) {
+	// if we have a maxLineLength, process the json unless JSON.stringify returned undefined
+	if (maxLineLength > 0 && stringified) {
 		return inlineCurlyBraces(inlineSquareBrackets(stringified, maxLineLength), maxLineLength);
 	}
 
