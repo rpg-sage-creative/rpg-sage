@@ -33,7 +33,7 @@ function getColorAndTypes(sageCommand: SageCommand): ColorAndType[] {
 	const results: ColorAndType[] = [];
 
 	// get color by key/value pair, where key is keyof ColorType
-	const types = getEnumValues<EmbedColorType>(EmbedColorType);
+	const types = getEnumValues(EmbedColorType);
 	types.forEach(type => {
 		const color = sageCommand.args.getColor(EmbedColorType[type]);
 		if (color) {

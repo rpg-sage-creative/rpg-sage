@@ -28,7 +28,7 @@ export function getArgValues(sageComand: SageCommand): ArgValues {
 	const name = pair("name")?.value;
 	const category = pair("cat", "category")?.value;
 	const content = pair("dialog", "dice", "items", "math", "table", "tableUrl");
-	const macroOwnerType = parseEnum<MacroOwnerType>(MacroOwnerType, pair("tier", "type")?.value) ?? MacroOwnerType.user;
+	const macroOwnerType = parseEnum(MacroOwnerType, pair("tier", "type")?.value) ?? MacroOwnerType.user;
 	const ownerType = MacroOwnerType[macroOwnerType] as MacroOwnerTypeKey;
 	const charName = pair("charName")?.value;
 

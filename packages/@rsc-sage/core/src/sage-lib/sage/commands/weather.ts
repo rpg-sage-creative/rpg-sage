@@ -37,9 +37,9 @@ function parseWeatherArgs({ climateType, elevationType, seasonType }: Args<Weath
 	// ensure we have a valid season / climate combo
 	seasonType = climateType === ClimateType.Tropical
 		// use given season if valid for tropical, or get current tropical season
-		? parseEnum<Season>(TropicalSeason, seasonType) ?? getTropicalSeason() as unknown as Season
+		? (parseEnum(TropicalSeason, seasonType) ?? getTropicalSeason()) as unknown as Season
 		// use given season if valid for temperate, or get current temperate season
-		: parseEnum<Season>(TemperateSeason, seasonType) ?? getTemperateSeason() as unknown as Season;
+		: (parseEnum(TemperateSeason, seasonType) ?? getTemperateSeason()) as unknown as Season;
 
 	return { climateType, elevationType, seasonType };
 }

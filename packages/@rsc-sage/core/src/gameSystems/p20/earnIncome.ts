@@ -378,7 +378,7 @@ function getArgs(sageCommand: SageCommand): Args {
 	const charLevelArg = getSelectedOrDefaultNumber(sageCommand, createCustomId("charLevel", userId), "charLevel");
 	const modifier = getSelectedOrDefaultNumber(sageCommand, createCustomId("modifier", userId), "modifier");
 	const proficiency = getSelectedOrDefault(sageCommand, createCustomId("proficiency", userId)) as ProficiencyName ?? "Trained";
-	const gameSystemType = getSelectedOrDefaultEnum<GameSystemType>(sageCommand, GameSystemType, createCustomId("gameSystem", userId), "game") ?? sageCommand.gameSystemType ?? GameSystemType.PF2e;
+	const gameSystemType = getSelectedOrDefaultEnum(sageCommand, GameSystemType, createCustomId("gameSystem", userId), "game") ?? sageCommand.gameSystemType ?? GameSystemType.PF2e;
 	const verbose = getVerbose(sageCommand, userId) ?? false;
 	const byCharLevel = !!charLevelArg;
 	const charLevel = boundNumber(+(charLevelArg ?? 1), { min:1, max:20, default:gameCharacter?.getNumber("level") ?? 1 });

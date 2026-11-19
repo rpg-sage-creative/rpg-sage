@@ -1,4 +1,4 @@
-import { parseEnum } from "@rsc-utils/type-utils";
+import { parseEnum, type EnumLike } from "@rsc-utils/type-utils";
 import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { StringSelectMenuComponent } from "discord.js";
 import { findComponent, type MessagesOrSageCommand } from "./findComponent.js";
@@ -33,6 +33,6 @@ export async function fetchSelectedOrDefaultNumber(input: MessagesOrSageCommand,
 }
 
 /** Gets the selected value (updated or default) as an enum for the given customId. */
-export async function fetchSelectedOrDefaultEnum<T>(input: MessagesOrSageCommand, _enum: unknown, customId: string, argKey?: string): Promise<T | undefined> {
-	return parseEnum<T>(_enum, await fetchSelectedOrDefault(input, customId, argKey));
+export async function fetchSelectedOrDefaultEnum<K extends string, V extends number>(input: MessagesOrSageCommand, enumLike: EnumLike<K, V>, customId: string, argKey?: string): Promise<V | undefined> {
+	return parseEnum(enumLike, await fetchSelectedOrDefault(input, customId, argKey));
 }

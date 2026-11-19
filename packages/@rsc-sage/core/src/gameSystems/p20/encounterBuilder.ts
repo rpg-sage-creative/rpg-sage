@@ -277,7 +277,7 @@ async function getArgs(sageCommand: SageCommand, messages?: Message[]): Promise<
 	}
 
 	const fetchInputs = [sageCommand, ...messages];
-	const gameSystemType = await fetchSelectedOrDefaultEnum<GameSystemType>(fetchInputs, GameSystemType, createCustomId(customIdArgs, "gameSystem"), "game") ?? sageCommand.gameSystemType ?? GameSystemType.PF2e;
+	const gameSystemType = await fetchSelectedOrDefaultEnum(fetchInputs, GameSystemType, createCustomId(customIdArgs, "gameSystem"), "game") ?? sageCommand.gameSystemType ?? GameSystemType.PF2e;
 	const partyLevel = await fetchSelectedOrDefaultNumber(fetchInputs, createCustomId(customIdArgs, "partyLevel")) ?? 1;
 	const partySize = await fetchSelectedOrDefaultNumber(fetchInputs, createCustomId(customIdArgs, "partySize")) ?? 4;
 	const verbose = await getVerbose(sageCommand, messages, customIdArgs);

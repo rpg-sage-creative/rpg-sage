@@ -30,7 +30,7 @@ function getEmojiAndTypes(sageCommand: SageCommand): EmojiAndType[] {
 	const results: EmojiAndType[] = [];
 
 	// get emoji by key/value pair, where key is keyof EmojiType
-	const types = getEnumValues<EmojiType>(EmojiType);
+	const types = getEnumValues(EmojiType);
 	types.forEach(type => {
 		const replacement = sageCommand.args.getString(EmojiType[type])?.trim();
 		if (replacement) {

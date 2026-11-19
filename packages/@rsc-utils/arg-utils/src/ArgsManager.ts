@@ -58,7 +58,7 @@ export class ArgsManager<T extends string = string> {
 
 	/** Sends all ValueArgs to parseEnum and returns only valid (defined) results. */
 	public enumValues<K extends string = string, V extends number = number>(enumLike: EnumLike<K, V>): V[] {
-		return this.valueArgs().map(arg => parseEnum<EnumLike<K, V>>(enumLike, arg.value)).filter(isDefined) as V[];
+		return this.valueArgs().map(arg => parseEnum(enumLike, arg.value)).filter(isDefined);
 	}
 
 	/** Returns KeyValueArg for the first key found. */

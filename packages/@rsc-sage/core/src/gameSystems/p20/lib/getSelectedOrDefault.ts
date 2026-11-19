@@ -1,4 +1,4 @@
-import { parseEnum } from "@rsc-utils/type-utils";
+import { parseEnum, type EnumLike } from "@rsc-utils/type-utils";
 import { numberOrUndefined } from "@rsc-utils/number-utils";
 import type { StringSelectMenuComponent } from "discord.js";
 import type { SageCommand } from "../../../sage-lib/sage/model/SageCommand.js";
@@ -34,6 +34,6 @@ export function getSelectedOrDefaultNumber(sageCommand: SageCommand, customId: s
 }
 
 /** Gets the selected value (updated or default) as an enum for the given customId. */
-export function getSelectedOrDefaultEnum<T>(sageCommand: SageCommand, _enum: unknown, customId: string, ...argKeys: string[]): T | undefined {
-	return parseEnum<T>(_enum, getSelectedOrDefault(sageCommand, customId, ...argKeys));
+export function getSelectedOrDefaultEnum<K extends string, V extends number>(sageCommand: SageCommand, enumLike: EnumLike<K, V>, customId: string, ...argKeys: string[]): V | undefined {
+	return parseEnum(enumLike, getSelectedOrDefault(sageCommand, customId, ...argKeys));
 }
