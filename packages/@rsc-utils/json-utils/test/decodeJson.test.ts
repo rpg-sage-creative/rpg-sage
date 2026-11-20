@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { decodeJson, encodeJson, parseJson, prettifyJson } from "../build/index.js";
+import { cloneJson, decodeJson, encodeJson, parseJson, prettifyJson } from "../build/index.js";
 
 const date = new Date("2020-06-01T12:34:56.789Z");
 const dateString = date.toISOString();
@@ -182,6 +182,111 @@ describe("decodeJson encodeJson round-trips", () => {
 	test("prettifyJson output decodes back to the original value", () => {
 		const object = { m:new Map([["k", [date, undefined]]]), s:new Set(["t"]) };
 		expect(decodeJson(prettifyJson(object))).toEqual(object);
+	});
+
+	// { $ref } wrappers restore shared/circular references against the decoded tree
+
+	test("a self-referencing root decodes back to a real cycle", () => {
+		const circular:{ self?:unknown } = {};
+		circular.self = circular;
+		const restored = decodeJson<{ self:unknown }>(encodeJson(circular));
+		expect(restored.self).toBe(restored);
+	});
+
+	test("a cycle back to a nested object decodes with identity at its dot path", () => {
+		const leaf:{ up?:unknown } = {};
+		const middle:{ b:typeof leaf } = { b:leaf };
+		const root:{ a:typeof middle } = { a:middle };
+		leaf.up = middle;
+		const restored = decodeJson<{ a:any }>(encodeJson(root));
+		expect(restored.a.b.up).toBe(restored.a);
+	});
+
+	test("array cycles decode with index paths", () => {
+		const arr:any[] = [1];
+		arr.push(arr);
+		const restored = decodeJson<any[]>(encodeJson(arr));
+		expect(restored[0]).toBe(1);
+		expect(restored[1]).toBe(restored);
+
+		const inner:any[] = [];
+		const outer:{ x:{ y:any[] } } = { x:{ y:inner } };
+		inner[0] = outer.x;
+		const nested = decodeJson<any>(encodeJson(outer));
+		expect(nested.x.y[0]).toBe(nested.x);
+	});
+
+	test("a self-referencing Set decodes back to a real cycle", () => {
+		const set:Set<unknown> = new Set();
+		set.add(set);
+		const restored = decodeJson<Set<unknown>>(encodeJson(set));
+		expect(restored.size).toBe(1);
+		expect(restored.has(restored)).toBe(true);
+	});
+
+	test("an object whose Set contains it decodes back to a real cycle", () => {
+		const holder:{ s?:Set<unknown> } = {};
+		holder.s = new Set([holder]);
+		const restored = decodeJson<{ s:Set<any> }>(encodeJson(holder));
+		expect(restored.s.has(restored)).toBe(true);
+	});
+
+	test("a Map value referencing the root decodes with identity", () => {
+		const root:{ m?:Map<string,unknown> } = {};
+		root.m = new Map([["self", root]]);
+		const restored = decodeJson<{ m:Map<string,any> }>(encodeJson(root));
+		expect(restored.m.get("self")).toBe(restored);
+	});
+
+	test("a circular Map key decodes with identity in both slots", () => {
+		const holder:{ m?:Map<unknown,unknown> } = {};
+		holder.m = new Map([[holder, holder]]);
+		const restored = decodeJson<{ m:Map<any,any> }>(encodeJson(holder));
+		expect(restored.m.get(restored)).toBe(restored);
+	});
+
+	test("a ref inside a stunned Map entry pointing at an outer object resolves across the boundary", () => {
+		const root:{ m?:Map<string,unknown> } = {};
+		root.m = new Map([["entry", { back:root }]]);
+		const restored = decodeJson<{ m:Map<string,any> }>(encodeJson(root));
+		expect(restored.m.get("entry").back).toBe(restored);
+	});
+
+	test("cloneJson preserves cycles as real references instead of throwing", () => {
+		const circular:{ self?:unknown } = {};
+		circular.self = circular;
+		const cloned = cloneJson<{ self:unknown }>(circular);
+		expect(cloned).not.toBe(circular);
+		expect(cloned.self).toBe(cloned);
+	});
+
+	// hand-written texts exercise the resolver directly — refs may point forward as well as back
+
+	test("a forward reference resolves in the second pass", () => {
+		const restored = decodeJson<{ a:any, b:unknown }>('{"a":{"$ref":"b"},"b":{"x":1}}');
+		expect(restored.a).toBe(restored.b);
+	});
+
+	test("an unresolvable ref stays literal", () => {
+		expect(decodeJson('{"a":{"$ref":"nope"}}')).toStrictEqual({ a:{ $ref:"nope" } });
+	});
+
+	// the single-key guard leaves look-alike user data alone, same as the other wrappers
+	test("$ref look-alikes are left unconverted", () => {
+		expect(decodeJson('{"a":{"$ref":"x","other":1}}')).toStrictEqual({ a:{ $ref:"x", other:1 } });
+		expect(decodeJson('{"a":{"$ref":5}}')).toStrictEqual({ a:{ $ref:5 } });
+	});
+
+	test("shared references round-trip back to a single reference", () => {
+		const shared = { x:1 };
+		const restored = decodeJson<{ a:any, b:any }>(encodeJson({ a:shared, b:shared }));
+		expect(restored.a).toEqual({ x:1 });
+		expect(restored.b).toBe(restored.a);
+
+		// and cloneJson preserves the sharing instead of duplicating it
+		const cloned = cloneJson<{ a:any, b:any }>({ a:shared, b:shared });
+		expect(cloned.a).not.toBe(shared);
+		expect(cloned.b).toBe(cloned.a);
 	});
 
 });

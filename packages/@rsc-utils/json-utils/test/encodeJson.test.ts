@@ -144,7 +144,7 @@ describe("encodeJson", () => {
 		expect(encodeJson({ a:"Apple" }, null, 2)).toBe('{\n  "a": "Apple"\n}');
 	});
 
-	// drop-in contract: for any input WITHOUT a special case in encodeJson (bigint/Date/non-finite-number/-0/undefined/$map/$set wrapping),
+	// drop-in contract: for any input WITHOUT a special case in encodeJson (bigint/Date/non-finite-number/-0/undefined/$map/$set wrapping, repeated object references),
 	// the output must be identical to JSON.stringify's.
 	// uniform sweep over a fixed list — one assertion per value, not distinct-case tests (escapeRegExp precedent).
 	const dropInValues:[label:string, value:unknown][] = [
@@ -184,14 +184,94 @@ describe("encodeJson", () => {
 		}
 	});
 
-	test("circular structures throw the same TypeError from both", () => {
+	// circular references encode as { $ref:"key.path" } pointing at the first occurrence instead of throwing (JSON.stringify still throws)
+
+	test("encodeJson encodes a self-referencing root with an empty path", () => {
 		const circular:{ self?:unknown } = {};
 		circular.self = circular;
-		let jsonError:unknown, encodedError:unknown;
-		try { JSON.stringify(circular); } catch(err) { jsonError = err; }
-		try { encodeJson(circular); } catch(err) { encodedError = err; }
-		expect(encodedError).toBeInstanceOf(TypeError);
-		expect((encodedError as Error).message).toBe((jsonError as Error).message);
+		expect(encodeJson(circular)).toBe('{"self":{"$ref":""}}');
+	});
+
+	test("encodeJson encodes a cycle back to the root as { $ref:'' }", () => {
+		const child:{ name:string, parent?:unknown } = { name:"child" };
+		const root = { data:child };
+		child.parent = root;
+		expect(encodeJson(root)).toBe('{"data":{"name":"child","parent":{"$ref":""}}}');
+	});
+
+	test("encodeJson encodes a cycle back to a nested object with its dot-notation path", () => {
+		const leaf:{ up?:unknown } = {};
+		const middle:{ b:typeof leaf } = { b:leaf };
+		const root:{ a:typeof middle } = { a:middle };
+		leaf.up = middle;
+		expect(encodeJson(root)).toBe('{"a":{"b":{"up":{"$ref":"a"}}}}');
+	});
+
+	test("encodeJson encodes cycles through arrays with index paths", () => {
+		const list:{ back?:unknown }[] = [{}];
+		const root = { list };
+		list[0].back = root;
+		expect(encodeJson(root)).toBe('{"list":[{"back":{"$ref":""}}]}');
+
+		const arr:any[] = [1];
+		arr.push(arr);
+		expect(encodeJson(arr)).toBe('[1,{"$ref":""}]');
+
+		const inner:any[] = [];
+		const outer:{ x:{ y:any[] } } = { x:{ y:inner } };
+		inner[0] = outer.x;
+		expect(encodeJson(outer)).toBe('{"x":{"y":[{"$ref":"x"}]}}');
+	});
+
+	test("encodeJson encodes cycles through Sets and Maps as { $ref }", () => {
+		const set:Set<unknown> = new Set();
+		set.add(set);
+		expect(encodeJson(set)).toBe(JSON.stringify({ $set:['{"$ref":""}'] }));
+
+		const root:{ m?:Map<string,unknown> } = {};
+		root.m = new Map([["self", root]]);
+		expect(encodeJson(root)).toBe(JSON.stringify({ m:{ $map:[['"self"', '{"$ref":""}']] } }));
+	});
+
+	test("encodeJson encodes a cycle from an object into a Set that contains it", () => {
+		const holder:{ s?:Set<unknown> } = {};
+		holder.s = new Set([holder]);
+		expect(encodeJson(holder)).toBe(JSON.stringify({ s:{ $set:['{"$ref":""}'] } }));
+	});
+
+	test("encodeJson encodes repeated references as { $ref } even when not circular", () => {
+		const shared = { x:1 };
+		expect(encodeJson({ a:shared, b:shared })).toBe('{"a":{"x":1},"b":{"$ref":"a"}}');
+
+		const tail:{ v:number, next?:unknown } = { v:2 };
+		const head:{ v:number, next?:typeof tail, again?:typeof tail } = { v:1, next:tail, again:tail };
+		expect(encodeJson(head)).toBe('{"v":1,"next":{"v":2},"again":{"$ref":"next"}}');
+
+		// the first occurrence keeps the pointer — a third repeat still resolves to it
+		const trio = { deep:{ id:7 } };
+		const root = { x:trio.deep, y:trio.deep, z:trio.deep };
+		expect(encodeJson(root)).toBe('{"x":{"id":7},"y":{"$ref":"x"},"z":{"$ref":"x"}}');
+	});
+
+	test("repeated Map and Set references encode as { $ref }", () => {
+		const set = new Set([1]);
+		expect(encodeJson({ a:set, b:set })).toBe(JSON.stringify({ a:{ $set:["1"] }, b:{ $ref:"a" } }));
+
+		// an object first seen inside a stunned entry is still found by later plain occurrences
+		const shared = { id:1 };
+		const root = { m:new Map([["k", shared]]), o:shared };
+		expect(encodeJson(root)).toBe(JSON.stringify({ m:{ $map:[['"k"', '{"id":1}']] }, o:{ $ref:"m.$map.0.1" } }));
+	});
+
+	test("boxed primitives serialize by value on every occurrence", () => {
+		const boxed = new Number(5);
+		expect(encodeJson({ a:boxed, b:boxed })).toBe('{"a":5,"b":5}');
+	});
+
+	test("circular structures still throw TypeError from JSON.stringify", () => {
+		const circular:{ self?:unknown } = {};
+		circular.self = circular;
+		expect(() => JSON.stringify(circular)).toThrow(TypeError);
 	});
 
 });

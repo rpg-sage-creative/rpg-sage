@@ -4,6 +4,7 @@ import { decodeJson } from "./decodeJson.js";
 /**
  * BigInt, Date, and non-finite-number safe JSON.parse(JSON.stringify(object)).
  * The clone is lossless for values plain JSON would lose: bigint, Date, NaN, -0, ±Infinity, undefined-valued keys, Map, and Set at any depth.
+ * Shared and circular object references are preserved as real references via encodeJson's { $ref } tracking.
  */
 export function cloneJson<T>(object: unknown): T {
 	switch(typeof(object)) {
