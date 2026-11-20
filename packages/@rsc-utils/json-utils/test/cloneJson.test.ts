@@ -46,7 +46,7 @@ describe("cloneJson", () => {
 		expect(cloned[0]).not.toBe(date);
 	});
 
-	// parseJson only converts single-key wrappers, so a $bigint alongside other keys stays a string
+	// decodeJson only converts single-key wrappers, so a $bigint alongside other keys stays a string
 	test("cloneJson keeps an object with a $bigint key as plain data", () => {
 		const object = { a:"Apple", $bigint:"1" };
 		expect(cloneJson<typeof object>(object)).toStrictEqual({ a:"Apple", $bigint:"1" });
@@ -61,10 +61,11 @@ describe("cloneJson", () => {
 		expect(cloneJson({ a:"Apple", b:null })).toStrictEqual({ a:"Apple", b:null });
 	});
 
-	// JSON.stringify drops undefined-valued keys, so the clone loses them
-	test("cloneJson drops keys with undefined values", () => {
+	// encodeJson wraps undefined-valued keys and decodeJson restores them, so the clone keeps the key present with an undefined value
+	test("cloneJson preserves keys with undefined values", () => {
 		const cloned = cloneJson<{ a:string; b?:unknown }>({ a:"Apple", b:undefined });
-		expect(Object.hasOwn(cloned, "b")).toBe(false);
+		expect(Object.hasOwn(cloned, "b")).toBe(true);
+		expect(cloned.b).toBeUndefined();
 	});
 
 	// the number guard returns top-level NaN as-is instead of null

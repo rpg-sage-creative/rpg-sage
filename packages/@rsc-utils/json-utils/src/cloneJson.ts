@@ -1,9 +1,9 @@
-import { parseJson } from "./parseJson.js";
-import { stringifyJson } from "./stringifyJson.js";
+import { encodeJson } from "./encodeJson.js";
+import { decodeJson } from "./decodeJson.js";
 
 /**
  * BigInt, Date, and non-finite-number safe JSON.parse(JSON.stringify(object)).
- * The clone is lossless for values plain JSON would lose: bigint, Date, NaN, -0, and ±Infinity at any depth.
+ * The clone is lossless for values plain JSON would lose: bigint, Date, NaN, -0, ±Infinity, undefined-valued keys, Map, and Set at any depth.
  */
 export function cloneJson<T>(object: unknown): T {
 	switch(typeof(object)) {
@@ -19,6 +19,6 @@ export function cloneJson<T>(object: unknown): T {
 
 		// objects/arrays need the deep copy and Dates a new instance; null round-trips to null, and symbol/function still throw here via stringify->undefined->parse like before
 		default:
-			return parseJson(stringifyJson(object));
+			return decodeJson(encodeJson(object));
 	}
 }

@@ -1,5 +1,5 @@
 import { tagLiterals, toLiteral } from "@rsc-tools/dev-scripts";
-import { parseJson } from "@rsc-utils/json-utils";
+import { decodeJson } from "@rsc-utils/json-utils";
 import { error } from "@rsc-utils/logger-utils";
 import { describe, expect, test } from "vitest";
 import { readFile, readFileSync, readJsonDb, readJsonDbSync, readJsonFile, readJsonFileSync, readText, readTextSync } from "../build/index.js";
@@ -42,7 +42,7 @@ describe("fs", () => {
 			expect(readTextSyncContent).toBe(textContent);
 		});
 
-		const jsonContent = parseJson(textContent);
+		const jsonContent = decodeJson(textContent);
 
 		test(tagLiterals`readJsonFile() equals ${jsonContent}`, async () => {
 			const readJsonObject = await readJsonFile(`${TEST_ROOT}/files/jsonFile.json`);
