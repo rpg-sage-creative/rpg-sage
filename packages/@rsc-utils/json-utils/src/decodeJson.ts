@@ -1,11 +1,17 @@
 import { isNonNullEncodableObject } from "./internal/isNonNullEncodableObject.js";
 
+const EncodedObjectKeyRegExp = /"\$(ref|undefined|date|bigint|number|map|set)"/;
+
 /**
  * BigInt, Date, and non-finite-number friendly replacement for JSON.parse().
  * Restores the wrappers produced by encodeJson: { $undefined }, { $bigint }, { $date }, { $number } (NaN, -0, ±Infinity), { $map } of encoded key/value pairs, { $set } of encoded values, and { $ref:"key.path" }.
  * { $ref } paths are document-relative dot-notation locations resolved in a second pass over the finished tree, so forward references, ancestor references, and cycles all restore as real shared object references. The reviver runs during parsing and never sees a resolved reference.
  */
 export function decodeJson<T = any>(text: string, reviver?: (this: any, key: string, value: any) => any): T {
+	if (!EncodedObjectKeyRegExp.test(text)) {
+		return JSON.parse(text, reviver);
+	}
+
 	const decoded = decodeValue(text, reviver);
 
 	// refs may point forward or at ancestors, so they can only be resolved once the whole document exists
