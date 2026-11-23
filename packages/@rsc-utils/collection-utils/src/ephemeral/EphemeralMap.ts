@@ -26,12 +26,14 @@ export class EphemeralMap<K, V>
 
 	// public delete(key: K): boolean
 
-	/** iterate the entries as [key, value] */
+	/** iterate the entries as [key, value]; expired entries skipped - NO MUTATION. */
 	public entries(): MapIterator<[K, V]> {
+		const cutOff = this.getCutoff();
 		return wrapMapIterator(this.map.keys(), key => {
+			const entry = this.liveEntry(key, cutOff);
 			return {
-				value: [key, this.map.get(key)?.value!],
-				skip: !this.map.has(key)
+				value: [key, entry?.value!],
+				skip: entry === undefined
 			};
 		});
 	}
@@ -42,28 +44,37 @@ export class EphemeralMap<K, V>
 		}
 	}
 
+	/**
+	 * Returns the value for the key, or undefined when missing OR expired.
+	 * Expired entries are deleted.
+	 */
 	public get(key: K): V | undefined {
-		return this.map.get(key)?.value;
+		return this.takeLiveEntry(key)?.value;
 	}
 
 	// public has(key: K): boolean
 
+	/** iterate the keys; expired entries are skipped - NO MUTATION. */
 	public keys(): MapIterator<K> {
+		const cutOff = this.getCutoff();
 		return wrapMapIterator(this.map.keys(), key => {
 			return {
 				value: key,
-				skip: !this.map.has(key)
+				skip: this.liveEntry(key, cutOff) === undefined
 			};
 		});
 	}
 
 	// public get size(): number
 
+	/** iterate the values; expired entries are skipped - NO MUTATION. */
 	public values(): MapIterator<V> {
+		const cutOff = this.getCutoff();
 		return wrapMapIterator(this.map.keys(), key => {
+			const entry = this.liveEntry(key, cutOff);
 			return {
-				value: this.map.get(key)?.value!,
-				skip: !this.has(key)
+				value: entry?.value!,
+				skip: entry === undefined
 			};
 		});
 	}

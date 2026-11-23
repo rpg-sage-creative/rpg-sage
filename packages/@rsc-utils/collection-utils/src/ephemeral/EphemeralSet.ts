@@ -27,12 +27,14 @@ export class EphemeralSet<V>
 
 	// public delete(key: K): boolean
 
-	/** iterate the entries as [key, value] */
+	/** iterate the entries as [key, value]; expired entries skipped - NO MUTATION. */
 	public entries(): SetIterator<[V, V]> {
+		const cutOff = this.getCutoff();
 		return wrapSetIterator(this.map.keys(), key => {
+			const entry = this.liveEntry(key, cutOff);
 			return {
-				value: [key, this.map.get(key)?.value!],
-				skip: !this.map.has(key)
+				value: [key, entry?.value!],
+				skip: entry === undefined
 			};
 		});
 	}
@@ -45,27 +47,30 @@ export class EphemeralSet<V>
 
 	// public has(key: K): boolean
 
+	/** iterate the values as keys; expired entries are skipped - NO MUTATION. */
 	public keys(): SetIterator<V> {
+		const cutOff = this.getCutoff();
 		return wrapSetIterator(this.map.keys(), key => {
 			return {
 				value: key,
-				skip: !this.map.has(key)
+				skip: this.liveEntry(key, cutOff) === undefined
 			};
 		});
 	}
 
 	// public get size(): number
 
+	/** iterate the values; expired entries are skipped - NO MUTATION. */
 	public values(): SetIterator<V> {
+		const cutOff = this.getCutoff();
 		const array = Array.from(this.map.keys());
 		return Iterator.from({
 			next: (): IteratorResult<V> => {
 				while (array.length) {
 					const key = array.shift();
-					const value = this.map.get(key!)?.value!;
-					const skip = !this.has(key!);
-					if (!skip) {
-						return { value, done:false };
+					const entry = this.liveEntry(key!, cutOff);
+					if (entry !== undefined) {
+						return { value:entry.value, done:false };
 					}
 				}
 				return { value:undefined, done: true };
