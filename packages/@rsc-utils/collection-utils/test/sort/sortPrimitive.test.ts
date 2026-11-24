@@ -71,12 +71,19 @@ import { sortPrimitive } from "../../build/index.js";
 
 			describe("pairwise", () => {
 
-				test(`undefined is the "greatest" value and null is second`, () => {
+				test(`undefined is the "greatest" value, null is second, NaN is third`, () => {
 					expect(sortPrimitive(undefined, null)).toBe(1);
 					expect(sortPrimitive(null, undefined)).toBe(-1);
 					expect(sortPrimitive(undefined, 1)).toBe(1);
 					expect(sortPrimitive(1, undefined)).toBe(-1);
 					expect(sortPrimitive(null, 1)).toBe(1);
+					// NaN sits between every valid value and null (the "third greatest")
+					expect(sortPrimitive(Number.NaN, 1)).toBe(1);
+					expect(sortPrimitive(1, Number.NaN)).toBe(-1);
+					expect(sortPrimitive(Number.NaN, null)).toBe(-1);
+					expect(sortPrimitive(null, Number.NaN)).toBe(1);
+					expect(sortPrimitive(undefined, Number.NaN)).toBe(1);
+					expect(sortPrimitive(Number.NaN, undefined)).toBe(-1);
 				});
 
 				test(`strings compare case-insensitively first; equal-lowercase pairs put UPPERCASE before lowercase`, () => {
@@ -134,6 +141,11 @@ import { sortPrimitive } from "../../build/index.js";
 					expect(sortPrimitive<Date | number>(invalid, Number.NaN)).toBe(-1);
 					expect(sortPrimitive(null, invalid)).toBe(1);
 					expect(sortPrimitive(undefined, invalid)).toBe(1);
+				});
+
+				test(`strings compare lexicographically, not numerically — "101" sorts before "99" (digit-by-digit: "1" < "9")`, () => {
+					expect(sortPrimitive("101", "99")).toBe(-1);
+					expect(sortPrimitive("99", "101")).toBe(1);
 				});
 
 			});
