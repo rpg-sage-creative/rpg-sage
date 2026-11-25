@@ -3,11 +3,16 @@ import type { Sorter, SortResult } from "./types.js";
 
 type Optional<T> = T | null | undefined;
 
-/** Creates a sorter that will sort objects by the values of the given keys. */
+/**
+ * Creates a sorter that will sort objects by the values of the given keys.
+ * Key values are compared with sortPrimitive and inherit its full ordering contract: undefined > null > NaN > Invalid Date, -0 before 0, dates by timestamp, type-name ties for equal values.
+ */
 export function sortByKey<T>(...keys: (keyof T)[]): Sorter<T> {
 	return (a: Optional<T>, b: Optional<T>) => {
-		// identical items should always return 0
-		if (a === b) return 0;
+		// identical items should always return 0 (Object.is matches sortPrimitive's identity check)
+		if (Object.is(a, b)) {
+			return 0;
+		}
 
 		// undefined is the "greatest" value
 		if (a === undefined) {
@@ -24,35 +29,40 @@ export function sortByKey<T>(...keys: (keyof T)[]): Sorter<T> {
 		}
 
 		// store results where the difference is only case
-		const caseSortResults: SortResult[] = [];
+		let caseSortResult: SortResult = 0;
 
 		// iterate the keys
 		for (const key of keys) {
-			// get the values and compare
-			const aValue = a?.[key] as string;
-			const bValue = b?.[key] as string;
+			// get the values and compare — sortPrimitive owns NaN, Invalid Date, -0 vs 0, and date timestamps
+			const aValue = a[key] as boolean | Date | number | string;
+			const bValue = b[key] as boolean | Date | number | string;
+
+			// 0 vs -0
+			if (aValue === 0 && bValue === 0 && !Object.is(aValue, bValue)) {
+				return Object.is(aValue, -0) ? -1 : 1;
+			}
+
 			const sortResult = sortPrimitive(aValue, bValue);
 
-			// compare lower values to see if we need to skip
-			const aLower = aValue?.toLowerCase?.() ?? aValue;
-			const bLower = bValue?.toLowerCase?.() ?? bValue;
-			if (aLower === bLower) {
-				// save for later
-				caseSortResults.push(sortResult);
-			}else if (sortResult !== 0) {
-				// return comparison
+			// already considered equal
+			if (sortResult === 0) continue;
+
+			// compare lower values to see if we need to save string comparison for later
+			const aLower = typeof(aValue) === "string" ? aValue.toLowerCase() : aValue;
+			const bLower = typeof(bValue) === "string" ? bValue.toLowerCase() : bValue;
+
+			// different, return result
+			if (aLower !== bLower) {
 				return sortResult;
+			}
+
+			// save the FIRST case-tie result for later, but keep scanning — a real difference on a later key still wins
+			if (caseSortResult === 0) {
+				caseSortResult = sortResult;
 			}
 		}
 
-		// check saved results from string values that have equal lowercase comparisons
-		for (const sortResult of caseSortResults) {
-			if (sortResult !== 0) {
-				return sortResult;
-			}
-		}
-
-		// return equal
-		return 0;
+		// return equal or the first saved case tie
+		return caseSortResult;
 	};
 }
