@@ -46,6 +46,14 @@ import type { Sorter } from "../../build/index.js";
 			expect(chained(1, 2)).toBe(-1);
 		});
 
+		test(`or() with no sorters returns a noop that treats every pair as equal (0)`, () => {
+			const combined = or();
+			expect(combined(1, 2)).toBe(0);
+			const input = [2, 1];
+			input.sort(combined);
+			expect(input).toStrictEqual([2, 1]);
+		});
+
 		test(`overload precedence: a lambda returning -1/0/1 binds to the Sorter overload; anything else (boolean/string/truthy values) falls through to Filter`, () => {
 			// () => 0 returns a literal in SortResult, so it is typed as a Sorter (2 params), not a Filter
 			const asSorter = or(() => 0);
