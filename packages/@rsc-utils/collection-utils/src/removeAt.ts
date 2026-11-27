@@ -1,32 +1,41 @@
-import { sortPrimitive } from "./sort/sortPrimitive.js";
-
 type OrUndefined<T> = T | undefined;
 
-/** Remove the value at the given index using .splice(). */
+// splice-highest-first comparator — default .sort() is lexicographic and would remove the WRONG indexes across the 10-boundary (indexes are pre-validated integers, so no nullish/±0 handling needed)
+const sortIndexesDesc = (a: number, b: number): -1 | 0 | 1 => a < b ? 1 : a > b ? -1 : 0;
+
+/** Remove the value at the given index using .splice(). Negative indexes count from the end and out-of-range is a no-op returning undefined. */
 export function removeAt<T>(array: T[], index: number): OrUndefined<T>;
 
-/** Remove the values at the given indexes using .splice(). */
-export function removeAt<T, U extends OrUndefined<T>[] = OrUndefined<T>[]>(array: T[], indexes: number[]): U[];
+/**
+ * Remove the values at the given indexes using .splice(), returning them in the order the indexes were given.
+ * Duplicate indexes are removed only once, and negative indexes count from the end like .splice().
+ * Non-integer and out-of-range indexes are skipped, so every returned value matches an actual removal.
+ */
+export function removeAt<T>(array: T[], indexes: number[]): T[];
 
-export function removeAt<T, U extends OrUndefined<T>[] = OrUndefined<T>[]>(values: T[], indexOrIndexes: number | number[]): OrUndefined<T> | U {
+export function removeAt<T>(values: T[], indexOrIndexes: number | number[]): OrUndefined<T> | T[] {
 	if (Array.isArray(indexOrIndexes)) {
-		// get all the values to be removed
-		const removed = indexOrIndexes.map(index => values[index]);
+		const length = values.length;
 
-		// sort indexes in reverse order for safer splicing
-		const sorted = indexOrIndexes.slice().sort(sortPrimitive).reverse();
+		// normalize negative indexes so -1 and length-1 dedupe together, keeping only valid integer indexes
+		const unique = new Set<number>();
+		for (const index of indexOrIndexes) {
+			const normalized = index < 0 ? index + length : index;
+			if (Number.isInteger(normalized) && normalized >= 0 && normalized < length) {
+				unique.add(normalized);
+			}
+		}
 
-		// splice each index to remove from target array
-		sorted.forEach(index => values.splice(index, 1));
+		// convert set to array
+		const ordered = [...unique];
 
-		// create an array from the one given to return the same type
-		const arrayConstructor = values.constructor as ArrayConstructor;
-		const indexes = new arrayConstructor() as U;
+		// map indexes to values
+		const removed = ordered.map(index => values[index]);
 
-		// push the values removed into the typed array
-		removed.forEach(item => indexes.push(item));
+		// sort indexes for splicing
+		ordered.sort(sortIndexesDesc).forEach(index => values.splice(index, 1));
 
-		return indexes;
+		return removed;
 	}
 
 	// splice and return the single given index

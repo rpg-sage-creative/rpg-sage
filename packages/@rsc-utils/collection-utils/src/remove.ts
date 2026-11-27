@@ -1,18 +1,19 @@
-import { removeAt } from "./removeAt.js";
-
-/** Removes the values that return a truthy value, returning values that are defined (!null && !undefined). */
-export function remove<T, U extends T[] = T[]>(array: T[], predicate: (value: T, index: number, obj: U) => unknown, thisArg?: any): U {
+/**
+ * Removes the values that return a truthy value from the predicate, in place.
+ * Returns the removed values in original order, including null and undefined entries.
+ */
+export function remove<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): T[] {
 	// test each value against the predicate and store the index of those that are truthy
 	const indexes: number[] = [];
 	array.forEach((value, index, obj) => {
-		if (predicate.call(thisArg, value, index, obj as U)) {
+		if (predicate.call(thisArg, value, index, obj)) {
 			indexes.push(index);
 		}
 	});
 
-	// we only care about values that are defined
-	const isDefined = (value: unknown) => value !== null && value !== undefined;
-
-	// removeAt safely removes values by index
-	return removeAt(array, indexes).filter(isDefined) as U;
+	// reduceRight allows each splice to not affect the next
+	return indexes.reduceRight((removed, indexToRemove, removedIndex) => {
+		removed[removedIndex] = array.splice(indexToRemove, 1)[0];
+		return removed;
+	}, [] as T[]);
 }
