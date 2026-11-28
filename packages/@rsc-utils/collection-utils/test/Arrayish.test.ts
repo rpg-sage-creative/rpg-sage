@@ -875,6 +875,60 @@ describe("Arrayish", () => {
 
 	});
 
+	describe(".toBatches", () => {
+
+		test("(array).splits into batchSize chunks with the remainder last", () => {
+			expect(Arrayish.from([1, 2, 3, 4, 5]).toBatches(2)).toStrictEqual([[1, 2], [3, 4], [5]]);
+		});
+
+		test("(array).an exact multiple produces no trailing partial batch", () => {
+			expect(Arrayish.from([1, 2, 3, 4]).toBatches(2)).toStrictEqual([[1, 2], [3, 4]]);
+		});
+
+		test("(array).batchSize larger than the items yields a single batch", () => {
+			expect(Arrayish.from([1, 2, 3]).toBatches(10)).toStrictEqual([[1, 2, 3]]);
+		});
+
+		test("(array).empty items yield no batches at all (not even an empty one)", () => {
+			expect(Arrayish.from([]).toBatches(2)).toStrictEqual([]);
+		});
+
+		test("(array).batchSize of 1 puts every item in its own batch", () => {
+			expect(Arrayish.from(["a", "b"]).toBatches(1)).toStrictEqual([["a"], ["b"]]);
+		});
+
+		test(`REPLACES splitIntoBatches QUIRK: a batchSize <= 0 yields nothing (the old strict-equality quirk put everything in one batch)`, () => {
+			expect(Arrayish.from([1, 2, 3]).toBatches(0)).toStrictEqual([]);
+			expect(Arrayish.from([1, 2, 3]).toBatches(-1)).toStrictEqual([]);
+		});
+
+		test(`REPLACES splitIntoBatches QUIRK: a fractional batchSize is floored and behaves identically on every path`, () => {
+			const expected = [[1], [2], [3], [4]];
+			expect(Arrayish.from([1, 2, 3, 4]).toBatches(1.5)).toStrictEqual(expected);
+			expect(Arrayish.from(new Set([1, 2, 3, 4])).toBatches(1.5)).toStrictEqual(expected);
+		});
+
+		test("(array).batches share no arrays with the input (each batch is a fresh array)", () => {
+			const input = [1, 2];
+			const batches = Arrayish.from(input).toBatches(1);
+			expect(batches[0]).not.toBe(input);
+			batches[0].push(99);
+			expect(input).toStrictEqual([1, 2]);
+		});
+
+		test("(set).toBatches consumes the Set a batch at a time and leaves it untouched", () => {
+			const set = new Set([1, 2, 3]);
+			expect(Arrayish.from(set).toBatches(2)).toStrictEqual([[1, 2], [3]]);
+			expect([...set]).toStrictEqual([1, 2, 3]);
+		});
+
+		test("(arraylike object).toBatches slices one window at a time via Array.prototype.slice.call", () => {
+			const input = { 0:"a", 1:"b", length:2 };
+			expect(Arrayish.from(input).toBatches(1)).toStrictEqual([["a"], ["b"]]);
+		});
+
+	});
+
 });
 
 describe("Async", () => {

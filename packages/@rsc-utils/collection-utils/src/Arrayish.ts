@@ -218,6 +218,47 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 		return Array.prototype.splice.call(this.iterableLike as ArrayLike<T>, start, deleteCount);
 	}
 
+	/**
+	 * Yields nested Arrays of at most batchSize items each, slicing only the current batch when that iteration is requested.
+	 * Sets are consumed a batch at a time from their iterator instead of being converted up front.
+	 * A fractional batchSize is floored and a batchSize less than 1 (or NaN) yields nothing.
+	 */
+	public *toBatchIterator(batchSize: number): Generator<T[]> {
+		// floor so fractional sizes behave the same on every path (slice truncates indexes anyway and strict equality would never match)
+		batchSize = Math.floor(batchSize);
+
+		if (!(batchSize >= 1)) {
+			return;
+		}
+
+		// sets have no index access, so consume their iterator a batch at a time
+		if (this.isSet) {
+			let batch: T[] = [];
+			for (const value of this.iterableLike as Set<T>) {
+				batch.push(value);
+				if (batch.length === batchSize) {
+					yield batch;
+					batch = [];
+				}
+			}
+			if (batch.length) {
+				yield batch;
+			}
+			return;
+		}
+
+		// slice one window at a time so only the current batch is materialized
+		const arrayLike = this.iterableLike as ArrayLike<T>;
+		for (let startIndex = 0; startIndex < arrayLike.length; startIndex += batchSize) {
+			yield this.slice(startIndex, startIndex + batchSize);
+		}
+	}
+
+	/** Partitions the values into nested Arrays of at most batchSize items each. A fractional batchSize is floored and a batchSize less than 1 (or NaN) returns an empty Array. */
+	public toBatches(batchSize: number): Array<T>[] {
+		return [...this.toBatchIterator(batchSize)];
+	}
+
 	/** Creates a new Array from the iterableLike of this Arrayish */
 	public toArray(): Array<T> {
 		return this.isArray
