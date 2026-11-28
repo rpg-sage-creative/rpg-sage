@@ -1,4 +1,5 @@
 import { randomInt } from "node:crypto";
+import { isDefined } from "@rsc-utils/type-utils";
 import { afterAll, afterEach, beforeAll, describe, expect, test, vitest } from "vitest";
 import { Arrayish, toUnique } from "../build/index.js";
 
@@ -664,6 +665,28 @@ describe("Arrayish", () => {
 			expect(Object.is(removed[0], undefined)).toBe(true);
 			expect(Object.is(removed[1], undefined)).toBe(true);
 			expect(input).toStrictEqual({ 0:"a", length:1 });
+		});
+
+		test("(array).remove(isDefined) removes every defined value, leaving only null and undefined entries", () => {
+			const input = [2,1,null,"2",true,null,undefined,2,null,"1",1,false,true];
+			const removed = Arrayish.from(input).remove(isDefined);
+
+			expect(removed).toStrictEqual([2,1,"2",true,2,"1",1,false,true]);
+			expect(input).toStrictEqual([null, null, undefined, null]);
+		});
+
+		test("(array).remove with no matches returns [] and leaves the named input array untouched", () => {
+			const input = [1, null, 2];
+			expect(Arrayish.from(input).remove(() => false)).toStrictEqual([]);
+			expect(input).toStrictEqual([1, null, 2]);
+		});
+
+		test("(array).remove on a >10-element array splices correctly across the digit boundary (right-to-left splices keep indexes valid)", () => {
+			const input = Array.from({ length: 12 }, (_, i) => i);
+			const removed = Arrayish.from(input).remove(value => value % 2 === 0);
+
+			expect(removed).toStrictEqual([0, 2, 4, 6, 8, 10]);
+			expect(input).toStrictEqual([1, 3, 5, 7, 9, 11]);
 		});
 
 	});

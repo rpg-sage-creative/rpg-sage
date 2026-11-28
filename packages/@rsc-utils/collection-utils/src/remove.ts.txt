@@ -1,4 +1,5 @@
 /**
+ * Arrayish.remove() optimized for arrays with no event handling.
  * Removes the values that return a truthy value from the predicate, in place.
  * Returns the removed values in original order, including null and undefined entries.
  */

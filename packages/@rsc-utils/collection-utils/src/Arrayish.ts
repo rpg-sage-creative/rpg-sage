@@ -674,3 +674,12 @@ class Parallel<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishB
 	}
 
 }
+
+/**
+ * @deprecated use Arrayish.from(array).remove()
+ * Removes the values that return a truthy value from the predicate, in place.
+ * Returns the removed values in original order, including null and undefined entries.
+ */
+export function remove<T>(iterableLike: IterableLike<T>, predicate: (value: T, index: number, obj: IterableLike<T>) => unknown, thisArg?: any): T[] {
+	return Arrayish.from(iterableLike).remove(predicate, thisArg);
+}
