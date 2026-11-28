@@ -1,7 +1,4 @@
-
-type Awaitable<T> = T | Promise<T>;
-
-type OrUndefined<T> = T | undefined;
+import type { Awaitable, OrUndefined } from "@rsc-utils/type-utils";
 
 type SetLike<T> = {
 	size: number;

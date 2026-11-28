@@ -1,4 +1,4 @@
-type Optional<T> = T | null | undefined;
+import type { Optional } from "@rsc-utils/type-utils";
 
 export type SortResult = -1 | 0 | 1;
 

@@ -1,7 +1,6 @@
 import { isDate } from "node:util/types";
+import type { Optional } from "@rsc-utils/type-utils";
 import type { SortResult } from "./types.js";
-
-type Optional<T> = T | null | undefined;
 
 /**
  * Sorts values in ascending order.

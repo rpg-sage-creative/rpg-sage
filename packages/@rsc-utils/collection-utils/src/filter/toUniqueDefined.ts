@@ -1,4 +1,4 @@
-type Optional<T> = T | null | undefined;
+import type { Optional } from "@rsc-utils/type-utils";
 
 /**
  * Filter that reduces an array to unique/defined values.
