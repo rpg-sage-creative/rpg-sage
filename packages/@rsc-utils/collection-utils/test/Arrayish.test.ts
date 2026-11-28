@@ -567,14 +567,30 @@ describe("Arrayish", () => {
 			expect(partitioned).toStrictEqual(expected);
 		});
 
-		test("QUIRK: (array).partition with negative/fractional indexes stores NON-INDEX properties — length stays 1 and JSON.stringify only shows index 0", () => {
-			const partitioned = Arrayish.from([1,2,3]).partition(v => v === 1 ? -1 : v === 2 ? 0.5 : 0);
+		test(`REPLACES partition QUIRK: a negative partition index now throws instead of storing an invisible non-index property`, () => {
+			// old behavior: -1 created a hidden "-1" key — length stayed 0 and the items were unreachable via array APIs
+			expect(() => Arrayish.from([1, 2, 3]).partition(v => v === 1 ? -1 : 0)).toThrow(RangeError);
+		});
 
-			expect(partitioned.length).toBe(1);
-			// stored under the literal keys, invisible to length/iteration/JSON
-			expect((partitioned as any)[-1]).toStrictEqual([1]);
-			expect((partitioned as any)[0.5]).toStrictEqual([2]);
-			expect(partitioned[0]).toStrictEqual([3]);
+		test(`REPLACES partition QUIRK: a fractional partition index is floored into the bucket below instead of stored under an invisible key`, () => {
+			// old behavior: 0.5 created a hidden "0.5" property invisible to length/iteration/JSON
+			const partitioned = Arrayish.from([1, 2, 3]).partition(v => v === 2 ? 0.5 : 0);
+			expect(partitioned).toStrictEqual([[1, 2, 3]]);
+		});
+
+		test("(array).partition throws RangeError for NaN and ±Infinity indexes", () => {
+			const iterator = Arrayish.from([1, 2, 3]);
+			expect(() => iterator.partition(() => NaN)).toThrow(RangeError);
+			expect(() => iterator.partition(() => Infinity)).toThrow(RangeError);
+			expect(() => iterator.partition(() => -Infinity)).toThrow(RangeError);
+		});
+
+		test("(array).partition throws mid-iteration — start() fires but finish() does not (same as predicate exceptions in forEach/filter)", () => {
+			const iterator = SpiedOn.from([1, 2, 3]);
+			expect(() => iterator.partition(v => v === 3 ? -1 : 0)).toThrow(RangeError);
+
+			expect(spies.start).toHaveBeenCalledTimes(1);
+			expect(spies.finish).toHaveBeenCalledTimes(0);
 		});
 
 		test("(array).partition passes thisArg to the partitionfn", () => {

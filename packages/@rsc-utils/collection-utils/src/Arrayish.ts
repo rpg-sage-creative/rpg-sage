@@ -262,7 +262,7 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 	 * Partitions the values into nested Arrays of at most batchSize items each.
 	 * A fractional batchSize is floored; see .toBatchIterator() for the full contract, including its RangeError on invalid sizes.
 	 */
-	public toBatches(batchSize: number): Array<T>[] {
+	public toBatches(batchSize: number): T[][] {
 		return [...this.toBatchIterator(batchSize)];
 	}
 
@@ -449,7 +449,11 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		return undefined;
 	}
 
-	/** Partitions the values into nested Arrays based on the partitionfn */
+	/**
+	 * Partitions the values into nested Arrays based on the partitionfn.
+	 * A fractional partition index is floored so buckets stay real array indexes, like batchSize elsewhere.
+	 * Throws a RangeError unless the returned value is finite and greater than or equal to 0; the throw happens mid-iteration (start() without finish()), as with predicate exceptions in .forEach/.filter.
+	 */
 	public partition(
 		partitionfn: (value: T, index: number, arrayLike: U) => number,
 		thisArg?: any,
@@ -462,7 +466,15 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		// start at -1 and use ++index
 		let index = -1;
 		for (const value of this) {
-			const partIndex = partitionfn.call(thisArg, value, ++index, iterableLike);
+			const returnedIndex = partitionfn.call(thisArg, value, ++index, iterableLike);
+
+			if (!Number.isFinite(returnedIndex) || returnedIndex < 0) {
+				throw rangeError({ argKey:"partition index", mustBe:"a finite number greater than or equal to 0", value: returnedIndex });
+			}
+
+			// floor so fractional returns land in a real bucket instead of creating invisible non-index properties
+			const partIndex = Math.floor(returnedIndex);
+
 			if (!partitioned[partIndex]) {
 				partitioned[partIndex] = [];
 			}
