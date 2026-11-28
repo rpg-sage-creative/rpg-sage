@@ -1,3 +1,4 @@
+import { rangeError } from "@rsc-utils/error-utils";
 import type { Awaitable, OrUndefined } from "@rsc-utils/type-utils";
 
 type SetLike<T> = {
@@ -218,22 +219,28 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 	/**
 	 * Yields nested Arrays of at most batchSize items each, slicing only the current batch when that iteration is requested.
 	 * Sets are consumed a batch at a time from their iterator instead of being converted up front.
-	 * A fractional batchSize is floored and a batchSize less than 1 (or NaN) yields nothing.
+	 * A fractional batchSize is floored so every full batch holds exactly that many items.
+	 * Throws a RangeError unless the floored size is finite and greater than 1 — for one item per batch, use forEach.
+	 * Validation runs eagerly, before the first .next().
 	 */
-	public *toBatchIterator(batchSize: number): Generator<T[]> {
+	public toBatchIterator(batchSize: number): Generator<T[]> {
 		// floor so fractional sizes behave the same on every path (slice truncates indexes anyway and strict equality would never match)
-		batchSize = Math.floor(batchSize);
+		const size = Math.floor(batchSize);
 
-		if (!(batchSize >= 1)) {
-			return;
+		if (!Number.isFinite(size) || !(size > 1)) {
+			throw rangeError({ argKey:"batchSize", mustBe:"a finite number greater than 1", value: batchSize });
 		}
 
+		return this.#iterateBatches(size);
+	}
+
+	*#iterateBatches(validSize: number): Generator<T[]> {
 		// sets have no index access, so consume their iterator a batch at a time
 		if (this.isSet) {
 			let batch: T[] = [];
 			for (const value of this.iterableLike as Set<T>) {
 				batch.push(value);
-				if (batch.length === batchSize) {
+				if (batch.length === validSize) {
 					yield batch;
 					batch = [];
 				}
@@ -246,12 +253,15 @@ abstract class ArrayishBase<T, U extends IterableLike<T>> {
 
 		// slice one window at a time so only the current batch is materialized
 		const arrayLike = this.iterableLike as ArrayLike<T>;
-		for (let startIndex = 0; startIndex < arrayLike.length; startIndex += batchSize) {
-			yield this.slice(startIndex, startIndex + batchSize);
+		for (let startIndex = 0; startIndex < arrayLike.length; startIndex += validSize) {
+			yield this.slice(startIndex, startIndex + validSize);
 		}
 	}
 
-	/** Partitions the values into nested Arrays of at most batchSize items each. A fractional batchSize is floored and a batchSize less than 1 (or NaN) returns an empty Array. */
+	/**
+	 * Partitions the values into nested Arrays of at most batchSize items each.
+	 * A fractional batchSize is floored; see .toBatchIterator() for the full contract, including its RangeError on invalid sizes.
+	 */
 	public toBatches(batchSize: number): Array<T>[] {
 		return [...this.toBatchIterator(batchSize)];
 	}
@@ -344,7 +354,11 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		return undefined;
 	}
 
-	/** like forEach, but in batches */
+	/**
+	 * Like forEach, but in batches.
+	 * Throws a RangeError for an invalid batchSize before any events fire; see .toBatchIterator().
+	 * Iterates live via .toBatchIterator() — mutating the iterableLike from the callback affects the remaining batches.
+	 */
 	public forBatch(
 		batchSize: number,
 		callbackfn: (values: T[], startIndex: number, iterableLike: U) => void,
@@ -352,20 +366,17 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	): void {
 
 		const { iterableLike } = this;
+		// validate before events fire so an invalid size never leaves a dangling start()
+		const batches = this.toBatchIterator(batchSize);
+
 		this.start();
 
-		const array = this.isArray ? (iterableLike as Array<T>).slice() : Array.from(iterableLike);
-
 		let startIndex = 0;
-		let batchLength = 0;
-		do {
-			const batch = array.slice(startIndex, startIndex + batchSize);
-			if (batchLength = batch.length) {
-				callbackfn.call(thisArg, batch, startIndex, iterableLike);
-				this.increment(batchLength);
-				startIndex += batchLength;
-			}
-		}while (batchLength);
+		for (const batch of batches) {
+			callbackfn.call(thisArg, batch, startIndex, iterableLike);
+			this.increment(batch.length);
+			startIndex += batch.length;
+		}
 
 		this.finish();
 	}
@@ -565,28 +576,29 @@ class Async<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase
 		return undefined;
 	}
 
-	/** batch iteration, like forEach, but in batches */
+	/**
+	 * Batch iteration, like forEach, but in batches.
+	 * Rejects with a RangeError for an invalid batchSize before any events fire; see .toBatchIterator().
+	 * Iterates live via .toBatchIterator() — mutating the iterableLike from the callback affects the remaining batches.
+	 */
 	public async forBatch(
 		batchSize: number,
 		callbackfn: (values: T[], startIndex: number, iterableLike: U) => Awaitable<void>,
 		thisArg?: any,
 	): Promise<void> {
 
-		const { iterableLike, length } = this;
+		const { iterableLike } = this;
+		// validate before events fire so an invalid size never leaves a dangling start()
+		const batches = this.toBatchIterator(batchSize);
+
 		this.start();
 
-		const array = this.isArray ? (iterableLike as Array<T>).slice() : Array.from(iterableLike);
-
 		let startIndex = 0;
-		let batchLength = 0;
-		do {
-			const batch = array.slice(startIndex, startIndex + batchSize);
-			if (batchLength = batch.length) {
-				await callbackfn.call(thisArg, batch, startIndex, iterableLike);
-				this.increment(batchLength);
-				startIndex += batchLength;
-			}
-		}while (startIndex < length && batchLength);
+		for (const batch of batches) {
+			await callbackfn.call(thisArg, batch, startIndex, iterableLike);
+			this.increment(batch.length);
+			startIndex += batch.length;
+		}
 
 		this.finish();
 	}

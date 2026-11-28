@@ -284,22 +284,29 @@ describe("Arrayish", () => {
 			expect(spies.finish).toHaveBeenCalledTimes(1);
 		});
 
-		test("(array).forBatch with batchSize=0 never invokes the callback (empty batch ends the loop)", () => {
+		test("(array).forBatch with batchSize=0 throws RangeError before any event fires", () => {
 			const iterator = SpiedOn.from([1, 2, 3]);
-			const batches: number[][] = [];
-			iterator.forBatch(0, batch => batches.push(batch));
 
-			expect(batches).toStrictEqual([]);
-			expect(spies.increment).toHaveBeenCalledTimes(0);
-			expect(spies.finish).toHaveBeenCalledTimes(1);
+			expect(() => iterator.forBatch(0, () => {})).toThrow(RangeError);
+
+			// validation runs before start(), so no dangling event stream
+			expect(spies.start).toHaveBeenCalledTimes(0);
+			expect(spies.finish).toHaveBeenCalledTimes(0);
 		});
 
-		test("QUIRK: (array).forBatch with a NEGATIVE batchSize slices from the end — [1..5] at -2 yields one batch [1,2,3] and silently drops 4 and 5", () => {
-			const batches: number[][] = [];
-			Arrayish.from([1, 2, 3, 4, 5]).forBatch(-2, batch => batches.push(batch));
+		test(`REPLACES forBatch QUIRK: a NEGATIVE batchSize now throws instead of slicing from the end and silently dropping items`, () => {
+			// old behavior: [1..5] at -2 yielded one batch [1,2,3] (slice(0,-2)) and dropped 4 and 5
+			expect(() => Arrayish.from([1, 2, 3, 4, 5]).forBatch(-2, () => {})).toThrow(RangeError);
+		});
 
-			// slice(0, -2) -> [1,2,3]; next slice(3, 1) is empty and ends the loop
-			expect(batches).toStrictEqual([[1, 2, 3]]);
+		test("(array).forBatch rejects batchSize <= 1, NaN, and ±Infinity — forEach already covers one item per batch", () => {
+			const iterator = Arrayish.from([1, 2, 3]);
+			expect(() => iterator.forBatch(1, () => {})).toThrow(RangeError);
+			// sizes that floor to 1 throw too, so full batches stay exactly `size` wide
+			expect(() => iterator.forBatch(1.5, () => {})).toThrow(RangeError);
+			expect(() => iterator.forBatch(NaN, () => {})).toThrow(RangeError);
+			expect(() => iterator.forBatch(Infinity, () => {})).toThrow(RangeError);
+			expect(() => iterator.forBatch(-Infinity, () => {})).toThrow(RangeError);
 		});
 
 		test("(array).forBatch with batchSize > length yields a single batch", () => {
@@ -893,24 +900,41 @@ describe("Arrayish", () => {
 			expect(Arrayish.from([]).toBatches(2)).toStrictEqual([]);
 		});
 
-		test("(array).batchSize of 1 puts every item in its own batch", () => {
-			expect(Arrayish.from(["a", "b"]).toBatches(1)).toStrictEqual([["a"], ["b"]]);
+		test("(array).batchSize of 1 throws — use forEach when each item should stand alone", () => {
+			expect(() => Arrayish.from(["a", "b"]).toBatches(1)).toThrow(RangeError);
+			// sizes that floor to 1 throw too, so full batches stay exactly `size` wide
+			expect(() => Arrayish.from(["a", "b"]).toBatches(1.5)).toThrow(RangeError);
 		});
 
-		test(`REPLACES splitIntoBatches QUIRK: a batchSize <= 0 yields nothing (the old strict-equality quirk put everything in one batch)`, () => {
-			expect(Arrayish.from([1, 2, 3]).toBatches(0)).toStrictEqual([]);
-			expect(Arrayish.from([1, 2, 3]).toBatches(-1)).toStrictEqual([]);
+		test(`REPLACES splitIntoBatches QUIRK: a batchSize <= 0 throws (the old strict-equality quirk put everything in one batch, then <1 yielded nothing)`, () => {
+			expect(() => Arrayish.from([1, 2, 3]).toBatches(0)).toThrow(RangeError);
+			expect(() => Arrayish.from([1, 2, 3]).toBatches(-1)).toThrow(RangeError);
 		});
 
 		test(`REPLACES splitIntoBatches QUIRK: a fractional batchSize is floored and behaves identically on every path`, () => {
-			const expected = [[1], [2], [3], [4]];
-			expect(Arrayish.from([1, 2, 3, 4]).toBatches(1.5)).toStrictEqual(expected);
-			expect(Arrayish.from(new Set([1, 2, 3, 4])).toBatches(1.5)).toStrictEqual(expected);
+			const expected = [[1, 2], [3, 4]];
+			expect(Arrayish.from([1, 2, 3, 4]).toBatches(2.5)).toStrictEqual(expected);
+			expect(Arrayish.from(new Set([1, 2, 3, 4])).toBatches(2.5)).toStrictEqual(expected);
+		});
+
+		test("(array).NaN and ±Infinity batchSize throw", () => {
+			const iterator = Arrayish.from([1, 2, 3]);
+			expect(() => iterator.toBatches(NaN)).toThrow(RangeError);
+			expect(() => iterator.toBatches(Infinity)).toThrow(RangeError);
+			expect(() => iterator.toBatches(-Infinity)).toThrow(RangeError);
+		});
+
+		test("(array).toBatchIterator validates eagerly — before any .next()", () => {
+			// a generator-body throw would only fire on first next(); the public method throws at call time
+			expect(() => Arrayish.from([1, 2, 3]).toBatchIterator(0)).toThrow(RangeError);
+			const iterator = Arrayish.from([1, 2, 3]).toBatchIterator(2);
+			// valid sizes still slice lazily: the first batch arrives on first next()
+			expect(iterator.next().value).toStrictEqual([1, 2]);
 		});
 
 		test("(array).batches share no arrays with the input (each batch is a fresh array)", () => {
 			const input = [1, 2];
-			const batches = Arrayish.from(input).toBatches(1);
+			const batches = Arrayish.from(input).toBatches(2);
 			expect(batches[0]).not.toBe(input);
 			batches[0].push(99);
 			expect(input).toStrictEqual([1, 2]);
@@ -923,8 +947,8 @@ describe("Arrayish", () => {
 		});
 
 		test("(arraylike object).toBatches slices one window at a time via Array.prototype.slice.call", () => {
-			const input = { 0:"a", 1:"b", length:2 };
-			expect(Arrayish.from(input).toBatches(1)).toStrictEqual([["a"], ["b"]]);
+			const input = { 0:"a", 1:"b", 2:"c", length:3 };
+			expect(Arrayish.from(input).toBatches(2)).toStrictEqual([["a","b"], ["c"]]);
 		});
 
 	});
@@ -991,6 +1015,16 @@ describe("Async", () => {
 		const batches: number[][] = [];
 		await Arrayish.async(new Set([1, 2, 3])).forBatch(5, batch => { batches.push(batch); });
 		expect(batches).toStrictEqual([[1, 2, 3]]);
+	});
+
+	test("(array).async().forBatch rejects an invalid batchSize before any event fires", async () => {
+		const iterator = SpiedOn.from([1, 2, 3]);
+
+		await expect(iterator.async().forBatch(0, () => {})).rejects.toThrow(RangeError);
+
+		// validation runs before start(), so no dangling event stream
+		expect(spies.start).toHaveBeenCalledTimes(0);
+		expect(spies.finish).toHaveBeenCalledTimes(0);
 	});
 
 	describe(".forEach", () => {
