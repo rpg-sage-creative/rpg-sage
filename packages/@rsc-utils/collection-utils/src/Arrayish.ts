@@ -331,7 +331,10 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		return outValues;
 	}
 
-	/** operates as Array.find */
+	/**
+	 * Operates as Array.find.
+	 * Fires finish() after found/notFound, so start/finish brackets every method; found/notFound are informational events like filtered(index).
+	 */
 	public find(
 		predicate: (value: T, index: number, iterableLike: U) => unknown,
 		thisArg?: any,
@@ -345,12 +348,14 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 		for (const value of this) {
 			if (predicate.call(thisArg, value, ++index, iterableLike)) {
 				this.found(index);
+				this.finish();
 				return value;
 			}
 			this.increment();
 		}
 
 		this.notFound();
+		this.finish();
 		return undefined;
 	}
 
@@ -425,6 +430,7 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 	 * Iterates the given array and returns the first mapped value returned from callbackfn that is !== null and !== undefined.
 	 * A convenience method for array.map(callbackfn).find(obj => obj !== null && obj !== undefined) that uses a single iteration.
 	 * Triggers .found(index) if a value other than undefined is returned.
+	 * Fires finish() after found/notFound, so start/finish brackets every method; found/notFound are informational events like filtered(index).
 	 */
 	public mapFirst<V>(
 		callbackfn: (value: T, index: number, iterableLike: U) => V,
@@ -440,12 +446,14 @@ export class Arrayish<T, U extends IterableLike<T> = IterableLike<T>> extends Ar
 			const outValue = callbackfn.call(thisArg, value, ++index, iterableLike);
 			if (outValue !== null && outValue !== undefined) {
 				this.found(index);
+				this.finish();
 				return outValue;
 			}
 			this.increment();
 		}
 
 		this.notFound();
+		this.finish();
 		return undefined;
 	}
 
@@ -565,7 +573,10 @@ class Async<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase
 		return outValues;
 	}
 
-	/** Ignores concurrency to ensure the returned value is the lowest index to return truthy. */
+	/**
+	 * Ignores concurrency to ensure the returned value is the lowest index to return truthy.
+	 * Fires finish() after found/notFound, so start/finish brackets every method; found/notFound are informational events like filtered(index).
+	 */
 	public async find(
 		predicate: (value: T, index: number, iterableLike: U) => Awaitable<unknown>,
 		thisArg?: any,
@@ -579,12 +590,14 @@ class Async<T, U extends IterableLike<T> = IterableLike<T>> extends ArrayishBase
 		for (const value of this) {
 			if (await predicate.call(thisArg, value, ++index, iterableLike)) {
 				this.found(index);
+				this.finish();
 				return value;
 			}
 			this.increment();
 		}
 
 		this.notFound();
+		this.finish();
 		return undefined;
 	}
 

@@ -224,22 +224,22 @@ describe("Arrayish", () => {
 
 	describe(".find", () => {
 
-		test("(array).find fires found(index) with the matched item's index and skips finish", () => {
+		test("(array).find fires found(index) with the matched item's index, then finish", () => {
 			const iterator = SpiedOn.from(["a","b","c"]);
 			const output = iterator.find(v => v === "b");
 
 			expect(output).toBe("b");
 			expect(spies.start).toHaveBeenCalledTimes(1);
-			// increment fires only for items BEFORE the match (index 0)
+			// increment fires only for items BEFORE the match (index 0) — the found item is not counted
 			expect(spies.increment).toHaveBeenCalledTimes(1);
 			expect(spies.found).toHaveBeenCalledTimes(1);
 			expect(spies.found).toHaveBeenCalledWith(1);
 			expect(spies.notFound).toHaveBeenCalledTimes(0);
-			// a found result never fires finish
-			expect(spies.finish).toHaveBeenCalledTimes(0);
+			// start/finish brackets every method: a found result fires finish after found
+			expect(spies.finish).toHaveBeenCalledTimes(1);
 		});
 
-		test("(array).find with no match fires notFound and returns undefined", () => {
+		test("(array).find with no match fires notFound, then finish, and returns undefined", () => {
 			const iterator = SpiedOn.from(["a","b"]);
 			const output = iterator.find(v => v === "z");
 
@@ -247,6 +247,7 @@ describe("Arrayish", () => {
 			expect(spies.increment).toHaveBeenCalledTimes(2);
 			expect(spies.found).toHaveBeenCalledTimes(0);
 			expect(spies.notFound).toHaveBeenCalledTimes(1);
+			expect(spies.finish).toHaveBeenCalledTimes(1);
 		});
 
 		test("(array).find passes thisArg to the predicate", () => {
@@ -467,22 +468,24 @@ describe("Arrayish", () => {
 
 	describe(".mapFirst", () => {
 
-		test("(array).mapFirst() --> found fires with the index and skips finish", () => {
+		test("(array).mapFirst() --> found fires with the index, then finish", () => {
 			const dataArray = new Array(100).fill(1);
 			const iterator = SpiedOn.from(dataArray);
 
 			const mappedValue = iterator.mapFirst((v, i) => v * i === 10 ? v * i : undefined);
 
 			expect(spies.start).toHaveBeenCalledTimes(1);
+			// increment fires only for items BEFORE the match — the found item is not counted
 			expect(spies.increment).toHaveBeenCalledTimes(10);
-			expect(spies.finish).toHaveBeenCalledTimes(0);
+			// start/finish brackets every method: a found result fires finish after found
+			expect(spies.finish).toHaveBeenCalledTimes(1);
 			expect(spies.found).toHaveBeenCalledTimes(1);
 			expect(spies.notFound).toHaveBeenCalledTimes(0);
 
 			expect(mappedValue).toBe(10);
 		});
 
-		test("(array).mapFirst() --> notFound after a full pass", () => {
+		test("(array).mapFirst() --> notFound after a full pass, then finish", () => {
 			const dataArray = new Array(100).fill(1);
 			const iterator = SpiedOn.from(dataArray);
 
@@ -490,7 +493,8 @@ describe("Arrayish", () => {
 
 			expect(spies.start).toHaveBeenCalledTimes(1);
 			expect(spies.increment).toHaveBeenCalledTimes(100);
-			expect(spies.finish).toHaveBeenCalledTimes(0);
+			// start/finish brackets every method: a miss fires finish after notFound
+			expect(spies.finish).toHaveBeenCalledTimes(1);
 			expect(spies.found).toHaveBeenCalledTimes(0);
 			expect(spies.notFound).toHaveBeenCalledTimes(1);
 
@@ -991,21 +995,25 @@ describe("Async", () => {
 		expect(output).toStrictEqual([2, 3]);
 	});
 
-	test("(array).async().find awaits predicates and fires found(index)", async () => {
+	test("(array).async().find awaits predicates and fires found(index), then finish", async () => {
 		const iterator = SpiedOn.from([1, 2, 3]);
 		const output = await iterator.async().find(async v => v === 3);
 
 		expect(output).toBe(3);
 		expect(spies.found).toHaveBeenCalledWith(2);
 		expect(spies.increment).toHaveBeenCalledTimes(2);
+		// start/finish brackets every method: a found result fires finish after found
+		expect(spies.finish).toHaveBeenCalledTimes(1);
 	});
 
-	test("(array).async().find with no match fires notFound", async () => {
+	test("(array).async().find with no match fires notFound, then finish", async () => {
 		const iterator = SpiedOn.from([1, 2, 3]);
 		const output = await iterator.async().find(v => v === 9);
 
 		expect(output).toBeUndefined();
 		expect(spies.notFound).toHaveBeenCalledTimes(1);
+		// start/finish brackets every method: a miss fires finish after notFound
+		expect(spies.finish).toHaveBeenCalledTimes(1);
 	});
 
 	test("(array).async().find ignores concurrency: the LOWEST matching index wins even when a later predicate resolves first", async () => {
